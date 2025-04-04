@@ -1,0 +1,16 @@
+Sepehr:
+
+turn abstract classes of enums into normal classes?
+
+
+
+Shahab:
+
+
+
+
+
+Arad:
+
+
+
