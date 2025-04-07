@@ -1,4 +1,6 @@
-package views;
+package models;
+
+import views.*;
 
 public enum Menu {
     Authentication(new AuthenticationMenu()),
@@ -10,6 +12,10 @@ public enum Menu {
 
 
     public final AppMenu menu;
+
+    public AppMenu getMenu() {
+        return menu;
+    }
 
     Menu(AppMenu menu) {
         this.menu = menu;

@@ -13,4 +13,11 @@ public class App {
     ArrayList<Plant> plants;
     ArrayList<Entity> entities;
 
+    Game game;
+
+    static Menu menu;
+
+    public static Menu getMenu() {
+        return menu;
+    }
 }

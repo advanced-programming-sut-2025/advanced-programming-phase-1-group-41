@@ -2,16 +2,18 @@ package controllers;
 
 import models.Result;
 
+import java.util.regex.Matcher;
+
 public class ProfileMenuController {
-    public Result changeUsername(){
+    public Result changeUsername(Matcher matcher){
 
     }
 
-    public Result changePassword(){}
+    public Result changePassword(Matcher matcher){}
 
-    public Result changeEmail() {}
+    public Result changeEmail(Matcher matcher) {}
 
-    public Result changeNickname() {}
+    public Result changeNickname(Matcher matcher) {}
 
-    public Result userInfo() {}
+    public Result userInfo(Matcher matcher) {}
 }
