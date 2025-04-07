@@ -2,8 +2,14 @@ package controllers;
 
 import models.Result;
 
-public class MapController {
-    public Result walk(){}
+import java.util.regex.Matcher;
 
-    private Result SSSP(){}
+public class MapController {
+    public Result walk(Matcher matcher){}
+
+    public Result printMap(Matcher matcher){}
+
+    public Result SSSP(Matcher matcher){}
+
+    public Result helpReadingMap(Matcher matcher){}
 }

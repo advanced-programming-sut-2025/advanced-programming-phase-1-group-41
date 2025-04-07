@@ -1,43 +1,21 @@
 package models;
 
+import java.util.ArrayList;
+
 public class User {
-    String username;
-    String password;
-    String email;
-    String nickname;
-    int age;
+    private String username;
+    private String password;
+    private String email;
+    private String nickname;
+    private Gender gender;
+    private int age;
+    private int numberOfGames;
+    private int HighestScore;
+    private Game currentGame;
+    private ArrayList<Game> games;
 
-    public User(String username, String password, String email, String nickname, int age) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.nickname = nickname;
-        this.age = age;
-    }
+    // TODO
+    private String question;
+    private String answer;
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-
-    @Override
-    public String toString() {
-        return this.username + " " this.password;
-    }
 }

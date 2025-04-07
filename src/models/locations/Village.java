@@ -1,4 +1,4 @@
-package models;
+package models.locations;
 
 public class Village {
 }
