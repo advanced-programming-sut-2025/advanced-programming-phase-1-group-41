@@ -1,4 +1,4 @@
 package models.items;
 
-public abstract class Item {
+public interface Item {
 }

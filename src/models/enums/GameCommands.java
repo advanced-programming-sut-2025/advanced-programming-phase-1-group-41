@@ -9,7 +9,7 @@ public enum GameCommands implements Command {
     GameMap(""),
     LoadGame(""),
     PassToNextUser(""),
-
+    TradeMenu(""),
     ;
 
     public final String pattern;

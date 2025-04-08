@@ -14,7 +14,6 @@ public class User {
     private Game currentGame;
     private ArrayList<Game> games;
 
-    // TODO
     private String question;
     private String answer;
 

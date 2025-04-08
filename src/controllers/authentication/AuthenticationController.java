@@ -18,4 +18,8 @@ public class AuthenticationController {
 
 
     public Result generateHash(Matcher matcher){}
+
+    public Result giveSecurityQuestion(Matcher matcher){}
+
+    public Result answerSecurityQuestion(Matcher matcher){}
 }

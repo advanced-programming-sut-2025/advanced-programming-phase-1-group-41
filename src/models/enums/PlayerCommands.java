@@ -7,6 +7,21 @@ import java.util.regex.Matcher;
 public enum PlayerCommands implements Command {
     ShowInventory(""),
     InventoryTrash(""),
+    EatFood(""),
+    CheatEnergySet(""),
+    CheatEnergyUnlimited(""),
+    Fishing(""),
+    SellProduct(""),
+    Talk(""),
+    TalkHistory(""),
+    Gift(""),
+    GiftList(""),
+    GiftRate(""),
+    GiftHistory(""),
+    Hug(""),
+    Flower(""),
+    AskForMarriage(""),
+    RespondToMarriage(""),
     ;
 
     public final String pattern;

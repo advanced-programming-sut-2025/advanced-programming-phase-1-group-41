@@ -7,7 +7,8 @@ public enum Menu {
     Profile(new ProfileMenu()),
     Main(new MainMenu()),
     Exit(new ExitMenu()),
-    Game(new GameMenu())
+    Game(new GameMenu()),
+    Trade(new TradeMenu()),
     ;
 
 

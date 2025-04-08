@@ -1,11 +1,11 @@
 package models;
 
-import enums.Map;
-import enums.Plant;
-import enums.buildings.Building;
+import models.buildings.Building;
 import models.entities.Entity;
+import models.foragings.Plant;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class App {
     Map map;

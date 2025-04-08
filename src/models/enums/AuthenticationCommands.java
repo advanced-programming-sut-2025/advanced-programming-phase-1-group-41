@@ -8,7 +8,9 @@ public enum AuthenticationCommands implements Command {
     Register(""),
     Login(""),
     ForgetPass(""),
-    RandomPass("")
+    RandomPass(""),
+    GiveSecurityQuestion(""),
+    AnswerSecurityQuestion(""),
     ;
 
     public final String pattern;

@@ -4,4 +4,5 @@ import models.Point;
 
 public class PlayerHome implements Building {
     Point loc;
+    Refrigerator refrigerator;
 }

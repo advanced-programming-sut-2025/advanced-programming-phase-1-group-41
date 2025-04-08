@@ -1,4 +1,6 @@
 package models.tools;
 
-public interface Tool {
+import models.items.Item;
+
+public interface Tool extends Item {
 }

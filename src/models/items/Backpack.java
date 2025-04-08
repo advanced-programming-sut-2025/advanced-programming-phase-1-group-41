@@ -15,5 +15,4 @@ public enum Backpack {
         return inventory;
     }
 
-    // TODO implement inventory controller
 }
