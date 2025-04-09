@@ -1,0 +1,1 @@
+Updated Occupation, Updated FriendShipLevel, Added Foods, Added Buffs, Added Fishes, Added Setter and Getter for User
