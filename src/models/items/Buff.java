@@ -1,8 +1,13 @@
 package models.items;
 
 public enum Buff {
-    Example(),
-    moreExample()
+    MaxEnergy,
+    Farming,
+    Foraging,
+    Fishing,
+    Mining,
     // etc
     ;
+    int buffTime;
+    int buffAmount;
 }
