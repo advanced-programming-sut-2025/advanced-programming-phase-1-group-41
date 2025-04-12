@@ -7,9 +7,11 @@ public enum CookingRecipe {
     Fish(),
     // etc
     ;
-    HashMap<Item, Integer> neededItems;
+    public final HashMap<Item, Integer> neededItems;
 
     CookingRecipe(HashMap<Item, Integer> neededItems) {
         this.neededItems = neededItems;
     }
+
+
 }

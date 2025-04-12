@@ -7,9 +7,17 @@ public enum Skill {
     Fishing
     ;
 
-    SkillLevel level;
+    private SkillLevel level;
 
     Skill() {
         this.level = SkillLevel.Zero;
+    }
+
+    public SkillLevel getLevel() {
+        return level;
+    }
+
+    public void increaseLevel() {
+
     }
 }

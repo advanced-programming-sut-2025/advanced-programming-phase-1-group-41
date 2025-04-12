@@ -6,7 +6,7 @@ public enum CraftingRecipe {
     Bomb(),
     Sprinkler(),
     ;
-    HashMap<Item, Integer> neededItems;
+    public final HashMap<Item, Integer> neededItems;
 
     CraftingRecipe(HashMap<Item, Integer> neededItems) {
         this.neededItems = neededItems;

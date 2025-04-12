@@ -5,5 +5,9 @@ import models.buildings.Building;
 import java.util.ArrayList;
 
 public class Village {
-    ArrayList<Building> buildings;
+    public final ArrayList<Building> buildings;
+
+    public Village(ArrayList<Building> buildings) {
+        this.buildings = buildings;
+    }
 }

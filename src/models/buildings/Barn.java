@@ -6,6 +6,11 @@ import models.animals.Animal;
 import java.util.ArrayList;
 
 public class Barn implements Building {
-    Point loc;
-    ArrayList<Animal> animals;
+    private Point loc;
+    public final ArrayList<Animal> animals;
+
+    public Barn(Point loc) {
+        this.loc = loc;
+        this.animals = new ArrayList<>();
+    }
 }

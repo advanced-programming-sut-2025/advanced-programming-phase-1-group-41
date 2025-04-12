@@ -5,7 +5,25 @@ import models.items.Slot;
 import java.util.ArrayList;
 
 public class Quest {
-    Slot request;
-    Slot reward;
-    NPC owner;
+    private Slot request;
+    private Slot reward;
+    private NPC owner;
+
+    public Quest(Slot request, Slot reward, NPC owner) {
+        this.request = request;
+        this.reward = reward;
+        this.owner = owner;
+    }
+
+    public Slot getRequest() {
+        return request;
+    }
+
+    public Slot getReward() {
+        return reward;
+    }
+
+    public NPC getOwner() {
+        return owner;
+    }
 }

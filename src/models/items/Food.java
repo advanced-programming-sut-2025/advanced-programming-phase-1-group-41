@@ -1,8 +1,6 @@
 package models.items;
 
 public enum Food {
-//    Egg(),
-//    Fish(),
     FriedEgg(50, 35),
     BakedFish(75, 100),
     Salad(113, 110),
@@ -46,13 +44,26 @@ public enum Food {
     SmokedFish(0,00),//(x1.5,x2)
     
     ;
-    int energyValue;
-    int sellPrice;
-    Buff buff;
+    private int energyValue;
+    private int sellPrice;
+    private Buff buff;
+
+    // TODO fill the buff as welll
 
     Food(int energyValue, int SellPrice) {
         this.energyValue = energyValue;
         this.sellPrice = SellPrice;
     }
 
+    public int getEnergyValue() {
+        return energyValue;
+    }
+
+    public int getSellPrice() {
+        return sellPrice;
+    }
+
+    public Buff getBuff() {
+        return buff;
+    }
 }

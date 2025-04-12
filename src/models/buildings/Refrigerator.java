@@ -5,5 +5,9 @@ import models.items.Slot;
 import java.util.ArrayList;
 
 public class Refrigerator {
-    ArrayList<Slot> slots;
+    public final ArrayList<Slot> slots;
+
+    public Refrigerator() {
+        this.slots = new ArrayList<>();
+    }
 }

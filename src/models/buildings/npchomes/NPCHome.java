@@ -3,5 +3,9 @@ package models.buildings.npchomes;
 import models.Point;
 
 public abstract class NPCHome {
-    Point loc;
+    private Point loc;
+
+    public Point getLoc() {
+        return loc;
+    }
 }

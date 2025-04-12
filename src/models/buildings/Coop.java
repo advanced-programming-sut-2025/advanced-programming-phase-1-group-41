@@ -6,6 +6,15 @@ import models.animals.Animal;
 import java.util.ArrayList;
 
 public class Coop {
-    Point loc;
-    ArrayList<Animal> animals;
+    private Point loc;
+    public final ArrayList<Animal> animals;
+
+    public Coop(Point loc) {
+        this.loc = loc;
+        this.animals = new ArrayList<>();
+    }
+
+    public Point getLoc() {
+        return loc;
+    }
 }

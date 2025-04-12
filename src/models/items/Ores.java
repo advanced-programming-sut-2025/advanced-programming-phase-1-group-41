@@ -7,10 +7,13 @@ public enum Ores {
     Gold(400)
     ;
 
-    int sellPrice;
+    private int sellPrice;
 
     Ores(int SellPrice) {
         this.sellPrice = SellPrice;
     }
 
+    public int getSellPrice() {
+        return sellPrice;
+    }
 }
