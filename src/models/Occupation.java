@@ -1,8 +1,12 @@
 package models;
 
 public enum Occupation {
-    kos,
-    kesh
+    Farmer,
+    Rancher,
+    Fisher,
+    Chef,
+    Librarian,
+    Doctor,
     // etc
 
     ;

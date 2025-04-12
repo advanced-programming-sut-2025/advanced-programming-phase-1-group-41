@@ -1,7 +1,7 @@
 package models.tools;
 
 public enum NormalTools implements Tool {
-    Seythe,
+    Scythe,
     MilkPail,
     Shear;
 }
