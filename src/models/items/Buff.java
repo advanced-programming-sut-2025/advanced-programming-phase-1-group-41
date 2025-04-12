@@ -7,7 +7,22 @@ public enum Buff {
     Fishing,
     Mining,
     // etc
+    // TODO
     ;
-    int buffTime;
-    int buffAmount;
+    private int buffTime;
+    private int buffAmount;
+
+
+    Buff(int buffTime, int buffAmount) {
+        this.buffTime = buffTime;
+        this.buffAmount = buffAmount;
+    }
+
+    public int getBuffTime() {
+        return buffTime;
+    }
+
+    public int getBuffAmount() {
+        return buffAmount;
+    }
 }
