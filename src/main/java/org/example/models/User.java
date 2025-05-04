@@ -8,11 +8,16 @@ public class User {
     private String email;
     private String nickname;
     private Gender gender;
+    private final int id;
     private int age;
     private int numberOfGames;
     private int HighestScore;
     private Game currentGame;
     private ArrayList<Game> games;
+
+    public User(int id){
+        this.id = id;
+    }
 
     private String question;
     private String answer;

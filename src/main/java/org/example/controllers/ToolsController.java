@@ -5,15 +5,15 @@ import org.example.models.Result;
 import java.util.regex.Matcher;
 
 public class ToolsController {
-    public Result equipTool(Matcher matcher){}
+    public Result equipTool(Matcher matcher){return null;}
 
-    public Result showCurrentTool(Matcher matcher){}
+    public Result showCurrentTool(Matcher matcher){return null;}
 
-    public Result showAvailableTools(Matcher matcher){}
+    public Result showAvailableTools(Matcher matcher){return null;}
 
-    public Result upgradeTool(Matcher matcher){}
+    public Result upgradeTool(Matcher matcher){return null;}
 
-    public Result useTool(Matcher matcher){}
+    public Result useTool(Matcher matcher){return null;}
 
 
 }

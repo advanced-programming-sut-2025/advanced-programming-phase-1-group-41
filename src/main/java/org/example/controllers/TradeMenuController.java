@@ -5,13 +5,13 @@ import org.example.models.Result;
 import java.util.regex.Matcher;
 
 public class TradeMenuController {
-    public Result tradeItem(Matcher matcher){}
+    public Result tradeItem(Matcher matcher){return null;}
 
-    public Result tradeList(Matcher matcher){}
+    public Result tradeList(Matcher matcher){return null;}
 
-    public Result tradeResponse(Matcher matcher){}
+    public Result tradeResponse(Matcher matcher){return null;}
 
-    public Result tradeHistory(Matcher matcher){}
+    public Result tradeHistory(Matcher matcher){return null;}
 
-    public Result exitTradeMenu(Matcher matcher){}
+    public Result exitTradeMenu(Matcher matcher){return null;}
 }

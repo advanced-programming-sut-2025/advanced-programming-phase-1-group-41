@@ -9,11 +9,11 @@ public class ProfileMenuController {
 
     }
 
-    public Result changePassword(Matcher matcher){}
+    public Result changePassword(Matcher matcher){return null;}
 
-    public Result changeEmail(Matcher matcher) {}
+    public Result changeEmail(Matcher matcher) {return null;}
 
-    public Result changeNickname(Matcher matcher) {}
+    public Result changeNickname(Matcher matcher) {return null;}
 
-    public Result userInfo(Matcher matcher) {}
+    public Result userInfo(Matcher matcher) {return null;}
 }

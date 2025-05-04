@@ -5,29 +5,29 @@ import org.example.models.Result;
 import java.util.regex.Matcher;
 
 public class AnimalController {
-    public Result build(Matcher matcher){}
+    public Result build(Matcher matcher){return null;}
 
-    private Result buildCoop(Matcher matcher){}
+    private Result buildCoop(Matcher matcher){return null;}
 
-    private Result buildBarn(Matcher matcher){}
+    private Result buildBarn(Matcher matcher){return null;}
 
-    public Result buyAnimal(Matcher matcher){}
+    public Result buyAnimal(Matcher matcher){return null;}
 
-    public Result pet(Matcher matcher) {}
+    public Result pet(Matcher matcher) {return null;}
 
-    public Result cheatSetFriendship(Matcher matcher){}
+    public Result cheatSetFriendship(Matcher matcher){return null;}
 
-    public Result animalsList(Matcher matcher){}
+    public Result animalsList(Matcher matcher){return null;}
 
-    public Result shephardAnimals(Matcher matcher){}
+    public Result shephardAnimals(Matcher matcher){return null;}
 
-    public Result feedHay(Matcher matcher){}
+    public Result feedHay(Matcher matcher){return null;}
 
-    public Result producesList(Matcher matcher){}
+    public Result producesList(Matcher matcher){return null;}
 
-    public Result collectProduct(Matcher matcher){}
+    public Result collectProduct(Matcher matcher){return null;}
 
-    public Result sellAnimal(Matcher matcher){}
+    public Result sellAnimal(Matcher matcher){return null;}
 
 
 

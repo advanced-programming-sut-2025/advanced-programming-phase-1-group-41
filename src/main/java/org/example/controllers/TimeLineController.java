@@ -14,19 +14,19 @@ public class TimeLineController {
 
     public void advanceYear(){}
 
-    public Result getTime(Matcher matcher){}
+    public Result getTime(Matcher matcher){return null;}
 
-    public Result getDate(Matcher matcher){}
+    public Result getDate(Matcher matcher){return null;}
 
-    public Result getDateAndTime(Matcher matcher){}
+    public Result getDateAndTime(Matcher matcher){return null;}
 
-    public Result getDayOfWeek(Matcher matcher){}
+    public Result getDayOfWeek(Matcher matcher){return null;}
 
-    public Result getSeason(Matcher matcher){}
+    public Result getSeason(Matcher matcher){return null;}
 
 
-    public Result cheatAdvanceTime(Matcher matcher){}
+    public Result cheatAdvanceTime(Matcher matcher){return null;}
 
-    public Result cheatAdvanceDate(Matcher matcher){}
+    public Result cheatAdvanceDate(Matcher matcher){return null;}
 
 }
