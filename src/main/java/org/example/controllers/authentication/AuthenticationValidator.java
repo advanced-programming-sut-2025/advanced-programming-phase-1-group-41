@@ -6,7 +6,7 @@ import org.example.models.User;
 public class AuthenticationValidator {
 
     public static boolean usernameExists(String username) {
-        for(User user : App.getUsers()){
+        for(User user : App.users){
             if(user.getUsername().equals(username)){
                 return true;
             }

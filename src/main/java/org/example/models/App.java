@@ -11,6 +11,7 @@ public class App {
     private static ArrayList<Building> buildings;
     private static ArrayList<Plant> plants;
     public final static ArrayList<User> users = new ArrayList<>();
+    private static User currentUser;
     private static Menu menu;
     private static Game game;
 
@@ -35,4 +36,15 @@ public class App {
     }
 
     public static ArrayList<User> getUsers() {return users;}
+
+    public static void addUser(User user){
+        users.add(user);
+    }
+
+    public static User getCurrentUser(){
+        return currentUser;
+    }
+    public static void setCurrentUser(User currentUser){
+        App.currentUser = currentUser;
+    }
 }

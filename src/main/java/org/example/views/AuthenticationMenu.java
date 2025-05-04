@@ -27,7 +27,6 @@ public class AuthenticationMenu implements AppMenu {
         else if((matcher = AuthenticationCommands.Register.getMatcher(command)) != null) {
             Result result = authenticationController.registerInput(matcher);
             System.out.println(result);
-
         }
         else if ((matcher = AuthenticationCommands.PickQuestion.getMatcher(command)) != null) {
 
