@@ -10,7 +10,7 @@ public class App {
     private static Map map;
     private static ArrayList<Building> buildings;
     private static ArrayList<Plant> plants;
-    private static ArrayList<User> users;
+    public final static ArrayList<User> users = new ArrayList<>();
     private static Menu menu;
     private static Game game;
 
