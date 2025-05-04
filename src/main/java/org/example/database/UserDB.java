@@ -3,7 +3,9 @@ package org.example.database;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
 import org.example.models.App;
 import org.example.models.User;
 
@@ -15,7 +17,7 @@ public class UserDB {
         // Connect to MongoDB Server
         try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
             // Access the database
-            MongoDatabase database = mongoClient.getDatabase("testDB");
+            MongoDatabase database = mongoClient.getDatabase("ProjectDB");
             System.out.println("Connected to database: " + database.getName());
         } catch (Exception e) {
             e.printStackTrace();
