@@ -8,7 +8,7 @@ public enum GameMainCommands implements Command {
     MenuEnter("\\s*menu\\s+enter\\s+(?<menuName>.*)\\s*"),
     MenuExit("\\s*menu\\s+exit\\s*"),
     ShowCurrentMenu("\\s*menu\\s+show\\s+(?<menuName>.*)\\s*"),
-    NewGame("\\s*game\\s+new\\s+-u\\s+(?<username1>.*)\\s+(?<username2>.*)\\s+(?<username3>.*)\\s*"),
+    NewGame("\\s*game\\s+new\\s*(?<flag>-u)?\\s*(?<username1>\\S+)?\\s*(?<username2>\\S*)?\\s*(?<username3>\\S*)?(?<trash>.*)\\s*"),
     GameMap("\\s*game\\s+map\\s+(?<mapNumber>.*)\\s*"),
     LoadGame("\\s*load\\s+game\\s*"),
     ExitGame("\\s*exit\\s+game\\s*"),

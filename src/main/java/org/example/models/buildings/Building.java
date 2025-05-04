@@ -1,4 +1,6 @@
 package org.example.models.buildings;
 
-public interface Building {
+import org.example.models.ObjectMap;
+
+public interface Building extends ObjectMap {
 }

@@ -5,6 +5,7 @@ import org.example.models.items.Backpack;
 import org.example.models.items.Buff;
 import org.example.models.items.CraftingRecipe;
 import org.example.models.locations.Farm;
+import org.example.models.locations.FarmType;
 import org.example.models.npc.NPC;
 import org.example.models.npc.Quest;
 import org.example.models.skills.Skill;
@@ -34,7 +35,26 @@ public class Player {
     private ArrayList<HashMap<NPC, Integer>> npcs;
     // needs an augmentation
     private ArrayList<HashMap<Player, FriendshipLevel>> friends;
+    public Player(User user) {
+        this.user = user;
+        animals = new ArrayList<>();
+        skills = new ArrayList<>();
+        point = new Point(0, 0);
+        skills = new ArrayList<>();
+        energy = new Energy(0);//what is the default value?
+        money = 0;
+        craftingRecipes = new ArrayList<>();
+        gifts = new ArrayList<>();
+        chats = new ArrayList<>();
+        trades = new ArrayList<>();
+        ongoingQuests = new ArrayList<>();
+        finishedQuests = new ArrayList<>();
+        npcs = new ArrayList<>();
+        friends = new ArrayList<>();
+        backpack = Backpack.Default;
 
+
+    }
     public Player(Point point, Farm farm, ArrayList<Animal> animals, ArrayList<Skill> skills, Energy energy, User user, Backpack backpack, int money, ArrayList<CraftingRecipe> craftingRecipes, Buff currentBuff, ArrayList<Gift> gifts, ArrayList<Chat> chats, ArrayList<Trade> trades, ArrayList<Quest> ongoingQuests, ArrayList<Quest> finishedQuests, ArrayList<HashMap<NPC, Integer>> npcs, ArrayList<HashMap<Player, FriendshipLevel>> friends) {
         this.point = point;
         this.farm = farm;
@@ -73,6 +93,10 @@ public class Player {
 
     public Energy getEnergy() {
         return energy;
+    }
+
+    public void setFarm(Farm farm) {
+        this.farm = farm;
     }
 
     public User getUser() {

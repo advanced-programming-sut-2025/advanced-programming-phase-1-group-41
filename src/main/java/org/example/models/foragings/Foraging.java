@@ -1,4 +1,6 @@
 package org.example.models.foragings;
 
-public interface Foraging {
+import org.example.models.ObjectMap;
+
+public interface Foraging extends ObjectMap {
 }
