@@ -2,6 +2,8 @@ package org.example.models;
 
 import org.example.views.*;
 
+import java.util.Scanner;
+
 public enum Menu {
     Authentication(new AuthenticationMenu()),
     Profile(new ProfileMenu()),

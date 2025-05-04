@@ -1,6 +1,8 @@
 package org.example.views;
 
 import org.example.controllers.authentication.AuthenticationController;
+import org.example.models.App;
+import org.example.models.Menu;
 import org.example.models.Result;
 import org.example.views.commands.AuthenticationCommands;
 
@@ -17,31 +19,21 @@ public class AuthenticationMenu implements AppMenu {
 
         if((matcher = AuthenticationCommands.MenuEnter.getMatcher(command)) != null) {
 
-        }
-        else if((matcher = AuthenticationCommands.MenuExit.getMatcher(command)) != null) {
-
-        }
-        else if((matcher = AuthenticationCommands.ShowCurrentMenu.getMatcher(command)) != null) {
-
-        }
-        else if((matcher = AuthenticationCommands.Register.getMatcher(command)) != null) {
-            Result result = authenticationController.registerInput(matcher);
+        } else if(AuthenticationCommands.MenuExit.getMatcher(command) != null) {
+            App.setMenu(Menu.Exit);
+            System.out.println("Thanks for playing :)");
+        } else if(AuthenticationCommands.ShowCurrentMenu.getMatcher(command) != null) {
+            System.out.println("Authentication Menu");
+        } else if((matcher = AuthenticationCommands.Register.getMatcher(command)) != null) {
+            Result result = authenticationController.registerInput(matcher, scanner);
             System.out.println(result);
-        }
-        else if ((matcher = AuthenticationCommands.PickQuestion.getMatcher(command)) != null) {
-
-        }
-        else if((matcher = AuthenticationCommands.Login.getMatcher(command)) != null) {
-
-        }
-        else if((matcher = AuthenticationCommands.ForgetPassword.getMatcher(command)) != null) {
-
-        }
-        else if((matcher = AuthenticationCommands.Answer.getMatcher(command)) != null) {
-
-        }
-        else {
-
+        } else if((matcher = AuthenticationCommands.Login.getMatcher(command)) != null) {
+            Result result = authenticationController.loginInput(matcher);
+            System.out.println(result);
+        } else if((matcher = AuthenticationCommands.ForgetPassword.getMatcher(command)) != null) {
+            System.out.println(authenticationController.forgotPassword(matcher, scanner));
+        } else {
+            System.out.println("Invalid command!");
         }
     }
 }

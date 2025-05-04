@@ -1,14 +1,9 @@
 package org.example.models;
 
-import dev.morphia.annotations.Entity;
-import dev.morphia.annotations.Id;
-import org.bson.types.ObjectId;
-
 import java.util.ArrayList;
-@Entity("users")
+
 public class User {
-    @Id
-    private ObjectId _id;
+    private final int id;
     private String username;
     private String password;
     private String email;
@@ -21,11 +16,13 @@ public class User {
 //    private ArrayList<Game> games;
     private String question;
     private String answer;
+    private boolean stayLoggedIn;
 
     public User() {
     }
 
-    public User(String username, String password, String email, String nickname) {
+    public User(int id, String username, String password, String email, String nickname, Gender gender, String question, String answer) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
@@ -33,12 +30,16 @@ public class User {
         this.age = 0;
         this.numberOfGames = 0;
         this.HighestScore = 0;
-        this.question = "";
-        this.answer = "";
-        this.gender = null;
+        this.gender = gender;
+        this.question = question;
+        this.answer = answer;
+        this.stayLoggedIn = false;
     }
 
 
+    public int getId() {
+        return id;
+    }
 
     public String getUsername() {
         return username;
@@ -118,5 +119,13 @@ public class User {
 
     public void setAnswer(String answer) {
         this.answer = answer;
+    }
+
+    public boolean isStayLoggedIn() {
+        return stayLoggedIn;
+    }
+
+    public void setStayLoggedIn(boolean stayLoggedIn) {
+        this.stayLoggedIn = stayLoggedIn;
     }
 }

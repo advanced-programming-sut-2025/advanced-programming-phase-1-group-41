@@ -14,6 +14,12 @@ public class App {
     private static User currentUser;
     private static Menu menu;
     private static Game game;
+    public final static ArrayList<String> questions = new ArrayList<>();
+
+    public static void setQuestions(ArrayList<String> questions){
+        App.questions.clear();
+        App.questions.addAll(questions);
+    }
 
     public static Map getMap() {
         return map;
@@ -29,6 +35,9 @@ public class App {
 
     public static Menu getMenu() {
         return menu;
+    }
+    public static void setMenu(Menu menu) {
+        App.menu = menu;
     }
 
     public static Game getGame() {

@@ -1,22 +1,43 @@
 package org.example.controllers.authentication;
 
-import org.example.models.App;
-import org.example.models.Gender;
-import org.example.models.Result;
-import org.example.models.User;
+import org.example.models.*;
+import org.example.views.commands.AuthenticationCommands;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class AuthenticationController {
 
-    public Result loginInput(Matcher matcher){return null;}
+    public Result loginInput(Matcher matcher){
+        if(!matcher.matches()){
+            return new Result(false, "Invalid command!");
+        }
+        String username = matcher.group("username");
+        String password = matcher.group("password");
+        boolean stayLoggedIn = matcher.group(3) != null;
+        if(!AuthenticationValidator.usernameExists(username)){
+            return new Result(false, "Username does not exist!");
+        }
+        User user = Finder.getUserByUsername(username);
+        assert user != null;
+        if(!user.getPassword().equals(password)){
+            return new Result(false, "Incorrect password!");
+        }
+        login(user, stayLoggedIn);
+        return new Result(true, "User logged in successfully!");
+    }
 
-    private Result login(Matcher matcher){return null;}
+    private void login(User user, boolean stayLoggedIn){
+        user.setStayLoggedIn(stayLoggedIn);
+        App.setCurrentUser(user);
+        App.setMenu(Menu.Main);
+    }
 
-    public Result registerInput(Matcher matcher){
+    public Result registerInput(Matcher matcher, Scanner scanner){
         if(!matcher.matches()) {
-            return new Result(false, "invalid command!");
+            return new Result(false, "Invalid command!");
         }
 
         String username = matcher.group("username");
@@ -24,8 +45,16 @@ public class AuthenticationController {
         String passwordConfirm = matcher.group("passwordConfirm");
         String nickname = matcher.group("nickname");
         String email = matcher.group("email");
+        String gender = matcher.group("gender");
+        Gender genderType = Gender.Male;
+        if(gender.equals("male")) {
+            genderType = Gender.Male;
+        }
+        else if(gender.equals("female")) {
+            genderType = Gender.Female;
+        }
 
-        String successMessage = matcher.group("User registered successfully!");
+        String successMessage = "User registered successfully!";
 
         if(AuthenticationValidator.usernameExists(username)){
             return new Result(false, "Username already exists!");
@@ -37,26 +66,11 @@ public class AuthenticationController {
             return new Result(false, "Invalid email format!");
         }
         if(password.equalsIgnoreCase("random") && passwordConfirm.equalsIgnoreCase("password")) {
-            String LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
-            String UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            String DIGITS = "0123456789";
-            String SPECIAL_CHARS = "!@#$%^&*()_+-=[]{};:'\",.<>?/\\|`~";
-            String ALL_CHARS = LOWERCASE + UPPERCASE + DIGITS + SPECIAL_CHARS;
-            SecureRandom random = new SecureRandom();
-            StringBuilder pass = new StringBuilder();
-
-            pass.append(LOWERCASE.charAt(random.nextInt(LOWERCASE.length())));
-            pass.append(UPPERCASE.charAt(random.nextInt(UPPERCASE.length())));
-            pass.append(DIGITS.charAt(random.nextInt(DIGITS.length())));
-            pass.append(SPECIAL_CHARS.charAt(random.nextInt(SPECIAL_CHARS.length())));
-
-            for (int i = 4; i < random.nextInt(4) + 9; i++) {
-                pass.append(ALL_CHARS.charAt(random.nextInt(ALL_CHARS.length())));
-            }
-            password = pass.toString();
+            password = generateRandomPassword();
+            passwordConfirm = password;
             successMessage = "User registered successfully!\nYour password is: " + password;
         }
-        if(!password.matches("^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};:'\",.<>?/\\\\|`~]$")){
+        if(!password.matches("^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};:'\",.<>?/\\\\|`~]+$")){
             return new Result(false, "Invalid password format!");
         }
         if(password.length() < 8){
@@ -77,21 +91,125 @@ public class AuthenticationController {
         if (!password.equals(passwordConfirm)) {
             return new Result(false, "Passwords do not match!");
         }
-        register(username, nickname, email, password);
+        String question, answer;
+        System.out.println("Security Questions:");
+        for(int i = 0; i < 10; i++){
+            System.out.println((i + 1) + ". " + App.questions.get(i));
+        }
+        while (true){
+            String command = scanner.nextLine();
+            Matcher newMatcher;
+            if((newMatcher = AuthenticationCommands.PickQuestion.getMatcher(command)) != null) {
+                ArrayList<String> questionAndAnswer;
+                if((questionAndAnswer = giveSecurityQuestion(newMatcher)) != null){
+                    question = questionAndAnswer.get(0);
+                    answer = questionAndAnswer.get(1);
+                    break;
+                }
+                else{
+                    System.out.println("Invalid command!");
+                }
+            }
+            else{
+                System.out.println("Invalid command!");
+            }
+        }
+        register(username, nickname, email, password, genderType, question, answer);
         return new Result(true, successMessage);
-
     }
 
-    private void register(String username, String nickname, String email, String password){
-        App.addUser(new User(username, password, email, nickname));
+    private void register(String username, String nickname, String email, String password,
+                          Gender gender, String question, String answer) {
+        int id = 0; //TODO
+        App.addUser(new User(id, username, password, email, nickname, gender, question, answer));
     }
 
-    public Result forgotPassword(Matcher matcher){return null;}
+    private String generateRandomPassword() {
+        String LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
+        String UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String DIGITS = "0123456789";
+        String SPECIAL_CHARS = "!@#$%^&*()_+-=[]{};:'\",.<>?/\\|`~";
+        String ALL_CHARS = LOWERCASE + UPPERCASE + DIGITS + SPECIAL_CHARS;
+        SecureRandom random = new SecureRandom();
+        StringBuilder pass = new StringBuilder();
 
+        pass.append(LOWERCASE.charAt(random.nextInt(LOWERCASE.length())));
+        pass.append(UPPERCASE.charAt(random.nextInt(UPPERCASE.length())));
+        pass.append(DIGITS.charAt(random.nextInt(DIGITS.length())));
+        pass.append(SPECIAL_CHARS.charAt(random.nextInt(SPECIAL_CHARS.length())));
+
+        for (int i = 4; i < random.nextInt(4) + 9; i++) {
+            pass.append(ALL_CHARS.charAt(random.nextInt(ALL_CHARS.length())));
+        }
+        return pass.toString();
+    }
+
+    private ArrayList<String> giveSecurityQuestion(Matcher matcher){
+        if(!matcher.matches()) {
+            return null;
+        }
+        int questionNumber = Integer.parseInt(matcher.group("questionNumber"));
+        String answer = matcher.group("answer");
+        String answerConfirm = matcher.group("answerConfirm");
+        if(questionNumber <= 0 || questionNumber > 10){
+            return null;
+        }
+        else if(!answer.equals(answerConfirm)){
+            return null;
+        }
+        ArrayList<String> questionAndAnswer = new ArrayList<>();
+        questionAndAnswer.add(App.questions.get(questionNumber - 1));
+        questionAndAnswer.add(answer);
+        return questionAndAnswer;
+    }
+
+    public Result forgotPassword(Matcher matcher, Scanner scanner){
+        if(!matcher.matches()) {
+            return new Result(false, "Invalid command!");
+        }
+        String username = matcher.group("username");
+        if(!AuthenticationValidator.usernameExists(username)){
+            return new Result(false, "username does not exist!");
+        }
+        User user = Finder.getUserByUsername(username);
+        assert user != null;
+        System.out.println(user.getQuestion());
+        String answer = scanner.nextLine();
+        if(!answer.equals(user.getAnswer())){
+            return new Result(false, "Wrong answer!");
+        }
+        System.out.println("Write your new password:");
+        answerSecurityQuestion(user, scanner);
+        return new Result(true, "Password updated!");
+    }
+
+    private void answerSecurityQuestion(User user, Scanner scanner){
+        while(true){
+            String password = scanner.nextLine();
+            if(!password.matches("^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};:'\",.<>?/\\\\|`~]+$")){
+                System.out.println("Invalid password format!");
+            }
+            if(password.length() < 8){
+                System.out.println("Password must be at least 8 characters!");
+            }
+            if (!password.matches(".*[a-z].*")) {
+                System.out.println("Password must contain at least one lowercase letter!");
+            }
+            if (!password.matches(".*[A-Z].*")) {
+                System.out.println("Password must contain at least one uppercase letter!");
+            }
+            if (!password.matches(".*\\d.*")) {
+                System.out.println("Password must contain at least one digit!");
+            }
+            if (!password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};:'\",.<>?/\\\\|`~].*")) {
+                System.out.println("Password must contain at least one special character!");
+            }
+            else{
+                user.setPassword(password);
+                return;
+            }
+        }
+    }
 
     public Result generateHash(Matcher matcher){return null;}
-
-    public Result giveSecurityQuestion(Matcher matcher){return null;}
-
-    public Result answerSecurityQuestion(Matcher matcher){return null;}
 }
