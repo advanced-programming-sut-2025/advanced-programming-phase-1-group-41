@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 
 public class ProfileMenuController {
     public Result changeUsername(Matcher matcher){
-
+        return null;
     }
 
     public Result changePassword(Matcher matcher){return null;}

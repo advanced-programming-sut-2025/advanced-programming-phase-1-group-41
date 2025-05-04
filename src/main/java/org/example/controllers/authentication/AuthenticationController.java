@@ -53,6 +53,8 @@ public class AuthenticationController {
             return new Result(false, "Passwords do not match!");
         }
 
+
+        return null;
     }
 
     private Result register(Matcher matcher){return null;}
