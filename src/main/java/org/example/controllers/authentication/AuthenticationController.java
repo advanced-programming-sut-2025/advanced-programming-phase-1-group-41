@@ -24,7 +24,6 @@ public class AuthenticationController {
         String passwordConfirm = matcher.group("passwordConfirm");
         String nickname = matcher.group("nickname");
         String email = matcher.group("email");
-        String gender = matcher.group("gender");
 
         String successMessage = matcher.group("User registered successfully!");
 
@@ -78,15 +77,14 @@ public class AuthenticationController {
         if (!password.equals(passwordConfirm)) {
             return new Result(false, "Passwords do not match!");
         }
-        register(username, nickname, email, password, gender);
+        register(username, nickname, email, password);
         return new Result(true, successMessage);
 
-        return null;
     }
 
-    private void register(String username, String nickname, String email, String password, Gender gender){
+    private void register(String username, String nickname, String email, String password){
         int id = 0; //TODO
-        App.addUser(new User(id, username, password, email, nickname, gender));
+        App.addUser(new User(id, username, password, email, nickname));
     }
 
     public Result forgotPassword(Matcher matcher){return null;}
