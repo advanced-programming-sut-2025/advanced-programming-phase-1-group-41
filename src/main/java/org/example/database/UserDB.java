@@ -3,8 +3,8 @@ package org.example.database;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+import dev.morphia.Datastore;
+import dev.morphia.Morphia;
 import org.bson.Document;
 import org.example.models.App;
 import org.example.models.User;
@@ -14,14 +14,18 @@ import java.io.IOException;
 
 public class UserDB {
     public static void connect() {
-        // Connect to MongoDB Server
-        try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
-            // Access the database
-            MongoDatabase database = mongoClient.getDatabase("ProjectDB");
-            System.out.println("Connected to database: " + database.getName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017"); // Keep MongoClient open
+        Datastore datastore = Morphia.createDatastore(mongoClient, "ProjectDB");
+
+        System.out.println("Connected to database: " + datastore.getDatabase().getName());
+
+        datastore.getMapper().map(User.class);
+
+        datastore.find(User.class).forEach(user -> {
+            System.out.println(user.getUsername());
+        });
+
+        mongoClient.close(); // Close the connection only after all operations are done
     }
 
 

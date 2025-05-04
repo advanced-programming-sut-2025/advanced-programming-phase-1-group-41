@@ -83,8 +83,7 @@ public class AuthenticationController {
     }
 
     private void register(String username, String nickname, String email, String password){
-        int id = 0; //TODO
-        App.addUser(new User(id, username, password, email, nickname));
+        App.addUser(new User(username, password, email, nickname));
     }
 
     public Result forgotPassword(Matcher matcher){return null;}

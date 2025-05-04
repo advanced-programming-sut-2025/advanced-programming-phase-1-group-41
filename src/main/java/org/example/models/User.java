@@ -1,9 +1,14 @@
 package org.example.models;
 
-import java.util.ArrayList;
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
+import org.bson.types.ObjectId;
 
+import java.util.ArrayList;
+@Entity("users")
 public class User {
-    private final int id;
+    @Id
+    private ObjectId _id;
     private String username;
     private String password;
     private String email;
@@ -12,13 +17,15 @@ public class User {
     private int age;
     private int numberOfGames;
     private int HighestScore;
-//    private Game currentGame;
+//    private Game currentGame =  new Game();
 //    private ArrayList<Game> games;
     private String question;
     private String answer;
 
-    public User(int id, String username, String password, String email, String nickname) {
-        this.id = id;
+    public User() {
+    }
+
+    public User(String username, String password, String email, String nickname) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -32,9 +39,6 @@ public class User {
     }
 
 
-    public int getId() {
-        return id;
-    }
 
     public String getUsername() {
         return username;
