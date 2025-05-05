@@ -123,7 +123,7 @@ public class AuthenticationController {
 
     private void register(String username, String nickname, String email, String password,
                           Gender gender, String question, String answer) {
-        User user = new User(username, nickname, email, password, gender, question, answer);
+        User user = new User(username, password, email, nickname, gender, question, answer);
         App.addUser(user);
     }
 
