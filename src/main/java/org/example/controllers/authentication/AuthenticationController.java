@@ -4,14 +4,18 @@ import org.example.database.UserDB;
 import org.example.models.*;
 import org.example.views.commands.AuthenticationCommands;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class AuthenticationController {
 
-    public Result loginInput(Matcher matcher){
+    public Result loginInput(Matcher matcher) throws NoSuchAlgorithmException {
         if(!matcher.matches()){
             return new Result(false, "Invalid command!");
         }
@@ -23,6 +27,8 @@ public class AuthenticationController {
         }
         User user = Finder.getUserByUsername(username);
         assert user != null;
+
+        password = getHash(password);
         if(!user.getPassword().equals(password)){
             return new Result(false, "Incorrect password! "+
                     password);
@@ -38,7 +44,7 @@ public class AuthenticationController {
         App.setMenu(Menu.Main);
     }
 
-    public Result registerInput(Matcher matcher, Scanner scanner){
+    public Result registerInput(Matcher matcher, Scanner scanner) throws NoSuchAlgorithmException {
         if(!matcher.matches()) {
             return new Result(false, "Invalid command!");
         }
@@ -117,6 +123,7 @@ public class AuthenticationController {
                 System.out.println("Invalid command!");
             }
         }
+        password = getHash(password);
         register(username, nickname, email, password, genderType, question, answer);
         return new Result(true, successMessage);
     }
@@ -214,5 +221,9 @@ public class AuthenticationController {
         }
     }
 
-    public Result generateHash(Matcher matcher){return null;}
+    public String getHash(String pass) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hashBytes = digest.digest(pass.getBytes(StandardCharsets.UTF_8));
+        return Base64.getEncoder().encodeToString(hashBytes);
+    }
 }

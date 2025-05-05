@@ -4,11 +4,12 @@ import org.example.database.UserDB;
 import org.example.models.App;
 import org.example.models.Menu;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class AppView {
-    public void runApp(){
+    public void runApp() throws NoSuchAlgorithmException {
         ArrayList<String> questions = new ArrayList<>();
         questions.add("What is your favorite color?");
         questions.add("What is your favorite food?");

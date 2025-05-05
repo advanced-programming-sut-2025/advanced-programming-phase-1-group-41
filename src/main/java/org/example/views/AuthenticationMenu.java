@@ -6,6 +6,7 @@ import org.example.models.Menu;
 import org.example.models.Result;
 import org.example.views.commands.AuthenticationCommands;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,7 +14,7 @@ import java.util.regex.Pattern;
 public class AuthenticationMenu implements AppMenu {
     AuthenticationController authenticationController = new AuthenticationController();
     @Override
-    public void check(Scanner scanner) {
+    public void check(Scanner scanner) throws NoSuchAlgorithmException {
         String command = scanner.nextLine();
         Matcher matcher = null;
 
