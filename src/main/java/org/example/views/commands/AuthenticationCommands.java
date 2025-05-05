@@ -10,7 +10,7 @@ public enum AuthenticationCommands implements Command {
             "-n\\s+(?<nickname>.*)\\s+-e\\s+(?<email>.*)\\s+-g\\s+(?<gender>.*)\\s*"),
     PickQuestion("\\s*pick\\s+question\\s+-q\\s+(?<questionNumber>.*)\\s+-a\\s+" +
             "(?<answer>.*)\\s+-c\\s+(?<answerConfirm>.*)\\s*"),
-    Login("\\s*login\\s+-u\\s+(?<username>.*)\\s+-p\\s+(?<password>.*)(\\s+–stay-logged-in)?\\s*"),
+    Login("\\s*login\\s+-u\\s+(?<username>\\S+)\\s+-p\\s+(?<password>\\S+)(?:\\s+(?<log>-stay-logged-in))?\\s*"),
     ForgetPassword("\\s*forget\\s+password\\s+-u\\s+(?<username>.*)\\s*"),
     Answer("\\s*answer\\s+-a\\s+(?<answer>.*)\\s*"),
     ;

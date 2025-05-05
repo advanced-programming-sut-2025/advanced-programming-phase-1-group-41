@@ -1,5 +1,7 @@
 package org.example.models;
 
+import org.bson.types.ObjectId;
+
 import java.util.ArrayList;
 
 public class Finder {
@@ -14,5 +16,14 @@ public class Finder {
     public static Game getGameByUsername(String username){
         //TODO
         return new Game(new ArrayList<>());
+    }
+
+    public static User getUserById(ObjectId id){
+        for (User user : App.users) {
+            if(user.get_id().equals(id)){
+                return user;
+            }
+        }
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 package org.example.views;
 
+import org.example.database.UserDB;
 import org.example.models.App;
 import org.example.models.Menu;
 
@@ -22,8 +23,10 @@ public class AppView {
         App.setQuestions(questions);
         Scanner scanner = new Scanner(System.in);
         App.setMenu(Menu.Authentication);
+        UserDB.connect();
         while(App.getMenu() != Menu.Exit){
             App.getMenu().getMenu().check(scanner);
         }
+        UserDB.disconnect();
     }
 }

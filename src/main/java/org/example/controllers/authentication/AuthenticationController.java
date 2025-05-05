@@ -1,5 +1,6 @@
 package org.example.controllers.authentication;
 
+import org.example.database.UserDB;
 import org.example.models.*;
 import org.example.views.commands.AuthenticationCommands;
 
@@ -14,8 +15,8 @@ public class AuthenticationController {
         if(!matcher.matches()){
             return new Result(false, "Invalid command!");
         }
-        String username = matcher.group("username");
-        String password = matcher.group("password");
+        String username = matcher.group("username").trim();
+        String password = matcher.group("password").trim();
         boolean stayLoggedIn = matcher.group(3) != null;
         if(!AuthenticationValidator.usernameExists(username)){
             return new Result(false, "Username does not exist!");
@@ -23,8 +24,10 @@ public class AuthenticationController {
         User user = Finder.getUserByUsername(username);
         assert user != null;
         if(!user.getPassword().equals(password)){
-            return new Result(false, "Incorrect password!");
+            return new Result(false, "Incorrect password! "+
+                    password);
         }
+        System.out.println(stayLoggedIn);
         login(user, stayLoggedIn);
         return new Result(true, "User logged in successfully!");
     }
@@ -120,8 +123,8 @@ public class AuthenticationController {
 
     private void register(String username, String nickname, String email, String password,
                           Gender gender, String question, String answer) {
-        int id = 0; //TODO
-        App.addUser(new User(id, username, password, email, nickname, gender, question, answer));
+        User user = new User(username, nickname, email, password, gender, question, answer);
+        App.addUser(user);
     }
 
     private String generateRandomPassword() {

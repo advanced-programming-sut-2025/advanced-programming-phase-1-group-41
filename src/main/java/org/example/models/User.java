@@ -1,9 +1,16 @@
 package org.example.models;
 
+import dev.morphia.annotations.Embedded;
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
+import org.bson.types.ObjectId;
+
 import java.util.ArrayList;
 
+@Entity("users")
 public class User {
-    private final int id;
+    @Id
+    private ObjectId _id;
     private String username;
     private String password;
     private String email;
@@ -21,8 +28,7 @@ public class User {
     public User() {
     }
 
-    public User(int id, String username, String password, String email, String nickname, Gender gender, String question, String answer) {
-        this.id = id;
+    public User( String username, String password, String email, String nickname, Gender gender, String question, String answer) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -37,9 +43,6 @@ public class User {
     }
 
 
-    public int getId() {
-        return id;
-    }
 
     public String getUsername() {
         return username;
@@ -127,5 +130,27 @@ public class User {
 
     public void setStayLoggedIn(boolean stayLoggedIn) {
         this.stayLoggedIn = stayLoggedIn;
+    }
+
+    public ObjectId get_id() {
+        return _id;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "_id=" + _id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", gender=" + gender +
+                ", age=" + age +
+                ", numberOfGames=" + numberOfGames +
+                ", HighestScore=" + HighestScore +
+                ", question='" + question + '\'' +
+                ", answer='" + answer + '\'' +
+                ", stayLoggedIn=" + stayLoggedIn +
+                '}';
     }
 }

@@ -54,21 +54,25 @@ public class GameMenuController {
         return new Result(true,"Selected"+matcher.group("mapNumber"));
     }
 
-    public ArrayList<ArrayList<Player>> buildFriendships(){}
+    public ArrayList<ArrayList<Player>> buildFriendships(){
+        return null;
+    }
 
-    public HashMap<NPC, Integer> buildFriendshipsWithNPCs(){}
+    public HashMap<NPC, Integer> buildFriendshipsWithNPCs(){
+        return null;
+    }
 
-    public Result gameMap(Matcher matcher){}
+    public Result gameMap(Matcher matcher){ return null ;}
 
-    public Result loadGame(Matcher matcher){}
+    public Result loadGame(Matcher matcher){ return null ;}
 
-    public Result saveGame(Matcher matcher){}
+    public Result saveGame(Matcher matcher){ return null ;}
 
-    public Result exitGame(Matcher matcher){}
+    public Result exitGame(Matcher matcher){ return null ;}
 
-    public Result deleteGame(Matcher matcher){}
+    public Result deleteGame(Matcher matcher){ return null ;}
 
-    public Result nextTurn(Matcher matcher){}
+    public Result nextTurn(Matcher matcher){ return null ;}
 
-    public Result tradeMenu(Matcher matcher){}
+    public Result tradeMenu(Matcher matcher){ return null ;}
 }
