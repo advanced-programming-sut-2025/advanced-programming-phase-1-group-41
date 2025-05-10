@@ -5,6 +5,7 @@ import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Reference;
 import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
+import org.example.models.locations.Farm;
 import org.example.models.locations.Map;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Entity("games")
 public class Game {
+    private ArrayList<Farm> farms = new ArrayList<>();
     @Id
     private ObjectId _id;
     private TimeLine time;
@@ -32,10 +34,6 @@ public class Game {
 
 //    private Map map;
 
-    public Game(){
-
-    }
-
     public Game(ArrayList<Player> players, Player loader) {
         this.players = players;
         this.loader = loader;
@@ -43,6 +41,10 @@ public class Game {
         this.tmrwWeatherType = WeatherType.Sunny;
         this.time = new TimeLine();
 //        this.map = new Map();
+        this.farms.add(new Farm(1));
+        this.farms.add(new Farm(2));
+        this.farms.add(new Farm(3));
+        this.farms.add(new Farm(4));
         this._id = new ObjectId();
     }
 
