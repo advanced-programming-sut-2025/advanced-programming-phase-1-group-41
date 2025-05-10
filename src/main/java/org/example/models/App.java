@@ -1,9 +1,11 @@
 package org.example.models;
 
+import org.bson.types.ObjectId;
 import org.example.models.buildings.Building;
 import org.example.models.foragings.Plant;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class App {
@@ -11,6 +13,8 @@ public class App {
     private static ArrayList<Building> buildings;
     private static ArrayList<Plant> plants;
     public final static ArrayList<User> users = new ArrayList<>();
+    public final static ArrayList<Game> games = new ArrayList<>();
+    public final static HashMap<ObjectId, User> userMap = new HashMap<>();
     private static User currentUser;
     private static Menu menu;
     private static Game game;

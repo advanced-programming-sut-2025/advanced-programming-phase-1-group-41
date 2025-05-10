@@ -3,9 +3,11 @@ package org.example.models;
 import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
+import dev.morphia.annotations.Reference;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Entity("users")
 public class User {
@@ -24,6 +26,7 @@ public class User {
     private String question;
     private String answer;
     private boolean stayLoggedIn;
+    @Reference
     private Game currentGame;
 
     public User() {
@@ -144,6 +147,14 @@ public class User {
     public ObjectId get_id() {
         return _id;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(username, user.username);
+    }
+
 
     @Override
     public String toString() {

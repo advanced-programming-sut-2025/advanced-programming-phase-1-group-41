@@ -22,9 +22,6 @@ public class GameMenuController {
 
     public Result gameMap(Matcher matcher){ return null ;}
 
-    public Result loadGame(Matcher matcher){ // TODO
-         return null ;
-    }
 
     public Result saveGame(Matcher matcher){ return null ;}
 

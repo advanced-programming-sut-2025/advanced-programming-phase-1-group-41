@@ -1,5 +1,6 @@
 package org.example.controllers;
 
+import org.bson.types.ObjectId;
 import org.example.models.*;
 
 import java.util.ArrayList;
@@ -72,8 +73,10 @@ public class MainMenuController {
 
 
         // TODO save the game
-        App.setGame(new Game(players, player1));
+        Game game = new Game(players, player1);
+        App.setGame(game);
         App.getGame().setCurrentPlayer(player1);
+        App.games.add(game);
         return new Result(true,"Game created successfully");
 
     }
@@ -93,8 +96,30 @@ public class MainMenuController {
         return new Result(true,"Selected"+matcher.group("mapNumber"));
     }
 
-    public Result loadGame(Matcher matcher){ // TODO
-        return null ;
+    public Result loadGame(Matcher matcher){
+        Game game = App.getCurrentUser().getCurrentGame();
+        if(game==null){
+            return new Result(false, "you currently don't have an ongoing game");
+        }
+        App.setGame(game);
+        App.setMenu(Menu.Game);
+        setLoader(game);
+        return new Result(true,"Game loaded successfully, current player: "+
+                game.getCurrentPlayer());
+    }
+
+    private void setLoader(Game game) {
+        System.out.println(game.getPlayers());
+        System.out.println(game.getCurrentPlayer().getUser().getGender());
+        for (Player player : game.getPlayers()) {
+
+            if (player.getUser().getUsername().equals(App.getCurrentUser().getUsername())) {
+                game.setLoader(player);
+                return;
+            }
+        }
+
+
     }
 
 }

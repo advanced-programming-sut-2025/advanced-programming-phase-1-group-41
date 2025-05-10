@@ -2,23 +2,25 @@ package org.example.models;
 
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
+import dev.morphia.annotations.Reference;
+import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 
-@Entity
+@Entity("games")
 public class Game {
     @Id
     private ObjectId _id;
     private TimeLine time = new TimeLine();
+    @Reference
     private Player loader;
+    @Reference
     private Player currentPlayer;
+    @Reference
     private ArrayList<Player> players;
     private WeatherType weatherType;
     private WeatherType tmrwWeatherType;
-    public TimeLine getTime() {
-        return time;
-    }
 
     public Game(){
 
@@ -60,6 +62,9 @@ public class Game {
 
     public Player getLoader() {
         return loader;
+    }
+    public TimeLine getTime() {
+        return time;
     }
 
     public void setLoader(Player loader) {

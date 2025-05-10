@@ -2,6 +2,8 @@ package org.example.models;
 
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
+import dev.morphia.annotations.Reference;
+import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
 import org.example.models.animals.Animal;
 import org.example.models.items.Backpack;
@@ -21,13 +23,14 @@ public class Player {
     @Id
     private ObjectId _id;
     private Point point;
+    @Reference(lazy = true)
+    private User user;
+    private int money;
+//    private Backpack backpack;
 //    private Farm farm;
 //    private ArrayList<Animal> animals;
 //    private ArrayList<Skill> skills;
 //    private Energy energy;
-    private User user;
-//    private Backpack backpack;
-    private int money;
 //    private ArrayList<CraftingRecipe> craftingRecipes;
 //    private Buff currentBuff;
 
@@ -89,6 +92,10 @@ public class Player {
 
     public void setMoney(int money) {
         this.money = money;
+    }
+
+    public ObjectId get_id() {
+        return _id;
     }
 
     @Override
