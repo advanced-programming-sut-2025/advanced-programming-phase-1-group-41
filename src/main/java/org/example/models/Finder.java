@@ -15,7 +15,8 @@ public class Finder {
     }
     public static Game getGameByUsername(String username){
         //TODO
-        return new Game(new ArrayList<>());
+//        return new Game(new ArrayList<>());
+        return null;
     }
 
     public static User getUserById(ObjectId id){

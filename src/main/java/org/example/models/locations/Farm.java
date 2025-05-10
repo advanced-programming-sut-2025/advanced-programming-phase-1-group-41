@@ -1,5 +1,6 @@
 package org.example.models.locations;
 
+import dev.morphia.annotations.Entity;
 import org.example.models.Cell;
 import org.example.models.Grass;
 import org.example.models.buildings.Building;
@@ -7,8 +8,8 @@ import org.example.models.foragings.Foraging;
 
 import java.util.ArrayList;
 
-public class Farm {
 
+public class Farm {
     private FarmType farmType;
     private ArrayList<ArrayList<Cell>> cells;
     int id;

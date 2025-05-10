@@ -1,5 +1,16 @@
 package org.example.models;
 
 public enum Season {
-    Spring, Summer, Autumn, Winter;
+    Spring("Spring"), Summer("Summer"), Autumn("Autumn"), Winter("Winter");
+
+    public final String name;
+
+    Season(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

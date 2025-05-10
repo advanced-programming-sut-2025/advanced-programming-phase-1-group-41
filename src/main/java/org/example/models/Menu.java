@@ -38,6 +38,9 @@ public enum Menu {
         return null;
     }
     public static Menu goToLastMenu(String input) {
+        if(input.equals("AuthenticationMenu")) {
+            System.out.println("thanks for playing");
+        }
          return switch (input){
             case "AuthenticationMenu" -> Exit;
 
@@ -52,12 +55,11 @@ public enum Menu {
         return switch (input){
             case "AuthenticationMenu" -> Authentication;
             case "ProfileMenu" -> Profile;
-            case "GameMenu" -> Main;
+            case "g" -> Game;
             case "TradeMenu" -> Trade;
             case "MainMenu" -> Main;
             case "Exit" -> Exit;
-
-            default -> throw new IllegalStateException("Unexpected value: " + input);
+            default -> null;
         };
     }
 

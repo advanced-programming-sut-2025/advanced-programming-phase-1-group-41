@@ -1,9 +1,20 @@
 package org.example.models;
 
+
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
+import org.bson.types.ObjectId;
+
+@Entity
 public class Cell {
+    @Id
+    private ObjectId _id;
     private ObjectMap objectMap;
     private int x;
     private int y;
+
+    public Cell() {
+    }
 
     public Cell(ObjectMap objectMap, int x, int y) {
         this.objectMap = objectMap;

@@ -24,6 +24,7 @@ public class User {
     private String question;
     private String answer;
     private boolean stayLoggedIn;
+    private Game currentGame;
 
     public User() {
     }
@@ -130,6 +131,14 @@ public class User {
 
     public void setStayLoggedIn(boolean stayLoggedIn) {
         this.stayLoggedIn = stayLoggedIn;
+    }
+
+    public Game getCurrentGame() {
+        return currentGame;
+    }
+
+    public void setCurrentGame(Game currentGame) {
+        this.currentGame = currentGame;
     }
 
     public ObjectId get_id() {

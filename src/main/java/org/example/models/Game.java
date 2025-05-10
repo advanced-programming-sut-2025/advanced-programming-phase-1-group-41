@@ -1,47 +1,78 @@
 package org.example.models;
 
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
+import org.bson.types.ObjectId;
+
 import java.util.ArrayList;
 
+@Entity
 public class Game {
-    private static TimeLine time = TimeLine.getInstance();
-
-    private static Player currentPlayer;
-
-    private static ArrayList<Player> players;
-
-    private static WeatherType weatherType;
-
-    public static TimeLine getTime() {
+    @Id
+    private ObjectId _id;
+    private TimeLine time = new TimeLine();
+    private Player loader;
+    private Player currentPlayer;
+    private ArrayList<Player> players;
+//    private WeatherType weatherType;
+    public TimeLine getTime() {
         return time;
     }
 
-    public static Player getCurrentPlayer() {
+    public Game(){
+
+    }
+
+    public Game(ArrayList<Player> players, Player loader) {
+        this.players = players;
+        this.loader = loader;
+    }
+
+    public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
-    public static WeatherType getWeatherType() {
-        return weatherType;
-    }
+//    public WeatherType getWeatherType() {
+//        return weatherType;
+//    }
 
-    public static void passTurn() {
+    public void passTurn() {
         for(int i=0;i<4;i++){
             if(players.get(i).equals(currentPlayer)){
+                currentPlayer = players.get((i+1) % 4);
                 if(i==3){
-                    currentPlayer = players.get(0);
-                }
-                else {
-                    currentPlayer = players.get(i + 1);
+                    // TODO continue on with timeline
                 }
                 break;
             }
         }
     }
 
-    public static ArrayList<Player> getPlayers() {
+    public ArrayList<Player> getPlayers() {
         return players;
     }
 
-    public Game(ArrayList<Player> players) {
-        this.players = players;
+    public Player getLoader() {
+        return loader;
+    }
+
+    public void setLoader(Player loader) {
+        this.loader = loader;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public void setTime(TimeLine time) {
+        this.time = time;
+    }
+
+    public ObjectId get_id() {
+        return _id;
+    }
+
+    public void set_id(ObjectId _id) {
+        this._id = _id;
     }
 }

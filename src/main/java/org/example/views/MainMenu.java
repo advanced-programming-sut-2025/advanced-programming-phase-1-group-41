@@ -1,5 +1,6 @@
 package org.example.views;
 
+import org.example.controllers.CheckerController;
 import org.example.controllers.MainMenuController;
 import org.example.models.App;
 import org.example.models.Menu;
@@ -15,15 +16,8 @@ public class MainMenu implements AppMenu {
         String command = scanner.nextLine();
         Matcher matcher = null;
 
-        if((matcher = MainMenuCommands.MenuEnter.getMatcher(command)) != null) {
-            System.out.println(mainMenuController.enterMenu(matcher));
-        }
-        else if(MainMenuCommands.MenuExit.getMatcher(command) != null) {
-            App.setMenu(Menu.Authentication);
-            System.out.println("Redirecting to Authentication Menu...");
-        }
-        else if(MainMenuCommands.ShowCurrentMenu.getMatcher(command) != null) {
-            System.out.println("Main Menu");
+        if(CheckerController.checkCommand(command)) {
+
         }
         else if(MainMenuCommands.UserLogout.getMatcher(command) != null) {
             mainMenuController.logout();

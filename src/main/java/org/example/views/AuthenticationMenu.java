@@ -1,5 +1,6 @@
 package org.example.views;
 
+import org.example.controllers.CheckerController;
 import org.example.controllers.authentication.AuthenticationController;
 import org.example.models.App;
 import org.example.models.Menu;
@@ -18,14 +19,10 @@ public class AuthenticationMenu implements AppMenu {
         String command = scanner.nextLine();
         Matcher matcher = null;
 
-        if((matcher = AuthenticationCommands.MenuEnter.getMatcher(command)) != null) {
+        if(CheckerController.checkCommand(command)) {
 
-        } else if(AuthenticationCommands.MenuExit.getMatcher(command) != null) {
-            App.setMenu(Menu.Exit);
-            System.out.println("Thanks for playing :)");
-        } else if(AuthenticationCommands.ShowCurrentMenu.getMatcher(command) != null) {
-            System.out.println("Authentication Menu");
-        } else if((matcher = AuthenticationCommands.Register.getMatcher(command)) != null) {
+        }
+        else if((matcher = AuthenticationCommands.Register.getMatcher(command)) != null) {
             Result result = authenticationController.registerInput(matcher, scanner);
             System.out.println(result);
         } else if((matcher = AuthenticationCommands.Login.getMatcher(command)) != null) {

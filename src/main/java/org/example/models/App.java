@@ -44,6 +44,10 @@ public class App {
         return game;
     }
 
+    public static void setGame(Game game) {
+        App.game = game;
+    }
+
     public static ArrayList<User> getUsers() {return users;}
 
     public static void addUser(User user){

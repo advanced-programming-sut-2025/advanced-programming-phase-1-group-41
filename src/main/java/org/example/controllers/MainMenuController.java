@@ -22,7 +22,10 @@ public class MainMenuController {
         } else if(menuName.equalsIgnoreCase("Authentication") || menuName.equalsIgnoreCase("Auth")){
             App.setMenu(Menu.Authentication);
             return new Result(true, "Redirecting to Authentication Menu...");
+        } else if(menuName.equalsIgnoreCase("Game")){
+            App.setMenu(Menu.Game);
         }
-        return new Result(false, "Invalid menu name!\nMenu options:\nProfile\nAuthentication");
+        System.out.println("here");
+        return new Result(false, "Invalid menu name!\nMenu options:\nProfile\nAuthentication\nGame");
     }
 }
