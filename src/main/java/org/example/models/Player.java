@@ -18,13 +18,14 @@ import org.example.models.skills.Skill;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-@Entity
+@Entity("players")
 public class Player {
     @Id
     private ObjectId _id;
     private Point point;
-    @Reference(lazy = true)
+    @Transient
     private User user;
+    private ObjectId userId;
     private int money;
 //    private Backpack backpack;
 //    private Farm farm;
@@ -67,7 +68,18 @@ public class Player {
 //        friends = new ArrayList<>();
 //        backpack = Backpack.Default;
 //        this.farm = null;
+        _id = new ObjectId();
     }
+
+    public void prepareForSaving() {
+        if (user != null) {
+            System.out.println("Debug: Setting userId : " + user.get_id());
+            userId = user.get_id();
+        } else {
+            System.out.println("Warning: currentUser is null");
+        }
+    }
+
 
 
     public Point getPoint() {
@@ -96,6 +108,10 @@ public class Player {
 
     public ObjectId get_id() {
         return _id;
+    }
+
+    public ObjectId getUserId() {
+        return userId;
     }
 
     @Override

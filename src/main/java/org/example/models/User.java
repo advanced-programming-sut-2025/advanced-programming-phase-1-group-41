@@ -1,9 +1,6 @@
 package org.example.models;
 
-import dev.morphia.annotations.Embedded;
-import dev.morphia.annotations.Entity;
-import dev.morphia.annotations.Id;
-import dev.morphia.annotations.Reference;
+import dev.morphia.annotations.*;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
@@ -21,13 +18,12 @@ public class User {
     private int age;
     private int numberOfGames;
     private int HighestScore;
-//    private Game currentGame =  new Game();
-//    private ArrayList<Game> games;
     private String question;
     private String answer;
     private boolean stayLoggedIn;
-    @Reference
+    @Transient
     private Game currentGame;
+    private ObjectId gameId;
 
     public User() {
     }
@@ -44,6 +40,16 @@ public class User {
         this.question = question;
         this.answer = answer;
         this.stayLoggedIn = false;
+        _id = new ObjectId();
+    }
+
+    public void prepareForSaving() {
+        if (currentGame != null) {
+            System.out.println("Debug: Setting gameId for " + username + " to " + currentGame.get_id());
+            gameId = currentGame.get_id();
+        } else {
+            System.out.println("Warning: currentGame is null for " + username);
+        }
     }
 
 
@@ -172,5 +178,9 @@ public class User {
                 ", answer='" + answer + '\'' +
                 ", stayLoggedIn=" + stayLoggedIn +
                 '}';
+    }
+
+    public ObjectId getGameId() {
+        return gameId;
     }
 }

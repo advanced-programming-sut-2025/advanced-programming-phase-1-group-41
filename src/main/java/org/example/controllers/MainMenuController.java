@@ -1,5 +1,9 @@
 package org.example.controllers;
 
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import dev.morphia.Datastore;
+import dev.morphia.Morphia;
 import org.bson.types.ObjectId;
 import org.example.models.*;
 
@@ -12,6 +16,18 @@ public class MainMenuController {
     public void logout(){
         App.setCurrentUser(null);
         App.setMenu(Menu.Authentication);
+    }
+
+    public void savePlayer(Player player) {
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        Datastore datastore = Morphia.createDatastore(mongoClient, "ProjectDB");
+
+        datastore.getMapper().map(TimeLine.class);
+        datastore.getMapper().map(Player.class);
+        datastore.getMapper().map(Game.class);
+        datastore.getMapper().map(User.class);
+
+        datastore.save(player);
     }
 
     public Result newGame(Matcher matcher){
@@ -47,7 +63,10 @@ public class MainMenuController {
         Player player2 = new Player(user2);
         Player player3 = new Player(user3);
         Player player4 = new Player(user4);
-
+        savePlayer(player1);
+        savePlayer(player2);
+        savePlayer(player3);
+        savePlayer(player4);
 
         if(user1 == null || user2 == null || user3 == null || user4 == null){
             return new Result(false,"a username doesn't exist");
@@ -77,9 +96,29 @@ public class MainMenuController {
         App.setGame(game);
         App.getGame().setCurrentPlayer(player1);
         App.games.add(game);
+        setPlayerGames(players, game);
+        saveGame(game);
         return new Result(true,"Game created successfully");
 
     }
+
+    private void saveGame(Game game){
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        Datastore datastore = Morphia.createDatastore(mongoClient, "ProjectDB");
+
+        datastore.getMapper().map(TimeLine.class);
+        datastore.getMapper().map(Player.class);
+        datastore.getMapper().map(Game.class);
+        datastore.getMapper().map(User.class);
+        datastore.save(game);
+    }
+
+    private void setPlayerGames(ArrayList<Player> players, Game game) {
+        for (Player player : players) {
+            player.getUser().setCurrentGame(game);
+        }
+    }
+
     public Result selectMap(Matcher matcher, HashSet<Integer> pickedFarms){
 
         String numberRaw = matcher.group("mapNumber");

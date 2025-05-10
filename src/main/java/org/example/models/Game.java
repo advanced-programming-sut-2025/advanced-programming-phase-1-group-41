@@ -8,22 +8,29 @@ import org.bson.types.ObjectId;
 import org.example.models.locations.Map;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity("games")
 public class Game {
     @Id
     private ObjectId _id;
-    private TimeLine time = new TimeLine();
-    @Reference
+    private TimeLine time;
+    @Transient
     private Player loader;
-    @Reference
+    @Transient
     private Player currentPlayer;
-    @Reference
+    @Transient
     private ArrayList<Player> players;
+
+    private ObjectId loaderId;
+    private ObjectId currentPlayerId;
+    private ArrayList<ObjectId> playersId;
+
     private WeatherType weatherType;
     private WeatherType tmrwWeatherType;
 
-    private Map map;
+//    private Map map;
 
     public Game(){
 
@@ -34,10 +41,28 @@ public class Game {
         this.loader = loader;
         this.weatherType = WeatherType.Sunny;
         this.tmrwWeatherType = WeatherType.Sunny;
-        this.map = new Map();
-
-        setPlayerGames(players);
+        this.time = new TimeLine();
+//        this.map = new Map();
+        this._id = new ObjectId();
     }
+
+    public void setPlayers(List<Player> players) {
+        this.players = new ArrayList<>(players); // Ensure it's explicitly an ArrayList
+        this.playersId = players.stream()
+                .map(Player::get_id)
+                .collect(Collectors.toCollection(ArrayList::new)); // Convert IDs safely to ArrayList
+    }
+
+    public void prepareForSaving() {
+        if (loader != null) loaderId = loader.get_id();
+        if (currentPlayer != null) currentPlayerId = currentPlayer.get_id();
+
+        playersId = players.stream()
+                .map(Player::get_id)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+
 
     public Player getCurrentPlayer() {
         return currentPlayer;
@@ -110,17 +135,25 @@ public class Game {
         this.tmrwWeatherType = tmrwWeatherType;
     }
 
-    private void setPlayerGames(ArrayList<Player> players) {
-        for (Player player : players) {
-            player.getUser().setCurrentGame(this);
-        }
+
+
+//    public Map getMap() {
+//        return map;
+//    }
+//
+//    public void setMap(Map map) {
+//        this.map = map;
+//    }
+
+    public ObjectId getLoaderId() {
+        return loaderId;
     }
 
-    public Map getMap() {
-        return map;
+    public ObjectId getCurrentPlayerId() {
+        return currentPlayerId;
     }
 
-    public void setMap(Map map) {
-        this.map = map;
+    public ArrayList<ObjectId> getPlayersId() {
+        return playersId;
     }
 }

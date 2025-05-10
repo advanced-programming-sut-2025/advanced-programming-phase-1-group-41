@@ -1,5 +1,9 @@
 package org.example.controllers.authentication;
 
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import dev.morphia.Datastore;
+import dev.morphia.Morphia;
 import org.example.database.UserDB;
 import org.example.models.*;
 import org.example.views.commands.AuthenticationCommands;
@@ -131,7 +135,21 @@ public class AuthenticationController {
     private void register(String username, String nickname, String email, String password,
                           Gender gender, String question, String answer) {
         User user = new User(username, password, email, nickname, gender, question, answer);
+        saveUser(user);
         App.addUser(user);
+    }
+
+    private void saveUser(User user){
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        Datastore datastore = Morphia.createDatastore(mongoClient, "ProjectDB");
+
+        datastore.getMapper().map(TimeLine.class);
+        datastore.getMapper().map(Player.class);
+        datastore.getMapper().map(Game.class);
+        datastore.getMapper().map(User.class);
+
+        datastore.save(user);
+
     }
 
     private String generateRandomPassword() {
