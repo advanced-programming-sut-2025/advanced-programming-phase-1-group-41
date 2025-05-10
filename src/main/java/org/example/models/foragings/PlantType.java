@@ -4,7 +4,7 @@ import org.example.models.Season;
 
 import java.util.ArrayList;
 
-public enum PlantType implements Foraging {
+public enum PlantType {
 //    BlueJazz(),
 //    Carrot(),
     // etc

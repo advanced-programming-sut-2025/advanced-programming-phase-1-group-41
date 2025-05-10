@@ -1,6 +1,6 @@
 package org.example.models.foragings;
 
-public enum MineralType implements Foraging{
+public enum MineralType{
     // TODO
     ;
 
