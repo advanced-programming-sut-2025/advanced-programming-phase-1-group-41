@@ -35,9 +35,10 @@ public class Farm {
             }
         }
         //TODO Random in 4 ta
-        buildings.add(new Greenhouse(0,0,this));
-        buildings.add(new Cottage(10,10,this));
-        mine = new Mine(20,20,this);
+        Random rand = new Random();
+        buildings.add(new Greenhouse(24 + rand.nextInt(4),4,this));
+        buildings.add(new Cottage(4, 30 + rand.nextInt(4),this));
+        mine = new Mine(3,3,this);
         int lakeCount = farmType.LakeCoefficient;
         for(int i = 0; i < lakeCount; i++){
             lakes.add(new Lake(30 + 10 * i, 30 + 10 * i, this));
@@ -47,8 +48,6 @@ public class Farm {
         int treeCount = 10 * farmType.treeCoefficient;
         int plantCount = 10 * farmType.treeCoefficient;
         for(int i = 0; i < rockCount ;i++){
-
-            Random rand = new Random();
             int x = rand.nextInt(MaxLength);
             int y = rand.nextInt(MaxHeight);
             if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap().getChar(), new Grass().getChar())){
@@ -58,7 +57,6 @@ public class Farm {
             }
         }
         for(int i = 0; i < treeCount ;i++){
-            Random rand = new Random();
             int x = rand.nextInt(MaxLength);
             int y = rand.nextInt(MaxHeight);
             if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap().getChar(), new Grass().getChar())){
@@ -68,7 +66,6 @@ public class Farm {
             }
         }
         for(int i = 0; i < plantCount ;i++){
-            Random rand = new Random();
             int x = rand.nextInt(MaxLength);
             int y = rand.nextInt(MaxHeight);
             if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap().getChar(), new Grass().getChar())){

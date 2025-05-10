@@ -11,7 +11,7 @@ import java.util.Random;
 public class Plant implements ObjectMap {
     @Override
     public String getChar() {
-        return Colors.colorize(9,22,"%%");
+        return Colors.colorize(9,22,"$$");
     }
     private final PlantType plantType;
     public Plant(int x, int y, Farm farm) {

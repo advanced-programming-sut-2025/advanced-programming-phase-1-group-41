@@ -24,22 +24,22 @@ public class Cottage implements Building {
         int xWall;
         int yWall;
         yWall = y;
-        while(yWall<=y+7) {
-            for (int i = x; i <= x + 6; i++) {
+        while(yWall<=y+5) {
+            for (int i = x; i <= x + 5; i++) {
                 Cell cell = Finder.findCellByCoordinates(i, yWall, farm);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
             }
-            yWall+=7;
+            yWall+=5;
         }
         xWall = x;
-        while(xWall<=y+6) {
-            for (int j = y+1; j <= y+6; j++) {
+        while(xWall<=x+5) {
+            for (int j = y+1; j <= y+5; j++) {
                 Cell cell = Finder.findCellByCoordinates(xWall, j, farm);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
             }
-            xWall+=6;
+            xWall+=5;
         }
         x++;
         y++;

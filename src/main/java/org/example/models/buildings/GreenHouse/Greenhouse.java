@@ -36,10 +36,10 @@ public class Greenhouse implements Building {
             yWall+=7;
         }
         xWall = x;
-        while(xWall<=y+6) {
+        while(xWall<=x+6) {
             for (int j = y+1; j <= y+6; j++) {
                 Cell cell = Finder.findCellByCoordinates(xWall, j, farm);
-                assert cell != null;
+//                assert cell != null;
                 cell.setObjectMap(new Wall());
             }
             xWall+=6;
@@ -51,7 +51,7 @@ public class Greenhouse implements Building {
         for(int i=x; i<xLength+x; i++) {
             for(int j=y; j<yLength+y; j++) {
                 Cell cell=Finder.findCellByCoordinates(i, j, farm);
-                assert cell != null;
+//                assert cell != null;
                 cell.setObjectMap(this);
             }
         }

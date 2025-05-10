@@ -13,8 +13,8 @@ public class Mine implements ObjectMap {
         x++;
         y++;
         Random rand = new Random();
-        int xLength = 8 + rand.nextInt(8);
-        int yLength = 7 + rand.nextInt(7);
+        int xLength = 7 + rand.nextInt(7);
+        int yLength = 7 + rand.nextInt(6);
         for(int i=x; i<xLength+x; i++) {
             for(int j=y; j<yLength+y; j++) {
                 Cell cell=Finder.findCellByCoordinates(i, j, farm);
