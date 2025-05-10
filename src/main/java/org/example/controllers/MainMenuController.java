@@ -4,6 +4,7 @@ import org.example.models.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.regex.Matcher;
 
 public class MainMenuController {
@@ -28,7 +29,9 @@ public class MainMenuController {
         System.out.println("here");
         return new Result(false, "Invalid menu name!\nMenu options:\nProfile\nAuthentication\nGame");
     }
+
     public Result newGame(Matcher matcher){
+
         if(matcher.group("flag")==null){
             return new Result(false,"Empty flag");
         }
@@ -45,19 +48,17 @@ public class MainMenuController {
             return new Result(false,matcher.group("More than 3 players"));
         }
         User user1 = null, user2 = null, user3 = null, user4 = null;
-        if(Finder.getUserByUsername(username1)==null||
-                Finder.getUserByUsername(username2)==null||
-                Finder.getUserByUsername(username3)==null
+
+        if(Finder.getUserByUsername(username1).getCurrentGame()!=null||
+                Finder.getUserByUsername(username2).getCurrentGame()!=null||
+                Finder.getUserByUsername(username3).getCurrentGame()!=null
         ){
             return new Result(false,matcher.group("Invalid Username"));
         }
 
+
         // TODO check if needed to be less than 4 players
-//        if(Finder.getGameByUsername(matcher.group(username1))!=null||
-//           Finder.getGameByUsername(matcher.group(username2))!=null||
-//           Finder.getGameByUsername(matcher.group(username3))!=null){
-//            return new Result(false,matcher.group("Username already in use"));
-//        }
+
         user1 = App.getCurrentUser();
         user2 = Finder.getUserByUsername(username1);
         user3 = Finder.getUserByUsername(username2);
@@ -76,13 +77,17 @@ public class MainMenuController {
         return new Result(true,"Game created successfully");
 
     }
-    public Result selectMap(Matcher matcher){
+    public Result selectMap(Matcher matcher, HashSet<Integer> pickedFarms){
+
         String numberRaw = matcher.group("mapNumber");
         int mapNumber = Integer.parseInt(numberRaw);
         if(!numberRaw.matches("\\d+")||mapNumber<=0||mapNumber>4){
             return new Result(false,matcher.group("Invalid number"));
         }
-
+        else if(pickedFarms.contains(mapNumber)){
+            return new Result(false,matcher.group("Invalid number"));
+        }
+        pickedFarms.add(mapNumber);
 //        App.getGame().getCurrentPlayer().setFarm(new Farm(mapNumber));
         App.getGame().passTurn();
         return new Result(true,"Selected"+matcher.group("mapNumber"));

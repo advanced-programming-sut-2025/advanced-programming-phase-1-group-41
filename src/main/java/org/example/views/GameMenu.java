@@ -21,9 +21,7 @@ public class GameMenu implements AppMenu {
         if(CheckerController.checkCommand(input)) {
 
         }
-        else if((matcher=GameMainCommands.NewGame.getMatcher(input))!=null){
-            handleNewGame(input, matcher, scanner);
-        }else if((matcher=GameMainCommands.ExitGame.getMatcher(input))!=null){
+        else if((matcher=GameMainCommands.ExitGame.getMatcher(input))!=null){
             System.out.println(controller.exitGame(matcher));
         }else if((matcher=GameMainCommands.DeleteGame.getMatcher(input))!=null){
             System.out.println(controller.deleteGame(matcher, scanner));
@@ -33,28 +31,6 @@ public class GameMenu implements AppMenu {
 
         }
 
-    }
-    private void handleNewGame(String input, Matcher matcher, Scanner scanner){
-        HashSet<Integer> pickedFarms = new HashSet<>();
-        Result result=controller.newGame(matcher);
-        System.out.println(result);
-        for(int i=0;i<4;i++) {
-            System.out.println("choosing for user: "+App.getGame().getPlayers().get(i));
-            input = scanner.nextLine();
-            while (GameMainCommands.GameMap.getMatcher(input) == null) {
-                System.out.println("Invalid command");
-                input = scanner.nextLine();
-            }
-            matcher = GameMainCommands.GameMap.getMatcher(input);
-            boolean passTurn = false;
-            while(!passTurn) {
-                result = controller.selectMap(matcher,pickedFarms);
-                System.out.println(result);
-                if(result.success()){
-                    passTurn = true;
-                }
-            }
-        }
     }
 
     public static boolean handleDeleteGame(Scanner scanner){

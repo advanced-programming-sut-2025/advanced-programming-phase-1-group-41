@@ -8,6 +8,7 @@ import org.example.models.Result;
 import org.example.views.commands.MainMenuCommands;
 import org.example.views.commands.gameCommands.GameMainCommands;
 
+import java.util.HashSet;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
@@ -37,6 +38,7 @@ public class MainMenu implements AppMenu {
     }
 
     private void handleNewGame(String input, Matcher matcher, Scanner scanner){
+        HashSet<Integer> pickedFarms = new HashSet<>();
         Result result=controller.newGame(matcher);
         System.out.println(result);
         for(int i=0;i<4;i++) {
@@ -49,7 +51,7 @@ public class MainMenu implements AppMenu {
             matcher = GameMainCommands.GameMap.getMatcher(input);
             boolean passTurn = false;
             while(!passTurn) {
-                result = controller.selectMap(matcher);
+                result = controller.selectMap(matcher,pickedFarms);
                 System.out.println(result);
                 if(result.success()){
                     passTurn = true;
