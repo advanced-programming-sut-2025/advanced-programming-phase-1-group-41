@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.database.UserDB;
+import org.example.models.locations.Farm;
 import org.example.views.AppView;
 
 import java.security.NoSuchAlgorithmException;
@@ -9,7 +10,10 @@ import java.security.NoSuchAlgorithmException;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) throws NoSuchAlgorithmException {
-        AppView appView = new AppView();
-        appView.runApp();
+        Farm farm = new Farm(1);
+        farm.printMap();
+
+//        AppView appView = new AppView();
+//        appView.runApp();
     }
 }

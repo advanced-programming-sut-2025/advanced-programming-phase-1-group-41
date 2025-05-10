@@ -19,8 +19,8 @@ import static org.example.models.App.MaxLength;
 
 
 public class Farm {
-    private FarmType farmType;
-    private ArrayList<Cell> cells;
+    private FarmType farmType = FarmType.Mountain;
+    private ArrayList<Cell> cells = new ArrayList<>();
     int id;
     private final ArrayList<Building> buildings = new ArrayList<>();
     private final ArrayList<Foraging> foragings = new ArrayList<>();
@@ -83,11 +83,14 @@ public class Farm {
         return cells;
     }
     public void printMap(){
+        int counter = 0;
         for(Cell cell:cells){
             System.out.printf(cell.getObjectMap().getChar());
-            if(cell.getX()==75){//TODO CHANGE APP FROM 75 TO 81 AND FROM 60 TO 41
-                System.out.println();
+//            System.out.print(cell.getX()+""+cell.getY());
+            if(counter%60 == 0){//TODO CHANGE APP FROM 75 TO 81 AND FROM 60 TO 41
+                System.out.println("");
             }
+            counter++;
         }
     }
 

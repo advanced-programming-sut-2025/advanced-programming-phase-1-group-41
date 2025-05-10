@@ -5,6 +5,10 @@ import org.example.models.locations.Farm;
 import java.util.Random;
 
 public class Mine implements ObjectMap {
+    @Override
+    public String getChar() {
+        return Colors.colorize(233,237,"MM");
+    }
     public Mine(int x, int y, Farm farm) {
         x++;
         y++;

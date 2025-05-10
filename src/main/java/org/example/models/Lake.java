@@ -5,9 +5,13 @@ import org.example.models.locations.Farm;
 import java.util.Random;
 
 public class Lake implements ObjectMap {
+    @Override
+    public String getChar() {
+        return Colors.colorize(39,39,"LL");
+    }
     private static final int WIDTH = 15;
     private static final int HEIGHT = 15;
-    private static final int ITERATIONS = 4;
+    private static final int ITERATIONS = 5;
     private static final double INITIAL_WATER_CHANCE = 0.45;
 
     public Lake(int startX, int startY, Farm farm) {

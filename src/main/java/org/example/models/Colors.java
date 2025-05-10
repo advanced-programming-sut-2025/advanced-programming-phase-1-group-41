@@ -1,41 +1,17 @@
 package org.example.models;
 
-public enum Colors {
-    BLACK("\u001B[30m", "\u001B[40m"),
-    RED("\u001B[31m", "\u001B[41m"),
-    GREEN("\u001B[32m", "\u001B[42m"),
-    YELLOW("\u001B[33m", "\u001B[43m"),
-    BLUE("\u001B[34m", "\u001B[44m"),
-    PURPLE("\u001B[35m", "\u001B[45m"),
-    CYAN("\u001B[36m", "\u001B[46m"),
-    WHITE("\u001B[37m", "\u001B[47m"),
-    RESET("\u001B[0m", "\u001B[0m");
-
-    private final String foreGround;
-    private final String backGround;
-
-    Colors(String foreGround, String backGround) {
-        this.foreGround = foreGround;
-        this.backGround = backGround;
+public class Colors {
+    public static String foreColor(int colorCode) {
+        return "\u001B[38;5;" + colorCode + "m";
     }
 
-    public String foreGround() {
-        return foreGround;
+    public static String backColor(int colorCode) {
+        return "\u001B[48;5;" + colorCode + "m";
     }
 
-    public String backGround() {
-        return backGround;
-    }
+    public static final String RESET = "\u001B[0m";
 
-    public String applyForeGround(String text) {
-        return foreGround + text + RESET.foreGround;
-    }
-
-    public String applyBackGround(String text) {
-        return backGround + text + RESET.backGround;
-    }
-
-    public String applyBoth(String text) {
-        return foreGround + backGround + text + RESET.backGround + RESET.foreGround;
+    public static String colorize(int foreColor, int backColor, String text) {
+        return foreColor(foreColor) + backColor(backColor) + text + RESET;
     }
 }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public enum PlantType {
 //    BlueJazz(),
-//    Carrot(),
+    Carrot(),
     // etc
     ;
 
@@ -14,23 +14,23 @@ public enum PlantType {
     private String name;
     private SeedType seed;
     private boolean eatable;
-    public final ArrayList<Season> seasonsToGrow;
-    public final ArrayList<Integer> stagesCycleTime;
+    public final ArrayList<Season> seasonsToGrow = new ArrayList<>();
+    public final ArrayList<Integer> stagesCycleTime =  new ArrayList<>();
     private boolean oneTime;
     private boolean canBecomeGiant;
     private int price;
 
 
-    PlantType(String name, SeedType seed, boolean eatable, ArrayList<Season> seasonsToGrow, ArrayList<Integer> stagesCycleTime, boolean oneTime, boolean canBecomeGiant, int price) {
-        this.name = name;
-        this.seed = seed;
-        this.eatable = eatable;
-        this.seasonsToGrow = seasonsToGrow;
-        this.stagesCycleTime = stagesCycleTime;
-        this.oneTime = oneTime;
-        this.canBecomeGiant = canBecomeGiant;
-        this.price = price;
-    }
+//    PlantType(String name, SeedType seed, boolean eatable, ArrayList<Season> seasonsToGrow, ArrayList<Integer> stagesCycleTime, boolean oneTime, boolean canBecomeGiant, int price) {
+//        this.name = name;
+//        this.seed = seed;
+//        this.eatable = eatable;
+//        this.seasonsToGrow = seasonsToGrow;
+//        this.stagesCycleTime = stagesCycleTime;
+//        this.oneTime = oneTime;
+//        this.canBecomeGiant = canBecomeGiant;
+//        this.price = price;
+//    }
 
 
     public String getName() {

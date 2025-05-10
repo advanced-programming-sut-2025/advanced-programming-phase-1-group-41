@@ -1,6 +1,7 @@
 package org.example.models.foragings;
 
 import org.example.models.Cell;
+import org.example.models.Colors;
 import org.example.models.Finder;
 import org.example.models.ObjectMap;
 import org.example.models.locations.Farm;
@@ -8,6 +9,10 @@ import org.example.models.locations.Farm;
 import java.util.Random;
 
 public class Rock implements ObjectMap {
+    @Override
+    public String getChar() {
+        return Colors.colorize(236,0,"OO");
+    }
     private final RockType rockType;
     public Rock(int x, int y, Farm farm) {
         Random rand = new Random();

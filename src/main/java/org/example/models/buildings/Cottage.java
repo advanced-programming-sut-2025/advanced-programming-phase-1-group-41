@@ -1,6 +1,7 @@
 package org.example.models.buildings;
 
 import org.example.models.Cell;
+import org.example.models.Colors;
 import org.example.models.Finder;
 import org.example.models.Point;
 import org.example.models.buildings.GreenHouse.WaterTank;
@@ -8,6 +9,10 @@ import org.example.models.locations.Farm;
 
 
 public class Cottage implements Building {
+    @Override
+    public String getChar() {
+        return Colors.colorize(0,178,"II");
+    }
     int x;
     int y;
     Farm farm;

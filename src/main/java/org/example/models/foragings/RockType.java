@@ -6,11 +6,11 @@ import java.util.ArrayList;
 
 public enum RockType {
 //    BlueJazz(),
-//    Carrot(),
+    Carrot(),
     // etc
     ;
 
 
-    RockType()
+    RockType(){
     }
 }

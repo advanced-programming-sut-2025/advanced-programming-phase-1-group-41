@@ -1,12 +1,17 @@
 package org.example.models.buildings.GreenHouse;
 
 import org.example.models.Cell;
+import org.example.models.Colors;
 import org.example.models.Finder;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.Wall;
 import org.example.models.locations.Farm;
 
 public class Greenhouse implements Building {
+    @Override
+    public String getChar() {
+        return Colors.colorize(0,3,"XX");
+    }
     private final int x;
     private final int y;
     private final Farm farm;
