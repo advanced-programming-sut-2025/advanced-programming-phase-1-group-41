@@ -40,6 +40,15 @@ public class Farm {
     public ArrayList<Cell> getCells() {
         return cells;
     }
+    public void printMap(){
+        for(Cell cell:cells){
+            System.out.printf(cell.getObjectMap().getChar());
+            if(cell.getX()==75){//TODO CHANGE APP FROM 75 TO 81 AND FROM 60 TO 41
+                System.out.println();
+            }
+        }
+    }
+
 
 //    public void setCells(ArrayList<Cell> cells) {
 //        this.cells = cells;
