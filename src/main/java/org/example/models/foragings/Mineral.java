@@ -1,22 +1,23 @@
 package org.example.models.foragings;
 
-public enum Mineral implements Foraging{
-    // TODO
-    ;
+import org.example.models.Cell;
+import org.example.models.Finder;
+import org.example.models.ObjectMap;
+import org.example.models.locations.Farm;
 
-    private String name;
-    private int price;
+import java.util.Random;
 
-    Mineral(String name, int price) {
-        this.name = name;
-        this.price = price;
+public class Mineral implements ObjectMap {
+    private MineralType mineralType;
+    public Mineral(int x, int y, Farm farm) {
+        Random rand = new Random();
+        int type = rand.nextInt(MineralType.values().length);
+        mineralType = MineralType.values()[type];
+        Cell cell= Finder.findCellByCoordinates(x, y, farm);
+        assert cell != null;
+        cell.setObjectMap(this);
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getPrice() {
-        return price;
+    public MineralType getMineralType() {
+        return mineralType;
     }
 }

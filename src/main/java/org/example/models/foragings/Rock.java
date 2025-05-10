@@ -7,17 +7,17 @@ import org.example.models.locations.Farm;
 
 import java.util.Random;
 
-public class Plant implements ObjectMap {
-    private final PlantType plantType;
-    public Plant(int x, int y, Farm farm) {
+public class Rock implements ObjectMap {
+    private final RockType rockType;
+    public Rock(int x, int y, Farm farm) {
         Random rand = new Random();
-        int type = rand.nextInt(PlantType.values().length);
-        plantType = PlantType.values()[type];
+        int type = rand.nextInt(RockType.values().length);
+        rockType = RockType.values()[type];
         Cell cell= Finder.findCellByCoordinates(x, y, farm);
         assert cell != null;
         cell.setObjectMap(this);
     }
-    public PlantType getPlantType() {
-        return plantType;
+    public RockType getRockType() {
+        return rockType;
     }
 }
