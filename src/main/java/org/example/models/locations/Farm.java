@@ -25,7 +25,7 @@ public class Farm {
                 cells.add(new Cell(new Grass(),i,j));
             }
         }
-        new Greenhouse(69,53,this);
+        buildings.add(new Greenhouse(69,53,this));
     }
 
     public ArrayList<Cell> getCells() {

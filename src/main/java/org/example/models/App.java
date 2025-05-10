@@ -3,13 +3,12 @@ package org.example.models;
 import org.bson.types.ObjectId;
 import org.example.models.buildings.Building;
 import org.example.models.foragings.Plant;
+import org.example.models.locations.Map;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class App {
-    private static Map map;
     private static ArrayList<Building> buildings;
     private static ArrayList<Plant> plants;
     public final static ArrayList<User> users = new ArrayList<>();

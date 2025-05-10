@@ -5,6 +5,7 @@ import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Reference;
 import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
+import org.example.models.locations.Map;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,8 @@ public class Game {
     private WeatherType weatherType;
     private WeatherType tmrwWeatherType;
 
+    private Map map;
+
     public Game(){
 
     }
@@ -31,7 +34,7 @@ public class Game {
         this.loader = loader;
         this.weatherType = WeatherType.Sunny;
         this.tmrwWeatherType = WeatherType.Sunny;
-
+        this.map = new Map();
 
         setPlayerGames(players);
     }
@@ -111,5 +114,13 @@ public class Game {
         for (Player player : players) {
             player.getUser().setCurrentGame(this);
         }
+    }
+
+    public Map getMap() {
+        return map;
+    }
+
+    public void setMap(Map map) {
+        this.map = map;
     }
 }
