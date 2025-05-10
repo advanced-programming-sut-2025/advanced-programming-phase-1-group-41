@@ -26,9 +26,9 @@ public class App {
         App.questions.addAll(questions);
     }
 
-    public static Map getMap() {
-        return map;
-    }
+//    public static Map getMap() {
+//        return map;
+//    }
 
     public static ArrayList<Building> getBuildings() {
         return buildings;
