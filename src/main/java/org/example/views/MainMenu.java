@@ -4,27 +4,57 @@ import org.example.controllers.CheckerController;
 import org.example.controllers.MainMenuController;
 import org.example.models.App;
 import org.example.models.Menu;
+import org.example.models.Result;
 import org.example.views.commands.MainMenuCommands;
+import org.example.views.commands.gameCommands.GameMainCommands;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class MainMenu implements AppMenu {
-    MainMenuController mainMenuController = new MainMenuController();
+    MainMenuController controller = new MainMenuController();
     @Override
     public void check(Scanner scanner) {
-        String command = scanner.nextLine();
+        String input = scanner.nextLine();
         Matcher matcher = null;
 
-        if(CheckerController.checkCommand(command)) {
+        if(CheckerController.checkCommand(input)) {
 
         }
-        else if(MainMenuCommands.UserLogout.getMatcher(command) != null) {
-            mainMenuController.logout();
+        else if((matcher= MainMenuCommands.NewGame.getMatcher(input))!=null){
+            handleNewGame(input, matcher, scanner);
+        } else if(MainMenuCommands.LoadGame.getMatcher(input)!=null){
+            Result result = controller.loadGame(MainMenuCommands.LoadGame.getMatcher(input));
+            System.out.println(result);
+        }
+        else if(MainMenuCommands.UserLogout.getMatcher(input) != null) {
+            controller.logout();
             System.out.println("Logged out successfully.");
         }
         else {
             System.out.println("Invalid command!");
+        }
+    }
+
+    private void handleNewGame(String input, Matcher matcher, Scanner scanner){
+        Result result=controller.newGame(matcher);
+        System.out.println(result);
+        for(int i=0;i<4;i++) {
+            System.out.println("choosing for user: "+App.getGame().getPlayers().get(i));
+            input = scanner.nextLine();
+            while (GameMainCommands.GameMap.getMatcher(input) == null) {
+                System.out.println("Invalid command");
+                input = scanner.nextLine();
+            }
+            matcher = GameMainCommands.GameMap.getMatcher(input);
+            boolean passTurn = false;
+            while(!passTurn) {
+                result = controller.selectMap(matcher);
+                System.out.println(result);
+                if(result.success()){
+                    passTurn = true;
+                }
+            }
         }
     }
 }
