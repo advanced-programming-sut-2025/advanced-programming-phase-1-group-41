@@ -19,7 +19,7 @@ import static org.example.models.App.MaxLength;
 
 
 public class Farm {
-    private FarmType farmType = FarmType.Mountain;
+    private FarmType farmType = FarmType.Swamp;
     private ArrayList<Cell> cells = new ArrayList<>();
     int id;
     private final ArrayList<Building> buildings = new ArrayList<>();
@@ -41,7 +41,7 @@ public class Farm {
         mine = new Mine(3,3,this);
         int lakeCount = farmType.LakeCoefficient;
         for(int i = 0; i < lakeCount; i++){
-            lakes.add(new Lake(30 + 10 * i, 30 + 10 * i, this));
+            lakes.add(new Lake(25 + 10 * i + rand.nextInt(5 + 5 * i), 25 + 10 * i + rand.nextInt(5 + 5 * i), this));
         }
 
         int rockCount = 20 * farmType.rockCoefficient;

@@ -6,6 +6,6 @@ import org.example.models.ObjectMap;
 public class WaterTank implements ObjectMap {
     @Override
     public String getChar() {
-        return Colors.colorize(20,27,"@@");
+        return Colors.colorize(27,0,"@@");
     }
 }

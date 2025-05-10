@@ -7,7 +7,7 @@ import java.util.Random;
 public class Mine implements ObjectMap {
     @Override
     public String getChar() {
-        return Colors.colorize(233,237,"MM");
+        return Colors.colorize(233,237,"^.");
     }
     public Mine(int x, int y, Farm farm) {
         x++;

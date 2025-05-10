@@ -11,7 +11,7 @@ import org.example.models.locations.Farm;
 public class Cottage implements Building {
     @Override
     public String getChar() {
-        return Colors.colorize(0,178,"II");
+        return Colors.colorize(178,0,"..");
     }
     int x;
     int y;

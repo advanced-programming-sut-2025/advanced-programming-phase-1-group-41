@@ -11,7 +11,7 @@ import java.util.Random;
 public class Tree implements ObjectMap {
     @Override
     public String getChar() {
-        return Colors.colorize(130,0,"TT");
+        return Colors.colorize(130,0,"\uD83E\uDEB5");
     }
     private TreeType treeType;
     public Tree(int x, int y, Farm farm) {

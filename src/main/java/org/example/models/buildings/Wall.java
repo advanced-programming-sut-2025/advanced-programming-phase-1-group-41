@@ -6,7 +6,7 @@ import org.example.models.ObjectMap;
 public class Wall implements ObjectMap {
     @Override
     public String getChar() {
-        return Colors.colorize(15,27,"##");
+        return Colors.colorize(3,0,"##");
     }
     //TODO
 }

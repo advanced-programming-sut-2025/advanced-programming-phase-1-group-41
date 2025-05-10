@@ -11,7 +11,7 @@ import java.util.Random;
 public class Rock implements ObjectMap {
     @Override
     public String getChar() {
-        return Colors.colorize(236,0,"OO");
+        return Colors.colorize(236,0,"\uD83E\uDEA8");
     }
     private final RockType rockType;
     public Rock(int x, int y, Farm farm) {
