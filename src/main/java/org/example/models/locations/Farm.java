@@ -3,8 +3,10 @@ package org.example.models.locations;
 import dev.morphia.annotations.Entity;
 import org.example.models.Cell;
 import org.example.models.Grass;
+import org.example.models.Mine;
 import org.example.models.ObjectMap;
 import org.example.models.buildings.Building;
+import org.example.models.buildings.Cottage;
 import org.example.models.buildings.GreenHouse.Greenhouse;
 import org.example.models.foragings.Foraging;
 
@@ -20,6 +22,7 @@ public class Farm {
     int id;
     private final ArrayList<Building> buildings = new ArrayList<>();
     private final ArrayList<Foraging> foragings= new ArrayList<>();
+    private final Mine mine;
 
     public Farm(int id) {
         this.id = id;
@@ -28,7 +31,10 @@ public class Farm {
                 cells.add(new Cell(new Grass(),i,j));
             }
         }
+        //TODO Random
         buildings.add(new Greenhouse(0,0,this));
+        buildings.add(new Cottage(10,10,this));
+        mine = new Mine(20,20,this);
     }
 
     public ArrayList<Cell> getCells() {

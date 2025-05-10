@@ -3,10 +3,18 @@ package org.example.models.buildings.GreenHouse;
 import org.example.models.Cell;
 import org.example.models.Finder;
 import org.example.models.buildings.Building;
+import org.example.models.buildings.Wall;
 import org.example.models.locations.Farm;
 
 public class Greenhouse implements Building {
+    private final int x;
+    private final int y;
+    private final Farm farm;
+
     public Greenhouse(int x, int y, Farm farm) {
+        this.x = x;
+        this.y = y;
+        this.farm = farm;
         int xWall;
         int yWall;
         yWall = y;
@@ -26,6 +34,7 @@ public class Greenhouse implements Building {
         while(xWall<=y+6) {
             for (int j = y+1; j <= y+6; j++) {
                 Cell cell = Finder.findCellByCoordinates(xWall, j, farm);
+                assert cell != null;
                 cell.setObjectMap(new Wall());
             }
             xWall+=6;
@@ -36,10 +45,20 @@ public class Greenhouse implements Building {
         int yLength=6;
         for(int i=x; i<xLength+x; i++) {
             for(int j=y; j<yLength+y; j++) {
-                Cell cell=Finder.findCellByCoordinates(x, y, farm);
+                Cell cell=Finder.findCellByCoordinates(i, j, farm);
                 assert cell != null;
                 cell.setObjectMap(this);
             }
         }
+    }
+
+    public int getX() {
+        return x;
+    }
+    public int getY() {
+        return y;
+    }
+    public Farm getFarm() {
+        return farm;
     }
 }

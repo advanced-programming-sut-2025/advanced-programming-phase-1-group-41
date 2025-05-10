@@ -1,32 +1,23 @@
 package org.example.models.foragings;
 
-import org.example.models.Season;
+import org.example.models.Cell;
+import org.example.models.Finder;
+import org.example.models.ObjectMap;
+import org.example.models.locations.Farm;
 
-import java.util.ArrayList;
+import java.util.Random;
 
-public enum Tree implements Foraging {
-//    Apricot(),
-//    Cherry(),
-//    Banana()
-    //etc
-    ;
-    String name;
-    Seed seed;
-    boolean eatable;
-    ArrayList<Season> seasonsToGrow;
-    ArrayList<Integer> stagesCycleTime;
-    boolean isStruckByLightning;
-//    boolean oneTime;
-//    boolean canBecomeGiant;
-    int price;
-
-    Tree(String name, Seed seed, boolean eatable, ArrayList<Season> seasonsToGrow, ArrayList<Integer> stagesCycleTime, int price) {
-        this.name = name;
-        this.seed = seed;
-        this.eatable = eatable;
-        this.seasonsToGrow = seasonsToGrow;
-        this.stagesCycleTime = stagesCycleTime;
-        this.price = price;
-        this.isStruckByLightning = false;
+public class Tree implements ObjectMap {
+    private TreeType treeType;
+    public Tree(int x, int y, Farm farm) {
+        Random rand = new Random();
+        int type = rand.nextInt(TreeType.values().length);
+        treeType = TreeType.values()[type];
+        Cell cell= Finder.findCellByCoordinates(x, y, farm);
+        assert cell != null;
+        cell.setObjectMap(this);
+    }
+    public TreeType getTreeType() {
+        return treeType;
     }
 }

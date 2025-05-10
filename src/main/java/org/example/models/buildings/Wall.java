@@ -1,4 +1,4 @@
-package org.example.models.buildings.GreenHouse;
+package org.example.models.buildings;
 
 import org.example.models.ObjectMap;
 

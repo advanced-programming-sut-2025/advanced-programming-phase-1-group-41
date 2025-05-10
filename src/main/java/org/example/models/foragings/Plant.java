@@ -1,59 +1,22 @@
 package org.example.models.foragings;
 
-import org.example.models.Season;
+import org.example.models.Cell;
+import org.example.models.Finder;
+import org.example.models.locations.Farm;
 
-import java.util.ArrayList;
+import java.util.Random;
 
-public enum Plant implements Foraging {
-//    BlueJazz(),
-//    Carrot(),
-    // etc
-    ;
-
-
-    private String name;
-    private Seed seed;
-    private boolean eatable;
-    public final ArrayList<Season> seasonsToGrow;
-    public final ArrayList<Integer> stagesCycleTime;
-    private boolean oneTime;
-    private boolean canBecomeGiant;
-    private int price;
-
-
-    Plant(String name, Seed seed, boolean eatable, ArrayList<Season> seasonsToGrow, ArrayList<Integer> stagesCycleTime, boolean oneTime, boolean canBecomeGiant, int price) {
-        this.name = name;
-        this.seed = seed;
-        this.eatable = eatable;
-        this.seasonsToGrow = seasonsToGrow;
-        this.stagesCycleTime = stagesCycleTime;
-        this.oneTime = oneTime;
-        this.canBecomeGiant = canBecomeGiant;
-        this.price = price;
+public class Plant {
+    private PlantType plantType;
+    public Plant(int x, int y, Farm farm) {
+        Random rand = new Random();
+        int type = rand.nextInt(PlantType.values().length);
+        plantType = PlantType.values()[type];
+        Cell cell= Finder.findCellByCoordinates(x, y, farm);
+        assert cell != null;
+        cell.setObjectMap(this);
     }
-
-
-    public String getName() {
-        return name;
-    }
-
-    public Seed getSeed() {
-        return seed;
-    }
-
-    public boolean isEatable() {
-        return eatable;
-    }
-
-    public boolean isOneTime() {
-        return oneTime;
-    }
-
-    public boolean isCanBecomeGiant() {
-        return canBecomeGiant;
-    }
-
-    public int getPrice() {
-        return price;
+    public PlantType getMineralType() {
+        return plantType;
     }
 }
