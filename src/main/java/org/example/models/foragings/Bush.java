@@ -1,20 +1,21 @@
-package org.example.models;
+package org.example.models.foragings;
 
+import org.example.models.*;
 import org.example.models.locations.Farm;
 
 import java.util.Random;
 
-public class Lake implements ObjectMap {
+public class Bush implements ObjectMap {
     @Override
     public String getChar() {
-        return Colors.colorize(39,39,"LL");
+        return Colors.colorize(9,0,"\uD83C\uDF3E");
     }
-    private static final int WIDTH = 15;
-    private static final int HEIGHT = 15;
-    private static final int ITERATIONS = 6;
-    private static final double INITIAL_WATER_CHANCE = 0.45;
+    private static final int WIDTH = 12;
+    private static final int HEIGHT = 12;
+    private static final int ITERATIONS = 5;
+    private static final double INITIAL_WATER_CHANCE = 0.6;
 
-    public Lake(int startX, int startY, Farm farm) {
+    public Bush(int startX, int startY, Farm farm) {
         boolean[][] map = new boolean[WIDTH][HEIGHT];
 
         Random random = new Random();
@@ -32,7 +33,7 @@ public class Lake implements ObjectMap {
             for (int y = 0; y < HEIGHT; y++) {
                 if (map[x][y]) {
                     Cell cell = Finder.findCellByCoordinates(startX + x, startY + y, farm);
-                    if (cell != null) {
+                    if (cell != null && cell.getObjectMap().getChar().equals(new Grass().getChar())) {
                         cell.setObjectMap(this);
                     }
                 }

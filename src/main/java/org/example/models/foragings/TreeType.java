@@ -5,9 +5,10 @@ import org.example.models.Season;
 import java.util.ArrayList;
 
 public enum TreeType {
-//    Apricot(),
+    Apricot(),
     Cherry(),
-//    Banana()
+    Banana(),
+    Log(),
     //etc
     ;
     String name;
