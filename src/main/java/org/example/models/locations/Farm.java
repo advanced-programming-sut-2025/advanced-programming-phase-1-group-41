@@ -10,6 +10,9 @@ import org.example.models.foragings.Foraging;
 
 import java.util.ArrayList;
 
+import static org.example.models.App.MaxHeight;
+import static org.example.models.App.MaxLength;
+
 
 public class Farm {
     private FarmType farmType;
@@ -20,12 +23,12 @@ public class Farm {
 
     public Farm(int id) {
         this.id = id;
-        for(int i=0;i<75;i++){
-            for(int j=0;j<60;j++){
+        for(int i=0;i<MaxLength;i++){
+            for(int j=0;j<MaxHeight;j++){
                 cells.add(new Cell(new Grass(),i,j));
             }
         }
-        buildings.add(new Greenhouse(69,53,this));
+        buildings.add(new Greenhouse(0,0,this));
     }
 
     public ArrayList<Cell> getCells() {

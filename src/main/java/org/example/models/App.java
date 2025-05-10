@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class App {
+    public static int MaxLength = 75;
+    public static int MaxHeight = 60;
     private static ArrayList<Building> buildings;
     private static ArrayList<Plant> plants;
     public final static ArrayList<User> users = new ArrayList<>();
