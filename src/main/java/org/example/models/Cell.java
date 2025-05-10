@@ -13,8 +13,6 @@ public class Cell {
     private int x;
     private int y;
 
-    public Cell() {
-    }
 
     public Cell(ObjectMap objectMap, int x, int y) {
         this.objectMap = objectMap;
