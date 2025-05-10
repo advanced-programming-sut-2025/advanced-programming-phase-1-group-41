@@ -21,7 +21,7 @@ public class UserDB {
         System.out.println("reached here");
 
 // Step 1: Load Games
-        datastore.find(Game.class).forEach(game -> App.games.add(game));
+//        datastore.find(Game.class).forEach(game -> App.games.add(game));
 
         System.out.println("games loaded");
 
