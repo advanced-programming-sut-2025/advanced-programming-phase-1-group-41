@@ -2,12 +2,13 @@ package org.example.models.foragings;
 
 import org.example.models.Cell;
 import org.example.models.Finder;
+import org.example.models.ObjectMap;
 import org.example.models.locations.Farm;
 
 import java.util.Random;
 
-public class Plant {
-    private PlantType plantType;
+public class Plant implements ObjectMap {
+    private final PlantType plantType;
     public Plant(int x, int y, Farm farm) {
         Random rand = new Random();
         int type = rand.nextInt(PlantType.values().length);
@@ -16,7 +17,7 @@ public class Plant {
         assert cell != null;
         cell.setObjectMap(this);
     }
-    public PlantType getMineralType() {
+    public PlantType getPlantType() {
         return plantType;
     }
 }
