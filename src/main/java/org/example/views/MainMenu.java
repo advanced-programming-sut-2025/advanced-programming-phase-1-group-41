@@ -40,7 +40,10 @@ public class MainMenu implements AppMenu {
     private void handleNewGame(String input, Matcher matcher, Scanner scanner){
         HashSet<Integer> pickedFarms = new HashSet<>();
         Result result=controller.newGame(matcher);
-        System.out.println(result);
+        if(!result.success()){
+            System.out.println(result);
+            return;
+        }
         for(int i=0;i<4;i++) {
             System.out.println("choosing for user: "+App.getGame().getPlayers().get(i));
             input = scanner.nextLine();
@@ -48,15 +51,19 @@ public class MainMenu implements AppMenu {
                 System.out.println("Invalid command");
                 input = scanner.nextLine();
             }
-            matcher = GameMainCommands.GameMap.getMatcher(input);
             boolean passTurn = false;
             while(!passTurn) {
+                matcher = GameMainCommands.GameMap.getMatcher(input);
                 result = controller.selectMap(matcher,pickedFarms);
                 System.out.println(result);
                 if(result.success()){
                     passTurn = true;
+                }else{
+                    input = scanner.nextLine();
                 }
             }
         }
+        System.out.println("welcome to the game!");
+        App.setMenu(Menu.Game);
     }
 }

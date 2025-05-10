@@ -11,6 +11,7 @@ import org.example.models.Menu;
 import org.example.models.Result;
 import org.example.views.commands.gameCommands.GameMainCommands;
 import org.example.views.subGames.TimeLineView;
+import org.example.views.subGames.WeatherView;
 
 public class GameMenu implements AppMenu {
     GameMenuController controller = new GameMenuController();
@@ -28,6 +29,8 @@ public class GameMenu implements AppMenu {
         }else if((matcher=GameMainCommands.NextTurn.getMatcher(input))!=null){
             System.out.println(controller.nextTurn(matcher));
         }else if(TimeLineView.check(input)){
+
+        }else if(WeatherView.check(input)){
 
         }
 

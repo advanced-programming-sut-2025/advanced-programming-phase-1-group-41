@@ -14,7 +14,8 @@ public class Game {
     private Player loader;
     private Player currentPlayer;
     private ArrayList<Player> players;
-//    private WeatherType weatherType;
+    private WeatherType weatherType;
+    private WeatherType tmrwWeatherType;
     public TimeLine getTime() {
         return time;
     }
@@ -26,6 +27,11 @@ public class Game {
     public Game(ArrayList<Player> players, Player loader) {
         this.players = players;
         this.loader = loader;
+        this.weatherType = WeatherType.Sunny;
+        this.tmrwWeatherType = WeatherType.Sunny;
+
+
+        setPlayerGames(players);
     }
 
     public Player getCurrentPlayer() {
@@ -74,5 +80,31 @@ public class Game {
 
     public void set_id(ObjectId _id) {
         this._id = _id;
+    }
+
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players;
+    }
+
+    public WeatherType getWeatherType() {
+        return weatherType;
+    }
+
+    public void setWeatherType(WeatherType weatherType) {
+        this.weatherType = weatherType;
+    }
+
+    public WeatherType getTmrwWeatherType() {
+        return tmrwWeatherType;
+    }
+
+    public void setTmrwWeatherType(WeatherType tmrwWeatherType) {
+        this.tmrwWeatherType = tmrwWeatherType;
+    }
+
+    private void setPlayerGames(ArrayList<Player> players) {
+        for (Player player : players) {
+            player.getUser().setCurrentGame(this);
+        }
     }
 }

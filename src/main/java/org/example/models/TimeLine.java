@@ -6,6 +6,7 @@ import dev.morphia.annotations.Id;
 import org.bson.types.ObjectId;
 
 import java.util.Date;
+import java.util.Random;
 
 @Entity
 public class TimeLine {
@@ -48,6 +49,9 @@ public class TimeLine {
         }
     }
     public void advanceOneDay(){
+        App.getGame().setWeatherType(App.getGame().getTmrwWeatherType());
+        predictTmrwWeather();
+
         day++;
         if(day >= 7){
             day = 0;
@@ -65,11 +69,45 @@ public class TimeLine {
         year++;
     }
 
-    public void sateDate(int hour, int day,Season season, int year){
-        this.hour = hour;
-        this.day = day;
-        this.season = season;
-        this.year = year;
+
+    public void predictTmrwWeather() {
+        WeatherType tmrw = null;
+        Random rand = new Random();
+        double chance = rand.nextDouble();
+
+        if (season == Season.Spring) {
+            if (chance < 0.6) {
+                tmrw = WeatherType.Sunny;
+            } else if (chance < 0.9) {
+                tmrw = WeatherType.Rainy;
+            } else {
+                tmrw = WeatherType.Stormy;
+            }
+        } else if (season == Season.Summer) {
+            if (chance < 0.8) {
+                tmrw = WeatherType.Sunny;
+            } else if (chance < 0.95) {
+                tmrw = WeatherType.Rainy;
+            } else {
+                tmrw = WeatherType.Stormy;
+            }
+        } else if (season == Season.Autumn) {
+            if (chance < 0.5) {
+                tmrw = WeatherType.Sunny;
+            } else if (chance < 0.85) {
+                tmrw = WeatherType.Rainy;
+            } else {
+                tmrw = WeatherType.Stormy;
+            }
+        } else if (season == Season.Winter) {
+            if (chance < 0.4) {
+                tmrw = WeatherType.Sunny;
+            }else {
+                tmrw = WeatherType.Snowy;
+            }
+        }
+
+        App.getGame().setTmrwWeatherType(tmrw);
     }
 
 

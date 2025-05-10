@@ -12,23 +12,6 @@ public class MainMenuController {
         App.setCurrentUser(null);
         App.setMenu(Menu.Authentication);
     }
-    public Result enterMenu(Matcher matcher){
-        if(!matcher.matches()) {
-            return new Result(false, "Invalid command!");
-        }
-        String menuName = matcher.group("menuName");
-        if(menuName.equalsIgnoreCase("Profile")){
-            App.setMenu(Menu.Profile);
-            return new Result(true, "Redirecting to Profile Menu...");
-        } else if(menuName.equalsIgnoreCase("Authentication") || menuName.equalsIgnoreCase("Auth")){
-            App.setMenu(Menu.Authentication);
-            return new Result(true, "Redirecting to Authentication Menu...");
-        } else if(menuName.equalsIgnoreCase("Game")){
-            App.setMenu(Menu.Game);
-        }
-        System.out.println("here");
-        return new Result(false, "Invalid menu name!\nMenu options:\nProfile\nAuthentication\nGame");
-    }
 
     public Result newGame(Matcher matcher){
 
@@ -49,12 +32,6 @@ public class MainMenuController {
         }
         User user1 = null, user2 = null, user3 = null, user4 = null;
 
-        if(Finder.getUserByUsername(username1).getCurrentGame()!=null||
-                Finder.getUserByUsername(username2).getCurrentGame()!=null||
-                Finder.getUserByUsername(username3).getCurrentGame()!=null
-        ){
-            return new Result(false,matcher.group("Invalid Username"));
-        }
 
 
         // TODO check if needed to be less than 4 players
@@ -63,10 +40,33 @@ public class MainMenuController {
         user2 = Finder.getUserByUsername(username1);
         user3 = Finder.getUserByUsername(username2);
         user4 = Finder.getUserByUsername(username3);
+
+
         Player player1 = new Player(user1);
         Player player2 = new Player(user2);
         Player player3 = new Player(user3);
         Player player4 = new Player(user4);
+
+
+        if(user1 == null || user2 == null || user3 == null || user4 == null){
+            return new Result(false,"a username doesn't exist");
+        }
+
+        HashSet<User> checker = new HashSet<>();
+        checker.add(user1);
+        checker.add(user2);
+        checker.add(user3);
+        checker.add(user4);
+        if(checker.size()!=4){
+            return new Result(false,"usernames are not distinct");
+        }
+
+        if(user2.getCurrentGame()!=null||
+                user3.getCurrentGame()!=null||
+                user4.getCurrentGame()!=null
+        ){
+            return new Result(false,"a user is already in a game");
+        }
 
         ArrayList<Player> players = new ArrayList<>(Arrays.asList(player1, player2, player3, player4));
 
@@ -82,10 +82,10 @@ public class MainMenuController {
         String numberRaw = matcher.group("mapNumber");
         int mapNumber = Integer.parseInt(numberRaw);
         if(!numberRaw.matches("\\d+")||mapNumber<=0||mapNumber>4){
-            return new Result(false,matcher.group("Invalid number"));
+            return new Result(false,"Invalid number");
         }
         else if(pickedFarms.contains(mapNumber)){
-            return new Result(false,matcher.group("Invalid number"));
+            return new Result(false,"Invalid number");
         }
         pickedFarms.add(mapNumber);
 //        App.getGame().getCurrentPlayer().setFarm(new Farm(mapNumber));
