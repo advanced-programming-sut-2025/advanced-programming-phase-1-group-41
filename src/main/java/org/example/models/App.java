@@ -2,8 +2,7 @@ package org.example.models;
 
 import org.bson.types.ObjectId;
 import org.example.models.buildings.Building;
-import org.example.models.foragings.Plant;
-import org.example.models.locations.Map;
+import org.example.models.foragings.PlantType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,8 +10,6 @@ import java.util.HashMap;
 public class App {
     public static int MaxLength = 75;
     public static int MaxHeight = 60;
-    private static ArrayList<Building> buildings;
-    private static ArrayList<Plant> plants;
     public final static ArrayList<User> users = new ArrayList<>();
     public final static ArrayList<Game> games = new ArrayList<>();
     public final static HashMap<ObjectId, User> userMap = new HashMap<>();
@@ -26,17 +23,9 @@ public class App {
         App.questions.addAll(questions);
     }
 
-    public static Map getMap() {
-        return map;
-    }
-
-    public static ArrayList<Building> getBuildings() {
-        return buildings;
-    }
-
-    public static ArrayList<Plant> getPlants() {
-        return plants;
-    }
+//    public static Map getMap() {
+//        return map;
+//    }
 
     public static Menu getMenu() {
         return menu;
