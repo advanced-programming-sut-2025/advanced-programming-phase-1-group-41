@@ -213,6 +213,10 @@ public class Farm {
         return crops;
     }
 
+    public void addCrop(Crop crop){
+        crops.add(crop);
+    }
+
     public void update(){
         farmBuilder.updateForagings();
         farmBuilder.growCrops();

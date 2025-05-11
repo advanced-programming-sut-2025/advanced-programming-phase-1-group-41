@@ -1,14 +1,11 @@
 package org.example.views;
 
-import java.util.HashSet;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
 import org.example.controllers.CheckerController;
 import org.example.controllers.GameMenuController;
 import org.example.models.App;
-import org.example.models.Menu;
-import org.example.models.Result;
 import org.example.views.commands.gameCommands.GameMainCommands;
 import org.example.views.subGames.*;
 
@@ -43,6 +40,8 @@ public class GameMenu implements AppMenu {
             }else if(PlayerView.check(input)){
 
             }else if(ToolView.check(input)){
+
+            }else if(FarmingView.check(input)){
 
             }
         }
