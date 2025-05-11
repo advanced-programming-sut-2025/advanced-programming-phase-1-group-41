@@ -1,7 +1,7 @@
 package org.example.models.foragings;
 
 public class ForagingCrop implements Foraging{
-    private ForagingCropType cropType;
+    private ForagingCropType foragingCropType;
 
     @Override
     public String getChar() {
@@ -10,6 +10,6 @@ public class ForagingCrop implements Foraging{
 
     @Override
     public String getName() {
-        return cropType.getName();
+        return foragingCropType.getName();
     }
 }
