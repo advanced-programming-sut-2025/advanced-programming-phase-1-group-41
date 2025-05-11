@@ -1,4 +1,4 @@
-package org.example.models.foragings;
+package org.example.models.buildings.Nature;
 
 public enum MineralType{
     Quartz("Quartz", "A clear crystal commonly found in caves and mines.", 25),

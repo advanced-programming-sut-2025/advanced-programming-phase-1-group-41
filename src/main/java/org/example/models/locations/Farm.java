@@ -1,10 +1,12 @@
 package org.example.models.locations;
 
-import dev.morphia.annotations.Entity;
 import org.example.models.*;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.Cottage;
 import org.example.models.buildings.GreenHouse.Greenhouse;
+import org.example.models.buildings.Nature.Bush;
+import org.example.models.buildings.Nature.Rock;
+import org.example.models.buildings.Nature.Tree;
 import org.example.models.foragings.*;
 
 import java.util.ArrayList;

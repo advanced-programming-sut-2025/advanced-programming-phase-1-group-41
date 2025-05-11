@@ -1,4 +1,4 @@
-package org.example.models.foragings;
+package org.example.models.buildings.Nature;
 
 import org.example.models.*;
 import org.example.models.locations.Farm;
