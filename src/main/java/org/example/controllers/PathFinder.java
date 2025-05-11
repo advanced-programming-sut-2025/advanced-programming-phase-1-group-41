@@ -1,7 +1,10 @@
 package org.example.controllers;
 
 import org.example.models.Cell;
+import org.example.models.Mine;
 import org.example.models.Player;
+import org.example.models.buildings.Building;
+import org.example.models.buildings.Nature.Nature;
 
 import java.util.*;
 
@@ -34,7 +37,10 @@ public class PathFinder {
                 int newY = current.y + dir[1];
 
                 Cell nextCell = getCell(newX, newY);
-                if (nextCell == null || nextCell.getObjectMap() != null) continue;
+                // unavailable tiles
+                if (nextCell == null || nextCell.getObjectMap() instanceof Building ||
+                   nextCell.getObjectMap() instanceof Nature ||
+                   nextCell.getObjectMap() instanceof Mine) continue;
 
                 int newTurns = (current.parent != null && directionChanged(current.parent.x, current.parent.y, current.x, current.y, newX, newY))
                         ? current.turns + 1 : current.turns;
@@ -91,5 +97,15 @@ class Node implements Comparable<Node> {
     @Override
     public int compareTo(Node other) {
         return Double.compare(this.energyCost, other.energyCost);
+    }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+                "x=" + x +
+                ", y=" + y +
+                ", energyCost=" + energyCost +
+                ", turns=" + turns +
+                '}';
     }
 }

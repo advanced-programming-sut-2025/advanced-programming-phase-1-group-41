@@ -1,13 +1,32 @@
 package org.example.controllers;
 
 import org.example.models.App;
+import org.example.models.Cell;
 import org.example.models.Result;
 import org.example.models.locations.Farm;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 
 public class MapController {
-    public Result walk(Matcher matcher){return null;}
+    public Result walk(Matcher matcher){
+        String xRaw = matcher.group(1);
+        String yRaw = matcher.group(2);
+        int x = Integer.parseInt(xRaw);
+        int y = Integer.parseInt(yRaw);
+        List<Node> cells = SSSP(x,y);
+        if (cells == null) {
+            return new Result(false, "energy exceeded");
+        }else{
+            for (Node cell : cells) {
+                System.out.println(cell);
+            }
+            return new Result(true,"found the path ;D");
+        }
+
+
+    }
 
     public Result printMap(Matcher matcher){
         Farm farm = App.getGame().getCurrentPlayerFarm();
@@ -19,8 +38,9 @@ public class MapController {
         return new Result(true, "");
     }
 
-    public Result SSSP(Matcher matcher){
-
+    public List<Node> SSSP(int x , int y){
+        return (new PathFinder(App.getGame().getCurrentPlayerFarm().getCells()))
+                .findPath(App.getGame().getCurrentPlayer(), x , y);
     }
 
     public Result helpReadingMap(Matcher matcher){return null;}

@@ -3,7 +3,7 @@ package org.example.models.items;
 import java.util.ArrayList;
 
 public class Inventory {
-    public ArrayList<Slot> slots;
+    public ArrayList<Slot> slots = new ArrayList<>();
     public Backpack backpack=Backpack.Default;
 
     public Inventory() {

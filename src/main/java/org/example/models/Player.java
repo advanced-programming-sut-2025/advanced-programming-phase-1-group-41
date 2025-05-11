@@ -36,6 +36,7 @@ public class Player {
     private int x;
     private int y;
     private double energy;
+    @Transient
     private Inventory inventory;
 
 //    private Farm farm;
