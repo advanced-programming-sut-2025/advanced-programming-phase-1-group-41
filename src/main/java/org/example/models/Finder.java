@@ -18,11 +18,6 @@ public class Finder {
         }
         return null;
     }
-    public static Game getGameByUsername(String username){
-        //TODO
-//        return new Game(new ArrayList<>());
-        return null;
-    }
     public static Item findItem(String itemName){
         if(parseBasicTool(itemName)!=null){
             return parseBasicTool(itemName);
@@ -33,6 +28,7 @@ public class Finder {
         if(parseFish(itemName)!=null){
             return parseFish(itemName);
         }
+        // TODO etc
 
         return null;
 

@@ -2,6 +2,7 @@ package org.example.views.subGames;
 
 import org.example.controllers.PlayerController;
 import org.example.views.commands.gameCommands.GameMainCommands;
+import org.example.views.commands.gameCommands.InventoryAndToolCommands;
 
 import java.util.regex.Matcher;
 
@@ -11,6 +12,10 @@ public class PlayerView {
         Matcher matcher;
         if((matcher = GameMainCommands.EnergyShow.getMatcher(input))!=null){
             controller.showEnergy(matcher);
+        }else if((matcher = GameMainCommands.CheatAddItem.getMatcher(input))!=null){
+            controller.cheatAddItem(matcher);
+        }else if((matcher = InventoryAndToolCommands.InventoryTrash.getMatcher(input))!=null){
+            controller.inventoryTrash(matcher);
         }
         else{
             return false;

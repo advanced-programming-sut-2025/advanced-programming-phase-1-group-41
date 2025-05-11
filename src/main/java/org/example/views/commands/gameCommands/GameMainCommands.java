@@ -27,7 +27,7 @@ public enum GameMainCommands implements Command {
     ShowCraftingRecipes("\\s*crafting\\s+show\\s+recipes\\s*"),
     CraftingCraft("\\s*crafting\\s+craft\\s+(?<itemName>.*)\\s*"),
     PlaceItem("\\s*place\\s+item\\s+-n\\s+(?<itemName>.*)\\s+-d\\s+(?<direction>.*)\\s*"),
-    CheatAddItem("\\s*cheat\\s+add\\s+item\\s+-n\\s+(?<itemName>.*)\\s+-c\\s+(?<count>.*)\\s*"),
+    CheatAddItem("\\s*cheat\\s+add\\s+item\\s+-n\\s+(?<itemName>.*)\\s+-c\\s+(?<count>-?\\d+)\\s*"),
     CookingRefrigerator("\\s*cooking\\s+refrigerator\\s+(put|pick)\\s+(?<item>.*)\\s*"),
     CookingShowRecipes("\\s*cooking\\s+show\\s+recipes\\s*"),
     CookingPrepare("\\s*cooking\\s+prepare\\s+(?<recipeName>.*)\\s*"),
