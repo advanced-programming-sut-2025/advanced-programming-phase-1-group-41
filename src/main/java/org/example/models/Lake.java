@@ -23,8 +23,8 @@ public class Lake implements ObjectMap, Obstacle {
         boolean[][] map = new boolean[WIDTH][HEIGHT];
 
         Random random = new Random();
-        for (int x = 0; x < WIDTH - random.nextInt(6); x++) {
-            for (int y = 0; y < HEIGHT - random.nextInt(6); y++) {
+        for (int x = 0; x < WIDTH - random.nextInt(5); x++) {
+            for (int y = 0; y < HEIGHT - random.nextInt(5); y++) {
                 map[x][y] = random.nextDouble() < INITIAL_WATER_CHANCE;
             }
         }

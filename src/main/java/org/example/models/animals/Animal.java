@@ -5,12 +5,19 @@ import org.example.models.items.Slot;
 
 public abstract class Animal {
     public abstract void doTheFuckingJob();
+    protected String name;
+    protected int buyPrice;
+    protected BarnOrCageSize sizeNeeded;
     protected Breed breed;
     protected Player owner;
     private int friendShip;
     private Slot slot;
+    //TODO Corps
 
-    public Animal(Player owner){
+    public Animal(Player owner, String name, int buyPrice, BarnOrCageSize sizeNeeded) {
+        this.name = name;
+        this.buyPrice = buyPrice;
+        this.sizeNeeded = sizeNeeded;
         this.owner = owner;
         this.friendShip = 0;
         this.slot = null;
@@ -27,6 +34,10 @@ public abstract class Animal {
         }
     }
 
+    public String getName() {return name;}
+
+    public int getBuyPrice() {return buyPrice;}
+
     public Slot getSlot() {
         return slot;
     }
@@ -37,5 +48,9 @@ public abstract class Animal {
 
     public Breed getBreed() {
         return breed;
+    }
+
+    public int getPrice() {
+        return (int) (buyPrice * ((friendShip / 1000f) + 0.3));
     }
 }
