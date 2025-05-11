@@ -22,11 +22,13 @@ import java.util.HashMap;
 public class Player {
     @Id
     private ObjectId _id;
-    private Point point;
     @Transient
     private User user;
     private ObjectId userId;
     private int money;
+    private int farmId;
+    private int x;
+    private int y;
 //    private Backpack backpack;
 //    private Farm farm;
 //    private ArrayList<Animal> animals;
@@ -52,12 +54,13 @@ public class Player {
 
     public Player(User user) {
         this.user = user;
+        money = 0;
+        x = 0;
+        y = 0;
 //        animals = new ArrayList<>();
 //        skills = new ArrayList<>();
-        point = new Point(0, 0);
 //        skills = new ArrayList<>();
 //        energy = new Energy(0);//what is the default value?
-        money = 0;
 //        craftingRecipes = new ArrayList<>();
 //        gifts = new ArrayList<>();
 //        chats = new ArrayList<>();
@@ -82,14 +85,6 @@ public class Player {
 
 
 
-    public Point getPoint() {
-        return point;
-    }
-
-    public void setPoint(Point point) {
-        this.point = point;
-    }
-
     public User getUser() {
         return user;
     }
@@ -112,6 +107,36 @@ public class Player {
 
     public ObjectId getUserId() {
         return userId;
+    }
+
+
+
+    public void setUserId(ObjectId userId) {
+        this.userId = userId;
+    }
+
+    public int getFarmId() {
+        return farmId;
+    }
+
+    public void setFarmId(int farmId) {
+        this.farmId = farmId;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
     @Override

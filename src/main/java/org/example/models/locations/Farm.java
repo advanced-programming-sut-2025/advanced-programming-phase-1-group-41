@@ -18,7 +18,7 @@ import static org.example.models.App.MaxLength;
 public class Farm {
     private FarmType farmType;
     private ArrayList<Cell> cells = new ArrayList<>();
-    int id;
+    private int id;
     private final ArrayList<Building> buildings = new ArrayList<>();
     private final ArrayList<Foraging> foragings = new ArrayList<>();
     private final ArrayList<Lake> lakes = new ArrayList<>();
@@ -100,8 +100,47 @@ public class Farm {
         return foragings;
     }
 
+    public FarmType getFarmType() {
+        return farmType;
+    }
 
-//    public void setCells(ArrayList<Cell> cells) {
+    public int getId() {
+        return id;
+    }
+
+    public ArrayList<Building> getBuildings() {
+        return buildings;
+    }
+
+    public ArrayList<Lake> getLakes() {
+        return lakes;
+    }
+
+    public ArrayList<Bush> getBushes() {
+        return bushes;
+    }
+
+    public Mine getMine() {
+        return mine;
+    }
+
+    public void setFarmType(FarmType farmType) {
+        this.farmType = farmType;
+    }
+
+    public void setCells(ArrayList<Cell> cells) {
+        this.cells = cells;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setMine(Mine mine) {
+        this.mine = mine;
+    }
+
+    //    public void setCells(ArrayList<Cell> cells) {
 //        this.cells = cells;
 //    }
 }

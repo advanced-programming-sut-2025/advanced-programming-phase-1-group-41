@@ -10,6 +10,7 @@ import org.example.models.App;
 import org.example.models.Menu;
 import org.example.models.Result;
 import org.example.views.commands.gameCommands.GameMainCommands;
+import org.example.views.subGames.MapView;
 import org.example.views.subGames.TimeLineView;
 import org.example.views.subGames.WeatherView;
 
@@ -31,6 +32,8 @@ public class GameMenu implements AppMenu {
         }else if(TimeLineView.check(input)){
 
         }else if(WeatherView.check(input)){
+
+        }else if(MapView.check(input)){
 
         }
 

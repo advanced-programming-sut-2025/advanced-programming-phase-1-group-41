@@ -15,7 +15,7 @@ public enum WeatherAndTimeCommands implements Command {
     CheatThor("\\s*cheat\\s+Thor\\s+-l\\s+(?<x>.*)\\s*,\\s*(?<y>.*)\\s*"),
     Weather("\\s*weather\\s*"),
     WeatherForecast("\\s*weather\\s+forecast\\s*"),
-    CheatWeather("\\s*cheat\\s+weather\\s+set\\s+(?<type>.*)\\s*"),
+    CheatWeather("\\s*cheat\\s+weather\\s+set\\s+(?<type>\\S+)\\s*"),
     ;
 
     private final String pattern;

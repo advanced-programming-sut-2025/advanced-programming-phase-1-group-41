@@ -151,6 +151,7 @@ public class UserDB {
             }
 
             user.prepareForSaving();
+//            user.setGameId(null);
             datastore.save(user);
         }
         System.out.println("Users saved");
@@ -174,6 +175,7 @@ public class UserDB {
                     System.out.println("Warning: No matching game found for user " + user.getUsername());
                 }
                 user.setCurrentGame(resolvedGame);
+//                user.setCurrentGame(null);
             }
             datastore.save(user); // Save updated User with restored reference
         }

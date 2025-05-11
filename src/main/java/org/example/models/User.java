@@ -183,4 +183,8 @@ public class User {
     public ObjectId getGameId() {
         return gameId;
     }
+
+    public void setGameId(ObjectId gameId) {
+        this.gameId = gameId;
+    }
 }

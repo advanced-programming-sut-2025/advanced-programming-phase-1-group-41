@@ -10,10 +10,10 @@ import java.security.NoSuchAlgorithmException;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) throws NoSuchAlgorithmException {
-        Farm farm = new Farm(1);
-        farm.printMap();
+//        Farm farm = new Farm(1);
+//        farm.printMap();
 
-//        AppView appView = new AppView();
-//        appView.runApp();
+        AppView appView = new AppView();
+        appView.runApp();
     }
 }

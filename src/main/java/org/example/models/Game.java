@@ -2,11 +2,9 @@ package org.example.models;
 
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
-import dev.morphia.annotations.Reference;
 import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
 import org.example.models.locations.Farm;
-import org.example.models.locations.Map;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +12,6 @@ import java.util.stream.Collectors;
 
 @Entity("games")
 public class Game {
-    private ArrayList<Farm> farms = new ArrayList<>();
     @Id
     private ObjectId _id;
     private TimeLine time;
@@ -32,7 +29,22 @@ public class Game {
     private WeatherType weatherType;
     private WeatherType tmrwWeatherType;
 
+    @Transient
+    private ArrayList<Farm> farms = new ArrayList<>();
 //    private Map map;
+
+    {
+        if (farms.isEmpty()) {
+            this.farms.add(new Farm(1));
+            this.farms.add(new Farm(2));
+            this.farms.add(new Farm(3));
+            this.farms.add(new Farm(4));
+        }
+    }
+
+
+    public Game() {
+    }
 
     public Game(ArrayList<Player> players, Player loader) {
         this.players = players;
@@ -41,10 +53,7 @@ public class Game {
         this.tmrwWeatherType = WeatherType.Sunny;
         this.time = new TimeLine();
 //        this.map = new Map();
-        this.farms.add(new Farm(1));
-        this.farms.add(new Farm(2));
-        this.farms.add(new Farm(3));
-        this.farms.add(new Farm(4));
+
         this._id = new ObjectId();
     }
 
@@ -65,7 +74,6 @@ public class Game {
     }
 
 
-
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
@@ -75,15 +83,24 @@ public class Game {
 //    }
 
     public void passTurn() {
-        for(int i=0;i<4;i++){
-            if(players.get(i).equals(currentPlayer)){
-                currentPlayer = players.get((i+1) % 4);
-                if(i==3){
+        for (int i = 0; i < 4; i++) {
+            if (players.get(i).equals(currentPlayer)) {
+                currentPlayer = players.get((i + 1) % 4);
+                if (i == 3) {
                     // TODO continue on with timeline
                 }
                 break;
             }
         }
+    }
+
+    public Farm getCurrentPlayerFarm() {
+        for(Farm farm : farms) {
+            if(farm.getId() == currentPlayer.getFarmId()){
+                return farm;
+            }
+        }
+        return null;
     }
 
     public ArrayList<Player> getPlayers() {
@@ -93,6 +110,7 @@ public class Game {
     public Player getLoader() {
         return loader;
     }
+
     public TimeLine getTime() {
         return time;
     }
@@ -138,7 +156,6 @@ public class Game {
     }
 
 
-
 //    public Map getMap() {
 //        return map;
 //    }
@@ -157,5 +174,9 @@ public class Game {
 
     public ArrayList<ObjectId> getPlayersId() {
         return playersId;
+    }
+
+    public ArrayList<Farm> getFarms() {
+        return farms;
     }
 }

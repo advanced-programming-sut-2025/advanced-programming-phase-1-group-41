@@ -4,7 +4,6 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
-import org.bson.types.ObjectId;
 import org.example.models.*;
 
 import java.util.ArrayList;
@@ -119,7 +118,7 @@ public class MainMenuController {
         }
     }
 
-    public Result selectMap(Matcher matcher, HashSet<Integer> pickedFarms){
+    public Result selectFarm(Matcher matcher, HashSet<Integer> pickedFarms){
 
         String numberRaw = matcher.group("mapNumber");
         int mapNumber = Integer.parseInt(numberRaw);
@@ -130,9 +129,11 @@ public class MainMenuController {
             return new Result(false,"Invalid number");
         }
         pickedFarms.add(mapNumber);
-//        App.getGame().getCurrentPlayer().setFarm(new Farm(mapNumber));
+        //
+        App.getGame().getCurrentPlayer().setFarmId(mapNumber);
+        //
         App.getGame().passTurn();
-        return new Result(true,"Selected"+matcher.group("mapNumber"));
+        return new Result(true,"Selected "+matcher.group("mapNumber"));
     }
 
     public Result loadGame(Matcher matcher){

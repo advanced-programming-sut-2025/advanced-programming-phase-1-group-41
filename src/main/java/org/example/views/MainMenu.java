@@ -54,7 +54,7 @@ public class MainMenu implements AppMenu {
             boolean passTurn = false;
             while(!passTurn) {
                 matcher = GameMainCommands.GameMap.getMatcher(input);
-                result = controller.selectMap(matcher,pickedFarms);
+                result = controller.selectFarm(matcher,pickedFarms);
                 System.out.println(result);
                 if(result.success()){
                     passTurn = true;
