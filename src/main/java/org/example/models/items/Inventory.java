@@ -123,4 +123,14 @@ public class Inventory {
         }
         return sum;
     }
+
+    public Slot getSlotByItem(Item item){
+        for(Slot slot : slots){
+            if(slot == null || slot.getItem() == null) continue;
+            if(slot.getItem().getName().equals(item.getName())){
+                return slot;
+            }
+        }
+        return null;
+    }
 }
