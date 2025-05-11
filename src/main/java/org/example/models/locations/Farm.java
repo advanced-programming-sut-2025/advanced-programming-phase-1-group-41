@@ -108,6 +108,27 @@ public class Farm {
         return cells;
     }
 
+
+    public boolean isLakeAround(){
+        for(int i=-1;i<=1;i++){
+            for(int j=-1;j<=1;j++){
+                if(getCell(App.getGame().getCurrentPlayer().getX()+i,App.getGame().getCurrentPlayer().getY()+i).getObjectMap() instanceof Lake){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public Cell getCell(int x , int y){
+        for(Cell cell : cells){
+            if(cell.getX() == x && cell.getY() == y){
+                return cell;
+            }
+        }
+        return null;
+    }
+
+
     public void printMap(){
         int counter = 0;
         for(Cell cell:cells){

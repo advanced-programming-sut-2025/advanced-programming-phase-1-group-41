@@ -2,10 +2,15 @@ package org.example.controllers;
 
 import org.example.models.App;
 import org.example.models.Result;
+import org.example.models.*;
+import org.example.models.animals.Fish;
+import org.example.models.animals.FishType;
 import org.example.models.items.Item;
 import org.example.models.items.Slot;
+import org.example.models.tools.FishingRod;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 
 import static org.example.models.Finder.parseItem;
@@ -55,7 +60,7 @@ public class PlayerController {
             return new Result(false, "Invalid item name");
         }
 
-        Item item= parseItem(itemName);
+        Item item=parseItem(itemName);
         int itemQuantity = Integer.parseInt(quantity);
 
         if(App.getGame().getCurrentPlayer().getInventory().addToInventory(item,itemQuantity)){
@@ -96,7 +101,139 @@ public class PlayerController {
 
     public Result eatFood(Matcher matcher){return null;}
 
-    public Result fishing(Matcher matcher){return null;}
+    public Result fishing(Matcher matcher){
+        Game game=App.getGame();
+        String fishingRodName = matcher.group(1);
+        List<String> list = List.of("Training", "Bamboo", "FiberGlass", "Iridium");
+        if(!list.contains(fishingRodName)){
+            return new Result(false, "Invalid rod name");
+        }
+        if(FishingRod.findFishingRod()==null){
+            return new Result(false, "You don't have any fishing rod");
+        }
+        if(!FishingRod.findFishingRod().getLevel().name().equals(fishingRodName)){
+            return new Result(false, "You don't "+fishingRodName+" Pol, instead, use "+FishingRod.findFishingRod().getLevel().name());
+        }
+        FishingRod fishingRod=FishingRod.findFishingRod();
+
+        if(!game.getCurrentPlayerFarm().isLakeAround()){
+            return new Result(false, "no lake around you!");
+        }
+        double weatherEffect;
+        switch(game.getWeatherType()){
+            case Sunny:
+                weatherEffect=1.5;
+                break;
+            case Rainy:
+                weatherEffect=1.2;
+                break;
+            case Stormy:
+                weatherEffect=0.5;
+                break;
+            default:
+                weatherEffect=1.0;
+                break;
+        }
+
+        int quantityOfFish=(int)Math.floor(Math.random()*weatherEffect*(1 + 2));//TODO SKILL LEVEL IS UNDEFINED.
+        Fish caughtFish = null;
+        double fishQuality=1.0;
+        if(fishingRodName.equals("Training")){
+            switch(game.getTime().getSeason()){
+                case Spring:
+                    caughtFish=new Fish(FishType.Herring);
+                    break;
+                case Summer:
+                    caughtFish=new Fish(FishType.Sunfish);
+                    break;
+                case Autumn:
+                    caughtFish=new Fish(FishType.Sardine);
+                    break;
+                case Winter:
+                    caughtFish=new Fish(FishType.Perch);
+                    break;
+            }
+        }
+        else{
+            int chance = 1 + (int)(Math.random() * 100);
+            switch(game.getTime().getSeason()){
+                case Spring:
+                    if(chance<7){
+                        caughtFish=new Fish(FishType.Legend);
+                    }
+                    else if(chance<30){
+                        caughtFish=new Fish(FishType.Flounder);
+                    }
+                    else if(chance<50){
+                        caughtFish=new Fish(FishType.Lionfish);
+                    }
+                    else if(chance<75){
+                        caughtFish=new Fish(FishType.Herring);
+                    }
+                    else{
+                        caughtFish=new Fish(FishType.Ghostfish);
+                    }
+                    break;
+                case Summer:
+                    if(chance<7){
+                        caughtFish=new Fish(FishType.Crimsonfish);
+                    }
+                    else if(chance<30){
+                        caughtFish=new Fish(FishType.Tilapia);
+                    }
+                    else if(chance<50){
+                        caughtFish=new Fish(FishType.Dorado);
+                    }
+                    else if(chance<75){
+                        caughtFish=new Fish(FishType.Sunfish);
+                    }
+                    else{
+                        caughtFish=new Fish(FishType.RainbowTrout);
+                    }
+                    break;
+                case Autumn:
+                    if(chance<7){
+                        caughtFish=new Fish(FishType.Angler);
+                    }
+                    else if(chance<30){
+                        caughtFish=new Fish(FishType.Sardine);
+                    }
+                    else if(chance<50){
+                        caughtFish=new Fish(FishType.Shad);
+                    }
+                    else if(chance<75){
+                        caughtFish=new Fish(FishType.BlueDiscus);
+                    }
+                    else{
+                        caughtFish=new Fish(FishType.Salmon);
+                    }
+                    break;
+                case Winter:
+                    if(chance<20&&true){//TODO base on skill level , true must change , only the highest level is true;
+                        caughtFish=new Fish(FishType.Glacierfish);
+                    }
+                    else if(chance<30){
+                        caughtFish=new Fish(FishType.MidnightCarp);
+                    }
+                    else if(chance<50){
+                        caughtFish=new Fish(FishType.Perch);
+                    }
+                    else if(chance<75){
+                        caughtFish=new Fish(FishType.Tuna);
+                    }
+                    else{
+                        caughtFish=new Fish(FishType.Squid);
+                    }
+                    break;
+
+            }
+        }
+        fishQuality=(int)Math.floor((Math.random()*( 1 + 2)*fishingRod.getLevel().getPole())/(7-weatherEffect));
+        game.getCurrentPlayer().decEnergy(fishingRod.getLevel().getEnergyUsage());//TODO skill has an effect on dec of energy
+        game.getCurrentPlayer().getInventory().addToInventory(caughtFish,quantityOfFish);
+        return new Result(true,"You have "+quantityOfFish+" fresh fish of "+caughtFish.getFishType().getName());
+
+    }
 
     public Result sellProduct(Matcher matcher){return null;}
 
