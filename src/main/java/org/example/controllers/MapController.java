@@ -1,9 +1,7 @@
 package org.example.controllers;
 
-import org.example.models.App;
-import org.example.models.Cell;
-import org.example.models.Player;
-import org.example.models.Result;
+import org.example.models.*;
+import org.example.models.buildings.GreenHouse.Greenhouse;
 import org.example.models.locations.Farm;
 
 import java.util.ArrayList;
@@ -45,8 +43,7 @@ public class MapController {
         if(farm==null){
             System.out.println("Farm is null");
         }else{
-//            farm.printMap();
-//              farm.printDebugMap();
+            farm.printMap();
         }
         return new Result(true, "");
     }
@@ -56,6 +53,9 @@ public class MapController {
                 .findPath(App.getGame().getCurrentPlayer(), x , y);
     }
 
-    public Result helpReadingMap(Matcher matcher){return null;}
+    public void helpReadingMap(Matcher matcher){
+
+
+    }
 }
 

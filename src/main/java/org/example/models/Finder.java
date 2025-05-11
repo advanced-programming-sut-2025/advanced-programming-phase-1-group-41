@@ -33,6 +33,7 @@ public class Finder {
         if(parseFish(itemName)!=null){
             return parseFish(itemName);
         }
+
         return null;
 
     }
