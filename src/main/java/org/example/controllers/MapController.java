@@ -2,6 +2,7 @@ package org.example.controllers;
 
 import org.example.models.App;
 import org.example.models.Cell;
+import org.example.models.Player;
 import org.example.models.Result;
 import org.example.models.locations.Farm;
 
@@ -19,14 +20,21 @@ public class MapController {
         if (cells == null) {
             return new Result(false, "no path found!");
         }else{
+            Player player = App.getGame().getCurrentPlayer();
             double energy = 0;
             for (Node cell : cells) {
                 energy = cell.energyCost;
-
+                if(energy > player.getEnergy()){
+                    player.setEnergy(0);
+                    return new Result(false, "you're running low :(");
+                }
+                player.setX(cell.x);
+                player.setY(cell.y);
             }
+            player.decEnergy(energy);
             return new Result(true,"found the path ;D" +
                     "\n" +
-                    "energy: "+App.getGame().getCurrentPlayer().getEnergy());
+                    "energy: "+player.getEnergy());
         }
 
 

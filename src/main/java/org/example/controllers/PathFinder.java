@@ -1,8 +1,6 @@
 package org.example.controllers;
 
-import org.example.models.Cell;
-import org.example.models.Mine;
-import org.example.models.Player;
+import org.example.models.*;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.Nature.Nature;
 
@@ -39,7 +37,7 @@ public class PathFinder {
                 Cell nextCell = getCell(newX, newY);
                 // unavailable tiles
                 if (nextCell == null || nextCell.getObjectMap() instanceof Building ||
-                   nextCell.getObjectMap() instanceof Nature ||
+                   nextCell.getObjectMap() instanceof Obstacle ||
                    nextCell.getObjectMap() instanceof Mine) continue;
 
                 int newTurns = (current.parent != null && directionChanged(current.parent.x, current.parent.y, current.x, current.y, newX, newY))
