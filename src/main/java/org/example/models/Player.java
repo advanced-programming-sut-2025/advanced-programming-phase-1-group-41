@@ -170,6 +170,7 @@ public class Player {
         this.energy = energy;
     }
     public void decEnergy(double delta) {
+        App.getGame().incRoundEnergy(delta);
         this.energy -= delta;
     }
     public void incEnergy(double delta) {
