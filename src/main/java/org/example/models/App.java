@@ -1,8 +1,6 @@
 package org.example.models;
 
 import org.bson.types.ObjectId;
-import org.example.models.buildings.Building;
-import org.example.models.foragings.PlantType;
 
 import java.util.ArrayList;
 import java.util.HashMap;

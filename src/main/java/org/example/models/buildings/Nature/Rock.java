@@ -5,7 +5,7 @@ import org.example.models.locations.Farm;
 
 import java.util.Random;
 
-public class Rock implements ObjectMap, Obstacle {
+public class Rock implements Nature, Obstacle {
     @Override
     public String getChar() {
         return Colors.colorize(250,0,"OO");

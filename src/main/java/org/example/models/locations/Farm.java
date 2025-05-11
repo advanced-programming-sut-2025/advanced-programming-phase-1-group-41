@@ -5,6 +5,7 @@ import org.example.models.buildings.Building;
 import org.example.models.buildings.Cottage;
 import org.example.models.buildings.GreenHouse.Greenhouse;
 import org.example.models.buildings.Nature.Bush;
+import org.example.models.buildings.Nature.Plant;
 import org.example.models.buildings.Nature.Rock;
 import org.example.models.buildings.Nature.Tree;
 import org.example.models.foragings.*;

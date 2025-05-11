@@ -1,6 +1,7 @@
-package org.example.models.foragings;
+package org.example.models.buildings.Nature;
 
 import org.example.models.Season;
+import org.example.models.foragings.SeedType;
 
 import java.util.ArrayList;
 

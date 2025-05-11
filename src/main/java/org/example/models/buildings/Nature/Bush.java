@@ -5,7 +5,7 @@ import org.example.models.locations.Farm;
 
 import java.util.Random;
 
-public class Bush implements ObjectMap {
+public class Bush implements Nature {
     @Override
     public String getChar() {
         return Colors.colorize(64,64,"%%%%");

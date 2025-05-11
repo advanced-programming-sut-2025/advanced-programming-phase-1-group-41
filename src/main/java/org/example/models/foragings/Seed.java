@@ -8,7 +8,7 @@ import org.example.models.locations.Farm;
 
 import java.util.Random;
 
-public class Seed implements ObjectMap {
+public class Seed implements Foraging {
     @Override
     public String getChar() {
         return Colors.colorize(172,0,"..");

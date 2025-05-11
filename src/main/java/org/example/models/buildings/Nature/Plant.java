@@ -1,4 +1,4 @@
-package org.example.models.foragings;
+package org.example.models.buildings.Nature;
 
 import org.example.models.Cell;
 import org.example.models.Colors;
@@ -8,7 +8,7 @@ import org.example.models.locations.Farm;
 
 import java.util.Random;
 
-public class Plant implements ObjectMap {
+public class Plant implements Nature {
     @Override
     public String getChar() {
         return Colors.colorize(109,0,"**");
