@@ -87,10 +87,14 @@ public class Farm {
     public void printMap(){
         int counter = 0;
         for(Cell cell:cells){
-            System.out.printf(cell.getObjectMap().getChar());
-//            System.out.print(cell.getX()+""+cell.getY());
+            if(cell.getX()==App.getGame().getCurrentPlayer().getX()&&cell.getY()==App.getGame().getCurrentPlayer().getY()){
+                System.out.printf(App.getGame().getCurrentPlayer().getChar());
+            }
+            else {
+                System.out.printf(cell.getObjectMap().getChar());
+            }
             counter++;
-            if(counter % 60 == 0){//TODO CHANGE APP FROM 75 TO 81 AND FROM 60 TO 41
+            if(counter % 60 == 0){
                 System.out.println();
             }
         }
