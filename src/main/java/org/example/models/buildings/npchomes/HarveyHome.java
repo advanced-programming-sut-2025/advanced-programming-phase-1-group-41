@@ -8,4 +8,9 @@ public class HarveyHome extends NPCHome implements Building {
     public String getChar() {
         return Colors.colorize(8,249,"HH");
     }
+
+    @Override
+    public String getName() {
+        return "HarveyHome";
+    }
 }

@@ -8,4 +8,9 @@ public class RobinHome extends NPCHome implements Building {
     public String getChar() {
         return Colors.colorize(15,233,"RH");
     }
+
+    @Override
+    public String getName() {
+        return "Rabin Home";
+    }
 }

@@ -1,8 +1,7 @@
 package org.example.controllers;
 
-import org.example.models.App;
-import org.example.models.Cell;
-import org.example.models.Result;
+import org.example.models.*;
+import org.example.models.buildings.GreenHouse.Greenhouse;
 import org.example.models.locations.Farm;
 
 import java.util.ArrayList;
@@ -19,14 +18,26 @@ public class MapController {
         if (cells == null) {
             return new Result(false, "no path found!");
         }else{
+            Player player = App.getGame().getCurrentPlayer();
             double energy = 0;
             for (Node cell : cells) {
                 energy = cell.energyCost;
-
+                if(energy > player.getEnergy() && !player.isEnergyUnilimited()){
+                    App.getGame().incRoundEnergy(player.getEnergy());
+                    player.setEnergy(0);
+                    printMap(null);
+                    return new Result(false, "you're running low :(");
+                }
+                player.setX(cell.x);
+                player.setY(cell.y);
+            }
+            if(!player.isEnergyUnilimited()){
+                player.decEnergy(energy);
+                App.getGame().incRoundEnergy(energy);
             }
             return new Result(true,"found the path ;D" +
                     "\n" +
-                    "energy: "+App.getGame().getCurrentPlayer().getEnergy());
+                    "energy: "+player.getEnergy());
         }
 
 
@@ -47,6 +58,17 @@ public class MapController {
                 .findPath(App.getGame().getCurrentPlayer(), x , y);
     }
 
-    public Result helpReadingMap(Matcher matcher){return null;}
+    public void helpReadingMap(Matcher matcher){
+        Farm farm = App.getGame().getCurrentPlayerFarm();
+        ArrayList<Cell> cells = farm.getCells();
+        ArrayList<String> objectNames = new ArrayList<>();
+        for(Cell cell : cells){
+            if(!objectNames.contains(cell.getObjectMap().getName())){
+                objectNames.add(cell.getObjectMap().getName());
+                System.out.println(cell.getObjectMap().getName()+": "+cell.getObjectMap().getChar());
+            }
+        }
+        objectNames.clear();
+    }
 }
 

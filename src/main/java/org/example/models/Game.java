@@ -29,6 +29,8 @@ public class Game {
     private WeatherType weatherType;
     private WeatherType tmrwWeatherType;
 
+
+    private double roundEnergy;
     @Transient
     private ArrayList<Farm> farms = new ArrayList<>();
 //    private Map map;
@@ -54,6 +56,7 @@ public class Game {
         this.time = new TimeLine();
 //        this.map = new Map();
 
+        this.roundEnergy = 0;
         this._id = new ObjectId();
     }
 
@@ -179,4 +182,21 @@ public class Game {
     public ArrayList<Farm> getFarms() {
         return farms;
     }
+
+    public double getRoundEnergy() {
+        return roundEnergy;
+    }
+
+    public void setRoundEnergy(double roundEnergy) {
+        this.roundEnergy = roundEnergy;
+    }
+
+    public void incRoundEnergy(double delta) {
+        roundEnergy += delta;
+    }
+    public void decRoundEnergy(double delta) {
+        roundEnergy -= delta;
+    }
+
+
 }

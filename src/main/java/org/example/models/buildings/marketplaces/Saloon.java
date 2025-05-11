@@ -8,4 +8,9 @@ public class Saloon extends Marketplace implements Building {
     public String getChar() {
         return Colors.colorize(136,214,"**");
     }
+
+    @Override
+    public String getName() {
+        return "Saloon";
+    }
 }

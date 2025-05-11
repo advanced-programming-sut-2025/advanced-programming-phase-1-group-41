@@ -13,6 +13,11 @@ public class Plant implements Nature {
     public String getChar() {
         return Colors.colorize(109,0,"**");
     }
+
+    @Override
+    public String getName() {
+        return "Plant";
+    }
     private final PlantType plantType;
     public Plant(int x, int y, Farm farm) {
         Random rand = new Random();

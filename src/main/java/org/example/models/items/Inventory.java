@@ -36,30 +36,37 @@ public class Inventory {
         return backpack;
     }
 
-    public boolean addToInventory(Item item, int quantity) {
-        for(Slot slot : slots){
-            if(slot.getItem() == null){
-                slot.setItem(item);
-                slot.setQuantity(quantity);
-                return true;
-            }
-            else if(slot.getItem().equals(item)){
-                slot.setQuantity(quantity+slot.getQuantity());
+    private boolean appendInventory(Item item, int quantity){
+        for (Slot slot : slots) {
+            if(slot.equals(item)){
+                slot.setQuantity(slot.getQuantity()+quantity);
                 return true;
             }
         }
         return false;
     }
+
+    public boolean addToInventory(Item item, int quantity) {
+        if(!appendInventory(item, quantity)){
+            for(Slot slot : slots){
+                if(slot.getItem() == null || slot.getQuantity() == 0){
+                    slot.setItem(item);
+                    slot.setQuantity(quantity);
+                    return true;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
     public boolean removeFromInventory(Item item, int quantity) {
         for(Slot slot : slots){
             if(slot.getItem().equals(item)){
-                if(slot.getQuantity() > quantity){
+                if(slot.getQuantity() >= quantity){
                     slot.setQuantity(slot.getQuantity()-quantity);
                     return true;
-                }
-                else{
-                    slots.remove(slot);
-                    return true;
+                }else{
+                    return false;
                 }
             }
         }
@@ -68,7 +75,7 @@ public class Inventory {
     public boolean removeFromInventory(Item item) {
         for(Slot slot : slots){
             if(slot.getItem().equals(item)){
-                slots.remove(slot);
+                slot.setQuantity(0);
                 return true;
             }
         }

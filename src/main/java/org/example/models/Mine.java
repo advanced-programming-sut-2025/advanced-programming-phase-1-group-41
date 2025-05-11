@@ -9,6 +9,11 @@ public class Mine implements ObjectMap {
     public String getChar() {
         return Colors.colorize(233,237,"^.");
     }
+
+    @Override
+    public String getName() {
+        return "Mine";
+    }
     public Mine(int x, int y, Farm farm) {
         x++;
         y++;

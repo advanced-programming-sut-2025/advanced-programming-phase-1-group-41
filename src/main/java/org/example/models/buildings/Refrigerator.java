@@ -11,6 +11,11 @@ public class Refrigerator implements ObjectMap {
     public String getChar() {
         return Colors.colorize(15,15,"[]");
     }
+
+    @Override
+    public String getName() {
+        return "Refrigerator";
+    }
     public final ArrayList<Slot> slots;
 
     public Refrigerator() {

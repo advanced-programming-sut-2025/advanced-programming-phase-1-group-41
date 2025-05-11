@@ -8,4 +8,8 @@ public class AbigailHome extends NPCHome implements Building {
     public String getChar() {
         return Colors.colorize(0,214,"BB");
     }
+    @Override
+    public String getName() {
+        return "Abigail Home";
+    }
 }

@@ -15,6 +15,11 @@ public class Cottage implements Building {
     int y;
     Farm farm;
 
+    @Override
+    public String getName() {
+        return "Cottage";
+    }
+
     public Cottage(int x, int y, Farm farm) {
         this.x = x;
         this.y = y;

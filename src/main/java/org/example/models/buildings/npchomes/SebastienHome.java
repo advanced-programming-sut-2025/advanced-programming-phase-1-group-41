@@ -8,4 +8,9 @@ public class SebastienHome extends NPCHome implements Building {
     public String getChar() {
         return Colors.colorize(0,235,"SH");
     }
+
+    @Override
+    public String getName() {
+        return "Sebastien Home";
+    }
 }

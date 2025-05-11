@@ -11,4 +11,9 @@ public class Blacksmith extends Marketplace implements Building{
     public String getChar() {
         return Colors.colorize(0,160,"BB");
     }
+
+    @Override
+    public String getName() {
+        return "Black smith";
+    }
 }

@@ -8,4 +8,9 @@ public class FishShop extends Marketplace implements Building {
     public String getChar() {
         return Colors.colorize(51,21,"FS");
     }
+
+    @Override
+    public String getName() {
+        return "Fish Shop";
+    }
 }

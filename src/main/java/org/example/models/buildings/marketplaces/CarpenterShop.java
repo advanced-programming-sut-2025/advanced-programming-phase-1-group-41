@@ -8,4 +8,9 @@ public class CarpenterShop extends Marketplace implements Building {
     public String getChar() {
         return Colors.colorize(3,160,"CS");
     }
+
+    @Override
+    public String getName() {
+        return "Carpenter Shop";
+    }
 }

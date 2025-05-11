@@ -1,8 +1,6 @@
 package org.example.controllers;
 
-import org.example.models.Cell;
-import org.example.models.Mine;
-import org.example.models.Player;
+import org.example.models.*;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.Nature.Nature;
 
@@ -39,12 +37,15 @@ public class PathFinder {
                 Cell nextCell = getCell(newX, newY);
                 // unavailable tiles
                 if (nextCell == null || nextCell.getObjectMap() instanceof Building ||
-                   nextCell.getObjectMap() instanceof Nature ||
+                   nextCell.getObjectMap() instanceof Obstacle ||
                    nextCell.getObjectMap() instanceof Mine) continue;
 
                 int newTurns = (current.parent != null && directionChanged(current.parent.x, current.parent.y, current.x, current.y, newX, newY))
                         ? current.turns + 1 : current.turns;
-                double newEnergyCost = (1 + 10 * newTurns) / 20.0 + current.energyCost;
+                double newEnergyCost = current.energyCost + 0.1;
+                if (current.parent != null && directionChanged(current.parent.x, current.parent.y, current.x, current.y, newX, newY)) {
+                    newEnergyCost += 0.5;
+                }
 
 
 
@@ -74,6 +75,9 @@ public class PathFinder {
             node = node.parent;
         }
         Collections.reverse(path);
+//        for (Node node1 : path) {
+//            System.out.println(node1);
+//        }
         return path;
     }
 }

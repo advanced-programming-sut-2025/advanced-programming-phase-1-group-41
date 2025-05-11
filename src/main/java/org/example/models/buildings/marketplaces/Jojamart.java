@@ -9,4 +9,9 @@ public class Jojamart extends Marketplace implements Building {
         return Colors.colorize(8,37,"JS");
     }
 
+    @Override
+    public String getName() {
+        return "Jojamart";
+    }
+
 }

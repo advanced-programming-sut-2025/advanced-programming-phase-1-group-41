@@ -8,4 +8,9 @@ public class GeneralStore extends Marketplace implements Building {
     public String getChar() {
         return Colors.colorize(0,195,"GS");
     }
+
+    @Override
+    public String getName() {
+        return "General Store";
+    }
 }

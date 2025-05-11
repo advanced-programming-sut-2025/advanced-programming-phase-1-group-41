@@ -14,6 +14,11 @@ public class Lake implements ObjectMap, Obstacle {
     private static final int ITERATIONS = 6;
     private static final double INITIAL_WATER_CHANCE = 0.5;
 
+    @Override
+    public String getName() {
+        return "Lake";
+    }
+
     public Lake(int startX, int startY, Farm farm) {
         boolean[][] map = new boolean[WIDTH][HEIGHT];
 
