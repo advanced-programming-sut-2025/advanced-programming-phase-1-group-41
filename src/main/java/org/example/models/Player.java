@@ -9,6 +9,7 @@ import org.example.models.animals.Animal;
 import org.example.models.items.Backpack;
 import org.example.models.items.Buff;
 import org.example.models.items.CraftingRecipe;
+import org.example.models.items.Inventory;
 import org.example.models.locations.Farm;
 import org.example.models.locations.FarmType;
 import org.example.models.npc.NPC;
@@ -35,7 +36,8 @@ public class Player {
     private int x;
     private int y;
     private double energy;
-//    private Backpack backpack;
+    private Inventory inventory;
+
 //    private Farm farm;
 //    private ArrayList<Animal> animals;
 //    private ArrayList<Skill> skills;
@@ -64,6 +66,7 @@ public class Player {
         x = 0;
         y = 0;
         energy = 1000;
+        this.inventory = new Inventory();
 //        animals = new ArrayList<>();
 //        skills = new ArrayList<>();
 //        skills = new ArrayList<>();
@@ -114,6 +117,10 @@ public class Player {
 
     public ObjectId getUserId() {
         return userId;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
     }
 
 

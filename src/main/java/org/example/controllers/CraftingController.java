@@ -1,5 +1,6 @@
 package org.example.controllers;
 
+import org.example.models.App;
 import org.example.models.Result;
 
 import java.util.regex.Matcher;
@@ -10,8 +11,6 @@ public class CraftingController {
     public Result learnRecipe(Matcher matcher){return null;}
 
     public Result craftRecipe(Matcher matcher) {return null;}
-
-    public Result cheatAddItem(Matcher matcher){return null;}
 
     public Result artisanUse(Matcher matcher){return null;}
 

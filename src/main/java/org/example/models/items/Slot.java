@@ -3,16 +3,21 @@ package org.example.models.items;
 import java.util.ArrayList;
 
 public class Slot {
-    private ArrayList<Item> items;
+    Item item;
     private int quantity;
 
-    public Slot(ArrayList<Item> items, int quantity) {
-        this.items = items;
+    public Slot(Item item, int quantity) {
+        this.item = item;
         this.quantity = quantity;
     }
 
-    public ArrayList<Item> getItems() {
-        return items;
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
     }
 
     public int getQuantity() {

@@ -1,18 +1,17 @@
 package org.example.models.items;
 
 public enum Backpack {
-    Default(new Inventory(12)),
-    Big(new Inventory(24)),
-    Deluxe(new Inventory(100000)),;
+    Default(12),
+    Big(24),
+    Deluxe(1000),;
 
-    private Inventory inventory;
+    private int size;
 
-    Backpack(Inventory inventory) {
-        this.inventory = inventory;
+    Backpack(int size) {
+        this.size = size;
     }
-
-    public Inventory getInventory() {
-        return inventory;
+    public int getSize() {
+        return size;
     }
 
 }
