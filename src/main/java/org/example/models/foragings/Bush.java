@@ -8,7 +8,7 @@ import java.util.Random;
 public class Bush implements ObjectMap {
     @Override
     public String getChar() {
-        return Colors.colorize(9,0,"\uD83C\uDF3E");
+        return Colors.colorize(64,64,"%%%%");
     }
     private static final int WIDTH = 12;
     private static final int HEIGHT = 12;

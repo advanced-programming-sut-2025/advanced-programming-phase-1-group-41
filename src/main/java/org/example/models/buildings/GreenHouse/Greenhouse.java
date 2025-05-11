@@ -26,7 +26,12 @@ public class Greenhouse implements Building {
         while(yWall<=y+7) {
             for (int i = x; i <= x + 6; i++) {
                 Cell cell = Finder.findCellByCoordinates(i, yWall, farm);
-                cell.setObjectMap(new Wall());
+                if(yWall==y&&(i!=x&&i!=x+6)){
+                    cell.setObjectMap(new WaterTank());
+                }
+                else {
+                    cell.setObjectMap(new Wall());
+                }
 
             }
             yWall+=7;
@@ -35,13 +40,7 @@ public class Greenhouse implements Building {
         while(xWall<=x+6) {
             for (int j = y+1; j <= y+6; j++) {
                 Cell cell = Finder.findCellByCoordinates(xWall, j, farm);
-//                assert cell != null;
-                if(xWall==x){
-                    cell.setObjectMap(new WaterTank());
-                }
-                else {
-                    cell.setObjectMap(new Wall());
-                }
+                cell.setObjectMap(new Wall());
             }
             xWall+=6;
         }

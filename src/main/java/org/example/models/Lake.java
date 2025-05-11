@@ -11,8 +11,8 @@ public class Lake implements ObjectMap {
     }
     private static final int WIDTH = 15;
     private static final int HEIGHT = 15;
-    private static final int ITERATIONS = 6;
-    private static final double INITIAL_WATER_CHANCE = 0.45;
+    private static final int ITERATIONS = 7;
+    private static final double INITIAL_WATER_CHANCE = 0.5;
 
     public Lake(int startX, int startY, Farm farm) {
         boolean[][] map = new boolean[WIDTH][HEIGHT];
