@@ -1,6 +1,7 @@
 package org.example.controllers;
 
 import org.example.models.*;
+import org.example.models.buildings.Building;
 import org.example.models.foragings.Nature.Mineral;
 import org.example.models.foragings.Nature.Rock;
 import org.example.models.foragings.Nature.RockType;
@@ -132,6 +133,9 @@ public class ToolsController {
                 }
             }else{
                 App.getGame().getCurrentPlayer().decEnergy(Math.max(0,energy-1));
+                if(!(cell.getObjectMap() instanceof Building)){
+                    cell.setObjectMap(new Grass());
+                }
                 return new Result(false,"fck this sht");
             }
         }
