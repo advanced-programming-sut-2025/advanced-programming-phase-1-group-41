@@ -113,7 +113,7 @@ public class Farm {
         for(int i=-1;i<=1;i++){
             for(int j=-1;j<=1;j++){
                 Player player = App.getGame().getCurrentPlayer();
-                Cell cell = getCell(player.getX()+i,player.getY()+i);
+                Cell cell = getCell(player.getX()+i,player.getY()+j);
                 if(cell == null) continue;
                 if(cell.getObjectMap() instanceof Lake){
                     return true;

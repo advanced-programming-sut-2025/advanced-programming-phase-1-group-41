@@ -11,15 +11,19 @@ public class PlayerView {
     public static boolean check(String input){
         Matcher matcher;
         if((matcher = GameMainCommands.EnergyShow.getMatcher(input))!=null){
-            controller.showEnergy(matcher);
+            System.out.println(controller.showEnergy(matcher));
+        }else if((matcher = GameMainCommands.EnergyUnlimited.getMatcher(input))!=null){
+            System.out.println(controller.cheatEnergyUnlimited(matcher));
+        }else if((matcher = GameMainCommands.EnergySet.getMatcher(input))!=null){
+            System.out.println(controller.cheatEnergySet(matcher));
         }else if((matcher = GameMainCommands.CheatAddItem.getMatcher(input))!=null){
-            controller.cheatAddItem(matcher);
+            System.out.println(controller.cheatAddItem(matcher));
         }else if((matcher = InventoryAndToolCommands.InventoryTrash.getMatcher(input))!=null){
-            controller.inventoryTrash(matcher);
+            System.out.println(controller.inventoryTrash(matcher));;
         }else if((matcher = InventoryAndToolCommands.InventoryShow.getMatcher(input))!=null){
-            controller.showInventory(matcher);
+            System.out.println(controller.showInventory(matcher));
         }else if((matcher = GameMainCommands.Fishing.getMatcher(input))!=null){
-            System.out.println(controller.fishing(matcher));;
+            System.out.println(controller.fishing(matcher));
         }
         else{
             return false;
