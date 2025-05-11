@@ -1,7 +1,6 @@
 package org.example.controllers;
 
 import org.example.models.App;
-import org.example.models.Finder;
 import org.example.models.Result;
 import org.example.models.items.Item;
 import org.example.models.items.Slot;
@@ -9,7 +8,7 @@ import org.example.models.items.Slot;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
-import static org.example.models.Finder.findItem;
+import static org.example.models.Finder.parseItem;
 
 
 public class PlayerController {
@@ -52,11 +51,11 @@ public class PlayerController {
         String itemName = matcher.group(1);
         String quantity = matcher.group(2);
 
-        if(findItem(itemName)==null){
+        if(parseItem(itemName)==null){
             return new Result(false, "Invalid item name");
         }
 
-        Item item=findItem(itemName);
+        Item item= parseItem(itemName);
         int itemQuantity = Integer.parseInt(quantity);
 
         if(App.getGame().getCurrentPlayer().getInventory().addToInventory(item,itemQuantity)){
@@ -68,11 +67,11 @@ public class PlayerController {
     public Result inventoryTrash(Matcher matcher) {
         String itemName = matcher.group(1);
         String quantity = matcher.group("number");
-        if(findItem(itemName)==null){
+        if(parseItem(itemName)==null){
             return new Result(false, "Invalid item name");
         }
 
-        Item item=findItem(itemName);
+        Item item= parseItem(itemName);
         int itemQuantity = 0;
         if(quantity != null){
             itemQuantity = Integer.parseInt(quantity);

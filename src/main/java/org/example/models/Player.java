@@ -31,7 +31,7 @@ public class Player {
     @Transient
     private User user;
     private ObjectId userId;
-    private int money;
+    private double money;
     private int farmId;
     private int x;
     private int y;
@@ -106,12 +106,18 @@ public class Player {
         this.user = user;
     }
 
-    public int getMoney() {
+    public double getMoney() {
         return money;
     }
 
-    public void setMoney(int money) {
+    public void setMoney(double money) {
         this.money = money;
+    }
+    public void incMoney(double delta) {
+        this.money += money;
+    }
+    public void decMoney(double delta) {
+        this.money -= delta;
     }
 
     public ObjectId get_id() {

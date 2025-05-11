@@ -1,13 +1,18 @@
 package org.example.models.items;
 
+import org.example.models.App;
+import org.example.models.tools.TrashCan;
+
 import java.util.ArrayList;
 
 public class Inventory {
     private ArrayList<Slot> slots=new ArrayList<>();
     private Backpack backpack=Backpack.Default;
 
-    public Inventory() {
+    public Inventory()
+    {
         setDefaultBag();
+        addToInventory(new TrashCan(), 1);
     }
 
     public void setDefaultBag() {
@@ -60,10 +65,26 @@ public class Inventory {
         }
         return true;
     }
+    
+    public double getCofOfTrashCan(){
+        TrashCan tc = TrashCan.findTrashCan();
+        if(tc != null){
+            return switch (tc.getLevel()){
+                case Default -> 0;
+                case Copper -> 0.15;
+                case Iron -> 0.30;
+                case Gold -> 0.45;
+                case Iridium -> 0.60;
+            };
+        }
+        return 0;
+    }
+    
     public boolean removeFromInventory(Item item, int quantity) {
         for(Slot slot : slots){
             if(slot.getItem().equals(item)){
                 if(slot.getQuantity() >= quantity){
+                    App.getGame().getCurrentPlayer().incMoney(quantity*getCofOfTrashCan());
                     slot.setQuantity(slot.getQuantity()-quantity);
                     return true;
                 }else{
@@ -76,6 +97,7 @@ public class Inventory {
     public boolean removeFromInventory(Item item) {
         for(Slot slot : slots){
             if(slot.getItem().equals(item)){
+                App.getGame().getCurrentPlayer().incMoney(slot.getQuantity()*getCofOfTrashCan());
                 slot.setQuantity(0);
                 return true;
             }

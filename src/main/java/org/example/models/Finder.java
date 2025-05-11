@@ -17,7 +17,7 @@ public class Finder {
         }
         return null;
     }
-    public static Item findItem(String itemName){
+    public static Item parseItem(String itemName){
         if(parseBasicTool(itemName)!=null){
             return parseBasicTool(itemName);
         }
