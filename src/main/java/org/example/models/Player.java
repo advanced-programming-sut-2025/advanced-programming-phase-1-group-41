@@ -22,7 +22,7 @@ import java.util.HashMap;
 public class Player {
 
     public String getChar() {
-        return Colors.colorize(15,226,":]");
+        return Colors.colorize(0,199,":]");
     }
 
     @Id
