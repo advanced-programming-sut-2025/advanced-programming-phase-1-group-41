@@ -1,6 +1,7 @@
 package org.example.models;
 
 import org.example.models.buildings.Nature.Mineral;
+import org.example.models.buildings.Nature.TreeType;
 import org.example.models.locations.Farm;
 
 import java.util.Random;
@@ -33,5 +34,11 @@ public class Mine implements ObjectMap {
                 }
             }
         }
+    }
+    public Mine(int x, int y, Farm farm, int i) {
+        Random rand = new Random();
+        Cell cell= Finder.findCellByCoordinates(x, y, farm);
+        assert cell != null;
+        cell.setObjectMap(this);
     }
 }
