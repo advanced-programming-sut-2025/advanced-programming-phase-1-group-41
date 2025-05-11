@@ -5,14 +5,16 @@ import org.example.models.Season;
 import java.util.ArrayList;
 
 public enum TreeType {
-    Apricot(),
-    Cherry(),
-    Banana(),
-    Log(),
+    Acorns(),
+    MapleSeeds(),
+    PineCones(),
+    MahoganySeeds(),
+    MushroomTreeSeeds();
     //etc
     ;
     String name;
-    SeedType seed;
+    SeedType sapling;
+    int totalHarvestTime;
     boolean eatable;
     ArrayList<Season> seasonsToGrow;
     ArrayList<Integer> stagesCycleTime;

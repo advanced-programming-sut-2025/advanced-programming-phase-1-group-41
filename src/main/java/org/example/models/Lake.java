@@ -4,22 +4,22 @@ import org.example.models.locations.Farm;
 
 import java.util.Random;
 
-public class Lake implements ObjectMap {
+public class Lake implements ObjectMap, Obstacle {
     @Override
     public String getChar() {
         return Colors.colorize(39,39,"LL");
     }
     private static final int WIDTH = 15;
     private static final int HEIGHT = 15;
-    private static final int ITERATIONS = 7;
+    private static final int ITERATIONS = 6;
     private static final double INITIAL_WATER_CHANCE = 0.5;
 
     public Lake(int startX, int startY, Farm farm) {
         boolean[][] map = new boolean[WIDTH][HEIGHT];
 
         Random random = new Random();
-        for (int x = 0; x < WIDTH - random.nextInt(7); x++) {
-            for (int y = 0; y < HEIGHT - random.nextInt(7); y++) {
+        for (int x = 0; x < WIDTH - random.nextInt(6); x++) {
+            for (int y = 0; y < HEIGHT - random.nextInt(6); y++) {
                 map[x][y] = random.nextDouble() < INITIAL_WATER_CHANCE;
             }
         }
