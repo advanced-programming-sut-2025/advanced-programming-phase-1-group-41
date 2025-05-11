@@ -16,6 +16,6 @@ public class Fish implements Item {
 
     @Override
     public String getName() {
-        return "";
+        return fishType.getName();
     }
 }
