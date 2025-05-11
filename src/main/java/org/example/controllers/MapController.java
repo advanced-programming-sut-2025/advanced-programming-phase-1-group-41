@@ -23,8 +23,7 @@ public class MapController {
             for (Node cell : cells) {
                 energy = cell.energyCost;
                 if(energy > player.getEnergy() && !player.isEnergyUnilimited()){
-                    App.getGame().incRoundEnergy(player.getEnergy());
-                    player.setEnergy(0);
+                    player.decEnergy(player.getEnergy());
                     printMap(null);
                     return new Result(false, "you're running low :(");
                 }
@@ -33,7 +32,6 @@ public class MapController {
             }
             if(!player.isEnergyUnilimited()){
                 player.decEnergy(energy);
-                App.getGame().incRoundEnergy(energy);
             }
             return new Result(true,"found the path ;D" +
                     "\n" +

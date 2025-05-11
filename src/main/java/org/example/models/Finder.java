@@ -2,7 +2,10 @@ package org.example.models;
 
 import org.bson.types.ObjectId;
 import org.example.models.items.Item;
+import org.example.models.items.Slot;
 import org.example.models.locations.Farm;
+import org.example.models.tools.Tool;
+import org.example.models.tools.TrashCan;
 
 import static org.example.models.animals.FishType.parseFish;
 import static org.example.models.items.CraftableItem.parseCraftable;
@@ -40,6 +43,22 @@ public class Finder {
         }
         return null;
     }
+
+    public static Tool getToolByName(String name){
+        for (Slot slot : App.getGame().getCurrentPlayer().getInventory().getSlots()) {
+            if(slot.getItem() == null){
+                continue;
+            }
+            System.out.println("checking.. "+slot.getItem().getName()+" "+name);
+            if(slot.getItem() instanceof Tool){
+                if(slot.getItem().getName().equalsIgnoreCase(name)){
+                    return (Tool) slot.getItem();
+                }
+            }
+        }
+        return null;
+    }
+
     public static Cell findCellByCoordinates(int x, int y, Farm farm){
         for(Cell cell : farm.getCells()){
             if(cell.getX() == x && cell.getY() == y){

@@ -2,22 +2,10 @@ package org.example.models;
 
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
-import dev.morphia.annotations.Reference;
 import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
-import org.example.models.animals.Animal;
-import org.example.models.items.Backpack;
-import org.example.models.items.Buff;
-import org.example.models.items.CraftingRecipe;
-import org.example.models.items.Inventory;
-import org.example.models.locations.Farm;
-import org.example.models.locations.FarmType;
-import org.example.models.npc.NPC;
-import org.example.models.npc.Quest;
-import org.example.models.skills.Skill;
-
-import java.util.ArrayList;
-import java.util.HashMap;
+import org.example.models.items.*;
+import org.example.models.tools.Tool;
 
 @Entity("players")
 public class Player {
@@ -39,6 +27,8 @@ public class Player {
     private boolean energyUnilimited;
     @Transient
     private Inventory inventory;
+    @Transient
+    private Tool currentTool;
 
 //    private Farm farm;
 //    private ArrayList<Animal> animals;
@@ -70,6 +60,7 @@ public class Player {
         energy = 100;
         this.inventory = new Inventory();
         this.energyUnilimited = false;
+        this.currentTool = null;
 //        animals = new ArrayList<>();
 //        skills = new ArrayList<>();
 //        skills = new ArrayList<>();
@@ -170,6 +161,7 @@ public class Player {
         this.energy = energy;
     }
     public void decEnergy(double delta) {
+        App.getGame().incRoundEnergy(delta);
         this.energy -= delta;
     }
     public void incEnergy(double delta) {
@@ -184,6 +176,16 @@ public class Player {
     public void setEnergyUnilimited(boolean energyUnilimited) {
         this.energyUnilimited = energyUnilimited;
     }
+
+    public Tool getCurrentTool() {
+        return currentTool;
+    }
+
+    public void setCurrentTool(Tool currentTool) {
+        this.currentTool = currentTool;
+    }
+
+
 
     @Override
     public String toString() {
