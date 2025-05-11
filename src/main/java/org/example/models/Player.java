@@ -20,6 +20,11 @@ import java.util.HashMap;
 
 @Entity("players")
 public class Player {
+
+    public String getChar() {
+        return Colors.colorize(15,226,":]");
+    }
+
     @Id
     private ObjectId _id;
     @Transient
