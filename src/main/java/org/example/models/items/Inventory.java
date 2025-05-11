@@ -9,6 +9,7 @@ public class Inventory {
     public Inventory() {
         setDefaultBag();
     }
+
     public void setDefaultBag() {
         for(int i = 0; i < backpack.getSize(); i++){
             slots.add(new Slot(null,0));
