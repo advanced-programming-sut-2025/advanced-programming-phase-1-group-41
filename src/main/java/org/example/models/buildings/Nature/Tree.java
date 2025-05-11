@@ -8,13 +8,16 @@ import java.util.Random;
 public class Tree implements Nature, Obstacle {
     @Override
     public String getChar() {
-        return Colors.colorize(3,0,"I^");
+        return Colors.colorize(3,0,(typeIndex/10) + "" + typeIndex % 10);
     }
 
     private final TreeType treeType;
+    private final int typeIndex;
+
     public Tree(int x, int y, Farm farm) {
         Random rand = new Random();
         int type = rand.nextInt(TreeType.values().length);
+        typeIndex = type;
         treeType = TreeType.values()[type];
         Cell cell= Finder.findCellByCoordinates(x, y, farm);
         assert cell != null;
@@ -22,5 +25,8 @@ public class Tree implements Nature, Obstacle {
     }
     public TreeType getTreeType() {
         return treeType;
+    }
+    public int getTypeIndex() {
+        return typeIndex;
     }
 }

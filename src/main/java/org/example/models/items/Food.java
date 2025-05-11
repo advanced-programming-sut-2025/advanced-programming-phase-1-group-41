@@ -1,6 +1,6 @@
 package org.example.models.items;
 
-public enum Food {
+public enum Food implements Item {
     FriedEgg(50, 35),
     BakedFish(75, 100),
     Salad(113, 110),

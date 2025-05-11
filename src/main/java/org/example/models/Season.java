@@ -1,7 +1,7 @@
 package org.example.models;
 
 public enum Season {
-    Spring("Spring"), Summer("Summer"), Autumn("Autumn"), Winter("Winter");
+    Spring("Spring"), Summer("Summer"), Autumn("Autumn"), Winter("Winter"), Special("Special");
 
     public final String name;
 
