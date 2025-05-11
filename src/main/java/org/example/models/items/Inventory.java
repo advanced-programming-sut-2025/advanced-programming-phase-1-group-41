@@ -1,6 +1,7 @@
 package org.example.models.items;
 
 import org.example.models.App;
+import org.example.models.tools.Pickaxe;
 import org.example.models.tools.TrashCan;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class Inventory {
     {
         setDefaultBag();
         addToInventory(new TrashCan(), 1);
+        addToInventory(new Pickaxe(), 1);
     }
 
     public void setDefaultBag() {

@@ -16,6 +16,8 @@ public class ToolView {
             System.out.println(controller.showCurrentTool(matcher));
         }else if((matcher = InventoryAndToolCommands.ShowAvailableTools.getMatcher(input))!=null){
             System.out.println(controller.showAvailableTools(matcher));
+        }else if((matcher = InventoryAndToolCommands.UseTool.getMatcher(input))!=null){
+            System.out.println(controller.useTool(matcher));
         }else{
             return false;
         }

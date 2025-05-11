@@ -1,6 +1,8 @@
 package org.example.models.items;
 
-public interface Item {
+import org.example.models.ObjectMap;
+
+public interface Item extends ObjectMap {
     String getName();
 
 }

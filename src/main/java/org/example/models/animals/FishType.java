@@ -68,8 +68,17 @@ public enum FishType implements Item {
             default -> null;
         };
     }
+
+
+    @Override
+    public String getChar() {
+        return "Fi";
+    }
+
     @Override
     public String getName() {
         return this.name();
     }
+
+
 }
