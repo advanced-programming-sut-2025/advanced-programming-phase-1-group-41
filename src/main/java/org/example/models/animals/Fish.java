@@ -5,6 +5,7 @@ import org.example.models.items.Item;
 
 public class Fish implements Item {
     private final FishType fishType;
+    private double quality;
 
     public Fish(FishType fishType) {
         this.fishType = fishType;
@@ -12,6 +13,14 @@ public class Fish implements Item {
 
     public FishType getFishType() {
         return fishType;
+    }
+
+    public double getQuality() {
+        return quality;
+    }
+
+    public void setQuality(double quality) {
+        this.quality = quality;
     }
 
     @Override

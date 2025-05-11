@@ -112,7 +112,10 @@ public class Farm {
     public boolean isLakeAround(){
         for(int i=-1;i<=1;i++){
             for(int j=-1;j<=1;j++){
-                if(getCell(App.getGame().getCurrentPlayer().getX()+i,App.getGame().getCurrentPlayer().getY()+i).getObjectMap() instanceof Lake){
+                Player player = App.getGame().getCurrentPlayer();
+                Cell cell = getCell(player.getX()+i,player.getY()+i);
+                if(cell == null) continue;
+                if(cell.getObjectMap() instanceof Lake){
                     return true;
                 }
             }

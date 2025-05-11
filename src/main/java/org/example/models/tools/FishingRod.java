@@ -10,7 +10,7 @@ public class FishingRod implements Tool {
     private FishingRodLevel level;
     public FishingRod() {
         this.usage = Skill.Fishing;
-        this.level = FishingRodLevel.Training;
+        this.level = FishingRodLevel.Iridium;
     }
 
     public Skill getUsage() {

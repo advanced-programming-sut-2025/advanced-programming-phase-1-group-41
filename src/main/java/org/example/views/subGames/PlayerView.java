@@ -18,6 +18,8 @@ public class PlayerView {
             controller.inventoryTrash(matcher);
         }else if((matcher = InventoryAndToolCommands.InventoryShow.getMatcher(input))!=null){
             controller.showInventory(matcher);
+        }else if((matcher = GameMainCommands.Fishing.getMatcher(input))!=null){
+            System.out.println(controller.fishing(matcher));;
         }
         else{
             return false;

@@ -1,6 +1,7 @@
 package org.example.models.items;
 
 import org.example.models.App;
+import org.example.models.tools.FishingRod;
 import org.example.models.tools.Pickaxe;
 import org.example.models.tools.TrashCan;
 
@@ -15,6 +16,8 @@ public class Inventory {
         setDefaultBag();
         addToInventory(new TrashCan(), 1);
         addToInventory(new Pickaxe(), 1);
+        // todo buy this
+        addToInventory(new FishingRod(), 1);
     }
 
     public void setDefaultBag() {

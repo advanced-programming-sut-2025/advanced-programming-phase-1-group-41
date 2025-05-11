@@ -35,7 +35,7 @@ public enum GameMainCommands implements Command {
     Build("\\s*build\\s+(?<buildingName>.*)\\s+-l\\s+(?<x>.*)\\s*,\\s*(?<y>.*)\\s*"),
     Produces("\\s*produces\\s*"),
     CollectProduce("\\s*collect\\s+produce\\s+-n\\s+(?<name>.*)\\s*"),
-    Fishing("\\s*fishing\\s+-p\\s+(?<fishingPole>.*)\\s*"),
+    Fishing("\\s*fishing\\s+-p\\s+(?<fishingPole>.+)\\s*"),
     ArtisanUse("\\s*artisan\\s+use\\s+(?<artisanName>.*)\\s+(?<item1Name>.*)\\s*"),
     ArtisanGet("\\s*artisan\\s+get\\s+(?<artisanName>.*)\\s*"),
     ;
