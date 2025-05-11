@@ -29,6 +29,8 @@ public class MapController {
                 }
                 player.setX(cell.x);
                 player.setY(cell.y);
+//                Cell c = Finder.findCellByCoordinates(cell.x,cell.y, App.getGame().getCurrentPlayerFarm());
+//                System.out.println(c.getObjectMap().getClass());
             }
             if(!player.isEnergyUnilimited()){
                 player.decEnergy(energy);

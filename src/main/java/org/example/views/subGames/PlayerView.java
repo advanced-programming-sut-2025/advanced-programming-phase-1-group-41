@@ -16,6 +16,8 @@ public class PlayerView {
             controller.cheatAddItem(matcher);
         }else if((matcher = InventoryAndToolCommands.InventoryTrash.getMatcher(input))!=null){
             controller.inventoryTrash(matcher);
+        }else if((matcher = InventoryAndToolCommands.InventoryShow.getMatcher(input))!=null){
+            controller.showInventory(matcher);
         }
         else{
             return false;

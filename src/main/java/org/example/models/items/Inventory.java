@@ -46,7 +46,10 @@ public class Inventory {
 
     private boolean appendInventory(Item item, int quantity){
         for (Slot slot : slots) {
-            if(slot.equals(item)){
+            if(slot == null || slot.getItem() == null){
+                continue;
+            }
+            if(item.getName().equals((slot.getItem().getName()))){
                 slot.setQuantity(slot.getQuantity()+quantity);
                 return true;
             }

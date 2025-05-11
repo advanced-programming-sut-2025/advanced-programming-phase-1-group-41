@@ -53,8 +53,8 @@ public class ToolsController {
             return new Result(false, "invalid dir");
         }
         int [][]dirs = {{-1,-1},{0,-1},{1,-1},{1,0},{1,1},{0,1},{-1,1},{-1,0},};
-        int x = App.getGame().getCurrentPlayer().getX()+dirs[dir][0];
-        int y = App.getGame().getCurrentPlayer().getY()+dirs[dir][1];
+        x = App.getGame().getCurrentPlayer().getX()+dirs[dir][0];
+        y = App.getGame().getCurrentPlayer().getY()+dirs[dir][1];
         return new Result(true, "x: "+x+" y: "+y);
     }
 
@@ -66,6 +66,7 @@ public class ToolsController {
         System.out.println(preResult);
 
         Cell cell = Finder.findCellByCoordinates(x,y,App.getGame().getCurrentPlayerFarm());
+        System.out.println(x+" "+y);
         if(cell == null){
             return new Result(false, "Cell not found");
         }
@@ -73,6 +74,7 @@ public class ToolsController {
         if(tool == null){
             return new Result(false, "you don't have any tool equipped");
         }
+
         if(tool instanceof Pickaxe){
             Pickaxe pickaxe = (Pickaxe) tool;
             int energy = 0;
@@ -84,19 +86,24 @@ public class ToolsController {
                 case Iridium -> energy = 1;
             }
             // todo check the mining level
+
             System.out.println(cell.getObjectMap().getClass());
             if(cell.getObjectMap() instanceof Mineral){
                 App.getGame().getCurrentPlayer().getInventory().addToInventory(
                         (Item) cell.getObjectMap(), 1
                 );
+                String name = ((Item)cell.getObjectMap()).getName();
                 App.getGame().getCurrentPlayer().decEnergy(energy);
-                return new Result(true, "got a "+((Item)cell.getObjectMap()).getName());
+                cell.setObjectMap(new Mine(x,y,App.getGame().getCurrentPlayerFarm(),12121212));
+                return new Result(true, "got a "+name);
             }else if(cell.getObjectMap() instanceof Rock){
                 App.getGame().getCurrentPlayer().getInventory().addToInventory(
                         (Item) cell.getObjectMap(), 1
                 );
                 App.getGame().getCurrentPlayer().decEnergy(energy);
-                return new Result(true, "got a "+((Item)cell.getObjectMap()).getName());
+                String namemeeme = ((Item)cell.getObjectMap()).getName();
+                cell.setObjectMap(new Grass());
+                return new Result(true, "got a "+namemeeme);
             }else{
                 App.getGame().getCurrentPlayer().decEnergy(Math.max(0,energy-1));
                 return new Result(false,"fck this sht");
