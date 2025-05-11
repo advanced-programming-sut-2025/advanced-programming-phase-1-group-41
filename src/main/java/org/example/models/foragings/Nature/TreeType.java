@@ -1,4 +1,4 @@
-package org.example.models.buildings.Nature;
+package org.example.models.foragings.Nature;
 
 import org.example.models.Season;
 import org.example.models.foragings.FruitType;

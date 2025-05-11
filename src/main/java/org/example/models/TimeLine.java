@@ -51,6 +51,7 @@ public class TimeLine {
         }
     }
     public void advanceOneDay(){
+        App.getGame().getCurrentPlayerFarm().update();
         App.getGame().setWeatherType(App.getGame().getTmrwWeatherType());
         predictTmrwWeather();
 

@@ -1,8 +1,8 @@
 package org.example.controllers;
 
 import org.example.models.*;
-import org.example.models.buildings.Nature.Mineral;
-import org.example.models.buildings.Nature.Rock;
+import org.example.models.foragings.Nature.Mineral;
+import org.example.models.foragings.Nature.Rock;
 import org.example.models.items.Item;
 import org.example.models.tools.Pickaxe;
 import org.example.models.tools.Tool;

@@ -1,10 +1,13 @@
 package org.example.models.locations;
 
 import org.example.models.*;
+import org.example.models.foragings.Nature.Bush;
+import org.example.models.foragings.Nature.Plant;
+import org.example.models.foragings.Nature.Rock;
+import org.example.models.foragings.Nature.Tree;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.Cottage;
 import org.example.models.buildings.GreenHouse.Greenhouse;
-import org.example.models.buildings.Nature.*;
 import org.example.models.buildings.animalContainer.Barn;
 import org.example.models.buildings.animalContainer.BarnType;
 import org.example.models.buildings.animalContainer.Coop;
@@ -38,9 +41,8 @@ public class Farm {
                 cells.add(new Cell(new Grass(),j,i));
             }
         }
-        //TODO Random in 4 ta
         Random rand = new Random();
-        FarmType farmType = FarmType.values()[rand.nextInt(FarmType.values().length)];
+        farmType = FarmType.values()[rand.nextInt(FarmType.values().length)];
         buildings.add(new Greenhouse(4,24 + rand.nextInt(4),this));
         buildings.add(new Cottage(30 + rand.nextInt(4), 4,this));
         mine = new Mine(3,3,this);
@@ -193,7 +195,49 @@ public class Farm {
         this.mine = mine;
     }
 
-
+    public void update(){
+        Random rand = new Random();
+        int rockCount = (5 + rand.nextInt(10)) * farmType.rockCoefficient;
+        int treeCount = (5 + rand.nextInt(10)) * farmType.treeCoefficient;
+        int plantCount = (5 + rand.nextInt(10)) * farmType.treeCoefficient;
+        int cropCount = (5 + rand.nextInt(5));
+        for(int i = 0; i < rockCount ;i++){
+            int y = rand.nextInt(MaxLength - 4) + 2;
+            int x = rand.nextInt(MaxHeight - 4) + 2;
+            if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap().getChar(), new Grass().getChar())){
+                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(new Rock(x, y, this));
+            } else{
+                i--;
+            }
+        }
+        for(int i = 0; i < treeCount ;i++){
+            int y = rand.nextInt(MaxLength - 4) + 4;
+            int x = rand.nextInt(MaxHeight - 4) + 4;
+            if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap().getChar(), new Grass().getChar())){
+                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(new Tree(x, y, this));
+            } else{
+                i--;
+            }
+        }
+        for(int i = 0; i < plantCount ;i++){
+            int y = rand.nextInt(MaxLength - 4) + 4;
+            int x = rand.nextInt(MaxHeight - 4) + 4;
+            if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap().getChar(), new Grass().getChar())){
+                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(new Plant(x, y, this));
+            } else{
+                i--;
+            }
+        }
+        for(int i = 0; i < cropCount ;i++){
+            int y = rand.nextInt(MaxLength - 4) + 4;
+            int x = rand.nextInt(MaxHeight - 4) + 4;
+            if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap().getChar(), new Grass().getChar())){
+                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(new ForagingCrop(x, y, this));
+            } else{
+                i--;
+            }
+        }
+    }
 
     //    public void setCells(ArrayList<Cell> cells) {
 //        this.cells = cells;
