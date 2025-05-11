@@ -11,6 +11,7 @@ public enum BasicTool implements Tool {
     TrashCan(null)
     ;
 
+
     private Skill usage;
     private ToolLevel toolLevel;
 
@@ -37,5 +38,10 @@ public enum BasicTool implements Tool {
             case "TrashCan" -> BasicTool.TrashCan;
             default -> null;
         };
+    }
+
+    @Override
+    public String getName() {
+        return this.name();
     }
 }

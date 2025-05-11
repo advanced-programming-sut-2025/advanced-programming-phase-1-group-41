@@ -4,7 +4,9 @@ import org.example.models.App;
 import org.example.models.Finder;
 import org.example.models.Result;
 import org.example.models.items.Item;
+import org.example.models.items.Slot;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 import static org.example.models.Finder.findItem;
@@ -30,7 +32,21 @@ public class PlayerController {
                 " energy is now unlimited");
     }
 
-    public Result showInventory(Matcher matcher){return null;}
+    public Result showInventory(Matcher matcher){
+        ArrayList<Slot> inventory=App.getGame().getCurrentPlayer().getInventory().getSlots();
+        for(Slot slot : inventory){
+            if(slot.getQuantity()>0) {
+                System.out.printf(slot.getQuantity() + " " + slot.getItem().getName());
+            }
+            if(slot.getQuantity()>1){
+                System.out.printf("s\n");
+            }
+            else if(slot.getQuantity()==1){
+                System.out.printf("\n");
+            }
+        }
+        return new Result(true,App.getGame().getCurrentPlayer().getInventory().getEmptySlots()+" empty slots in your "+App.getGame().getCurrentPlayer().getInventory().getBackpack().name()+" backPack");
+    }
 
     public Result cheatAddItem(Matcher matcher){
         String itemName = matcher.group(1);

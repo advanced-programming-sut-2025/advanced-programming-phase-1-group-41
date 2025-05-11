@@ -15,4 +15,8 @@ public enum NormalTools implements Tool {
             default -> null;
         };
     }
+    @Override
+    public String getName() {
+        return this.name();
+    }
 }

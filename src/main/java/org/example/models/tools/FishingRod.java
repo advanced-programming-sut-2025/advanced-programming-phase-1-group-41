@@ -15,4 +15,8 @@ public class FishingRod implements Tool {
     }
 
 
+    @Override
+    public String getName() {
+        return "Fishing Rod";
+    }
 }

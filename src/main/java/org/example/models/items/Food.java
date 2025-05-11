@@ -66,4 +66,9 @@ public enum Food implements Item {
     public Buff getBuff() {
         return buff;
     }
+
+    @Override
+    public String getName() {
+        return "";
+    }
 }

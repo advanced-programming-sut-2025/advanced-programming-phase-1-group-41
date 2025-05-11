@@ -68,4 +68,8 @@ public enum Fish implements Item {
             default -> null;
         };
     }
+    @Override
+    public String getName() {
+        return this.name();
+    }
 }

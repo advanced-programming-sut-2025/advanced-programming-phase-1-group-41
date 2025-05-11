@@ -6,6 +6,10 @@ public enum CraftableItem implements Item{
     // etc
 
     ;
+    @Override
+    public String getName() {
+        return this.name();
+    }
 
     private final CraftingRecipe recipe;
 

@@ -81,4 +81,13 @@ public class Inventory {
         }
         return false;
     }
+    public int getEmptySlots(){
+        int sum=0;
+        for(Slot slot : slots){
+            if(slot.getItem()==null||slot.getQuantity() == 0){
+                sum++;
+            }
+        }
+        return sum;
+    }
 }
