@@ -8,4 +8,9 @@ public class WaterTank implements ObjectMap {
     public String getChar() {
         return Colors.colorize(27,0,"@@");
     }
+
+    @Override
+    public String getName() {
+        return "Water Tank";
+    }
 }

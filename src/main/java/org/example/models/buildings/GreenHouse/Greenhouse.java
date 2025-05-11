@@ -16,6 +16,11 @@ public class Greenhouse implements Building {
     public final int y;
     private final Farm farm;
 
+    @Override
+    public String getName() {
+        return "Green House";
+    }
+
     public Greenhouse(int x, int y, Farm farm) {
         this.x = x;
         this.y = y;

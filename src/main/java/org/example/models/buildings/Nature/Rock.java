@@ -10,6 +10,12 @@ public class Rock implements Nature, Obstacle {
     public String getChar() {
         return Colors.colorize(250,0,"OO");
     }
+
+    @Override
+    public String getName() {
+        return "Rock";
+    }
+
     private final RockType rockType;
     public Rock(int x, int y, Farm farm) {
         Random rand = new Random();

@@ -8,6 +8,11 @@ public class PlayerHome implements Building {
         return Colors.colorize(94,178,"##");
     }
 
+    @Override
+    public String getName() {
+        return "Player Home";
+    }
+
     private Refrigerator refrigerator;
 
     public PlayerHome() {

@@ -58,7 +58,16 @@ public class MapController {
     }
 
     public void helpReadingMap(Matcher matcher){
-
+        Farm farm = App.getGame().getCurrentPlayerFarm();
+        ArrayList<Cell> cells = farm.getCells();
+        ArrayList<String> objectNames = new ArrayList<>();
+        for(Cell cell : cells){
+            if(!objectNames.contains(cell.getObjectMap().getName())){
+                objectNames.add(cell.getObjectMap().getName());
+                System.out.println(cell.getObjectMap().getName()+": "+cell.getObjectMap().getChar());
+            }
+        }
+        objectNames.clear();
     }
 }
 

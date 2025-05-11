@@ -10,6 +10,10 @@ public class Bush implements Nature {
     public String getChar() {
         return Colors.colorize(64,64,"%%%%");
     }
+    @Override
+    public String getName() {
+        return "Bush";
+    }
     private static final int WIDTH = 12;
     private static final int HEIGHT = 12;
     private static final int ITERATIONS = 5;

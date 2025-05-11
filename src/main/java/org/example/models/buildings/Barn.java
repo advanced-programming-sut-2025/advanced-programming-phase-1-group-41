@@ -16,4 +16,9 @@ public class Barn implements Building {
     public String getChar() {
         return Colors.colorize(243,234,"bb");
     }
+
+    @Override
+    public String getName() {
+        return "Barn";
+    }
 }

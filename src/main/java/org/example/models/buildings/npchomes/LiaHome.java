@@ -8,4 +8,9 @@ public class LiaHome extends NPCHome implements Building {
     public String getChar() {
         return Colors.colorize(243,255,"LH");
     }
+
+    @Override
+    public String getName() {
+        return "Lia Home";
+    }
 }

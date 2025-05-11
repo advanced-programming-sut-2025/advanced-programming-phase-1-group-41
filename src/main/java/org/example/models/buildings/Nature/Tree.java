@@ -11,6 +11,11 @@ public class Tree implements Nature, Obstacle {
         return Colors.colorize(3,0,(typeIndex/10) + "" + typeIndex % 10);
     }
 
+    @Override
+    public String getName() {
+        return "Tree";
+    }
+
     private final TreeType treeType;
     private final int typeIndex;
 

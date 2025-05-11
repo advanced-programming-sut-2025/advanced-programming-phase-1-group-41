@@ -5,4 +5,9 @@ public class Grass implements ObjectMap{
     public String getChar() {
         return Colors.colorize(2,0,"ww");
     }
+
+    @Override
+    public String getName() {
+        return "Grass";
+    }
 }

@@ -10,6 +10,11 @@ public class Mineral implements Nature, Obstacle {
     public String getChar() {
         return Colors.colorize(15,51,"mm");
     }
+
+    @Override
+    public String getName() {
+        return "Mineral";
+    }
     private final MineralType mineralType;
     public Mineral(int x, int y, Farm farm) {
         Random rand = new Random();

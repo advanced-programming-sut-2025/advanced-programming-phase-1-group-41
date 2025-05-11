@@ -8,4 +8,9 @@ public class MarnieRanch extends Marketplace implements Building {
     public String getChar() {
         return Colors.colorize(0,6,"MR");
     }
+
+    @Override
+    public String getName() {
+        return "Marnie Ranch";
+    }
 }

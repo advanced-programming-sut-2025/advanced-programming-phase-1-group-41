@@ -13,6 +13,12 @@ public class Seed implements Foraging {
     public String getChar() {
         return Colors.colorize(172,0,"..");
     }
+
+    @Override
+    public String getName() {
+        return "Seed";
+    }
+
     private final SeedType seedType;
     private final SeedStage seedStage;
     public Seed(int x, int y, Farm farm) {

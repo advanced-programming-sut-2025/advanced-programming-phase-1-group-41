@@ -8,5 +8,9 @@ public class Wall implements Building {
     public String getChar() {
         return Colors.colorize(3,0,"##");
     }
-    //TODO
+
+    @Override
+    public String getName() {
+        return "Wall";
+    }
 }
