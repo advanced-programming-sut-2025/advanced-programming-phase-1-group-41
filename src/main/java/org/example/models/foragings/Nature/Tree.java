@@ -16,12 +16,14 @@ public class Tree implements Nature, Obstacle {
         return "Tree";
     }
 
+    private int hitPoints;
     private final TreeType treeType;
     private final int typeIndex;
 
     public Tree(int x, int y, Farm farm) {
         Random rand = new Random();
         int type = rand.nextInt(TreeType.values().length);
+        hitPoints = 4;
         typeIndex = type;
         treeType = TreeType.values()[type];
         Cell cell= Finder.findCellByCoordinates(x, y, farm);
@@ -33,5 +35,11 @@ public class Tree implements Nature, Obstacle {
     }
     public int getTypeIndex() {
         return typeIndex;
+    }
+    public int getHitPoints() {
+        return hitPoints;
+    }
+    public void decreaseHitPoints() {
+        hitPoints--;
     }
 }

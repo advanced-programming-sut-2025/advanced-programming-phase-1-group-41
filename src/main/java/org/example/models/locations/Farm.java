@@ -239,6 +239,8 @@ public class Farm {
         }
     }
 
+
+
     //    public void setCells(ArrayList<Cell> cells) {
 //        this.cells = cells;
 //    }

@@ -16,13 +16,17 @@ public class Rock implements Nature, Obstacle {
         return "Rock";
     }
 
+    private int hitPoints;
     private final RockType rockType;
+
     public Rock(int x, int y, Farm farm) {
         Random rand = new Random();
         if(y >= 40){
             rockType = RockType.BigRock;
+            hitPoints = 3;
         } else{
             rockType = RockType.SmallRock;
+            hitPoints = 1;
         }
         Cell cell = Finder.findCellByCoordinates(x, y, farm);
         assert cell != null;
@@ -44,5 +48,12 @@ public class Rock implements Nature, Obstacle {
     }
     public RockType getRockType() {
         return rockType;
+    }
+
+    public int getHitPoints() {
+        return hitPoints;
+    }
+    public void decreaseHitPoints() {
+        hitPoints--;
     }
 }

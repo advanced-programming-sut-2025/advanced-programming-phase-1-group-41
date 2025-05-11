@@ -3,6 +3,7 @@ package org.example.controllers;
 import org.example.models.*;
 import org.example.models.foragings.Nature.Mineral;
 import org.example.models.foragings.Nature.Rock;
+import org.example.models.foragings.Nature.RockType;
 import org.example.models.items.Item;
 import org.example.models.tools.Pickaxe;
 import org.example.models.tools.Tool;
@@ -97,13 +98,29 @@ public class ToolsController {
                 cell.setObjectMap(new Mine(x,y,App.getGame().getCurrentPlayerFarm(),12121212));
                 return new Result(true, "got a "+name);
             }else if(cell.getObjectMap() instanceof Rock){
-                App.getGame().getCurrentPlayer().getInventory().addToInventory(
-                        (Item) cell.getObjectMap(), 1
-                );
-                App.getGame().getCurrentPlayer().decEnergy(energy);
-                String namemeeme = ((Item)cell.getObjectMap()).getName();
-                cell.setObjectMap(new Grass());
-                return new Result(true, "got a "+namemeeme);
+                ((Rock) cell.getObjectMap()).decreaseHitPoints();
+                if(((Rock) cell.getObjectMap()).getHitPoints() == 0){
+                    App.getGame().getCurrentPlayer().getInventory().addToInventory(
+                            (Item) cell.getObjectMap(), 1
+                    );
+                    App.getGame().getCurrentPlayer().decEnergy(energy);
+                    String namemeeme = ((Item)cell.getObjectMap()).getName();
+                    cell.setObjectMap(new Grass());
+                    if(((Rock) cell.getObjectMap()).getRockType().equals(RockType.BigRock)){
+                        Cell cell2 = Finder.findCellByCoordinates(x + 1, y,App.getGame().getCurrentPlayerFarm());
+                        assert cell2 != null;
+                        cell2.setObjectMap(new Grass());
+                        Cell cell3 = Finder.findCellByCoordinates(x + 1, y,App.getGame().getCurrentPlayerFarm());
+                        assert cell3 != null;
+                        cell3.setObjectMap(new Grass());
+                        Cell cell4 = Finder.findCellByCoordinates(x + 1, y,App.getGame().getCurrentPlayerFarm());
+                        assert cell4 != null;
+                        cell4.setObjectMap(new Grass());
+                    }
+                    return new Result(true, "got a "+namemeeme);
+                } else{
+                    return new Result(true, "Hits Left: "+((Rock) cell.getObjectMap()).getHitPoints());
+                }
             }else{
                 App.getGame().getCurrentPlayer().decEnergy(Math.max(0,energy-1));
                 return new Result(false,"fck this sht");
