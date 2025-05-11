@@ -66,7 +66,7 @@ public class Player {
         money = 0;
         x = 0;
         y = 0;
-        energy = 1000;
+        energy = 100;
         this.inventory = new Inventory();
 //        animals = new ArrayList<>();
 //        skills = new ArrayList<>();

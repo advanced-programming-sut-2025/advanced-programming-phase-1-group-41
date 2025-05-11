@@ -17,12 +17,16 @@ public class MapController {
         int y = Integer.parseInt(yRaw);
         List<Node> cells = SSSP(x,y);
         if (cells == null) {
-            return new Result(false, "energy exceeded");
+            return new Result(false, "no path found!");
         }else{
+            double energy = 0;
             for (Node cell : cells) {
-                System.out.println(cell);
+                energy = cell.energyCost;
+
             }
-            return new Result(true,"found the path ;D");
+            return new Result(true,"found the path ;D" +
+                    "\n" +
+                    "energy: "+App.getGame().getCurrentPlayer().getEnergy());
         }
 
 

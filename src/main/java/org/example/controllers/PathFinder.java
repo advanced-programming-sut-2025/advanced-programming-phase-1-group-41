@@ -47,8 +47,6 @@ public class PathFinder {
                 double newEnergyCost = (1 + 10 * newTurns) / 20.0 + current.energyCost;
 
 
-                // check energy
-                if (newEnergyCost > player.getEnergy()) continue;
 
                 openSet.add(new Node(newX, newY, newEnergyCost, newTurns, current));
             }

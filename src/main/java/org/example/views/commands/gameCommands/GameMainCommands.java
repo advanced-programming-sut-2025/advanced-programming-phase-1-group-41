@@ -13,7 +13,7 @@ public enum GameMainCommands implements Command {
     DeleteGame("\\s*delete\\s+game\\s*"),
     NextTurn("\\s*next\\s+turn\\s*"),
     GreenhouseBuild("\\s*greenhouse\\s+build\\s*"),
-    Walk("\\s*walk\\s+-l\\s+(?<x>.*)\\s*,\\s*(?<y>.*)\\s*"),
+    Walk("\\s*walk\\s+-l\\s+(?<x>-?\\d+)\\s*,\\s*(?<y>-?\\d+)\\s*"),
     PrintMapReal("\\s*print\\s+map\\s+-l\\s+(?<x>.*)\\s*,\\s*(?<y>.*)\\s+-s\\s+(?<size>.*)\\s*"),
     PrintMap("\\s*print\\s+map\\s*"),
     HelpReadingMap("\\s*help\\s+reading\\s+map\\s*"),
