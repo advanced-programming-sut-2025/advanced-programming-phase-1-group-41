@@ -37,8 +37,7 @@ public class PathFinder {
                 Cell nextCell = getCell(newX, newY);
                 // unavailable tiles
                 if (nextCell == null || nextCell.getObjectMap() instanceof Building ||
-                   nextCell.getObjectMap() instanceof Obstacle ||
-                   nextCell.getObjectMap() instanceof Mine) continue;
+                   nextCell.getObjectMap() instanceof Obstacle) continue;
 
                 int newTurns = (current.parent != null && directionChanged(current.parent.x, current.parent.y, current.x, current.y, newX, newY))
                         ? current.turns + 1 : current.turns;

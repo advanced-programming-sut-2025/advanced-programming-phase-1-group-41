@@ -84,7 +84,7 @@ public class ToolsController {
                 case Iridium -> energy = 1;
             }
             // todo check the mining level
-
+            System.out.println(cell.getObjectMap().getClass());
             if(cell.getObjectMap() instanceof Mineral){
                 App.getGame().getCurrentPlayer().getInventory().addToInventory(
                         (Item) cell.getObjectMap(), 1
