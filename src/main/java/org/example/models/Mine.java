@@ -1,5 +1,6 @@
 package org.example.models;
 
+import org.example.models.buildings.Nature.Mineral;
 import org.example.models.locations.Farm;
 
 import java.util.Random;
@@ -23,8 +24,13 @@ public class Mine implements ObjectMap {
         for(int i=x; i<xLength+x; i++) {
             for(int j=y; j<yLength+y; j++) {
                 Cell cell=Finder.findCellByCoordinates(i, j, farm);
-                assert cell != null;
-                cell.setObjectMap(this);
+                if(rand.nextInt(4) != 0) {
+                    assert cell != null;
+                    cell.setObjectMap(this);
+                } else{
+                    assert cell != null;
+                    cell.setObjectMap(new Mineral(i, j, farm));
+                }
             }
         }
     }

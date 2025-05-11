@@ -11,9 +11,8 @@ public class Cottage implements Building {
     public String getChar() {
         return Colors.colorize(178,0,"..");
     }
-    int x;
-    int y;
-    Farm farm;
+    private int x;
+    private int y;
 
     @Override
     public String getName() {
@@ -23,7 +22,6 @@ public class Cottage implements Building {
     public Cottage(int x, int y, Farm farm) {
         this.x = x;
         this.y = y;
-        this.farm = farm;
         int xWall;
         int yWall;
         yWall = y;

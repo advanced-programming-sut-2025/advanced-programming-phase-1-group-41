@@ -4,10 +4,11 @@ import org.example.models.*;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.Cottage;
 import org.example.models.buildings.GreenHouse.Greenhouse;
-import org.example.models.buildings.Nature.Bush;
-import org.example.models.buildings.Nature.Plant;
-import org.example.models.buildings.Nature.Rock;
-import org.example.models.buildings.Nature.Tree;
+import org.example.models.buildings.Nature.*;
+import org.example.models.buildings.animalContainer.Barn;
+import org.example.models.buildings.animalContainer.BarnType;
+import org.example.models.buildings.animalContainer.Coop;
+import org.example.models.buildings.animalContainer.CoopType;
 import org.example.models.foragings.*;
 
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ public class Farm {
     private final ArrayList<Foraging> foragings = new ArrayList<>();
     private final ArrayList<Lake> lakes = new ArrayList<>();
     private final ArrayList<Bush> bushes = new ArrayList<>();
+    private final ArrayList<Barn> barns = new ArrayList<>();
+    private final ArrayList<Coop> coops = new ArrayList<>();
     private Mine mine;
 
     public Farm(int id) {
@@ -92,11 +95,19 @@ public class Farm {
                 i--;
             }
         }
+        barns.add(new Barn(40, 30, this, BarnType.Big));
+        coops.add(new Coop(30, 40, this, CoopType.Deluxe));
+    }
+
+    public void creatNewBarn(int x, int y, BarnType barnType){
+        int size = 5 + barnType.getCapacity() / 4;
+
     }
 
     public ArrayList<Cell> getCells() {
         return cells;
     }
+
     public void printMap(){
         int counter = 0;
         for(Cell cell:cells){

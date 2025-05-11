@@ -6,6 +6,12 @@ public enum CraftableItem implements Item{
     // etc
 
     ;
+
+    @Override
+    public String getChar() {
+        return "CI";
+    }
+
     @Override
     public String getName() {
         return this.name();

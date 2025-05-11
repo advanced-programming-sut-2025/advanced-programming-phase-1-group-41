@@ -68,6 +68,11 @@ public enum Food implements Item {
     }
 
     @Override
+    public String getChar() {
+        return "FF";
+    }
+
+    @Override
     public String getName() {
         return "";
     }

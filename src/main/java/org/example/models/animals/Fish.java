@@ -15,6 +15,11 @@ public class Fish implements Item {
     }
 
     @Override
+    public String getChar() {
+        return "ff";
+    }
+
+    @Override
     public String getName() {
         return fishType.getName();
     }
