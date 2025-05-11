@@ -52,6 +52,8 @@ public class TimeLine {
     }
     public void advanceOneDay(){
         App.getGame().getCurrentPlayerFarm().update();
+
+
         App.getGame().setWeatherType(App.getGame().getTmrwWeatherType());
         predictTmrwWeather();
 
@@ -63,7 +65,7 @@ public class TimeLine {
     }
     public void advanceOneSeason(){
         Season[] seasons = Season.values();
-        season = seasons[(season.ordinal()+1) % seasons.length];
+        season = seasons[(season.ordinal()+1) % 4];
         if(season.ordinal() == 0){
             advanceOneYear();
         }

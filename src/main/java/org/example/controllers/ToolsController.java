@@ -100,26 +100,35 @@ public class ToolsController {
             }else if(cell.getObjectMap() instanceof Rock){
                 ((Rock) cell.getObjectMap()).decreaseHitPoints();
                 if(((Rock) cell.getObjectMap()).getHitPoints() == 0){
-                    App.getGame().getCurrentPlayer().getInventory().addToInventory(
-                            (Item) cell.getObjectMap(), 1
-                    );
+                    if(((Rock) cell.getObjectMap()).getRockType().equals(RockType.BigRock)){
+                        App.getGame().getCurrentPlayer().getInventory().addToInventory(
+                                (Item) cell.getObjectMap(), 4
+                        );
+                    }else{
+                        App.getGame().getCurrentPlayer().getInventory().addToInventory(
+                                (Item) cell.getObjectMap(), 1
+                        );
+                    }
                     App.getGame().getCurrentPlayer().decEnergy(energy);
                     String namemeeme = ((Item)cell.getObjectMap()).getName();
-                    cell.setObjectMap(new Grass());
                     if(((Rock) cell.getObjectMap()).getRockType().equals(RockType.BigRock)){
                         Cell cell2 = Finder.findCellByCoordinates(x + 1, y,App.getGame().getCurrentPlayerFarm());
                         assert cell2 != null;
                         cell2.setObjectMap(new Grass());
-                        Cell cell3 = Finder.findCellByCoordinates(x + 1, y,App.getGame().getCurrentPlayerFarm());
+                        Cell cell3 = Finder.findCellByCoordinates(x + 1, y + 1,App.getGame().getCurrentPlayerFarm());
                         assert cell3 != null;
                         cell3.setObjectMap(new Grass());
-                        Cell cell4 = Finder.findCellByCoordinates(x + 1, y,App.getGame().getCurrentPlayerFarm());
+                        Cell cell4 = Finder.findCellByCoordinates(x, y + 1,App.getGame().getCurrentPlayerFarm());
                         assert cell4 != null;
                         cell4.setObjectMap(new Grass());
                     }
+                    cell.setObjectMap(new Grass());
                     return new Result(true, "got a "+namemeeme);
                 } else{
-                    return new Result(true, "Hits Left: "+((Rock) cell.getObjectMap()).getHitPoints());
+                    if(cell.getObjectMap() instanceof Rock && !cell.getObjectMap().getName().equals(new Grass().getName())){
+                        return new Result(true, "Hits Left: "+((Rock) cell.getObjectMap()).getHitPoints());
+                    }
+                    return new Result(true,"broke");
                 }
             }else{
                 App.getGame().getCurrentPlayer().decEnergy(Math.max(0,energy-1));
