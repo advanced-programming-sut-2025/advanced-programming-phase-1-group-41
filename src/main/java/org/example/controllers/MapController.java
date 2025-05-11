@@ -45,8 +45,7 @@ public class MapController {
         if(farm==null){
             System.out.println("Farm is null");
         }else{
-//            farm.printMap();
-//              farm.printDebugMap();
+            farm.printMap();
         }
         return new Result(true, "");
     }

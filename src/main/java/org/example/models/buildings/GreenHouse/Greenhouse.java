@@ -12,8 +12,8 @@ public class Greenhouse implements Building {
     public String getChar() {
         return Colors.colorize(0,3,"XX");
     }
-    private final int x;
-    private final int y;
+    public final int x;
+    public final int y;
     private final Farm farm;
 
     public Greenhouse(int x, int y, Farm farm) {

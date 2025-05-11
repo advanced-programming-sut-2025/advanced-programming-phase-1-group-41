@@ -104,7 +104,6 @@ public class Farm {
     }
 
 
-
     public ArrayList<Foraging> getForagings() {
         return foragings;
     }
