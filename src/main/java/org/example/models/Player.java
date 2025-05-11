@@ -34,6 +34,7 @@ public class Player {
     private int farmId;
     private int x;
     private int y;
+    private double energy;
 //    private Backpack backpack;
 //    private Farm farm;
 //    private ArrayList<Animal> animals;
@@ -62,6 +63,7 @@ public class Player {
         money = 0;
         x = 0;
         y = 0;
+        energy = 1000;
 //        animals = new ArrayList<>();
 //        skills = new ArrayList<>();
 //        skills = new ArrayList<>();
@@ -143,6 +145,22 @@ public class Player {
     public void setY(int y) {
         this.y = y;
     }
+
+    public double getEnergy() {
+        return energy;
+    }
+
+    public void setEnergy(double energy) {
+        this.energy = energy;
+    }
+    public void decEnergy(double delta) {
+        this.energy -= delta;
+    }
+    public void incEnergy(double delta) {
+        this.energy += delta;
+    }
+
+
 
     @Override
     public String toString() {

@@ -1,16 +1,14 @@
 package org.example.models;
 
 public class Energy {
-    private int value;
+    private double value;
 
 
-    public Energy(int value) {
+    public Energy(double value) {
         this.value = value;
     }
 
-    public int getValue() {
-        return value;
-    }
+
 
     public void setValue(int value) {
         this.value = value;

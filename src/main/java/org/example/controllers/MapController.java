@@ -19,7 +19,10 @@ public class MapController {
         return new Result(true, "");
     }
 
-    public Result SSSP(Matcher matcher){return null;}
+    public Result SSSP(Matcher matcher){
+
+    }
 
     public Result helpReadingMap(Matcher matcher){return null;}
 }
+

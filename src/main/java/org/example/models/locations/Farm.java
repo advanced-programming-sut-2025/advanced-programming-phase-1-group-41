@@ -147,6 +147,8 @@ public class Farm {
         this.mine = mine;
     }
 
+
+
     //    public void setCells(ArrayList<Cell> cells) {
 //        this.cells = cells;
 //    }

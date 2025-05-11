@@ -1,10 +1,16 @@
 package org.example.controllers;
 
+import org.example.models.App;
 import org.example.models.Result;
 
 import java.util.regex.Matcher;
 
 public class PlayerController {
+
+    public Result showEnergy(Matcher matcher){
+        return new Result(true, App.getGame().getCurrentPlayer().getEnergy()+"");
+    }
+
     public Result cheatEnergySet(Matcher matcher) {return null;}
 
     public Result cheatEnergyUnlimited(Matcher matcher) {return null;}
