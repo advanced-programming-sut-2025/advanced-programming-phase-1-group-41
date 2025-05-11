@@ -20,6 +20,11 @@ public class TrashCan implements Tool {
         level = ToolLevel.values()[levelNum];
     }
 
+    @Override
+    public String getChar() {
+        return "TC";
+    }
+
     // TODO check if the name should be this
     @Override
     public String getName() {

@@ -26,6 +26,11 @@ public class FishingRod implements Tool {
     }
 
     @Override
+    public String getChar() {
+        return "FR";
+    }
+
+    @Override
     public String getName() {
         return "Fishing Rod";
     }

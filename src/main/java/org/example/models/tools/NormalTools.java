@@ -15,6 +15,12 @@ public enum NormalTools implements Tool {
             default -> null;
         };
     }
+
+    @Override
+    public String getChar() {
+        return "NT";
+    }
+
     @Override
     public String getName() {
         return this.name();

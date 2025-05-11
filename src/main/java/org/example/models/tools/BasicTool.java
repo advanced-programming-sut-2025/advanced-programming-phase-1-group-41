@@ -41,6 +41,11 @@ public enum BasicTool implements Tool {
     }
 
     @Override
+    public String getChar() {
+        return "BT";
+    }
+
+    @Override
     public String getName() {
         return this.name();
     }

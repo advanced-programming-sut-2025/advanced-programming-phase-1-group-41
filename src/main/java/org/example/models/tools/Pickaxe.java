@@ -30,6 +30,11 @@ public class Pickaxe implements Tool{
     }
 
     @Override
+    public String getChar() {
+        return "Pi";
+    }
+
+    @Override
     public String getName() {
         return "Pickaxe";
     }
