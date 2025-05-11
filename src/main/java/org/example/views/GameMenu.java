@@ -30,14 +30,22 @@ public class GameMenu implements AppMenu {
             System.out.println(controller.deleteGame(matcher, scanner));
         }else if((matcher=GameMainCommands.NextTurn.getMatcher(input))!=null){
             System.out.println(controller.nextTurn(matcher));
-        }else if(TimeLineView.check(input)){
+        }
+        if(App.getGame().getCurrentPlayer().getEnergy() <= 0){
+            System.out.println("you've passed out.. either exit or pass the turn");
+        }else if(App.getGame().getRoundEnergy() > 50){
+            System.out.println("you've used too much energy.. either exit or pass the turn");
+        }
+        else{
+            if(TimeLineView.check(input)){
 
-        }else if(WeatherView.check(input)){
+            }else if(WeatherView.check(input)){
 
-        }else if(MapView.check(input)){
+            }else if(MapView.check(input)){
 
-        }else if(PlayerView.check(input)){
+            }else if(PlayerView.check(input)){
 
+            }
         }
 
     }

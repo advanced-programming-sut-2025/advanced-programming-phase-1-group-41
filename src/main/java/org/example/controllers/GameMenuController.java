@@ -57,6 +57,7 @@ public class GameMenuController {
         for(int i=0;i<4;i++){
             if(players.get(i).equals(App.getGame().getCurrentPlayer())){
                 App.getGame().setCurrentPlayer(players.get((i+1)%4));
+                App.getGame().setRoundEnergy(0);
                 System.out.println("turn is : "+App.getGame().getCurrentPlayer());
                 if(i == 3){
                     App.getGame().getTime().advanceOneHour();

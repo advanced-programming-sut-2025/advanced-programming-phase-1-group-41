@@ -25,6 +25,7 @@ public class MapController {
                 if(energy > player.getEnergy() && !player.isEnergyUnilimited()){
                     App.getGame().incRoundEnergy(player.getEnergy());
                     player.setEnergy(0);
+                    printMap(null);
                     return new Result(false, "you're running low :(");
                 }
                 player.setX(cell.x);

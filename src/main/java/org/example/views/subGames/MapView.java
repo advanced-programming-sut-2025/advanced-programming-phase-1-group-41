@@ -14,6 +14,8 @@ public class MapView {
             controller.printMap(matcher);
         }else if((matcher = GameMainCommands.Walk.getMatcher(input))!=null){
             System.out.println(controller.walk(matcher));
+        }else if((matcher = GameMainCommands.HelpReadingMap.getMatcher(input))!=null){
+            controller.helpReadingMap(matcher);
         }
         else{
             return false;

@@ -42,7 +42,10 @@ public class PathFinder {
 
                 int newTurns = (current.parent != null && directionChanged(current.parent.x, current.parent.y, current.x, current.y, newX, newY))
                         ? current.turns + 1 : current.turns;
-                double newEnergyCost = (1 + 10 * newTurns) / 20.0 + current.energyCost;
+                double newEnergyCost = current.energyCost + 0.1;
+                if (current.parent != null && directionChanged(current.parent.x, current.parent.y, current.x, current.y, newX, newY)) {
+                    newEnergyCost += 0.5;
+                }
 
 
 
@@ -72,6 +75,9 @@ public class PathFinder {
             node = node.parent;
         }
         Collections.reverse(path);
+//        for (Node node1 : path) {
+//            System.out.println(node1);
+//        }
         return path;
     }
 }
