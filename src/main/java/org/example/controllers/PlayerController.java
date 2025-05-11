@@ -16,9 +16,19 @@ public class PlayerController {
         return new Result(true, App.getGame().getCurrentPlayer().getEnergy()+"");
     }
 
-    public Result cheatEnergySet(Matcher matcher) {return null;}
+    public Result cheatEnergySet(Matcher matcher) {
+        String valueRaw = matcher.group(1);
+        int value = Integer.parseInt(valueRaw);
+        App.getGame().getCurrentPlayer().setEnergy(value);
+        return new Result(true, "energy has been set to "+
+                App.getGame().getCurrentPlayer().getEnergy());
+    }
 
-    public Result cheatEnergyUnlimited(Matcher matcher) {return null;}
+    public Result cheatEnergyUnlimited(Matcher matcher) {
+        App.getGame().getCurrentPlayer().setEnergyUnilimited(true);
+        return new Result(true, App.getGame().getCurrentPlayer().getUser().getUsername()+
+                " energy is now unlimited");
+    }
 
     public Result showInventory(Matcher matcher){return null;}
 

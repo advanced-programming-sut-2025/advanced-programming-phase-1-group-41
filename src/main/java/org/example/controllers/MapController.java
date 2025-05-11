@@ -22,14 +22,16 @@ public class MapController {
             double energy = 0;
             for (Node cell : cells) {
                 energy = cell.energyCost;
-                if(energy > player.getEnergy()){
+                if(energy > player.getEnergy() && !player.isEnergyUnilimited()){
                     player.setEnergy(0);
                     return new Result(false, "you're running low :(");
                 }
                 player.setX(cell.x);
                 player.setY(cell.y);
             }
-            player.decEnergy(energy);
+            if(!player.isEnergyUnilimited()){
+                player.decEnergy(energy);
+            }
             return new Result(true,"found the path ;D" +
                     "\n" +
                     "energy: "+player.getEnergy());

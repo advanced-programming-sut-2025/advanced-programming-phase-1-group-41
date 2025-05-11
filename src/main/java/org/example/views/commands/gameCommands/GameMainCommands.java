@@ -18,7 +18,7 @@ public enum GameMainCommands implements Command {
     PrintMap("\\s*print\\s+map\\s*"),
     HelpReadingMap("\\s*help\\s+reading\\s+map\\s*"),
     EnergyShow("\\s*energy\\s+show\\s*"),
-    EnergySet("\\s*energy\\s+set\\s+-v\\s+(?<value>.*)\\s*"),
+    EnergySet("\\s*energy\\s+set\\s+-v\\s+(?<value>-?\\d+)\\s*"),
     EnergyUnlimited("\\s*energy\\s+unlimited\\s*"),
     Plant("\\s*plant\\s+-s\\s+(?<seed>.*)\\s+-d\\s+(?<direction>.*)\\s*"),
     ShowPlant("\\s*showplant\\s+-l\\s+(?<x>.*)\\s*,\\s*(?<y>.*)\\s*"),

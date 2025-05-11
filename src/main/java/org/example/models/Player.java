@@ -36,6 +36,7 @@ public class Player {
     private int x;
     private int y;
     private double energy;
+    private boolean energyUnilimited;
     @Transient
     private Inventory inventory;
 
@@ -68,6 +69,7 @@ public class Player {
         y = 0;
         energy = 100;
         this.inventory = new Inventory();
+        this.energyUnilimited = false;
 //        animals = new ArrayList<>();
 //        skills = new ArrayList<>();
 //        skills = new ArrayList<>();
@@ -169,6 +171,13 @@ public class Player {
     }
 
 
+    public boolean isEnergyUnilimited() {
+        return energyUnilimited;
+    }
+
+    public void setEnergyUnilimited(boolean energyUnilimited) {
+        this.energyUnilimited = energyUnilimited;
+    }
 
     @Override
     public String toString() {
