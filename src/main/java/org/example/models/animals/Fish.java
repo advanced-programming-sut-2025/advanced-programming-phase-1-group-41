@@ -41,4 +41,31 @@ public enum Fish implements Item {
     }
 
     public Season getSeason() {return season;}
+
+
+    public static Item parseFish(String name) {
+        return switch(name){
+            case "Salmon" -> Salmon;
+            case "Sardine" -> Sardine;
+            case "Shad" -> Shad;
+            case "BlueDiscus " -> BlueDiscus;
+            case "MidnightCarp" -> MidnightCarp;
+            case "Squid" -> Squid;
+            case "Tuna" -> Tuna;
+            case "Perch" -> Perch;
+            case "Flounder" -> Flounder;
+            case "Lionfish" -> Lionfish;
+            case "Herring" -> Herring;
+            case "Ghostfish" -> Ghostfish;
+            case "Tilapia" -> Tilapia;
+            case "Dorado" -> Dorado;
+            case "Sunfish" -> Sunfish;
+            case "RainbowTrout" -> RainbowTrout;
+            case "Legend" -> Legend;
+            case "Glacierfish" -> Glacierfish;
+            case "Angler" -> Angler;
+            case "Crimsonfish" -> Crimsonfish;
+            default -> null;
+        };
+    }
 }

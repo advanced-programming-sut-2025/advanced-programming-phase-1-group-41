@@ -1,5 +1,6 @@
 package org.example.models.tools;
 
+import org.example.models.items.Item;
 import org.example.models.skills.Skill;
 
 public class FishingRod implements Tool {
@@ -12,4 +13,6 @@ public class FishingRod implements Tool {
     public Skill getUsage() {
         return usage;
     }
+
+
 }

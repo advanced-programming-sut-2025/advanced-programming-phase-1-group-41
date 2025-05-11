@@ -16,4 +16,9 @@ public enum CraftableItem implements Item{
     public CraftingRecipe getRecipe() {
         return recipe;
     }
+
+
+    public static Item parseCraftable(String name) {
+        return null;
+    }
 }

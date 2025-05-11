@@ -1,7 +1,13 @@
 package org.example.models;
 
 import org.bson.types.ObjectId;
+import org.example.models.items.Item;
 import org.example.models.locations.Farm;
+import org.example.models.*;
+
+import static org.example.models.animals.Fish.parseFish;
+import static org.example.models.items.CraftableItem.parseCraftable;
+import static org.example.models.tools.BasicTool.parseBasicTool;
 
 public class Finder {
     public static User getUserByUsername(String username){
@@ -17,7 +23,19 @@ public class Finder {
 //        return new Game(new ArrayList<>());
         return null;
     }
+    public static Item findItem(String itemName){
+        if(parseBasicTool(itemName)!=null){
+            return parseBasicTool(itemName);
+        }
+        if(parseCraftable(itemName)!=null){
+            return parseCraftable(itemName);
+        }
+        if(parseFish(itemName)!=null){
+            return parseFish(itemName);
+        }
+        return null;
 
+    }
     public static User getUserById(ObjectId id){
         for (User user : App.users) {
             if(user.get_id().equals(id)){

@@ -1,9 +1,14 @@
 package org.example.controllers;
 
 import org.example.models.App;
+import org.example.models.Finder;
 import org.example.models.Result;
+import org.example.models.items.Item;
 
 import java.util.regex.Matcher;
+
+import static org.example.models.Finder.findItem;
+
 
 public class PlayerController {
 
@@ -17,6 +22,22 @@ public class PlayerController {
 
     public Result showInventory(Matcher matcher){return null;}
 
+    public Result cheatAddItem(Matcher matcher){
+        String itemName = matcher.group(1);
+        String quantity = matcher.group(2);
+
+        if(findItem(itemName)==null){
+            return new Result(false, "Invalid item name");
+        }
+
+        Item item=findItem(itemName);
+        int itemQuantity = Integer.parseInt(quantity);
+
+        if(App.getGame().getCurrentPlayer().getInventory().addToInventory(item,itemQuantity)){
+            return new Result(true, itemName+" added to the inventory");
+        }
+        return new Result(false, "inventory is full");
+    }
 
     public Result inventoryTrash(Matcher matcher) {return null;}
 

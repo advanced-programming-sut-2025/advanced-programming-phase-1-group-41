@@ -3,8 +3,8 @@ package org.example.models.items;
 import java.util.ArrayList;
 
 public class Inventory {
-    public ArrayList<Slot> slots = new ArrayList<>();
-    public Backpack backpack=Backpack.Default;
+    private ArrayList<Slot> slots=new ArrayList<>();
+    private Backpack backpack=Backpack.Default;
 
     public Inventory() {
         setDefaultBag();

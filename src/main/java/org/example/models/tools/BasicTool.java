@@ -1,5 +1,6 @@
 package org.example.models.tools;
 
+import org.example.models.items.Item;
 import org.example.models.skills.Skill;
 
 public enum BasicTool implements Tool {
@@ -25,5 +26,16 @@ public enum BasicTool implements Tool {
 
     public Skill getUsage() {
         return usage;
+    }
+
+    public static Item parseBasicTool(String name) {
+        return switch (name){
+            case "Hoe" -> BasicTool.Hoe;
+            case "WateringCan" -> BasicTool.WateringCan;
+            case "Pickaxe" -> BasicTool.Pickaxe;
+            case "Axe" -> BasicTool.Axe;
+            case "TrashCan" -> BasicTool.TrashCan;
+            default -> null;
+        };
     }
 }
