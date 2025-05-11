@@ -4,7 +4,7 @@ import org.example.models.App;
 import org.example.models.items.Item;
 import org.example.models.items.Slot;
 
-public class TrashCan implements Item {
+public class TrashCan implements Tool {
     private ToolLevel level;
 
     public TrashCan() {

@@ -7,8 +7,8 @@ public class Fish extends Animal implements Item {
     private final FishType fishType;
 
     public Fish(Player owner, FishType fishType) {
-        this.fishType = fishType;
         super(owner);
+        this.fishType = fishType;
         super.breed = Breed.Barner;
     }
     @Override
