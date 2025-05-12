@@ -10,6 +10,7 @@ import org.example.models.buildings.animalContainer.Coop;
 import org.example.models.buildings.animalContainer.CoopType;
 import org.example.models.foragings.Nature.Grass;
 import org.example.models.foragings.Nature.Nature;
+import org.example.models.items.Products.ProductType;
 import org.example.models.locations.Farm;
 
 import java.util.regex.Matcher;
@@ -420,8 +421,64 @@ public class AnimalController {
 
     public Result producesList(Matcher matcher){return null;}
 
-    public Result collectProduct(Matcher matcher){return null;}
-
+    public Result collectProduct(Matcher matcher){
+        String name=matcher.group(1);
+        Animal theAnimal=null;
+        for(Barn barn:App.getGame().getCurrentPlayerFarm().getBarns()){
+            for(Animal animal: barn.getAnimals()){
+                if(animal.getName().equals(name)){
+                    theAnimal = animal;
+                    break;
+                }
+            }
+        }
+        for(Coop coop:App.getGame().getCurrentPlayerFarm().getCoops()){
+            for(Animal animal: coop.getAnimals()){
+                if(animal.getName().equals(name)){
+                    theAnimal = animal;
+                    break;
+                }
+            }
+        }
+        if(theAnimal==null){
+            return new Result(false,name+" is not one of your pets");
+        }
+        for(int i=-2;i<=2;i++){
+            for(int j=-2;j<=2;j++){
+                int x = App.getGame().getCurrentPlayer().getX()+i;
+                int y = App.getGame().getCurrentPlayer().getY()+j;
+                Cell cell=App.getGame().getCurrentPlayerFarm().getCell(x, y);
+                if(cell==null){
+                    continue;
+                }
+                ObjectMap objectMap=cell.getObjectMap();
+                if(theAnimal.getX()==x && theAnimal.getY()==y){
+                    theAnimal.increaseFriendShip(15);
+                    theAnimal.setPetToday(true);
+                    return new Result(true,"");
+                }
+                else if(objectMap instanceof Barn){
+                    for(Animal animal:((Barn) objectMap).getAnimals()){
+                        if(animal.getName().equals(name)){
+                            animal.increaseFriendShip(15);
+                            animal.setPetToday(true);
+                            return new Result(true,"you pet "+name+" in its barn, now it loves you more");
+                        }
+                    }
+                }
+                else if(objectMap instanceof Coop){
+                    for(Animal animal:((Coop) objectMap).getAnimals()){
+                        if(animal.getName().equals(name)){
+                            animal.increaseFriendShip(15);
+                            animal.setPetToday(true);
+                            return new Result(true,"you pet "+name+" in its coop, now it loves you more");
+                        }
+                    }
+                }
+            }
+        }
+        return new Result(false,name+" is not anywhere around you");
+    }
     public Result sellAnimal(Matcher matcher){
         String name=matcher.group(1);
         Animal theAnimal=null;
@@ -510,6 +567,49 @@ public class AnimalController {
                     if (!animal.isFedToday()) {
                         animal.increaseFriendShip(-20);
                         System.out.println("poor "+animal.getName()+(" slept with hunger in "+player+"`s farm last day"));
+                    }else{
+                        double specialProduceChance=(animal.getFriendShip()+(150*(0.5 + Math.random()))/1500);
+
+                        if(animal.getFriendShip()>=100&&Math.random()<specialProduceChance){
+                            if(animal instanceof Chicken&&animal.canGiveProduct()){
+                                animal.setProductType(ProductType.BigChickenEgg);
+                            } else if(animal instanceof Cow&&animal.canGiveProduct()){
+                                animal.setProductType(ProductType.BigCowMilk);
+                            } else if(animal instanceof Goat&&animal.canGiveProduct()){
+                                animal.setProductType(ProductType.BigGoatMilk);
+                            } else if(animal instanceof Duck&&animal.canGiveProduct()){
+                                animal.setProductType(ProductType.DuckFeather);
+                            } else if(animal instanceof Rabbit&&animal.canGiveProduct()){
+                                animal.setProductType(ProductType.RabbitFoot);
+                            } else if(animal instanceof Sheep&&animal.canGiveProduct()){
+                                animal.setProductType(ProductType.SheepWool);
+                            } else if(animal instanceof Dino&&animal.canGiveProduct()){
+                                animal.setProductType(ProductType.DinoEgg);
+                            } else if(animal instanceof Pig&&animal.canGiveProduct()){
+                                animal.setProductType(ProductType.PigTruffle);
+                            }
+                        }else{
+                            if(animal instanceof Chicken){
+                                animal.setProductType(ProductType.ChickenEgg);
+                            } else if(animal instanceof Cow&&animal.canGiveProduct()){
+                                animal.setProductType(ProductType.CowMilk);
+                            } else if(animal instanceof Goat&&animal.canGiveProduct()){
+                                animal.setProductType(ProductType.GoatMilk);
+                            } else if(animal instanceof Duck&&animal.canGiveProduct()){
+                                animal.setProductType(ProductType.DuckEgg);
+                            } else if(animal instanceof Rabbit&&animal.canGiveProduct()){
+                                animal.setProductType(ProductType.RabbitWool);
+                            } else if(animal instanceof Sheep&&animal.canGiveProduct()){
+                                animal.setProductType(ProductType.SheepWool);
+                            } else if(animal instanceof Dino&&animal.canGiveProduct()){
+                                animal.setProductType(ProductType.DinoEgg);
+                            } else if(animal instanceof Pig&&animal.canGiveProduct()){
+                                animal.setProductType(ProductType.PigTruffle);
+                            }
+                        }
+
+
+//                        animal.setProductType();
                     }
                     if (!animal.isHome()) {
                         animal.increaseFriendShip(-20);
@@ -519,6 +619,7 @@ public class AnimalController {
             }
         }
     }
+
     public void resetAndCheck(){
         check();
         reset();
