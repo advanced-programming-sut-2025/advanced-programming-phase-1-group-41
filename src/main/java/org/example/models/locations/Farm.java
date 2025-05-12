@@ -111,8 +111,6 @@ public class Farm {
                 i--;
             }
         }
-        barns.add(new Barn(40, 30, this, BarnType.Big));
-        coops.add(new Coop(30, 40, this, CoopType.Deluxe));
     }
 
     public ArrayList<Barn> getBarns() {
