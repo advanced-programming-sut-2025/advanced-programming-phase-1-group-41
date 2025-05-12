@@ -310,6 +310,7 @@ public class Farm {
         farmBuilder.updateForagings();
         farmBuilder.growCrops();
         farmBuilder.growTrees();
+        farmBuilder.weatherUpdates();
     }
     public int getRockCount() {
         return rockCount;
