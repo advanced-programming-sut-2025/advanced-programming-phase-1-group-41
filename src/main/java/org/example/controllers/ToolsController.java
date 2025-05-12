@@ -84,6 +84,8 @@ public class ToolsController {
             return useHoe(cell, tool);
         }else if(tool instanceof Axe){
             return useAxe(cell, tool);
+        }else if(tool instanceof Scythe){
+            return useScythe(cell, tool);
         }
 
 
@@ -236,6 +238,18 @@ public class ToolsController {
         }
         return new Result(false,"it's not a tree!");
 
+    }
+
+    private Result useScythe(Cell cell, Tool tool){
+        Scythe scythe = (Scythe) tool;
+        int energy = 2;
+        App.getGame().getCurrentPlayer().decEnergy(energy);
+
+        if(cell.getObjectMap() instanceof Bush){
+            cell.setObjectMap(new Grass());
+            return new Result(true, "caught the bush");
+        }
+        return new Result(false, "it wasn't a bush!");
     }
 
 }
