@@ -57,7 +57,7 @@ public enum CropType {
     private final int BaseSellPrice;
     private final boolean IsEatable;
     private final int Energy;
-    private final boolean CanBecomeGiant;
+    private final boolean canBecomeGiant;
     private final Season[] GrowingSeasons;
 
     CropType(String name, SeedType source, ArrayList<Integer> stages, int harvestTime, boolean oneTimeHarvest, int regrowthTime, int baseSellPrice, boolean isEatable, int energy, boolean canBecomeGiant, Season... growingSeasons) {
@@ -70,7 +70,7 @@ public enum CropType {
         this.BaseSellPrice = baseSellPrice;
         this.IsEatable = isEatable;
         this.Energy = energy;
-        this.CanBecomeGiant = canBecomeGiant;
+        this.canBecomeGiant = canBecomeGiant;
         this.GrowingSeasons = growingSeasons;
     }
 
@@ -83,6 +83,46 @@ public enum CropType {
     public int getBaseSellPrice() { return BaseSellPrice; }
     public boolean isEatable() { return IsEatable; }
     public int getEnergy() { return Energy; }
-    public boolean canBecomeGiant() { return CanBecomeGiant; }
+    public boolean canBecomeGiant() { return canBecomeGiant; }
     public Season[] getGrowingSeasons() { return GrowingSeasons; }
+
+    @Override
+    public String toString() {
+        StringBuilder stages = new StringBuilder();
+        ArrayList<Integer> stagesList = getStages();
+        for (int i = 0; i < stagesList.size(); i++) {
+            if(i == stagesList.size() - 1) {
+                stages.append(stagesList.get(i));
+            } else{
+                stages.append(stagesList.get(i)).append("-");
+            }
+        }
+        StringBuilder result = new StringBuilder();
+        String res;
+        result.append("Name: ").append(getName()).append("\n");
+        result.append("Source: ").append(getSource().getName()).append("\n");
+        result.append("Stages: ").append(stages).append("\n");
+        result.append("Total Harvest Time: ").append(getHarvestTime()).append("\n");
+        result.append("One Time: ").append(isOneTimeHarvest()).append("\n");
+        res = String.valueOf(getRegrowthTime());
+        if(getRegrowthTime() == -1){
+            res = "-";
+        }
+        result.append("Regrowth Time: ").append(res).append("\n");
+        result.append("Base Sell Price: ").append(getBaseSellPrice()).append("\n");
+        result.append("Is Edible: ").append(isEatable()).append("\n");
+        res = String.valueOf(getEnergy());
+        if(getEnergy() == -1){
+            res = "-";
+        }
+        result.append("Base Energy: ").append(res).append("\n");
+        res = String.valueOf(getEnergy() / 2);
+        if(getEnergy() == -1){
+            res = "-";
+        }
+        result.append("Base Health: ").append(res).append("\n");
+        result.append("Season: ").append(getSource().getSeason()).append("\n");
+        result.append("Can Become Giant: ").append(canBecomeGiant()).append("\n");
+        return result.toString();
+    }
 }

@@ -1,13 +1,17 @@
 package org.example.models.locations;
 
+import org.example.models.App;
 import org.example.models.Finder;
 import org.example.models.Grass;
 import org.example.models.foragings.Crop;
+import org.example.models.foragings.CropType;
 import org.example.models.foragings.ForagingCrop;
 import org.example.models.foragings.Nature.Plant;
 import org.example.models.foragings.Nature.Rock;
 import org.example.models.foragings.Nature.Tree;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
@@ -65,8 +69,20 @@ public class FarmBuilder {
         }
     }
     public void growCrops(){
-        for(Crop crop : farm.getCrops()){
+        List<Crop> toRemove = new ArrayList<>();
+        for (Crop crop : farm.getCrops()) {
             crop.increaseStage();
+            if (crop.shouldBeRemoved()) {
+                toRemove.add(crop);
+            }
         }
+        for(Crop crop : toRemove){
+            farm.removeCrop(crop);
+        }
+
+        Random rand = new Random();
+        App.getCurrentUser().getCurrentGame().getCurrentPlayer().getInventory().addToInventory(new Crop(CropType.values()[rand.nextInt(CropType.values().length)]), 2);
+        App.getCurrentUser().getCurrentGame().getCurrentPlayer().getInventory().addToInventory(new Crop(CropType.values()[rand.nextInt(CropType.values().length)]), 2);
+        App.getCurrentUser().getCurrentGame().getCurrentPlayer().getInventory().addToInventory(new Crop(CropType.values()[rand.nextInt(CropType.values().length)]), 2);
     }
 }

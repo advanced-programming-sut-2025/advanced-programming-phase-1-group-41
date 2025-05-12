@@ -1,20 +1,27 @@
 package org.example.models.foragings;
 
-import org.example.models.Cell;
-import org.example.models.Colors;
-import org.example.models.Finder;
+import org.example.models.*;
+import org.example.models.items.Item;
 import org.example.models.locations.Farm;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class Crop implements Foraging {
+public class Crop implements Item {
     private final CropType cropType;
     private final ArrayList<Integer> stages;
     private int typeIndex = 0;
     private int currentStage;
     private int currentStageLevel;
+    private Boolean isWateredToday = false;
+    private int waterStreak = 0;
+    private Boolean isFertilizedToday = false;
+    private int x;
+    private int y;
 
     public Crop(int x, int y, Farm farm, CropType cropType) {
+        this.x = x;
+        this.y = y;
         this.cropType = cropType;
         for(CropType type : CropType.values()){
             if(type.equals(cropType)){
@@ -27,6 +34,11 @@ public class Crop implements Foraging {
         Cell cell = Finder.findCellByCoordinates(x, y, farm);
         assert cell != null;
         cell.setObjectMap(this);
+    }
+    public Crop(CropType cropType) {
+        this.cropType = cropType;
+        stages = cropType.getStages();
+        currentStage = 0;
     }
 
     public CropType getCropType() {
@@ -52,6 +64,11 @@ public class Crop implements Foraging {
     }
 
     public void increaseStage() {
+        if(!isWateredToday){
+            waterStreak++;
+        } else {
+            waterStreak = 0;
+        }
         currentStageLevel++;
         if(currentStageLevel >= stages.get(currentStage)){
             currentStage++;
@@ -63,30 +80,39 @@ public class Crop implements Foraging {
         }
     }
 
+    public Boolean shouldBeRemoved() {
+        return (waterStreak >= 1 && !isWateredToday) || waterStreak >= 2
+                || (!Arrays.asList(cropType.getGrowingSeasons()).contains(App.getGame().getTime().getSeason())
+                && !cropType.getGrowingSeasons()[0].equals(Season.Special));
+    }
+
+    public int getX(){
+        return x;
+    }
+    public int getY(){
+        return y;
+    }
+    public Boolean isWateredToday() {
+        return isWateredToday;
+    }
+    public Boolean isFertilizedToday() {
+        return isFertilizedToday;
+    }
+
     @Override
     public String toString() {
-        StringBuilder stages = new StringBuilder();
-        ArrayList<Integer> stagesList = getStages();
-        for (int i = 0; i < stagesList.size(); i++) {
-            if(i == stagesList.size() - 1) {
-                stages.append(stagesList.get(i));
-            } else{
-                stages.append(stagesList.get(i)).append("-");
-            }
-        }
         StringBuilder result = new StringBuilder();
+        int dayLeft = -currentStageLevel;
+        for(int i = currentStage; i < stages.size(); i++){
+            dayLeft += stages.get(i);
+        }
         result.append("Name: ").append(getName()).append("\n");
-        result.append("Source: ").append(getCropType().getSource().getName()).append("\n");
-        result.append("Stages: ").append(stages).append("\n");
-        result.append("Total Harvest Time: ").append(cropType.getHarvestTime()).append("\n");
-        result.append("One Time: ").append(cropType.isOneTimeHarvest());
-        result.append("Regrowth Time: ").append(cropType.getRegrowthTime()).append("\n");
-        result.append("Base Sell Price: ").append(cropType.getBaseSellPrice()).append("\n");
-        result.append("Is Edible: ").append(cropType.isEatable()).append("\n");
-        result.append("Base Energy: ").append(cropType.getEnergy()).append("\n");
-        result.append("Base Health: ").append(cropType.getEnergy()/2).append("\n");
-        result.append("Season: ").append(cropType.getSource().getSeason()).append("\n");
-        result.append("Can Become Giant: ").append(cropType.canBecomeGiant()).append("\n");
+        result.append("Day Left: ").append(dayLeft).append("\n");
+        result.append("Current Stage: ").append(currentStage).append("\n");
+        result.append("Watered Today: ").append(isWateredToday).append("\n");
+        //TODO Add Quality
+        result.append("Quality: ").append("\n");
+        result.append("Fertilized Today: ").append(isFertilizedToday).append("\n");
         return result.toString();
     }
 }

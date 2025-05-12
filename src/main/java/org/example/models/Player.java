@@ -65,6 +65,8 @@ public class Player {
         this.currentTool = null;
         this.recipes = new ArrayList<>();
         this.recipes.add(CookingRecipe.BakedFish);
+        this.recipes.add(CookingRecipe.Pizza);
+        this.recipes.add(CookingRecipe.Spaghetti);
         this.recipes.add(CookingRecipe.Bread);
 //        animals = new ArrayList<>();
 //        skills = new ArrayList<>();
@@ -190,9 +192,16 @@ public class Player {
         this.currentTool = currentTool;
     }
 
+
     public ArrayList<CookingRecipe> getRecipes() {
         return recipes;
     }
+
+    public void setRecipes(ArrayList<CookingRecipe> recipes) {
+        this.recipes = recipes;
+    }
+
+
 
     @Override
     public String toString() {

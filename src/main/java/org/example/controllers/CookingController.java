@@ -6,13 +6,26 @@ import org.example.models.Finder;
 import org.example.models.Result;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.Cottage;
+import org.example.models.buildings.Refrigerator;
 import org.example.models.items.CookingRecipe;
 import org.example.models.items.Item;
 import org.example.models.items.Slot;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 public class CookingController {
+
+    Refrigerator refrigerator;
+
+    public CookingController() {
+        for (Building building : App.getGame().getCurrentPlayerFarm().getBuildings()) {
+            if(building instanceof Cottage) {
+                refrigerator = (Refrigerator) ((Cottage) building).getRefrigerator();
+            }
+        }
+        System.out.println("ref is : " + refrigerator);
+    }
 
 
     private boolean inHome(){
@@ -27,8 +40,13 @@ public class CookingController {
     }
 
     private Result pickFromRef(Item item) {
-        // receive slot
-        return null;
+        Slot slot = refrigerator.getSlotByItem(item);
+        if(slot == null){
+            return new Result(false, "Slot not found");
+        }
+        App.getGame().getCurrentPlayer().getInventory().addToInventory(slot.getItem(),slot.getQuantity());
+        refrigerator.removeFromRef(slot.getItem(),slot.getQuantity());
+        return new Result(true, "removed from ref :D");
     }
 
     private Result putInRef(Item item){
@@ -36,7 +54,8 @@ public class CookingController {
         if(slot==null){
             return new Result(false,"Slot not found");
         }
-        // get the home and ref
+        refrigerator.addToRef(slot.getItem(), slot.getQuantity());
+        App.getGame().getCurrentPlayer().getInventory().removeFromInventory(slot.getItem(), slot.getQuantity());
 
         return new Result(true,slot.getItem()+" "+slot.getQuantity());
     }
@@ -61,7 +80,20 @@ public class CookingController {
         if(!inHome()){
             return new Result(false, "You're not in a home");
         }
-        return null;
+        for(Slot slot : refrigerator.slots){
+            if(slot.getItem()==null) continue;
+            if(slot.getQuantity()>0) {
+                System.out.printf(slot.getQuantity() + " " + slot.getItem().getName());
+            }
+            if(slot.getQuantity()>1){
+                System.out.printf("s\n");
+            }
+            else if(slot.getQuantity()==1){
+                System.out.printf("\n");
+            }
+        }
+        return new Result(true,":)");
+
     }
 
     public Result learnRecipe(Matcher matcher) {
