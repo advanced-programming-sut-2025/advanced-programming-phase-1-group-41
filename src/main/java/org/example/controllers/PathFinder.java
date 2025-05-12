@@ -3,6 +3,7 @@ package org.example.controllers;
 import org.example.models.*;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.Cottage;
+import org.example.models.buildings.Door;
 
 import java.util.*;
 
@@ -40,7 +41,9 @@ public class PathFinder {
                    nextCell.getObjectMap() instanceof Obstacle) continue;
 
                 if(nextCell.getObjectMap() instanceof Building){
-                    if(!(nextCell.getObjectMap() instanceof Cottage)){
+                    if(!(nextCell.getObjectMap() instanceof Cottage) &&
+                    !(nextCell.getObjectMap() instanceof Door)){
+                        System.out.println(nextCell.getObjectMap().getClass());
                         continue;
                     }
                 }
