@@ -14,4 +14,15 @@ public enum BarnType {
     public int getCapacity() {
         return capacity;
     }
+
+
+
+    public static BarnType parseBarn(String name){
+        return switch(name){
+            case "normal" -> Normal;
+            case "big" -> Big;
+            case "deluxe" -> Deluxe;
+            default -> null;
+        };
+    }
 }

@@ -14,4 +14,14 @@ public enum CoopType {
     public int getCapacity() {
         return capacity;
     }
+
+
+    public static CoopType parseCoop(String name) {
+        return switch (name) {
+            case "normal" -> Normal;
+            case "big" -> Big;
+            case "deluxe" -> Deluxe;
+            default -> null;
+        };
+    }
 }

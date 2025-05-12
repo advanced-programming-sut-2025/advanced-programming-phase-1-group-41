@@ -7,7 +7,7 @@ public interface Command {
     Matcher getMatcher(String input);
 
     static Matcher getMatcher(String input, String pattern){
-        Matcher matcher = Pattern.compile(pattern).matcher(input);
+        Matcher matcher = Pattern.  compile(pattern).matcher(input);
         if(matcher.matches()){
             return matcher;
         }

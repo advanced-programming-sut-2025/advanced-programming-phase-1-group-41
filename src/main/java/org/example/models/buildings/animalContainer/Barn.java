@@ -14,10 +14,26 @@ public class Barn implements Building {
     private final ArrayList<Animal> animals = new ArrayList<>();
     private int x;
     private int y;
+    private BarnType barnType;
+    private int capacity;
+
+    public int getX() {
+        return x;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public BarnType getBarnType() {
+        return barnType;
+    }
 
     public Barn(int x, int y, Farm farm, BarnType barnType) {
+        this.capacity=barnType.getCapacity();
         this.x = x;
         this.y = y;
+        this.barnType=barnType;
         int size = 5 + barnType.getCapacity() / 4;
         int xWall;
         int yWall;
@@ -48,6 +64,10 @@ public class Barn implements Building {
                 cell.setObjectMap(this);
             }
         }
+    }
+    public int updateCapacity(int capacityChange) {
+        capacity+=capacityChange;
+        return capacity;
     }
 
     @Override

@@ -111,13 +111,21 @@ public class Farm {
                 i--;
             }
         }
-        barns.add(new Barn(40, 30, this, BarnType.Big));
-        coops.add(new Coop(30, 40, this, CoopType.Deluxe));
+    }
+
+    public ArrayList<Barn> getBarns() {
+        return barns;
+    }
+
+    public ArrayList<Coop> getCoops() {
+        return coops;
     }
 
     public void creatNewBarn(int x, int y, BarnType barnType){
-        int size = 5 + barnType.getCapacity() / 4;
-
+        barns.add(new Barn(x, y, this, barnType));
+    }
+    public void creatNewCoop(int x,int y,CoopType coopType){
+        coops.add(new Coop(x, y, this, coopType));
     }
 
     public ArrayList<Cell> getCells() {

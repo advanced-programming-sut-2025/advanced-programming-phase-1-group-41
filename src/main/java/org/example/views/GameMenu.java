@@ -45,6 +45,8 @@ public class GameMenu implements AppMenu {
 
             }else if(CookingView.check(input)){
 
+            }else if(AnimalView.check(input)){
+
             }
         }
 
