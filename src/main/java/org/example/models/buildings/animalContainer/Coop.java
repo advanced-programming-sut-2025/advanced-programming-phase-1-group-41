@@ -14,13 +14,29 @@ public class Coop implements Building {
     private final ArrayList<Animal> animals = new ArrayList<>();
     private int x;
     private int y;
+    private CoopType coopType;
+    private int capacity;
+
+    public int getX() {
+        return x;
+    }
+
+    public CoopType getCoopType() {
+        return coopType;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
 
     public Coop(int x, int y, Farm farm, CoopType coopType) {
+        this.capacity = coopType.getCapacity();
         this.x = x;
         this.y = y;
         int size = 5 + coopType.getCapacity() / 4;
         int xWall;
         int yWall;
+        this.coopType = coopType;
         yWall = y;
         while(yWall<=y + size) {
             for (int i = x; i <= x + size; i++) {
@@ -48,6 +64,10 @@ public class Coop implements Building {
                 cell.setObjectMap(this);
             }
         }
+    }
+    public int updateCapacity(int capacityChange) {
+        capacity+=capacityChange;
+        return capacity;
     }
 
     @Override

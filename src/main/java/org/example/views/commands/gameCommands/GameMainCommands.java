@@ -32,7 +32,7 @@ public enum GameMainCommands implements Command {
     CookingShowRecipes("\\s*cooking\\s+show\\s+recipes\\s*"),
     CookingPrepare("\\s*cooking\\s+prepare\\s+(?<recipeName>.*)\\s*"),
     Eat("\\s*eat\\s+(?<foodName>.*)\\s*"),
-    Build("\\s*build\\s+(?<buildingName>.*)\\s+-l\\s+(?<x>.*)\\s*,\\s*(?<y>.*)\\s*"),
+    Build("\\s*build -a\\s+(?<buildingName>.+)\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*"),
     Produces("\\s*produces\\s*"),
     CollectProduce("\\s*collect\\s+produce\\s+-n\\s+(?<name>.*)\\s*"),
     Fishing("\\s*fishing\\s+-p\\s+(?<fishingPole>.*)\\s*"),

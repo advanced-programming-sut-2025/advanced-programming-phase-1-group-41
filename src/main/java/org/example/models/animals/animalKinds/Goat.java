@@ -8,7 +8,7 @@ import org.example.models.animals.Breed;
 public class Goat extends Animal {
     public Goat(Player owner, String name) {
         super(owner, name, 4000, BarnOrCageSize.Big);
-        super.breed = Breed.Barner;
+        super.breed = Breed.Barn;
     }
 
     @Override
