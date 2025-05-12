@@ -1,14 +1,12 @@
 package org.example.controllers;
 
 import org.example.models.*;
-import org.example.models.foragings.Crop;
-import org.example.models.foragings.CropType;
+import org.example.models.foragings.*;
 import org.example.models.foragings.Nature.Grass;
 import org.example.models.foragings.Nature.Tree;
 import org.example.models.foragings.Nature.TreeType;
-import org.example.models.foragings.Seed;
-import org.example.models.foragings.SeedType;
 import org.example.models.items.Inventory;
+import org.example.models.items.Item;
 import org.example.models.items.Slot;
 import org.example.models.locations.Farm;
 
@@ -35,12 +33,7 @@ public class FarmingController {
 
     public Result plant(Matcher matcher){
         String seed = matcher.group("seed");
-        SeedType seedType = null;
-        for(SeedType type : SeedType.values()){
-            if(seed.equalsIgnoreCase(type.getName())){
-                seedType = type;
-            }
-        }
+        SeedType seedType = SeedType.parseSeedType(seed);
         if(seedType == null){
             return new Result(false, "Seed type not found!");
         }
@@ -120,6 +113,97 @@ public class FarmingController {
                 return new Result(true, tree.toString());
             }
         }
-        return new Result(false, "No Plant found");
+        return new Result(false, "No Plant found!");
+    }
+    public Result fertilize(Matcher matcher){
+        String fertilizer = matcher.group("fertilizer");
+        FertilizerType fertilizerType = FertilizerType.parseFertilizerType(fertilizer);
+        if(fertilizerType == null){
+            return new Result(false, "Fertilizer type not found!");
+        }
+
+        String direction = matcher.group("direction");
+        int dir = Integer.parseInt(direction)-1;
+        if(dir < 0 || dir > 7){
+            return new Result(false, "invalid direction");
+        }
+        int [][]dirs = {{-1,-1},{0,-1},{1,-1},{1,0},{1,1},{0,1},{-1,1},{-1,0},};
+        int x = App.getGame().getCurrentPlayer().getX()+dirs[dir][0];
+        int y = App.getGame().getCurrentPlayer().getY()+dirs[dir][1];
+        Cell cell = Finder.findCellByCoordinates(x, y, App.getGame().getCurrentPlayerFarm());
+        assert cell != null;
+        if(fertilizerType.equals(FertilizerType.GrassStarter)){
+            fertilizeGrass(cell, App.getGame().getCurrentPlayerFarm());
+            return new Result(true, "Grass starter used at " + x + "," + y);
+        }
+        if(!(cell.getObjectMap() instanceof Crop) && !(cell.getObjectMap() instanceof Tree)){
+            return new Result(false, "Cell is not a crop or a tree!");
+        }
+        Inventory inventory = App.getCurrentUser().getCurrentGame().getCurrentPlayer().getInventory();
+        for(Slot slot : inventory.getSlots()){
+            if(slot.getItem() instanceof Fertilizer){
+                if(slot.getItem().getName().equals(fertilizerType.getName())){
+                    if(cell.getObjectMap() instanceof Crop){
+                        fertilizeCrop((Crop) cell.getObjectMap(), fertilizerType);
+                        inventory.removeFromInventory(slot.getItem(), 1);
+                        return new Result(true, "Crop " + cell.getObjectMap().getName() + " fertilized with " + fertilizerType.getName());
+                    }
+                    if(cell.getObjectMap() instanceof Tree){
+                        fertilizeTree((Tree) cell.getObjectMap(), fertilizerType);
+                        inventory.removeFromInventory(slot.getItem(), 1);
+                        return new Result(true, "Tree " + cell.getObjectMap().getName() + " fertilized with " + fertilizerType.getName());
+                    }
+                }
+            }
+        }
+        return new Result(false, "No Fertilizer of this type found in your inventory!");
+    }
+    private void fertilizeCrop(Crop crop, FertilizerType fertilizerType){
+        Random rand = new Random();
+        int chance = 0;
+        if(fertilizerType.equals(FertilizerType.BasicRetainingSoil)){
+            chance = 1 + rand.nextInt(100);
+        }
+        else if(fertilizerType.equals(FertilizerType.QualityRetainingSoil)){
+            chance = 1 + rand.nextInt(200);
+        } else if(fertilizerType.equals(FertilizerType.DeluxeRetainingSoil)){
+            chance = 100;
+        }
+        if(chance >= 50){
+            crop.decreaseWaterStreak();
+        }
+        if(chance == 0){
+            crop.decreaseWaterStreak();
+            crop.increaseStage();
+        }
+    }
+    private void fertilizeTree(Tree tree, FertilizerType fertilizerType){
+        Random rand = new Random();
+        int chance = 0;
+        if(fertilizerType.equals(FertilizerType.BasicRetainingSoil)){
+            chance = 1 + rand.nextInt(100);
+        }
+        else if(fertilizerType.equals(FertilizerType.QualityRetainingSoil)){
+            chance = 1 + rand.nextInt(200);
+        } else if(fertilizerType.equals(FertilizerType.DeluxeRetainingSoil)){
+            chance = 100;
+        }
+        if(chance >= 50){
+            tree.decreaseWaterStreak();
+        }
+        if(chance == 0){
+            tree.decreaseWaterStreak();
+            tree.increaseStage();
+        }
+    }
+    private void fertilizeGrass(Cell cell, Farm farm){
+        for(int i = -2 + cell.getX(); i <= 2 + cell.getX(); i++){
+            for(int j = -2 + cell.getY(); j <= 2 + cell.getY(); j++){
+                Cell cell1 = farm.getCell(i, j);
+                if(cell1.getObjectMap() instanceof Grass){
+                    ((Grass) cell1.getObjectMap()).setGround(false);
+                }
+            }
+        }
     }
 }

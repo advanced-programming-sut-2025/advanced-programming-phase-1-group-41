@@ -24,8 +24,8 @@ public class Crop implements Item {
     private int currentStage;
     private int currentStageLevel;
     private Boolean isWateredToday = false;
-    private int waterStreak = 0;
     private Boolean isFertilizedToday = false;
+    private int waterStreak = 0;
     private int x;
     private int y;
 
@@ -65,10 +65,14 @@ public class Crop implements Item {
 
 
     public void increaseStage() {
-        if(!isWateredToday){
-            waterStreak++;
+        if(!isFertilizedToday){
+            if(!isWateredToday){
+                waterStreak++;
+            } else {
+                waterStreak = 0;
+            }
         } else {
-            waterStreak = 0;
+            isFertilizedToday = false;
         }
         currentStageLevel++;
         if(currentStageLevel >= stages.get(currentStage)){
@@ -107,6 +111,12 @@ public class Crop implements Item {
     public void nextDay(){
         isWateredToday = false;
         isFertilizedToday = false;
+    }
+    public void decreaseWaterStreak(){
+        waterStreak--;
+    }
+    public void waterFertilize() {
+        isFertilizedToday = true;
     }
 
     @Override

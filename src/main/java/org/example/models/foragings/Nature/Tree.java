@@ -11,7 +11,7 @@ public class Tree implements Nature, Obstacle {
 
     @Override
     public String getName() {
-        return "Tree";
+        return treeType.getName();
     }
 
     private int hitPoints;
@@ -58,10 +58,14 @@ public class Tree implements Nature, Obstacle {
 
 
     public void increaseStage() {
-        if(!isWateredToday){
-            waterStreak++;
+        if(!isFertilizedToday){
+            if(!isWateredToday){
+                waterStreak++;
+            } else {
+                waterStreak = 0;
+            }
         } else {
-            waterStreak = 0;
+            isFertilizedToday = false;
         }
         currentStageLevel++;
         if(currentStageLevel >= 7){
@@ -98,6 +102,12 @@ public class Tree implements Nature, Obstacle {
     public void nextDay(){
         isWateredToday = false;
         isFertilizedToday = false;
+    }
+    public void decreaseWaterStreak(){
+        waterStreak--;
+    }
+    public void waterFertilize() {
+        isFertilizedToday = true;
     }
     @Override
     public String toString() {

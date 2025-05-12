@@ -42,19 +42,30 @@ public class Farm {
     public Farm(int id) {
         farmBuilder = new FarmBuilder(this);
         this.id = id;
+        Random rand = new Random();
         for(int i=0;i<MaxLength;i++){
             for(int j=0;j<MaxHeight;j++){
                 cells.add(new Cell(new Grass(),j,i));
             }
         }
-        Random rand = new Random();
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; j < 4; j++){
+                int x1 = 10 + ((7 + rand.nextInt(7)) * i);
+                int y1 = 10 + ((10 + rand.nextInt(9)) * j);
+//                Objects.requireNonNull(Finder.findCellByCoordinates(x1, y1, this)).setObjectMap(new Grass(x1, y1, this));
+                farmBuilder.createGroundGrass(x1, y1);
+            }
+
+        }
+//        Objects.requireNonNull(Finder.findCellByCoordinates(20, 50, this)).setObjectMap(new Grass(20, 50, this));
         farmType = FarmType.values()[rand.nextInt(FarmType.values().length)];
         buildings.add(new Greenhouse(4,24 + rand.nextInt(4),this));
         buildings.add(new Cottage(30 + rand.nextInt(4), 4,this));
         mine = new Mine(3,3,this);
 
         int lakeCount = farmType.LakeCoefficient;
-        int bushCount = 1+rand.nextInt(farmType.treeCoefficient/2 + 1);
+        int bushCount = 1 + rand.nextInt(farmType.treeCoefficient/2 + 1);
+
 
         for(int i = 0; i < lakeCount; i++){
             lakes.add(new Lake(25 + 10 * i + rand.nextInt(5 + 5 * i), 25 + 10 * i + rand.nextInt(5 + 5 * i), this));
@@ -66,6 +77,7 @@ public class Farm {
         bushes.add(new Bush(35 + rand.nextInt(10), 10, this));
         bushes.add(new Bush(20 + rand.nextInt(10), 35 + rand.nextInt(10), this));
         bushes.add(new Bush(25 + rand.nextInt(10), 40 + rand.nextInt(10), this));
+
         int rockCount = (35 + rand.nextInt(10)) * farmType.rockCoefficient;
         int foragingTreeCount = (35 + rand.nextInt(10)) * farmType.treeCoefficient;
         int plantCount = (40 + rand.nextInt(10)) * farmType.treeCoefficient;
@@ -74,6 +86,7 @@ public class Farm {
 //        foragingTreeCount = (5 + rand.nextInt(10)) * farmType.treeCoefficient;
 //        plantCount = (4 + rand.nextInt(10)) * farmType.treeCoefficient;
 //        foragingCropCount = (3 + rand.nextInt(5));
+
         for(int i = 0; i < rockCount ;i++){
             int y = rand.nextInt(MaxLength - 4) + 2;
             int x = rand.nextInt(MaxHeight - 4) + 2;

@@ -22,9 +22,9 @@ public class FarmingView {
         } else if((matcher = FarmingCommands.HowMuchWater.getMatcher(input)) != null){
             if(App.getGame().getCurrentPlayer().getInventory().getSlotByItem(Finder.getToolByName("WateringCan")).getItem() instanceof WateringCan){
                 System.out.println("Water left: " + ((WateringCan) App.getGame().getCurrentPlayer().getInventory().getSlotByItem(Finder.getToolByName("WateringCan")).getItem()).getTiles());
-            } else{
-                System.out.println("Kir");
             }
+        } else if((matcher = FarmingCommands.Fertilize.getMatcher(input)) != null){
+            System.out.println(controller.fertilize(matcher));
         }
         else{
             return false;

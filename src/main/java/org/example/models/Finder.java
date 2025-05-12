@@ -8,7 +8,6 @@ import org.example.models.items.Item;
 import org.example.models.items.Slot;
 import org.example.models.locations.Farm;
 import org.example.models.tools.Tool;
-import org.example.models.tools.TrashCan;
 
 import java.util.Objects;
 
@@ -46,6 +45,9 @@ public class Finder {
         }
         if(FruitType.parseFruitType(itemName)!=null){
             return new Fruit(FruitType.parseFruitType(itemName));
+        }
+        if(FertilizerType.parseFertilizerType(itemName)!=null){
+            return new Fertilizer(FertilizerType.parseFertilizerType(itemName));
         }
         if(itemName.equalsIgnoreCase((new Wood()).getName())){
             return new Wood();
