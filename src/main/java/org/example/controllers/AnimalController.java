@@ -99,12 +99,12 @@ public class AnimalController {
     }
 
     public Result buyAnimal(Matcher matcher){
-        String animalType = matcher.group(1);
-        String animalName = matcher.group(2);
-        if(parseAnimal(animalType,animalName)==null){
-            return new Result(false, "Invalid animal type");
+        String animalType = matcher.group(1).trim().toLowerCase();
+        String animalName = matcher.group(2).trim().toLowerCase();
+        Animal animal = parseAnimal(animalType,animalName);
+        if(animal==null){
+            return new Result(false, "Invalid animal type "+animalType);
         }
-        Animal animal = parseAnimal(animalName,animalType);
         if(animal.getBreed()== Breed.Barn){
             switch(animal.getSizeNeeded()){
                 case Deluxe ->{
@@ -117,7 +117,7 @@ public class AnimalController {
                             }
                         }
                     }
-                    return new Result(false, "not enough space for +"+animalType);
+                    return new Result(false, "not enough space for "+animalType);
                 }
                 case Big -> {
                     for(Barn barn:App.getGame().getCurrentPlayerFarm().getBarns()){
@@ -129,7 +129,7 @@ public class AnimalController {
                             }
                         }
                     }
-                    return new Result(false, "not enough space for +"+animalType);
+                    return new Result(false, "not enough space for "+animalType);
                 }
                 case Normal -> {
                     for(Barn barn:App.getGame().getCurrentPlayerFarm().getBarns()){
@@ -141,7 +141,7 @@ public class AnimalController {
                             }
                         }
                     }
-                    return new Result(false, "not enough space for +"+animalType);
+                    return new Result(false, "not enough space for "+animalType);
                 }
 
             }
@@ -363,7 +363,7 @@ public class AnimalController {
 
         }
         double sellPrice = theAnimal.getBuyPrice()*(((double) theAnimal.getFriendShip() /1000)+0.3);
-        //sell;
+        // todo sell;
         return new Result(true,"sold "+name+" for "+sellPrice);
 
     }
