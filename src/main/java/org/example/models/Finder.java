@@ -5,6 +5,7 @@ import org.example.models.foragings.Crop;
 import org.example.models.foragings.CropType;
 import org.example.models.foragings.Fruit;
 import org.example.models.foragings.FruitType;
+import org.example.models.foragings.Nature.Wood;
 import org.example.models.items.Food;
 import org.example.models.items.Item;
 import org.example.models.items.Slot;
@@ -43,6 +44,9 @@ public class Finder {
         }
         if(FruitType.parseFruitType(itemName)!=null){
             return new Fruit(FruitType.parseFruitType(itemName));
+        }
+        if(itemName.equalsIgnoreCase((new Wood()).getName())){
+            return new Wood();
         }
         // TODO etc
 
