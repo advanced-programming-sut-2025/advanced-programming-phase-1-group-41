@@ -87,4 +87,11 @@ public class Barn implements Building {
     public void addAnimal(Animal animal) {
         animals.add(animal);
     }
+
+    public int getY() {
+        return y;
+    }
+    public void setY(int y){
+        this.y=y;
+    }
 }

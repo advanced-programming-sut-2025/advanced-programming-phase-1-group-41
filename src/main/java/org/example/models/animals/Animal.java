@@ -115,6 +115,9 @@ public abstract class Animal {
     public void setHome(boolean home){
         isHome = home;
     }
+    public String getChar(){
+        return "";
+    }
 
 
     public Breed getBreed() {
