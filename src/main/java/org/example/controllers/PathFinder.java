@@ -43,7 +43,7 @@ public class PathFinder {
                 if(nextCell.getObjectMap() instanceof Building){
                     if(!(nextCell.getObjectMap() instanceof Cottage) &&
                     !(nextCell.getObjectMap() instanceof Door)){
-                        System.out.println(nextCell.getObjectMap().getClass());
+//                        System.out.println(nextCell.getObjectMap().getClass());
                         continue;
                     }
                 }

@@ -24,6 +24,8 @@ public class PlayerView {
             System.out.println(controller.showInventory(matcher));
         }else if((matcher = GameMainCommands.Fishing.getMatcher(input))!=null){
             System.out.println(controller.fishing(matcher));
+        }else if((matcher = GameMainCommands.Eat.getMatcher(input))!=null){
+            System.out.println(controller.eatFood(matcher));
         }
         else{
             return false;
