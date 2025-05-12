@@ -591,14 +591,37 @@ public class AnimalController {
                     if (!animal.isPetToday()) {
                         animal.increaseFriendShip((animal.getFriendShip() / 200) - 10);
                         System.out.println("poor "+animal.getName()+(" did not get any pet from "+player+" last day"));
+                    }if (!animal.isHome()) {
+                        animal.increaseFriendShip(-20);
+                        System.out.println("poor "+animal.getName()+(" slept in cold in "+player+"`s farm last day"));
                     }
                     if (!animal.isFedToday()) {
                         animal.increaseFriendShip(-20);
                         System.out.println("poor "+animal.getName()+(" slept with hunger in "+player+"`s farm last day"));
-                    }
-                    if (!animal.isHome()) {
-                        animal.increaseFriendShip(-20);
-                        System.out.println("poor "+animal.getName()+(" slept in cold in "+player+"`s farm last day"));
+                    }else{
+                        double specialProduceChance=(animal.getFriendShip()+(150*(0.5 + Math.random()))/1500);
+
+                        if(animal.getFriendShip()>=100&&Math.random()<specialProduceChance){
+                            if(animal instanceof Cow&&animal.canGiveProduct()){
+                                animal.setProduct(new Product(ProductType.BigCowMilk));
+                            } else if(animal instanceof Goat&&animal.canGiveProduct()){
+                                animal.setProduct(new Product(ProductType.BigGoatMilk));
+                            } else if(animal instanceof Sheep&&animal.canGiveProduct()){
+                                animal.setProduct(new Product(ProductType.SheepWool));
+                            } else if(animal instanceof Pig&&animal.canGiveProduct()){
+                                animal.setProduct(new Product(ProductType.PigTruffle));
+                            }
+                        }else{
+                             if(animal instanceof Cow&&animal.canGiveProduct()){
+                                animal.setProduct(new Product(ProductType.CowMilk));
+                            } else if(animal instanceof Goat&&animal.canGiveProduct()){
+                                animal.setProduct(new Product(ProductType.GoatMilk));
+                            } else if(animal instanceof Sheep&&animal.canGiveProduct()){
+                                animal.setProduct(new Product(ProductType.SheepWool));
+                            } else if(animal instanceof Pig&&animal.canGiveProduct()){
+                                animal.setProduct(new Product(ProductType.PigTruffle));
+                            }
+                        }
                     }
                 }
             }
@@ -607,6 +630,9 @@ public class AnimalController {
                     if (!animal.isPetToday()) {
                         animal.increaseFriendShip((animal.getFriendShip() / 200) - 10);
                         System.out.println("poor "+animal.getName()+(" did not get any pet from "+player+" last day"));
+                    }if (!animal.isHome()) {
+                        animal.increaseFriendShip(-20);
+                        System.out.println("poor "+animal.getName()+(" slept in cold in "+player+"`s farm last day"));
                     }
                     if (!animal.isFedToday()) {
                         animal.increaseFriendShip(-20);
@@ -617,41 +643,23 @@ public class AnimalController {
                         if(animal.getFriendShip()>=100&&Math.random()<specialProduceChance){
                             if(animal instanceof Chicken&&animal.canGiveProduct()){
                                 animal.setProduct(new Product(ProductType.BigChickenEgg));
-                            } else if(animal instanceof Cow&&animal.canGiveProduct()){
-                                System.out.println("im a cow");
-                                animal.setProduct(new Product(ProductType.BigCowMilk));
-                            } else if(animal instanceof Goat&&animal.canGiveProduct()){
-                                animal.setProduct(new Product(ProductType.BigGoatMilk));
                             } else if(animal instanceof Duck&&animal.canGiveProduct()){
                                 animal.setProduct(new Product(ProductType.DuckFeather));
                             } else if(animal instanceof Rabbit&&animal.canGiveProduct()){
                                 animal.setProduct(new Product(ProductType.RabbitFoot));
-                            } else if(animal instanceof Sheep&&animal.canGiveProduct()){
-                                animal.setProduct(new Product(ProductType.SheepWool));
                             } else if(animal instanceof Dino&&animal.canGiveProduct()){
                                 animal.setProduct(new Product(ProductType.DinoEgg));
-                            } else if(animal instanceof Pig&&animal.canGiveProduct()){
-                                animal.setProduct(new Product(ProductType.PigTruffle));
                             }
                         }else{
                             if(animal instanceof Chicken && animal.canGiveProduct()){
                                 System.out.println("i am a chicken");
                                 animal.setProduct(new Product(ProductType.ChickenEgg));
-                            } else if(animal instanceof Cow&&animal.canGiveProduct()){
-                                System.out.println("i am a cow");
-                                animal.setProduct(new Product(ProductType.CowMilk));
-                            } else if(animal instanceof Goat&&animal.canGiveProduct()){
-                                animal.setProduct(new Product(ProductType.GoatMilk));
                             } else if(animal instanceof Duck&&animal.canGiveProduct()){
                                 animal.setProduct(new Product(ProductType.DuckEgg));
                             } else if(animal instanceof Rabbit&&animal.canGiveProduct()){
                                 animal.setProduct(new Product(ProductType.RabbitWool));
                             } else if(animal instanceof Sheep&&animal.canGiveProduct()){
-                                animal.setProduct(new Product(ProductType.SheepWool));
-                            } else if(animal instanceof Dino&&animal.canGiveProduct()){
                                 animal.setProduct(new Product(ProductType.DinoEgg));
-                            } else if(animal instanceof Pig&&animal.canGiveProduct()){
-                                animal.setProduct(new Product(ProductType.PigTruffle));
                             }
                         }
 
