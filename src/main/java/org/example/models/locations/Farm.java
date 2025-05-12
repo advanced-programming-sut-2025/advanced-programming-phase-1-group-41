@@ -100,17 +100,17 @@ public class Farm {
                 i--;
             }
         }
-        for(int i = 0; i < 50 ;i++){
-            int y = rand.nextInt(MaxLength - 4) + 4;
-            int x = rand.nextInt(MaxHeight - 4) + 4;
-            if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap().getChar(), new Grass().getChar())){
-                Crop crop = new Crop(x, y, this, CropType.values()[rand.nextInt(CropType.values().length)]);
-                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(crop);
-                crops.add(crop);
-            } else{
-                i--;
-            }
-        }
+//        for(int i = 0; i < 50 ;i++){
+//            int y = rand.nextInt(MaxLength - 4) + 4;
+//            int x = rand.nextInt(MaxHeight - 4) + 4;
+//            if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap().getChar(), new Grass().getChar())){
+//                Crop crop = new Crop(x, y, this, CropType.values()[rand.nextInt(CropType.values().length)]);
+//                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(crop);
+//                crops.add(crop);
+//            } else{
+//                i--;
+//            }
+//        }
     }
 
     public ArrayList<Barn> getBarns() {
@@ -228,6 +228,11 @@ public class Farm {
     public void update(){
         farmBuilder.updateForagings();
         farmBuilder.growCrops();
+    }
+
+    public void removeCrop(Crop crop){
+        Objects.requireNonNull(Finder.findCellByCoordinates(crop.getX(), crop.getY(), this)).setObjectMap(new Grass());
+        crops.remove(crop);
     }
 
 

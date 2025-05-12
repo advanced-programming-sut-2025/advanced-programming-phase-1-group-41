@@ -10,4 +10,14 @@ public class Grass implements ObjectMap{
     public String getName() {
         return "Grass";
     }
+
+    //TODO Make it TRUE!
+    private boolean isFarmland = true;
+
+    public boolean isFarmland() {
+        return isFarmland;
+    }
+    public void setFarmland(boolean isFarmland) {
+        this.isFarmland = isFarmland;
+    }
 }

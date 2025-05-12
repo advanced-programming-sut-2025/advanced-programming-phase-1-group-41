@@ -1,13 +1,11 @@
 package org.example.models.foragings;
 
-import org.example.models.App;
-import org.example.models.Cell;
-import org.example.models.Colors;
-import org.example.models.Finder;
+import org.example.models.*;
 import org.example.models.items.Item;
 import org.example.models.locations.Farm;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Crop implements Item {
     private final CropType cropType;
@@ -36,6 +34,11 @@ public class Crop implements Item {
         Cell cell = Finder.findCellByCoordinates(x, y, farm);
         assert cell != null;
         cell.setObjectMap(this);
+    }
+    public Crop(CropType cropType) {
+        this.cropType = cropType;
+        stages = cropType.getStages();
+        currentStage = 0;
     }
 
     public CropType getCropType() {
@@ -66,9 +69,6 @@ public class Crop implements Item {
         } else {
             waterStreak = 0;
         }
-        if(waterStreak >= 2){
-            App.getCurrentUser().getCurrentGame().getCurrentPlayerFarm().getCrops().remove(this);
-        }
         currentStageLevel++;
         if(currentStageLevel >= stages.get(currentStage)){
             currentStage++;
@@ -78,6 +78,12 @@ public class Crop implements Item {
         } else {
             currentStageLevel = 0;
         }
+    }
+
+    public Boolean shouldBeRemoved() {
+        return (waterStreak >= 1 && !isWateredToday) || waterStreak >= 2
+                || (!Arrays.asList(cropType.getGrowingSeasons()).contains(App.getGame().getTime().getSeason())
+                && !cropType.getGrowingSeasons()[0].equals(Season.Special));
     }
 
     public int getX(){
@@ -95,32 +101,6 @@ public class Crop implements Item {
 
     @Override
     public String toString() {
-        StringBuilder stages = new StringBuilder();
-        ArrayList<Integer> stagesList = getStages();
-        for (int i = 0; i < stagesList.size(); i++) {
-            if(i == stagesList.size() - 1) {
-                stages.append(stagesList.get(i));
-            } else{
-                stages.append(stagesList.get(i)).append("-");
-            }
-        }
-        StringBuilder result = new StringBuilder();
-        result.append("Name: ").append(getName()).append("\n");
-        result.append("Source: ").append(getCropType().getSource().getName()).append("\n");
-        result.append("Stages: ").append(stages).append("\n");
-        result.append("Total Harvest Time: ").append(cropType.getHarvestTime()).append("\n");
-        result.append("One Time: ").append(cropType.isOneTimeHarvest());
-        result.append("Regrowth Time: ").append(cropType.getRegrowthTime()).append("\n");
-        result.append("Base Sell Price: ").append(cropType.getBaseSellPrice()).append("\n");
-        result.append("Is Edible: ").append(cropType.isEatable()).append("\n");
-        result.append("Base Energy: ").append(cropType.getEnergy()).append("\n");
-        result.append("Base Health: ").append(cropType.getEnergy()/2).append("\n");
-        result.append("Season: ").append(cropType.getSource().getSeason()).append("\n");
-        result.append("Can Become Giant: ").append(cropType.canBecomeGiant()).append("\n");
-        return result.toString();
-    }
-
-    public String toString2() {
         StringBuilder result = new StringBuilder();
         int dayLeft = -currentStageLevel;
         for(int i = currentStage; i < stages.size(); i++){

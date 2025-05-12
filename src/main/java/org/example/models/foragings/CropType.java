@@ -98,16 +98,29 @@ public enum CropType {
             }
         }
         StringBuilder result = new StringBuilder();
+        String res;
         result.append("Name: ").append(getName()).append("\n");
         result.append("Source: ").append(getSource().getName()).append("\n");
         result.append("Stages: ").append(stages).append("\n");
         result.append("Total Harvest Time: ").append(getHarvestTime()).append("\n");
-        result.append("One Time: ").append(isOneTimeHarvest());
-        result.append("Regrowth Time: ").append(getRegrowthTime()).append("\n");
+        result.append("One Time: ").append(isOneTimeHarvest()).append("\n");
+        res = String.valueOf(getRegrowthTime());
+        if(getRegrowthTime() == -1){
+            res = "-";
+        }
+        result.append("Regrowth Time: ").append(res).append("\n");
         result.append("Base Sell Price: ").append(getBaseSellPrice()).append("\n");
         result.append("Is Edible: ").append(isEatable()).append("\n");
-        result.append("Base Energy: ").append(getEnergy()).append("\n");
-        result.append("Base Health: ").append(getEnergy()/2).append("\n");
+        res = String.valueOf(getEnergy());
+        if(getEnergy() == -1){
+            res = "-";
+        }
+        result.append("Base Energy: ").append(res).append("\n");
+        res = String.valueOf(getEnergy() / 2);
+        if(getEnergy() == -1){
+            res = "-";
+        }
+        result.append("Base Health: ").append(res).append("\n");
         result.append("Season: ").append(getSource().getSeason()).append("\n");
         result.append("Can Become Giant: ").append(canBecomeGiant()).append("\n");
         return result.toString();
