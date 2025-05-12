@@ -1,4 +1,4 @@
-package org.example.models.buildings.Nature;
+package org.example.models.foragings.Nature;
 
 public enum RockType {
     SmallRock,

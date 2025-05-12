@@ -57,7 +57,7 @@ public abstract class Animal {
         return breed;
     }
 
-    public int getPrice() {
+    public int getSellPrice() {
         return (int) (buyPrice * ((friendShip / 1000f) + 0.3));
     }
 

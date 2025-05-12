@@ -1,6 +1,7 @@
 package org.example.models.items;
 
 import org.example.models.App;
+import org.example.models.tools.FishingRod;
 import org.example.models.tools.Pickaxe;
 import org.example.models.tools.TrashCan;
 
@@ -15,6 +16,8 @@ public class Inventory {
         setDefaultBag();
         addToInventory(new TrashCan(), 1);
         addToInventory(new Pickaxe(), 1);
+        // todo buy this
+        addToInventory(new FishingRod(), 1);
     }
 
     public void setDefaultBag() {
@@ -87,6 +90,7 @@ public class Inventory {
     
     public boolean removeFromInventory(Item item, int quantity) {
         for(Slot slot : slots){
+            if(slot.getItem() == null) continue;
             if(slot.getItem().equals(item)){
                 if(slot.getQuantity() >= quantity){
                     App.getGame().getCurrentPlayer().incMoney(quantity*getCofOfTrashCan());
@@ -101,6 +105,7 @@ public class Inventory {
     }
     public boolean removeFromInventory(Item item) {
         for(Slot slot : slots){
+            if (slot.getItem() == null) continue;
             if(slot.getItem().equals(item)){
                 App.getGame().getCurrentPlayer().incMoney(slot.getQuantity()*getCofOfTrashCan());
                 slot.setQuantity(0);
@@ -117,5 +122,15 @@ public class Inventory {
             }
         }
         return sum;
+    }
+
+    public Slot getSlotByItem(Item item){
+        for(Slot slot : slots){
+            if(slot == null || slot.getItem() == null) continue;
+            if(slot.getItem().getName().equals(item.getName())){
+                return slot;
+            }
+        }
+        return null;
     }
 }

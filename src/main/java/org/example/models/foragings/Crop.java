@@ -1,16 +1,32 @@
 package org.example.models.foragings;
 
+import org.example.models.Cell;
+import org.example.models.Colors;
+import org.example.models.Finder;
+import org.example.models.locations.Farm;
+
 import java.util.ArrayList;
 
 public class Crop implements Foraging {
     private final CropType cropType;
     private final ArrayList<Integer> stages;
+    private int typeIndex = 0;
     private int currentStage;
+    private int currentStageLevel;
 
-    public Crop(CropType cropType) {
+    public Crop(int x, int y, Farm farm, CropType cropType) {
         this.cropType = cropType;
+        for(CropType type : CropType.values()){
+            if(type.equals(cropType)){
+                break;
+            }
+            typeIndex++;
+        }
         stages = cropType.getStages();
         currentStage = 0;
+        Cell cell = Finder.findCellByCoordinates(x, y, farm);
+        assert cell != null;
+        cell.setObjectMap(this);
     }
 
     public CropType getCropType() {
@@ -27,7 +43,7 @@ public class Crop implements Foraging {
 
     @Override
     public String getChar() {
-        return "CC";
+        return Colors.colorize(53,4 - currentStage,typeIndex/10 + "" + typeIndex%10);
     }
 
     @Override
@@ -36,7 +52,15 @@ public class Crop implements Foraging {
     }
 
     public void increaseStage() {
-        currentStage++;
+        currentStageLevel++;
+        if(currentStageLevel >= stages.get(currentStage)){
+            currentStage++;
+            if(currentStage >= stages.size()){
+                currentStage--;
+            }
+        } else {
+            currentStageLevel = 0;
+        }
     }
 
     @Override

@@ -1,7 +1,6 @@
 package org.example.models;
 
-import org.example.models.buildings.Nature.Mineral;
-import org.example.models.buildings.Nature.TreeType;
+import org.example.models.foragings.Nature.Mineral;
 import org.example.models.locations.Farm;
 
 import java.util.Random;

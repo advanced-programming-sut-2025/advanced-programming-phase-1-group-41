@@ -3,7 +3,6 @@ package org.example.models.foragings;
 import org.example.models.Cell;
 import org.example.models.Colors;
 import org.example.models.Finder;
-import org.example.models.buildings.Nature.TreeType;
 import org.example.models.locations.Farm;
 
 import java.util.Random;

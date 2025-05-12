@@ -104,7 +104,7 @@ public class PlayerController {
     public Result fishing(Matcher matcher){
         Game game=App.getGame();
         String fishingRodName = matcher.group(1);
-        List<String> list = List.of("Training", "Bamboo", "FiberGlass", "Iridium");
+            List<String> list = List.of("Training", "Bamboo", "FiberGlass", "Iridium");
         if(!list.contains(fishingRodName)){
             return new Result(false, "Invalid rod name");
         }
@@ -228,7 +228,8 @@ public class PlayerController {
 
             }
         }
-        fishQuality=(int)Math.floor((Math.random()*( 1 + 2)*fishingRod.getLevel().getPole())/(7-weatherEffect));
+        fishQuality=(Math.random()*( 1 + 2)*fishingRod.getLevel().getPole())/(7-weatherEffect);
+        caughtFish.setQuality(fishQuality);
         game.getCurrentPlayer().decEnergy(fishingRod.getLevel().getEnergyUsage());//TODO skill has an effect on dec of energy
         game.getCurrentPlayer().getInventory().addToInventory(caughtFish,quantityOfFish);
         return new Result(true,"You have "+quantityOfFish+" fresh fish of "+caughtFish.getFishType().getName());

@@ -1,10 +1,13 @@
 package org.example.models.locations;
 
 import org.example.models.*;
+import org.example.models.foragings.Nature.Bush;
+import org.example.models.foragings.Nature.Plant;
+import org.example.models.foragings.Nature.Rock;
+import org.example.models.foragings.Nature.Tree;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.Cottage;
 import org.example.models.buildings.GreenHouse.Greenhouse;
-import org.example.models.buildings.Nature.*;
 import org.example.models.buildings.animalContainer.Barn;
 import org.example.models.buildings.animalContainer.BarnType;
 import org.example.models.buildings.animalContainer.Coop;
@@ -21,6 +24,7 @@ import static org.example.models.App.MaxLength;
 
 public class Farm {
     private FarmType farmType;
+    private FarmBuilder farmBuilder;
     private ArrayList<Cell> cells = new ArrayList<>();
     private int id;
     private final ArrayList<Building> buildings = new ArrayList<>();
@@ -29,18 +33,19 @@ public class Farm {
     private final ArrayList<Bush> bushes = new ArrayList<>();
     private final ArrayList<Barn> barns = new ArrayList<>();
     private final ArrayList<Coop> coops = new ArrayList<>();
+    private final ArrayList<Crop> crops = new ArrayList<>();
     private Mine mine;
 
     public Farm(int id) {
+        farmBuilder = new FarmBuilder(this);
         this.id = id;
         for(int i=0;i<MaxLength;i++){
             for(int j=0;j<MaxHeight;j++){
                 cells.add(new Cell(new Grass(),j,i));
             }
         }
-        //TODO Random in 4 ta
         Random rand = new Random();
-        FarmType farmType = FarmType.values()[rand.nextInt(FarmType.values().length)];
+        farmType = FarmType.values()[rand.nextInt(FarmType.values().length)];
         buildings.add(new Greenhouse(4,24 + rand.nextInt(4),this));
         buildings.add(new Cottage(30 + rand.nextInt(4), 4,this));
         mine = new Mine(3,3,this);
@@ -58,7 +63,7 @@ public class Farm {
         int rockCount = (35 + rand.nextInt(10)) * farmType.rockCoefficient;
         int treeCount = (40 + rand.nextInt(10)) * farmType.treeCoefficient;
         int plantCount = (40 + rand.nextInt(10)) * farmType.treeCoefficient;
-        int cropCount = (20 + rand.nextInt(5));
+        int foragingCropCount = (20 + rand.nextInt(5));
         for(int i = 0; i < rockCount ;i++){
             int y = rand.nextInt(MaxLength - 4) + 2;
             int x = rand.nextInt(MaxHeight - 4) + 2;
@@ -86,7 +91,7 @@ public class Farm {
                 i--;
             }
         }
-        for(int i = 0; i < cropCount ;i++){
+        for(int i = 0; i < foragingCropCount ;i++){
             int y = rand.nextInt(MaxLength - 4) + 4;
             int x = rand.nextInt(MaxHeight - 4) + 4;
             if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap().getChar(), new Grass().getChar())){
@@ -95,6 +100,19 @@ public class Farm {
                 i--;
             }
         }
+        for(int i = 0; i < 50 ;i++){
+            int y = rand.nextInt(MaxLength - 4) + 4;
+            int x = rand.nextInt(MaxHeight - 4) + 4;
+            if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap().getChar(), new Grass().getChar())){
+                Crop crop = new Crop(x, y, this, CropType.values()[rand.nextInt(CropType.values().length)]);
+                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(crop);
+                crops.add(crop);
+            } else{
+                i--;
+            }
+        }
+        barns.add(new Barn(40, 30, this, BarnType.Big));
+        coops.add(new Coop(30, 40, this, CoopType.Deluxe));
     }
 
     public ArrayList<Barn> getBarns() {
@@ -120,7 +138,10 @@ public class Farm {
     public boolean isLakeAround(){
         for(int i=-1;i<=1;i++){
             for(int j=-1;j<=1;j++){
-                if(getCell(App.getGame().getCurrentPlayer().getX()+i,App.getGame().getCurrentPlayer().getY()+i).getObjectMap() instanceof Lake){
+                Player player = App.getGame().getCurrentPlayer();
+                Cell cell = getCell(player.getX()+i,player.getY()+j);
+                if(cell == null) continue;
+                if(cell.getObjectMap() instanceof Lake){
                     return true;
                 }
             }
@@ -196,6 +217,15 @@ public class Farm {
 
     public void setMine(Mine mine) {
         this.mine = mine;
+    }
+
+    public ArrayList<Crop> getCrops() {
+        return crops;
+    }
+
+    public void update(){
+        farmBuilder.updateForagings();
+        farmBuilder.growCrops();
     }
 
 
