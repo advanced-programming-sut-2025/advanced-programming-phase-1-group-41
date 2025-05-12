@@ -8,10 +8,12 @@ import org.example.models.items.Slot;
 public abstract class Animal {
     public abstract void doTheFuckingJob();
     protected String name;
+    protected int x;
+    protected int y;
     protected int buyPrice;
     protected boolean isPetToday;
     protected boolean isFedToday;
-    protected boolean isHome;
+    protected boolean isHome=true;
 
     public BarnOrCageSize getSizeNeeded() {
         return sizeNeeded;
@@ -23,12 +25,30 @@ public abstract class Animal {
     private int friendShip;
     //TODO Corps
 
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
     public Animal(Player owner, String name, int buyPrice, BarnOrCageSize sizeNeeded) {
         this.name = name;
         this.buyPrice = buyPrice;
         this.sizeNeeded = sizeNeeded;
         this.owner = owner;
         this.friendShip = 0;
+        this.x=-10;
+        this.y=-10;
     }
 
     public int getFriendShip() {

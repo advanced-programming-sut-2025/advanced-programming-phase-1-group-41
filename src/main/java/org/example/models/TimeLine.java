@@ -53,7 +53,7 @@ public class TimeLine {
     }
     public void advanceOneDay(){
         App.getGame().getCurrentPlayerFarm().update();
-//        (new AnimalController()).reset();
+        (new AnimalController()).resetAndCheck();
 
         App.getGame().setWeatherType(App.getGame().getTmrwWeatherType());
         predictTmrwWeather();
