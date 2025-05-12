@@ -55,6 +55,8 @@ public class Tree implements Nature, Obstacle {
     public int getCurrentStage() {
         return currentStage;
     }
+    public int getCurrentStageLevel() {return currentStageLevel;}
+    public void setCurrentStageLevel(int level){currentStageLevel = level;}
 
 
     public void increaseStage() {
@@ -72,8 +74,9 @@ public class Tree implements Nature, Obstacle {
             currentStage++;
             if(currentStage >= 4){
                 currentStage--;
+            } else {
+                currentStageLevel = 0;
             }
-            currentStageLevel = 0;
         }
     }
 
