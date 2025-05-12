@@ -3,14 +3,10 @@ package org.example.controllers;
 import org.example.models.*;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.GreenHouse.WaterTank;
-import org.example.models.foragings.Nature.Mineral;
-import org.example.models.foragings.Nature.Rock;
-import org.example.models.foragings.Nature.RockType;
+import org.example.models.foragings.ForagingTree;
+import org.example.models.foragings.Nature.*;
 import org.example.models.items.Item;
-import org.example.models.tools.Hoe;
-import org.example.models.tools.Pickaxe;
-import org.example.models.tools.Tool;
-import org.example.models.tools.WateringCan;
+import org.example.models.tools.*;
 
 import java.util.regex.Matcher;
 
@@ -86,6 +82,8 @@ public class ToolsController {
             return useWateringCan(cell, tool);
         }else if(tool instanceof Hoe){
             return useHoe(cell, tool);
+        }else if(tool instanceof Axe){
+            return useAxe(cell, tool);
         }
 
 
@@ -199,6 +197,45 @@ public class ToolsController {
             return new Result(true, "grass is ready for shokhm");
         }
         return new Result(false,"it's not a grass!");
+    }
+
+    private Result useAxe(Cell cell, Tool tool){
+        Axe axe = (Axe) tool;
+        int energy = 0;
+        switch (axe.getLevel()){
+            case Default -> energy = 5;
+            case Copper -> energy = 4;
+            case Iron -> energy = 3;
+            case Gold -> energy = 2;
+            case Iridium -> energy = 1;
+        }
+        if(cell.getObjectMap() instanceof Tree){
+            Tree tree = (Tree) cell.getObjectMap();
+            tree.decreaseHitPoints();
+            App.getGame().getCurrentPlayer().decEnergy(energy);
+
+            if(tree.getHitPoints() == 0){
+                App.getGame().getCurrentPlayer().getInventory().addToInventory(new Wood(), 100);
+                cell.setObjectMap(new Grass());
+                return new Result(true, "got some wood");
+            }else{
+                return new Result(true, "hit points left: "+tree.getHitPoints());
+            }
+        }else if(cell.getObjectMap() instanceof ForagingTree){
+            ForagingTree foragingTree = (ForagingTree) cell.getObjectMap();
+            foragingTree.decreaseHitPoints();
+            App.getGame().getCurrentPlayer().decEnergy(energy);
+
+            if(foragingTree.getHitPoints() == 0){
+                App.getGame().getCurrentPlayer().getInventory().addToInventory(new Wood(), 100);
+                cell.setObjectMap(new Grass());
+                return new Result(true, "got some wood from foraging");
+            }else{
+                return new Result(true, "hit points left: "+foragingTree.getHitPoints());
+            }
+        }
+        return new Result(false,"it's not a tree!");
+
     }
 
 }

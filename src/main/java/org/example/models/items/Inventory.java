@@ -18,6 +18,7 @@ public class Inventory {
         addToInventory(new FishingRod(), 1);
         addToInventory(new WateringCan(), 1);
         addToInventory(new Hoe(), 1);
+        addToInventory(new Axe(), 1);
     }
 
     public void setDefaultBag() {

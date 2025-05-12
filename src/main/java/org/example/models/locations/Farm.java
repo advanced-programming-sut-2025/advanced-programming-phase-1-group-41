@@ -66,7 +66,7 @@ public class Farm {
 //        int plantCount = (40 + rand.nextInt(10)) * farmType.treeCoefficient;
 //        int foragingCropCount = (30 + rand.nextInt(5));
         int rockCount = (5 + rand.nextInt(10)) * farmType.rockCoefficient;
-        int foragingTreeCount = (5 + rand.nextInt(10)) * farmType.treeCoefficient;
+        int foragingTreeCount = (200 + rand.nextInt(10)) * farmType.treeCoefficient;
         int plantCount = (4 + rand.nextInt(10)) * farmType.treeCoefficient;
         int foragingCropCount = (3 + rand.nextInt(5));
         for(int i = 0; i < rockCount ;i++){
