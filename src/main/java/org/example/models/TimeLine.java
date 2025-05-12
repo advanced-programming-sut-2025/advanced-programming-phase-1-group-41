@@ -4,6 +4,7 @@ import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import org.bson.types.ObjectId;
+import org.example.controllers.AnimalController;
 
 import java.util.Date;
 import java.util.Random;
@@ -52,7 +53,7 @@ public class TimeLine {
     }
     public void advanceOneDay(){
         App.getGame().getCurrentPlayerFarm().update();
-
+        (new AnimalController()).reset();
 
         App.getGame().setWeatherType(App.getGame().getTmrwWeatherType());
         predictTmrwWeather();
