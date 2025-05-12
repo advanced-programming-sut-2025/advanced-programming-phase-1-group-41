@@ -1,9 +1,6 @@
 package org.example.controllers;
 
-import org.example.models.App;
-import org.example.models.Grass;
-import org.example.models.ObjectMap;
-import org.example.models.Result;
+import org.example.models.*;
 import org.example.models.animals.Animal;
 import org.example.models.animals.Breed;
 import org.example.models.animals.animalKinds.*;
@@ -12,6 +9,7 @@ import org.example.models.buildings.animalContainer.BarnType;
 import org.example.models.buildings.animalContainer.Coop;
 import org.example.models.buildings.animalContainer.CoopType;
 import org.example.models.foragings.Nature.Nature;
+import org.example.models.locations.Farm;
 
 import java.util.regex.Matcher;
 
@@ -58,8 +56,10 @@ public class AnimalController {
         }
         for(int j=y;j<y+ySize;++j){
             for(int i=x;i<x+xSize;++i){
-                if (!(App.getGame().getCurrentPlayerFarm().getCell(i, j).getObjectMap() instanceof Nature) &&
-                        !(App.getGame().getCurrentPlayerFarm().getCell(i, j).getObjectMap() instanceof Grass  )) {
+                Cell cell = App.getGame().getCurrentPlayerFarm().getCell(i, j);
+                if(cell == null) continue;
+                if (!(cell.getObjectMap() instanceof Nature) &&
+                        !(cell.getObjectMap() instanceof Grass  )) {
                     return new Result(false, "there is obstackle in the way");
                 }
             }
@@ -87,8 +87,10 @@ public class AnimalController {
         }
         for (int j = y; j < y + ySize; ++j) {
             for (int i = x; i < x + xSize; ++i) {
-                if (!(App.getGame().getCurrentPlayerFarm().getCell(i, j).getObjectMap() instanceof Nature) &&
-                        !(App.getGame().getCurrentPlayerFarm().getCell(i, j).getObjectMap() instanceof Grass  )) {
+                Cell cell = App.getGame().getCurrentPlayerFarm().getCell(i, j);
+                if(cell == null) continue;
+                if (!(cell.getObjectMap() instanceof Nature) &&
+                        !(cell.getObjectMap() instanceof Grass  )) {
                     return new Result(false, "there is obstackle in the way");
                 }
             }
@@ -99,12 +101,12 @@ public class AnimalController {
     }
 
     public Result buyAnimal(Matcher matcher){
-        String animalType = matcher.group(1);
-        String animalName = matcher.group(2);
-        if(parseAnimal(animalType,animalName)==null){
-            return new Result(false, "Invalid animal type");
+        String animalType = matcher.group(1).trim().toLowerCase();
+        String animalName = matcher.group(2).trim().toLowerCase();
+        Animal animal = parseAnimal(animalType,animalName);
+        if(animal==null){
+            return new Result(false, "Invalid animal type "+animalType);
         }
-        Animal animal = parseAnimal(animalName,animalType);
         if(animal.getBreed()== Breed.Barn){
             switch(animal.getSizeNeeded()){
                 case Deluxe ->{
@@ -117,7 +119,7 @@ public class AnimalController {
                             }
                         }
                     }
-                    return new Result(false, "not enough space for +"+animalType);
+                    return new Result(false, "not enough space for "+animalType);
                 }
                 case Big -> {
                     for(Barn barn:App.getGame().getCurrentPlayerFarm().getBarns()){
@@ -129,7 +131,7 @@ public class AnimalController {
                             }
                         }
                     }
-                    return new Result(false, "not enough space for +"+animalType);
+                    return new Result(false, "not enough space for "+animalType);
                 }
                 case Normal -> {
                     for(Barn barn:App.getGame().getCurrentPlayerFarm().getBarns()){
@@ -141,7 +143,7 @@ public class AnimalController {
                             }
                         }
                     }
-                    return new Result(false, "not enough space for +"+animalType);
+                    return new Result(false, "not enough space for "+animalType);
                 }
 
             }
@@ -192,12 +194,13 @@ public class AnimalController {
 
     public Result pet(Matcher matcher) {
         String name=matcher.group(1);
-        for(int i=-1;i<1;i++){
-            for(int j=-1;j<1;j++){
-                if(App.getGame().getCurrentPlayer().getX()+i<0||App.getGame().getCurrentPlayer().getY()+j<0){
-                    continue;
-                }
-                ObjectMap objectMap=App.getGame().getCurrentPlayerFarm().getCell(App.getGame().getCurrentPlayer().getX()+i,App.getGame().getCurrentPlayer().getY()+j).getObjectMap();
+        for(int i=-2;i<=2;i++){
+            for(int j=-2;j<=2;j++){
+                int x = App.getGame().getCurrentPlayer().getX();
+                int y = App.getGame().getCurrentPlayer().getY();
+                Cell cell = App.getGame().getCurrentPlayerFarm().getCell(x+i,y+j);
+                if(cell == null) continue;
+                ObjectMap objectMap=cell.getObjectMap();
                 if(objectMap instanceof Animal&&objectMap.getName().equals(name)){
                     ((Animal) objectMap).increaseFriendShip(15);
                     return new Result(true,"you pet "+name+", now it loves you more");
@@ -301,13 +304,17 @@ public class AnimalController {
         if(theAnimal==null){
             return new Result(false,"can`t find "+name);
         }
-        if (!(App.getGame().getCurrentPlayerFarm().getCell(x, y).getObjectMap() instanceof Grass  )&&
-                (theBarn!=null&&!(App.getGame().getCurrentPlayerFarm().getCell(x, y).getObjectMap() instanceof Barn  )||
-                theCoop!=null&&!(App.getGame().getCurrentPlayerFarm().getCell(x,y).getObjectMap() instanceof Coop  ))) {
+        Cell cell =App.getGame().getCurrentPlayerFarm().getCell(x, y);
+        if(cell==null){
+            return new Result(false,"can`t find cell");
+        }
+        if (!(cell.getObjectMap() instanceof Grass  )&&
+                (theBarn!=null&&!(cell.getObjectMap() instanceof Barn  )||
+                theCoop!=null&&!(cell.getObjectMap() instanceof Coop  ))) {
             return new Result(false, "there is no grass in selected area");
         }
-        if((theBarn!=null&&(App.getGame().getCurrentPlayerFarm().getCell(x, y).getObjectMap() instanceof Barn  )||
-                theCoop!=null&&(App.getGame().getCurrentPlayerFarm().getCell(x,y).getObjectMap() instanceof Coop  ))){
+        if((theBarn!=null&&(cell.getObjectMap() instanceof Barn  )||
+                theCoop!=null&&(cell.getObjectMap() instanceof Coop  ))){
             return new Result(true,name+" shepherd to its home");
         }
         switch (App.getGame().getWeatherType()){
@@ -363,11 +370,47 @@ public class AnimalController {
 
         }
         double sellPrice = theAnimal.getBuyPrice()*(((double) theAnimal.getFriendShip() /1000)+0.3);
-        //sell;
+        // todo sell;
         return new Result(true,"sold "+name+" for "+sellPrice);
 
     }
 
-
+    private void reset(){
+        Game game =App.getGame();
+        for(Player player:game.getPlayers()){
+            Farm farm =Finder.findFarmByPlayer(player);
+            assert farm != null;
+            for(Barn barn:farm.getBarns()){
+                for(Animal animal: barn.getAnimals()){
+                    animal.setPetToday(false);
+                    animal.setFedToday(false);
+                }
+            }
+        }
+    }
+    private void check() {
+        Game game = App.getGame();
+        for (Player player : game.getPlayers()) {
+            Farm farm = Finder.findFarmByPlayer(player);
+            assert farm != null;
+            for (Barn barn : farm.getBarns()) {
+                for (Animal animal : barn.getAnimals()) {
+                    if (!animal.isPetToday()) {
+                        animal.increaseFriendShip((animal.getFriendShip() / 200) - 10);
+                    }
+                    if (!animal.isFedToday()) {
+                        animal.increaseFriendShip(-20);
+                    }
+//                    if (!animal.isInBarn()) {
+//                        animal.increaseFriendShip(-20);
+//                    }
+                }
+            }
+        }
+    }
+    public void resetAndCheck(){
+        reset();
+        check();
+    }
 
 }

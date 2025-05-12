@@ -13,15 +13,17 @@ public class Cottage implements Building {
     }
     private int x;
     private int y;
-
+    private Refrigerator refrigerator;
     @Override
     public String getName() {
         return "Cottage";
     }
 
     public Cottage(int x, int y, Farm farm) {
+        this.refrigerator = new Refrigerator();
         this.x = x;
         this.y = y;
+        System.out.println( "cottage in : "+x+" "+y);
         int xWall;
         int yWall;
         yWall = y;
@@ -30,6 +32,9 @@ public class Cottage implements Building {
                 Cell cell = Finder.findCellByCoordinates(i, yWall, farm);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
+                if(i == x + 2&&yWall==y+5){
+                    cell.setObjectMap(new Door());
+                }
             }
             yWall+=5;
         }
@@ -55,4 +60,27 @@ public class Cottage implements Building {
         }
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public Refrigerator getRefrigerator() {
+        return refrigerator;
+    }
+
+    public void setRefrigerator(Refrigerator refrigerator) {
+        this.refrigerator = refrigerator;
+    }
 }

@@ -60,10 +60,10 @@ public class Farm {
             bushes.add(new Bush(20 + rand.nextInt(10) + i * 20, 20 + rand.nextInt(10), this));
         }
 
-        int rockCount = (35 + rand.nextInt(10)) * farmType.rockCoefficient;
-        int treeCount = (40 + rand.nextInt(10)) * farmType.treeCoefficient;
-        int plantCount = (40 + rand.nextInt(10)) * farmType.treeCoefficient;
-        int foragingCropCount = (20 + rand.nextInt(5));
+        int rockCount = (15 + rand.nextInt(10)) * farmType.rockCoefficient;
+        int treeCount = (20 + rand.nextInt(10)) * farmType.treeCoefficient;
+        int plantCount = (20 + rand.nextInt(10)) * farmType.treeCoefficient;
+        int foragingCropCount = (0 + rand.nextInt(5));
         for(int i = 0; i < rockCount ;i++){
             int y = rand.nextInt(MaxLength - 4) + 2;
             int x = rand.nextInt(MaxHeight - 4) + 2;

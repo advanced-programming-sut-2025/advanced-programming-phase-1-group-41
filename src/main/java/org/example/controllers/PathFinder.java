@@ -2,6 +2,7 @@ package org.example.controllers;
 
 import org.example.models.*;
 import org.example.models.buildings.Building;
+import org.example.models.buildings.Cottage;
 
 import java.util.*;
 
@@ -34,10 +35,15 @@ public class PathFinder {
                 int newY = current.y + dir[1];
 
                 Cell nextCell = getCell(newX, newY);
-                // unavailable tiles
-                if (nextCell == null || nextCell.getObjectMap() instanceof Building ||
+                // unavailable
+                if (nextCell == null ||
                    nextCell.getObjectMap() instanceof Obstacle) continue;
 
+                if(nextCell.getObjectMap() instanceof Building){
+                    if(!(nextCell.getObjectMap() instanceof Cottage)){
+                        continue;
+                    }
+                }
                 int newTurns = (current.parent != null && directionChanged(current.parent.x, current.parent.y, current.x, current.y, newX, newY))
                         ? current.turns + 1 : current.turns;
                 double newEnergyCost = current.energyCost + 0.1;
