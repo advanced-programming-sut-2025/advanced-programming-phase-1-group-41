@@ -228,11 +228,6 @@ public class Farm {
         crops.add(crop);
     }
 
-    public void update(){
-        farmBuilder.updateForagings();
-        farmBuilder.growCrops();
-    }
-
     private boolean isAnimalHere(Cell cell){
 //        for()
         return true;
@@ -259,10 +254,6 @@ public class Farm {
         farmBuilder.updateForagings();
         farmBuilder.growCrops();
     }
-
-
-
-
 
     //    public void setCells(ArrayList<Cell> cells) {
 //        this.cells = cells;
