@@ -54,10 +54,10 @@ public class FarmBuilder {
     public void updateForagings(){
         setCounters();
         Random rand = new Random();
-        rockCount += -5 + rand.nextInt(11);
-        foragingTreeCount += -5 + rand.nextInt(11);
-        plantCount -= -5 + rand.nextInt(11);
-        foragingCropCount += -5 + rand.nextInt(11);
+        rockCount = farm.getRockCount() - rockCount - 5 + rand.nextInt(11);
+        foragingTreeCount = farm.getForagingTreeCount() - foragingTreeCount - 5 + rand.nextInt(11);
+        plantCount = farm.getPlantCount() - plantCount - 5 + rand.nextInt(11);
+        foragingCropCount = farm.getForagingCropCount() - foragingCropCount - 5 + rand.nextInt(11);
         for(int i = 0; i < rockCount ;i++){
             int y = rand.nextInt(MaxLength - 4) + 2;
             int x = rand.nextInt(MaxHeight - 4) + 2;
