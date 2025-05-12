@@ -17,6 +17,11 @@ public enum CraftableItem implements Item{
         return this.name();
     }
 
+    @Override
+    public double getPrice() {
+        return 0;
+    }
+
     private final CraftingRecipe recipe;
 
     CraftableItem(CraftingRecipe recipe) {
@@ -31,4 +36,6 @@ public enum CraftableItem implements Item{
     public static Item parseCraftable(String name) {
         return null;
     }
+
+
 }

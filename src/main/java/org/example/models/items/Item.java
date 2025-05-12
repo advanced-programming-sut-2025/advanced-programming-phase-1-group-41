@@ -4,7 +4,7 @@ import org.example.models.ObjectMap;
 
 public interface Item extends ObjectMap {
     String getName();
-
+    double getPrice();
 
 
 }

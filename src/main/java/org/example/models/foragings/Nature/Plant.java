@@ -29,4 +29,9 @@ public class Plant implements Nature {
     public PlantType getPlantType() {
         return plantType;
     }
+
+    @Override
+    public double getPrice() {
+        return plantType.getPrice();
+    }
 }

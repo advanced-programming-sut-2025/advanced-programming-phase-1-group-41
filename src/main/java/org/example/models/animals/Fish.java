@@ -32,4 +32,9 @@ public class Fish implements Item {
     public String getName() {
         return fishType.getName();
     }
+
+    @Override
+    public double getPrice() {
+        return fishType.getPrice();
+    }
 }

@@ -11,4 +11,9 @@ public class Scythe implements Tool{
     public String getChar() {
         return "Sy";
     }
+
+    @Override
+    public double getPrice() {
+        return 0;
+    }
 }

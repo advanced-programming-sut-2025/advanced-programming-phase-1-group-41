@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 
 public enum InventoryAndToolCommands implements Command {
     InventoryShow("\\s*inventory\\s+show\\s*"),
-    InventoryTrash("\\s*inventory\\s+trash\\s+-i\\s+(?<itemName>\\S+)(?:\\s+-n\\s+(?<number>-?\\d+))?\\s*"),
+    InventoryTrash("\\s*inventory\\s+trash\\s+-i\\s+([^\\n-]+)(?:\\s+-n\\s+(?<number>-?\\d+))?\\s*"),
     ToolsEquip("\\s*tools\\s+equip\\s+(?<toolName>.*)\\s*"),
     ShowCurrentTools("\\s*tools\\s+show\\s+current\\s*"),
     ShowAvailableTools("\\s*tools\\s+show\\s+available\\s*"),

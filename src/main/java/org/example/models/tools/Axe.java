@@ -26,4 +26,9 @@ public class Axe implements Tool{
     public String getChar() {
         return "Ax";
     }
+
+    @Override
+    public double getPrice() {
+        return 0;
+    }
 }

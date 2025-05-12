@@ -39,4 +39,9 @@ public class FishingRod implements Tool {
     public String getName() {
         return "Fishing Rod";
     }
+
+    @Override
+    public double getPrice() {
+        return 0;
+    }
 }

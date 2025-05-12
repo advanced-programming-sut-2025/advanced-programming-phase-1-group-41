@@ -30,4 +30,10 @@ public class Mineral implements Nature, Obstacle {
     public MineralType getMineralType() {
         return mineralType;
     }
+
+
+    @Override
+    public double getPrice() {
+        return mineralType.getPrice();
+    }
 }

@@ -85,6 +85,12 @@ public enum Food implements Item {
         return name;
     }
 
+    @Override
+    public double getPrice() {
+        return sellPrice;
+    }
+
+
     public CookingRecipe getRecipe() {
         return this.recipe;
     }

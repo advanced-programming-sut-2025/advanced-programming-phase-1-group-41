@@ -12,6 +12,8 @@ public class PlayerView {
         Matcher matcher;
         if((matcher = GameMainCommands.EnergyShow.getMatcher(input))!=null){
             System.out.println(controller.showEnergy(matcher));
+        }else if((matcher = GameMainCommands.MoneyShow.getMatcher(input))!=null){
+            System.out.println(controller.showMoney(matcher));
         }else if((matcher = GameMainCommands.EnergyUnlimited.getMatcher(input))!=null){
             System.out.println(controller.cheatEnergyUnlimited(matcher));
         }else if((matcher = GameMainCommands.EnergySet.getMatcher(input))!=null){

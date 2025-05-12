@@ -58,4 +58,9 @@ public class WateringCan implements Tool{
     public String getChar() {
         return "WC";
     }
+
+    @Override
+    public double getPrice() {
+        return 0;
+    }
 }
