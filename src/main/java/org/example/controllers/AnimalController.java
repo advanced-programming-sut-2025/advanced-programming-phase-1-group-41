@@ -8,6 +8,7 @@ import org.example.models.buildings.animalContainer.Barn;
 import org.example.models.buildings.animalContainer.BarnType;
 import org.example.models.buildings.animalContainer.Coop;
 import org.example.models.buildings.animalContainer.CoopType;
+import org.example.models.foragings.Nature.Grass;
 import org.example.models.foragings.Nature.Nature;
 import org.example.models.locations.Farm;
 
@@ -59,7 +60,7 @@ public class AnimalController {
                 Cell cell = App.getGame().getCurrentPlayerFarm().getCell(i, j);
                 if(cell == null) continue;
                 if (!(cell.getObjectMap() instanceof Nature) &&
-                        !(cell.getObjectMap() instanceof Grass  )) {
+                        !(cell.getObjectMap() instanceof Grass)) {
                     return new Result(false, "there is obstackle in the way");
                 }
             }

@@ -1,6 +1,9 @@
-package org.example.models;
+package org.example.models.foragings.Nature;
 
-import org.example.models.foragings.Nature.Mineral;
+import org.example.models.Cell;
+import org.example.models.Colors;
+import org.example.models.Finder;
+import org.example.models.ObjectMap;
 import org.example.models.locations.Farm;
 
 import java.util.Random;
@@ -23,7 +26,7 @@ public class Mine implements ObjectMap {
         int yLength = 7 + rand.nextInt(6);
         for(int i=x; i<xLength+x; i++) {
             for(int j=y; j<yLength+y; j++) {
-                Cell cell=Finder.findCellByCoordinates(i, j, farm);
+                Cell cell= Finder.findCellByCoordinates(i, j, farm);
                 if(rand.nextInt(4) != 0) {
                     assert cell != null;
                     cell.setObjectMap(this);

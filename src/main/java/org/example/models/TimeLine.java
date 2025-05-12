@@ -52,14 +52,14 @@ public class TimeLine {
         }
     }
     public void advanceOneDay(){
-        App.getGame().getCurrentPlayerFarm().update();
         (new AnimalController()).resetAndCheck();
 
         App.getGame().setWeatherType(App.getGame().getTmrwWeatherType());
         predictTmrwWeather();
+        App.getGame().getCurrentPlayerFarm().update();
 
         day++;
-        if(day >= 7){
+        if(day >= 28){
             day = 0;
             advanceOneSeason();
         }

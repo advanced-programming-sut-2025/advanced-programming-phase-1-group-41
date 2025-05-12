@@ -1,10 +1,7 @@
 package org.example.models;
 
 import org.bson.types.ObjectId;
-import org.example.models.foragings.Crop;
-import org.example.models.foragings.CropType;
-import org.example.models.foragings.Fruit;
-import org.example.models.foragings.FruitType;
+import org.example.models.foragings.*;
 import org.example.models.foragings.Nature.Wood;
 import org.example.models.items.Food;
 import org.example.models.items.Item;
@@ -12,6 +9,8 @@ import org.example.models.items.Slot;
 import org.example.models.locations.Farm;
 import org.example.models.tools.Tool;
 import org.example.models.tools.TrashCan;
+
+import java.util.Objects;
 
 import static org.example.models.animals.FishType.parseFish;
 import static org.example.models.items.CraftableItem.parseCraftable;
@@ -40,7 +39,10 @@ public class Finder {
             return Food.parseFood(itemName);
         }
         if(CropType.parseCropType(itemName)!=null){
-            return new Crop(CropType.parseCropType(itemName));
+            return new Crop(Objects.requireNonNull(CropType.parseCropType(itemName)));
+        }
+        if(SeedType.parseSeedType(itemName)!=null){
+            return new Seed(SeedType.parseSeedType(itemName));
         }
         if(FruitType.parseFruitType(itemName)!=null){
             return new Fruit(FruitType.parseFruitType(itemName));

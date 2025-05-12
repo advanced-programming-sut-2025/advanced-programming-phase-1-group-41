@@ -45,10 +45,15 @@ public class PlayerController {
                 System.out.printf(slot.getQuantity() + " " + slot.getItem().getName());
             }
             if(slot.getQuantity()>1){
-                System.out.printf("s\n");
+                char lastChar = slot.getItem().getName().charAt(slot.getItem().getName().length() - 1);
+                if(lastChar == 'e' || lastChar == 'a' || lastChar == 'i' || lastChar == 'o' || lastChar == 'u' || lastChar == 'd') {
+                    System.out.print("s\n");
+                } else {
+                    System.out.print("es\n");
+                }
             }
             else if(slot.getQuantity()==1){
-                System.out.printf("\n");
+                System.out.print("\n");
             }
         }
         return new Result(true,App.getGame().getCurrentPlayer().getInventory().getEmptySlots()+" empty slots in your "+App.getGame().getCurrentPlayer().getInventory().getBackpack().name()+" backPack");
@@ -78,7 +83,7 @@ public class PlayerController {
             return new Result(false, "Invalid item name");
         }
 
-        Item item= parseItem(itemName);
+        Item item = parseItem(itemName);
         int itemQuantity = 0;
         if(quantity != null){
             itemQuantity = Integer.parseInt(quantity);

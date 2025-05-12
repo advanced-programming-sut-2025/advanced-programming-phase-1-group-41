@@ -6,7 +6,7 @@ public class WateringCan implements Tool{
     int tiles;
     public WateringCan() {
         this.level = ToolLevel.Default;
-        this.tiles = 0;
+        this.tiles = 40;
     }
 
 
@@ -39,6 +39,14 @@ public class WateringCan implements Tool{
 
     public void setTiles(int tiles) {
         this.tiles = tiles;
+    }
+
+    public boolean decreaseTiles() {
+        if(tiles - 5 < 0){
+            return false;
+        }
+        tiles -= 5;
+        return true;
     }
 
     @Override

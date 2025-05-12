@@ -3,6 +3,7 @@ package org.example.controllers;
 import org.example.models.*;
 import org.example.models.foragings.Crop;
 import org.example.models.foragings.CropType;
+import org.example.models.foragings.Nature.Grass;
 import org.example.models.foragings.Nature.Tree;
 import org.example.models.foragings.Nature.TreeType;
 import org.example.models.foragings.Seed;
@@ -36,7 +37,7 @@ public class FarmingController {
         String seed = matcher.group("seed");
         SeedType seedType = null;
         for(SeedType type : SeedType.values()){
-            if(seed.equals(type.name())){
+            if(seed.equalsIgnoreCase(type.getName())){
                 seedType = type;
             }
         }

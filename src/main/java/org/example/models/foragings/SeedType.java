@@ -75,8 +75,8 @@ public enum SeedType implements Item {
 
     ;
 
-    private String name;
-    private Season season;
+    private final String name;
+    private final Season season;
 
     SeedType(String name, Season season) {
         this.name = name;
@@ -96,5 +96,13 @@ public enum SeedType implements Item {
         return season;
     }
 
+    public static SeedType parseSeedType(String seedType) {
+        for (SeedType value : SeedType.values()) {
+            if(value.getName().equalsIgnoreCase(seedType)) {
+                return value;
+            }
+        }
+        return null;
+    }
 
 }

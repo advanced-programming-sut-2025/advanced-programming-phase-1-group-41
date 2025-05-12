@@ -104,6 +104,10 @@ public class Crop implements Item {
     public void fertilize(){
         isFertilizedToday = true;
     }
+    public void nextDay(){
+        isWateredToday = false;
+        isFertilizedToday = false;
+    }
 
     @Override
     public String toString() {

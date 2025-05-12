@@ -1,11 +1,7 @@
 package org.example.models.foragings.Nature;
 
 import org.example.models.*;
-import org.example.models.foragings.CropType;
 import org.example.models.locations.Farm;
-
-import java.util.Arrays;
-import java.util.Random;
 
 public class Tree implements Nature, Obstacle {
     @Override
@@ -99,7 +95,10 @@ public class Tree implements Nature, Obstacle {
     public void fertilize(){
         isFertilizedToday = true;
     }
-
+    public void nextDay(){
+        isWateredToday = false;
+        isFertilizedToday = false;
+    }
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();

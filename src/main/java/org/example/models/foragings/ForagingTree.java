@@ -1,6 +1,7 @@
 package org.example.models.foragings;
 
 import org.example.models.*;
+import org.example.models.foragings.Nature.Obstacle;
 import org.example.models.locations.Farm;
 
 import java.util.Random;

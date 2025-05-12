@@ -1,8 +1,10 @@
 package org.example.models.locations;
 
 import org.example.models.App;
+import org.example.models.Cell;
 import org.example.models.Finder;
-import org.example.models.Grass;
+import org.example.models.foragings.Nature.Grass;
+import org.example.models.WeatherType;
 import org.example.models.foragings.*;
 import org.example.models.foragings.Nature.Plant;
 import org.example.models.foragings.Nature.Rock;
@@ -18,17 +20,44 @@ import static org.example.models.App.MaxLength;
 
 public class FarmBuilder {
     private final Farm farm;
+    int rockCount;
+    int foragingCropCount;
+    int foragingTreeCount;
+    int plantCount;
 
     public FarmBuilder(Farm farm) {
         this.farm = farm;
     }
 
+    public void setCounters(){
+        rockCount = 0;
+        foragingCropCount = 0;
+        foragingTreeCount = 0;
+        plantCount = 0;
+        for(Cell cell : farm.getCells()){
+            if(cell.getObjectMap() instanceof Rock){
+                rockCount++;
+            }
+            else if(cell.getObjectMap() instanceof ForagingCrop){
+                foragingCropCount++;
+            }
+            else if(cell.getObjectMap() instanceof ForagingTree){
+                foragingTreeCount++;
+            }
+            else if(cell.getObjectMap() instanceof Plant){
+                plantCount++;
+            }
+        }
+
+    }
+
     public void updateForagings(){
+        setCounters();
         Random rand = new Random();
-        int rockCount = (5 + rand.nextInt(10)) * farm.getFarmType().rockCoefficient;
-        int foragingTreeCount = (5 + rand.nextInt(10)) * farm.getFarmType().treeCoefficient;
-        int plantCount = (5 + rand.nextInt(10)) * farm.getFarmType().treeCoefficient;
-        int cropCount = (5 + rand.nextInt(5));
+        rockCount += -5 + rand.nextInt(11);
+        foragingTreeCount += -5 + rand.nextInt(11);
+        plantCount -= -5 + rand.nextInt(11);
+        foragingCropCount += -5 + rand.nextInt(11);
         for(int i = 0; i < rockCount ;i++){
             int y = rand.nextInt(MaxLength - 4) + 2;
             int x = rand.nextInt(MaxHeight - 4) + 2;
@@ -56,7 +85,7 @@ public class FarmBuilder {
                 i--;
             }
         }
-        for(int i = 0; i < cropCount ;i++){
+        for(int i = 0; i < foragingCropCount ;i++){
             int y = rand.nextInt(MaxLength - 4) + 4;
             int x = rand.nextInt(MaxHeight - 4) + 4;
             if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, farm)).getObjectMap().getChar(), new Grass().getChar())){
@@ -93,6 +122,22 @@ public class FarmBuilder {
         }
         for(Tree tree : toRemove){
             farm.removeTree(tree);
+        }
+    }
+    public void weatherUpdates(){
+        for(Crop crop : farm.getCrops()){
+            crop.nextDay();
+        }
+        for(Tree tree : farm.getTrees()){
+            tree.nextDay();
+        }
+        if(App.getGame().getWeatherType().equals(WeatherType.Rainy)){
+            for(Crop crop : farm.getCrops()){
+                crop.water();
+            }
+            for(Tree tree : farm.getTrees()) {
+                tree.water();
+            }
         }
     }
 }

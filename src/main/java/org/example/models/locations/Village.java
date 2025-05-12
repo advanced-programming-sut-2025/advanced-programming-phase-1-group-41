@@ -2,7 +2,7 @@ package org.example.models.locations;
 
 import org.example.models.*;
 import org.example.models.buildings.Building;
-import org.example.models.foragings.Nature.Bush;
+import org.example.models.foragings.Nature.Grass;
 
 import java.util.ArrayList;
 import java.util.Random;

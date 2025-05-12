@@ -2,10 +2,7 @@ package org.example.models.locations;
 
 import org.example.models.*;
 import org.example.models.animals.Animal;
-import org.example.models.foragings.Nature.Bush;
-import org.example.models.foragings.Nature.Plant;
-import org.example.models.foragings.Nature.Rock;
-import org.example.models.foragings.Nature.Tree;
+import org.example.models.foragings.Nature.*;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.Cottage;
 import org.example.models.buildings.GreenHouse.Greenhouse;
@@ -25,7 +22,7 @@ import static org.example.models.App.MaxLength;
 
 public class Farm {
     private FarmType farmType;
-    private FarmBuilder farmBuilder;
+    private final FarmBuilder farmBuilder;
     private ArrayList<Cell> cells = new ArrayList<>();
     private int id;
     private final ArrayList<Building> buildings = new ArrayList<>();
@@ -36,6 +33,10 @@ public class Farm {
     private final ArrayList<Coop> coops = new ArrayList<>();
     private final ArrayList<Crop> crops = new ArrayList<>();
     private final ArrayList<Tree> trees = new ArrayList<>();
+    private int rockCount;
+    private int foragingTreeCount;
+    private int plantCount;
+    private int foragingCropCount;
     private Mine mine;
 
     public Farm(int id) {
@@ -58,17 +59,21 @@ public class Farm {
         for(int i = 0; i < lakeCount; i++){
             lakes.add(new Lake(25 + 10 * i + rand.nextInt(5 + 5 * i), 25 + 10 * i + rand.nextInt(5 + 5 * i), this));
         }
+        lakes.add(new Lake(30 + rand.nextInt(10), 35 + rand.nextInt(10), this));
         for(int i = 0; i < bushCount; i++){
             bushes.add(new Bush(20 + rand.nextInt(10) + i * 20, 20 + rand.nextInt(10), this));
         }
-//        int rockCount = (35 + rand.nextInt(10)) * farmType.rockCoefficient;
-//        int foragingTreeCount = (35 + rand.nextInt(10)) * farmType.treeCoefficient;
-//        int plantCount = (40 + rand.nextInt(10)) * farmType.treeCoefficient;
-//        int foragingCropCount = (30 + rand.nextInt(5));
-        int rockCount = (5 + rand.nextInt(10)) * farmType.rockCoefficient;
-        int foragingTreeCount = (5 + rand.nextInt(10)) * farmType.treeCoefficient;
-        int plantCount = (4 + rand.nextInt(10)) * farmType.treeCoefficient;
-        int foragingCropCount = (3 + rand.nextInt(5));
+        bushes.add(new Bush(35 + rand.nextInt(10), 10, this));
+        bushes.add(new Bush(20 + rand.nextInt(10), 35 + rand.nextInt(10), this));
+        bushes.add(new Bush(25 + rand.nextInt(10), 40 + rand.nextInt(10), this));
+        int rockCount = (35 + rand.nextInt(10)) * farmType.rockCoefficient;
+        int foragingTreeCount = (35 + rand.nextInt(10)) * farmType.treeCoefficient;
+        int plantCount = (40 + rand.nextInt(10)) * farmType.treeCoefficient;
+        int foragingCropCount = (30 + rand.nextInt(5));
+//        rockCount = (5 + rand.nextInt(10)) * farmType.rockCoefficient;
+//        foragingTreeCount = (5 + rand.nextInt(10)) * farmType.treeCoefficient;
+//        plantCount = (4 + rand.nextInt(10)) * farmType.treeCoefficient;
+//        foragingCropCount = (3 + rand.nextInt(5));
         for(int i = 0; i < rockCount ;i++){
             int y = rand.nextInt(MaxLength - 4) + 2;
             int x = rand.nextInt(MaxHeight - 4) + 2;
@@ -178,6 +183,7 @@ public class Farm {
             }
         }
     }
+
     public void printMap(int x , int y ,int squareSize){
         int counter = 0;
         for(int i=x;i<x+squareSize;i++) {
@@ -290,6 +296,19 @@ public class Farm {
     public void update(){
         farmBuilder.updateForagings();
         farmBuilder.growCrops();
+        farmBuilder.growTrees();
+    }
+    public int getRockCount() {
+        return rockCount;
+    }
+    public int getForagingCropCount() {
+        return foragingCropCount;
+    }
+    public int getForagingTreeCount() {
+        return foragingTreeCount;
+    }
+    public int getPlantCount() {
+        return plantCount;
     }
 
     //    public void setCells(ArrayList<Cell> cells) {

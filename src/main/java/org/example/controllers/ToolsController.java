@@ -5,6 +5,11 @@ import org.example.models.buildings.Building;
 import org.example.models.buildings.GreenHouse.WaterTank;
 import org.example.models.foragings.ForagingTree;
 import org.example.models.foragings.Nature.*;
+import org.example.models.foragings.Crop;
+import org.example.models.foragings.Nature.Mineral;
+import org.example.models.foragings.Nature.Rock;
+import org.example.models.foragings.Nature.RockType;
+import org.example.models.foragings.Nature.Tree;
 import org.example.models.items.Item;
 import org.example.models.tools.*;
 
@@ -114,6 +119,28 @@ public class ToolsController {
             return new Result(true, "wc is filled now with " +
                     wc.getTiles() +
                     " tiles");
+        } else if(cell.getObjectMap() instanceof Crop || cell.getObjectMap() instanceof Tree){
+            if(cell.getObjectMap() instanceof Crop){
+                if(((Crop) cell.getObjectMap()).isWateredToday()){
+                    return new Result(true, cell.getObjectMap().getName() + " has been already watered today!");
+                }
+            }
+            if(cell.getObjectMap() instanceof Tree){
+                if(((Tree) cell.getObjectMap()).isWateredToday()){
+                    return new Result(true, cell.getObjectMap().getName() + " has been already watered today!");
+                }
+            }
+            if(wc.decreaseTiles()){
+                App.getGame().getCurrentPlayer().decEnergy(energy);
+                if(cell.getObjectMap() instanceof Crop){
+                    ((Crop) cell.getObjectMap()).water();
+                } else if(cell.getObjectMap() instanceof Tree){
+                    ((Tree) cell.getObjectMap()).water();
+                }
+                return new Result(true, cell.getObjectMap().getName() + " has been watered successfully.");
+            } else{
+                return new Result(false, "Not enough water: " + wc.getTiles());
+            }
         }
         return new Result(false, "unable to use this on "+cell.getObjectMap());
     }

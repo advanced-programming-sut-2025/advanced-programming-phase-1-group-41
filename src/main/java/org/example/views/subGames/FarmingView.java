@@ -1,6 +1,9 @@
 package org.example.views.subGames;
 
 import org.example.controllers.FarmingController;
+import org.example.models.App;
+import org.example.models.Finder;
+import org.example.models.tools.WateringCan;
 import org.example.views.commands.gameCommands.FarmingCommands;
 import org.example.views.commands.gameCommands.GameMainCommands;
 
@@ -16,7 +19,14 @@ public class FarmingView {
             System.out.println(controller.plant(matcher));
         } else if((matcher = FarmingCommands.ShowPlant.getMatcher(input)) != null){
             System.out.println(controller.showPlant(matcher));
-        } else{
+        } else if((matcher = FarmingCommands.HowMuchWater.getMatcher(input)) != null){
+            if(App.getGame().getCurrentPlayer().getInventory().getSlotByItem(Finder.getToolByName("WateringCan")).getItem() instanceof WateringCan){
+                System.out.println("Water left: " + ((WateringCan) App.getGame().getCurrentPlayer().getInventory().getSlotByItem(Finder.getToolByName("WateringCan")).getItem()).getTiles());
+            } else{
+                System.out.println("Kir");
+            }
+        }
+        else{
             return false;
         }
         return true;
