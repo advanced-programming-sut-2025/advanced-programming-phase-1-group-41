@@ -1,5 +1,6 @@
 package org.example.models.animals.animalKinds;
 
+import org.example.models.Colors;
 import org.example.models.Player;
 import org.example.models.animals.Animal;
 import org.example.models.animals.BarnOrCageSize;
@@ -16,6 +17,6 @@ public class Dino extends Animal {
 
     }
     public String getChar(){
-        return "🦕";
+        return Colors.colorize(1,0,"🦕");
     }
 }

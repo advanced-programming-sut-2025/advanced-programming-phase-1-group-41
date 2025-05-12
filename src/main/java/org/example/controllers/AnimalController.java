@@ -344,6 +344,8 @@ public class AnimalController {
         if((theBarn!=null&&(cell.getObjectMap() instanceof Barn  )||
                 theCoop!=null&&(cell.getObjectMap() instanceof Coop  ))){
             theAnimal.setHome(true);
+            theAnimal.setX(-10);
+            theAnimal.setY(-10);
             return new Result(true,name+" shepherd to its home");
         }
         switch (App.getGame().getWeatherType()){
@@ -354,6 +356,9 @@ public class AnimalController {
         }
         theAnimal.increaseFriendShip(8);//TODO -> place ship on ground
         theAnimal.setHome(false);
+        theAnimal.setX(x);
+        theAnimal.setY(y);
+        theAnimal.setFedToday(true);
         return new Result(true,name+" shepherd to grass");
 
     }

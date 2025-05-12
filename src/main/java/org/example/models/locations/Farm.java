@@ -1,6 +1,7 @@
 package org.example.models.locations;
 
 import org.example.models.*;
+import org.example.models.animals.Animal;
 import org.example.models.foragings.Nature.Bush;
 import org.example.models.foragings.Nature.Plant;
 import org.example.models.foragings.Nature.Rock;
@@ -52,7 +53,7 @@ public class Farm {
         mine = new Mine(3,3,this);
 
         int lakeCount = farmType.LakeCoefficient;
-        int bushCount = 2;
+        int bushCount = 1+rand.nextInt(farmType.treeCoefficient/2 + 1);
 
         for(int i = 0; i < lakeCount; i++){
             lakes.add(new Lake(25 + 10 * i + rand.nextInt(5 + 5 * i), 25 + 10 * i + rand.nextInt(5 + 5 * i), this));
@@ -60,11 +61,14 @@ public class Farm {
         for(int i = 0; i < bushCount; i++){
             bushes.add(new Bush(20 + rand.nextInt(10) + i * 20, 20 + rand.nextInt(10), this));
         }
-
-        int rockCount = (35 + rand.nextInt(10)) * farmType.rockCoefficient;
-        int foragingTreeCount = (35 + rand.nextInt(10)) * farmType.treeCoefficient;
-        int plantCount = (40 + rand.nextInt(10)) * farmType.treeCoefficient;
-        int foragingCropCount = (30 + rand.nextInt(5));
+//        int rockCount = (35 + rand.nextInt(10)) * farmType.rockCoefficient;
+//        int foragingTreeCount = (35 + rand.nextInt(10)) * farmType.treeCoefficient;
+//        int plantCount = (40 + rand.nextInt(10)) * farmType.treeCoefficient;
+//        int foragingCropCount = (30 + rand.nextInt(5));
+        int rockCount = (5 + rand.nextInt(10)) * farmType.rockCoefficient;
+        int foragingTreeCount = (5 + rand.nextInt(10)) * farmType.treeCoefficient;
+        int plantCount = (4 + rand.nextInt(10)) * farmType.treeCoefficient;
+        int foragingCropCount = (3 + rand.nextInt(5));
         for(int i = 0; i < rockCount ;i++){
             int y = rand.nextInt(MaxLength - 4) + 2;
             int x = rand.nextInt(MaxHeight - 4) + 2;
@@ -162,7 +166,7 @@ public class Farm {
         for(Cell cell:cells){
             if(isAnimalHere(cell)){
             }
-            if(cell.getX()==App.getGame().getCurrentPlayer().getX()&&cell.getY()==App.getGame().getCurrentPlayer().getY()){
+            else if(cell.getX()==App.getGame().getCurrentPlayer().getX()&&cell.getY()==App.getGame().getCurrentPlayer().getY()){
                 System.out.printf(App.getGame().getCurrentPlayer().getChar());
             }
             else {
@@ -229,8 +233,23 @@ public class Farm {
     }
 
     private boolean isAnimalHere(Cell cell){
-//        for()
-        return true;
+        for(Barn barn : barns){
+            for(Animal animal:barn.getAnimals()){
+                if(animal.getX()==cell.getX()&&animal.getY()==cell.getY()){
+                    System.out.printf(animal.getChar());
+                    return true;
+                }
+            }
+        }
+        for(Coop coop : coops){
+            for(Animal animal:coop.getAnimals()){
+                if(animal.getX()==cell.getX()&&animal.getY()==cell.getY()){
+                    System.out.printf(animal.getChar());
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void removeCrop(Crop crop) {
