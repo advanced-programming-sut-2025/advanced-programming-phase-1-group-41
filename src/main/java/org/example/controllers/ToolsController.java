@@ -2,12 +2,15 @@ package org.example.controllers;
 
 import org.example.models.*;
 import org.example.models.buildings.Building;
+import org.example.models.buildings.GreenHouse.WaterTank;
 import org.example.models.foragings.Nature.Mineral;
 import org.example.models.foragings.Nature.Rock;
 import org.example.models.foragings.Nature.RockType;
 import org.example.models.items.Item;
+import org.example.models.tools.Hoe;
 import org.example.models.tools.Pickaxe;
 import org.example.models.tools.Tool;
+import org.example.models.tools.WateringCan;
 
 import java.util.regex.Matcher;
 
@@ -78,66 +81,11 @@ public class ToolsController {
         }
 
         if(tool instanceof Pickaxe){
-            Pickaxe pickaxe = (Pickaxe) tool;
-            int energy = 0;
-            switch (pickaxe.getLevel()){
-                case Default -> energy = 5;
-                case Copper -> energy = 4;
-                case Iron -> energy = 3;
-                case Gold -> energy = 2;
-                case Iridium -> energy = 1;
-            }
-            // todo check the mining level
-
-            System.out.println(cell.getObjectMap().getClass());
-            if(cell.getObjectMap() instanceof Mineral){
-                App.getGame().getCurrentPlayer().getInventory().addToInventory(
-                        (Item) cell.getObjectMap(), 1
-                );
-                String name = ((Item)cell.getObjectMap()).getName();
-                App.getGame().getCurrentPlayer().decEnergy(energy);
-                cell.setObjectMap(new Mine(x,y,App.getGame().getCurrentPlayerFarm(),12121212));
-                return new Result(true, "got a "+name);
-            }else if(cell.getObjectMap() instanceof Rock){
-                ((Rock) cell.getObjectMap()).decreaseHitPoints();
-                if(((Rock) cell.getObjectMap()).getHitPoints() == 0){
-                    if(((Rock) cell.getObjectMap()).getRockType().equals(RockType.BigRock)){
-                        App.getGame().getCurrentPlayer().getInventory().addToInventory(
-                                (Item) cell.getObjectMap(), 4
-                        );
-                    }else{
-                        App.getGame().getCurrentPlayer().getInventory().addToInventory(
-                                (Item) cell.getObjectMap(), 1
-                        );
-                    }
-                    App.getGame().getCurrentPlayer().decEnergy(energy);
-                    String namemeeme = ((Item)cell.getObjectMap()).getName();
-                    if(((Rock) cell.getObjectMap()).getRockType().equals(RockType.BigRock)){
-                        Cell cell2 = Finder.findCellByCoordinates(x + 1, y,App.getGame().getCurrentPlayerFarm());
-                        assert cell2 != null;
-                        cell2.setObjectMap(new Grass());
-                        Cell cell3 = Finder.findCellByCoordinates(x + 1, y + 1,App.getGame().getCurrentPlayerFarm());
-                        assert cell3 != null;
-                        cell3.setObjectMap(new Grass());
-                        Cell cell4 = Finder.findCellByCoordinates(x, y + 1,App.getGame().getCurrentPlayerFarm());
-                        assert cell4 != null;
-                        cell4.setObjectMap(new Grass());
-                    }
-                    cell.setObjectMap(new Grass());
-                    return new Result(true, "got a "+namemeeme);
-                } else{
-                    if(cell.getObjectMap() instanceof Rock && !cell.getObjectMap().getName().equals(new Grass().getName())){
-                        return new Result(true, "Hits Left: "+((Rock) cell.getObjectMap()).getHitPoints());
-                    }
-                    return new Result(true,"broke");
-                }
-            }else{
-                App.getGame().getCurrentPlayer().decEnergy(Math.max(0,energy-1));
-                if(!(cell.getObjectMap() instanceof Building)){
-                    cell.setObjectMap(new Grass());
-                }
-                return new Result(false,"fck this sht");
-            }
+            return usePickaxe(cell, tool);
+        }else if(tool instanceof WateringCan){
+            return useWateringCan(cell, tool);
+        }else if(tool instanceof Hoe){
+            return useHoe(cell, tool);
         }
 
 
@@ -147,5 +95,110 @@ public class ToolsController {
 
     }
 
+
+    private Result useWateringCan(Cell cell, Tool tool){
+        WateringCan wc =  (WateringCan) tool;
+        int energy = 0;
+        switch (wc.getLevel()){
+            case Default -> energy = 5;
+            case Copper -> energy = 4;
+            case Iron -> energy = 3;
+            case Gold -> energy = 2;
+            case Iridium -> energy = 1;
+        }
+        if(cell.getObjectMap() instanceof Lake ||
+                cell.getObjectMap() instanceof WaterTank){
+            wc.setTiles(wc.getMaxTilesNumberByLevel());
+            // todo count the skill of energy decrease
+            App.getGame().getCurrentPlayer().decEnergy(energy);
+            return new Result(true, "wc is filled now with " +
+                    wc.getTiles() +
+                    " tiles");
+        }
+        return new Result(false, "unable to use this on "+cell.getObjectMap());
+    }
+
+    private Result usePickaxe(Cell cell, Tool tool){
+        Pickaxe pickaxe = (Pickaxe) tool;
+        int energy = 0;
+        switch (pickaxe.getLevel()){
+            case Default -> energy = 5;
+            case Copper -> energy = 4;
+            case Iron -> energy = 3;
+            case Gold -> energy = 2;
+            case Iridium -> energy = 1;
+        }
+        // todo check the mining level
+
+        System.out.println(cell.getObjectMap().getClass());
+        if(cell.getObjectMap() instanceof Mineral){
+            App.getGame().getCurrentPlayer().getInventory().addToInventory(
+                    (Item) cell.getObjectMap(), 1
+            );
+            String name = ((Item)cell.getObjectMap()).getName();
+            App.getGame().getCurrentPlayer().decEnergy(energy);
+            cell.setObjectMap(new Mine(x,y,App.getGame().getCurrentPlayerFarm(),12121212));
+            return new Result(true, "got a "+name);
+        }else if(cell.getObjectMap() instanceof Rock){
+            ((Rock) cell.getObjectMap()).decreaseHitPoints();
+            if(((Rock) cell.getObjectMap()).getHitPoints() == 0){
+                if(((Rock) cell.getObjectMap()).getRockType().equals(RockType.BigRock)){
+                    App.getGame().getCurrentPlayer().getInventory().addToInventory(
+                            (Item) cell.getObjectMap(), 4
+                    );
+                }else{
+                    App.getGame().getCurrentPlayer().getInventory().addToInventory(
+                            (Item) cell.getObjectMap(), 1
+                    );
+                }
+                App.getGame().getCurrentPlayer().decEnergy(energy);
+                String namemeeme = ((Item)cell.getObjectMap()).getName();
+                if(((Rock) cell.getObjectMap()).getRockType().equals(RockType.BigRock)){
+                    Cell cell2 = Finder.findCellByCoordinates(x + 1, y,App.getGame().getCurrentPlayerFarm());
+                    assert cell2 != null;
+                    cell2.setObjectMap(new Grass());
+                    Cell cell3 = Finder.findCellByCoordinates(x + 1, y + 1,App.getGame().getCurrentPlayerFarm());
+                    assert cell3 != null;
+                    cell3.setObjectMap(new Grass());
+                    Cell cell4 = Finder.findCellByCoordinates(x, y + 1,App.getGame().getCurrentPlayerFarm());
+                    assert cell4 != null;
+                    cell4.setObjectMap(new Grass());
+                }
+                cell.setObjectMap(new Grass());
+                return new Result(true, "got a "+namemeeme);
+            } else{
+                if(cell.getObjectMap() instanceof Rock && !cell.getObjectMap().getName().equals(new Grass().getName())){
+                    return new Result(true, "Hits Left: "+((Rock) cell.getObjectMap()).getHitPoints());
+                }
+                return new Result(true,"broke");
+            }
+        }else{
+            App.getGame().getCurrentPlayer().decEnergy(Math.max(0,energy-1));
+            if(!(cell.getObjectMap() instanceof Building)){
+                cell.setObjectMap(new Grass());
+            }
+            return new Result(false,"fck this sht");
+        }
+    }
+
+
+    private Result useHoe(Cell cell, Tool tool){
+        Hoe hoe = (Hoe) tool;
+        int energy = 0;
+        switch (hoe.getLevel()){
+            case Default -> energy = 5;
+            case Copper -> energy = 4;
+            case Iron -> energy = 3;
+            case Gold -> energy = 2;
+            case Iridium -> energy = 1;
+        }
+        if(cell.getObjectMap() instanceof Grass){
+            Grass grass = (Grass) cell.getObjectMap();
+            grass.setFarmland(true);
+            App.getGame().getCurrentPlayer().decEnergy(energy);
+            return new Result(true, "grass is ready for shokhm");
+        }
+        return new Result(false,"it's not a grass!");
+    }
 
 }
