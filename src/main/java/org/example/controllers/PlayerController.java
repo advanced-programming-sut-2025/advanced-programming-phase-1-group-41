@@ -9,6 +9,7 @@ import org.example.models.items.Food;
 import org.example.models.items.Inventory;
 import org.example.models.items.Item;
 import org.example.models.items.Slot;
+import org.example.models.skills.Skill;
 import org.example.models.tools.FishingRod;
 
 import java.util.ArrayList;
@@ -22,6 +23,27 @@ public class PlayerController {
 
     public Result showEnergy(Matcher matcher){
         return new Result(true, App.getGame().getCurrentPlayer().getEnergy()+"");
+    }
+    public Result showSkill(Matcher matcher){
+        StringBuilder message = new StringBuilder();
+        Player player = App.getGame().getCurrentPlayer();
+        Skill skill = player.getFarmingSkill();
+        message.append("farming:\n");
+        message.append("  level: ").append(skill.getLevel()).append("\n");
+        message.append("  xp: ").append(skill.getXp()).append("\n");
+        skill = player.getMiningSkill();
+        message.append("mining:\n");
+        message.append("  level: ").append(skill.getLevel()).append("\n");
+        message.append("  xp: ").append(skill.getXp()).append("\n");
+        skill = player.getForagingSkill();
+        message.append("foraging:\n");
+        message.append("  level: ").append(skill.getLevel()).append("\n");
+        message.append("  xp: ").append(skill.getXp()).append("\n");
+        skill = player.getFishingSkill();
+        message.append("fishing:\n");
+        message.append("  level: ").append(skill.getLevel()).append("\n");
+        message.append("  xp: ").append(skill.getXp());
+        return new Result(true, message.toString());
     }
 
     public Result cheatEnergySet(Matcher matcher) {

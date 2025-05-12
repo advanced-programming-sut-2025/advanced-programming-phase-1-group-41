@@ -26,6 +26,8 @@ public class PlayerView {
             System.out.println(controller.fishing(matcher));
         }else if((matcher = GameMainCommands.Eat.getMatcher(input))!=null){
             System.out.println(controller.eatFood(matcher));
+        }else if((matcher = GameMainCommands.SkillShow.getMatcher(input))!=null){
+            System.out.println(controller.showSkill(matcher));
         }
         else{
             return false;

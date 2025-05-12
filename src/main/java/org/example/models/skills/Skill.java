@@ -20,7 +20,7 @@ public class Skill {
     }
 
     public void increaseLevel() {
-        this.level = Math.max(this.level + 1, 4);
+        this.level = Math.min(this.level + 1, 4);
     }
 
     public int getXp() {
