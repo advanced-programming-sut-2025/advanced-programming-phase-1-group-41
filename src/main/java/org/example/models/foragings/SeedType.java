@@ -92,6 +92,11 @@ public enum SeedType implements Item {
         return name;
     }
 
+    @Override
+    public double getPrice() {
+        return 0;
+    }
+
     public Season getSeason() {
         return season;
     }
@@ -104,5 +109,9 @@ public enum SeedType implements Item {
         }
         return null;
     }
+
+
+
+
 
 }

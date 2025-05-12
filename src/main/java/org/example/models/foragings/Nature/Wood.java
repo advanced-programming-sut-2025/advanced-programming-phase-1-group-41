@@ -12,4 +12,9 @@ public class Wood implements Item {
     public String getChar() {
         return "wd";
     }
+
+    @Override
+    public double getPrice() {
+        return 0;
+    }
 }

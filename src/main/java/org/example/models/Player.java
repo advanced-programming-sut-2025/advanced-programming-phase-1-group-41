@@ -125,7 +125,7 @@ public class Player {
         this.money = money;
     }
     public void incMoney(double delta) {
-        this.money += money;
+        this.money += delta;
     }
     public void decMoney(double delta) {
         this.money -= delta;

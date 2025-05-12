@@ -8,7 +8,7 @@ public class TrashCan implements Tool {
     private ToolLevel level;
 
     public TrashCan() {
-        this.level = ToolLevel.Default;
+        this.level = ToolLevel.Iridium;
     }
 
     public ToolLevel getLevel() {
@@ -38,5 +38,10 @@ public class TrashCan implements Tool {
             }
         }
         return null;
+    }
+
+    @Override
+    public double getPrice() {
+        return 0;
     }
 }

@@ -22,4 +22,10 @@ public class Fruit implements Item {
     public FruitType getType() {
         return fruitType;
     }
+
+    @Override
+    public double getPrice() {
+        // maybe needs a change?
+        return fruitType.getBaseSellPrice();
+    }
 }

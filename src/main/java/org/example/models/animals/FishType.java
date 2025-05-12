@@ -36,7 +36,8 @@ public enum FishType implements Item {
         this.season = season;
     }
 
-    public int getPrice() {
+    @Override
+    public double getPrice() {
         return price;
     }
 

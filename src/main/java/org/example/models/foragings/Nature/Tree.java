@@ -115,4 +115,9 @@ public class Tree implements Nature, Obstacle {
         result.append("Fertilized Today: ").append(isFertilizedToday).append("\n");
         return result.toString();
     }
+
+    @Override
+    public double getPrice() {
+        return 0;
+    }
 }

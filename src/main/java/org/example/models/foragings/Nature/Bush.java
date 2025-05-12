@@ -75,4 +75,9 @@ public class Bush implements Nature {
         }
         return count;
     }
+
+    @Override
+    public double getPrice() {
+        return 0;
+    }
 }

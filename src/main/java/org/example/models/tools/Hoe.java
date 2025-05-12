@@ -26,4 +26,9 @@ public class Hoe implements Tool{
     public String getChar() {
         return "Ho";
     }
+
+    @Override
+    public double getPrice() {
+        return 0;
+    }
 }

@@ -56,4 +56,9 @@ public class Rock implements Nature, Obstacle {
     public void decreaseHitPoints() {
         hitPoints--;
     }
+
+    @Override
+    public double getPrice() {
+        return 0;
+    }
 }
