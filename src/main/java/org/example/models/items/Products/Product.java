@@ -18,4 +18,9 @@ public class Product implements Item {
     public String getName() {
         return productType.getName();
     }
+
+    @Override
+    public double getPrice() {
+        return productType.getPrice();
+    }
 }

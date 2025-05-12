@@ -568,13 +568,15 @@ public class AnimalController {
             for(Barn barn:farm.getBarns()){
                 for(Animal animal: barn.getAnimals()){
                     animal.setPetToday(false);
-                    animal.setFedToday(false);
+                    animal.setFedToday(true);
+//                    animal.setFedToday(false);
                 }
             }
             for(Coop coop:farm.getCoops()){
                 for(Animal animal: coop.getAnimals()){
                     animal.setPetToday(false);
-                    animal.setFedToday(false);
+                    animal.setFedToday(true);
+//                    animal.setFedToday(false);
                 }
             }
         }
@@ -616,6 +618,7 @@ public class AnimalController {
                             if(animal instanceof Chicken&&animal.canGiveProduct()){
                                 animal.setProduct(new Product(ProductType.BigChickenEgg));
                             } else if(animal instanceof Cow&&animal.canGiveProduct()){
+                                System.out.println("im a cow");
                                 animal.setProduct(new Product(ProductType.BigCowMilk));
                             } else if(animal instanceof Goat&&animal.canGiveProduct()){
                                 animal.setProduct(new Product(ProductType.BigGoatMilk));
@@ -631,9 +634,11 @@ public class AnimalController {
                                 animal.setProduct(new Product(ProductType.PigTruffle));
                             }
                         }else{
-                            if(animal instanceof Chicken){
+                            if(animal instanceof Chicken && animal.canGiveProduct()){
+                                System.out.println("i am a chicken");
                                 animal.setProduct(new Product(ProductType.ChickenEgg));
                             } else if(animal instanceof Cow&&animal.canGiveProduct()){
+                                System.out.println("i am a cow");
                                 animal.setProduct(new Product(ProductType.CowMilk));
                             } else if(animal instanceof Goat&&animal.canGiveProduct()){
                                 animal.setProduct(new Product(ProductType.GoatMilk));

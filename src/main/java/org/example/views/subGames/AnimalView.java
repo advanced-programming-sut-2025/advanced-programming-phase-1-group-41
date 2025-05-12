@@ -29,6 +29,8 @@ public class AnimalView {
             System.out.println(controller.feedHay(matcher));
         }else if((matcher = AnimalCommands.CollectProduce.getMatcher(input))!=null){
             System.out.println(controller.collectProduct(matcher));
+        }else if((matcher = AnimalCommands.Produces.getMatcher(input))!=null){
+            System.out.println(controller.producesList(matcher));
         }
         else{
             return false;
