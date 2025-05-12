@@ -27,7 +27,7 @@ public enum GameMainCommands implements Command {
     CookingRefrigerator("\\s*cooking\\s+refrigerator\\s+(?<which>put|pick)\\s+(?<item>.+)\\s*"),
     ShowRefrigerator("\\s*cooking\\s+refrigerator\\s*"),
     CookingShowRecipes("\\s*cooking\\s+show\\s+recipes\\s*"),
-    CookingPrepare("\\s*cooking\\s+prepare\\s+(?<recipeName>.*)\\s*"),
+    CookingPrepare("\\s*cooking\\s+prepare\\s+(?<recipeName>.+)\\s*"),
     Eat("\\s*eat\\s+(?<foodName>.*)\\s*"),
     Build("\\s*build -a\\s+(?<buildingName>.+)\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*"),
     Produces("\\s*produces\\s*"),

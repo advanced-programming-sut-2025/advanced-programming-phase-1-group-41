@@ -43,4 +43,13 @@ public enum FruitType {
     public int getBaseSellPrice() {
         return baseSellPrice;
     }
+
+    public static FruitType parseFruitType(String fruitType) {
+        for (FruitType value : FruitType.values()) {
+            if(value.name.equalsIgnoreCase(fruitType)){
+                return value;
+            }
+        }
+        return null;
+    }
 }

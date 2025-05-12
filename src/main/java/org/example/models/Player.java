@@ -65,7 +65,6 @@ public class Player {
         this.currentTool = null;
         this.recipes = new ArrayList<>();
         this.recipes.add(CookingRecipe.BakedFish);
-        this.recipes.add(CookingRecipe.Pizza);
         this.recipes.add(CookingRecipe.Spaghetti);
         this.recipes.add(CookingRecipe.Bread);
 //        animals = new ArrayList<>();
@@ -201,7 +200,16 @@ public class Player {
         this.recipes = recipes;
     }
 
-
+    public boolean hasRecipe(Food food){
+        System.out.println("food is: "+food+" "+food.getRecipe());
+        for (CookingRecipe recipe : recipes) {
+            System.out.println(recipe.toString()+" "+food.getRecipe());
+            if(recipe.equals(food.getRecipe())){
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     public String toString() {

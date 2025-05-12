@@ -7,9 +7,7 @@ import org.example.models.Result;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.Cottage;
 import org.example.models.buildings.Refrigerator;
-import org.example.models.items.CookingRecipe;
-import org.example.models.items.Item;
-import org.example.models.items.Slot;
+import org.example.models.items.*;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -24,7 +22,6 @@ public class CookingController {
                 refrigerator = (Refrigerator) ((Cottage) building).getRefrigerator();
             }
         }
-        System.out.println("ref is : " + refrigerator);
     }
 
 
@@ -101,13 +98,64 @@ public class CookingController {
             return new Result(false, "You're not in a home");
         }
         return null;
+        // TODO
     }
 
     public Result prepareFood(Matcher matcher) {
         if(!inHome()){
             return new Result(false, "You're not in a home");
         }
-        return null;
+        String foodName = matcher.group(1).trim();
+        Food food = Food.parseFood(foodName);
+        if(food == null){
+            return new Result(false,"Food not found");
+        }
+        if(!App.getGame().getCurrentPlayer().hasRecipe(food)){
+            return new Result(false,"Food not found, recipe");
+        }
+        if(food.getRecipe() == null){
+            return new Result(false,"Not implemented yet");
+        }
+        boolean checker = true;
+        Inventory inventory = App.getGame().getLoader().getInventory();
+        for (Item item : food.getRecipe().neededItems.keySet()) {
+            Slot invSlot = inventory.getSlotByItem(item);
+            Slot refSlot = refrigerator.getSlotByItem(item);
+            if(invSlot != null && invSlot.getQuantity()>=food.getRecipe().neededItems.get(item)){
+            }
+            else if(refSlot != null && refSlot.getQuantity()>=food.getRecipe().neededItems.get(item)){
+
+            }else{
+                checker = false;
+                System.out.println(item+" not found");
+                break;
+            }
+        }
+        if(!checker){
+            return new Result(false,"you don't have the needed items :(");
+        }
+
+        if(inventory.getEmptySlots() <= 0){
+            return new Result(false,"you don't have enough empty slots");
+        }
+
+        // remove items
+
+        for (Item item : food.getRecipe().neededItems.keySet()) {
+            Slot invSlot = inventory.getSlotByItem(item);
+            Slot refSlot = refrigerator.getSlotByItem(item);
+            if(invSlot != null && invSlot.getQuantity()>=food.getRecipe().neededItems.get(item)){
+                inventory.removeFromInventory(invSlot.getItem(),invSlot.getQuantity());
+            }
+            else if(refSlot != null && refSlot.getQuantity()>=food.getRecipe().neededItems.get(item)){
+                refrigerator.removeFromRef(refSlot.getItem(),refSlot.getQuantity());
+            }
+        }
+
+
+        inventory.addToInventory(food, 1);
+
+        return new Result(true,":))");
     }
 
     public Result showRecepies(Matcher matcher) {
