@@ -1,8 +1,9 @@
 package org.example.models.foragings;
 
 import org.example.models.Season;
+import org.example.models.items.Item;
 
-public enum SeedType {
+public enum SeedType implements Item {
 
     //Trees
     ApricotSapling("ApricotSapling", Season.Spring),
@@ -81,6 +82,11 @@ public enum SeedType {
         this.season = season;
     }
 
+    @Override
+    public String getChar() {
+        return "ST";
+    }
+
     public String getName() {
         return name;
     }
@@ -88,4 +94,6 @@ public enum SeedType {
     public Season getSeason() {
         return season;
     }
+
+
 }

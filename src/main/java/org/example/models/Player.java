@@ -7,6 +7,8 @@ import org.bson.types.ObjectId;
 import org.example.models.items.*;
 import org.example.models.tools.Tool;
 
+import java.util.ArrayList;
+
 @Entity("players")
 public class Player {
 
@@ -29,7 +31,7 @@ public class Player {
     private Inventory inventory;
     @Transient
     private Tool currentTool;
-
+    private ArrayList<CookingRecipe> recipes;
 //    private Farm farm;
 //    private ArrayList<Animal> animals;
 //    private ArrayList<Skill> skills;
@@ -61,6 +63,9 @@ public class Player {
         this.inventory = new Inventory();
         this.energyUnilimited = false;
         this.currentTool = null;
+        this.recipes = new ArrayList<>();
+        this.recipes.add(CookingRecipe.BakedFish);
+        this.recipes.add(CookingRecipe.Bread);
 //        animals = new ArrayList<>();
 //        skills = new ArrayList<>();
 //        skills = new ArrayList<>();
@@ -185,7 +190,9 @@ public class Player {
         this.currentTool = currentTool;
     }
 
-
+    public ArrayList<CookingRecipe> getRecipes() {
+        return recipes;
+    }
 
     @Override
     public String toString() {
