@@ -22,4 +22,9 @@ public class Fertilizer implements Item {
     public FertilizerType getFertilizerType() {
         return fertilizerType;
     }
+
+    @Override
+    public double getPrice() {
+        return fertilizerType.getPrice();
+    }
 }

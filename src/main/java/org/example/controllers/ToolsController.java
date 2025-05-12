@@ -305,7 +305,7 @@ public class ToolsController {
             return new Result(true, "caught the bush");
         }else if(cell.getObjectMap() instanceof Grass){
             ((Grass) cell.getObjectMap()).setGround(true);
-            return new Result(true, "its not a ground");
+            return new Result(true, "its now a ground");
         }
         return new Result(false, "it wasn't a bush!");
     }
