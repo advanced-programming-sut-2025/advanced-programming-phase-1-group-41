@@ -20,7 +20,11 @@ public enum CookingRecipe {
     }}),
     Bread(new HashMap<>(){{
         put(new Crop(CropType.Wheat),1);
+    }}),
+    Tortilla(new HashMap<>(){{
+        put(new Crop(CropType.Corn),1);
     }})
+
     ;
     public final HashMap<Item, Integer> neededItems;
 

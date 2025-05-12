@@ -10,10 +10,25 @@ public class Sheep extends Animal {
     public Sheep(Player owner, String name) {
         super(owner, name, 8000, BarnOrCageSize.Deluxe);
         super.breed = Breed.Barn;
+        daysUntilProduce=3;
     }
 
     @Override
     public void doTheFuckingJob() {
+
+    }
+    @Override
+    public boolean canGiveProduct(){
+        if(daysUntilProduce==0&&this.getFriendShip()>=70){
+            return true;
+        }
+        else if(this.getFriendShip()<70){
+            daysUntilProduce=3;
+            return false;
+        }
+        daysUntilProduce--;
+        return false;
+
 
     }
     public String getChar(){

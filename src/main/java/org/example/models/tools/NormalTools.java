@@ -25,4 +25,11 @@ public enum NormalTools implements Tool {
     public String getName() {
         return this.name();
     }
+
+    @Override
+    public double getPrice() {
+        return 0;
+    }
+
+
 }

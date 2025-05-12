@@ -93,9 +93,8 @@ public class Inventory {
     public boolean removeFromInventory(Item item, int quantity) {
         for(Slot slot : slots){
             if(slot.getItem() == null) continue;
-            if(slot.getItem().equals(item)){
+            if(slot.getItem().getName().equals(item.getName())){
                 if(slot.getQuantity() >= quantity){
-                    App.getGame().getCurrentPlayer().incMoney(quantity*getCofOfTrashCan());
                     slot.setQuantity(slot.getQuantity()-quantity);
                     return true;
                 }else{
@@ -108,8 +107,7 @@ public class Inventory {
     public boolean removeFromInventory(Item item) {
         for(Slot slot : slots){
             if (slot.getItem() == null) continue;
-            if(slot.getItem().equals(item)){
-                App.getGame().getCurrentPlayer().incMoney(slot.getQuantity()*getCofOfTrashCan());
+            if(slot.getItem().getName().equals(item.getName())){
                 slot.setQuantity(0);
                 return true;
             }

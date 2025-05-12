@@ -135,4 +135,10 @@ public class Crop implements Item {
         result.append("Fertilized Today: ").append(isFertilizedToday).append("\n");
         return result.toString();
     }
+
+    @Override
+    public double getPrice() {
+        // TODO needs to change ?
+        return this.cropType.getBaseSellPrice();
+    }
 }

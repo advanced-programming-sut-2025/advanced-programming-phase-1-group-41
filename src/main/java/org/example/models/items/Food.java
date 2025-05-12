@@ -8,7 +8,7 @@ public enum Food implements Item {
     PumpkinPie(225, 385, null, "PumpkinPie"),
     Spaghetti(75, 120, CookingRecipe.Spaghetti, "Spaghetti"),
     Pizza(150, 300, null, "Pizza"),
-    Tortilla(50, 50, null, "Tortilla"),
+    Tortilla(50, 50, CookingRecipe.Tortilla, "Tortilla"),
     MakiRoll(100, 220, null, "MakiRoll"),
     TripleShotEspresso(200, 450, null, "TripleShotEspresso"),
     Cookie(90, 140, null, "Cookie"),
@@ -84,6 +84,12 @@ public enum Food implements Item {
     public String getName() {
         return name;
     }
+
+    @Override
+    public double getPrice() {
+        return sellPrice;
+    }
+
 
     public CookingRecipe getRecipe() {
         return this.recipe;

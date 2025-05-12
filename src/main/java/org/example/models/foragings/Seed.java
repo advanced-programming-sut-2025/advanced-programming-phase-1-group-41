@@ -22,4 +22,9 @@ public class Seed implements Item {
     public SeedType getSeedType() {
         return seedType;
     }
+
+    @Override
+    public double getPrice() {
+        return seedType.getPrice();
+    }
 }

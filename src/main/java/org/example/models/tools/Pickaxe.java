@@ -38,4 +38,9 @@ public class Pickaxe implements Tool{
     public String getName() {
         return "Pickaxe";
     }
+
+    @Override
+    public double getPrice() {
+        return 0;
+    }
 }

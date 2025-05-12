@@ -10,10 +10,16 @@ public class Chicken extends Animal {
     public Chicken(Player owner, String name) {
         super(owner, name, 800, BarnOrCageSize.Normal);
         super.breed = Breed.Coop;
+        daysUntilProduce = 1;
     }
 
     @Override
     public void doTheFuckingJob() {
+
+    }
+    @Override
+    public boolean canGiveProduct(){
+        return true;
 
     }
     public String getChar(){

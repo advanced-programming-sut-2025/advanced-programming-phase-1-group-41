@@ -6,16 +6,11 @@ import org.example.models.items.Slot;
 import org.example.models.skills.Skill;
 
 public class FishingRod implements Tool {
-    private Skill usage;
     private FishingRodLevel level;
     public FishingRod() {
-        this.usage = Skill.Fishing;
         this.level = FishingRodLevel.Iridium;
     }
 
-    public Skill getUsage() {
-        return usage;
-    }
 
 
     public FishingRodLevel getLevel() {
@@ -43,5 +38,10 @@ public class FishingRod implements Tool {
     @Override
     public String getName() {
         return "Fishing Rod";
+    }
+
+    @Override
+    public double getPrice() {
+        return 0;
     }
 }
