@@ -237,7 +237,7 @@ public class PlayerController {
                     }
                     break;
                 case Winter:
-                    if(chance<20&&true){//TODO base on skill level , true must change , only the highest level is true;
+                    if(chance<20&&App.getGame().getCurrentPlayer().getFishingSkill().isMaxLevel()){//TODO base on skill level , true must change , only the highest level is true;
                         caughtFish=new Fish(FishType.Glacierfish);
                     }
                     else if(chance<30){
@@ -258,7 +258,9 @@ public class PlayerController {
         }
         fishQuality=(Math.random()*( 1 + 2)*fishingRod.getLevel().getPole())/(7-weatherEffect);
         caughtFish.setQuality(fishQuality);
-        game.getCurrentPlayer().decEnergy(fishingRod.getLevel().getEnergyUsage());//TODO skill has an effect on dec of energy
+        int value = App.getGame().getCurrentPlayer().getFishingSkill().isMaxLevel() ? -1 : 0;
+        App.getGame().getCurrentPlayer().getFishingSkill().increaseXp(quantityOfFish * 5);
+        game.getCurrentPlayer().decEnergy(fishingRod.getLevel().getEnergyUsage() + value);//TODO skill has an effect on dec of energy
         game.getCurrentPlayer().getInventory().addToInventory(caughtFish,quantityOfFish);
         return new Result(true,"You have "+quantityOfFish+" fresh fish of "+caughtFish.getFishType().getName());
 

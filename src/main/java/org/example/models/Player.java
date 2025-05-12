@@ -5,6 +5,7 @@ import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
 import org.example.models.items.*;
+import org.example.models.skills.Skill;
 import org.example.models.tools.Tool;
 
 import java.util.ArrayList;
@@ -32,6 +33,15 @@ public class Player {
     @Transient
     private Tool currentTool;
     private ArrayList<CookingRecipe> recipes;
+    @Transient
+    private Skill farmingSkill;
+    @Transient
+    private Skill miningSkill;
+    @Transient
+    private Skill foragingSkill;
+    @Transient
+    private Skill fishingSkill;
+
 //    private Farm farm;
 //    private ArrayList<Animal> animals;
 //    private ArrayList<Skill> skills;
@@ -67,6 +77,10 @@ public class Player {
         this.recipes.add(CookingRecipe.BakedFish);
         this.recipes.add(CookingRecipe.Spaghetti);
         this.recipes.add(CookingRecipe.Bread);
+        this.farmingSkill = new Skill();
+        this.miningSkill = new Skill();
+        this.foragingSkill = new Skill();
+        this.fishingSkill = new Skill();
 //        animals = new ArrayList<>();
 //        skills = new ArrayList<>();
 //        skills = new ArrayList<>();
@@ -198,6 +212,22 @@ public class Player {
 
     public void setRecipes(ArrayList<CookingRecipe> recipes) {
         this.recipes = recipes;
+    }
+
+    public Skill getFarmingSkill() {
+        return farmingSkill;
+    }
+
+    public Skill getMiningSkill() {
+        return miningSkill;
+    }
+
+    public Skill getForagingSkill() {
+        return foragingSkill;
+    }
+
+    public Skill getFishingSkill() {
+        return fishingSkill;
     }
 
     public boolean hasRecipe(Food food){

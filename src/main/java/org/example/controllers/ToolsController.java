@@ -111,6 +111,9 @@ public class ToolsController {
             case Gold -> energy = 2;
             case Iridium -> energy = 1;
         }
+        if(App.getGame().getCurrentPlayer().getFarmingSkill().isMaxLevel()){
+            energy--;
+        }
         if(cell.getObjectMap() instanceof Lake ||
                 cell.getObjectMap() instanceof WaterTank){
             wc.setTiles(wc.getMaxTilesNumberByLevel());
@@ -155,12 +158,16 @@ public class ToolsController {
             case Gold -> energy = 2;
             case Iridium -> energy = 1;
         }
-        // todo check the mining level
+        if(App.getGame().getCurrentPlayer().getMiningSkill().isMaxLevel()){
+            energy--;
+        }
 
         System.out.println(cell.getObjectMap().getClass());
         if(cell.getObjectMap() instanceof Mineral){
+            int value =  App.getGame().getCurrentPlayer().getMiningSkill().getLevel() >= 2 ? 1 : 0;
+            App.getGame().getCurrentPlayer().getMiningSkill().increaseXp(10);
             App.getGame().getCurrentPlayer().getInventory().addToInventory(
-                    (Item) cell.getObjectMap(), 1
+                    (Item) cell.getObjectMap(), 1 + value
             );
             String name = ((Item)cell.getObjectMap()).getName();
             App.getGame().getCurrentPlayer().decEnergy(energy);
@@ -169,14 +176,17 @@ public class ToolsController {
         }else if(cell.getObjectMap() instanceof Rock){
             ((Rock) cell.getObjectMap()).decreaseHitPoints();
             if(((Rock) cell.getObjectMap()).getHitPoints() == 0){
+                int value =  App.getGame().getCurrentPlayer().getMiningSkill().getLevel() >= 2 ? 1 : 0;
                 if(((Rock) cell.getObjectMap()).getRockType().equals(RockType.BigRock)){
                     App.getGame().getCurrentPlayer().getInventory().addToInventory(
-                            (Item) cell.getObjectMap(), 4
+                            (Item) cell.getObjectMap(), 4 + value
                     );
+                    App.getGame().getCurrentPlayer().getMiningSkill().increaseXp(40);
                 }else{
                     App.getGame().getCurrentPlayer().getInventory().addToInventory(
-                            (Item) cell.getObjectMap(), 1
+                            (Item) cell.getObjectMap(), 1 + value
                     );
+                    App.getGame().getCurrentPlayer().getMiningSkill().increaseXp(10);
                 }
                 App.getGame().getCurrentPlayer().decEnergy(energy);
                 String namemeeme = ((Item)cell.getObjectMap()).getName();
@@ -219,6 +229,9 @@ public class ToolsController {
             case Gold -> energy = 2;
             case Iridium -> energy = 1;
         }
+        if(App.getGame().getCurrentPlayer().getFarmingSkill().isMaxLevel()){
+            energy--;
+        }
         if(cell.getObjectMap() instanceof Grass){
             Grass grass = (Grass) cell.getObjectMap();
             grass.setFarmland(true);
@@ -238,6 +251,10 @@ public class ToolsController {
             case Gold -> energy = 2;
             case Iridium -> energy = 1;
         }
+        if(App.getGame().getCurrentPlayer().getForagingSkill().isMaxLevel()){
+            energy--;
+        }
+
         if(cell.getObjectMap() instanceof Tree){
             Tree tree = (Tree) cell.getObjectMap();
             tree.decreaseHitPoints();
