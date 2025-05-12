@@ -4,6 +4,7 @@ import org.example.models.App;
 import org.example.models.tools.FishingRod;
 import org.example.models.tools.Pickaxe;
 import org.example.models.tools.TrashCan;
+import org.example.models.tools.WateringCan;
 
 import java.util.ArrayList;
 
@@ -18,6 +19,7 @@ public class Inventory {
         addToInventory(new Pickaxe(), 1);
         // todo buy this
         addToInventory(new FishingRod(), 1);
+        addToInventory(new WateringCan(), 1);
     }
 
     public void setDefaultBag() {
