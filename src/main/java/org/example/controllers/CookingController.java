@@ -154,6 +154,7 @@ public class CookingController {
 
 
         inventory.addToInventory(food, 1);
+        App.getGame().getCurrentPlayer().decEnergy(3);
 
         return new Result(true,":))");
     }
