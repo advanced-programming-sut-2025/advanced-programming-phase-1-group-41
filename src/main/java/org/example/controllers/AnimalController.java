@@ -425,12 +425,15 @@ public class AnimalController {
                 for (Animal animal : barn.getAnimals()) {
                     if (!animal.isPetToday()) {
                         animal.increaseFriendShip((animal.getFriendShip() / 200) - 10);
+                        System.out.println("poor "+animal.getName()+(" did not get any pet from "+player+" last day"));
                     }
                     if (!animal.isFedToday()) {
                         animal.increaseFriendShip(-20);
+                        System.out.println("poor "+animal.getName()+(" slept with hunger in "+player+"`s farm last day"));
                     }
                     if (!animal.isHome()) {
                         animal.increaseFriendShip(-20);
+                        System.out.println("poor "+animal.getName()+(" slept in cold in "+player+"`s farm last day"));
                     }
                 }
             }
