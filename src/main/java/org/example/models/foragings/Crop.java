@@ -8,6 +8,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Crop implements Item {
+    @Override
+    public String getChar() {
+        return Colors.colorize(53,4 - currentStage,typeIndex/10 + "" + typeIndex%10);
+    }
+
+    @Override
+    public String getName() {
+        return cropType.getName();
+    }
+
     private final CropType cropType;
     private final ArrayList<Integer> stages;
     private int typeIndex = 0;
@@ -53,15 +63,6 @@ public class Crop implements Item {
         return currentStage;
     }
 
-    @Override
-    public String getChar() {
-        return Colors.colorize(53,4 - currentStage,typeIndex/10 + "" + typeIndex%10);
-    }
-
-    @Override
-    public String getName() {
-        return cropType.getName();
-    }
 
     public void increaseStage() {
         if(!isWateredToday){
@@ -75,7 +76,6 @@ public class Crop implements Item {
             if(currentStage >= stages.size()){
                 currentStage--;
             }
-        } else {
             currentStageLevel = 0;
         }
     }
@@ -97,6 +97,12 @@ public class Crop implements Item {
     }
     public Boolean isFertilizedToday() {
         return isFertilizedToday;
+    }
+    public void water(){
+        isWateredToday = true;
+    }
+    public void fertilize(){
+        isFertilizedToday = true;
     }
 
     @Override

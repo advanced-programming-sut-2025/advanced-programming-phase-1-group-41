@@ -42,6 +42,7 @@ public enum SeedType implements Item {
     Pumpkin("Pumpkin", Season.Autumn),
     FairyRose("FairyRose", Season.Autumn),
     Powdermelon("Powdermelon", Season.Winter),
+
     //Other Foraging Seeds
     Jazz("JazzSeed", Season.Spring),
     Carrot("CarrotSeed", Season.Spring),

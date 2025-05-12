@@ -3,11 +3,17 @@ package org.example.controllers;
 import org.example.models.*;
 import org.example.models.foragings.Crop;
 import org.example.models.foragings.CropType;
+import org.example.models.foragings.Nature.Tree;
+import org.example.models.foragings.Nature.TreeType;
+import org.example.models.foragings.Seed;
 import org.example.models.foragings.SeedType;
 import org.example.models.items.Inventory;
 import org.example.models.items.Slot;
 import org.example.models.locations.Farm;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 
 public class FarmingController {
@@ -16,6 +22,11 @@ public class FarmingController {
         for(CropType cropType : CropType.values()){
             if(craftName.equalsIgnoreCase(cropType.getName())){
                 return new Result(true, cropType.toString());
+            }
+        }
+        for(TreeType treeType : TreeType.values()){
+            if(craftName.equalsIgnoreCase(treeType.getName())){
+                return new Result(true, treeType.toString());
             }
         }
         return new Result(false, "Craft not found!");
@@ -54,16 +65,42 @@ public class FarmingController {
         if(cell.getObjectMap() instanceof Grass){
             if(((Grass) cell.getObjectMap()).isFarmland()){
                 for(Slot slot : inventory.getSlots()){
-                    if(slot.getItem() instanceof Crop){
-                        if(((Crop) slot.getItem()).getCropType().getSource().equals(seedType)
-                                || ((Crop) slot.getItem()).getCropType().getName().equalsIgnoreCase(seed)
-                                || slot.getItem().getName().equalsIgnoreCase(seed)){
-                            farm.addCrop(new Crop(x, y, farm, ((Crop) slot.getItem()).getCropType()));
-                            inventory.removeFromInventory(slot.getItem(), 1);
+                    if(slot.getItem() instanceof Seed){
+                        if(slot.getItem().getName().equals(seed)
+                            || ((Seed) slot.getItem()).getSeedType().equals(seedType)){
+                            List<String> mixedCropNames = Arrays.asList(
+                                    "Cauliflower", "Parsnip", "Potato", "BlueJazz", "Tulip",
+                                    "Corn", "HotPepper", "Radish", "Wheat", "Poppy", "Sunflower", "SummerSpangle",
+                                    "Artichoke", "Eggplant", "Pumpkin", "FairyRose", "Powdermelon"
+                            );
+                            if(seedType.equals(SeedType.Mixed)){
+                                Random rand = new Random();
+                                String randomType = mixedCropNames.get(rand.nextInt(mixedCropNames.size()));
+                                for(CropType cropType : CropType.values()){
+                                    if(cropType.getSource().getName().equalsIgnoreCase(randomType)){
+                                        farm.addCrop(new Crop(x, y, farm, cropType));
+                                        inventory.removeFromInventory(slot.getItem(), 1);
+                                        return new Result(true, "A " + cropType.getName() + " planted at " + x + "," + y);
+                                    }
+                                }
+                            }
+                            for(CropType cropType : CropType.values()){
+                                if(cropType.getSource().equals(seedType)){
+                                    farm.addCrop(new Crop(x, y, farm, cropType));
+                                    inventory.removeFromInventory(slot.getItem(), 1);
+                                    return new Result(true, "A " + cropType.getName() + " planted at " + x + "," + y);
+                                }
+                            }
+                            for(TreeType treeType : TreeType.values()){
+                                if(treeType.getSource().equals(seedType)){
+                                    farm.addTree(new Tree(x, y, farm, treeType));
+                                    inventory.removeFromInventory(slot.getItem(), 1);
+                                    return new Result(true, "A " + treeType.getName() + " planted at " + x + "," + y);
+                                }
+                            }
                         }
                     }
                 }
-                return new Result(true, "farming planted at " + x + "," + y);
             }
         }
         return new Result(false, "Cell x: " + x + " y: " + y + " is not farmland!");
@@ -77,6 +114,11 @@ public class FarmingController {
                 return new Result(true, crop.toString());
             }
         }
-        return new Result(false, "No Crop found");
+        for(Tree tree : farm.getTrees()){
+            if(tree.getX() == x && tree.getY() == y){
+                return new Result(true, tree.toString());
+            }
+        }
+        return new Result(false, "No Plant found");
     }
 }

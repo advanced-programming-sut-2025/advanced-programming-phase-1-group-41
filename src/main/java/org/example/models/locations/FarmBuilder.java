@@ -3,9 +3,7 @@ package org.example.models.locations;
 import org.example.models.App;
 import org.example.models.Finder;
 import org.example.models.Grass;
-import org.example.models.foragings.Crop;
-import org.example.models.foragings.CropType;
-import org.example.models.foragings.ForagingCrop;
+import org.example.models.foragings.*;
 import org.example.models.foragings.Nature.Plant;
 import org.example.models.foragings.Nature.Rock;
 import org.example.models.foragings.Nature.Tree;
@@ -28,7 +26,7 @@ public class FarmBuilder {
     public void updateForagings(){
         Random rand = new Random();
         int rockCount = (5 + rand.nextInt(10)) * farm.getFarmType().rockCoefficient;
-        int treeCount = (5 + rand.nextInt(10)) * farm.getFarmType().treeCoefficient;
+        int foragingTreeCount = (5 + rand.nextInt(10)) * farm.getFarmType().treeCoefficient;
         int plantCount = (5 + rand.nextInt(10)) * farm.getFarmType().treeCoefficient;
         int cropCount = (5 + rand.nextInt(5));
         for(int i = 0; i < rockCount ;i++){
@@ -40,11 +38,11 @@ public class FarmBuilder {
                 i--;
             }
         }
-        for(int i = 0; i < treeCount ;i++){
+        for(int i = 0; i < foragingTreeCount ;i++){
             int y = rand.nextInt(MaxLength - 4) + 4;
             int x = rand.nextInt(MaxHeight - 4) + 4;
             if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, farm)).getObjectMap().getChar(), new Grass().getChar())){
-                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, farm)).setObjectMap(new Tree(x, y, farm));
+                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, farm)).setObjectMap(new ForagingTree(x, y, farm));
             } else{
                 i--;
             }
@@ -81,8 +79,20 @@ public class FarmBuilder {
         }
 
         Random rand = new Random();
-        App.getCurrentUser().getCurrentGame().getCurrentPlayer().getInventory().addToInventory(new Crop(CropType.values()[rand.nextInt(CropType.values().length)]), 2);
-        App.getCurrentUser().getCurrentGame().getCurrentPlayer().getInventory().addToInventory(new Crop(CropType.values()[rand.nextInt(CropType.values().length)]), 2);
-        App.getCurrentUser().getCurrentGame().getCurrentPlayer().getInventory().addToInventory(new Crop(CropType.values()[rand.nextInt(CropType.values().length)]), 2);
+        App.getCurrentUser().getCurrentGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.values()[rand.nextInt(SeedType.values().length)]), 2);
+        App.getCurrentUser().getCurrentGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.values()[rand.nextInt(SeedType.values().length)]), 2);
+        App.getCurrentUser().getCurrentGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.values()[rand.nextInt(SeedType.values().length)]), 2);
+    }
+    public void growTrees(){
+        List<Tree> toRemove = new ArrayList<>();
+        for (Tree tree : farm.getTrees()) {
+            tree.increaseStage();
+            if (tree.shouldBeRemoved()) {
+                toRemove.add(tree);
+            }
+        }
+        for(Tree tree : toRemove){
+            farm.removeTree(tree);
+        }
     }
 }

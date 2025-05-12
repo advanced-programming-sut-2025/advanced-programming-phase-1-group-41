@@ -34,6 +34,7 @@ public class Farm {
     private final ArrayList<Barn> barns = new ArrayList<>();
     private final ArrayList<Coop> coops = new ArrayList<>();
     private final ArrayList<Crop> crops = new ArrayList<>();
+    private final ArrayList<Tree> trees = new ArrayList<>();
     private Mine mine;
 
     public Farm(int id) {
@@ -60,10 +61,10 @@ public class Farm {
             bushes.add(new Bush(20 + rand.nextInt(10) + i * 20, 20 + rand.nextInt(10), this));
         }
 
-        int rockCount = (15 + rand.nextInt(10)) * farmType.rockCoefficient;
-        int treeCount = (20 + rand.nextInt(10)) * farmType.treeCoefficient;
-        int plantCount = (20 + rand.nextInt(10)) * farmType.treeCoefficient;
-        int foragingCropCount = (0 + rand.nextInt(5));
+        int rockCount = (35 + rand.nextInt(10)) * farmType.rockCoefficient;
+        int foragingTreeCount = (35 + rand.nextInt(10)) * farmType.treeCoefficient;
+        int plantCount = (40 + rand.nextInt(10)) * farmType.treeCoefficient;
+        int foragingCropCount = (30 + rand.nextInt(5));
         for(int i = 0; i < rockCount ;i++){
             int y = rand.nextInt(MaxLength - 4) + 2;
             int x = rand.nextInt(MaxHeight - 4) + 2;
@@ -73,11 +74,11 @@ public class Farm {
                 i--;
             }
         }
-        for(int i = 0; i < treeCount ;i++){
+        for(int i = 0; i < foragingTreeCount ;i++){
             int y = rand.nextInt(MaxLength - 4) + 4;
             int x = rand.nextInt(MaxHeight - 4) + 4;
             if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap().getChar(), new Grass().getChar())){
-                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(new Tree(x, y, this));
+                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(new ForagingTree(x, y, this));
             } else{
                 i--;
             }
@@ -234,13 +235,32 @@ public class Farm {
 
     private boolean isAnimalHere(Cell cell){
 //        for()
-return true;
+        return true;
     }
 
-    public void removeCrop(Crop crop){
+    public void removeCrop(Crop crop) {
         Objects.requireNonNull(Finder.findCellByCoordinates(crop.getX(), crop.getY(), this)).setObjectMap(new Grass());
         crops.remove(crop);
     }
+
+    public ArrayList<Tree> getTrees() {
+        return trees;
+    }
+
+    public void addTree(Tree tree){
+        trees.add(tree);
+    }
+
+    public void removeTree(Tree tree){
+        Objects.requireNonNull(Finder.findCellByCoordinates(tree.getX(), tree.getY(), this)).setObjectMap(new Grass());
+        trees.remove(tree);
+    }
+    public void update(){
+        farmBuilder.updateForagings();
+        farmBuilder.growCrops();
+    }
+
+
 
 
 

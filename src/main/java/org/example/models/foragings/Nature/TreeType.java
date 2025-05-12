@@ -61,4 +61,30 @@ public enum TreeType {
     public SeedType getSource() {
         return source;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        String res;
+        result.append("Name: ").append(getName()).append("\n");
+        result.append("Source: ").append(getSource().getName()).append("\n");
+        result.append("Stages: ").append("7-7-7-7").append("\n");
+        result.append("Total Harvest Time: 28").append("\n");
+        result.append("Harvest Cycle: ").append(fruitHarvestCycle).append("\n");
+        result.append("Fruit: ").append(getFruitType().getName()).append("\n");
+        result.append("Fruit Base Sell Price: ").append(fruitType.getBaseSellPrice()).append("\n");
+        result.append("Is Fruit Edible: ").append(fruitType.isEatable()).append("\n");
+        res = String.valueOf(fruitType.getEnergy());
+        if(fruitType.getEnergy() == -1){
+            res = "-";
+        }
+        result.append("Fruit Energy: ").append(res).append("\n");
+        res = String.valueOf(fruitType.getEnergy() / 2);
+        if(fruitType.getEnergy() == -1){
+            res = "-";
+        }
+        result.append("Fruit Health: ").append(res).append("\n");
+        result.append("Season: ").append(getSource().getSeason()).append("\n");
+        return result.toString();
+    }
 }

@@ -3,19 +3,23 @@ package org.example.models.foragings;
 import org.example.models.items.Item;
 
 public class Fruit implements Item {
-    private FruitType type;
+    private final FruitType fruitType;
 
-    public Fruit(FruitType type) {
-        this.type = type;
-    }
-
-    @Override
-    public String getName() {
-        return "Fruit";
+    public Fruit(FruitType fruitType) {
+        this.fruitType = fruitType;
     }
 
     @Override
     public String getChar() {
-        return "Fr";
+        return "FF";
+    }
+
+    @Override
+    public String getName() {
+        return fruitType.getName();
+    }
+
+    public FruitType getType() {
+        return fruitType;
     }
 }

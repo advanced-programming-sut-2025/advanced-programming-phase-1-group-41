@@ -1,14 +1,16 @@
 package org.example.models.foragings.Nature;
 
 import org.example.models.*;
+import org.example.models.foragings.CropType;
 import org.example.models.locations.Farm;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class Tree implements Nature, Obstacle {
     @Override
     public String getChar() {
-        return Colors.colorize(3,0,(typeIndex/10) + "" + typeIndex % 10);
+        return Colors.colorize(3,15 - currentStage,(typeIndex/10) + "" + typeIndex % 10);
     }
 
     @Override
@@ -18,14 +20,26 @@ public class Tree implements Nature, Obstacle {
 
     private int hitPoints;
     private final TreeType treeType;
-    private final int typeIndex;
+    private int typeIndex = 0;
+    private int currentStage = 0;
+    private int currentStageLevel = 0;
+    private Boolean isWateredToday = false;
+    private int waterStreak = 0;
+    private Boolean isFertilizedToday = false;
+    private int x;
+    private int y;
 
-    public Tree(int x, int y, Farm farm) {
-        Random rand = new Random();
-        int type = rand.nextInt(TreeType.values().length);
+    public Tree(int x, int y, Farm farm, TreeType treeType) {
+        this.x = x;
+        this.y = y;
+        this.treeType = treeType;
+        for(TreeType type : TreeType.values()){
+            if(type.equals(treeType)){
+                break;
+            }
+            typeIndex++;
+        }
         hitPoints = 4;
-        typeIndex = type;
-        treeType = TreeType.values()[type];
         Cell cell= Finder.findCellByCoordinates(x, y, farm);
         assert cell != null;
         cell.setObjectMap(this);
@@ -41,5 +55,65 @@ public class Tree implements Nature, Obstacle {
     }
     public void decreaseHitPoints() {
         hitPoints--;
+    }
+    public int getCurrentStage() {
+        return currentStage;
+    }
+
+
+    public void increaseStage() {
+        if(!isWateredToday){
+            waterStreak++;
+        } else {
+            waterStreak = 0;
+        }
+        currentStageLevel++;
+        if(currentStageLevel >= 7){
+            currentStage++;
+            if(currentStage >= 4){
+                currentStage--;
+            }
+            currentStageLevel = 0;
+        }
+    }
+
+    public Boolean shouldBeRemoved() {
+        return (waterStreak >= 5 && !isWateredToday) || waterStreak >= 6;
+    }
+
+    public int getX(){
+        return x;
+    }
+    public int getY(){
+        return y;
+    }
+    public Boolean isWateredToday() {
+        return isWateredToday;
+    }
+    public Boolean isFertilizedToday() {
+        return isFertilizedToday;
+    }
+    public void water(){
+        isWateredToday = true;
+    }
+    public void fertilize(){
+        isFertilizedToday = true;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        int dayLeft = -currentStageLevel;
+        for(int i = currentStage; i < 4; i++){
+            dayLeft += 7;
+        }
+        result.append("Name: ").append(getName()).append("\n");
+        result.append("Day Left: ").append(dayLeft).append("\n");
+        result.append("Current Stage: ").append(currentStage).append("\n");
+        result.append("Watered Today: ").append(isWateredToday).append("\n");
+        //TODO Add Quality
+        result.append("Quality: ").append("\n");
+        result.append("Fertilized Today: ").append(isFertilizedToday).append("\n");
+        return result.toString();
     }
 }
