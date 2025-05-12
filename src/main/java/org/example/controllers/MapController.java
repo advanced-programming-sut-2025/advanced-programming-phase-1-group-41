@@ -53,6 +53,20 @@ public class MapController {
         return new Result(true, "");
     }
 
+    public Result printMapReal(Matcher matcher){
+        int x = Integer.parseInt(matcher.group(1));
+        int y = Integer.parseInt(matcher.group(2));
+        int size = Integer.parseInt(matcher.group(3));
+        Farm farm = App.getGame().getCurrentPlayerFarm();
+        if(farm==null){
+            System.out.println("Farm is null");
+        }
+        else{
+            farm.printMap(x,y,size);
+        }
+        return new Result(true, "");
+    }
+
     public List<Node> SSSP(int x , int y){
         return (new PathFinder(App.getGame().getCurrentPlayerFarm().getCells()))
                 .findPath(App.getGame().getCurrentPlayer(), x , y);

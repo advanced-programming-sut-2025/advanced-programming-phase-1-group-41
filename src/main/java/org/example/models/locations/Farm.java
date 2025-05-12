@@ -178,6 +178,24 @@ public class Farm {
             }
         }
     }
+    public void printMap(int x , int y ,int squareSize){
+        int counter = 0;
+        for(int i=x;i<x+squareSize;i++) {
+            for (int j = y; j < y + squareSize; j++) {
+                Cell cell = getCell(i, j);
+                if (isAnimalHere(cell)) {
+                } else if (cell.getX() == App.getGame().getCurrentPlayer().getX() && cell.getY() == App.getGame().getCurrentPlayer().getY()) {
+                    System.out.printf(App.getGame().getCurrentPlayer().getChar());
+                } else {
+                    System.out.printf(cell.getObjectMap().getChar());
+                }
+                counter++;
+                if (counter % squareSize == 0) {
+                    System.out.println();
+                }
+            }
+        }
+    }
 
 
     public ArrayList<Foraging> getForagings() {
