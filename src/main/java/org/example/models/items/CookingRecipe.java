@@ -1,27 +1,25 @@
 package org.example.models.items;
 
+import org.example.models.animals.Fish;
 import org.example.models.animals.FishType;
+import org.example.models.foragings.Crop;
+import org.example.models.foragings.CropType;
 import org.example.models.foragings.SeedType;
 
 import java.util.HashMap;
 
 public enum CookingRecipe {
     BakedFish(new HashMap<>(){{
-        put(FishType.Salmon,1);
-        put(FishType.Sardine,1);
-        put(SeedType.Wheat,1);
-    }}),
-    Pizza(new HashMap<>(){{
-        put(SeedType.Wheat,1);
-        put(SeedType.Tomato, 1);
-        put(Food.Cheese, 1);
+        put(new Fish(FishType.Salmon),1);
+        put(new Fish(FishType.Sardine),1);
+        put(new Crop(CropType.Wheat),1);
     }}),
     Spaghetti(new HashMap<>(){{
-        put(SeedType.Wheat,1);
-        put(SeedType.Tomato, 1);
+        put(new Crop(CropType.Wheat),1);
+        put(new Crop(CropType.Tomato), 1);
     }}),
     Bread(new HashMap<>(){{
-        put(SeedType.Wheat,1);
+        put(new Crop(CropType.Wheat),1);
     }})
     ;
     public final HashMap<Item, Integer> neededItems;

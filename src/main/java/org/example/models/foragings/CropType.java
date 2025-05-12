@@ -125,4 +125,13 @@ public enum CropType {
         result.append("Can Become Giant: ").append(canBecomeGiant()).append("\n");
         return result.toString();
     }
+
+    public static CropType parseCropType(String cropType) {
+        for (CropType value : CropType.values()) {
+            if(value.getName().equalsIgnoreCase(cropType)) {
+                return value;
+            }
+        }
+        return null;
+    }
 }

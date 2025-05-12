@@ -16,6 +16,8 @@ public class CookingView {
             System.out.println(controller.cookingRef(matcher));;
         }else if((matcher = GameMainCommands.ShowRefrigerator.getMatcher(input))!=null){
             System.out.println(controller.showRef(matcher));;
+        }else if((matcher = GameMainCommands.CookingPrepare.getMatcher(input))!=null){
+            System.out.println(controller.prepareFood(matcher));;
         }
         else{
             return false;
