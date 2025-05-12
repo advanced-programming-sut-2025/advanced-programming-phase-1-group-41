@@ -11,6 +11,7 @@ public abstract class Animal {
     protected int buyPrice;
     protected boolean isPetToday;
     protected boolean isFedToday;
+    protected boolean isHome;
 
     public BarnOrCageSize getSizeNeeded() {
         return sizeNeeded;
@@ -87,6 +88,12 @@ public abstract class Animal {
 
     public void setFriendShip(int friendShip) {
         this.friendShip = friendShip;
+    }
+    public boolean isHome(){
+        return isHome;
+    }
+    public void setHome(boolean home){
+        isHome = home;
     }
 
 

@@ -203,12 +203,14 @@ public class AnimalController {
                 ObjectMap objectMap=cell.getObjectMap();
                 if(objectMap instanceof Animal&&objectMap.getName().equals(name)){
                     ((Animal) objectMap).increaseFriendShip(15);
+                    ((Animal) objectMap).setPetToday(true);
                     return new Result(true,"you pet "+name+", now it loves you more");
                 }
                 else if(objectMap instanceof Barn){
                     for(Animal animal:((Barn) objectMap).getAnimals()){
                         if(animal.getName().equals(name)){
                             animal.increaseFriendShip(15);
+                            animal.setPetToday(true);
                             return new Result(true,"you pet "+name+" in its barn, now it loves you more");
                         }
                     }
@@ -217,6 +219,7 @@ public class AnimalController {
                     for(Animal animal:((Coop) objectMap).getAnimals()){
                         if(animal.getName().equals(name)){
                             animal.increaseFriendShip(15);
+                            animal.setPetToday(true);
                             return new Result(true,"you pet "+name+" in its coop, now it loves you more");
                         }
                     }
@@ -270,7 +273,7 @@ public class AnimalController {
                 } else if(animal instanceof Duck){
                     name="Duck";
                 }
-                System.out.println(animal.getName()+" the "+name+" -> friendShip : "+animal.getFriendShip()+", is pet today : "+"todo"+", if fed today :"+"todo");
+                System.out.println(animal.getName()+" the "+name+" -> friendShip : "+animal.getFriendShip()+", is pet today : "+animal.isPetToday()+", is fed today :"+animal.isFedToday());
             }
         }
         return new Result(true,"");
@@ -315,6 +318,7 @@ public class AnimalController {
         }
         if((theBarn!=null&&(cell.getObjectMap() instanceof Barn  )||
                 theCoop!=null&&(cell.getObjectMap() instanceof Coop  ))){
+            theAnimal.setHome(true);
             return new Result(true,name+" shepherd to its home");
         }
         switch (App.getGame().getWeatherType()){
@@ -324,12 +328,36 @@ public class AnimalController {
             default ->{}
         }
         theAnimal.increaseFriendShip(8);//TODO -> place ship on ground
+        theAnimal.setHome(false);
         return new Result(true,name+" shepherd to grass");
 
     }
 
     public Result feedHay(Matcher matcher){
-        return null;
+        String name= matcher.group(1);
+        Animal theAnimal=null;
+        for(Barn barn:App.getGame().getCurrentPlayerFarm().getBarns()){
+            for(Animal animal:barn.getAnimals()){
+                if(animal.getName().equals(name)){
+                    theAnimal=animal;
+                    break;
+                }
+            }
+        }
+        for(Coop coop:App.getGame().getCurrentPlayerFarm().getCoops()){
+            for(Animal animal:coop.getAnimals()){
+                if(animal.getName().equals(name)){
+                    theAnimal=animal;
+                    break;
+                }
+            }
+        }
+        if(theAnimal==null){
+            return new Result(false,"can`t find "+name);
+        }
+        theAnimal.increaseFriendShip(8);
+        theAnimal.setFedToday(true);
+        return new Result(true , name+"is fed with Hay, now it loves you more");
     }
 
     public Result producesList(Matcher matcher){return null;}
@@ -401,9 +429,9 @@ public class AnimalController {
                     if (!animal.isFedToday()) {
                         animal.increaseFriendShip(-20);
                     }
-//                    if (!animal.isInBarn()) {
-//                        animal.increaseFriendShip(-20);
-//                    }
+                    if (!animal.isHome()) {
+                        animal.increaseFriendShip(-20);
+                    }
                 }
             }
         }
