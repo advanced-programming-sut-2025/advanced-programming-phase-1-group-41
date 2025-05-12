@@ -67,4 +67,13 @@ public class Finder {
         }
         return null;
     }
+
+    public static Farm findFarmByPlayer(Player player){
+        for(Farm farm:App.getGame().getFarms()){
+            if(farm.getId()==player.getFarmId()){
+                return farm;
+            }
+        }
+        return null;
+    }
 }

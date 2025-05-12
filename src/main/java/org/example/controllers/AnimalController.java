@@ -9,6 +9,7 @@ import org.example.models.buildings.animalContainer.BarnType;
 import org.example.models.buildings.animalContainer.Coop;
 import org.example.models.buildings.animalContainer.CoopType;
 import org.example.models.foragings.Nature.Nature;
+import org.example.models.locations.Farm;
 
 import java.util.regex.Matcher;
 
@@ -374,9 +375,42 @@ public class AnimalController {
 
     }
 
-    public void reset(){
-        // for players
-        // reset booleans for all barns and coops animals
+    private void reset(){
+        Game game =App.getGame();
+        for(Player player:game.getPlayers()){
+            Farm farm =Finder.findFarmByPlayer(player);
+            assert farm != null;
+            for(Barn barn:farm.getBarns()){
+                for(Animal animal: barn.getAnimals()){
+                    animal.setPetToday(false);
+                    animal.setFedToday(false);
+                }
+            }
+        }
+    }
+    private void check() {
+        Game game = App.getGame();
+        for (Player player : game.getPlayers()) {
+            Farm farm = Finder.findFarmByPlayer(player);
+            assert farm != null;
+            for (Barn barn : farm.getBarns()) {
+                for (Animal animal : barn.getAnimals()) {
+                    if (!animal.isPetToday()) {
+                        animal.increaseFriendShip((animal.getFriendShip() / 200) - 10);
+                    }
+                    if (!animal.isFedToday()) {
+                        animal.increaseFriendShip(-20);
+                    }
+//                    if (!animal.isInBarn()) {
+//                        animal.increaseFriendShip(-20);
+//                    }
+                }
+            }
+        }
+    }
+    public void resetAndCheck(){
+        reset();
+        check();
     }
 
 }

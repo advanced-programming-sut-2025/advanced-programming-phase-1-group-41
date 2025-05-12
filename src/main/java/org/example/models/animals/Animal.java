@@ -9,6 +9,8 @@ public abstract class Animal {
     public abstract void doTheFuckingJob();
     protected String name;
     protected int buyPrice;
+    protected boolean isPetToday;
+    protected boolean isFedToday;
 
     public BarnOrCageSize getSizeNeeded() {
         return sizeNeeded;
@@ -18,7 +20,6 @@ public abstract class Animal {
     protected Breed breed;
     protected Player owner;
     private int friendShip;
-    private Slot slot;
     //TODO Corps
 
     public Animal(Player owner, String name, int buyPrice, BarnOrCageSize sizeNeeded) {
@@ -27,7 +28,6 @@ public abstract class Animal {
         this.sizeNeeded = sizeNeeded;
         this.owner = owner;
         this.friendShip = 0;
-        this.slot = null;
     }
 
     public int getFriendShip() {
@@ -45,13 +45,50 @@ public abstract class Animal {
 
     public int getBuyPrice() {return buyPrice;}
 
-    public Slot getSlot() {
-        return slot;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void resetSlot() {
-        this.slot = null;
+    public void setBuyPrice(int buyPrice) {
+        this.buyPrice = buyPrice;
     }
+
+    public boolean isPetToday() {
+        return isPetToday;
+    }
+
+    public void setPetToday(boolean petToday) {
+        isPetToday = petToday;
+    }
+
+    public boolean isFedToday() {
+        return isFedToday;
+    }
+
+    public void setFedToday(boolean fedToday) {
+        isFedToday = fedToday;
+    }
+
+    public void setSizeNeeded(BarnOrCageSize sizeNeeded) {
+        this.sizeNeeded = sizeNeeded;
+    }
+
+    public void setBreed(Breed breed) {
+        this.breed = breed;
+    }
+
+    public Player getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Player owner) {
+        this.owner = owner;
+    }
+
+    public void setFriendShip(int friendShip) {
+        this.friendShip = friendShip;
+    }
+
 
     public Breed getBreed() {
         return breed;

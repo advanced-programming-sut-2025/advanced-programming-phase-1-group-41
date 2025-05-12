@@ -29,12 +29,12 @@ public class Cottage implements Building {
         yWall = y;
         while(yWall<=y+5) {
             for (int i = x; i <= x + 5; i++) {
-                if(i == x + 2){
-                    continue;
-                }
                 Cell cell = Finder.findCellByCoordinates(i, yWall, farm);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
+                if(i == x + 2&&yWall==y+5){
+                    cell.setObjectMap(new Door());
+                }
             }
             yWall+=5;
         }
