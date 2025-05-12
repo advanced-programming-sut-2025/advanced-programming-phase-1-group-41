@@ -7,11 +7,11 @@ import org.example.models.Result;
 import org.example.models.animals.Animal;
 import org.example.models.animals.Breed;
 import org.example.models.animals.animalKinds.*;
-import org.example.models.buildings.Nature.Nature;
 import org.example.models.buildings.animalContainer.Barn;
 import org.example.models.buildings.animalContainer.BarnType;
 import org.example.models.buildings.animalContainer.Coop;
 import org.example.models.buildings.animalContainer.CoopType;
+import org.example.models.foragings.Nature.Nature;
 
 import java.util.regex.Matcher;
 

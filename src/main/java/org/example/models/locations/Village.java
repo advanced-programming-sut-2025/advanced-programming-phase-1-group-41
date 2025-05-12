@@ -4,12 +4,12 @@ import org.example.models.*;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.Cottage;
 import org.example.models.buildings.GreenHouse.Greenhouse;
-import org.example.models.buildings.Nature.*;
 import org.example.models.buildings.animalContainer.Barn;
 import org.example.models.buildings.animalContainer.BarnType;
 import org.example.models.buildings.animalContainer.Coop;
 import org.example.models.buildings.animalContainer.CoopType;
 import org.example.models.foragings.*;
+import org.example.models.foragings.Nature.Bush;
 
 import javax.xml.stream.Location;
 import java.util.ArrayList;
