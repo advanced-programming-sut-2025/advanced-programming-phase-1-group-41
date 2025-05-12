@@ -7,6 +7,7 @@ import org.example.models.foragings.Nature.Mineral;
 import org.example.models.foragings.Nature.Rock;
 import org.example.models.foragings.Nature.RockType;
 import org.example.models.items.Item;
+import org.example.models.tools.Hoe;
 import org.example.models.tools.Pickaxe;
 import org.example.models.tools.Tool;
 import org.example.models.tools.WateringCan;
@@ -83,6 +84,8 @@ public class ToolsController {
             return usePickaxe(cell, tool);
         }else if(tool instanceof WateringCan){
             return useWateringCan(cell, tool);
+        }else if(tool instanceof Hoe){
+            return useHoe(cell, tool);
         }
 
 
@@ -176,6 +179,26 @@ public class ToolsController {
             }
             return new Result(false,"fck this sht");
         }
+    }
+
+
+    private Result useHoe(Cell cell, Tool tool){
+        Hoe hoe = (Hoe) tool;
+        int energy = 0;
+        switch (hoe.getLevel()){
+            case Default -> energy = 5;
+            case Copper -> energy = 4;
+            case Iron -> energy = 3;
+            case Gold -> energy = 2;
+            case Iridium -> energy = 1;
+        }
+        if(cell.getObjectMap() instanceof Grass){
+            Grass grass = (Grass) cell.getObjectMap();
+            grass.setFarmland(true);
+            App.getGame().getCurrentPlayer().decEnergy(energy);
+            return new Result(true, "grass is ready for shokhm");
+        }
+        return new Result(false,"it's not a grass!");
     }
 
 }
