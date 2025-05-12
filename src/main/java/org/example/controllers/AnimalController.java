@@ -194,16 +194,38 @@ public class AnimalController {
 
     public Result pet(Matcher matcher) {
         String name=matcher.group(1);
+        Animal theAnimal=null;
+        for(Barn barn:App.getGame().getCurrentPlayerFarm().getBarns()){
+            for(Animal animal: barn.getAnimals()){
+                if(animal.getName().equals(name)){
+                    theAnimal = animal;
+                    break;
+                }
+            }
+        }
+        for(Coop coop:App.getGame().getCurrentPlayerFarm().getCoops()){
+            for(Animal animal: coop.getAnimals()){
+                if(animal.getName().equals(name)){
+                    theAnimal = animal;
+                    break;
+                }
+            }
+        }
+        if(theAnimal==null){
+            return new Result(false,name+" is not one of your pets");
+        }
         for(int i=-2;i<=2;i++){
             for(int j=-2;j<=2;j++){
-                int x = App.getGame().getCurrentPlayer().getX();
-                int y = App.getGame().getCurrentPlayer().getY();
-                Cell cell = App.getGame().getCurrentPlayerFarm().getCell(x+i,y+j);
-                if(cell == null) continue;
+                int x = App.getGame().getCurrentPlayer().getX()+i;
+                int y = App.getGame().getCurrentPlayer().getY()+j;
+                Cell cell=App.getGame().getCurrentPlayerFarm().getCell(x, y);
+                if(cell==null){
+                    continue;
+                }
                 ObjectMap objectMap=cell.getObjectMap();
-                if(objectMap instanceof Animal&&objectMap.getName().equals(name)){
-                    ((Animal) objectMap).increaseFriendShip(15);
-                    ((Animal) objectMap).setPetToday(true);
+                if(theAnimal.getX()==x && theAnimal.getY()==y){
+                    theAnimal.increaseFriendShip(15);
+                    theAnimal.setPetToday(true);
                     return new Result(true,"you pet "+name+", now it loves you more");
                 }
                 else if(objectMap instanceof Barn){
