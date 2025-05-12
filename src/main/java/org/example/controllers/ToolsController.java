@@ -1,8 +1,13 @@
 package org.example.controllers;
 
 import org.example.models.*;
+import org.example.models.animals.Animal;
+import org.example.models.animals.animalKinds.Cow;
+import org.example.models.animals.animalKinds.Goat;
+import org.example.models.animals.animalKinds.Sheep;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.GreenHouse.WaterTank;
+import org.example.models.buildings.animalContainer.Barn;
 import org.example.models.foragings.ForagingTree;
 import org.example.models.foragings.Nature.*;
 import org.example.models.foragings.Crop;
@@ -11,6 +16,8 @@ import org.example.models.foragings.Nature.Rock;
 import org.example.models.foragings.Nature.RockType;
 import org.example.models.foragings.Nature.Tree;
 import org.example.models.items.Item;
+import org.example.models.items.Products.Product;
+import org.example.models.items.Products.ProductType;
 import org.example.models.tools.*;
 
 import java.util.regex.Matcher;
@@ -91,6 +98,10 @@ public class ToolsController {
             return useAxe(cell, tool);
         }else if(tool instanceof Scythe){
             return useScythe(cell, tool);
+        }else if(tool instanceof MilkPale){
+            return useMilkPale(cell, tool);
+        }else if(tool instanceof Shear){
+            return useShear(cell, tool);
         }
 
 
@@ -292,8 +303,73 @@ public class ToolsController {
         if(cell.getObjectMap() instanceof Bush){
             cell.setObjectMap(new Grass());
             return new Result(true, "caught the bush");
+        }else if(cell.getObjectMap() instanceof Grass){
+            ((Grass) cell.getObjectMap()).setGround(true);
+            return new Result(true, "its not a ground");
         }
         return new Result(false, "it wasn't a bush!");
     }
+
+    private Result useMilkPale(Cell cell, Tool tool){
+        MilkPale milkPale = (MilkPale) tool;
+        int energy = 4;
+        App.getGame().getCurrentPlayer().decEnergy(energy);
+
+        for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
+            for (Animal animal : barn.getAnimals()) {
+                if(animal.getX() == cell.getX() && animal.getY() == cell.getY()){
+                    if(animal instanceof Goat&&animal.canGiveProduct()){
+                        App.getGame().getCurrentPlayer().getInventory().addToInventory
+                                (new Product(ProductType.GoatMilk), 1);
+                        animal.setProduct(null);
+                        return new Result(true, "got a goat milk");
+                        // todo biggg milk
+                    }else if(animal instanceof Cow){
+                        if(animal.canGiveProduct()){
+                            App.getGame().getCurrentPlayer().getInventory().addToInventory
+                                    (new Product(ProductType.CowMilk), 1);
+                            animal.setProduct(null);
+                            return new Result(true, "got a cow milk");
+                        }else{
+                            return new Result(false, "dooesn't have the product available");
+                        }
+                    }
+                }else{
+                    return new Result(false,"no animal is around you");
+                }
+            }
+        }
+        return new Result(false, "no barn in the farm");
+    }
+
+    private Result useShear(Cell cell, Tool tool){
+        Shear shear = (Shear) tool;
+        int energy = 4;
+
+        App.getGame().getCurrentPlayer().decEnergy(energy);
+
+        for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
+            for (Animal animal : barn.getAnimals()) {
+                if(animal.getX() == cell.getX() && animal.getY() == cell.getY()){
+                    if(animal instanceof Sheep){
+                        if(animal.canGiveProduct()){
+                            App.getGame().getCurrentPlayer().getInventory().addToInventory
+                                    (new Product(ProductType.SheepWool),1);
+                            animal.setProduct(null);
+                            return new Result(true, "got a sheep wool");
+                        }else{
+                            return new Result(false, "doesn't have the product");
+                        }
+                    }else{
+                        return new Result(false,"the animal is not a sheep");
+                    }
+                }else{
+                    return new Result(false, "no animal around you");
+                }
+            }
+        }
+        return new Result(false,"no barn in the farm");
+    }
+
 
 }
