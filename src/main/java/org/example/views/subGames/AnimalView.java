@@ -25,6 +25,8 @@ public class AnimalView {
             System.out.println(controller.shepherdAnimals(matcher));
         }else if((matcher = AnimalCommands.SellAnimal.getMatcher(input))!=null){
             System.out.println(controller.sellAnimal(matcher));
+        }else if((matcher = AnimalCommands.FeedHay.getMatcher(input))!=null){
+            System.out.println(controller.feedHay(matcher));
         }
         else{
             return false;

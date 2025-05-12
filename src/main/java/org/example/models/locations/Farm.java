@@ -159,6 +159,8 @@ public class Farm {
     public void printMap(){
         int counter = 0;
         for(Cell cell:cells){
+            if(isAnimalHere(cell)){
+            }
             if(cell.getX()==App.getGame().getCurrentPlayer().getX()&&cell.getY()==App.getGame().getCurrentPlayer().getY()){
                 System.out.printf(App.getGame().getCurrentPlayer().getChar());
             }
@@ -228,6 +230,11 @@ public class Farm {
     public void update(){
         farmBuilder.updateForagings();
         farmBuilder.growCrops();
+    }
+
+    private boolean isAnimalHere(Cell cell){
+//        for()
+return true;
     }
 
     public void removeCrop(Crop crop){

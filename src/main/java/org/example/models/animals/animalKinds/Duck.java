@@ -15,4 +15,7 @@ public class Duck extends Animal {
     public void doTheFuckingJob() {
 
     }
+    public String getChar(){
+        return "🦆";
+    }
 }

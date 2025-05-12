@@ -15,4 +15,7 @@ public class Chicken extends Animal {
     public void doTheFuckingJob() {
 
     }
+    public String getChar(){
+        return "🐓";
+    }
 }

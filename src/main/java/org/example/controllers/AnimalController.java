@@ -253,29 +253,54 @@ public class AnimalController {
     }
 
     public Result animalsList(Matcher matcher){
-        for(Barn barn:App.getGame().getCurrentPlayerFarm().getBarns()){
-            for(Animal animal:barn.getAnimals()){
+        for(Barn barn:App.getGame().getCurrentPlayerFarm().getBarns()) {
+            for (Animal animal : barn.getAnimals()) {
                 String name = "animal";
                 if (animal instanceof Cow) {
-                    name="Cow";
-                } else if(animal instanceof Chicken){
-                    name="Chicken";
-                } else if(animal instanceof Rabbit){
-                    name="Rabbit";
-                } else if(animal instanceof Pig){
-                    name="Pig";
-                } else if(animal instanceof Dino){
-                    name="Dino";
-                } else if(animal instanceof Sheep){
-                    name="Sheep";
-                } else if(animal instanceof Goat){
-                    name="Goat";
-                } else if(animal instanceof Duck){
-                    name="Duck";
+                    name = "Cow";
+                } else if (animal instanceof Chicken) {
+                    name = "Chicken";
+                } else if (animal instanceof Rabbit) {
+                    name = "Rabbit";
+                } else if (animal instanceof Pig) {
+                    name = "Pig";
+                } else if (animal instanceof Dino) {
+                    name = "Dino";
+                } else if (animal instanceof Sheep) {
+                    name = "Sheep";
+                } else if (animal instanceof Goat) {
+                    name = "Goat";
+                } else if (animal instanceof Duck) {
+                    name = "Duck";
                 }
-                System.out.println(animal.getName()+" the "+name+" -> friendShip : "+animal.getFriendShip()+", is pet today : "+animal.isPetToday()+", is fed today :"+animal.isFedToday());
+                System.out.println("int your barns you have :");
+                System.out.println(animal.getName() + " the " + name + " -> friendShip : " + animal.getFriendShip() + ", is pet today : " + animal.isPetToday() + ", is fed today :" + animal.isFedToday());
             }
         }
+            for(Coop coop:App.getGame().getCurrentPlayerFarm().getCoops()) {
+                for (Animal animal : coop.getAnimals()) {
+                    String name = "animal";
+                    if (animal instanceof Cow) {
+                        name = "Cow";
+                    } else if (animal instanceof Chicken) {
+                        name = "Chicken";
+                    } else if (animal instanceof Rabbit) {
+                        name = "Rabbit";
+                    } else if (animal instanceof Pig) {
+                        name = "Pig";
+                    } else if (animal instanceof Dino) {
+                        name = "Dino";
+                    } else if (animal instanceof Sheep) {
+                        name = "Sheep";
+                    } else if (animal instanceof Goat) {
+                        name = "Goat";
+                    } else if (animal instanceof Duck) {
+                        name = "Duck";
+                    }
+                    System.out.println("int your coops you have :");
+                    System.out.println(animal.getName() + " the " + name + " -> friendShip : " + animal.getFriendShip() + ", is pet today : " + animal.isPetToday() + ", is fed today :" + animal.isFedToday());
+                }
+            }
         return new Result(true,"");
     }
 
@@ -333,31 +358,36 @@ public class AnimalController {
 
     }
 
-    public Result feedHay(Matcher matcher){
-        String name= matcher.group(1);
-        Animal theAnimal=null;
-        for(Barn barn:App.getGame().getCurrentPlayerFarm().getBarns()){
-            for(Animal animal:barn.getAnimals()){
-                if(animal.getName().equals(name)){
-                    theAnimal=animal;
-                    break;
+    public Result feedHay(Matcher matcher) {
+        String name = matcher.group(1);
+        Animal theAnimal = null;
+        for (int i = -2; i <= 2; i++) {
+            for (int j = -2; j <= 2; j++) {
+                int x = App.getGame().getCurrentPlayer().getX();
+                int y = App.getGame().getCurrentPlayer().getY();
+                Cell cell = App.getGame().getCurrentPlayerFarm().getCell(x + i, y + j);
+                if (cell == null) continue;
+                ObjectMap objectMap = cell.getObjectMap();
+                if (objectMap instanceof Barn) {
+                    for (Animal animal : ((Barn) objectMap).getAnimals()) {
+                        if (animal.getName().equals(name)) {
+                            animal.increaseFriendShip(8);
+                            animal.setFedToday(true);
+                            return new Result(true, name + " is fed with Hay, now it loves you more");
+                        }
+                    }
+                } else if (objectMap instanceof Coop) {
+                    for (Animal animal : ((Coop) objectMap).getAnimals()) {
+                        if (animal.getName().equals(name)) {
+                            animal.increaseFriendShip(8);
+                            animal.setFedToday(true);
+                            return new Result(true, name + " is fed with Hay, now it loves you more");
+                        }
+                    }
                 }
             }
         }
-        for(Coop coop:App.getGame().getCurrentPlayerFarm().getCoops()){
-            for(Animal animal:coop.getAnimals()){
-                if(animal.getName().equals(name)){
-                    theAnimal=animal;
-                    break;
-                }
-            }
-        }
-        if(theAnimal==null){
-            return new Result(false,"can`t find "+name);
-        }
-        theAnimal.increaseFriendShip(8);
-        theAnimal.setFedToday(true);
-        return new Result(true , name+"is fed with Hay, now it loves you more");
+        return new Result(false,name+" is not anywhere around you");
     }
 
     public Result producesList(Matcher matcher){return null;}
@@ -414,6 +444,12 @@ public class AnimalController {
                     animal.setFedToday(false);
                 }
             }
+            for(Coop coop:farm.getCoops()){
+                for(Animal animal: coop.getAnimals()){
+                    animal.setPetToday(false);
+                    animal.setFedToday(false);
+                }
+            }
         }
     }
     private void check() {
@@ -437,11 +473,27 @@ public class AnimalController {
                     }
                 }
             }
+            for (Coop coop : farm.getCoops()) {
+                for (Animal animal : coop.getAnimals()) {
+                    if (!animal.isPetToday()) {
+                        animal.increaseFriendShip((animal.getFriendShip() / 200) - 10);
+                        System.out.println("poor "+animal.getName()+(" did not get any pet from "+player+" last day"));
+                    }
+                    if (!animal.isFedToday()) {
+                        animal.increaseFriendShip(-20);
+                        System.out.println("poor "+animal.getName()+(" slept with hunger in "+player+"`s farm last day"));
+                    }
+                    if (!animal.isHome()) {
+                        animal.increaseFriendShip(-20);
+                        System.out.println("poor "+animal.getName()+(" slept in cold in "+player+"`s farm last day"));
+                    }
+                }
+            }
         }
     }
     public void resetAndCheck(){
-        reset();
         check();
+        reset();
     }
 
 }

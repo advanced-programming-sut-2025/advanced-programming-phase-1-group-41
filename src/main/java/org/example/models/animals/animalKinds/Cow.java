@@ -15,5 +15,8 @@ public class Cow extends Animal {
     @Override
     public void doTheFuckingJob() {
     }
+    public String getChar(){
+        return "🐄";
+    }
 
 }
