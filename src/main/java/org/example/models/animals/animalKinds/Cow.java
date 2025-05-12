@@ -11,10 +11,16 @@ public class Cow extends Animal {
     public Cow(Player owner, String name) {
         super(owner, name, 1500, BarnOrCageSize.Normal);
         super.breed = Breed.Barn;
+        daysUntilProduce = 1;
     }
 
     @Override
     public void doTheFuckingJob() {
+    }
+    @Override
+    public boolean canGiveProduct(){
+        return true;
+
     }
     public String getChar(){
         return Colors.colorize(1,0,"🐄");

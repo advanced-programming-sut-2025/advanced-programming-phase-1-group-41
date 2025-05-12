@@ -10,10 +10,21 @@ public class Pig extends Animal {
     public Pig(Player owner, String name) {
         super(owner, name, 16000, BarnOrCageSize.Deluxe);
         super.breed = Breed.Barn;
+        daysUntilProduce=(int)(Math.random()*4);
     }
 
     @Override
     public void doTheFuckingJob() {
+
+    }
+    @Override
+    public boolean canGiveProduct(){
+        if(daysUntilProduce==0){
+            daysUntilProduce=(int)(Math.random()*4);
+            return true;
+        }
+        daysUntilProduce--;
+        return false;
 
     }
     public String getChar(){

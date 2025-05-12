@@ -10,10 +10,21 @@ public class Duck extends Animal {
     public Duck(Player owner, String name) {
         super(owner, name, 1200, BarnOrCageSize.Big);
         super.breed = Breed.Coop;
+        daysUntilProduce=2;
     }
 
     @Override
     public void doTheFuckingJob() {
+
+    }
+    @Override
+    public boolean canGiveProduct(){
+        if(daysUntilProduce==0){
+            daysUntilProduce=2;
+            return true;
+        }
+        daysUntilProduce--;
+        return false;
 
     }
     public String getChar(){

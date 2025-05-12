@@ -3,6 +3,7 @@ package org.example.models.animals;
 import org.example.models.App;
 import org.example.models.Player;
 import org.example.models.animals.animalKinds.*;
+import org.example.models.items.Products.Product;
 import org.example.models.items.Products.ProductType;
 
 public abstract class Animal {
@@ -14,7 +15,7 @@ public abstract class Animal {
     protected boolean isPetToday;
     protected boolean isFedToday;
     protected boolean isHome=true;
-    protected ProductType productType;
+    protected Product product;
    protected int daysUntilProduce;
 
     public BarnOrCageSize getSizeNeeded() {
@@ -122,11 +123,11 @@ public abstract class Animal {
     public void setDaysUntilProduce(int daysUntilProduce) {
         this.daysUntilProduce = daysUntilProduce;
     }
-    public ProductType getProductType() {
-        return productType;
+    public Product getProduct() {
+        return product;
     }
-    public void setProductType(ProductType productType) {
-        this.productType = productType;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public void setFriendShip(int friendShip) {

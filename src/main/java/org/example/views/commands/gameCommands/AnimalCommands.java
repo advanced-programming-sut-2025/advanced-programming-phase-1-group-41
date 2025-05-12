@@ -11,6 +11,8 @@ public enum AnimalCommands implements Command {
     ShepherdAnimals("\\s*shepherd\\s+animals\\s+-n\\s+(?<animalName>\\S+)\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*"),
     FeedHay("\\s*feed\\s+hay\\s+-n\\s+(?<animalName>.*)\\s*"),
     SellAnimal("\\s*sell\\s+animal\\s+-n\\s+(?<name>.*)\\s*"),
+    Produces("\\s*produces\\s*"),
+    CollectProduce("\\s*collect\\s+produce\\s+-n\\s+(?<name>.*)\\s*"),
     ;
 
     private final String pattern;
