@@ -108,17 +108,14 @@ public class FarmBuilder {
         }
 
         Random rand = new Random();
-//        App.getCurrentUser().getCurrentGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.values()[rand.nextInt(SeedType.values().length)]), 2);
-//        App.getCurrentUser().getCurrentGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.values()[rand.nextInt(SeedType.values().length)]), 2);
-//        App.getCurrentUser().getCurrentGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.values()[rand.nextInt(SeedType.values().length)]), 2);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Fertilizer(FertilizerType.PlantGrow), 10);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Fertilizer(FertilizerType.BasicRetainingSoil), 10);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Fertilizer(FertilizerType.QualityRetainingSoil), 10);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Fertilizer(FertilizerType.DeluxeRetainingSoil), 10);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Fertilizer(FertilizerType.GrassStarter), 10);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.ApricotSapling), 10);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.Mixed), 10);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.Bean), 10);
+        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Fertilizer(FertilizerType.PlantGrow), 100);
+        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Fertilizer(FertilizerType.BasicRetainingSoil), 100);
+        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Fertilizer(FertilizerType.QualityRetainingSoil), 100);
+        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Fertilizer(FertilizerType.DeluxeRetainingSoil), 100);
+        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Fertilizer(FertilizerType.GrassStarter), 100);
+        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.ApricotSapling), 100);
+        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.Mixed), 100);
+        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.CauliflowerSeed), 100);
     }
     public void growTrees(){
         List<Tree> toRemove = new ArrayList<>();

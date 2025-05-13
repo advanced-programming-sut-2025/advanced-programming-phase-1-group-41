@@ -6,13 +6,10 @@ import org.example.models.foragings.Nature.Grass;
 import org.example.models.foragings.Nature.Tree;
 import org.example.models.foragings.Nature.TreeType;
 import org.example.models.items.Inventory;
-import org.example.models.items.Item;
 import org.example.models.items.Slot;
 import org.example.models.locations.Farm;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.regex.Matcher;
 
 public class FarmingController {
@@ -72,6 +69,11 @@ public class FarmingController {
                                 String randomType = mixedCropNames.get(rand.nextInt(mixedCropNames.size()));
                                 for(CropType cropType : CropType.values()){
                                     if(cropType.getSource().getName().equalsIgnoreCase(randomType)){
+                                        Result result = giantCrop(x, y, cropType, farm);
+                                        if(result.success()){
+                                            inventory.removeFromInventory(slot.getItem(), 1);
+                                            return result;
+                                        }
                                         farm.addCrop(new Crop(x, y, farm, cropType));
                                         inventory.removeFromInventory(slot.getItem(), 1);
                                         return new Result(true, "A " + cropType.getName() + " planted at " + x + "," + y);
@@ -80,6 +82,11 @@ public class FarmingController {
                             }
                             for(CropType cropType : CropType.values()){
                                 if(cropType.getSource().equals(seedType)){
+                                    Result result = giantCrop(x, y, cropType, farm);
+                                    if(result.success()){
+                                        inventory.removeFromInventory(slot.getItem(), 1);
+                                        return result;
+                                    }
                                     farm.addCrop(new Crop(x, y, farm, cropType));
                                     inventory.removeFromInventory(slot.getItem(), 1);
                                     return new Result(true, "A " + cropType.getName() + " planted at " + x + "," + y);
@@ -99,6 +106,74 @@ public class FarmingController {
         }
         return new Result(false, "Cell x: " + x + " y: " + y + " is not farmland!");
     }
+
+    private Result giantCrop(int x, int y, CropType cropType, Farm farm) {
+        if(!cropType.canBecomeGiant()){
+            return new Result(false, "Can't become giant!");
+        }
+        List<int[][]> directionSets = List.of(
+                new int[][]{{0, 0}, {1, 0}, {0, 1}, {1, 1}},
+                new int[][]{{0, 0}, {1, 0}, {0, -1}, {1, -1}},
+                new int[][]{{0, 0}, {-1, 0}, {0, 1}, {-1, 1}},
+                new int[][]{{0, 0}, {-1, 0}, {0, -1}, {-1, -1}}
+        );
+
+        for (int[][] directions : directionSets) {
+            Result result = checkGiantCropFormation(x, y, farm, cropType, directions);
+            if (result.success()) return result;
+        }
+
+        return new Result(false, "No Giant Crop found.");
+    }
+
+    private Result checkGiantCropFormation(int x, int y, Farm farm, CropType cropType, int[][] directions) {
+        int count = 0;
+        int maxCurrentStage = 0;
+        int maxCurrentStageLevel = 0;
+        ArrayList<Crop> crops = new ArrayList<>();
+
+        for (int[] dir : directions) {
+            Cell neighborCell = Finder.findCellByCoordinates(x + dir[0], y + dir[1], farm);
+            if (neighborCell != null) {
+                Object cellObject = neighborCell.getObjectMap();
+                if (cellObject instanceof Crop neighborCrop) {
+                    if (neighborCrop.getCropType().getName().equals(cropType.getName())) {
+                        crops.add(neighborCrop);
+                        count++;
+                        if (neighborCrop.getCurrentStage() > maxCurrentStage) {
+                            maxCurrentStage = neighborCrop.getCurrentStage();
+                            maxCurrentStageLevel = neighborCrop.getCurrentStageLevel();
+                        } else if (neighborCrop.getCurrentStage() == maxCurrentStage
+                                && neighborCrop.getCurrentStageLevel() > maxCurrentStageLevel) {
+                            maxCurrentStageLevel = neighborCrop.getCurrentStageLevel();
+                        }
+                    }
+                }
+            }
+        }
+        if(directions[3][0] == 1 && directions[3][1] == -1){
+            y -= 1;
+        }
+        if(directions[3][0] == -1 && directions[3][1] == 1){
+            x -= 1;
+        }
+        if(directions[3][0] == -1 && directions[3][1] == -1){
+            x -= 1;
+            y -= 1;
+        }
+
+        if (count >= 3) {
+            farm.getCrops().removeAll(crops);
+            Crop crop = new Crop(x, y, farm, cropType, maxCurrentStage, maxCurrentStageLevel);
+            farm.addCrop(crop);
+            Objects.requireNonNull(Finder.findCellByCoordinates(x, y, farm))
+                    .setObjectMap(crop);
+            return new Result(true, "A Giant " + cropType.getName() + " planted at " + x + "," + y);
+        }
+//        System.out.println("Crops: " + count + " | " + "x : " + x + " | " + "y : " + y);
+        return new Result(false, "No Giant Crop found.");
+    }
+
     public Result showPlant(Matcher matcher){
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
@@ -170,7 +245,7 @@ public class FarmingController {
             chance = 100;
         }
         if(chance >= 50){
-            crop.decreaseWaterStreak();
+            crop.isFertilizedToday();
         }
         if(chance == 0){
             crop.decreaseWaterStreak();

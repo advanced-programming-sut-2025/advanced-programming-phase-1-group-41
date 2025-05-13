@@ -14,6 +14,8 @@ public class Grass implements ObjectMap {
     public String getChar() {
         if(isFarmland && !isGround){
             return Colors.colorize(94,0,"||");
+        } else if(isSand){
+            return Colors.colorize(228,0,"ww");
         } else if(isGround){
             return Colors.colorize(215,0,"ww");
         }else{
@@ -26,12 +28,14 @@ public class Grass implements ObjectMap {
         return "Grass";
     }
 
-    private boolean isFarmland = false;
-    private boolean isGround = false;
+    private boolean isFarmland;
+    private boolean isGround;
+    private boolean isSand;
 
     public Grass(){
         isGround = false;
         isFarmland = false;
+        isSand = false;
     }
 
     public boolean isFarmland() {
@@ -40,16 +44,20 @@ public class Grass implements ObjectMap {
     public void setFarmland(boolean isFarmland) {
         this.isFarmland = isFarmland;
         isGround = false;
+        isSand = false;
     }
+    public boolean isSand() {return isSand;}
     public boolean isGround() {
         return isGround;
     }
     public void setGround(boolean isGround) {
         this.isGround = isGround;
     }
+    public void setSand(boolean isSand) {}
     public Grass(int startX, int startY, Farm farm) {
         isGround = true;
         isFarmland = false;
+        isSand = false;
 //        for(int i = startX; i < startX + 13; i++) {
 //            Objects.requireNonNull(Finder.findCellByCoordinates(i, startY, farm)).setObjectMap(this);
 //        }

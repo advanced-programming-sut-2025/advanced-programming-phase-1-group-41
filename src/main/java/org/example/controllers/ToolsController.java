@@ -19,6 +19,7 @@ import org.example.models.foragings.Nature.Tree;
 import org.example.models.items.Item;
 import org.example.models.items.Products.Product;
 import org.example.models.items.Products.ProductType;
+import org.example.models.locations.Farm;
 import org.example.models.tools.*;
 
 import java.util.regex.Matcher;
@@ -306,13 +307,47 @@ public class ToolsController {
             return new Result(true, "caught the bush");
         }else if(cell.getObjectMap() instanceof Grass){
             ((Grass) cell.getObjectMap()).setGround(true);
-            return new Result(true, "its now a ground");
+            return new Result(true, "It's now a ground");
         } else if(cell.getObjectMap() instanceof Crop crop){
-            if(!(crop.getStages().size() - 1 == crop.getCurrentStage())){
+            if(!(crop.getStages().size() - 1 == crop.getCurrentStage()) || (crop.getRegrowthTime() != 0 && crop.getCurrentStageLevel() < crop.getRegrowthTime())){
                 return new Result(true, "Crop is not ripe yet!");
             } else{
-                App.getGame().getCurrentPlayer().getInventory().addToInventory(crop, 1);
-                cell.setObjectMap(new Grass());
+                if(crop.getRegrowthTime() == 0){
+                    if(crop.isGiantCrop()){
+                        App.getGame().getCurrentPlayer().getInventory().addToInventory(crop, 10);
+                        int x = crop.getX();
+                        int y = crop.getY();
+                        Farm farm = App.getGame().getCurrentPlayerFarm();
+                        farm.getCrops().remove(crop);
+                        Cell cell1 = Finder.findCellByCoordinates(x, y, farm);
+                        assert cell1 != null;
+                        cell1.setObjectMap(new Grass());
+                        Cell cell2 = Finder.findCellByCoordinates(x + 1, y, farm);
+                        assert cell2 != null;
+                        cell2.setObjectMap(new Grass());
+                        Cell cell3 = Finder.findCellByCoordinates(x, y + 1, farm);
+                        assert cell3 != null;
+                        cell3.setObjectMap(new Grass());
+                        Cell cell4 = Finder.findCellByCoordinates(x + 1, y + 1, farm);
+                        assert cell4 != null;
+                        cell4.setObjectMap(new Grass());
+                        return new Result(true, "You got 10 " + crop.getName());
+                    } else{
+                        App.getGame().getCurrentPlayer().getInventory().addToInventory(crop, 1);
+                        cell.setObjectMap(new Grass());
+                        return new Result(true, "You got a " + crop.getName());
+                    }
+                }
+                else{
+                    crop.setRegrowthTime(0);
+                    if(crop.isGiantCrop()){
+                        App.getGame().getCurrentPlayer().getInventory().addToInventory(crop, 10);
+                        return new Result(true, "You got 10 " + crop.getName());
+                    } else{
+                        App.getGame().getCurrentPlayer().getInventory().addToInventory(crop, 1);
+                        return new Result(true, "You got a " + crop.getName());
+                    }
+                }
             }
         } else if(cell.getObjectMap() instanceof Tree tree){
             if(tree.getCurrentStage() < 3 || tree.getCurrentStageLevel() < 7){

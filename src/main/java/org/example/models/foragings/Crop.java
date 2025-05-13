@@ -10,7 +10,10 @@ import java.util.Arrays;
 public class Crop implements Item {
     @Override
     public String getChar() {
-        return Colors.colorize(53,4 - currentStage,typeIndex/10 + "" + typeIndex%10);
+        if(isGiantCrop){
+            return Colors.colorize(53,21 + 6 * currentStage,typeIndex/10 + "" + typeIndex%10);
+        }
+        return Colors.colorize(53,58 + 6 * currentStage,typeIndex/10 + "" + typeIndex%10);
     }
 
     @Override
@@ -25,6 +28,8 @@ public class Crop implements Item {
     private int currentStageLevel;
     private Boolean isWateredToday = false;
     private Boolean isFertilizedToday = false;
+    private Boolean isGiantCrop = false;
+    private int regrowthTime = 0;
     private int waterStreak = 0;
     private int x;
     private int y;
@@ -41,6 +46,9 @@ public class Crop implements Item {
         }
         stages = cropType.getStages();
         currentStage = 0;
+        if(!cropType.isOneTimeHarvest()){
+            regrowthTime = cropType.getRegrowthTime();
+        }
         Cell cell = Finder.findCellByCoordinates(x, y, farm);
         assert cell != null;
         cell.setObjectMap(this);
@@ -49,6 +57,32 @@ public class Crop implements Item {
         this.cropType = cropType;
         stages = cropType.getStages();
         currentStage = 0;
+    }
+    public Crop(int x, int y, Farm farm, CropType cropType, int currentStage, int currentStageLevel) {
+        this.x = x;
+        this.y = y;
+        this.cropType = cropType;
+        this.currentStage = currentStage;
+        this.currentStageLevel = currentStageLevel;
+
+        stages = cropType.getStages();
+        isWateredToday = true;
+        isGiantCrop = true;
+        if(!cropType.isOneTimeHarvest()){
+            regrowthTime = cropType.getRegrowthTime();
+        }
+        Cell cell1 = Finder.findCellByCoordinates(x, y, farm);
+        assert cell1 != null;
+        cell1.setObjectMap(this);
+        Cell cell2 = Finder.findCellByCoordinates(x + 1, y, farm);
+        assert cell2 != null;
+        cell2.setObjectMap(this);
+        Cell cell3 = Finder.findCellByCoordinates(x + 1, y + 1, farm);
+        assert cell3 != null;
+        cell3.setObjectMap(this);
+        Cell cell4 = Finder.findCellByCoordinates(x, y + 1, farm);
+        assert cell4 != null;
+        cell4.setObjectMap(this);
     }
 
     public CropType getCropType() {
@@ -61,6 +95,9 @@ public class Crop implements Item {
 
     public int getCurrentStage() {
         return currentStage;
+    }
+    public int getCurrentStageLevel() {
+        return currentStageLevel;
     }
 
 
@@ -79,8 +116,9 @@ public class Crop implements Item {
             currentStage++;
             if(currentStage >= stages.size()){
                 currentStage--;
+            } else{
+                currentStageLevel = 0;
             }
-            currentStageLevel = 0;
         }
     }
 
@@ -118,6 +156,9 @@ public class Crop implements Item {
     public void waterFertilize() {
         isFertilizedToday = true;
     }
+    public Boolean isGiantCrop() {return isGiantCrop;}
+    public int getRegrowthTime(){return regrowthTime;}
+    public void setRegrowthTime(int regrowthTime){this.regrowthTime = regrowthTime;}
 
     @Override
     public String toString() {
