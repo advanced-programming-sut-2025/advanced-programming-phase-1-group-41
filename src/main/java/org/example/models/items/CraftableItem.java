@@ -10,7 +10,6 @@ public enum CraftableItem implements Item{
     IronBar("ib", "IronBar", 10 * MineralType.IronOre.getPrice(), false),
     GoldBar("gb", "GoldBar", 10 * MineralType.GoldOre.getPrice(), false),
     IridiumBar("ib", "IridiumBar", 10 * MineralType.IridiumOre.getPrice(), false),
-    SmokedFish("sf","SmokedFish",Food.BakedFish.getPrice()*2, true, Food.BakedFish.getEnergy()*1.5),
     Oil("oi","Oil",100,true,13),
     TruffleOil("to","TruffleOil",1065,true,38),
     Mayonnaise("ma","Mayonnaise",190,true,50),

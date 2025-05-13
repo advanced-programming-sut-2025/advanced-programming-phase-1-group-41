@@ -41,8 +41,7 @@ public enum Food implements Item, Eatable {
     Raisins(125, 600, null, "Raisins"),
     Pickles(0, 0, null, "Pickles"), // (x1.75,x2+50)
     Jelly(0, 0, null, "Jelly"), // (x2,x2+50)
-    SmokedFish(0, 0, null, "SmokedFish") // (x1.5,x2)
-    
+
     ;
     static{
         CookingRecipe.values();

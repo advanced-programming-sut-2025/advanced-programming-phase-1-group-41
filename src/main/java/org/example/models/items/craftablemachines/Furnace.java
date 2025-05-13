@@ -35,18 +35,4 @@ public class Furnace extends Machine {
         }
     }
 
-
-    public ArrayList<Slot> getReceivedItems() {
-        return receivedItems;
-    }
-
-
-    public ArrayList<Slot> getSlots() {
-        return slots;
-    }
-
-    public void setSlots(ArrayList<Slot> slots) {
-        this.slots = slots;
-    }
-
 }

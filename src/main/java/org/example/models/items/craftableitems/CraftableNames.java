@@ -9,6 +9,7 @@ public enum CraftableNames {
     Juice(new Juice()),
     Pickles(new Pickles()),
     Wine(new Wine()),
+    SmokedFish(new SmokedFish()),
     ;
     public final Item item;
 

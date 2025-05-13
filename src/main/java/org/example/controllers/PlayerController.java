@@ -7,10 +7,7 @@ import org.example.models.animals.Fish;
 import org.example.models.animals.FishType;
 import org.example.models.foragings.Fruit;
 import org.example.models.foragings.FruitType;
-import org.example.models.items.Food;
-import org.example.models.items.Inventory;
-import org.example.models.items.Item;
-import org.example.models.items.Slot;
+import org.example.models.items.*;
 import org.example.models.skills.Skill;
 import org.example.models.tools.FishingRod;
 
@@ -148,16 +145,23 @@ public class PlayerController {
     }
 
     public Result eat(Matcher matcher){
-        String itemName = matcher.group(1);
+        String itemName = matcher.group(1).trim();
         Food food = Food.parseFood(itemName);
         FruitType fruitType = FruitType.parseFruitType(itemName);
-        if(food == null && fruitType == null){
+        Item item = Finder.parseItem(itemName);
+        if(food == null && fruitType == null && !(item instanceof Eatable)){
             return new Result(false, "Invalid item");
         }
         if(food != null){
             return eatFood(itemName);
+        }else if(fruitType != null){
+            return eatFruit(itemName);
         }
-        return eatFruit(itemName);
+        Slot e = App.getGame().getCurrentPlayer().getInventory().getSlotByItem(item);
+        if(e.getItem() instanceof Eatable eatable){
+            return eatEatable(eatable);
+        }
+        return new Result(false, "Invalid item");
     }
 
     private Result eatFruit(String fruitName){
@@ -198,9 +202,25 @@ public class PlayerController {
             App.getGame().getCurrentPlayer().setEnergy(100);
         }
         double value  = wantedFood.getEnergy();
-        inventory.removeFromInventory(wantedFood);
+        inventory.removeFromInventory(wantedFood, 1);
         return new Result(true, value+
                 " energy added :)");
+    }
+
+    private Result eatEatable(Eatable eatable){
+        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
+        Slot slot = inventory.getSlotByItem((Item) eatable);
+        if(slot==null){
+            return new Result(false,"you don't have this food");
+        }
+        Eatable e = (Eatable)slot.getItem();
+        App.getGame().getCurrentPlayer().incEnergy(e.getEnergy());
+        if(App.getGame().getCurrentPlayer().getEnergy() > 100){
+            App.getGame().getCurrentPlayer().setEnergy(100);
+        }
+        double value = e.getEnergy();
+        inventory.removeFromInventory((Item) e, 1);
+        return new Result(true, value+" energy added :)");
     }
 
     public Result fishing(Matcher matcher){

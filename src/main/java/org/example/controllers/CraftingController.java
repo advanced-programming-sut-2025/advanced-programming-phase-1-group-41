@@ -1,10 +1,13 @@
 package org.example.controllers;
 
 import org.example.models.*;
+import org.example.models.animals.Fish;
+import org.example.models.animals.FishType;
 import org.example.models.buildings.Cottage;
 import org.example.models.foragings.Nature.MineralType;
 import org.example.models.foragings.Nature.Wood;
 import org.example.models.items.*;
+import org.example.models.items.craftablemachines.FishSmoker;
 import org.example.models.items.craftablemachines.Furnace;
 import org.example.models.items.craftablemachines.Kiln;
 import org.example.models.items.craftablemachines.Machine;
@@ -186,6 +189,7 @@ public class CraftingController {
         return switch (machine) {
             case Furnace -> this.furnace(items, cell);
             case CharcoalKiln -> this.charcoalKiln(items, cell);
+            case FishSmoker -> this.fishSmoker(items, cell);
             default -> new Result(false, machineName + " is not useable");
         };
     }
@@ -209,7 +213,8 @@ public class CraftingController {
                 if (slot == null) {
                     return new Result(false, onGoingMachine.getProcessTime() + " hours left");
                 }
-                player.getInventory().addToInventory(slot.getItem(), slot.getQuantity());
+                System.out.println(((Eatable)slot.getItem()).getEnergy());
+                player.getInventory().addToInventory((Eatable)slot.getItem(), slot.getQuantity());
                 iterator.remove();
                 return new Result(true, slot.getItem() + " added to inventory");
             }
@@ -220,7 +225,60 @@ public class CraftingController {
 
     // atrisans
 
-    private Result FishSmoker(String[] items, Cell cell) {
+    private void updateItems(Item item, Machine machine, Player player, int max) {
+        for (Slot slot : machine.getReceivedItems()) {
+            if(slot.getItem().getName().equals(item.getName())){
+                int playerQua = player.getInventory().getSlotByItem(item).getQuantity();
+                if(playerQua > max-slot.getQuantity()){
+                    playerQua = max - slot.getQuantity();
+                }
+                slot.setQuantity(slot.getQuantity() + playerQua);
+                player.getInventory().removeFromInventory(item , playerQua);
+                System.out.println("added "+playerQua+" of "+slot.getItem().getName());
+                break;
+            }
+        }
+
+    }
+
+
+    private Result fishSmoker(ArrayList<Item> items, Cell cell) {
+        Fish fish = setFish(items);
+        Player player = App.getGame().getCurrentPlayer();
+        for (Machine x : player.getOnGoingMachines()) {
+            if(x instanceof FishSmoker fs){
+                fishSmokerHelper(fs, items, cell, player, fish);
+                return new Result(true, "donee");
+            }
+        }
+        FishSmoker fs = new FishSmoker(fish);
+        player.getOnGoingMachines().add(fs);
+        fishSmokerHelper(fs, items, cell, player, fish);
+        return new Result(true, "done");
+    }
+
+    private void fishSmokerHelper(FishSmoker fs,ArrayList<Item> items, Cell cell, Player player, Fish fish) {
+        for (Item item : items) {
+            if(item.getName().equalsIgnoreCase(fish.getFishType().getName())){
+                if(item instanceof Eatable eatable){
+                    updateItems(eatable, fs, player, 1);
+                }
+            }else if(item.getName().equalsIgnoreCase(MineralType.Coal.getName())){
+                updateItems(item, fs, player, 1);
+            }else{
+                System.out.println(item.getName()+" is not a valid item");
+            }
+        }
+    }
+
+    private Fish setFish(ArrayList<Item> items) {
+        for (Item item : items) {
+            for (FishType ft : FishType.values()) {
+                if(ft.getName().equals(item.getName())){
+                    return new Fish(ft);
+                }
+            }
+        }
         return null;
     }
 
@@ -258,18 +316,7 @@ public class CraftingController {
     private void kilnHelper(Kiln kiln,ArrayList<Item> items, Cell cell, Player player) {
         for (Item item : items) {
             if(item.getName().equalsIgnoreCase(new Wood().getName())){
-                for (Slot slot : kiln.getReceivedItems()) {
-                    if(slot.getItem().getName().equals(item.getName())){
-                        int playerQua = player.getInventory().getSlotByItem(item).getQuantity();
-                        if(playerQua > 10-slot.getQuantity()){
-                            playerQua = 10 - slot.getQuantity();
-                        }
-                        slot.setQuantity(slot.getQuantity() + playerQua);
-                        player.getInventory().removeFromInventory(item , playerQua);
-                        System.out.println("added "+playerQua+" of "+slot.getItem().getName()+" to kiln");
-                        break;
-                    }
-                }
+                updateItems(item, kiln, player, 10);
             }else{
                 System.out.println(item.getName()+" is not a valid item");
             }
@@ -318,31 +365,9 @@ public class CraftingController {
     private void furnaceHelper(Furnace furnace, ArrayList<Item> items, Player player, MineralType mineralType){
         for (Item item : items) {
             if(item.getName().equalsIgnoreCase(MineralType.Coal.getName())){
-                for (Slot slot : furnace.getReceivedItems()) {
-                    if(slot.getItem().getName().equals(item.getName())){
-                        int playerQua = player.getInventory().getSlotByItem(item).getQuantity();
-                        if(playerQua > 1-slot.getQuantity()){
-                            playerQua = 1-slot.getQuantity();
-                        }
-                        slot.setQuantity(slot.getQuantity()+playerQua);
-                        player.getInventory().removeFromInventory(item , playerQua);
-                        System.out.println("added "+playerQua+" to furnace");
-                        break;
-                    }
-                }
+                updateItems(item, furnace, player, 1);
             }else if(mineralType != null && item.getName().equalsIgnoreCase(mineralType.getName())){
-                for (Slot slot : furnace.getReceivedItems()) {
-                    if(slot.getItem().getName().equals(item.getName())){
-                        int playerQua = player.getInventory().getSlotByItem(item).getQuantity();
-                        if(playerQua > 5-slot.getQuantity()){
-                            playerQua = 5-slot.getQuantity();
-                        }
-                        slot.setQuantity(slot.getQuantity()+playerQua);
-                        player.getInventory().removeFromInventory(item , playerQua);
-                        System.out.println("added "+playerQua+" to furnace");
-                        break;
-                    }
-                }
+                updateItems(item, furnace, player, 5);
             }else{
                 System.out.println(item.getName() + " is not a valid input");
                 return;

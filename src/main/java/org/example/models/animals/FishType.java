@@ -1,39 +1,41 @@
 package org.example.models.animals;
 
 import org.example.models.Season;
+import org.example.models.items.Eatable;
 import org.example.models.items.Item;
 
-public enum FishType implements Item {
-    Salmon(75, Season.Autumn),
-    Sardine(40, Season.Autumn),
-    Shad(60, Season.Autumn),
-    BlueDiscus(120, Season.Autumn),
-    MidnightCarp(150, Season.Winter),
-    Squid(80, Season.Winter),
-    Tuna(100, Season.Winter),
-    Perch(55, Season.Winter),
-    Flounder(100, Season.Spring),
-    Lionfish(100, Season.Spring),
-    Herring(30, Season.Spring),
-    Ghostfish(45, Season.Spring),
-    Tilapia(75, Season.Summer),
-    Dorado(100, Season.Summer),
-    Sunfish(30, Season.Summer),
-    RainbowTrout(65, Season.Summer),
+public enum FishType implements Item, Eatable {
+    Salmon(75, Season.Autumn, 75),
+    Sardine(40, Season.Autumn, 40),
+    Shad(60, Season.Autumn, 60),
+    BlueDiscus(120, Season.Autumn, 120),
+    MidnightCarp(150, Season.Winter, 150),
+    Squid(80, Season.Winter, 80),
+    Tuna(100, Season.Winter, 100),
+    Perch(55, Season.Winter, 55),
+    Flounder(100, Season.Spring, 100),
+    Lionfish(100, Season.Spring, 100),
+    Herring(30, Season.Spring, 30),
+    Ghostfish(45, Season.Spring, 45),
+    Tilapia(75, Season.Summer, 75),
+    Dorado(100, Season.Summer, 100),
+    Sunfish(30, Season.Summer, 30),
+    RainbowTrout(65, Season.Summer, 65),
 
-    //Legendary Fishes:
-    Legend(5000, Season.Spring),
-    Glacierfish(1000, Season.Winter),
-    Angler(900, Season.Autumn),
-    Crimsonfish(1500, Season.Summer),
+    // Legendary Fishes:
+    Legend(5000, Season.Spring, 5000),
+    Glacierfish(1000, Season.Winter, 1000),
+    Angler(900, Season.Autumn, 900),
+    Crimsonfish(1500, Season.Summer, 1500),
     ;
 
     private final int price;
     private final Season season;
-
-    FishType(int price, Season season) {
+    private final double energy;
+    FishType(int price, Season season, double energy) {
         this.price = price;
         this.season = season;
+        this.energy = energy;
     }
 
     @Override
@@ -70,6 +72,9 @@ public enum FishType implements Item {
         };
     }
 
+    public double getEnergy() {
+        return energy;
+    }
 
     @Override
     public String getChar() {

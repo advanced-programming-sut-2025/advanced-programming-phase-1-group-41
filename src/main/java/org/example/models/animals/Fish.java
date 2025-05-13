@@ -1,9 +1,10 @@
 package org.example.models.animals;
 
 import org.example.models.Player;
+import org.example.models.items.Eatable;
 import org.example.models.items.Item;
 
-public class Fish implements Item {
+public class Fish implements Item, Eatable {
     private final FishType fishType;
     private double quality;
 
@@ -21,6 +22,11 @@ public class Fish implements Item {
 
     public void setQuality(double quality) {
         this.quality = quality;
+    }
+
+    @Override
+    public double getEnergy() {
+        return fishType.getEnergy();
     }
 
     @Override

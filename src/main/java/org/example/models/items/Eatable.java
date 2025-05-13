@@ -1,5 +1,5 @@
 package org.example.models.items;
 
-public interface Eatable {
+public interface Eatable extends Item {
     double getEnergy();
 }
