@@ -23,6 +23,8 @@ public class Village { ;
     private ArrayList<Cell> cells = new ArrayList<>();
 
     private final ArrayList<Building> buildings = new ArrayList<>();
+    ArrayList<Cell> transferCells = new ArrayList<>();
+    ArrayList<Cell> startPoints = new ArrayList<>();
 
 
 
@@ -72,7 +74,11 @@ public class Village { ;
         }
         buildPath();
         getCell(42,35).setObjectMap(new Grass());
-
+        transferCells.add(getCell(43,35));
+        transferCells.add(getCell(44,35));
+        transferCells.add(getCell(43,36));
+        transferCells.add(getCell(44,36));
+        startPoints.add(getCell(47,32));
 
         buildings.add(new Blacksmith(80,54,this));
         buildings.add(new FishShop(22,0,this));
@@ -90,39 +96,11 @@ public class Village { ;
         buildings.add(new HarveyHome(59,54,this));
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
         Random rand = new Random();
     public void buildPath(){
-        makeOvalInCenter(30,20,0.8,1.2);
-        makeOvalInCenter(6,4,0.7,1.3);
+        makeOvalInCenter(30,20,0.8,1.2,true);
+        makeOvalInCenter(6,4,0.7,1.3,true);
 
         makeGrass(getCell(38,11));
         for(int i=73;i<=89;i++){
@@ -162,6 +140,7 @@ public class Village { ;
         makeGround(getCell(10,54));
         makeGround(getCell(9,54));
         makeGround(getCell(10,53));
+        makeGround(getCell(43,34));
         for(int j=54;j>=52;j--){
             makeGround(getCell(10,j));
             makeGround(getCell(9,j));
@@ -179,6 +158,17 @@ public class Village { ;
         for(int j=57;j<59;j++){
             makeGround(getCell(43,j));
             makeGround(getCell(42,j));
+        }
+        for(int i=53;i<76;i++){
+            makeGround(getCell(i,32));
+            makeGround(getCell(i,33));
+            makeGround(getCell(i,31));
+        }
+        for(int i=53;i>=42;i--){
+            makeGround(getCell(i,32));
+        }
+        for(int j=36;j>=28;j--){
+            makeGround(getCell(47,j));
         }
         for(int i=43;i<=62;i++){
             makeGround(getCell(i,58));
@@ -231,7 +221,7 @@ public class Village { ;
             ((Grass) cell.getObjectMap()).setSand(false);
         }
     }
-    private void makeOvalInCenter(int a, int b,double c,double d) {
+    private void makeOvalInCenter(int a, int b,double c,double d,boolean isRing) {
         int centerX = 95 / 2;
         int centerY = 65 / 2;
 
@@ -239,8 +229,7 @@ public class Village { ;
             for (int j = 0; j < 65; j++) {
 
                 double distance = Math.pow(i - centerX, 2) / Math.pow(a, 2) + Math.pow(j - centerY, 2) / Math.pow(b, 2);
-
-                if (distance <= d && distance >= c) {
+                if(isRing&&distance <= d && distance >= c||!isRing&&distance <= d){
                     Cell cell = getCell(i, j);
                     if (cell != null && cell.getObjectMap() instanceof Grass) {
 
@@ -283,7 +272,8 @@ public class Village { ;
         for(Cell cell:cells){
 //            if(cell.getX()==App.getGame().getCurrentPlayer().getX()&&cell.getY()==App.getGame().getCurrentPlayer().getY()){
 //                System.out.printf(App.getGame().getCurrentPlayer().getChar());
-//            }
+            if(isSpecialPoint(cell)) {
+            }else
              {
                 System.out.printf(cell.getObjectMap().getChar());
             }
@@ -291,6 +281,35 @@ public class Village { ;
             if(counter % 95 == 0){
                 System.out.println();
             }
+        }
+    }
+    public boolean isSpecialPoint(Cell cell){
+        if(transferCells.contains(cell)){
+            showTransferCell(cell);
+            return true;
+        }
+        else if(startPoints.contains(cell)){
+            printStartSign();
+            return true;
+        }
+        return false;
+
+    }
+    private void printStartSign(){
+        System.out.printf(Colors.colorize(15,33,"xx"));
+    }
+    private void showTransferCell(Cell cell){
+         if(transferCells.get(0).equals(cell)){
+            System.out.printf(Colors.colorize(15,196,"↓↓"));
+        }
+        else if(transferCells.get(1).equals(cell)){
+            System.out.printf(Colors.colorize(15,196,"↙↙"));
+        }
+        else if(transferCells.get(2).equals(cell)){
+            System.out.printf(Colors.colorize(0,39,"⛵"));
+        }
+        else if(transferCells.get(3).equals(cell)){
+            System.out.printf(Colors.colorize(15,196,"←←"));
         }
     }
 

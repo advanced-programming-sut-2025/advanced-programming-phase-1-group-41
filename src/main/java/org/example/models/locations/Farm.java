@@ -3,6 +3,7 @@ package org.example.models.locations;
 import org.example.controllers.WeatherController;
 import org.example.models.*;
 import org.example.models.animals.Animal;
+import org.example.models.buildings.Door;
 import org.example.models.foragings.Nature.*;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.Cottage;
@@ -39,6 +40,7 @@ public class Farm {
     private int plantCount;
     private int foragingCropCount;
     private ArrayList<Cell> transferCells = new ArrayList<>();
+    private ArrayList<Cell> startPoints = new ArrayList<>();
     private Mine mine;
 
     public Farm(int id) {
@@ -161,6 +163,11 @@ public class Farm {
                 }
             }
         }
+        for(Cell cell : cells){
+            if(getCell(cell.getX(),cell.getY()-1).getObjectMap() instanceof Door){
+                startPoints.add(cell);
+            }
+        }
 
     }
 
@@ -230,8 +237,8 @@ public class Farm {
                 Cell cell = getCell(i, j);
                  if (cell.getX() == App.getGame().getCurrentPlayer().getX() && cell.getY() == App.getGame().getCurrentPlayer().getY()) {
                     System.out.printf(App.getGame().getCurrentPlayer().getChar());}
-                    else if (isAnimalHere(cell)) {
-                    }else if(transferCells.contains(cell)){printFlashSign();}
+                    else if (isAnimalHere(cell)) {}
+                    else if(isSpecialPoint(cell)){}
 
                  else {
                     System.out.printf(cell.getObjectMap().getChar());
@@ -243,6 +250,21 @@ public class Farm {
             }
         }
 
+    }
+    public boolean isSpecialPoint(Cell cell){
+        if(transferCells.contains(cell)){
+            printFlashSign();
+            return true;
+        }
+        else if(startPoints.contains(cell)){
+            printStartSign();
+            return true;
+        }
+        return false;
+
+    }
+    private void printStartSign(){
+        System.out.printf(Colors.colorize(15,33,"xx"));
     }
     private void printFlashSign(){
         if(this.getId()==1){
