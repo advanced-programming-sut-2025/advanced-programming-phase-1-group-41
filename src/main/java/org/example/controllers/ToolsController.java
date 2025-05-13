@@ -224,6 +224,11 @@ public class ToolsController {
             }
         }else{
             App.getGame().getCurrentPlayer().decEnergy(Math.max(0,energy-1));
+            try{
+                App.getGame().getCurrentPlayer().getInventory().addToInventory((Item)cell.getObjectMap(),1);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
             if(!(cell.getObjectMap() instanceof Building)){
                 cell.setObjectMap(new Grass());
             }
