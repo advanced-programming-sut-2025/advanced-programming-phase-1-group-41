@@ -32,12 +32,12 @@ public class Cottage implements Building {
         int xWall;
         int yWall;
         yWall = y;
-        while(yWall<=y+5) {
+        while(yWall <= y + 5) {
             for (int i = x; i <= x + 5; i++) {
                 Cell cell = Finder.findCellByCoordinates(i, yWall, farm);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
-                if(i == x + 2&&yWall==y+5){
+                if(i == x + 2 && yWall == y + 5){
                     cell.setObjectMap(new Door());
                 }
             }
@@ -45,19 +45,19 @@ public class Cottage implements Building {
         }
         xWall = x;
         while(xWall<=x+5) {
-            for (int j = y+1; j <= y+5; j++) {
+            for (int j = y + 1; j <= y + 5; j++) {
                 Cell cell = Finder.findCellByCoordinates(xWall, j, farm);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
             }
-            xWall+=5;
+            xWall += 5;
         }
         x++;
         y++;
         int xLength=4;
         int yLength=4;
-        for(int i=x; i<xLength+x; i++) {
-            for(int j=y; j<yLength+y; j++) {
+        for(int i = x; i < xLength + x; i++) {
+            for(int j = y; j < yLength + y; j++) {
                 Cell cell=Finder.findCellByCoordinates(i, j, farm);
                 assert cell != null;
                 cell.setObjectMap(this);
