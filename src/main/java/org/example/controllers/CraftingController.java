@@ -322,13 +322,13 @@ public class CraftingController {
     public static void check(){
         Player player = App.getGame().getCurrentPlayer();
         for (Machine onGoingMachine : player.getOnGoingMachines()) {
+            if(onGoingMachine.suffice()){
+                System.out.println("it suffices reducing time..");
+                onGoingMachine.decreaseProcessTime();
             if(onGoingMachine.getProcessTime()<=0 && onGoingMachine.getProduce() == null){
                 onGoingMachine.setProduce();
                 System.out.println("produce is ready");
             }
-            if(onGoingMachine.suffice()){
-                System.out.println("it suffices reducing time..");
-                onGoingMachine.decreaseProcessTime();
             }else{
                 System.out.println(onGoingMachine+" is not suffice");
             }
