@@ -120,4 +120,12 @@ public class Finder {
         }
         return null;
     }
+    public static Player findPlayerByFarm(Farm farm){
+        for(Player player : App.getGame().getPlayers()){
+            if(farm.getId() == player.getFarmId()){
+                return player;
+            }
+        }
+        return null;
+    }
 }

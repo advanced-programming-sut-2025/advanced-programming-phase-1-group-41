@@ -2,9 +2,8 @@ package org.example.views;
 
 import org.example.controllers.CheckerController;
 import org.example.controllers.MainMenuController;
-import org.example.models.App;
-import org.example.models.Menu;
-import org.example.models.Result;
+import org.example.models.*;
+import org.example.models.locations.Farm;
 import org.example.views.commands.MainMenuCommands;
 import org.example.views.commands.gameCommands.GameMainCommands;
 
@@ -62,6 +61,12 @@ public class MainMenu implements AppMenu {
                     input = scanner.nextLine();
                 }
             }
+        }
+        for(Player player : App.getGame().getPlayers()) {
+            Farm farm = Finder.findFarmByPlayer(player);
+            assert farm != null;
+            player.setX(farm.getStartPoints().getFirst().getX());
+            player.setY(farm.getStartPoints().getFirst().getY());
         }
         System.out.println("welcome to the game!");
         App.setMenu(Menu.Game);

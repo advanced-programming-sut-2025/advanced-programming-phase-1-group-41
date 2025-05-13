@@ -1,6 +1,7 @@
 package org.example.controllers;
 
 import org.example.models.*;
+import org.example.models.buildings.GreenHouse.Greenhouse;
 import org.example.models.foragings.*;
 import org.example.models.foragings.Nature.Grass;
 import org.example.models.foragings.Nature.Tree;
@@ -31,14 +32,6 @@ public class FarmingController {
     public Result plant(Matcher matcher){
         String seed = matcher.group("seed");
         SeedType seedType = SeedType.parseSeedType(seed);
-        if(seedType == null){
-            return new Result(false, "Seed type not found!");
-        }
-
-        if(!App.getGame().getTime().getSeason().equals(seedType.getSeason()) && !seedType.getSeason().equals(Season.Special)){
-            return new Result(false, "Can't plant this seed on this season!");
-        }
-
         String direction = matcher.group("direction");
         int dir = Integer.parseInt(direction)-1;
         if(dir < 0 || dir > 7){
@@ -48,13 +41,30 @@ public class FarmingController {
         int x = App.getGame().getCurrentPlayer().getX()+dirs[dir][0];
         int y = App.getGame().getCurrentPlayer().getY()+dirs[dir][1];
 
+        if(seedType == null){
+            return new Result(false, "Seed type not found!");
+        }
+
+        if(!App.getGame().getTime().getSeason().equals(seedType.getSeason()) && !seedType.getSeason().equals(Season.Special)
+                && !App.getGame().getCurrentPlayerFarm().getGreenhouse().isGreenHouse(x, y)){
+            return new Result(false, "Can't plant this seed on this season!");
+        }
+
+
         Farm farm = App.getCurrentUser().getCurrentGame().getCurrentPlayerFarm();
         Inventory inventory = App.getCurrentUser().getCurrentGame().getCurrentPlayer().getInventory();
         Cell cell = Finder.findCellByCoordinates(x, y, farm);
 
         assert cell != null;
-        if(cell.getObjectMap() instanceof Grass){
-            if(((Grass) cell.getObjectMap()).isFarmland()){
+        if(cell.getObjectMap() instanceof Grass || cell.getObjectMap() instanceof Greenhouse){
+            boolean canPlant = true;
+            if(cell.getObjectMap() instanceof Grass){
+                canPlant = false;
+                if(((Grass) cell.getObjectMap()).isFarmland()){
+                    canPlant = true;
+                }
+            }
+            if(canPlant){
                 for(Slot slot : inventory.getSlots()){
                     if(slot.getItem() instanceof Seed){
                         if(slot.getItem().getName().equals(seed)
@@ -69,7 +79,10 @@ public class FarmingController {
                                 String randomType = mixedCropNames.get(rand.nextInt(mixedCropNames.size()));
                                 for(CropType cropType : CropType.values()){
                                     if(cropType.getSource().getName().equalsIgnoreCase(randomType)){
-                                        Result result = giantCrop(x, y, cropType, farm);
+                                        Result result = new Result(false, "");
+                                        if(!farm.getGreenhouse().isGreenHouse(x, y)){
+                                            result = giantCrop(x, y, cropType, farm);
+                                        }
                                         if(result.success()){
                                             inventory.removeFromInventory(slot.getItem(), 1);
                                             return result;
@@ -82,7 +95,10 @@ public class FarmingController {
                             }
                             for(CropType cropType : CropType.values()){
                                 if(cropType.getSource().equals(seedType)){
-                                    Result result = giantCrop(x, y, cropType, farm);
+                                    Result result = new Result(false, "");
+                                    if(!farm.getGreenhouse().isGreenHouse(x, y)){
+                                        result = giantCrop(x, y, cropType, farm);
+                                    }
                                     if(result.success()){
                                         inventory.removeFromInventory(slot.getItem(), 1);
                                         return result;

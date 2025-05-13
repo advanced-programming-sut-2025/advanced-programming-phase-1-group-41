@@ -36,12 +36,10 @@ public class Game {
 //    private Map map;
 
     {
-        if (farms.isEmpty()) {
-            this.farms.add(new Farm(1));
-            this.farms.add(new Farm(2));
-            this.farms.add(new Farm(3));
-            this.farms.add(new Farm(4));
-        }
+        this.farms.add(new Farm(1));
+        this.farms.add(new Farm(2));
+        this.farms.add(new Farm(3));
+        this.farms.add(new Farm(4));
     }
 
 

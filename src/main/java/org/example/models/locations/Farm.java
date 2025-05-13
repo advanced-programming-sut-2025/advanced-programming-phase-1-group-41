@@ -35,13 +35,14 @@ public class Farm {
     private final ArrayList<Coop> coops = new ArrayList<>();
     private final ArrayList<Crop> crops = new ArrayList<>();
     private final ArrayList<Tree> trees = new ArrayList<>();
-    private int rockCount;
-    private int foragingTreeCount;
-    private int plantCount;
-    private int foragingCropCount;
-    private ArrayList<Cell> transferCells = new ArrayList<>();
-    private ArrayList<Cell> startPoints = new ArrayList<>();
+    private final int rockCount;
+    private final int foragingTreeCount;
+    private final int plantCount;
+    private final int foragingCropCount;
+    private final ArrayList<Cell> transferCells = new ArrayList<>();
+    private final ArrayList<Cell> startPoints = new ArrayList<>();
     private Mine mine;
+    private final Greenhouse greenhouse;
 
     public Farm(int id) {
         farmBuilder = new FarmBuilder(this);
@@ -63,7 +64,8 @@ public class Farm {
         }
 //        Objects.requireNonNull(Finder.findCellByCoordinates(20, 50, this)).setObjectMap(new Grass(20, 50, this));
         farmType = FarmType.values()[rand.nextInt(FarmType.values().length)];
-        buildings.add(new Greenhouse(4,24 + rand.nextInt(4),this));
+        greenhouse = new Greenhouse(4,24 + rand.nextInt(4),this);
+        buildings.add(greenhouse);
         buildings.add(new Cottage(30 + rand.nextInt(4), 4,this));
         mine = new Mine(3,3,this);
 
@@ -176,8 +178,9 @@ public class Farm {
         }
         for(Cell cell : cells){
             if(cell.getY()>2&&getCell(cell.getX(),cell.getY()-1).getObjectMap() instanceof Door&&getCell(cell.getX(),cell.getY()-2).getObjectMap() instanceof Cottage){
-                System.out.println("HAGGGGGGGGGGGGGGG");
                 startPoints.add(cell);
+//                Objects.requireNonNull(Finder.findPlayerByFarm(this)).setX(cell.getX());
+//                Objects.requireNonNull(Finder.findPlayerByFarm(this)).setY(cell.getY());
             }
         }
 
@@ -194,6 +197,7 @@ public class Farm {
     public void creatNewBarn(int x, int y, BarnType barnType){
         barns.add(new Barn(x, y, this, barnType));
     }
+
     public void creatNewCoop(int x,int y,CoopType coopType){
         coops.add(new Coop(x, y, this, coopType));
     }
@@ -279,6 +283,7 @@ public class Farm {
     private void printStartSign(){
         System.out.printf(Colors.colorize(15,33,"xx"));
     }
+
     private void printFlashSign(){
         if(this.getId()==1){
             System.out.printf(Colors.colorize(15,196,"↘↘"));
@@ -319,6 +324,10 @@ public class Farm {
 
     public Mine getMine() {
         return mine;
+    }
+
+    public Greenhouse getGreenhouse() {
+        return greenhouse;
     }
 
     public void setFarmType(FarmType farmType) {
@@ -365,8 +374,15 @@ public class Farm {
         return false;
     }
 
+    public ArrayList<Cell> getStartPoints(){
+        return startPoints;
+    }
     public void removeCrop(Crop crop) {
-        Objects.requireNonNull(Finder.findCellByCoordinates(crop.getX(), crop.getY(), this)).setObjectMap(new Grass());
+        if(!greenhouse.isGreenHouse(crop.getX(), crop.getY())){
+            Objects.requireNonNull(Finder.findCellByCoordinates(crop.getX(), crop.getY(), this)).setObjectMap(new Grass());
+        } else{
+            Objects.requireNonNull(Finder.findCellByCoordinates(crop.getX(), crop.getY(), this)).setObjectMap(new Greenhouse());
+        }
         crops.remove(crop);
     }
 
@@ -379,7 +395,11 @@ public class Farm {
     }
 
     public void removeTree(Tree tree){
-        Objects.requireNonNull(Finder.findCellByCoordinates(tree.getX(), tree.getY(), this)).setObjectMap(new Grass());
+        if(!greenhouse.isGreenHouse(tree.getX(), tree.getY())){
+            Objects.requireNonNull(Finder.findCellByCoordinates(tree.getX(), tree.getY(), this)).setObjectMap(new Grass());
+        } else{
+            Objects.requireNonNull(Finder.findCellByCoordinates(tree.getX(), tree.getY(), this)).setObjectMap(new Greenhouse());
+        }
         trees.remove(tree);
     }
     public void update(){

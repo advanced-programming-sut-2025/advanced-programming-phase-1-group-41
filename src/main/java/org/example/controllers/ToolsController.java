@@ -6,6 +6,7 @@ import org.example.models.animals.animalKinds.Cow;
 import org.example.models.animals.animalKinds.Goat;
 import org.example.models.animals.animalKinds.Sheep;
 import org.example.models.buildings.Building;
+import org.example.models.buildings.GreenHouse.Greenhouse;
 import org.example.models.buildings.GreenHouse.WaterTank;
 import org.example.models.buildings.animalContainer.Barn;
 import org.example.models.foragings.*;
@@ -282,7 +283,11 @@ public class ToolsController {
             if(tree.isThundered()){
                 App.getGame().getCurrentPlayer().getInventory().addToInventory(new Mineral(MineralType.Coal), 5);
                 App.getGame().getCurrentPlayer().getForagingSkill().increaseXp(10);
-                cell.setObjectMap(new Grass());
+                if(App.getGame().getCurrentPlayerFarm().getGreenhouse().isGreenHouse(tree.getX(), tree.getY())){
+                    cell.setObjectMap(new Greenhouse());
+                } else{
+                    cell.setObjectMap(new Grass());
+                }
                 return new Result(true, "You got 5 coal.");
             }
             if(tree.getHitPoints() == 0){
@@ -291,7 +296,11 @@ public class ToolsController {
                 App.getGame().getCurrentPlayer().getInventory().addToInventory(new Wood(), 100);
                 App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(tree.getTreeType().getSource()), saplingCount);
                 App.getGame().getCurrentPlayer().getForagingSkill().increaseXp(10);
-                cell.setObjectMap(new Grass());
+                if(App.getGame().getCurrentPlayerFarm().getGreenhouse().isGreenHouse(tree.getX(), tree.getY())){
+                    cell.setObjectMap(new Greenhouse());
+                } else{
+                    cell.setObjectMap(new Grass());
+                }
                 return new Result(true, "got some wood and " + saplingCount + " " + tree.getTreeType().getSource().getName());
             }else{
                 return new Result(true, "hit points left: "+tree.getHitPoints());
@@ -361,7 +370,11 @@ public class ToolsController {
                     } else{
                         App.getGame().getCurrentPlayer().getInventory().addToInventory(crop, 1);
                         App.getGame().getCurrentPlayer().getFarmingSkill().increaseXp(5);
-                        cell.setObjectMap(new Grass());
+                        if(App.getGame().getCurrentPlayerFarm().getGreenhouse().isGreenHouse(crop.getX(), crop.getY())){
+                            cell.setObjectMap(new Greenhouse());
+                        } else{
+                            cell.setObjectMap(new Grass());
+                        }
                         return new Result(true, "You got a " + crop.getName());
                     }
                 }

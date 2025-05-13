@@ -102,7 +102,7 @@ public class FarmBuilder {
         List<Crop> toRemove = new ArrayList<>();
         for (Crop crop : farm.getCrops()) {
             crop.increaseStage();
-            if (crop.shouldBeRemoved()) {
+            if (crop.shouldBeRemoved(farm)) {
                 toRemove.add(crop);
             }
         }
@@ -118,6 +118,7 @@ public class FarmBuilder {
         App.getGame().getCurrentPlayer().getInventory().addToInventory(new Fertilizer(FertilizerType.GrassStarter), 100);
         App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.ApricotSapling), 100);
         App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.Mixed), 100);
+        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.StarfruitSeed), 100);
         App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.CauliflowerSeed), 100);
         App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.CoffeeBeanSeed), 100);
         App.getGame().getCurrentPlayer().getInventory().addToInventory(CraftableMachine.DeluxeScarecrow, 100);
@@ -145,10 +146,14 @@ public class FarmBuilder {
         }
         if(App.getGame().getWeatherType().equals(WeatherType.Rainy) || App.getGame().getWeatherType().equals(WeatherType.Stormy)){
             for(Crop crop : farm.getCrops()){
-                crop.water();
+                if(!farm.getGreenhouse().isGreenHouse(crop.getX(), crop.getY())){
+                    crop.water();
+                }
             }
             for(Tree tree : farm.getTrees()) {
-                tree.water();
+                if(!farm.getGreenhouse().isGreenHouse(tree.getX(), tree.getY())){
+                    tree.water();
+                }
             }
         }
         if(App.getGame().getWeatherType().equals(WeatherType.Stormy)){
@@ -189,9 +194,12 @@ public class FarmBuilder {
             if(rand.nextInt(4) == 0){
                 if(rand.nextInt(2) == 0 && !farm.getCrops().isEmpty()){
                     Crop crop = farm.getCrops().get(rand.nextInt(farm.getCrops().size()));
-                    if(crop.isProtected()){
+                    if(farm.getGreenhouse().isGreenHouse(crop.getX(), crop.getY())){
                         System.out.println("A crow tried to attack your " + crop.getName() +
-                                " at " + crop.getX() + ", " + crop.getY() + ". But it was protected.");
+                                " at " + crop.getX() + ", " + crop.getY() + ". But it was in Greenhouse.");
+                    } else if(crop.isProtected()){
+                        System.out.println("A crow tried to attack your " + crop.getName() +
+                                " at " + crop.getX() + ", " + crop.getY() + ". But it was protected by Scarecrow.");
                     } else{
                         System.out.println("A crow attacked your " + crop.getName() +
                                 " at " + crop.getX() + ", " + crop.getY() + ". Now it's dead.");
@@ -200,16 +208,17 @@ public class FarmBuilder {
                     }
                 } else if(!farm.getTrees().isEmpty()) {
                     Tree tree = farm.getTrees().get(rand.nextInt(farm.getTrees().size()));
-                    if(tree.isProtected()){
+                    if(farm.getGreenhouse().isGreenHouse(tree.getX(), tree.getY())){
                         System.out.println("A crow tried to attack your " + tree.getName() +
-                                " at " + tree.getX() + ", " + tree.getY() + ". But it was protected.");
+                                " at " + tree.getX() + ", " + tree.getY() + ". But it was in Greenhouse.");
+                    } else if(tree.isProtected()){
+                        System.out.println("A crow tried to attack your " + tree.getName() +
+                                " at " + tree.getX() + ", " + tree.getY() + ". But it was protected by Scarecrow.");
                     } else{
                         System.out.println("A crow attacked your " + tree.getName() +
                                 " at " + tree.getX() + ", " + tree.getY() + ". It won't have fruit tomorrow.");
                         tree.setAttacked(true);
                     }
-                } else{
-                    System.out.println("Kir Shody");
                 }
             }
         }

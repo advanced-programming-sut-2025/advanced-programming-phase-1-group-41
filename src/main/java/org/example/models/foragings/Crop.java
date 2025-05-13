@@ -129,10 +129,10 @@ public class Crop implements Item {
     public void setCurrentStageLevel(int currentStageLevel){
         this.currentStageLevel = currentStageLevel;
     }
-    public Boolean shouldBeRemoved() {
+    public boolean shouldBeRemoved(Farm farm) {
         return (waterStreak >= 2 && !isWateredToday) || waterStreak >= 3
-                || (!Arrays.asList(cropType.getGrowingSeasons()).contains(App.getGame().getTime().getSeason())
-                && !cropType.getGrowingSeasons()[0].equals(Season.Special));
+                || ((!Arrays.asList(cropType.getGrowingSeasons()).contains(App.getGame().getTime().getSeason())
+                && !cropType.getGrowingSeasons()[0].equals(Season.Special)) && !farm.getGreenhouse().isGreenHouse(x, y));
     }
 
     public int getX(){

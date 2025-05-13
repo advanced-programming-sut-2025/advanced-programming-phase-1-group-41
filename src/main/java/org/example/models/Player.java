@@ -6,6 +6,7 @@ import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
 import org.example.models.items.*;
 import org.example.models.items.craftablemachines.Machine;
+import org.example.models.locations.Farm;
 import org.example.models.skills.Skill;
 import org.example.models.tools.Tool;
 

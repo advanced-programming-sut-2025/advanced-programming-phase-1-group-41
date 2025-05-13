@@ -30,13 +30,21 @@ public class WeatherController {
             }
             if(cell.getObjectMap() instanceof Grass || cell.getObjectMap() instanceof Crop || cell.getObjectMap() instanceof ForagingCrop
                     || cell.getObjectMap() instanceof Plant || cell.getObjectMap() instanceof Bush){
+                if(cell.getObjectMap() instanceof Crop crop){
+                    if(farm.getGreenhouse().isGreenHouse(crop.getX(), crop.getY())){
+                        continue;
+                    }
+                }
                 Grass grass = new Grass();
                 grass.setThundered(true);
                 cell.setObjectMap(grass);
                 System.out.println("A " + cell.getObjectMap().getName() + " was struck by lightning at " + x + ", " + y);
             } else if(cell.getObjectMap() instanceof Tree || cell.getObjectMap() instanceof ForagingTree){
-                if(cell.getObjectMap() instanceof Tree){
-                    ((Tree) cell.getObjectMap()).thunder();
+                if(cell.getObjectMap() instanceof Tree tree){
+                    if(farm.getGreenhouse().isGreenHouse(tree.getX(), tree.getY())){
+                        continue;
+                    }
+                    tree.thunder();
                 } else {
                     ((ForagingTree) cell.getObjectMap()).thunder();
                 }

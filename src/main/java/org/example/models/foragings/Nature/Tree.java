@@ -102,10 +102,10 @@ public class Tree implements Nature, Obstacle {
     public int getY(){
         return y;
     }
-    public Boolean isWateredToday() {
+    public boolean isWateredToday() {
         return isWateredToday;
     }
-    public Boolean isFertilizedToday() {
+    public boolean isFertilizedToday() {
         return isFertilizedToday;
     }
     public void water(){

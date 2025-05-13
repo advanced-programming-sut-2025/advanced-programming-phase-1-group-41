@@ -15,9 +15,9 @@ public class Greenhouse implements Building {
     public String getChar() {
         return Colors.colorize(0,3,"XX");
     }
-    public final int x;
-    public final int y;
-    private final Farm farm;
+    public int x;
+    public int y;
+    private Farm farm;
     private int[][] cells;
 
     @Override
@@ -25,6 +25,9 @@ public class Greenhouse implements Building {
         return "Green House";
     }
 
+    public Greenhouse() {
+
+    }
     public Greenhouse(int x, int y, Farm farm) {
         this.x = x;
         this.y = y;

@@ -5,6 +5,7 @@ import com.mongodb.client.MongoClients;
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
 import org.example.models.*;
+import org.example.models.locations.Farm;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -96,6 +97,12 @@ public class MainMenuController {
         App.getGame().setCurrentPlayer(player1);
         App.games.add(game);
         setPlayerGames(players, game);
+//        for(Player player : players){
+//            Farm farm = Finder.findFarmByPlayer(player);
+//            assert farm != null;
+//            player.setX(farm.getStartPoints().getFirst().getX());
+//            player.setY(farm.getStartPoints().getFirst().getY());
+//        }
         saveGame(game);
         return new Result(true,"Game created successfully");
 

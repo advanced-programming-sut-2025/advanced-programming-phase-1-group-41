@@ -36,7 +36,6 @@ public class Lake implements ObjectMap, Obstacle {
         double theta = 2 * Math.PI * startY / 15;
         startY *=  (Math.cos(theta) / 10 + 1);
         startX -= 2;
-        Random random = new Random();
         for (int x = 0; x < 7; x++) {
             for (int y = 0; y < 7; y++) {
                 map[x][y] = x + y < 8;
