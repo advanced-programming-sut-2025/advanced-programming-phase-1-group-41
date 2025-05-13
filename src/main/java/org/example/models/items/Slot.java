@@ -1,14 +1,17 @@
 package org.example.models.items;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.PriorityQueue;
 
 public class Slot {
     Item item;
     private int quantity;
-
+    private PriorityQueue<Integer> itemsPrice;
     public Slot(Item item, int quantity) {
         this.item = item;
         this.quantity = quantity;
+        itemsPrice = new PriorityQueue<>();
     }
 
 
@@ -26,5 +29,9 @@ public class Slot {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public PriorityQueue getItemsPrice() {
+        return itemsPrice;
     }
 }
