@@ -4,19 +4,24 @@ import dev.morphia.annotations.Entity;
 
 @Entity
 public enum WeatherType {
-    Sunny("Sunny"),
-    Rainy("Rainy"),
-    Stormy("Stormy"),
-    Snowy("Snowy"),
+    Sunny("Sunny", 1),
+    Rainy("Rainy", 1.5),
+    Stormy("Stormy", 1.5),
+    Snowy("Snowy", 2),
     ;
 
     private final String name;
+    private final double energy;
 
 
-    WeatherType(String name) {
+    WeatherType(String name, double energy) {
         this.name = name;
+        this.energy = energy;
     }
 
+    public double getEnergy() {
+        return energy;
+    }
     @Override
     public String toString() {
         return name;

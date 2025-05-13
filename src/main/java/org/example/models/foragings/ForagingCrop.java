@@ -3,11 +3,12 @@ package org.example.models.foragings;
 import org.example.models.Cell;
 import org.example.models.Colors;
 import org.example.models.Finder;
+import org.example.models.items.Item;
 import org.example.models.locations.Farm;
 
 import java.util.Random;
 
-public class ForagingCrop implements Foraging{
+public class ForagingCrop implements Foraging, Item {
 
     private final ForagingCropType foragingCropType;
     int typeIndex;
@@ -20,6 +21,11 @@ public class ForagingCrop implements Foraging{
     @Override
     public String getName() {
         return foragingCropType.getName();
+    }
+
+    @Override
+    public double getPrice() {
+        return foragingCropType.getBaseSellPrice();
     }
 
     public ForagingCrop(int x, int y, Farm farm) {

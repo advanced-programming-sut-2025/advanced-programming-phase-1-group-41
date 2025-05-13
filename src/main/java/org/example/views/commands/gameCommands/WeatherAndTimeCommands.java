@@ -12,7 +12,7 @@ public enum WeatherAndTimeCommands implements Command {
     CheatAdvanceTime("\\s*cheat\\s+advance\\s+time\\s+(?<hour>\\d+)h\\s*"),
     CheatAdvanceDate("\\s*cheat\\s+advance\\s+date\\s+(?<day>\\d+)d\\s*"),
     Season("\\s*season\\s*"),
-    CheatThor("\\s*cheat\\s+Thor\\s+-l\\s+(?<x>.*)\\s*,\\s*(?<y>.*)\\s*"),
+    CheatThor("\\s*cheat\\s+Thor\\s+-l\\s+(?<x>-?\\d+)\\s*,\\s*(?<y>-?\\d+)\\s*"),
     Weather("\\s*weather\\s*"),
     WeatherForecast("\\s*weather\\s+forecast\\s*"),
     CheatWeather("\\s*cheat\\s+weather\\s+set\\s+(?<type>\\S+)\\s*"),

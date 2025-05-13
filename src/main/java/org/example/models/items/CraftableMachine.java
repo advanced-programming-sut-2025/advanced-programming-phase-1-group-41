@@ -9,7 +9,7 @@ public enum CraftableMachine implements Item{
     IridiumSprinkler("is", "IridiumSprinkler", 0, null),
     CharcoalKiln("ck", "CharcoalKiln", 0, null),
     Furnace("Fu", "Furnace", 0,CraftingRecipe.Furnace),
-    Scarecrow("sc", "Scarecrow", 0, null),
+    Scarecrow("!!", "Scarecrow", 0, null),
     DeluxeScarecrow("ds", "DeluxeScarecrow", 0, null),
     BeeHouse("bh", "BeeHouse", 0, null),
     CheesePress("cp", "Cheese Press", 0, null),

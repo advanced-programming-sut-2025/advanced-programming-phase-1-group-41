@@ -6,7 +6,10 @@ import org.example.models.locations.Farm;
 public class Tree implements Nature, Obstacle {
     @Override
     public String getChar() {
-        return Colors.colorize(3,15 - currentStage,(typeIndex/10) + "" + typeIndex % 10);
+        if(isThundered){
+            return Colors.colorize(53,0,(typeIndex/10) + "" + typeIndex % 10);
+        }
+        return Colors.colorize(53,214 - 6 * currentStage,(typeIndex/10) + "" + typeIndex % 10);
     }
 
     @Override
@@ -19,11 +22,13 @@ public class Tree implements Nature, Obstacle {
     private int typeIndex = 0;
     private int currentStage = 0;
     private int currentStageLevel = 0;
-    private Boolean isWateredToday = false;
+    private boolean isWateredToday = false;
     private int waterStreak = 0;
-    private Boolean isFertilizedToday = false;
-    private int x;
-    private int y;
+    private boolean isFertilizedToday = false;
+    private boolean isProtected = false;
+    private boolean isThundered = false;
+    private final int x;
+    private final int y;
 
     public Tree(int x, int y, Farm farm, TreeType treeType) {
         this.x = x;
@@ -106,12 +111,21 @@ public class Tree implements Nature, Obstacle {
         isWateredToday = false;
         isFertilizedToday = false;
     }
+    public void thunder(){
+        isThundered = true;
+    }
+    public boolean isThundered(){
+        return isThundered;
+    }
     public void decreaseWaterStreak(){
         waterStreak--;
     }
     public void waterFertilize() {
         isFertilizedToday = true;
     }
+    public boolean isProtected() {return isProtected;}
+    public void setIsProtected(boolean isProtected) {this.isProtected = isProtected;}
+
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();

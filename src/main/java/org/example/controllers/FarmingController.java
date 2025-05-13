@@ -170,7 +170,6 @@ public class FarmingController {
                     .setObjectMap(crop);
             return new Result(true, "A Giant " + cropType.getName() + " planted at " + x + "," + y);
         }
-//        System.out.println("Crops: " + count + " | " + "x : " + x + " | " + "y : " + y);
         return new Result(false, "No Giant Crop found.");
     }
 
@@ -245,7 +244,7 @@ public class FarmingController {
             chance = 100;
         }
         if(chance >= 50){
-            crop.isFertilizedToday();
+            crop.waterFertilize();
         }
         if(chance == 0){
             crop.decreaseWaterStreak();
