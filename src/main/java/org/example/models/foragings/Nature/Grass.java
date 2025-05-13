@@ -2,20 +2,18 @@ package org.example.models.foragings.Nature;
 
 import org.example.models.Cell;
 import org.example.models.Colors;
-import org.example.models.Finder;
 import org.example.models.ObjectMap;
 import org.example.models.locations.Farm;
-
-import java.util.Objects;
-import java.util.Random;
 
 public class Grass implements ObjectMap {
     @Override
     public String getChar() {
-        if(isFarmland && !isGround){
+        if(isFarmland){
             return Colors.colorize(94,0,"||");
         } else if(isSand){
             return Colors.colorize(228,0,"ww");
+        } else if(isThundered){
+            return Colors.colorize(15,0,"ww");
         } else if(isGround){
             return Colors.colorize(215,0,"ww");
         }else{
@@ -31,11 +29,13 @@ public class Grass implements ObjectMap {
     private boolean isFarmland;
     private boolean isGround;
     private boolean isSand;
+    private boolean isThundered;
 
     public Grass(){
         isGround = false;
         isFarmland = false;
         isSand = false;
+        isThundered = false;
     }
 
     public boolean isFarmland() {
@@ -45,8 +45,10 @@ public class Grass implements ObjectMap {
         this.isFarmland = isFarmland;
         isGround = false;
         isSand = false;
+        isThundered = false;
     }
     public boolean isSand() {return isSand;}
+
     public boolean isGround() {
         return isGround;
     }
@@ -55,6 +57,12 @@ public class Grass implements ObjectMap {
     }
     public void setSand(boolean isSand) {
         this.isSand = isSand;
+    }
+    public boolean isThundered() {
+        return isThundered;
+    }
+    public void setThundered(boolean isThundered) {
+        this.isThundered = isThundered;
     }
     public Grass(int startX, int startY, Farm farm) {
         isGround = true;

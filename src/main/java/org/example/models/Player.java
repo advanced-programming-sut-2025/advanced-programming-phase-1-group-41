@@ -189,6 +189,7 @@ public class Player {
         this.energy = energy;
     }
     public void decEnergy(double delta) {
+        delta *= App.getGame().getWeatherType().getEnergy();
         App.getGame().incRoundEnergy(delta);
         this.energy -= delta;
     }

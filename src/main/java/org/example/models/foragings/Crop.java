@@ -26,10 +26,12 @@ public class Crop implements Item {
     private int typeIndex = 0;
     private int currentStage;
     private int currentStageLevel;
-    private Boolean isWateredToday = false;
-    private Boolean isFertilizedToday = false;
-    private Boolean isGiantCrop = false;
+    private boolean isWateredToday = false;
+    private boolean isFertilizedToday = false;
+    private boolean isGiantCrop = false;
     private int regrowthTime = 0;
+    private boolean canRegrow = false;
+    private boolean isProtected = false;
     private int waterStreak = 0;
     private int x;
     private int y;
@@ -48,6 +50,7 @@ public class Crop implements Item {
         currentStage = 0;
         if(!cropType.isOneTimeHarvest()){
             regrowthTime = cropType.getRegrowthTime();
+            canRegrow = true;
         }
         Cell cell = Finder.findCellByCoordinates(x, y, farm);
         assert cell != null;
@@ -70,6 +73,7 @@ public class Crop implements Item {
         isGiantCrop = true;
         if(!cropType.isOneTimeHarvest()){
             regrowthTime = cropType.getRegrowthTime();
+            canRegrow = true;
         }
         Cell cell1 = Finder.findCellByCoordinates(x, y, farm);
         assert cell1 != null;
@@ -122,6 +126,9 @@ public class Crop implements Item {
         }
     }
 
+    public void setCurrentStageLevel(int currentStageLevel){
+        this.currentStageLevel = currentStageLevel;
+    }
     public Boolean shouldBeRemoved() {
         return (waterStreak >= 1 && !isWateredToday) || waterStreak >= 2
                 || (!Arrays.asList(cropType.getGrowingSeasons()).contains(App.getGame().getTime().getSeason())
@@ -136,9 +143,6 @@ public class Crop implements Item {
     }
     public Boolean isWateredToday() {
         return isWateredToday;
-    }
-    public Boolean isFertilizedToday() {
-        return isFertilizedToday;
     }
     public void water(){
         isWateredToday = true;
@@ -158,7 +162,14 @@ public class Crop implements Item {
     }
     public Boolean isGiantCrop() {return isGiantCrop;}
     public int getRegrowthTime(){return regrowthTime;}
-    public void setRegrowthTime(int regrowthTime){this.regrowthTime = regrowthTime;}
+    public void setCanRegrow(boolean canRegrow){
+        this.canRegrow = canRegrow;
+    }
+    public boolean getCanRegrow(){
+        return canRegrow;
+    }
+    public boolean isProtected() {return isProtected;}
+    public void setIsProtected(boolean isProtected) {this.isProtected = isProtected;}
 
     @Override
     public String toString() {

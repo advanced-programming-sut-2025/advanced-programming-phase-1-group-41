@@ -8,10 +8,8 @@ import org.example.models.animals.animalKinds.Sheep;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.GreenHouse.WaterTank;
 import org.example.models.buildings.animalContainer.Barn;
-import org.example.models.foragings.ForagingTree;
-import org.example.models.foragings.Fruit;
+import org.example.models.foragings.*;
 import org.example.models.foragings.Nature.*;
-import org.example.models.foragings.Crop;
 import org.example.models.foragings.Nature.Mineral;
 import org.example.models.foragings.Nature.Rock;
 import org.example.models.foragings.Nature.RockType;
@@ -22,6 +20,7 @@ import org.example.models.items.Products.ProductType;
 import org.example.models.locations.Farm;
 import org.example.models.tools.*;
 
+import java.util.Random;
 import java.util.regex.Matcher;
 
 public class ToolsController {
@@ -182,6 +181,7 @@ public class ToolsController {
             App.getGame().getCurrentPlayer().getInventory().addToInventory(
                     (Item) cell.getObjectMap(), 1 + value
             );
+            App.getGame().getCurrentPlayer().getForagingSkill().increaseXp(10);
             String name = ((Item)cell.getObjectMap()).getName();
             App.getGame().getCurrentPlayer().decEnergy(energy);
             cell.setObjectMap(new Mine(x,y,App.getGame().getCurrentPlayerFarm(),12121212));
@@ -194,11 +194,13 @@ public class ToolsController {
                     App.getGame().getCurrentPlayer().getInventory().addToInventory(
                             (Item) cell.getObjectMap(), 4 + value
                     );
+                    App.getGame().getCurrentPlayer().getForagingSkill().increaseXp(10);
                     App.getGame().getCurrentPlayer().getMiningSkill().increaseXp(40);
                 }else{
                     App.getGame().getCurrentPlayer().getInventory().addToInventory(
                             (Item) cell.getObjectMap(), 1 + value
                     );
+                    App.getGame().getCurrentPlayer().getForagingSkill().increaseXp(10);
                     App.getGame().getCurrentPlayer().getMiningSkill().increaseXp(10);
                 }
                 App.getGame().getCurrentPlayer().decEnergy(energy);
@@ -273,27 +275,45 @@ public class ToolsController {
             energy--;
         }
 
-        if(cell.getObjectMap() instanceof Tree){
-            Tree tree = (Tree) cell.getObjectMap();
+        if(cell.getObjectMap() instanceof Tree tree){
             tree.decreaseHitPoints();
             App.getGame().getCurrentPlayer().decEnergy(energy);
 
-            if(tree.getHitPoints() == 0){
-                App.getGame().getCurrentPlayer().getInventory().addToInventory(new Wood(), 100);
+            if(tree.isThundered()){
+                App.getGame().getCurrentPlayer().getInventory().addToInventory(new Mineral(MineralType.Coal), 5);
+                App.getGame().getCurrentPlayer().getForagingSkill().increaseXp(10);
                 cell.setObjectMap(new Grass());
-                return new Result(true, "got some wood");
+                return new Result(true, "You got 5 coal.");
+            }
+            if(tree.getHitPoints() == 0){
+                Random rand = new Random();
+                int saplingCount = 1 + rand.nextInt(2);
+                App.getGame().getCurrentPlayer().getInventory().addToInventory(new Wood(), 100);
+                App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(tree.getTreeType().getSource()), saplingCount);
+                App.getGame().getCurrentPlayer().getForagingSkill().increaseXp(10);
+                cell.setObjectMap(new Grass());
+                return new Result(true, "got some wood and " + saplingCount + " " + tree.getTreeType().getSource().getName());
             }else{
                 return new Result(true, "hit points left: "+tree.getHitPoints());
             }
-        }else if(cell.getObjectMap() instanceof ForagingTree){
-            ForagingTree foragingTree = (ForagingTree) cell.getObjectMap();
+        }else if(cell.getObjectMap() instanceof ForagingTree foragingTree){
             foragingTree.decreaseHitPoints();
             App.getGame().getCurrentPlayer().decEnergy(energy);
 
-            if(foragingTree.getHitPoints() == 0){
-                App.getGame().getCurrentPlayer().getInventory().addToInventory(new Wood(), 100);
+            if(foragingTree.isThundered()){
+                App.getGame().getCurrentPlayer().getInventory().addToInventory(new Mineral(MineralType.Coal), 5);
+                App.getGame().getCurrentPlayer().getForagingSkill().increaseXp(10);
                 cell.setObjectMap(new Grass());
-                return new Result(true, "got some wood from foraging");
+                return new Result(true, "You got 5 coal.");
+            }
+            if(foragingTree.getHitPoints() == 0){
+                Random rand = new Random();
+                int saplingCount = 1 + rand.nextInt(2);
+                App.getGame().getCurrentPlayer().getInventory().addToInventory(new Wood(), 100);
+                App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(foragingTree.getTreeType().getSource()), saplingCount);
+                App.getGame().getCurrentPlayer().getForagingSkill().increaseXp(10);
+                cell.setObjectMap(new Grass());
+                return new Result(true, "got some wood and " + saplingCount + " " + foragingTree.getTreeType().getSource().getName());
             }else{
                 return new Result(true, "hit points left: "+foragingTree.getHitPoints());
             }
@@ -314,12 +334,13 @@ public class ToolsController {
             ((Grass) cell.getObjectMap()).setGround(true);
             return new Result(true, "It's now a ground");
         } else if(cell.getObjectMap() instanceof Crop crop){
-            if(!(crop.getStages().size() - 1 == crop.getCurrentStage()) || (crop.getRegrowthTime() != 0 && crop.getCurrentStageLevel() < crop.getRegrowthTime())){
+            if(!(crop.getStages().size() - 1 == crop.getCurrentStage()) || (!crop.getCropType().isOneTimeHarvest() && crop.getCurrentStageLevel() < crop.getRegrowthTime())){
                 return new Result(true, "Crop is not ripe yet!");
             } else{
-                if(crop.getRegrowthTime() == 0){
+                if(!crop.getCanRegrow()){
                     if(crop.isGiantCrop()){
                         App.getGame().getCurrentPlayer().getInventory().addToInventory(crop, 10);
+                        App.getGame().getCurrentPlayer().getFarmingSkill().increaseXp(5);
                         int x = crop.getX();
                         int y = crop.getY();
                         Farm farm = App.getGame().getCurrentPlayerFarm();
@@ -339,22 +360,31 @@ public class ToolsController {
                         return new Result(true, "You got 10 " + crop.getName());
                     } else{
                         App.getGame().getCurrentPlayer().getInventory().addToInventory(crop, 1);
+                        App.getGame().getCurrentPlayer().getFarmingSkill().increaseXp(5);
                         cell.setObjectMap(new Grass());
                         return new Result(true, "You got a " + crop.getName());
                     }
                 }
                 else{
-                    crop.setRegrowthTime(0);
+                    crop.setCurrentStageLevel(0);
+                    crop.setCanRegrow(false);
                     if(crop.isGiantCrop()){
                         App.getGame().getCurrentPlayer().getInventory().addToInventory(crop, 10);
+                        App.getGame().getCurrentPlayer().getFarmingSkill().increaseXp(20);
                         return new Result(true, "You got 10 " + crop.getName());
                     } else{
                         App.getGame().getCurrentPlayer().getInventory().addToInventory(crop, 1);
+                        App.getGame().getCurrentPlayer().getFarmingSkill().increaseXp(5);
                         return new Result(true, "You got a " + crop.getName());
                     }
                 }
             }
         } else if(cell.getObjectMap() instanceof Tree tree){
+            if(tree.isThundered()){
+                App.getGame().getCurrentPlayer().getInventory().addToInventory(new Mineral(MineralType.Coal), 5);
+                cell.setObjectMap(new Grass());
+                return new Result(true, "You got 5 coal.");
+            }
             if(tree.getCurrentStage() < 3 || tree.getCurrentStageLevel() < 7){
                 return new Result(true, "Tree is not ripe yet!");
             } else if(tree.getCurrentStageLevel() < tree.getTreeType().getFruitHarvestCycle()){
@@ -362,7 +392,24 @@ public class ToolsController {
             }
             tree.setCurrentStageLevel(0);
             App.getGame().getCurrentPlayer().getInventory().addToInventory(new Fruit(tree.getTreeType().getFruitType()), 1);
-            return new Result(true, "You got a " + tree.getTreeType().getFruitType().getName() + " fruit");
+            App.getGame().getCurrentPlayer().getFarmingSkill().increaseXp(5);
+            return new Result(true, "You got a " + tree.getTreeType().getFruitType().getName() + " fruit.");
+        } else if(cell.getObjectMap() instanceof ForagingCrop crop){
+            App.getGame().getCurrentPlayer().getInventory().addToInventory(crop, 1);
+            App.getGame().getCurrentPlayer().getFarmingSkill().increaseXp(5);
+            App.getGame().getCurrentPlayer().getForagingSkill().increaseXp(10);
+            cell.setObjectMap(new Grass());
+            return new Result(true, "You got a " + crop.getName());
+        } else if(cell.getObjectMap() instanceof ForagingTree tree){
+            if(tree.isThundered()){
+                App.getGame().getCurrentPlayer().getInventory().addToInventory(new Mineral(MineralType.Coal), 5);
+                cell.setObjectMap(new Grass());
+                return new Result(true, "You got 5 coal.");
+            }
+            App.getGame().getCurrentPlayer().getInventory().addToInventory(new Fruit(tree.getTreeType().getFruitType()), 1);
+            App.getGame().getCurrentPlayer().getFarmingSkill().increaseXp(5);
+            App.getGame().getCurrentPlayer().getForagingSkill().increaseXp(10);
+            return new Result(true, "You got a " + tree.getTreeType().getFruitType().getName() + " fruit.");
         }
         return new Result(false, "it wasn't a bush or grass or crop or tree!");
     }

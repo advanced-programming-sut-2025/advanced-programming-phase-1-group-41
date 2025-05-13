@@ -5,6 +5,7 @@ import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import org.bson.types.ObjectId;
 import org.example.controllers.AnimalController;
+import org.example.models.locations.Farm;
 import org.example.controllers.CraftingController;
 
 import java.util.Date;
@@ -58,7 +59,9 @@ public class TimeLine {
 
         App.getGame().setWeatherType(App.getGame().getTmrwWeatherType());
         predictTmrwWeather();
-        App.getGame().getCurrentPlayerFarm().update();
+        for(Farm farm : App.getGame().getFarms()){
+            App.getGame().getCurrentPlayerFarm().update();
+        }
 
         day++;
         if(day >= 28){

@@ -9,6 +9,8 @@ import org.example.models.foragings.*;
 import org.example.models.foragings.Nature.Plant;
 import org.example.models.foragings.Nature.Rock;
 import org.example.models.foragings.Nature.Tree;
+import org.example.models.items.CraftableItem;
+import org.example.models.items.CraftableMachine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,6 +118,7 @@ public class FarmBuilder {
         App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.ApricotSapling), 100);
         App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.Mixed), 100);
         App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.CauliflowerSeed), 100);
+        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.CoffeeBeanSeed), 100);
     }
     public void growTrees(){
         List<Tree> toRemove = new ArrayList<>();
@@ -136,12 +139,50 @@ public class FarmBuilder {
         for(Tree tree : farm.getTrees()){
             tree.nextDay();
         }
-        if(App.getGame().getWeatherType().equals(WeatherType.Rainy)){
+        if(App.getGame().getWeatherType().equals(WeatherType.Rainy) || App.getGame().getWeatherType().equals(WeatherType.Stormy)){
             for(Crop crop : farm.getCrops()){
                 crop.water();
             }
             for(Tree tree : farm.getTrees()) {
                 tree.water();
+            }
+        }
+    }
+    public void scarecrowUpdate(){
+        for(Cell cell : farm.getCells()){
+            int radius = 8;
+            if(cell.getObjectMap().getName().equals(CraftableMachine.DeluxeScarecrow.getName())){
+                radius = 12;
+            }
+            if(cell.getObjectMap().getName().equals(CraftableMachine.Scarecrow.getName())
+                || cell.getObjectMap().getName().equals(CraftableMachine.DeluxeScarecrow.getName())){
+                for(int i = cell.getX() - radius; i <= cell.getX() + radius; i++){
+                    for(int j = cell.getY() - radius; j <= cell.getY() + radius; j++){
+                        Cell cell1 = Finder.findCellByCoordinates(i, j , farm);
+                        if(cell1 != null && cell1.getObjectMap() != null){
+                            if(cell1.getObjectMap() instanceof Tree tree){
+                                tree.setIsProtected(true);
+                            }
+                            if(cell1.getObjectMap() instanceof Crop crop){
+                                crop.setIsProtected(true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    public void crawlAttacks(){
+        int items = farm.getCrops().size() + farm.getTrees().size();
+        int crows = items / 16;
+        Random rand = new Random();
+        for(int i = 0; i < crows; i++){
+            if(rand.nextInt(4) == 0){
+                if(rand.nextInt(2) == 0){
+                    if(farm.getCrops().get(rand.nextInt(farm.getCrops().size())).isProtected()){
+
+                    }
+                }
             }
         }
     }

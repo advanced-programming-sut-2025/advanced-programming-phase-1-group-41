@@ -55,13 +55,13 @@ public class Village { ;
                     }
                     Objects.requireNonNull(Finder.findCellByCoordinatesVillage(i, j, this)).setObjectMap(grass);
                 }
-                int radiant = i * i / 9 + j * j / 4;
-                if(radiant <= 70){
+                int radius = i * i / 9 + j * j / 4;
+                if(radius <= 70){
                     Grass grass = new Grass();
                     grass.setGround(false);
                     grass.setSand(true);
                     Objects.requireNonNull(Finder.findCellByCoordinatesVillage(i, j, this)).setObjectMap(grass);
-                }if(radiant <= 50 || (i >= 75 && j >= 63)){
+                }if(radius <= 50 || (i >= 75 && j >= 63)){
                     Objects.requireNonNull(Finder.findCellByCoordinatesVillage(i, j, this)).setObjectMap(new Lake(i, j, this, 0));
                 }
             }

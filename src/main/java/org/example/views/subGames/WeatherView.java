@@ -1,6 +1,5 @@
 package org.example.views.subGames;
 
-import org.example.controllers.TimeLineController;
 import org.example.controllers.WeatherController;
 import org.example.views.commands.gameCommands.WeatherAndTimeCommands;
 
@@ -16,7 +15,9 @@ public class WeatherView {
             System.out.println(controller.predictTmrwWeather(matcher));
         }else if((matcher = WeatherAndTimeCommands.CheatWeather.getMatcher(input))!=null){
             System.out.println(controller.cheatChangeTmrwWeather(matcher));
-        }else{
+        }else if((matcher = WeatherAndTimeCommands.CheatThor.getMatcher(input))!=null){
+            System.out.println(controller.cheatStrikeThunder(matcher));
+        } else{
             return false;
         }
         return true;
