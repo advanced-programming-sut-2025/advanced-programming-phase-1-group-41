@@ -317,29 +317,40 @@ public class ToolsController {
 
         for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
             for (Animal animal : barn.getAnimals()) {
+                System.out.println(animal.getName()+" "+animal.getX()+" "+animal.getY());
                 if(animal.getX() == cell.getX() && animal.getY() == cell.getY()){
-                    if(animal instanceof Goat&&animal.canGiveProduct()){
-                        App.getGame().getCurrentPlayer().getInventory().addToInventory
-                                (new Product(ProductType.GoatMilk), 1);
-                        animal.setProduct(null);
-                        return new Result(true, "got a goat milk");
-                        // todo biggg milk
+                    double specialProduceChance=(animal.getFriendShip()+(150*(0.5 + Math.random()))/1500);
+                    if(animal instanceof Goat){
+                        if(Math.random()<specialProduceChance){
+                            App.getGame().getCurrentPlayer().getInventory().addToInventory
+                                    (new Product(ProductType.BigGoatMilk), 1);
+                            animal.setProduct(null);
+                            return new Result(true, "got a big goat milk");
+                        }
+                        else {
+                            App.getGame().getCurrentPlayer().getInventory().addToInventory
+                                    (new Product(ProductType.GoatMilk), 1);
+                            animal.setProduct(null);
+                            return new Result(true, "got a goat milk");
+                        }
+
                     }else if(animal instanceof Cow){
-                        if(animal.canGiveProduct()){
+                        if(Math.random()<specialProduceChance) {
+                            App.getGame().getCurrentPlayer().getInventory().addToInventory
+                                    (new Product(ProductType.BigCowMilk), 1);
+                            animal.setProduct(null);
+                            return new Result(true, "got a big cow milk");
+                        }else{
                             App.getGame().getCurrentPlayer().getInventory().addToInventory
                                     (new Product(ProductType.CowMilk), 1);
                             animal.setProduct(null);
                             return new Result(true, "got a cow milk");
-                        }else{
-                            return new Result(false, "dooesn't have the product available");
                         }
                     }
-                }else{
-                    return new Result(false,"no animal is around you");
                 }
             }
         }
-        return new Result(false, "no barn in the farm");
+        return new Result(false, "no animal around you");
     }
 
     private Result useShear(Cell cell, Tool tool){
@@ -352,23 +363,17 @@ public class ToolsController {
             for (Animal animal : barn.getAnimals()) {
                 if(animal.getX() == cell.getX() && animal.getY() == cell.getY()){
                     if(animal instanceof Sheep){
-                        if(animal.canGiveProduct()){
                             App.getGame().getCurrentPlayer().getInventory().addToInventory
                                     (new Product(ProductType.SheepWool),1);
                             animal.setProduct(null);
                             return new Result(true, "got a sheep wool");
-                        }else{
-                            return new Result(false, "doesn't have the product");
-                        }
                     }else{
                         return new Result(false,"the animal is not a sheep");
                     }
-                }else{
-                    return new Result(false, "no animal around you");
                 }
             }
         }
-        return new Result(false,"no barn in the farm");
+        return new Result(false,"no animal around u");
     }
 
 

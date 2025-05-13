@@ -385,6 +385,7 @@ public class AnimalController {
         theAnimal.setHome(false);
         theAnimal.setX(x);
         theAnimal.setY(y);
+        System.out.println("new x , y "+x+" "+y);
         theAnimal.setFedToday(true);
         return new Result(true, name + " shepherd to grass");
 
@@ -652,7 +653,6 @@ public class AnimalController {
                             }
                         }else{
                             if(animal instanceof Chicken && animal.canGiveProduct()){
-                                System.out.println("i am a chicken");
                                 animal.setProduct(new Product(ProductType.ChickenEgg));
                             } else if(animal instanceof Duck&&animal.canGiveProduct()){
                                 animal.setProduct(new Product(ProductType.DuckEgg));

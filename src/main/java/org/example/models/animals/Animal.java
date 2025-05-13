@@ -29,7 +29,7 @@ public abstract class Animal {
     //TODO Corps
 
     public int getY() {
-        return y;
+        return this.y;
     }
 
     public void setY(int y) {
@@ -37,7 +37,7 @@ public abstract class Animal {
     }
 
     public int getX() {
-        return x;
+        return this.x;
     }
 
     public void setX(int x) {
