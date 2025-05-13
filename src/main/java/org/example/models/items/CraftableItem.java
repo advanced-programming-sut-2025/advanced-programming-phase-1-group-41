@@ -86,4 +86,13 @@ public enum CraftableItem implements Item{
     public double getPrice() {
         return this.price;
     }
+
+    public static CraftableItem parseCraftable(String craftable){
+        for (CraftableItem value : CraftableItem.values()) {
+            if(value.getName().equalsIgnoreCase(craftable)){
+                return value;
+            }
+        }
+        return null;
+    }
 }

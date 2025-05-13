@@ -8,6 +8,9 @@ public class DriedFruit implements Item, Eatable {
 
     Fruit fruit;
 
+    public DriedFruit() {
+    }
+
     public DriedFruit(Fruit fruit) {
         this.fruit = fruit;
     }

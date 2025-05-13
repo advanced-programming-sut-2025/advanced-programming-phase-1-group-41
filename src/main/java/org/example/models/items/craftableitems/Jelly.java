@@ -9,6 +9,9 @@ import org.example.models.items.Item;
 public class Jelly implements Item, Eatable {
     private Fruit fruit;
 
+    public Jelly() {
+    }
+
     public Jelly(Fruit fruit) {
         this.fruit = fruit;
     }

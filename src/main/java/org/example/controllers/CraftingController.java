@@ -2,8 +2,13 @@ package org.example.controllers;
 
 import org.example.models.*;
 import org.example.models.buildings.Cottage;
+import org.example.models.foragings.Nature.MineralType;
 import org.example.models.items.*;
+import org.example.models.items.craftablemachines.Furnace;
+import org.example.models.items.craftablemachines.Machine;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 
 public class CraftingController {
@@ -131,14 +136,88 @@ public class CraftingController {
         return checker;
     }
 
-    public Result artisanUse(Matcher matcher){return null;}
+    private Cell findArtisan(String machineName){
+        for (int i = -1; i < 1 ; i++) {
+            for (int j = -1; j < 1; j++) {
+                x = App.getGame().getCurrentPlayer().getX()+i;
+                y = App.getGame().getCurrentPlayer().getY()+j;
+                Cell cell = App.getGame().getCurrentPlayerFarm().getCell(x,y);
+                if(cell != null){
+                    if(cell.getObjectMap() instanceof CraftableMachine){
+                        System.out.println("found a "+cell.getObjectMap().getName()+" in "+x+" "+y);
+                        if(machineName.equalsIgnoreCase(cell.getObjectMap().getName())){
+                            return cell;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
-    public Result artisanGet(Matcher matcher){return null;}
+    public Result artisanUse(Matcher matcher){
+        String machineName = matcher.group(1).trim();
+        String[] puttingItems = matcher.group(2).trim().split(" ");
+        Cell cell = findArtisan(machineName);
+        if(cell == null){
+            return new Result(false, machineName+" is not around you");
+        }
+        CraftableMachine machine = (CraftableMachine) cell.getObjectMap();
+        ArrayList<Item> items = new ArrayList<>();
+        for (String itemName : puttingItems) {
+            Item item = Finder.parseItem(itemName);
+            if(item == null){
+                return new Result(false, itemName+"doesn't exist");
+            }
+            items.add(item);
+        }
+        for (Item item : items) {
+            Slot slot = App.getGame().getCurrentPlayer().getInventory().getSlotByItem(item);
+            if(slot == null || slot.getQuantity()==0){
+                System.out.println("you don't have "+slot.getItem().getName());
+            }
+        }
+
+        return switch (machine){
+            case Furnace -> this.furnace(items, cell);
+            default -> new Result(false, machineName+" is not useable");
+        };
+    }
+
+    public Result artisanGet(Matcher matcher){
+        String machineName = matcher.group(1).trim();
+        Cell cell = findArtisan(machineName);
+        if(cell == null){
+            return new Result(false, machineName+" is not around you");
+        }
+        CraftableMachine machine = (CraftableMachine) cell.getObjectMap();
+        Player player = App.getGame().getCurrentPlayer();
+        Iterator<Machine> iterator = player.getOnGoingMachines().iterator();
+        while (iterator.hasNext()) {
+            Machine onGoingMachine = iterator.next();
+            if (onGoingMachine.getCraftableMachine().getName().equals(machine.getName())) {
+                if (!onGoingMachine.suffice()) {
+                    return new Result(false, machine.getName() + "'s product is not ready yet");
+                }
+                Slot slot = onGoingMachine.getProduce();
+                if (slot == null) {
+                    return new Result(false, onGoingMachine.getProcessTime() + " hours left");
+                }
+                player.getInventory().addToInventory(slot.getItem(), slot.getQuantity());
+                iterator.remove();
+                return new Result(true, slot.getItem() + " added to inventory");
+            }
+        }
+        return new Result(false, machineName+" is not ongoing");
+    }
 
 
     // atrisans
 
-    private Result FishSmoker(Matcher matcher){return null;}
+    private Result FishSmoker(String[] items, Cell cell){
+        return null;
+    }
+
 
     private Result cheesePress(Matcher matcher){return null;}
 
@@ -150,7 +229,51 @@ public class CraftingController {
 
     private Result charcoalKiln(Matcher matcher){return null;}
 
-    private Result furnace(Matcher matcher){return null;}
+    private Result furnace(ArrayList<Item> items, Cell cell){
+        Player player = App.getGame().getCurrentPlayer();
+        for (Machine x : player.getOnGoingMachines()) {
+            if(x instanceof Furnace furnace){
+                furnaceHelper(furnace, items, player);
+                return new Result(true,"done");
+            }
+        }
+        Furnace furnace = new Furnace();
+        player.getOnGoingMachines().add(furnace);
+        furnaceHelper(furnace, items, player);
+        return new Result(true,"donee");
+    }
+
+    private void furnaceHelper(Furnace furnace, ArrayList<Item> items, Player player){
+        for (Item item : items) {
+            if(item.getName().equalsIgnoreCase(MineralType.Coal.getName())){
+                for (Slot slot : furnace.getReceivedItems()) {
+                    if(slot.getItem().getName().equals(item.getName())){
+                        int playerQua = player.getInventory().getSlotByItem(item).getQuantity();
+                        if(playerQua > 1-slot.getQuantity()){
+                            playerQua = 1-slot.getQuantity();
+                        }
+                        slot.setQuantity(slot.getQuantity()+playerQua);
+                        player.getInventory().removeFromInventory(item , playerQua);
+                        System.out.println("added "+playerQua+" to furnace");
+                        break;
+                    }
+                }
+            }else if(item.getName().equalsIgnoreCase(MineralType.CopperOre.getName())){
+                for (Slot slot : furnace.getReceivedItems()) {
+                    if(slot.getItem().getName().equals(item.getName())){
+                        int playerQua = player.getInventory().getSlotByItem(item).getQuantity();
+                        if(playerQua > 5-slot.getQuantity()){
+                            playerQua = 5-slot.getQuantity();
+                        }
+                        slot.setQuantity(slot.getQuantity()+playerQua);
+                        player.getInventory().removeFromInventory(item , playerQua);
+                        System.out.println("added "+playerQua+" to furnace");
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
     private Result jarPreserver(Matcher matcher){return null;}
 
@@ -159,5 +282,22 @@ public class CraftingController {
     private Result MayonnaiseMachine(Matcher matcher){return null;}
 
     private Result loom(Matcher matcher){return null;}
+
+
+    public static void check(){
+        Player player = App.getGame().getCurrentPlayer();
+        for (Machine onGoingMachine : player.getOnGoingMachines()) {
+            if(onGoingMachine.getProcessTime()<=0 && onGoingMachine.getProduce() == null){
+                onGoingMachine.setProduce();
+                System.out.println("produce is ready");
+            }
+            if(onGoingMachine.suffice()){
+                System.out.println("it suffices reducing time..");
+                onGoingMachine.decreaseProcessTime();
+            }else{
+                System.out.println(onGoingMachine+" is not suffice");
+            }
+        }
+    }
 
 }

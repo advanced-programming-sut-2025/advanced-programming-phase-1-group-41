@@ -7,6 +7,9 @@ import org.example.models.items.Item;
 public class Wine implements Item, Eatable {
     private Fruit fruit;
 
+    public Wine() {
+    }
+
     public Wine(Fruit fruit) {
         this.fruit = fruit;
     }

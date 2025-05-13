@@ -7,6 +7,9 @@ import org.example.models.items.Item;
 public class DriedMushroom implements Eatable, Item {
     ForagingCropType cropType;
 
+    public DriedMushroom() {
+    }
+
     public DriedMushroom(ForagingCropType cropType) {
         this.cropType = cropType;
     }

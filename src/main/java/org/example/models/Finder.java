@@ -6,10 +6,8 @@ import org.example.models.foragings.Nature.Mineral;
 import org.example.models.foragings.Nature.MineralType;
 import org.example.models.foragings.Nature.Rock;
 import org.example.models.foragings.Nature.Wood;
-import org.example.models.items.CraftableMachine;
-import org.example.models.items.Food;
-import org.example.models.items.Item;
-import org.example.models.items.Slot;
+import org.example.models.items.*;
+import org.example.models.items.craftableitems.CraftableNames;
 import org.example.models.locations.Farm;
 import org.example.models.locations.Village;
 import org.example.models.tools.Tool;
@@ -61,6 +59,12 @@ public class Finder {
         }
         if(itemName.equalsIgnoreCase((new Rock()).getName())){
             return new Rock();
+        }
+        if(CraftableNames.parseItem(itemName)!=null){
+            return CraftableNames.parseItem(itemName);
+        }
+        if(CraftableItem.parseCraftable(itemName)!=null){
+            return CraftableItem.parseCraftable(itemName);
         }
         // TODO etc
 

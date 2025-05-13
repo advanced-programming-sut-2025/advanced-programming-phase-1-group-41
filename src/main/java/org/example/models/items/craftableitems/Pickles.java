@@ -7,6 +7,9 @@ import org.example.models.items.Item;
 public class Pickles implements Item , Eatable {
     private CropType cropType;
 
+    public Pickles() {
+    }
+
     public Pickles(CropType cropType) {
         this.cropType = cropType;
     }

@@ -8,6 +8,9 @@ public class Juice implements Item, Eatable {
 
     private CropType cropType;
 
+    public Juice() {
+    }
+
     public Juice(CropType cropType) {
         this.cropType = cropType;
     }
