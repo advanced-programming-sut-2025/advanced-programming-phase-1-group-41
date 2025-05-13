@@ -1,7 +1,12 @@
 package org.example.models.locations;
 
 import org.example.models.*;
+import org.example.models.buildings.Bridge;
 import org.example.models.buildings.Building;
+import org.example.models.buildings.animalContainer.Barn;
+import org.example.models.buildings.animalContainer.Coop;
+import org.example.models.buildings.marketplaces.*;
+import org.example.models.buildings.npchomes.*;
 import org.example.models.foragings.Nature.Grass;
 import org.example.models.foragings.Nature.Lake;
 
@@ -11,6 +16,7 @@ import java.util.Random;
 
 import static org.example.models.App.MaxHeight;
 import static org.example.models.App.MaxLength;
+import static org.example.models.animals.Breed.Coop;
 
 
 public class Village { ;
@@ -27,8 +33,6 @@ public class Village { ;
                 cells.add(new Cell(new Grass(), j, i));
             }
         }
-        makeOvalInCenter(30,20,0.8,1.2);
-        makeOvalInCenter(6,4,0.7,1.3);
         for(int i = 0; i < 95; i++){
             for(int j = 0; j < 65; j++){
                 boolean isGrass = false;
@@ -51,14 +55,183 @@ public class Village { ;
                     }
                     Objects.requireNonNull(Finder.findCellByCoordinatesVillage(i, j, this)).setObjectMap(grass);
                 }
-                if(i * i / 9 + j * j / 4 <= 50 || (i >= 75 && j >= 63)){
+                int radiant = i * i / 9 + j * j / 4;
+                if(radiant <= 70){
+                    Grass grass = new Grass();
+                    grass.setGround(false);
+                    grass.setSand(true);
+                    Objects.requireNonNull(Finder.findCellByCoordinatesVillage(i, j, this)).setObjectMap(grass);
+                }if(radiant <= 50 || (i >= 75 && j >= 63)){
                     Objects.requireNonNull(Finder.findCellByCoordinatesVillage(i, j, this)).setObjectMap(new Lake(i, j, this, 0));
                 }
             }
         }
+        for(int i = 70 ; i < 95; i++){
+            getCell(i,63).setObjectMap(new Grass());
+            getCell(i,64).setObjectMap(new Grass());
+        }
+        buildPath();
+        getCell(42,35).setObjectMap(new Grass());
+
+
+        buildings.add(new Blacksmith(80,54,this));
+        buildings.add(new FishShop(22,0,this));
+        buildings.add(new GeneralStore(38,3,this));
+        buildings.add(new Saloon(80,20,this));
+        buildings.add(new MarnieRanch(80,0,this));
+        buildings.add(new CarpenterShop(67,0,this));
+        buildings.add(new Barn(77,0,this));
+        buildings.add(new Coop(77,4,this));
+        buildings.add(new Jojamart(84,10,this));
+        buildings.add(new AbigailHome(9,43,this));
+        buildings.add(new LiaHome(0,51,this));
+        buildings.add(new SebastienHome(12,58,this));
+        buildings.add(new RobinHome(24,58,this));
+        buildings.add(new HarveyHome(59,54,this));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
         Random rand = new Random();
-    public void makeOvalInCenter(int a, int b,double c,double d) {
+    public void buildPath(){
+        makeOvalInCenter(30,20,0.8,1.2);
+        makeOvalInCenter(6,4,0.7,1.3);
+
+        makeGrass(getCell(38,11));
+        for(int i=73;i<=89;i++){
+            makeGround(getCell(i,19));
+            makeGround(getCell(i,18));
+        }
+        for(int j=19;j<55;j++){
+            makeGround(getCell(89,j));
+            makeGround(getCell(90,j));
+        }
+        makeGround(getCell(89,55));
+        makeGround(getCell(88,55));
+        makeGround(getCell(88,56));
+        makeGround(getCell(87,56));
+        makeGround(getCell(86,56));
+
+        for(int j=8;j<12;j++){
+            makeGround(getCell(36,j));
+            makeGround(getCell(35,j));
+        }
+        for(int i=35;i>19;i--){
+            makeGround(getCell(i,8));
+            makeGround(getCell(i,7));
+        }
+        for(int j=53;j<=56;j++){
+            makeGround(getCell(40,j));
+            makeGround(getCell(41,j));
+        }
+        for(int i=41;i>=12;i--){
+            makeGround(getCell(i,56));
+            makeGround(getCell(i,57));
+        }
+        makeGround(getCell(11,56));
+        makeGround(getCell(11,55));
+        makeGround(getCell(10,55));
+        makeGround(getCell(9,55));
+        makeGround(getCell(10,54));
+        makeGround(getCell(9,54));
+        makeGround(getCell(10,53));
+        for(int j=54;j>=52;j--){
+            makeGround(getCell(10,j));
+            makeGround(getCell(9,j));
+        }
+        makeGround(getCell(10,51));
+        makeGround(getCell(11,52));
+        makeGround(getCell(10,56));
+        makeGround(getCell(11,57));
+        for(int i=11;i<=30;i++){
+            makeGround(getCell(i,50));
+            makeGround(getCell(i,51));
+        }
+        makeGround(getCell(10,51));
+        makeGround(getCell(42,56));
+        for(int j=57;j<59;j++){
+            makeGround(getCell(43,j));
+            makeGround(getCell(42,j));
+        }
+        for(int i=43;i<=62;i++){
+            makeGround(getCell(i,58));
+            makeGround(getCell(i,59));
+        }
+        makeGround(getCell(19,7));
+
+        for(int j=7;j>=0;j--){
+            makeGround(getCell(19,j));
+        }
+        for(int i=65;i<=71;i++){
+            makeGround(getCell(i,14));
+            makeGround(getCell(i,15));
+        }
+        for(int i=81;i<=85;i++){
+            makeGround(getCell(i,8));
+        }
+        for(int j=14;j>8;j--){
+            makeGround(getCell(71,j));
+            makeGround(getCell(72,j));
+        }
+        for(int i=72;i<=80;i++){
+            makeGround(getCell(i,9));
+            makeGround(getCell(i,8));
+        }
+        makeGround(getCell(80,10));
+        makeGround(getCell(81,10));
+        makeGround(getCell(82,10));
+        makeGround(getCell(82,11));
+        makeGround(getCell(83,11));
+
+
+            makeGround(getCell(20,2));
+
+            makeGround(getCell(21,2));
+
+    }
+    private void makeGround(Cell cell){
+        if(cell.getObjectMap() instanceof Grass){
+            ((Grass) cell.getObjectMap()).setGround(true);
+            ((Grass) cell.getObjectMap()).setSand(false);
+        }
+        else if(cell.getObjectMap() instanceof Lake){
+            cell.setObjectMap(new Bridge());
+        }
+    }
+    private void makeGrass(Cell cell){
+        if(cell.getObjectMap() instanceof Grass){
+            ((Grass) cell.getObjectMap()).setGround(false);
+            ((Grass) cell.getObjectMap()).setSand(false);
+        }
+    }
+    private void makeOvalInCenter(int a, int b,double c,double d) {
         int centerX = 95 / 2;
         int centerY = 65 / 2;
 
@@ -72,6 +245,9 @@ public class Village { ;
                     if (cell != null && cell.getObjectMap() instanceof Grass) {
 
                         ((Grass) cell.getObjectMap()).setGround(true);
+                    }
+                    else if(cell != null && cell.getObjectMap() instanceof Lake) {
+                        cell.setObjectMap(new Bridge());
                     }
 
                 }

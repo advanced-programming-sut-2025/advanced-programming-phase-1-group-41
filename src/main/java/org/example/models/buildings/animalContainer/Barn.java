@@ -7,6 +7,7 @@ import org.example.models.animals.Animal;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.Wall;
 import org.example.models.locations.Farm;
+import org.example.models.locations.Village;
 
 import java.util.ArrayList;
 
@@ -60,6 +61,40 @@ public class Barn implements Building {
         for(int i = x; i< size +x - 1; i++) {
             for(int j = y; j< size +y - 1; j++) {
                 Cell cell=Finder.findCellByCoordinates(i, j, farm);
+                assert cell != null;
+                cell.setObjectMap(this);
+            }
+        }
+    }
+    public Barn(int x, int y, Village village) {
+        this.x = x;
+        this.y = y;
+        int size = 3;
+        int xWall;
+        int yWall;
+        yWall = y;
+        while(yWall<=y + size) {
+            for (int i = x; i <= x + size; i++) {
+                Cell cell = Finder.findCellByCoordinatesVillage(i, yWall, village);
+                assert cell != null;
+                cell.setObjectMap(new Wall());
+            }
+            yWall+=size;
+        }
+        xWall = x;
+        while(xWall<=x+size) {
+            for (int j = y+1; j <= y+size; j++) {
+                Cell cell = Finder.findCellByCoordinatesVillage(xWall, j, village);
+                assert cell != null;
+                cell.setObjectMap(new Wall());
+            }
+            xWall+=size;
+        }
+        x++;
+        y++;
+        for(int i = x; i< size +x - 1; i++) {
+            for(int j = y; j< size +y - 1; j++) {
+                Cell cell=Finder.findCellByCoordinatesVillage(i, j, village);
                 assert cell != null;
                 cell.setObjectMap(this);
             }

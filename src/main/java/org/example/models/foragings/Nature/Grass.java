@@ -53,7 +53,9 @@ public class Grass implements ObjectMap {
     public void setGround(boolean isGround) {
         this.isGround = isGround;
     }
-    public void setSand(boolean isSand) {}
+    public void setSand(boolean isSand) {
+        this.isSand = isSand;
+    }
     public Grass(int startX, int startY, Farm farm) {
         isGround = true;
         isFarmland = false;
