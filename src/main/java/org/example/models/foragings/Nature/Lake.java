@@ -5,6 +5,7 @@ import org.example.models.Colors;
 import org.example.models.Finder;
 import org.example.models.ObjectMap;
 import org.example.models.locations.Farm;
+import org.example.models.locations.Village;
 
 import java.util.Random;
 
@@ -23,6 +24,47 @@ public class Lake implements ObjectMap, Obstacle {
         return "Lake";
     }
 
+    public Lake(int x, int y, Village village, int a) {
+        Cell cell = Finder.findCellByCoordinatesVillage(x, y, village);
+        if (cell != null) {
+            cell.setObjectMap(this);
+        }
+    }
+    public Lake(int startX, int startY1, Village village) {
+        boolean[][] map = new boolean[WIDTH][HEIGHT];
+        double startY = (int) Math.sqrt(startX * 55) - 7;
+        double theta = 2 * Math.PI * startY / 15;
+        startY *=  (Math.cos(theta) / 10 + 1);
+        startX -= 2;
+        Random random = new Random();
+        for (int x = 0; x < 7; x++) {
+            for (int y = 0; y < 7; y++) {
+                map[x][y] = x + y < 8;
+            }
+        }
+        if(startX > 70 && startX < 80){
+            startX = 140 - startX;
+        }
+        if (startX > 80) {
+            startX -= 20;
+        }
+
+
+        for (int i = 0; i < ITERATIONS; i++) {
+            map = simulateStep(map);
+        }
+
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+                if (map[x][y]) {
+                    Cell cell = Finder.findCellByCoordinatesVillage(startX + x, (int) startY + y, village);
+                    if (cell != null) {
+                        cell.setObjectMap(this);
+                    }
+                }
+            }
+        }
+    }
     public Lake(int startX, int startY, Farm farm) {
         boolean[][] map = new boolean[WIDTH][HEIGHT];
 

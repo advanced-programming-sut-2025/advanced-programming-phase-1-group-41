@@ -7,6 +7,7 @@ import org.example.models.items.Food;
 import org.example.models.items.Item;
 import org.example.models.items.Slot;
 import org.example.models.locations.Farm;
+import org.example.models.locations.Village;
 import org.example.models.tools.Tool;
 
 import java.util.Objects;
@@ -83,6 +84,14 @@ public class Finder {
 
     public static Cell findCellByCoordinates(int x, int y, Farm farm){
         for(Cell cell : farm.getCells()){
+            if(cell.getX() == x && cell.getY() == y){
+                return cell;
+            }
+        }
+        return null;
+    }
+    public static Cell findCellByCoordinatesVillage(int x, int y, Village village){
+        for(Cell cell : village.getCells()){
             if(cell.getX() == x && cell.getY() == y){
                 return cell;
             }
