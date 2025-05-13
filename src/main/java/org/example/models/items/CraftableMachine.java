@@ -1,5 +1,7 @@
 package org.example.models.items;
 
+import org.example.models.Colors;
+
 public enum CraftableMachine implements Item{
     CherryBomb("cb", "CherryBomb",50,CraftingRecipe.CherryBomb),
     Bomb("bb","Bomb",50, CraftingRecipe.Bomb),
@@ -9,8 +11,8 @@ public enum CraftableMachine implements Item{
     IridiumSprinkler("is", "IridiumSprinkler", 0, null),
     CharcoalKiln("ck", "CharcoalKiln", 0, null),
     Furnace("Fu", "Furnace", 0,CraftingRecipe.Furnace),
-    Scarecrow("!!", "Scarecrow", 0, null),
-    DeluxeScarecrow("ds", "DeluxeScarecrow", 0, null),
+    Scarecrow(Colors.colorize(160, 0, "!!"), "Scarecrow", 0, null),
+    DeluxeScarecrow(Colors.colorize(160, 0, "??"), "DeluxeScarecrow", 0, null),
     BeeHouse("bh", "BeeHouse", 0, null),
     CheesePress("cp", "Cheese Press", 0, null),
     Keg("k", "Keg", 0, null),
@@ -24,10 +26,10 @@ public enum CraftableMachine implements Item{
     MysticTreeSeed("mts", "MysticTreeSeed", 100, CraftingRecipe.MysticTreeSeed),
     ;
 
-    private CraftingRecipe recipe;
-    private String name;
-    private String ch;
-    private double price;
+    private final CraftingRecipe recipe;
+    private final String name;
+    private final String ch;
+    private final double price;
 
     CraftableMachine(String ch, String name, double price, CraftingRecipe recipe) {
         this.ch = ch;
