@@ -4,6 +4,7 @@ import org.example.models.*;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.Cottage;
 import org.example.models.buildings.Door;
+import org.example.models.buildings.GreenHouse.Greenhouse;
 import org.example.models.foragings.Nature.Obstacle;
 
 import java.util.*;
@@ -43,7 +44,8 @@ public class PathFinder {
 
                 if(nextCell.getObjectMap() instanceof Building){
                     if(!(nextCell.getObjectMap() instanceof Cottage) &&
-                    !(nextCell.getObjectMap() instanceof Door)){
+                        !(nextCell.getObjectMap() instanceof Door) &&
+                        !(nextCell.getObjectMap() instanceof Greenhouse)){
 //                        System.out.println(nextCell.getObjectMap().getClass());
                         continue;
                     }

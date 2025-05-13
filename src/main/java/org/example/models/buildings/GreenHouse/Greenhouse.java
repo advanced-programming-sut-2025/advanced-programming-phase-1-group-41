@@ -4,8 +4,11 @@ import org.example.models.Cell;
 import org.example.models.Colors;
 import org.example.models.Finder;
 import org.example.models.buildings.Building;
+import org.example.models.buildings.Door;
 import org.example.models.buildings.Wall;
 import org.example.models.locations.Farm;
+
+import java.util.ArrayList;
 
 public class Greenhouse implements Building {
     @Override
@@ -15,6 +18,7 @@ public class Greenhouse implements Building {
     public final int x;
     public final int y;
     private final Farm farm;
+    private int[][] cells;
 
     @Override
     public String getName() {
@@ -31,21 +35,30 @@ public class Greenhouse implements Building {
         while(yWall<=y+7) {
             for (int i = x; i <= x + 6; i++) {
                 Cell cell = Finder.findCellByCoordinates(i, yWall, farm);
-                if(yWall==y&&(i!=x&&i!=x+6)){
+                if(yWall == y && (i != x && i != x + 6)){
+                    assert cell != null;
                     cell.setObjectMap(new WaterTank());
                 }
                 else {
+                    assert cell != null;
                     cell.setObjectMap(new Wall());
+                }
+                if(i == x + 3 && yWall == y + 7){
+                    cell.setObjectMap(new Door());
                 }
 
             }
-            yWall+=7;
+            yWall += 7;
         }
         xWall = x;
         while(xWall<=x+6) {
             for (int j = y+1; j <= y+6; j++) {
                 Cell cell = Finder.findCellByCoordinates(xWall, j, farm);
+                assert cell != null;
                 cell.setObjectMap(new Wall());
+                if((j == y + 3 && xWall == x + 6) || (j == y + 4 && xWall == x + 6)){
+                    cell.setObjectMap(new Door());
+                }
             }
             xWall+=6;
         }
@@ -53,10 +66,10 @@ public class Greenhouse implements Building {
         y++;
         int xLength=5;
         int yLength=6;
-        for(int i=x; i<xLength+x; i++) {
-            for(int j=y; j<yLength+y; j++) {
+        for(int i = x; i < xLength + x; i++) {
+            for(int j = y; j < yLength + y; j++) {
                 Cell cell=Finder.findCellByCoordinates(i, j, farm);
-//                assert cell != null;
+                assert cell != null;
                 cell.setObjectMap(this);
             }
         }
@@ -70,5 +83,15 @@ public class Greenhouse implements Building {
     }
     public Farm getFarm() {
         return farm;
+    }
+    public boolean isGreenHouse(int x1, int y1) {
+        for(int i = x; i< x + 5; i++) {
+            for(int j = y; j< y + 6; j++) {
+                if(i == x1 && j == y1){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

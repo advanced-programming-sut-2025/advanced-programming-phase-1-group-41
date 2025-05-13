@@ -63,7 +63,9 @@ public class Village { ;
                     grass.setGround(false);
                     grass.setSand(true);
                     Objects.requireNonNull(Finder.findCellByCoordinatesVillage(i, j, this)).setObjectMap(grass);
-                }if(radius <= 50 || (i >= 75 && j >= 63)){
+                }if(radius <= 50 || (i >= 75 && j >= 63) || (i == 8 && j == 15) || (i == 9 && j == 15)
+                        || (i == 8 && j == 14) || (i == 8 && j == 13) || (i == 8 && j == 12) || (i == 9 && j == 14)
+                        || (i == 9 && j == 12) || (i == 10 && j == 15) || (i == 9 && j == 13)){
                     Objects.requireNonNull(Finder.findCellByCoordinatesVillage(i, j, this)).setObjectMap(new Lake(i, j, this, 0));
                 }
             }
@@ -94,7 +96,6 @@ public class Village { ;
         buildings.add(new SebastienHome(12,58,this));
         buildings.add(new RobinHome(24,58,this));
         buildings.add(new HarveyHome(59,54,this));
-
 
     }
         Random rand = new Random();
