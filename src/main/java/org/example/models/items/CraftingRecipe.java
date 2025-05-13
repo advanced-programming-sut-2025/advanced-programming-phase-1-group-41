@@ -50,7 +50,9 @@ public enum CraftingRecipe {
         put(SeedType.MapleSeeds, 5);
         put(SeedType.PineCones, 5);
         put(SeedType.MahoganySeeds,5);
-    }})
+    }}),
+
+
     ;
     public final HashMap<Item, Integer> neededItems;
 

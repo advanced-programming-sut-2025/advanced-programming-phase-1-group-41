@@ -4,6 +4,7 @@ import org.bson.types.ObjectId;
 import org.example.models.foragings.*;
 import org.example.models.foragings.Nature.Mineral;
 import org.example.models.foragings.Nature.MineralType;
+import org.example.models.foragings.Nature.Rock;
 import org.example.models.foragings.Nature.Wood;
 import org.example.models.items.CraftableMachine;
 import org.example.models.items.Food;
@@ -57,6 +58,9 @@ public class Finder {
         }
         if(itemName.equalsIgnoreCase((new Wood()).getName())){
             return new Wood();
+        }
+        if(itemName.equalsIgnoreCase((new Rock()).getName())){
+            return new Rock();
         }
         // TODO etc
 

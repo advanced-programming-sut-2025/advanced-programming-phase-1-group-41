@@ -13,6 +13,8 @@ public class CraftingView {
             System.out.println(controller.showRecepies(matcher));;
         }else if((matcher = GameMainCommands.CraftingCraft.getMatcher(input))!=null){
             System.out.println(controller.craftRecipe(matcher));;
+        }else if((matcher = GameMainCommands.PlaceItem.getMatcher(input))!=null){
+            System.out.println(controller.placeItem(matcher));;
         }
         else{
             return false;

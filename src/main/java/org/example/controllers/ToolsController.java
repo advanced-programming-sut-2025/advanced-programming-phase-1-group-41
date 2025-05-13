@@ -61,7 +61,7 @@ public class ToolsController {
     public Result upgradeTool(Matcher matcher){return null;}
 
     public Result preValidateUseTool(Matcher matcher){
-        String dirName = matcher.group(1).trim();
+        String dirName = matcher.group("direction").trim();
         int dir = Integer.parseInt(dirName)-1;
         if(dir < 0 || dir > 7){
             return new Result(false, "invalid dir");

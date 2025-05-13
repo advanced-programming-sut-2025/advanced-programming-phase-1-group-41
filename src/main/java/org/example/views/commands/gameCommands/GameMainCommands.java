@@ -24,7 +24,7 @@ public enum GameMainCommands implements Command {
     EnergyUnlimited("\\s*energy\\s+unlimited\\s*"),
     ShowCraftingRecipes("\\s*crafting\\s+show\\s+recipes\\s*"),
     CraftingCraft("\\s*crafting\\s+craft\\s+(?<itemName>.*)\\s*"),
-    PlaceItem("\\s*place\\s+item\\s+-n\\s+(?<itemName>.*)\\s+-d\\s+(?<direction>.*)\\s*"),
+    PlaceItem("\\s*place\\s+item\\s+-n\\s+(?<itemName>.+)\\s+-d\\s+(?<direction>\\d+)\\s*"),
     CheatAddItem("\\s*cheat\\s+add\\s+item\\s+-n\\s+(?<itemName>.*)\\s+-c\\s+(?<count>-?\\d+)\\s*"),
     CookingRefrigerator("\\s*cooking\\s+refrigerator\\s+(?<which>put|pick)\\s+(?<item>.+)\\s*"),
     ShowRefrigerator("\\s*cooking\\s+refrigerator\\s*"),

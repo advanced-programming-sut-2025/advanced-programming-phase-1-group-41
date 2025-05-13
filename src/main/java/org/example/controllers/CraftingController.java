@@ -7,7 +7,8 @@ import org.example.models.items.*;
 import java.util.regex.Matcher;
 
 public class CraftingController {
-
+    int x;
+    int y;
     private boolean inHome(){
         int x = App.getGame().getCurrentPlayer().getX();
         int y = App.getGame().getCurrentPlayer().getY();
@@ -17,6 +18,42 @@ public class CraftingController {
             return true;
         }
         return false;
+    }
+
+    public Result preValidateUseTool(Matcher matcher){
+        String dirName = matcher.group("direction").trim();
+        int dir = Integer.parseInt(dirName)-1;
+        if(dir < 0 || dir > 7){
+            return new Result(false, "invalid dir");
+        }
+        int [][]dirs = {{-1,-1},{0,-1},{1,-1},{1,0},{1,1},{0,1},{-1,1},{-1,0},};
+        x = App.getGame().getCurrentPlayer().getX()+dirs[dir][0];
+        y = App.getGame().getCurrentPlayer().getY()+dirs[dir][1];
+        return new Result(true, "x: "+x+" y: "+y);
+    }
+
+    public Result placeItem(Matcher matcher){
+        Result preResult = preValidateUseTool(matcher);
+        if(!preResult.success()){
+            return preResult;
+        }
+        String itemName = matcher.group(1).trim();
+        Cell cell = Finder.findCellByCoordinates(x,y,App.getGame().getCurrentPlayerFarm());
+        if(cell == null){
+            return new Result(false, "Cell not found");
+        }
+        Item item = Finder.parseItem(itemName);
+        if(item == null){
+            return new Result(false, "item not found");
+        }
+        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
+        Slot slot = inventory.getSlotByItem(item);
+        if(slot == null){
+            return new Result(false, "slot not found");
+        }
+        cell.setObjectMap(item);
+        inventory.removeFromInventory(item, 1);
+        return new Result(true, itemName+" placed on "+x+" "+y);
     }
 
     public Result showRecepies(Matcher matcher){
