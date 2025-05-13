@@ -60,7 +60,7 @@ public class TimeLine {
         App.getGame().setWeatherType(App.getGame().getTmrwWeatherType());
         predictTmrwWeather();
         for(Farm farm : App.getGame().getFarms()){
-            App.getGame().getCurrentPlayerFarm().update();
+            farm.update();
         }
 
         day++;

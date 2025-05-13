@@ -13,14 +13,10 @@ import java.util.ArrayList;
 import static org.example.models.foragings.Nature.MineralType.*;
 
 public class Furnace extends Machine {
-    private ArrayList<Slot> slots;
-    private ArrayList<Slot> receivedItems;
     public Furnace(MineralType mineralType) {
         super(4, CraftableMachine.Furnace);
-        this.slots = new ArrayList<>();
         slots.add(new Slot(new Mineral(mineralType),5));
         slots.add(new Slot(new Mineral(MineralType.Coal),1));
-        receivedItems = new ArrayList<>();
         receivedItems.add(new Slot(new Mineral(mineralType),0));
         receivedItems.add(new Slot(new Mineral(MineralType.Coal),0));
     }
@@ -44,9 +40,6 @@ public class Furnace extends Machine {
         return receivedItems;
     }
 
-    public void setReceivedItems(ArrayList<Slot> receivedItems) {
-        this.receivedItems = receivedItems;
-    }
 
     public ArrayList<Slot> getSlots() {
         return slots;
@@ -56,13 +49,4 @@ public class Furnace extends Machine {
         this.slots = slots;
     }
 
-    @Override
-    public boolean suffice() {
-        for (int i = 0; i < slots.size(); i++) {
-            if(slots.get(i).getQuantity() != this.receivedItems.get(i).getQuantity()) {
-                return false;
-            }
-        }
-        return true;
-    }
 }

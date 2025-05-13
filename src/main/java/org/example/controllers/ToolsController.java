@@ -385,10 +385,13 @@ public class ToolsController {
                 cell.setObjectMap(new Grass());
                 return new Result(true, "You got 5 coal.");
             }
+            if(tree.isAttacked()){
+                return new Result(false, "Tree was attacked last night!.");
+            }
             if(tree.getCurrentStage() < 3 || tree.getCurrentStageLevel() < 7){
-                return new Result(true, "Tree is not ripe yet!");
+                return new Result(false, "Tree is not ripe yet!");
             } else if(tree.getCurrentStageLevel() < tree.getTreeType().getFruitHarvestCycle()){
-                return new Result(true, "Tree is not at its fruit harvest cycle!");
+                return new Result(false, "Tree is not at its fruit harvest cycle!");
             }
             tree.setCurrentStageLevel(0);
             App.getGame().getCurrentPlayer().getInventory().addToInventory(new Fruit(tree.getTreeType().getFruitType()), 1);

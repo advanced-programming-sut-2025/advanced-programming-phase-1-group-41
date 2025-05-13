@@ -130,7 +130,7 @@ public class Crop implements Item {
         this.currentStageLevel = currentStageLevel;
     }
     public Boolean shouldBeRemoved() {
-        return (waterStreak >= 1 && !isWateredToday) || waterStreak >= 2
+        return (waterStreak >= 2 && !isWateredToday) || waterStreak >= 3
                 || (!Arrays.asList(cropType.getGrowingSeasons()).contains(App.getGame().getTime().getSeason())
                 && !cropType.getGrowingSeasons()[0].equals(Season.Special));
     }

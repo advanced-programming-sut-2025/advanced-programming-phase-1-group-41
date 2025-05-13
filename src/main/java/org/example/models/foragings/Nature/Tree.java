@@ -27,6 +27,7 @@ public class Tree implements Nature, Obstacle {
     private boolean isFertilizedToday = false;
     private boolean isProtected = false;
     private boolean isThundered = false;
+    private boolean isAttacked = false;
     private final int x;
     private final int y;
 
@@ -62,6 +63,12 @@ public class Tree implements Nature, Obstacle {
     }
     public int getCurrentStageLevel() {return currentStageLevel;}
     public void setCurrentStageLevel(int level){currentStageLevel = level;}
+    public boolean isAttacked() {
+        return isAttacked;
+    }
+    public void setAttacked(boolean isAttacked) {
+        this.isAttacked = isAttacked;
+    }
 
 
     public void increaseStage() {
@@ -86,7 +93,7 @@ public class Tree implements Nature, Obstacle {
     }
 
     public Boolean shouldBeRemoved() {
-        return (waterStreak >= 5 && !isWateredToday) || waterStreak >= 6;
+        return (waterStreak >= 6 && !isWateredToday) || waterStreak >= 7;
     }
 
     public int getX(){
@@ -123,7 +130,9 @@ public class Tree implements Nature, Obstacle {
     public void waterFertilize() {
         isFertilizedToday = true;
     }
-    public boolean isProtected() {return isProtected;}
+    public boolean isProtected() {
+        return isProtected;
+    }
     public void setIsProtected(boolean isProtected) {this.isProtected = isProtected;}
 
     @Override
@@ -138,7 +147,7 @@ public class Tree implements Nature, Obstacle {
         result.append("Current Stage: ").append(currentStage).append("\n");
         result.append("Watered Today: ").append(isWateredToday).append("\n");
         //TODO Add Quality
-        result.append("Quality: ").append("\n");
+        result.append("Quality: ").append(getPrice() / 2 + 10).append("\n");
         result.append("Fertilized Today: ").append(isFertilizedToday).append("\n");
         return result.toString();
     }

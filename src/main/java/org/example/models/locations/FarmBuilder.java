@@ -1,5 +1,6 @@
 package org.example.models.locations;
 
+import org.example.controllers.WeatherController;
 import org.example.models.App;
 import org.example.models.Cell;
 import org.example.models.Finder;
@@ -119,11 +120,14 @@ public class FarmBuilder {
         App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.Mixed), 100);
         App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.CauliflowerSeed), 100);
         App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.CoffeeBeanSeed), 100);
+        App.getGame().getCurrentPlayer().getInventory().addToInventory(CraftableMachine.DeluxeScarecrow, 100);
+        App.getGame().getCurrentPlayer().getInventory().addToInventory(CraftableMachine.Scarecrow, 100);
     }
     public void growTrees(){
         List<Tree> toRemove = new ArrayList<>();
         for (Tree tree : farm.getTrees()) {
             tree.increaseStage();
+            tree.setAttacked(false);
             if (tree.shouldBeRemoved()) {
                 toRemove.add(tree);
             }
@@ -146,6 +150,9 @@ public class FarmBuilder {
             for(Tree tree : farm.getTrees()) {
                 tree.water();
             }
+        }
+        if(App.getGame().getWeatherType().equals(WeatherType.Stormy)){
+            WeatherController.strikeThunder(farm);
         }
     }
     public void scarecrowUpdate(){
@@ -172,19 +179,42 @@ public class FarmBuilder {
             }
         }
     }
-    public void crawlAttacks(){
+    public void crowAttacks(){
         int items = farm.getCrops().size() + farm.getTrees().size();
+//        System.out.println("Items: " + items);
         int crows = items / 16;
         Random rand = new Random();
+        ArrayList<Crop> removedCrops = new ArrayList<>();
         for(int i = 0; i < crows; i++){
             if(rand.nextInt(4) == 0){
-                if(rand.nextInt(2) == 0){
-                    if(farm.getCrops().get(rand.nextInt(farm.getCrops().size())).isProtected()){
-
+                if(rand.nextInt(2) == 0 && !farm.getCrops().isEmpty()){
+                    Crop crop = farm.getCrops().get(rand.nextInt(farm.getCrops().size()));
+                    if(crop.isProtected()){
+                        System.out.println("A crow tried to attack your " + crop.getName() +
+                                " at " + crop.getX() + ", " + crop.getY() + ". But it was protected.");
+                    } else{
+                        System.out.println("A crow attacked your " + crop.getName() +
+                                " at " + crop.getX() + ", " + crop.getY() + ". Now it's dead.");
+                        removedCrops.add(crop);
+                        Objects.requireNonNull(Finder.findCellByCoordinates(crop.getX(), crop.getY(), farm)).setObjectMap(new Grass());
                     }
+                } else if(!farm.getTrees().isEmpty()) {
+                    Tree tree = farm.getTrees().get(rand.nextInt(farm.getTrees().size()));
+                    if(tree.isProtected()){
+                        System.out.println("A crow tried to attack your " + tree.getName() +
+                                " at " + tree.getX() + ", " + tree.getY() + ". But it was protected.");
+                    } else{
+                        System.out.println("A crow attacked your " + tree.getName() +
+                                " at " + tree.getX() + ", " + tree.getY() + ". It won't have fruit tomorrow.");
+                        tree.setAttacked(true);
+                    }
+                } else{
+                    System.out.println("Kir Shody");
                 }
             }
         }
+//        System.out.println("Crops: " + farm.getCrops().size() + " Trees: " + farm.getTrees().size() + " Rm: " + removedCrops.size());
+        farm.getCrops().removeAll(removedCrops);
     }
 
     private static final int WIDTH = 12;

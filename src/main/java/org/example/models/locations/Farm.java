@@ -127,13 +127,24 @@ public class Farm {
                 i--;
             }
         }
-//        for(int i = 0; i < 50 ;i++){
+//        for(int i = 0; i < 400 ;i++){
 //            int y = rand.nextInt(MaxLength - 4) + 4;
 //            int x = rand.nextInt(MaxHeight - 4) + 4;
 //            if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap().getChar(), new Grass().getChar())){
 //                Crop crop = new Crop(x, y, this, CropType.values()[rand.nextInt(CropType.values().length)]);
-//                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(crop);
+//                (Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this))).setObjectMap(crop);
 //                crops.add(crop);
+//            } else{
+//                i--;
+//            }
+//        }
+//        for(int i = 0; i < 300 ;i++){
+//            int y = rand.nextInt(MaxLength - 4) + 4;
+//            int x = rand.nextInt(MaxHeight - 4) + 4;
+//            if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap().getChar(), new Grass().getChar())){
+//                Tree tree = new Tree(x, y, this, TreeType.values()[rand.nextInt(TreeType.values().length)]);
+//                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(tree);
+//                trees.add(tree);
 //            } else{
 //                i--;
 //            }
@@ -375,6 +386,7 @@ public class Farm {
         farmBuilder.growTrees();
         farmBuilder.weatherUpdates();
         farmBuilder.scarecrowUpdate();
+        farmBuilder.crowAttacks();
 //        WeatherController.strikeThunder(this);
     }
     public int getRockCount() {
