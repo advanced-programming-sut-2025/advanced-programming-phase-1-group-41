@@ -14,55 +14,56 @@ import java.util.regex.Matcher;
 public class CraftingController {
     int x;
     int y;
-    private boolean inHome(){
+
+    private boolean inHome() {
         int x = App.getGame().getCurrentPlayer().getX();
         int y = App.getGame().getCurrentPlayer().getY();
         Cell cell = App.getGame().getCurrentPlayerFarm().getCell(x, y);
-        if(cell == null) return false;
-        if(cell.getObjectMap() instanceof Cottage){
+        if (cell == null) return false;
+        if (cell.getObjectMap() instanceof Cottage) {
             return true;
         }
         return false;
     }
 
-    public Result preValidateUseTool(Matcher matcher){
+    public Result preValidateUseTool(Matcher matcher) {
         String dirName = matcher.group("direction").trim();
-        int dir = Integer.parseInt(dirName)-1;
-        if(dir < 0 || dir > 7){
+        int dir = Integer.parseInt(dirName) - 1;
+        if (dir < 0 || dir > 7) {
             return new Result(false, "invalid dir");
         }
-        int [][]dirs = {{-1,-1},{0,-1},{1,-1},{1,0},{1,1},{0,1},{-1,1},{-1,0},};
-        x = App.getGame().getCurrentPlayer().getX()+dirs[dir][0];
-        y = App.getGame().getCurrentPlayer().getY()+dirs[dir][1];
-        return new Result(true, "x: "+x+" y: "+y);
+        int[][] dirs = {{-1, -1}, {0, -1}, {1, -1}, {1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0},};
+        x = App.getGame().getCurrentPlayer().getX() + dirs[dir][0];
+        y = App.getGame().getCurrentPlayer().getY() + dirs[dir][1];
+        return new Result(true, "x: " + x + " y: " + y);
     }
 
-    public Result placeItem(Matcher matcher){
+    public Result placeItem(Matcher matcher) {
         Result preResult = preValidateUseTool(matcher);
-        if(!preResult.success()){
+        if (!preResult.success()) {
             return preResult;
         }
         String itemName = matcher.group(1).trim();
-        Cell cell = Finder.findCellByCoordinates(x,y,App.getGame().getCurrentPlayerFarm());
-        if(cell == null){
+        Cell cell = Finder.findCellByCoordinates(x, y, App.getGame().getCurrentPlayerFarm());
+        if (cell == null) {
             return new Result(false, "Cell not found");
         }
         Item item = Finder.parseItem(itemName);
-        if(item == null){
+        if (item == null) {
             return new Result(false, "item not found");
         }
         Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
         Slot slot = inventory.getSlotByItem(item);
-        if(slot == null){
+        if (slot == null) {
             return new Result(false, "slot not found");
         }
         cell.setObjectMap(item);
         inventory.removeFromInventory(item, 1);
-        return new Result(true, itemName+" placed on "+x+" "+y);
+        return new Result(true, itemName + " placed on " + x + " " + y);
     }
 
-    public Result showRecepies(Matcher matcher){
-        if(!inHome()){
+    public Result showRecepies(Matcher matcher) {
+        if (!inHome()) {
             return new Result(false, "You are not in a home");
         }
         StringBuilder message = new StringBuilder();
@@ -71,49 +72,51 @@ public class CraftingController {
         for (CraftingRecipe craftingRecipe : player.getCraftingRecipes()) {
             message.append(craftingRecipe.toString()).append("\n");
         }
-        message.delete(message.length()-1, message.length());
+        message.delete(message.length() - 1, message.length());
         return new Result(true, message.toString());
     }
 
-    public Result learnRecipe(Matcher matcher){return null;}
+    public Result learnRecipe(Matcher matcher) {
+        return null;
+    }
 
     public Result craftRecipe(Matcher matcher) {
-        if(!inHome()){
+        if (!inHome()) {
             return new Result(false, "You are not in a home");
         }
         String itemName = matcher.group(1).trim();
         Item item = Finder.parseItem(itemName);
-        if(item == null){
+        if (item == null) {
             return new Result(false, "Item not found");
         }
 
-        if(item.getName().equals(CraftableMachine.CherryBomb.getName())){
+        if (item.getName().equals(CraftableMachine.CherryBomb.getName())) {
             App.getGame().getCurrentPlayer().getInventory().addToInventory(CraftableMachine.CherryBomb, 1);
-            return new Result(true,"you have a cherry bomb now");
+            return new Result(true, "you have a cherry bomb now");
         }
 
 
         for (CraftableMachine machine : CraftableMachine.values()) {
-            if(item.getName().equals(machine.getName())){
+            if (item.getName().equals(machine.getName())) {
                 boolean hasItems = hasNeededItems(machine);
-                if(!hasItems){
+                if (!hasItems) {
                     return new Result(false, "you don't have the needed items");
                 }
 
-                if(App.getGame().getCurrentPlayer().getInventory().getEmptySlots() <= 0){
-                    return new Result(false,"you don't have enough empty slots");
+                if (App.getGame().getCurrentPlayer().getInventory().getEmptySlots() <= 0) {
+                    return new Result(false, "you don't have enough empty slots");
                 }
 
                 removeItems(machine);
 
                 App.getGame().getCurrentPlayer().getInventory().addToInventory(machine, 1);
-                return new Result(true, "You received a "+ machine.getName());
+                return new Result(true, "You received a " + machine.getName());
             }
         }
         return new Result(false, "can't craft that item");
     }
 
-    private void removeItems(CraftableMachine machine){
+    private void removeItems(CraftableMachine machine) {
         Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
         for (Item item : machine.getRecipe().neededItems.keySet()) {
             Slot invSlot = inventory.getSlotByItem(item);
@@ -121,31 +124,31 @@ public class CraftingController {
         }
     }
 
-    private boolean hasNeededItems(CraftableMachine machine){
+    private boolean hasNeededItems(CraftableMachine machine) {
         Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
         boolean checker = true;
         for (Item item : machine.getRecipe().neededItems.keySet()) {
             Slot invSlot = inventory.getSlotByItem(item);
-            if(invSlot != null && invSlot.getQuantity()>=machine.getRecipe().neededItems.get(item)){
-            }else{
+            if (invSlot != null && invSlot.getQuantity() >= machine.getRecipe().neededItems.get(item)) {
+            } else {
                 checker = false;
-                System.out.println(item+" not found");
+                System.out.println(item + " not found");
                 break;
             }
         }
         return checker;
     }
 
-    private Cell findArtisan(String machineName){
-        for (int i = -1; i < 1 ; i++) {
+    private Cell findArtisan(String machineName) {
+        for (int i = -1; i < 1; i++) {
             for (int j = -1; j < 1; j++) {
-                x = App.getGame().getCurrentPlayer().getX()+i;
-                y = App.getGame().getCurrentPlayer().getY()+j;
-                Cell cell = App.getGame().getCurrentPlayerFarm().getCell(x,y);
-                if(cell != null){
-                    if(cell.getObjectMap() instanceof CraftableMachine){
-                        System.out.println("found a "+cell.getObjectMap().getName()+" in "+x+" "+y);
-                        if(machineName.equalsIgnoreCase(cell.getObjectMap().getName())){
+                x = App.getGame().getCurrentPlayer().getX() + i;
+                y = App.getGame().getCurrentPlayer().getY() + j;
+                Cell cell = App.getGame().getCurrentPlayerFarm().getCell(x, y);
+                if (cell != null) {
+                    if (cell.getObjectMap() instanceof CraftableMachine) {
+                        System.out.println("found a " + cell.getObjectMap().getName() + " in " + x + " " + y);
+                        if (machineName.equalsIgnoreCase(cell.getObjectMap().getName())) {
                             return cell;
                         }
                     }
@@ -155,40 +158,40 @@ public class CraftingController {
         return null;
     }
 
-    public Result artisanUse(Matcher matcher){
+    public Result artisanUse(Matcher matcher) {
         String machineName = matcher.group(1).trim();
         String[] puttingItems = matcher.group(2).trim().split(" ");
         Cell cell = findArtisan(machineName);
-        if(cell == null){
-            return new Result(false, machineName+" is not around you");
+        if (cell == null) {
+            return new Result(false, machineName + " is not around you");
         }
         CraftableMachine machine = (CraftableMachine) cell.getObjectMap();
         ArrayList<Item> items = new ArrayList<>();
         for (String itemName : puttingItems) {
             Item item = Finder.parseItem(itemName);
-            if(item == null){
-                return new Result(false, itemName+"doesn't exist");
+            if (item == null) {
+                return new Result(false, itemName + "doesn't exist");
             }
             items.add(item);
         }
         for (Item item : items) {
             Slot slot = App.getGame().getCurrentPlayer().getInventory().getSlotByItem(item);
-            if(slot == null || slot.getQuantity()==0){
-                System.out.println("you don't have "+slot.getItem().getName());
+            if (slot == null || slot.getQuantity() == 0) {
+                return new Result(false,"you don't have " + item.getName());
             }
         }
 
-        return switch (machine){
+        return switch (machine) {
             case Furnace -> this.furnace(items, cell);
-            default -> new Result(false, machineName+" is not useable");
+            default -> new Result(false, machineName + " is not useable");
         };
     }
 
-    public Result artisanGet(Matcher matcher){
+    public Result artisanGet(Matcher matcher) {
         String machineName = matcher.group(1).trim();
         Cell cell = findArtisan(machineName);
-        if(cell == null){
-            return new Result(false, machineName+" is not around you");
+        if (cell == null) {
+            return new Result(false, machineName + " is not around you");
         }
         CraftableMachine machine = (CraftableMachine) cell.getObjectMap();
         Player player = App.getGame().getCurrentPlayer();
@@ -197,7 +200,7 @@ public class CraftingController {
             Machine onGoingMachine = iterator.next();
             if (onGoingMachine.getCraftableMachine().getName().equals(machine.getName())) {
                 if (!onGoingMachine.suffice()) {
-                    return new Result(false, machine.getName() + "'s product is not ready yet");
+                    return new Result(false, machine.getName() + "'s needed items are not ready yet");
                 }
                 Slot slot = onGoingMachine.getProduce();
                 if (slot == null) {
@@ -208,42 +211,74 @@ public class CraftingController {
                 return new Result(true, slot.getItem() + " added to inventory");
             }
         }
-        return new Result(false, machineName+" is not ongoing");
+        return new Result(false, machineName + " is not ongoing");
     }
 
 
     // atrisans
 
-    private Result FishSmoker(String[] items, Cell cell){
+    private Result FishSmoker(String[] items, Cell cell) {
         return null;
     }
 
 
-    private Result cheesePress(Matcher matcher){return null;}
-
-    private Result beeHouse(Matcher matcher){return null;}
-
-    private Result keg(Matcher matcher){return null;}
-
-    private Result dehydrator(Matcher matcher){return null;}
-
-    private Result charcoalKiln(Matcher matcher){return null;}
-
-    private Result furnace(ArrayList<Item> items, Cell cell){
-        Player player = App.getGame().getCurrentPlayer();
-        for (Machine x : player.getOnGoingMachines()) {
-            if(x instanceof Furnace furnace){
-                furnaceHelper(furnace, items, player);
-                return new Result(true,"done");
-            }
-        }
-        Furnace furnace = new Furnace();
-        player.getOnGoingMachines().add(furnace);
-        furnaceHelper(furnace, items, player);
-        return new Result(true,"donee");
+    private Result cheesePress(Matcher matcher) {
+        return null;
     }
 
-    private void furnaceHelper(Furnace furnace, ArrayList<Item> items, Player player){
+    private Result beeHouse(Matcher matcher) {
+        return null;
+    }
+
+    private Result keg(Matcher matcher) {
+        return null;
+    }
+
+    private Result dehydrator(Matcher matcher) {
+        return null;
+    }
+
+    private Result charcoalKiln(Matcher matcher) {
+        return null;
+    }
+
+    private Result furnace(ArrayList<Item> items, Cell cell) {
+        MineralType mineralType = setMineralType(items);
+        Player player = App.getGame().getCurrentPlayer();
+        for (Machine x : player.getOnGoingMachines()) {
+            if (x instanceof Furnace furnace) {
+                furnaceHelper(furnace, items, player, mineralType);
+                return new Result(true, "done");
+            }
+        }
+        if(mineralType == null){
+            return new Result(false, "first fix the ore!");
+        }
+        Furnace furnace = new Furnace(mineralType);
+        player.getOnGoingMachines().add(furnace);
+        furnaceHelper(furnace, items, player, mineralType);
+        return new Result(true, "donee");
+    }
+
+    private MineralType setMineralType(ArrayList<Item> items) {
+        for (Item item : items) {
+            if (item.getName().equalsIgnoreCase(MineralType.CopperOre.getName())) {
+                return MineralType.CopperOre;
+            }
+            if (item.getName().equalsIgnoreCase(MineralType.GoldOre.getName())) {
+                return MineralType.GoldOre;
+            }
+            if (item.getName().equalsIgnoreCase(MineralType.IronOre.getName())) {
+                return MineralType.IronOre;
+            }
+            if (item.getName().equalsIgnoreCase(MineralType.IridiumOre.getName())) {
+                return MineralType.IridiumOre;
+            }
+        }
+        return null;
+    }
+
+    private void furnaceHelper(Furnace furnace, ArrayList<Item> items, Player player, MineralType mineralType){
         for (Item item : items) {
             if(item.getName().equalsIgnoreCase(MineralType.Coal.getName())){
                 for (Slot slot : furnace.getReceivedItems()) {
@@ -258,7 +293,7 @@ public class CraftingController {
                         break;
                     }
                 }
-            }else if(item.getName().equalsIgnoreCase(MineralType.CopperOre.getName())){
+            }else if(mineralType != null && item.getName().equalsIgnoreCase(mineralType.getName())){
                 for (Slot slot : furnace.getReceivedItems()) {
                     if(slot.getItem().getName().equals(item.getName())){
                         int playerQua = player.getInventory().getSlotByItem(item).getQuantity();

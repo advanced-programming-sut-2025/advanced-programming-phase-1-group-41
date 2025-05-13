@@ -10,22 +10,33 @@ import org.example.models.items.Slot;
 
 import java.util.ArrayList;
 
+import static org.example.models.foragings.Nature.MineralType.*;
+
 public class Furnace extends Machine {
     private ArrayList<Slot> slots;
     private ArrayList<Slot> receivedItems;
-    public Furnace() {
+    public Furnace(MineralType mineralType) {
         super(4, CraftableMachine.Furnace);
         this.slots = new ArrayList<>();
-        slots.add(new Slot(new Mineral(MineralType.CopperOre),5));
+        slots.add(new Slot(new Mineral(mineralType),5));
         slots.add(new Slot(new Mineral(MineralType.Coal),1));
         receivedItems = new ArrayList<>();
-        receivedItems.add(new Slot(new Mineral(MineralType.CopperOre),0));
+        receivedItems.add(new Slot(new Mineral(mineralType),0));
         receivedItems.add(new Slot(new Mineral(MineralType.Coal),0));
     }
 
 
     public void setProduce() {
-        this.produce = new Slot(CraftableItem.CopperBar,5);
+        Item item = slots.get(0).getItem();
+        if(item.getName().equals(CopperOre.getName())) {
+            this.produce = new Slot(CraftableItem.CopperBar,5);
+        }else if(item.getName().equals(IronOre.getName())) {
+            this.produce = new Slot(CraftableItem.IronBar,5);
+        }else if(item.getName().equals(GoldOre.getName())) {
+            this.produce = new Slot(CraftableItem.GoldBar,5);
+        }else if(item.getName().equals(IridiumOre.getName())) {
+            this.produce = new Slot(CraftableItem.IridiumBar,5);
+        }
     }
 
 
