@@ -1,6 +1,6 @@
 package org.example.models.items;
 
-public enum Food implements Item {
+public enum Food implements Item, Eatable {
     FriedEgg(50, 35, null, "FriedEgg"),
     BakedFish(75, 100, CookingRecipe.BakedFish, "BakedFish"),
     Salad(113, 110, null, "Salad"),
@@ -63,7 +63,8 @@ public enum Food implements Item {
         this.name = name;
     }
 
-    public int getEnergyValue() {
+    @Override
+    public double getEnergy() {
         return energyValue;
     }
 
