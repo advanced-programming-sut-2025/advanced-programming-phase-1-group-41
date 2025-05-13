@@ -19,6 +19,10 @@ public class Rock implements Nature, Obstacle {
     private int hitPoints;
     private final RockType rockType;
 
+    public Rock(){
+        rockType = RockType.SmallRock;
+    }
+
     public Rock(int x, int y, Farm farm) {
         Random rand = new Random();
         if(y >= 40){

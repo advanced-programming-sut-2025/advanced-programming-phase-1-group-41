@@ -2,7 +2,10 @@ package org.example.models;
 
 import org.bson.types.ObjectId;
 import org.example.models.foragings.*;
+import org.example.models.foragings.Nature.Mineral;
+import org.example.models.foragings.Nature.MineralType;
 import org.example.models.foragings.Nature.Wood;
+import org.example.models.items.CraftableMachine;
 import org.example.models.items.Food;
 import org.example.models.items.Item;
 import org.example.models.items.Slot;
@@ -13,7 +16,6 @@ import org.example.models.tools.Tool;
 import java.util.Objects;
 
 import static org.example.models.animals.FishType.parseFish;
-import static org.example.models.items.CraftableItem.parseCraftable;
 import static org.example.models.tools.BasicTool.parseBasicTool;
 
 public class Finder {
@@ -29,8 +31,8 @@ public class Finder {
         if(parseBasicTool(itemName)!=null){
             return parseBasicTool(itemName);
         }
-        if(parseCraftable(itemName)!=null){
-            return parseCraftable(itemName);
+        if(CraftableMachine.parseCraftable(itemName)!=null){
+            return CraftableMachine.parseCraftable(itemName);
         }
         if(parseFish(itemName)!=null){
             return parseFish(itemName);
@@ -49,6 +51,9 @@ public class Finder {
         }
         if(FertilizerType.parseFertilizerType(itemName)!=null){
             return new Fertilizer(FertilizerType.parseFertilizerType(itemName));
+        }
+        if(MineralType.parseMineralType(itemName)!=null){
+            return new Mineral(MineralType.parseMineralType(itemName));
         }
         if(itemName.equalsIgnoreCase((new Wood()).getName())){
             return new Wood();

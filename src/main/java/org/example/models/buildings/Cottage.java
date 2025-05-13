@@ -3,7 +3,10 @@ package org.example.models.buildings;
 import org.example.models.Cell;
 import org.example.models.Colors;
 import org.example.models.Finder;
+import org.example.models.items.Item;
 import org.example.models.locations.Farm;
+
+import java.util.HashSet;
 
 
 public class Cottage implements Building {
@@ -14,6 +17,7 @@ public class Cottage implements Building {
     private int x;
     private int y;
     private Refrigerator refrigerator;
+    private HashSet<Item> machines;
     @Override
     public String getName() {
         return "Cottage";
@@ -21,6 +25,7 @@ public class Cottage implements Building {
 
     public Cottage(int x, int y, Farm farm) {
         this.refrigerator = new Refrigerator();
+        this.machines = new HashSet<>();
         this.x = x;
         this.y = y;
         System.out.println( "cottage in : "+x+" "+y);
@@ -82,5 +87,9 @@ public class Cottage implements Building {
 
     public void setRefrigerator(Refrigerator refrigerator) {
         this.refrigerator = refrigerator;
+    }
+
+    public HashSet<Item> getMachines() {
+        return machines;
     }
 }

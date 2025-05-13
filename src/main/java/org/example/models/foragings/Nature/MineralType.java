@@ -13,10 +13,10 @@ public enum MineralType{
     Jade("Jade", "A pale green ornamental stone.", 200),
     Diamond("Diamond", "A rare and valuable gem.", 750),
     PrismaticShard("Prismatic Shard", "A very rare and powerful substance with unknown origins.", 2000),
-    Copper("Copper", "A common ore that can be smelted into bars.", 5),
-    Iron("Iron", "A fairly common ore that can be smelted into bars.", 10),
-    Gold("Gold", "A precious ore that can be smelted into bars.", 25),
-    Iridium("Iridium", "An exotic ore with many curious properties. Can be smelted into bars.", 100),
+    CopperOre("CopperOre", "A common ore that can be smelted into bars.", 5),
+    IronOre("IronOre", "A fairly common ore that can be smelted into bars.", 10),
+    GoldOre("GoldOre", "A precious ore that can be smelted into bars.", 25),
+    IridiumOre("IridiumOre", "An exotic ore with many curious properties. Can be smelted into bars.", 100),
     Coal("Coal", "A combustible rock that is useful for crafting and smelting.", 15);
 
     private final String name;
@@ -38,4 +38,13 @@ public enum MineralType{
     }
 
     public String getDescription() {return description;}
+
+    public static MineralType parseMineralType(String itemName){
+        for (MineralType value : MineralType.values()) {
+            if(value.getName().equalsIgnoreCase(itemName)){
+                return value;
+            }
+        }
+        return null;
+    }
 }

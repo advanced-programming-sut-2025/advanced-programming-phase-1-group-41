@@ -32,7 +32,8 @@ public class Player {
     private Inventory inventory;
     @Transient
     private Tool currentTool;
-    private ArrayList<CookingRecipe> recipes;
+    private ArrayList<CookingRecipe> cookingRecipes;
+    private ArrayList<CraftingRecipe> craftingRecipes;
     @Transient
     private Skill farmingSkill;
     @Transient
@@ -73,10 +74,13 @@ public class Player {
         this.inventory = new Inventory();
         this.energyUnilimited = false;
         this.currentTool = null;
-        this.recipes = new ArrayList<>();
-        this.recipes.add(CookingRecipe.BakedFish);
-        this.recipes.add(CookingRecipe.Spaghetti);
-        this.recipes.add(CookingRecipe.Bread);
+        this.cookingRecipes = new ArrayList<>();
+        this.cookingRecipes.add(CookingRecipe.BakedFish);
+        this.cookingRecipes.add(CookingRecipe.Spaghetti);
+        this.cookingRecipes.add(CookingRecipe.Bread);
+        this.craftingRecipes = new ArrayList<>();
+        this.craftingRecipes.add(CraftingRecipe.Furnace);
+
         this.farmingSkill = new Skill();
         this.miningSkill = new Skill();
         this.foragingSkill = new Skill();
@@ -206,12 +210,12 @@ public class Player {
     }
 
 
-    public ArrayList<CookingRecipe> getRecipes() {
-        return recipes;
+    public ArrayList<CookingRecipe> getCookingRecipes() {
+        return cookingRecipes;
     }
 
-    public void setRecipes(ArrayList<CookingRecipe> recipes) {
-        this.recipes = recipes;
+    public void setCookingRecipes(ArrayList<CookingRecipe> cookingRecipes) {
+        this.cookingRecipes = cookingRecipes;
     }
 
     public Skill getFarmingSkill() {
@@ -232,13 +236,17 @@ public class Player {
 
     public boolean hasRecipe(Food food){
         System.out.println("food is: "+food+" "+food.getRecipe());
-        for (CookingRecipe recipe : recipes) {
+        for (CookingRecipe recipe : cookingRecipes) {
             System.out.println(recipe.toString()+" "+food.getRecipe());
             if(recipe.equals(food.getRecipe())){
                 return true;
             }
         }
         return false;
+    }
+
+    public ArrayList<CraftingRecipe> getCraftingRecipes() {
+        return craftingRecipes;
     }
 
     @Override

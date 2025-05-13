@@ -9,7 +9,6 @@ import org.example.models.buildings.Cottage;
 import org.example.models.buildings.Refrigerator;
 import org.example.models.items.*;
 
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 public class CookingController {
@@ -145,10 +144,12 @@ public class CookingController {
             Slot invSlot = inventory.getSlotByItem(item);
             Slot refSlot = refrigerator.getSlotByItem(item);
             if(invSlot != null && invSlot.getQuantity()>=food.getRecipe().neededItems.get(item)){
-                inventory.removeFromInventory(invSlot.getItem(),invSlot.getQuantity());
+                inventory.removeFromInventory(invSlot.getItem(),
+                        food.getRecipe().neededItems.get(item));
             }
             else if(refSlot != null && refSlot.getQuantity()>=food.getRecipe().neededItems.get(item)){
-                refrigerator.removeFromRef(refSlot.getItem(),refSlot.getQuantity());
+                refrigerator.removeFromRef(refSlot.getItem(),
+                        food.getRecipe().neededItems.get(item));
             }
         }
 
@@ -163,7 +164,7 @@ public class CookingController {
         if(!inHome()){
             return new Result(false, "You're not in a home");
         }
-        for (CookingRecipe recipe : App.getGame().getCurrentPlayer().getRecipes()) {
+        for (CookingRecipe recipe : App.getGame().getCurrentPlayer().getCookingRecipes()) {
             System.out.println(recipe.toString());
         }
         return new Result(true,"that was all..");

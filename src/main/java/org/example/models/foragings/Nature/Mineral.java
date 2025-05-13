@@ -27,6 +27,11 @@ public class Mineral implements Nature, Obstacle {
         assert cell != null;
         cell.setObjectMap(this);
     }
+    public Mineral(MineralType mineralType) {
+        this.mineralType = mineralType;
+        this.typeIndex = mineralType.ordinal();
+    }
+
     public MineralType getMineralType() {
         return mineralType;
     }
