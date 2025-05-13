@@ -193,11 +193,11 @@ public class PlayerController {
         if(slot==null){
             return new Result(false,"you don't have this food");
         }
-        App.getGame().getCurrentPlayer().incEnergy(wantedFood.getEnergyValue());
+        App.getGame().getCurrentPlayer().incEnergy(wantedFood.getEnergy());
         if(App.getGame().getCurrentPlayer().getEnergy() > 100){
             App.getGame().getCurrentPlayer().setEnergy(100);
         }
-        double value  = wantedFood.getEnergyValue();
+        double value  = wantedFood.getEnergy();
         inventory.removeFromInventory(wantedFood);
         return new Result(true, value+
                 " energy added :)");

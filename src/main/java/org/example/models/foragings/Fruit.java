@@ -1,8 +1,9 @@
 package org.example.models.foragings;
 
+import org.example.models.items.Eatable;
 import org.example.models.items.Item;
 
-public class Fruit implements Item {
+public class Fruit implements Item, Eatable {
     private final FruitType fruitType;
 
     public Fruit(FruitType fruitType) {
@@ -21,6 +22,11 @@ public class Fruit implements Item {
 
     public FruitType getType() {
         return fruitType;
+    }
+
+    @Override
+    public double getEnergy() {
+        return this.fruitType.getEnergy();
     }
 
     @Override

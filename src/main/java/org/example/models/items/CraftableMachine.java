@@ -29,7 +29,6 @@ public enum CraftableMachine implements Item{
     private String ch;
     private double price;
 
-
     CraftableMachine(String ch, String name, double price, CraftingRecipe recipe) {
         this.ch = ch;
         this.name = name;

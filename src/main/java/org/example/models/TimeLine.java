@@ -5,6 +5,7 @@ import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import org.bson.types.ObjectId;
 import org.example.controllers.AnimalController;
+import org.example.controllers.CraftingController;
 
 import java.util.Date;
 import java.util.Random;
@@ -45,6 +46,7 @@ public class TimeLine {
     }
 
     public void advanceOneHour(){
+        CraftingController.check();
         hour++;
         if(hour >= 24){
             hour = 0;

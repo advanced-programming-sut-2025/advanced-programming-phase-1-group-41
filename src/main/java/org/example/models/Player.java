@@ -5,6 +5,7 @@ import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
 import org.example.models.items.*;
+import org.example.models.items.craftablemachines.Machine;
 import org.example.models.skills.Skill;
 import org.example.models.tools.Tool;
 
@@ -42,7 +43,8 @@ public class Player {
     private Skill foragingSkill;
     @Transient
     private Skill fishingSkill;
-
+    @Transient
+    private ArrayList<Machine> onGoingMachines;
 //    private Farm farm;
 //    private ArrayList<Animal> animals;
 //    private ArrayList<Skill> skills;
@@ -85,6 +87,8 @@ public class Player {
         this.miningSkill = new Skill();
         this.foragingSkill = new Skill();
         this.fishingSkill = new Skill();
+
+        this.onGoingMachines = new ArrayList<>();
 //        animals = new ArrayList<>();
 //        skills = new ArrayList<>();
 //        skills = new ArrayList<>();
@@ -232,6 +236,10 @@ public class Player {
 
     public Skill getFishingSkill() {
         return fishingSkill;
+    }
+
+    public ArrayList<Machine> getOnGoingMachines() {
+        return onGoingMachines;
     }
 
     public boolean hasRecipe(Food food){
