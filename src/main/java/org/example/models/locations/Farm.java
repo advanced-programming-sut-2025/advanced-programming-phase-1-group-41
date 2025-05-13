@@ -175,7 +175,8 @@ public class Farm {
             }
         }
         for(Cell cell : cells){
-            if(getCell(cell.getX(),cell.getY()-1).getObjectMap() instanceof Door){
+            if(cell.getY()>2&&getCell(cell.getX(),cell.getY()-1).getObjectMap() instanceof Door&&getCell(cell.getX(),cell.getY()-2).getObjectMap() instanceof Cottage){
+                System.out.println("HAGGGGGGGGGGGGGGG");
                 startPoints.add(cell);
             }
         }
@@ -230,7 +231,7 @@ public class Farm {
         for(Cell cell:cells){
              if(cell.getX()==App.getGame().getCurrentPlayer().getX()&&cell.getY()==App.getGame().getCurrentPlayer().getY()){System.out.printf(App.getGame().getCurrentPlayer().getChar());}
              else if(isAnimalHere(cell)){}
-             else if(transferCells.contains(cell)){printFlashSign();}
+             else if(isSpecialPoint(cell)){}
              else {
                 System.out.printf(cell.getObjectMap().getChar());
             }
@@ -249,6 +250,7 @@ public class Farm {
                  if (cell.getX() == App.getGame().getCurrentPlayer().getX() && cell.getY() == App.getGame().getCurrentPlayer().getY()) {
                     System.out.printf(App.getGame().getCurrentPlayer().getChar());}
                     else if (isAnimalHere(cell)) {}
+                    else if(isSpecialPoint(cell)){}
                     else if(isSpecialPoint(cell)){}
 
                  else {
