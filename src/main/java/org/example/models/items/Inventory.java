@@ -1,6 +1,5 @@
 package org.example.models.items;
 
-import org.example.models.App;
 import org.example.models.tools.*;
 
 import java.util.ArrayList;
@@ -8,9 +7,10 @@ import java.util.ArrayList;
 public class Inventory {
     private ArrayList<Slot> slots=new ArrayList<>();
     private Backpack backpack=Backpack.Deluxe;
-
+    private int lastGottenSumOfItemsPrice;
     public Inventory()
     {
+        lastGottenSumOfItemsPrice=0;
         setDefaultBag();
         addToInventory(new TrashCan(), 1);
         addToInventory(new Pickaxe(), 1);
@@ -64,6 +64,20 @@ public class Inventory {
         return false;
     }
 
+    private boolean appendInventory(Item item, int quantity, int price){
+        for (Slot slot : slots) {
+            if(slot == null || slot.getItem() == null){
+                continue;
+            }
+            if(item.getName().equals((slot.getItem().getName()))){
+                slot.setQuantity(slot.getQuantity()+quantity);
+                slot.getItemsPrice().add(price);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean addToInventory(Item item, int quantity) {
         if(!appendInventory(item, quantity)){
             for(Slot slot : slots){
@@ -77,7 +91,22 @@ public class Inventory {
         }
         return true;
     }
-    
+
+    public boolean addToInventory(Item item, int quantity, int price) {
+        if(!appendInventory(item, quantity, price)){
+            for(Slot slot : slots){
+                if(slot.getItem() == null || slot.getQuantity() == 0){
+                    slot.setItem(item);
+                    slot.setQuantity(quantity);
+                    slot.getItemsPrice().add(price);
+                    return true;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
+
     public double getCofOfTrashCan(){
         TrashCan tc = TrashCan.findTrashCan();
         if(tc != null){
@@ -91,7 +120,7 @@ public class Inventory {
         }
         return 0;
     }
-    
+
     public boolean removeFromInventory(Item item, int quantity) {
         for(Slot slot : slots){
             if(slot.getItem() == null) continue;
@@ -106,6 +135,40 @@ public class Inventory {
         }
         return false;
     }
+
+    public boolean removeFromInventory(Item item, int quantity, int price) {
+        for(Slot slot : slots){
+            if(slot.getItem() == null) continue;
+            if(slot.getItem().getName().equals(item.getName())){
+                if(slot.getQuantity() >= quantity){
+                    slot.setQuantity(slot.getQuantity()-quantity);
+                    for (int i = 0; i < quantity; i++) {
+                        lastGottenSumOfItemsPrice+= (int)slot.getItemsPrice().poll();
+                    }
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+    public int getTopPriceOfItem(Item item){
+        for (Slot slot : slots) {
+            if(slot.getItem() == null) continue;
+            if(slot.getItem().getName().equals(item.getName())){
+                Integer price = (Integer) slot.getItemsPrice().peek();
+                if(price != null){
+                    return price;
+                }
+                return -1;
+            }
+        }
+        return -2;
+    }
+
+
     public boolean removeFromInventory(Item item) {
         for(Slot slot : slots){
             if (slot.getItem() == null) continue;
@@ -116,6 +179,8 @@ public class Inventory {
         }
         return false;
     }
+
+
     public int getEmptySlots(){
         int sum=0;
         for(Slot slot : slots){
@@ -136,4 +201,12 @@ public class Inventory {
         return null;
     }
 
+
+    public int getLastGottenSumOfItemsPrice() {
+        return lastGottenSumOfItemsPrice;
+    }
+
+    public void resetLastGottenSumOfItemsPrice() {
+        this.lastGottenSumOfItemsPrice = 0;
+    }
 }

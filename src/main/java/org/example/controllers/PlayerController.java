@@ -5,6 +5,8 @@ import org.example.models.Result;
 import org.example.models.*;
 import org.example.models.animals.Fish;
 import org.example.models.animals.FishType;
+import org.example.models.foragings.Fruit;
+import org.example.models.foragings.FruitType;
 import org.example.models.items.Food;
 import org.example.models.items.Inventory;
 import org.example.models.items.Item;
@@ -145,24 +147,57 @@ public class PlayerController {
 
     }
 
-    public Result eatFood(Matcher matcher){
-        String foodName = matcher.group(1);
+    public Result eat(Matcher matcher){
+        String itemName = matcher.group(1);
+        Food food = Food.parseFood(itemName);
+        FruitType fruitType = FruitType.parseFruitType(itemName);
+        if(food == null && fruitType == null){
+            return new Result(false, "Invalid item");
+        }
+        if(food != null){
+            return eatFood(itemName);
+        }
+        return eatFruit(itemName);
+    }
+
+    private Result eatFruit(String fruitName){
+        FruitType fruitType = FruitType.parseFruitType(fruitName);
+        if(fruitType==null){
+            return new Result(false,"invalid fruit");
+        }
+        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
+        Slot slot = inventory.getSlotByItem(new Fruit(fruitType));
+        if(slot==null || slot.getQuantity()==0){
+            return new Result(false,"you don't have the fruit "+fruitName);
+        }
+        if(!fruitType.isEatable()){
+            return new Result(false,"fruit "+fruitName+" is not eatable");
+        }
+        App.getGame().getCurrentPlayer().incEnergy(fruitType.getEnergy());
+        if(App.getGame().getCurrentPlayer().getEnergy() > 100){
+            App.getGame().getCurrentPlayer().setEnergy(100);
+        }
+        double value = fruitType.getEnergy();
+        inventory.removeFromInventory(new Fruit(fruitType), 1);
+        return new Result (true, "you got "+value+" energy");
+    }
+
+    private Result eatFood(String foodName){
         Food wantedFood = Food.parseFood(foodName);
         if(wantedFood == null){
             return new Result(false, "Invalid food");
         }
+
         Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
         Slot slot = inventory.getSlotByItem(wantedFood);
         if(slot==null){
             return new Result(false,"you don't have this food");
         }
-        for (int i = 0; i < slot.getQuantity(); i++) {
-            App.getGame().getCurrentPlayer().incEnergy(wantedFood.getEnergyValue());
-            if(App.getGame().getCurrentPlayer().getEnergy() > 100){
-                App.getGame().getCurrentPlayer().setEnergy(100);
-            }
+        App.getGame().getCurrentPlayer().incEnergy(wantedFood.getEnergyValue());
+        if(App.getGame().getCurrentPlayer().getEnergy() > 100){
+            App.getGame().getCurrentPlayer().setEnergy(100);
         }
-        double value  = wantedFood.getEnergyValue()*slot.getQuantity();
+        double value  = wantedFood.getEnergyValue();
         inventory.removeFromInventory(wantedFood);
         return new Result(true, value+
                 " energy added :)");

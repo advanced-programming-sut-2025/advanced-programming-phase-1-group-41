@@ -9,6 +9,7 @@ import org.example.models.buildings.Building;
 import org.example.models.buildings.GreenHouse.WaterTank;
 import org.example.models.buildings.animalContainer.Barn;
 import org.example.models.foragings.ForagingTree;
+import org.example.models.foragings.Fruit;
 import org.example.models.foragings.Nature.*;
 import org.example.models.foragings.Crop;
 import org.example.models.foragings.Nature.Mineral;
@@ -306,8 +307,24 @@ public class ToolsController {
         }else if(cell.getObjectMap() instanceof Grass){
             ((Grass) cell.getObjectMap()).setGround(true);
             return new Result(true, "its now a ground");
+        } else if(cell.getObjectMap() instanceof Crop crop){
+            if(!(crop.getStages().size() - 1 == crop.getCurrentStage())){
+                return new Result(true, "Crop is not ripe yet!");
+            } else{
+                App.getGame().getCurrentPlayer().getInventory().addToInventory(crop, 1);
+                cell.setObjectMap(new Grass());
+            }
+        } else if(cell.getObjectMap() instanceof Tree tree){
+            if(tree.getCurrentStage() < 3 || tree.getCurrentStageLevel() < 7){
+                return new Result(true, "Tree is not ripe yet!");
+            } else if(tree.getCurrentStageLevel() < tree.getTreeType().getFruitHarvestCycle()){
+                return new Result(true, "Tree is not at its fruit harvest cycle!");
+            }
+            tree.setCurrentStageLevel(0);
+            App.getGame().getCurrentPlayer().getInventory().addToInventory(new Fruit(tree.getTreeType().getFruitType()), 1);
+            return new Result(true, "You got a " + tree.getTreeType().getFruitType().getName() + " fruit");
         }
-        return new Result(false, "it wasn't a bush!");
+        return new Result(false, "it wasn't a bush or grass or crop or tree!");
     }
 
     private Result useMilkPale(Cell cell, Tool tool){
