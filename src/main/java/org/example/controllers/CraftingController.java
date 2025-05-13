@@ -3,8 +3,10 @@ package org.example.controllers;
 import org.example.models.*;
 import org.example.models.buildings.Cottage;
 import org.example.models.foragings.Nature.MineralType;
+import org.example.models.foragings.Nature.Wood;
 import org.example.models.items.*;
 import org.example.models.items.craftablemachines.Furnace;
+import org.example.models.items.craftablemachines.Kiln;
 import org.example.models.items.craftablemachines.Machine;
 
 import java.util.ArrayList;
@@ -148,7 +150,7 @@ public class CraftingController {
                 if (cell != null) {
                     if (cell.getObjectMap() instanceof CraftableMachine) {
                         System.out.println("found a " + cell.getObjectMap().getName() + " in " + x + " " + y);
-                        if (machineName.equalsIgnoreCase(cell.getObjectMap().getName())) {
+                        if (cell.getObjectMap().getName().equalsIgnoreCase(machineName)) {
                             return cell;
                         }
                     }
@@ -183,6 +185,7 @@ public class CraftingController {
 
         return switch (machine) {
             case Furnace -> this.furnace(items, cell);
+            case CharcoalKiln -> this.charcoalKiln(items, cell);
             default -> new Result(false, machineName + " is not useable");
         };
     }
@@ -238,9 +241,41 @@ public class CraftingController {
         return null;
     }
 
-    private Result charcoalKiln(Matcher matcher) {
-        return null;
+    private Result charcoalKiln(ArrayList<Item> items, Cell cell) {
+        Player player = App.getGame().getCurrentPlayer();
+        for (Machine x : player.getOnGoingMachines()) {
+            if(x instanceof Kiln kiln){
+                kilnHelper(kiln, items, cell, player);
+                return new Result(true, "donee");
+            }
+        }
+        Kiln kiln = new Kiln();
+        player.getOnGoingMachines().add(kiln);
+        kilnHelper(kiln, items, cell, player);
+        return new Result(true, "done");
     }
+
+    private void kilnHelper(Kiln kiln,ArrayList<Item> items, Cell cell, Player player) {
+        for (Item item : items) {
+            if(item.getName().equalsIgnoreCase(new Wood().getName())){
+                for (Slot slot : kiln.getReceivedItems()) {
+                    if(slot.getItem().getName().equals(item.getName())){
+                        int playerQua = player.getInventory().getSlotByItem(item).getQuantity();
+                        if(playerQua > 10-slot.getQuantity()){
+                            playerQua = 10 - slot.getQuantity();
+                        }
+                        slot.setQuantity(slot.getQuantity() + playerQua);
+                        player.getInventory().removeFromInventory(item , playerQua);
+                        System.out.println("added "+playerQua+" of "+slot.getItem().getName()+" to kiln");
+                        break;
+                    }
+                }
+            }else{
+                System.out.println(item.getName()+" is not a valid item");
+            }
+        }
+    }
+
 
     private Result furnace(ArrayList<Item> items, Cell cell) {
         MineralType mineralType = setMineralType(items);
@@ -278,6 +313,8 @@ public class CraftingController {
         return null;
     }
 
+
+
     private void furnaceHelper(Furnace furnace, ArrayList<Item> items, Player player, MineralType mineralType){
         for (Item item : items) {
             if(item.getName().equalsIgnoreCase(MineralType.Coal.getName())){
@@ -306,6 +343,9 @@ public class CraftingController {
                         break;
                     }
                 }
+            }else{
+                System.out.println(item.getName() + " is not a valid input");
+                return;
             }
         }
     }
