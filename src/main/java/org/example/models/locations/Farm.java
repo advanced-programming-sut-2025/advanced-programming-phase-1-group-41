@@ -37,6 +37,7 @@ public class Farm {
     private int foragingTreeCount;
     private int plantCount;
     private int foragingCropCount;
+    private ArrayList<Cell> transferCells = new ArrayList<>();
     private Mine mine;
 
     public Farm(int id) {
@@ -134,6 +135,32 @@ public class Farm {
 //                i--;
 //            }
 //        }
+        if(this.getId()==1){
+            for(Cell cell : cells){
+                if(cell.getX()==59&&cell.getY()>=73||cell.getY()==74&&cell.getX()>=58){
+                    transferCells.add(cell);
+                }
+            }
+        }else if(this.getId()==2){
+            for(Cell cell : cells){
+                if(cell.getX()==0&&cell.getY()>=73||cell.getY()==74&&cell.getX()<=1){
+                    transferCells.add(cell);
+                }
+            }
+        }else if(this.getId()==3){
+            for(Cell cell : cells){
+                if(cell.getX()==59&&cell.getY()<=1||cell.getY()==0&&cell.getX()>=58){
+                    transferCells.add(cell);
+                }
+            }
+        } else if(this.getId()==4){
+            for(Cell cell : cells){
+                if(cell.getX()==0&&cell.getY()<=1||cell.getY()==0&&cell.getX()<=1){
+                    transferCells.add(cell);
+                }
+            }
+        }
+
     }
 
     public ArrayList<Barn> getBarns() {
@@ -182,12 +209,10 @@ public class Farm {
     public void printMap(){
         int counter = 0;
         for(Cell cell:cells){
-            if(isAnimalHere(cell)){
-            }
-            else if(cell.getX()==App.getGame().getCurrentPlayer().getX()&&cell.getY()==App.getGame().getCurrentPlayer().getY()){
-                System.out.printf(App.getGame().getCurrentPlayer().getChar());
-            }
-            else {
+             if(cell.getX()==App.getGame().getCurrentPlayer().getX()&&cell.getY()==App.getGame().getCurrentPlayer().getY()){System.out.printf(App.getGame().getCurrentPlayer().getChar());}
+             else if(isAnimalHere(cell)){}
+             else if(transferCells.contains(cell)){printFlashSign();}
+             else {
                 System.out.printf(cell.getObjectMap().getChar());
             }
             counter++;
@@ -202,10 +227,12 @@ public class Farm {
         for(int i=x;i<x+squareSize;i++) {
             for (int j = y; j < y + squareSize; j++) {
                 Cell cell = getCell(i, j);
-                if (isAnimalHere(cell)) {
-                } else if (cell.getX() == App.getGame().getCurrentPlayer().getX() && cell.getY() == App.getGame().getCurrentPlayer().getY()) {
-                    System.out.printf(App.getGame().getCurrentPlayer().getChar());
-                } else {
+                 if (cell.getX() == App.getGame().getCurrentPlayer().getX() && cell.getY() == App.getGame().getCurrentPlayer().getY()) {
+                    System.out.printf(App.getGame().getCurrentPlayer().getChar());}
+                    else if (isAnimalHere(cell)) {
+                    }else if(transferCells.contains(cell)){printFlashSign();}
+
+                 else {
                     System.out.printf(cell.getObjectMap().getChar());
                 }
                 counter++;
@@ -214,9 +241,22 @@ public class Farm {
                 }
             }
         }
+
     }
-
-
+    private void printFlashSign(){
+        if(this.getId()==1){
+            System.out.printf(Colors.colorize(15,196,"↘↘"));
+        }
+        else if(this.getId()==2){
+            System.out.printf(Colors.colorize(15,196,"↙↙"));
+        }
+        else if(this.getId()==3){
+            System.out.printf(Colors.colorize(15,196,"↗↗"));
+        }
+        else if(this.getId()==4){
+            System.out.printf(Colors.colorize(15,196,"↖↖"));
+        }
+    }
     public ArrayList<Foraging> getForagings() {
         return foragings;
     }
