@@ -97,7 +97,6 @@ public class Village { ;
         buildings.add(new RobinHome(24,58,this));
         buildings.add(new HarveyHome(59,54,this));
 
-
     }
         Random rand = new Random();
     public void buildPath(){
