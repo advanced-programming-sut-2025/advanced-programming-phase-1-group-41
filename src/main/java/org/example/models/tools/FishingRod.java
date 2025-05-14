@@ -8,17 +8,19 @@ import org.example.models.skills.Skill;
 public class FishingRod implements Tool {
     private FishingRodLevel level;
     public FishingRod() {
-        this.level = FishingRodLevel.Iridium;
+        this.level = FishingRodLevel.Training;
     }
 
-
+    public FishingRod(FishingRodLevel level) {
+        this.level = level;
+    }
 
     public FishingRodLevel getLevel() {
         return level;
     }
 
     public void increaseLevel() {
-        int nextLevel = Math.max(level.ordinal()+1,FishingRodLevel.values().length - 1);
+        int nextLevel = Math.min(level.ordinal()+1,FishingRodLevel.values().length - 1);
         level = FishingRodLevel.values()[nextLevel];
     }
     public static FishingRod findFishingRod(){
@@ -37,7 +39,7 @@ public class FishingRod implements Tool {
 
     @Override
     public String getName() {
-        return "Fishing Rod";
+        return level.getName();
     }
 
     @Override

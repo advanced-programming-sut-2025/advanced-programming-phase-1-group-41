@@ -22,7 +22,7 @@ public enum CraftableMachine implements Item{
     PreservesJar("pj", "PreservesJar", 0, null),
     Dehydrator("d", "Dehydrator", 0, null),
     GrassStarter("gs", "GrassStarter", 0, null),
-    FishSmoker("fs", "FishSmoker", 0, null),
+    FishSmoker("fs", "FishSmoker", 0, CraftingRecipe.FishSmoker),
     MysticTreeSeed("mts", "MysticTreeSeed", 100, CraftingRecipe.MysticTreeSeed),
     ;
 

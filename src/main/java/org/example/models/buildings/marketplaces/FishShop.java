@@ -6,9 +6,16 @@ import org.example.models.Finder;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.Door;
 import org.example.models.buildings.Wall;
+import org.example.models.buildings.marketplaces.items.FishShopItems;
+import org.example.models.items.Slot;
 import org.example.models.locations.Village;
 
+import java.util.ArrayList;
+
 public class FishShop extends Marketplace implements Building {
+
+    ArrayList<Slot> stock= new ArrayList<>();
+
     @Override
     public String getChar() {
         return Colors.colorize(51,21,"FS");
@@ -21,6 +28,20 @@ public class FishShop extends Marketplace implements Building {
     private int x;
     private int y;
     public FishShop(int x, int y, Village village) {
+        super(null);
+        constructFishShop(x, y, village);
+
+        stock.add(new Slot(FishShopItems.FishSmokerRecipe, 1));
+        stock.add(new Slot(FishShopItems.TroutSoup, 1));
+        stock.add(new Slot(FishShopItems.TrainingRod, 1));
+        stock.add(new Slot(FishShopItems.BambooRod, 1));
+        stock.add(new Slot(FishShopItems.FiberglassRod, 1));
+        stock.add(new Slot(FishShopItems.IridiumRod, 1));
+
+        this.updateStock();
+    }
+
+    public void constructFishShop(int x , int y , Village village){
         this.x = x;
         this.y = y;
         int xWall;
@@ -77,6 +98,9 @@ public class FishShop extends Marketplace implements Building {
 
     @Override
     public void updateStock() {
-
+        this.itemsForSale.clear();
+        for (Slot slot : this.stock) {
+            this.itemsForSale.add(new Slot(slot.getItem(), slot.getQuantity()));
+        }
     }
 }

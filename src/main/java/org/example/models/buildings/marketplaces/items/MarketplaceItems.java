@@ -12,9 +12,12 @@ public enum MarketplaceItems implements Item {
     Rice("Ri","Rice", 250),
 
 
-
     WeddingRing("WR","WeddingRing", 10000),
     Bouquet("BQ","Bouquet", 1000),
+
+
+    TroutSoup(new Troutsoup()),
+
     ;
 
 
@@ -28,6 +31,11 @@ public enum MarketplaceItems implements Item {
         this.price = price;
     }
 
+    MarketplaceItems(Item item) {
+        this.name = item.getName();
+        this.price = item.getPrice();
+        this.ch = item.getChar();
+    }
 
     @Override
     public String getChar() {

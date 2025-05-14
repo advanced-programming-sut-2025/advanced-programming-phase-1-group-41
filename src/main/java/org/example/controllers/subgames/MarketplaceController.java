@@ -15,6 +15,7 @@ import org.example.models.items.*;
 import org.example.models.tools.*;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.regex.Matcher;
 
 public class MarketplaceController {
@@ -159,6 +160,26 @@ public class MarketplaceController {
         }else{
             wantedQuantity = 1;
         }
+        if(mp instanceof FishShop fishShop){
+            FishingRodLevel level = FishingRodLevel.parseFishingRodLevel(itemName);
+            if(level != null){
+                switch (level){
+                    case FiberGlass -> {
+                        int fishingLevel = player.getFishingSkill().getLevel();
+                        if(fishingLevel < 2){
+                            return new Result(false, "your fishing needs to be at least 2");
+                        }
+                    }
+                    case Iridium -> {
+                        int fishingLevel = player.getFishingSkill().getLevel();
+                        if(fishingLevel < 4){
+                            return new Result(false, "your fishing needs to be at least 4");
+                        }
+                    }
+                }
+            }
+        }
+
         Item item = Finder.parseItem(itemName);
         if(item == null){
             return new Result(false, "Item doesn't exist");
@@ -214,6 +235,35 @@ public class MarketplaceController {
                     return new Result(false,"you just wasted your money..");
                 }
             }
+        }
+        if(mp instanceof FishShop fishShop){
+            CraftingRecipe recipe = CraftingRecipe.parseRecipe(item.getName());
+            System.out.println("here "+item.getName()+" "+CraftingRecipe.FishSmoker.getName());
+            if(recipe != null){
+                if(!player.getCraftingRecipes().contains(recipe)){
+                    player.getCraftingRecipes().add(recipe);
+                    return new Result(true, wantedQuantity+" "+itemName+" recipe purchased");
+                }else{
+                    return new Result(false,"you just wasted your money..");
+                }
+            }
+            if(Objects.equals(slot.getItem().getName(), FishingRodLevel.Training.getName())){
+                inventory.addToInventory(new FishingRod(FishingRodLevel.Training), 1);
+                return new Result(true,"got "+slot.getItem());
+            }
+            if(Objects.equals(slot.getItem().getName(), FishingRodLevel.Bamboo.getName())){
+                inventory.addToInventory(new FishingRod(FishingRodLevel.Bamboo), 1);
+                return new Result(true,"got "+slot.getItem());
+            }
+            if(Objects.equals(slot.getItem().getName(), FishingRodLevel.FiberGlass.getName())){
+                inventory.addToInventory(new FishingRod(FishingRodLevel.FiberGlass), 1);
+                return new Result(true,"got "+slot.getItem());
+            }
+            if(Objects.equals(slot.getItem().getName(), FishingRodLevel.Iridium.getName())){
+                inventory.addToInventory(new FishingRod(FishingRodLevel.Iridium), 1);
+                return new Result(true,"got "+slot.getItem());
+            }
+
         }
         inventory.addToInventory(slot.getItem(), wantedQuantity);
         return new Result(true, wantedQuantity+"x "+itemName+" purchased");

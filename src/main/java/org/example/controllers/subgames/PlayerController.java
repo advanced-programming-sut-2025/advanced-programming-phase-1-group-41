@@ -10,6 +10,7 @@ import org.example.models.foragings.FruitType;
 import org.example.models.items.*;
 import org.example.models.skills.Skill;
 import org.example.models.tools.FishingRod;
+import org.example.models.tools.FishingRodLevel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -225,19 +226,15 @@ public class PlayerController {
 
     public Result fishing(Matcher matcher){
         Game game=App.getGame();
-        String fishingRodName = matcher.group(1);
-            List<String> list = List.of("Training", "Bamboo", "FiberGlass", "Iridium");
-        if(!list.contains(fishingRodName)){
-            return new Result(false, "Invalid rod name");
+        String fishingRodName = matcher.group(1).trim();
+        Player player = App.getGame().getCurrentPlayer();
+        if(!(player.getCurrentTool() instanceof FishingRod)){
+            return new Result(false,"your current tool is not a rod!");
         }
-        if(FishingRod.findFishingRod()==null){
-            return new Result(false, "You don't have any fishing rod");
+        FishingRod fishingRod = (FishingRod) player.getCurrentTool();
+        if(!fishingRod.getName().equalsIgnoreCase(fishingRodName)){
+            return new Result(false,"your rod isn't "+fishingRodName+" it's a "+fishingRod.getName());
         }
-        if(!FishingRod.findFishingRod().getLevel().name().equals(fishingRodName)){
-            return new Result(false, "You don't "+fishingRodName+" Pol, instead, use "+FishingRod.findFishingRod().getLevel().name());
-        }
-        FishingRod fishingRod=FishingRod.findFishingRod();
-
         if(!game.getCurrentPlayerFarm().isLakeAround()){
             return new Result(false, "no lake around you!");
         }
@@ -260,7 +257,7 @@ public class PlayerController {
         int quantityOfFish=(int)Math.floor(Math.random()*weatherEffect*(App.getGame().getCurrentPlayer().getFishingSkill().getLevel() + 2));
         Fish caughtFish = null;
         double fishQuality=1.0;
-        if(fishingRodName.equals("Training")){
+        if(fishingRod.getLevel() == FishingRodLevel.Training){
             switch(game.getTime().getSeason()){
                 case Spring:
                     caughtFish=new Fish(FishType.Herring);

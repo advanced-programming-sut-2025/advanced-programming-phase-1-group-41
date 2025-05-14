@@ -3,6 +3,8 @@ package org.example.models;
 import org.bson.types.ObjectId;
 import org.example.models.buildings.ShippingBin;
 import org.example.models.buildings.Well;
+import org.example.models.buildings.marketplaces.FishShop;
+import org.example.models.buildings.marketplaces.items.FishShopItems;
 import org.example.models.buildings.marketplaces.items.MarketplaceItems;
 import org.example.models.buildings.marketplaces.items.SaloonItems;
 import org.example.models.foragings.*;
@@ -12,6 +14,7 @@ import org.example.models.items.Products.ProductType;
 import org.example.models.items.craftableitems.CraftableNames;
 import org.example.models.locations.Farm;
 import org.example.models.locations.Village;
+import org.example.models.tools.FishingRodLevel;
 import org.example.models.tools.NormalTools;
 import org.example.models.tools.Tool;
 
@@ -38,6 +41,9 @@ public class Finder {
         }
         if(CraftableMachine.parseCraftable(itemName)!=null){
             return CraftableMachine.parseCraftable(itemName);
+        }
+        if(FishingRodLevel.parseFishingRod(itemName)!=null){
+            return FishingRodLevel.parseFishingRod(itemName);
         }
         if(parseFish(itemName)!=null){
             return parseFish(itemName);
@@ -83,6 +89,9 @@ public class Finder {
         }
         if(SaloonItems.parseItem(itemName)!=null){
             return SaloonItems.parseItem(itemName);
+        }
+        if(FishShopItems.parseItem(itemName)!=null){
+            return FishShopItems.parseItem(itemName);
         }
         if(ProductType.parseProductType(itemName)!=null){
             return ProductType.parseProductType(itemName);

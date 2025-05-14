@@ -24,7 +24,6 @@ public enum Food implements Item, Eatable {
     DishOTheSea(150, 220, CookingRecipe.dishOSea, "DishOTheSea"),
     SeaFormPudding(175, 300, CookingRecipe.SeaformPuddin, "SeaFormPudding"),
     MinerTreat(125, 200, CookingRecipe.MinerTreat, "MinerTreat"),
-
 //    Beer(50, 200, null, "Beer"),
 //    Vineqar(13, 100, null, "Vineqar"),
 //    Coffee(75, 150, null, "Coffee"),
