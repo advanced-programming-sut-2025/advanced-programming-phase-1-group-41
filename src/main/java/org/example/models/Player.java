@@ -64,6 +64,12 @@ public class Player {
     private final ArrayList<Gift> newGifts = new ArrayList<>();
     @Transient
     private final ArrayList<Gift> receivedGifts = new ArrayList<>();
+    @Transient
+    private final ArrayList<Trade> tradesList = new ArrayList<>();
+    @Transient
+    private final ArrayList<Trade> newTradesList = new ArrayList<>();
+    @Transient
+    private final ArrayList<Trade> totalTradesList = new ArrayList<>();
 //    private Farm farm;
 //    private ArrayList<Animal> animals;
 //    private ArrayList<Skill> skills;
@@ -74,7 +80,6 @@ public class Player {
 
 //    private ArrayList<Gift> gifts;
 //    private ArrayList<Chat> chats;
-//    private ArrayList<Trade> trades;
 //    private ArrayList<Quest> ongoingQuests;
 //    private ArrayList<Quest> finishedQuests;
 
@@ -305,6 +310,12 @@ public class Player {
     public ArrayList<Gift> getReceivedGifts(){return receivedGifts;}
 
     public ArrayList<Gift> getNewGifts(){return newGifts;}
+
+    public ArrayList<Trade> getTradesList(){return tradesList;}
+
+    public ArrayList<Trade> getNewTradesList(){return newTradesList;}
+
+    public ArrayList<Trade> getTotalTradesList(){return totalTradesList;}
 
     public boolean hasRecipe(Food food){
         System.out.println("food is: "+food+" "+food.getRecipe());

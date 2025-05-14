@@ -44,9 +44,11 @@ public enum Menu {
          return switch (input){
             case "AuthenticationMenu" -> Exit;
 
-            case "ProfileMenu", "GameMenu", "TradeMenu" -> Main;
+            case "ProfileMenu", "GameMenu" -> Main;
 
             case "MainMenu" -> Authentication;
+
+            case "TradeMenu" -> Game;
 
             default -> throw new IllegalStateException("Unexpected value: " + input);
         };
