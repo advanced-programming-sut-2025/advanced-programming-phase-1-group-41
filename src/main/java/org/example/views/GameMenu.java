@@ -56,7 +56,7 @@ public class GameMenu implements AppMenu {
 
             }
             else{
-                System.out.println("Invalid command");
+//                System.out.println("Invalid command");
             }
         }
 

@@ -14,7 +14,6 @@ import java.util.regex.Matcher;
 public class MarketplaceView {
     static MarketplaceController controller = new MarketplaceController();
     public static boolean check(String input){
-        System.out.println("here");
         Matcher matcher;
         if ((matcher = StoreCommands.ShowAllProducts.getMatcher(input)) != null) {
             System.out.println(controller.showAllProducts(matcher));

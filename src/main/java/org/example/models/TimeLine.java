@@ -77,6 +77,9 @@ public class TimeLine {
             }
         }
         (new AnimalController()).resetAndCheck();
+        for (Player player : App.getGame().getPlayers()) {
+            player.dailyUpdates();
+        }
 
         App.getGame().setWeatherType(App.getGame().getTmrwWeatherType());
         predictTmrwWeather();
