@@ -20,6 +20,7 @@ public class FriendshipController {
         for(Friendship friendship : App.getGame().getCurrentPlayer().getFriendships()){
             result.append(friendship.showResult(App.getGame().getCurrentPlayer()));
         }
+        result.delete(result.length() - 1, result.length());
         return new Result(true, result.toString());
     }
 }
