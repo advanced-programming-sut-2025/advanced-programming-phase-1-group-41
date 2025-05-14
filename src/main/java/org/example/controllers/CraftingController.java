@@ -4,6 +4,7 @@ import org.example.models.*;
 import org.example.models.animals.Fish;
 import org.example.models.animals.FishType;
 import org.example.models.buildings.Cottage;
+import org.example.models.buildings.Well;
 import org.example.models.foragings.Nature.MineralType;
 import org.example.models.foragings.Nature.Wood;
 import org.example.models.items.*;
@@ -62,6 +63,16 @@ public class CraftingController {
         if (slot == null) {
             return new Result(false, "slot not found");
         }
+        if(item instanceof Well){
+            if(cell.getY() <= App.getGame().getCurrentPlayer().getY()
+            && cell.getX() <= App.getGame().getCurrentPlayer().getX()){
+                return new Result(false,"choose another direction");
+            }
+            Well well =new Well(cell.getX(), cell.getY(), App.getGame().getCurrentPlayerFarm());
+            App.getGame().getCurrentPlayerFarm().getBuildings().add(well);
+            return new Result(true, "well was placed");
+        }
+
         cell.setObjectMap(item);
         inventory.removeFromInventory(item, 1);
         return new Result(true, itemName + " placed on " + x + " " + y);

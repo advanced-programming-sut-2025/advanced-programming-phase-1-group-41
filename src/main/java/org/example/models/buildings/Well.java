@@ -10,7 +10,7 @@ import org.example.models.locations.Farm;
 import java.util.HashSet;
 
 
-public class Well implements Building{
+public class Well implements Building, Item{
     @Override
     public String getChar() {
 //        return Colors.colorize(255,0,"🌑");
@@ -58,5 +58,10 @@ public class Well implements Building{
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    @Override
+    public double getPrice() {
+        return 1000;
     }
 }

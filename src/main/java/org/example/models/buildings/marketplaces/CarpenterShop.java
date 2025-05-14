@@ -3,12 +3,20 @@ package org.example.models.buildings.marketplaces;
 import org.example.models.Cell;
 import org.example.models.Colors;
 import org.example.models.Finder;
-import org.example.models.buildings.Building;
-import org.example.models.buildings.Door;
-import org.example.models.buildings.Wall;
+import org.example.models.buildings.*;
+import org.example.models.buildings.animalContainer.BarnType;
+import org.example.models.buildings.animalContainer.CoopType;
+import org.example.models.buildings.marketplaces.items.CarpenterItems;
+import org.example.models.items.Slot;
 import org.example.models.locations.Village;
 
+import java.util.HashMap;
+
 public class CarpenterShop extends Marketplace implements Building {
+
+    HashMap<BarnType, Integer> barnLimits;
+    HashMap<CoopType, Integer> coopLimits;
+
     @Override
     public String getChar() {
         return Colors.colorize(0,205,"CS");
@@ -21,6 +29,28 @@ public class CarpenterShop extends Marketplace implements Building {
     private int x;
     private int y;
     public CarpenterShop(int x, int y, Village village) {
+        super(null);
+        constructCarpenterShop(x, y, village);
+
+        barnLimits = new HashMap<>();
+        coopLimits = new HashMap<>();
+
+        itemsForSale.add(new Slot(CarpenterItems.Wood, 100000));
+        itemsForSale.add(new Slot(CarpenterItems.Wood, 100000));
+        itemsForSale.add(new Slot(CarpenterItems.ShippingBin, 100000));
+        itemsForSale.add(new Slot(CarpenterItems.Well, 1));
+
+        barnLimits.put(BarnType.Normal, 1);
+        barnLimits.put(BarnType.Big, 1);
+        barnLimits.put(BarnType.Deluxe, 1);
+
+        coopLimits.put(CoopType.Normal, 1);
+        coopLimits.put(CoopType.Big, 1);
+        coopLimits.put(CoopType.Deluxe, 1);
+
+    }
+
+    public void constructCarpenterShop(int x, int y, Village village) {
         this.x = x;
         this.y = y;
         int xWall;
@@ -77,6 +107,17 @@ public class CarpenterShop extends Marketplace implements Building {
 
     @Override
     public void updateStock() {
-
+        for (BarnType barnType : barnLimits.keySet()) {
+            barnLimits.put(barnType, 1);
+        }
+        for (CoopType coopType : coopLimits.keySet()) {
+            coopLimits.put(coopType, 1);
+        }
+        for (Slot slot : itemsForSale) {
+            slot.setQuantity(100000);
+            if(slot.getItem() instanceof Well){
+                slot.setQuantity(1);
+            }
+        }
     }
 }

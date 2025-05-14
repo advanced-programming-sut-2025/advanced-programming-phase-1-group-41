@@ -1,6 +1,8 @@
 package org.example.models;
 
 import org.bson.types.ObjectId;
+import org.example.models.buildings.ShippingBin;
+import org.example.models.buildings.Well;
 import org.example.models.buildings.marketplaces.items.MarketplaceItems;
 import org.example.models.buildings.marketplaces.items.SaloonItems;
 import org.example.models.foragings.*;
@@ -63,6 +65,12 @@ public class Finder {
         }
         if(itemName.equalsIgnoreCase((new Rock()).getName())){
             return new Rock();
+        }
+        if(itemName.equalsIgnoreCase((new Well()).getName())){
+            return new Well();
+        }
+        if(itemName.equalsIgnoreCase((new ShippingBin()).getName())){
+            return new ShippingBin();
         }
         if(CraftableNames.parseItem(itemName)!=null){
             return CraftableNames.parseItem(itemName);
