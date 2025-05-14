@@ -26,6 +26,7 @@ public class GameMenu implements AppMenu {
             System.out.println(controller.nextTurn(matcher));
         }
         if(App.getGame().getCurrentPlayer().getEnergy() <= 0){
+            System.out.println(App.getGame().getCurrentPlayer().getEnergy());
             System.out.println("you've passed out.. either exit or pass the turn");
         }else if(App.getGame().getRoundEnergy() > 50){
             System.out.println("you've used too much energy.. either exit or pass the turn");

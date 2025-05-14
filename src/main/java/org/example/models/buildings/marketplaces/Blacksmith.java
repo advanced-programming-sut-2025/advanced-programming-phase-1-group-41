@@ -8,6 +8,7 @@ import org.example.models.buildings.Building;
 import org.example.models.buildings.Door;
 import org.example.models.buildings.Refrigerator;
 import org.example.models.buildings.Wall;
+import org.example.models.buildings.marketplaces.items.BlacksmithItems;
 import org.example.models.foragings.Nature.Mine;
 import org.example.models.foragings.Nature.Mineral;
 import org.example.models.foragings.Nature.MineralType;
@@ -37,10 +38,10 @@ public class Blacksmith extends Marketplace implements Building{
 //        super(App.getGame().getVillage().getnpcByName("clint"));
         super(null);
         constructBlacksmith(x,y,village);
-        itemsForSale.add(new Slot(new Mineral(MineralType.CopperOre), 10000));
-        itemsForSale.add(new Slot(new Mineral(MineralType.IronOre), 10000));
-        itemsForSale.add(new Slot(new Mineral(MineralType.GoldOre), 10000));
-        itemsForSale.add(new Slot(new Mineral(MineralType.Coal), 10000));
+        itemsForSale.add(new Slot(BlacksmithItems.Coal, 10000));
+        itemsForSale.add(new Slot(BlacksmithItems.IronOre, 10000));
+        itemsForSale.add(new Slot(BlacksmithItems.GoldOre, 10000));
+        itemsForSale.add(new Slot(BlacksmithItems.Coal, 10000));
     }
 
     private void constructBlacksmith(int x, int y , Village village){

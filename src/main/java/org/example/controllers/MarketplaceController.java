@@ -74,12 +74,12 @@ public class MarketplaceController {
         if(slot.getQuantity() < wantedQuantity){
             return new Result(false, "Low stock for "+itemName);
         }
-        double delta = player.getMoney() - wantedQuantity * slot.getItem().getPrice();
+        double delta = player.getMoney() - (wantedQuantity * slot.getItem().getPrice());
         if(delta < 0){
             return new Result(false, "Not enough money for "+itemName+" you need "+(-delta) + " more money");
         }
         slot.setQuantity(slot.getQuantity() - wantedQuantity);
-        player.decEnergy(delta);
+        player.setMoney(delta);
         inventory.addToInventory(slot.getItem(), slot.getQuantity());
         return new Result(true, wantedQuantity+"x "+itemName+" purchased");
     }

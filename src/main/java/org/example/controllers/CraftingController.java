@@ -213,8 +213,7 @@ public class CraftingController {
                 if (slot == null) {
                     return new Result(false, onGoingMachine.getProcessTime() + " hours left");
                 }
-                System.out.println(((Eatable)slot.getItem()).getEnergy());
-                player.getInventory().addToInventory((Eatable)slot.getItem(), slot.getQuantity());
+                player.getInventory().addToInventory(slot.getItem(), slot.getQuantity());
                 iterator.remove();
                 return new Result(true, slot.getItem() + " added to inventory");
             }
