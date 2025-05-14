@@ -2,6 +2,7 @@ package org.example.controllers;
 
 import org.example.models.*;
 import org.example.models.animals.Animal;
+import org.example.models.animals.animalKinds.*;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.marketplaces.Blacksmith;
 import org.example.models.buildings.marketplaces.Marketplace;
@@ -13,6 +14,8 @@ import org.example.models.items.Products.Product;
 import org.example.models.items.Slot;
 import org.example.models.tools.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 
 public class MarketplaceController {
@@ -23,6 +26,9 @@ public class MarketplaceController {
         player = App.getGame().getCurrentPlayer();
         currentCell = App.getGame().getVillage().getCell(player.getX(), player.getY());
         inventory = player.getInventory();
+        if(!player.isPlayerIsInVillage()){
+            return new Result(false, "you're not even in the village");
+        }
         if(!(currentCell.getObjectMap() instanceof Marketplace)){
             System.out.println(currentCell.getX()+" "+currentCell.getY());
             return new Result(false, "You are not in Marketplace");
@@ -207,7 +213,72 @@ public class MarketplaceController {
 
 
     public Result buyAnimal(Animal animal, Building building){
-        return null;
+        Result preResult = inMarketPlace();
+        if(!preResult.success()){
+            return preResult;
+        }
+        MarnieRanch ranch;
+        if((currentCell.getObjectMap() instanceof MarnieRanch marnieRanch)){
+            ranch = marnieRanch;
+        }else{
+            return new Result(false, "you're not in marnie's ranch");
+        }
+        if(player.getMoney() < animal.getBuyPrice() ){
+            return new Result(false,"you need "+(animal.getBuyPrice()-player.getMoney())+" more money!");
+        }
+        HashMap<String, Integer> limits = ranch.getDailyLimit();
+        if(animal instanceof Chicken){
+            if(limits.get("Chicken") > 0){
+                limits.put("Chicken", limits.get("Chicken") - 1);
+            } else {
+                return new Result(false, "We're outta chicken, come back tomorrow.");
+            }
+        } else if(animal instanceof Cow){
+            if(limits.get("Cow") > 0){
+                limits.put("Cow", limits.get("Cow") - 1);
+            } else {
+                return new Result(false, "We're outta cow, come back tomorrow.");
+            }
+        } else if(animal instanceof Goat){
+            if(limits.get("Goat") > 0){
+                limits.put("Goat", limits.get("Goat") - 1);
+            } else {
+                return new Result(false, "We're outta goat, come back tomorrow.");
+            }
+        } else if(animal instanceof Duck){
+            if(limits.get("Duck") > 0){
+                limits.put("Duck", limits.get("Duck") - 1);
+            } else {
+                return new Result(false, "We're outta duck, come back tomorrow.");
+            }
+        } else if(animal instanceof Sheep){
+            if(limits.get("Sheep") > 0){
+                limits.put("Sheep", limits.get("Sheep") - 1);
+            } else {
+                return new Result(false, "We're outta sheep, come back tomorrow.");
+            }
+        } else if(animal instanceof Rabbit){
+            if(limits.get("Rabbit") > 0){
+                limits.put("Rabbit", limits.get("Rabbit") - 1);
+            } else {
+                return new Result(false, "We're outta rabbit, come back tomorrow.");
+            }
+        } else if(animal instanceof Dino){
+            if(limits.get("Dinosaur") > 0){
+                limits.put("Dinosaur", limits.get("Dinosaur") - 1);
+            } else {
+                return new Result(false, "We're outta dinosaur, come back tomorrow.");
+            }
+        } else if(animal instanceof Pig){
+            if(limits.get("Pig") > 0){
+                limits.put("Pig", limits.get("Pig") - 1);
+            } else {
+                return new Result(false, "We're outta pig, come back tomorrow.");
+            }
+        }
+
+        player.decMoney(animal.getBuyPrice());
+        return new Result(true,"");
     }
 
 }

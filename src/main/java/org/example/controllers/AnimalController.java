@@ -119,6 +119,10 @@ public class AnimalController {
                     for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
                         if (barn.getBarnType().getCapacity() == 12) {
                             if (barn.getCapacity() > 0) {
+                                Result preResult = new MarketplaceController().buyAnimal(animal, barn);
+                                if(!preResult.success()){
+                                    return preResult;
+                                }
                                 barn.addAnimal(animal);
                                 barn.updateCapacity(-1);
                                 return new Result(true, "Animal added to " + barn.getBarnType().name() + " barn");
@@ -131,6 +135,10 @@ public class AnimalController {
                     for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
                         if (barn.getBarnType().getCapacity() >= 8) {
                             if (barn.getCapacity() > 0) {
+                                Result preResult = new MarketplaceController().buyAnimal(animal, barn);
+                                if(!preResult.success()){
+                                    return preResult;
+                                }
                                 barn.addAnimal(animal);
                                 barn.updateCapacity(-1);
                                 return new Result(true, "Animal added to " + barn.getBarnType().name() + " barn");
@@ -143,6 +151,10 @@ public class AnimalController {
                     for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
                         if (barn.getBarnType().getCapacity() >= 4) {
                             if (barn.getCapacity() > 0) {
+                                Result preResult = new MarketplaceController().buyAnimal(animal, barn);
+                                if(!preResult.success()){
+                                    return preResult;
+                                }
                                 barn.addAnimal(animal);
                                 barn.updateCapacity(-1);
                                 return new Result(true, "Animal added to " + barn.getBarnType().name() + " barn");
@@ -159,6 +171,10 @@ public class AnimalController {
                     for (Coop coop : App.getGame().getCurrentPlayerFarm().getCoops()) {
                         if (coop.getCoopType().getCapacity() == 12) {
                             if (coop.getCapacity() > 0) {
+                                Result preResult = new MarketplaceController().buyAnimal(animal, coop);
+                                if(!preResult.success()){
+                                    return preResult;
+                                }
                                 coop.addAnimal(animal);
                                 coop.updateCapacity(-1);
                                 return new Result(true, "Animal added to " + coop.getCoopType().name() + " coop");
@@ -171,6 +187,10 @@ public class AnimalController {
                     for (Coop coop : App.getGame().getCurrentPlayerFarm().getCoops()) {
                         if (coop.getCoopType().getCapacity() >= 8) {
                             if (coop.getCapacity() > 0) {
+                                Result preResult = new MarketplaceController().buyAnimal(animal, coop);
+                                if(!preResult.success()){
+                                    return preResult;
+                                }
                                 coop.addAnimal(animal);
                                 coop.updateCapacity(-1);
                                 return new Result(true, "Animal added to " + coop.getCoopType().name() + " coop");
@@ -183,6 +203,10 @@ public class AnimalController {
                     for (Coop coop : App.getGame().getCurrentPlayerFarm().getCoops()) {
                         if (coop.getCoopType().getCapacity() >= 4) {
                             if (coop.getCapacity() > 0) {
+                                Result preResult = new MarketplaceController().buyAnimal(animal, coop);
+                                if(!preResult.success()){
+                                    return preResult;
+                                }
                                 coop.addAnimal(animal);
                                 coop.updateCapacity(-1);
                                 return new Result(true, "Animal added to " + coop.getCoopType().name() + " coop");

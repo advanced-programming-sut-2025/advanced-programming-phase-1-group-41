@@ -44,6 +44,7 @@ public abstract class Animal {
         this.x = x;
     }
 
+
     public Animal(Player owner, String name, int buyPrice, BarnOrCageSize sizeNeeded) {
         this.name = name;
         this.buyPrice = buyPrice;

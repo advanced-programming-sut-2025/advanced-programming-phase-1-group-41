@@ -3,6 +3,8 @@ package org.example.models.buildings.marketplaces;
 import org.example.models.Cell;
 import org.example.models.Colors;
 import org.example.models.Finder;
+import org.example.models.animals.Animal;
+import org.example.models.animals.animalKinds.Chicken;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.Door;
 import org.example.models.buildings.Wall;
@@ -10,11 +12,14 @@ import org.example.models.buildings.marketplaces.items.RanchItems;
 import org.example.models.items.Slot;
 import org.example.models.locations.Village;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class MarnieRanch extends Marketplace implements Building {
 
     private boolean shearLimit;
     private boolean milkpaleLimit;
-
+    HashMap<String, Integer> dailyLimit;
 
     @Override
     public String getChar() {
@@ -36,6 +41,16 @@ public class MarnieRanch extends Marketplace implements Building {
 
         this.shearLimit = true;
         this.milkpaleLimit = true;
+        dailyLimit = new HashMap<>(){{
+            put("Chicken", 2);
+            put("Cow", 2);
+            put("Goat", 2);
+            put("Duck", 2);
+            put("Sheep", 2);
+            put("Rabbit", 2);
+            put("Dinosaur", 2);
+            put("Pig", 2);
+        }};
     }
 
     public void constructRanch(int x, int y, Village village) {
@@ -97,6 +112,7 @@ public class MarnieRanch extends Marketplace implements Building {
     public void updateStock() {
         this.shearLimit = true;
         this.milkpaleLimit = true;
+        dailyLimit.replaceAll((s, v) -> 2);
     }
 
     public boolean isMilkpaleLimit() {
@@ -113,5 +129,9 @@ public class MarnieRanch extends Marketplace implements Building {
 
     public void setShearLimit(boolean shearLimit) {
         this.shearLimit = shearLimit;
+    }
+
+    public HashMap<String, Integer> getDailyLimit() {
+        return dailyLimit;
     }
 }
