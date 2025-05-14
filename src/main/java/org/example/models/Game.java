@@ -5,6 +5,7 @@ import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
 import org.example.models.locations.Farm;
+import org.example.models.locations.Village;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ public class Game {
     private Player currentPlayer;
     @Transient
     private ArrayList<Player> players;
+    private Village village;
 
     private ObjectId loaderId;
     private ObjectId currentPlayerId;
@@ -35,12 +37,17 @@ public class Game {
     private ArrayList<Farm> farms = new ArrayList<>();
 //    private Map map;
 
+    public Village getVillage() {
+        return village;
+    }
+
     {
         this.farms.add(new Farm(1));
         this.farms.add(new Farm(2));
         this.farms.add(new Farm(3));
         this.farms.add(new Farm(4));
     }
+
 
 
     public Game() {
@@ -92,6 +99,9 @@ public class Game {
                 }
                 break;
             }
+        }
+        if(village == null) {
+            this.village = new Village();
         }
     }
 

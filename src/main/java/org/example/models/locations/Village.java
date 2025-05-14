@@ -271,9 +271,9 @@ public class Village { ;
     public void printMap(){
         int counter = 0;
         for(Cell cell:cells){
-//            if(cell.getX()==App.getGame().getCurrentPlayer().getX()&&cell.getY()==App.getGame().getCurrentPlayer().getY()){
-//                System.out.printf(App.getGame().getCurrentPlayer().getChar());
-            if(isSpecialPoint(cell)) {
+            if(cell.getX()==App.getGame().getCurrentPlayer().getX()&&cell.getY()==App.getGame().getCurrentPlayer().getY()){
+                System.out.printf(App.getGame().getCurrentPlayer().getChar());}
+            else if(isSpecialPoint(cell)) {
             }else
              {
                 System.out.printf(cell.getObjectMap().getChar());
