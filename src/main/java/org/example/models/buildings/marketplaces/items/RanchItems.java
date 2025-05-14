@@ -7,21 +7,24 @@ import org.example.models.tools.MilkPale;
 import org.example.models.tools.Shear;
 
 public enum RanchItems implements Item {
-    Hay("Ha","Hay", 75),
+    Hay(MarketplaceItems.Hay),
     MilkPale(new MilkPale(), 1000),
     Shear(new Shear(), 1000),
     ;
+
+    static {
+        MarketplaceItems.values();
+    }
 
     private String name;
     private double price;
     private String ch;
 
-    RanchItems(String ch, String name, double price) {
-        this.ch = ch;
-        this.name = name;
-        this.price = price;
+    RanchItems(Item item){
+        this.name = item.getName();
+        this.price = item.getPrice();
+        this.ch = item.getChar();
     }
-
 
     RanchItems(Item item, double price) {
         this.ch = item.getChar();

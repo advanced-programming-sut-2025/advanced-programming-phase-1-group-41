@@ -91,7 +91,7 @@ public class PathFinder {
             if(!(nextCell.getObjectMap() instanceof Door) &&
             !(nextCell.getObjectMap() instanceof Marketplace) &&
             !(nextCell.getObjectMap() instanceof Bridge)){
-                System.out.println(nextCell.getObjectMap().getClass());
+//                System.out.println(nextCell.getObjectMap().getClass());
                 return false;
             }
         }else if(nextCell.getObjectMap() instanceof Grass){

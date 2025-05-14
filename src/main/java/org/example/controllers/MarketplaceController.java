@@ -1,6 +1,8 @@
 package org.example.controllers;
 
 import org.example.models.*;
+import org.example.models.animals.Animal;
+import org.example.models.buildings.Building;
 import org.example.models.buildings.marketplaces.Blacksmith;
 import org.example.models.buildings.marketplaces.Marketplace;
 import org.example.models.buildings.marketplaces.MarnieRanch;
@@ -103,12 +105,12 @@ public class MarketplaceController {
         }
 
         if(!isAvailable(mp, item)){
-            System.out.println("come back later..");
+            return new Result(false, "come back later..");
         }
-
+        System.out.println("wanted "+wantedQuantity+" "+itemName);
         slot.setQuantity(slot.getQuantity() - wantedQuantity);
         player.setMoney(delta);
-        inventory.addToInventory(slot.getItem(), slot.getQuantity());
+        inventory.addToInventory(slot.getItem(), wantedQuantity);
         return new Result(true, wantedQuantity+"x "+itemName+" purchased");
     }
 
@@ -203,5 +205,9 @@ public class MarketplaceController {
                 +"new money is : "+player.getMoney());
     }
 
+
+    public Result buyAnimal(Animal animal, Building building){
+        return null;
+    }
 
 }

@@ -1,6 +1,7 @@
 package org.example.models;
 
 import org.bson.types.ObjectId;
+import org.example.models.buildings.marketplaces.items.MarketplaceItems;
 import org.example.models.foragings.*;
 import org.example.models.foragings.Nature.Mineral;
 import org.example.models.foragings.Nature.MineralType;
@@ -32,7 +33,6 @@ public class Finder {
             return parseBasicTool(itemName);
         }
         if(NormalTools.parseNormalTool(itemName)!=null){
-            System.out.println("found it here:DDD");
             return NormalTools.parseNormalTool(itemName);
         }
         if(CraftableMachine.parseCraftable(itemName)!=null){
@@ -70,6 +70,9 @@ public class Finder {
         }
         if(CraftableItem.parseCraftable(itemName)!=null){
             return CraftableItem.parseCraftable(itemName);
+        }
+        if(MarketplaceItems.parseItem(itemName)!=null){
+            return MarketplaceItems.parseItem(itemName);
         }
         // TODO etc
 

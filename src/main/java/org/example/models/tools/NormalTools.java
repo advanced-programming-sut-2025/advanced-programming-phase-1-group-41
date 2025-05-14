@@ -3,32 +3,39 @@ package org.example.models.tools;
 import org.example.models.items.Item;
 
 public enum NormalTools implements Tool {
-    Scythe,
-    MilkPail,
-    Shear;
+    Scythe(new Scythe()),
+    MilkPail(new MilkPale()),
+    Shear(new Shear()),
+    ;
+
+    private Item item;
+
+    NormalTools(Item item) {
+        this.item = item;
+    }
 
     public static Item parseNormalTool(String name) {
-        return switch (name.trim()) {
-            case "Scythe" -> Scythe;
-            case "MilkPail" -> MilkPail;
-            case "Shear" -> Shear;
-            default -> null;
-        };
+        for (NormalTools value : NormalTools.values()) {
+            if(value.getName().equalsIgnoreCase(name)){
+                return value.item;
+            }
+        }
+        return null;
     }
 
     @Override
     public String getChar() {
-        return "NT";
+        return item.getChar();
     }
 
     @Override
     public String getName() {
-        return this.name();
+        return item.getName();
     }
 
     @Override
     public double getPrice() {
-        return 0;
+        return item.getPrice();
     }
 
 

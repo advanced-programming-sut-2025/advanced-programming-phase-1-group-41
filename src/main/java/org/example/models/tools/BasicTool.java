@@ -4,23 +4,26 @@ import org.example.models.items.Item;
 import org.example.models.skills.Skill;
 
 public enum BasicTool implements Tool {
-    Hoe(),
-    WateringCan(),
-    Pickaxe(),
-    Axe(),
-    TrashCan()
+    Hoe(new Hoe()),
+    WateringCan(new WateringCan()),
+    Pickaxe(new Pickaxe()),
+    Axe(new Axe()),
+    TrashCan(new TrashCan()),
     ;
 
+    private Item item;
+
+    BasicTool(Item item) {
+        this.item = item;
+    }
 
     public static Item parseBasicTool(String name) {
-        return switch (name){
-            case "Hoe" -> BasicTool.Hoe;
-            case "WateringCan" -> BasicTool.WateringCan;
-            case "Pickaxe" -> BasicTool.Pickaxe;
-            case "Axe" -> BasicTool.Axe;
-            case "TrashCan" -> BasicTool.TrashCan;
-            default -> null;
-        };
+        for (BasicTool value : BasicTool.values()) {
+            if(value.item.getName().equalsIgnoreCase(name)){
+                return value.item;
+            }
+        }
+        return null;
     }
 
     @Override
