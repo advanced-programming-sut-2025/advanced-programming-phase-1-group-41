@@ -29,7 +29,8 @@ public class AppView {
         UserDB.connect();
         while(App.getMenu() != Menu.Exit){
             App.getMenu().getMenu().check(scanner);
-            System.out.println(App.getMenu().getMenu().toString());
+//            System.out.println(App.getMenu().getMenu().toString());
+            System.out.print("> ");
         }
         UserDB.disconnect();
     }
