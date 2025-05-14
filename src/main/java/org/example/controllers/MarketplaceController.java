@@ -84,6 +84,69 @@ public class MarketplaceController {
         return true;
     }
 
+    private boolean nearShippingBin(){
+        player = App.getGame().getCurrentPlayer();
+        inventory = player.getInventory();
+        if(!player.isPlayerIsInVillage()){
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    Cell nextCell = Finder.findCellByCoordinates(player.getX()+i, player.getY()+j, App.getGame().getCurrentPlayerFarm());
+                    if(nextCell == null) continue;
+                    if(nextCell.getObjectMap() instanceof ShippingBin){
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                Cell nextCell = Finder.findCellByCoordinatesVillage(player.getX()+i, player.getY()+j, App.getGame().getVillage());
+                if(nextCell == null ) continue;
+                if(nextCell.getObjectMap() instanceof ShippingBin){
+                    return true;
+                }
+            }
+        }
+        return false;
+
+    }
+
+    public Result sellProduct(Matcher matcher){
+        boolean nearShippingBin = nearShippingBin();
+        if(!nearShippingBin){
+            return new Result(false, "you're not near a shipping bin");
+        }
+        String itemName = matcher.group(1);
+        String iqs = matcher.group("count");
+
+        Item item = Finder.parseItem(itemName);
+        if(item == null){
+            return new Result(false, "item doesn't exist");
+        }
+        Player player = App.getGame().getCurrentPlayer();
+        Slot slot = player.getInventory().getSlotByItem(item);
+        if(slot == null){
+            return new Result(false, "you don't have this item");
+        }
+        int wantedQuantity = slot.getQuantity();
+        if(iqs != null){
+            wantedQuantity = Integer.parseInt(iqs);
+        }
+        if(slot.getQuantity() < wantedQuantity){
+            return new Result(false, "you don't have enough of this item");
+        }
+        double value = wantedQuantity*slot.getItem().getPrice();
+        double cof = player.getFarmingSkill().getLevel() + player.getForagingSkill().getLevel() +
+                player.getMiningSkill().getLevel() + player.getFishingSkill().getLevel();
+        cof /= 8;
+        System.out.println(value+" "+wantedQuantity+" "+slot.getItem().getPrice());
+        value *= cof;
+        player.incSavings(value);
+        player.getInventory().removeFromInventory(slot.getItem(), wantedQuantity);
+        return new Result(true,"you're gonna gain "+value+" later.. current saving: "+player.getSavings());
+    }
+
     public Result purchaseProduct(Matcher matcher){
         Result preResult = inMarketPlace();
         if(!preResult.success()){

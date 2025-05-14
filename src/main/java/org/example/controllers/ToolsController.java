@@ -8,6 +8,7 @@ import org.example.models.animals.animalKinds.Sheep;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.GreenHouse.Greenhouse;
 import org.example.models.buildings.GreenHouse.WaterTank;
+import org.example.models.buildings.Well;
 import org.example.models.buildings.animalContainer.Barn;
 import org.example.models.foragings.*;
 import org.example.models.foragings.Nature.*;
@@ -135,7 +136,8 @@ public class ToolsController {
             energy--;
         }
         if(cell.getObjectMap() instanceof Lake ||
-                cell.getObjectMap() instanceof WaterTank){
+                cell.getObjectMap() instanceof WaterTank ||
+                cell.getObjectMap() instanceof Well){
             wc.setTiles(wc.getMaxTilesNumberByLevel());
             // todo count the skill of energy decrease
             App.getGame().getCurrentPlayer().decEnergy(energy);

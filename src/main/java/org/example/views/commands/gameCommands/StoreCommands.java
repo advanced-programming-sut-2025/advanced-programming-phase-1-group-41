@@ -12,7 +12,7 @@ public enum StoreCommands implements Command {
     ShowAllAvailableProducts("\\s*show\\s+all\\s+available\\s+products\\s*"),
     Purchase("\\s*purchase\\s+(?<productName>.+?)(?=\\s+-n\\s+\\d+|$)\\s*(-n\\s+(?<count>\\d+))?\\s*"),
     CheatAddDollars("\\s*cheat\\s+add\\s+(?<count>\\d+)\\s+dollars\\s*"),
-    Sell("\\s*sell\\s+(?<productName>.+)\\s+-n\\s+(?<count>\\d+)\\s*"),
+    Sell("\\s*sell\\s+(?<productName>.+?)(?=\\s+-n\\s+\\d+|$)\\s*(-n\\s+(?<count>\\d+))?\\s*"),
     ;
 
     private final String pattern;

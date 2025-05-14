@@ -34,6 +34,7 @@ public class Player {
     private User user;
     private ObjectId userId;
     private double money;
+    private double savings;
     private int farmId;
     private int x;
     private int y;
@@ -87,6 +88,7 @@ public class Player {
     public Player(User user) {
         this.user = user;
         money = 0;
+        savings = 0;
         x = 0;
         y = 0;
         energy = 100;
@@ -163,6 +165,20 @@ public class Player {
     }
     public void decMoney(double delta) {
         this.money -= delta;
+    }
+
+    public double getSavings() {
+        return savings;
+    }
+    public void incSavings(double delta) {
+        this.savings += delta;
+    }
+    public void decSavings(double delta) {
+        this.savings -= delta;
+    }
+
+    public void setSavings(double savings) {
+        this.savings = savings;
     }
 
     public ObjectId get_id() {
