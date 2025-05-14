@@ -71,13 +71,15 @@ public class GameMenuController {
         System.out.println("turn is : "+App.getGame().getCurrentPlayer());
         int a = 0;
         for(Friendship friendship : App.getGame().getCurrentPlayer().getFriendships()){
-            a++;
+            if(friendship.newMessages().length() != friendship.getLastReadMessage()){
+                a++;
+            }
         }
         if(a > 0){
             System.out.println("New messages:");
         }
         for(Friendship friendship : App.getGame().getCurrentPlayer().getFriendships()){
-            System.out.println(friendship.newMessages());
+            System.out.print(friendship.newMessages());
             friendship.setLastReadMessage();
         }
         if(!player.getNewGifts().isEmpty()){

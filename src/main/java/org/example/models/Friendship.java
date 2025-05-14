@@ -120,6 +120,9 @@ public class Friendship {
     public void setLastReadMessage() {
         lastReadMessage = talks.size();
     }
+    public int getLastReadMessage() {
+        return lastReadMessage;
+    }
     public Player getProposer() {
         return proposer;
     }
@@ -224,6 +227,9 @@ public class Friendship {
             result.append(talks.get(i).getFirst()).append(": ").append(talks.get(i).get(1)).append("\n");
         }
 //        result.delete(result.length() - 1, result.length());
+        if(result.isEmpty()){
+            return "";
+        }
         return result.toString();
     }
 }
