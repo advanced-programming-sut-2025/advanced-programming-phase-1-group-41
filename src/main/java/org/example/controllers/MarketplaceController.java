@@ -15,8 +15,8 @@ public class MarketplaceController {
     Inventory inventory;
     Cell currentCell;
     private Result inMarketPlace(){
-        currentCell = App.getGame().getVillage().getCell(player.getX(), player.getY());
         player = App.getGame().getCurrentPlayer();
+        currentCell = App.getGame().getVillage().getCell(player.getX(), player.getY());
         inventory = player.getInventory();
         if(!(currentCell.getObjectMap() instanceof Marketplace)){
             System.out.println(currentCell.getX()+" "+currentCell.getY());
@@ -79,11 +79,17 @@ public class MarketplaceController {
             return new Result(false, "Not enough money for "+itemName+" you need "+(-delta) + " more money");
         }
         slot.setQuantity(slot.getQuantity() - wantedQuantity);
-        return null;
-
+        player.decEnergy(delta);
+        inventory.addToInventory(slot.getItem(), slot.getQuantity());
+        return new Result(true, wantedQuantity+"x "+itemName+" purchased");
     }
 
-    public Result cheatAddMoney(Matcher matcher){return null;}
+    public Result cheatAddMoney(Matcher matcher){
+        int delta = Integer.parseInt(matcher.group(1).trim());
+        Player player = App.getGame().getCurrentPlayer();
+        player.incMoney(delta);
+        return new Result(true,"new money is : "+player.getMoney());
+    }
 
 
 }
