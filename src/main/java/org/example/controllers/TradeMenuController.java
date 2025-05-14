@@ -31,6 +31,19 @@ public class TradeMenuController {
         Item targetItem = Finder.parseItem(targetItemName);
         Slot firstSlot = new Slot(item, amount);
         Slot secondSlot = new Slot(targetItem, targetAmount);
+        if(isRequest){
+            if(trader.getInventory().getSlotByItem(targetItem) == null){
+                return new Result(false, "You don't have " + targetItemName + "!");
+            } else if(trader.getInventory().getSlotByItem(targetItem).getQuantity() < targetAmount){
+                return new Result(false, "You don't have enough of " + targetItemName + "!");
+            }
+        }else{
+            if(trader.getInventory().getSlotByItem(item) == null){
+                return new Result(false, "You don't have " + itemName + "!");
+            } else if(trader.getInventory().getSlotByItem(item).getQuantity() < amount){
+                return new Result(false, "You don't have enough of " + itemName + "!");
+            }
+        }
         Trade trade = new Trade(trader, target, firstSlot, secondSlot, isRequest);
         target.getTradesList().add(trade);
 
@@ -58,6 +71,17 @@ public class TradeMenuController {
         }
         Item item = Finder.parseItem(itemName);
         Slot firstSlot = new Slot(item, amount);
+        if(isRequest){
+            if(trader.getMoney() < price){
+                return new Result(false, "You don't have enough money!");
+            }
+        }else{
+            if(trader.getInventory().getSlotByItem(item) == null){
+                return new Result(false, "You don't have " + itemName + "!");
+            } else if(trader.getInventory().getSlotByItem(item).getQuantity() < amount){
+                return new Result(false, "You don't have enough of " + itemName + "!");
+            }
+        }
         Trade trade = new Trade(trader, target, firstSlot, price, isRequest);
         target.getTradesList().add(trade);
         target.getNewTradesList().add(trade);
@@ -81,7 +105,17 @@ public class TradeMenuController {
 
     public Result tradeResponse(Matcher matcher){return null;}
 
-    public Result tradeHistory(Matcher matcher){return null;}
+    public Result tradeHistory(Matcher matcher){
+        StringBuilder tradeList = new StringBuilder();
+        for(Trade trade : App.getGame().getCurrentPlayer().getTradesList()){
+            tradeList.append(trade.toString2()).append("\n");
+        }
+        if(tradeList.isEmpty()){
+            return new Result(false, "No trades available!");
+        }
+        tradeList.delete(tradeList.length() - 1, tradeList.length());
+        return new Result(true, tradeList.toString());
+    }
 
     public Result exitTradeMenu(Matcher matcher){return null;}
 }

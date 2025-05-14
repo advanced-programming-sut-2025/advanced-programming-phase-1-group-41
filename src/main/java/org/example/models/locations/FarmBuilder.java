@@ -1,12 +1,9 @@
 package org.example.models.locations;
 
 import org.example.controllers.WeatherController;
-import org.example.models.App;
-import org.example.models.Cell;
-import org.example.models.Finder;
+import org.example.models.*;
 import org.example.models.buildings.marketplaces.items.MarketplaceItems;
 import org.example.models.foragings.Nature.*;
-import org.example.models.WeatherType;
 import org.example.models.foragings.*;
 import org.example.models.items.CraftableItem;
 import org.example.models.items.CraftableMachine;
@@ -109,21 +106,23 @@ public class FarmBuilder {
         }
 
         Random rand = new Random();
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Fertilizer(FertilizerType.PlantGrow), 100);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Fertilizer(FertilizerType.BasicRetainingSoil), 100);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Fertilizer(FertilizerType.QualityRetainingSoil), 100);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Fertilizer(FertilizerType.DeluxeRetainingSoil), 100);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Fertilizer(FertilizerType.GrassStarter), 100);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.ApricotSapling), 100);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.Mixed), 100);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.StarfruitSeed), 100);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.CauliflowerSeed), 100);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.CoffeeBeanSeed), 100);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(CraftableMachine.DeluxeScarecrow, 100);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(CraftableMachine.Scarecrow, 100);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Crop(Flower.Poppy.getCropType()), 100);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(MarketplaceItems.Bouquet, 100);
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(MarketplaceItems.WeddingRing, 100);
+        Player player = App.getGame().getCurrentPlayer();
+        player.getInventory().addToInventory(new Fertilizer(FertilizerType.PlantGrow), 100);
+        player.getInventory().addToInventory(new Fertilizer(FertilizerType.BasicRetainingSoil), 100);
+        player.getInventory().addToInventory(new Fertilizer(FertilizerType.QualityRetainingSoil), 100);
+        player.getInventory().addToInventory(new Fertilizer(FertilizerType.DeluxeRetainingSoil), 100);
+        player.getInventory().addToInventory(new Fertilizer(FertilizerType.GrassStarter), 100);
+        player.getInventory().addToInventory(new Seed(SeedType.ApricotSapling), 100);
+        player.getInventory().addToInventory(new Seed(SeedType.Mixed), 100);
+        player.getInventory().addToInventory(new Seed(SeedType.StarfruitSeed), 100);
+        player.getInventory().addToInventory(new Seed(SeedType.CauliflowerSeed), 100);
+        player.getInventory().addToInventory(new Seed(SeedType.CoffeeBeanSeed), 100);
+        player.getInventory().addToInventory(CraftableMachine.DeluxeScarecrow, 100);
+        player.getInventory().addToInventory(CraftableMachine.Scarecrow, 100);
+        player.getInventory().addToInventory(new Crop(Flower.Poppy.getCropType()), 100);
+        player.getInventory().addToInventory(MarketplaceItems.Bouquet, 100);
+        player.getInventory().addToInventory(MarketplaceItems.WeddingRing, 100);
+        player.incMoney(100000);
     }
     public void growTrees(){
         List<Tree> toRemove = new ArrayList<>();

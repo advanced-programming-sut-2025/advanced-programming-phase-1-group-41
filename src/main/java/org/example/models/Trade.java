@@ -78,4 +78,7 @@ public class Trade {
             }
         }
     }
+    public String toString2(){
+        return null;
+    }
 }
