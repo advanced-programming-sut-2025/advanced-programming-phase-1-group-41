@@ -9,6 +9,14 @@ public abstract class Marketplace {
     protected NPC owner;
     public final ArrayList<Slot> itemsForSale;
 
+
+
+    public Marketplace(NPC owner) {
+        this.owner = owner;
+        this.itemsForSale = new ArrayList<>();
+    }
+
+
     // TODO add the actual items in the constructor of
     // each marketplace
 

@@ -10,6 +10,12 @@ import java.util.ArrayList;
 
 public class Clint extends NPC{
     Marketplace marketplace;
+
+    public Clint(String name){
+        super(name);
+    }
+
+
     public Clint(String name, Occupation job, Marketplace marketplace, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift, Quest firstQuest, Quest secondQuest, Quest thirdQuest) {
         super(name, job, dialogues, favorites, itemsToGift, firstQuest, secondQuest, thirdQuest);
         this.marketplace = marketplace;

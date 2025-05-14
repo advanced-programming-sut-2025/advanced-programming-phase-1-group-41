@@ -1,5 +1,6 @@
 package org.example.models.buildings.marketplaces;
 
+import org.example.models.App;
 import org.example.models.Cell;
 import org.example.models.Colors;
 import org.example.models.Finder;
@@ -9,10 +10,15 @@ import org.example.models.buildings.Refrigerator;
 import org.example.models.buildings.Wall;
 import org.example.models.items.Slot;
 import org.example.models.locations.Village;
+import org.example.models.npc.Clint;
 
 import java.util.ArrayList;
 
 public class Blacksmith extends Marketplace implements Building{
+
+
+
+
     @Override
     public String getChar() {
         return Colors.colorize(0,160,"BS");
@@ -25,6 +31,11 @@ public class Blacksmith extends Marketplace implements Building{
     private int x;
     private int y;
     public Blacksmith(int x, int y, Village village) {
+        super(App.getGame().getVillage().getnpcByName("clint"));
+        constructBlacksmith(x,y,village);
+    }
+
+    private void constructBlacksmith(int x, int y , Village village){
         this.x = x;
         this.y = y;
         int xWall;

@@ -9,6 +9,7 @@ import org.example.models.buildings.marketplaces.*;
 import org.example.models.buildings.npchomes.*;
 import org.example.models.foragings.Nature.Grass;
 import org.example.models.foragings.Nature.Lake;
+import org.example.models.npc.Clint;
 import org.example.models.npc.NPC;
 
 import java.util.ArrayList;
@@ -347,8 +348,20 @@ public class Village { ;
         return transferCells;
     }
 
+    public ArrayList<NPC> getNPCs() {
+        return NPCs;
+    }
 
-//    public void setCells(ArrayList<Cell> cells) {
+    public NPC getnpcByName(String name) {
+        for (NPC npc : NPCs) {
+            if(npc.getName().equalsIgnoreCase(name)){
+                return npc;
+            }
+        }
+        return null;
+    }
+
+    //    public void setCells(ArrayList<Cell> cells) {
 //        this.cells = cells;
 //    }
 }

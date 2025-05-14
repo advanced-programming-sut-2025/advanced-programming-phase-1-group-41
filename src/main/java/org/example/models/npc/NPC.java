@@ -23,9 +23,13 @@ public abstract class NPC {
     private Quest secondQuest;
     private Quest thirdQuest;
 
-    public NPC(String name, Occupation job,ArrayList<String> dialogues,
-        ArrayList<Item> favorites, ArrayList<Slot> itemsToGift,
-        Quest firstQuest, Quest secondQuest, Quest thirdQuest) {
+    public NPC(String name) {
+        this.name = name;
+    }
+
+    public NPC(String name, Occupation job, ArrayList<String> dialogues,
+               ArrayList<Item> favorites, ArrayList<Slot> itemsToGift,
+               Quest firstQuest, Quest secondQuest, Quest thirdQuest) {
         this.name = name;
         this.job = job;
         this.dialogues = dialogues;
