@@ -10,6 +10,7 @@ import org.example.models.items.*;
 import org.example.models.items.craftableitems.CraftableNames;
 import org.example.models.locations.Farm;
 import org.example.models.locations.Village;
+import org.example.models.tools.NormalTools;
 import org.example.models.tools.Tool;
 
 import java.util.Objects;
@@ -29,6 +30,10 @@ public class Finder {
     public static Item parseItem(String itemName){
         if(parseBasicTool(itemName)!=null){
             return parseBasicTool(itemName);
+        }
+        if(NormalTools.parseNormalTool(itemName)!=null){
+            System.out.println("found it here:DDD");
+            return NormalTools.parseNormalTool(itemName);
         }
         if(CraftableMachine.parseCraftable(itemName)!=null){
             return CraftableMachine.parseCraftable(itemName);

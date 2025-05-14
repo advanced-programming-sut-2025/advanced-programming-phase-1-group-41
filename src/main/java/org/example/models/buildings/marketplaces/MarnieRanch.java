@@ -6,9 +6,16 @@ import org.example.models.Finder;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.Door;
 import org.example.models.buildings.Wall;
+import org.example.models.buildings.marketplaces.items.RanchItems;
+import org.example.models.items.Slot;
 import org.example.models.locations.Village;
 
 public class MarnieRanch extends Marketplace implements Building {
+
+    private boolean shearLimit;
+    private boolean milkpaleLimit;
+
+
     @Override
     public String getChar() {
         return Colors.colorize(0,6,"MR");
@@ -21,6 +28,17 @@ public class MarnieRanch extends Marketplace implements Building {
     private int x;
     private int y;
     public MarnieRanch(int x, int y, Village village) {
+        super(null);
+        constructRanch(x, y, village);
+        itemsForSale.add(new Slot(RanchItems.Hay, 10000));
+        itemsForSale.add(new Slot(RanchItems.MilkPale, 10000));
+        itemsForSale.add(new Slot(RanchItems.Shear, 10000));
+
+        this.shearLimit = true;
+        this.milkpaleLimit = true;
+    }
+
+    public void constructRanch(int x, int y, Village village) {
         this.x = x;
         this.y = y;
         int xWall;
@@ -77,6 +95,23 @@ public class MarnieRanch extends Marketplace implements Building {
 
     @Override
     public void updateStock() {
+        this.shearLimit = true;
+        this.milkpaleLimit = true;
+    }
 
+    public boolean isMilkpaleLimit() {
+        return milkpaleLimit;
+    }
+
+    public boolean isShearLimit() {
+        return shearLimit;
+    }
+
+    public void setMilkpaleLimit(boolean milkpaleLimit) {
+        this.milkpaleLimit = milkpaleLimit;
+    }
+
+    public void setShearLimit(boolean shearLimit) {
+        this.shearLimit = shearLimit;
     }
 }

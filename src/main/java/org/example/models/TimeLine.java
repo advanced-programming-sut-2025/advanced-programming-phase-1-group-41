@@ -7,6 +7,7 @@ import org.bson.types.ObjectId;
 import org.example.controllers.AnimalController;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.marketplaces.Blacksmith;
+import org.example.models.buildings.marketplaces.MarnieRanch;
 import org.example.models.locations.Farm;
 import org.example.controllers.CraftingController;
 
@@ -61,6 +62,9 @@ public class TimeLine {
             if(building instanceof Blacksmith blacksmith){
                 System.out.println("blacksmith found ..");
                 blacksmith.updateStock();
+            }else if(building instanceof MarnieRanch marnieRanch){
+                System.out.println("marnieRanch found ..");
+                marnieRanch.updateStock();
             }
         }
         (new AnimalController()).resetAndCheck();

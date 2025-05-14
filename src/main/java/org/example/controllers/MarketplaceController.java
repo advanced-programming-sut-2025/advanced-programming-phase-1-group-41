@@ -3,15 +3,13 @@ package org.example.controllers;
 import org.example.models.*;
 import org.example.models.buildings.marketplaces.Blacksmith;
 import org.example.models.buildings.marketplaces.Marketplace;
+import org.example.models.buildings.marketplaces.MarnieRanch;
 import org.example.models.items.CraftableItem;
 import org.example.models.items.Inventory;
 import org.example.models.items.Item;
 import org.example.models.items.Products.Product;
 import org.example.models.items.Slot;
-import org.example.models.tools.LevelTool;
-import org.example.models.tools.Tool;
-import org.example.models.tools.ToolLevel;
-import org.example.models.tools.TrashCan;
+import org.example.models.tools.*;
 
 import java.util.regex.Matcher;
 
@@ -57,6 +55,26 @@ public class MarketplaceController {
         return new Result(true,message.toString());
     }
 
+    private boolean isAvailable(Marketplace marketplace, Item item){
+        if(marketplace instanceof MarnieRanch marnieRanch){
+            if(item instanceof Shear){
+                if(marnieRanch.isShearLimit()){
+                    marnieRanch.setShearLimit(false);
+                    return true;
+                }
+                return false;
+            }
+            if(item instanceof MilkPale milkPale){
+                if(marnieRanch.isMilkpaleLimit()){
+                   marnieRanch.setMilkpaleLimit(false);
+                   return true;
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+
     public Result purchaseProduct(Matcher matcher){
         Result preResult = inMarketPlace();
         if(!preResult.success()){
@@ -83,6 +101,11 @@ public class MarketplaceController {
         if(delta < 0){
             return new Result(false, "Not enough money for "+itemName+" you need "+(-delta) + " more money");
         }
+
+        if(!isAvailable(mp, item)){
+            System.out.println("come back later..");
+        }
+
         slot.setQuantity(slot.getQuantity() - wantedQuantity);
         player.setMoney(delta);
         inventory.addToInventory(slot.getItem(), slot.getQuantity());

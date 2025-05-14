@@ -8,7 +8,7 @@ public enum NormalTools implements Tool {
     Shear;
 
     public static Item parseNormalTool(String name) {
-        return switch (name) {
+        return switch (name.trim()) {
             case "Scythe" -> Scythe;
             case "MilkPail" -> MilkPail;
             case "Shear" -> Shear;
