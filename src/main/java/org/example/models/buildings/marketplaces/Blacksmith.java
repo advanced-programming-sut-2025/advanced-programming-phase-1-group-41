@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class Blacksmith extends Marketplace implements Building{
 
-
+    private ArrayList<Boolean> updates;
 
 
     @Override
@@ -42,6 +42,17 @@ public class Blacksmith extends Marketplace implements Building{
         itemsForSale.add(new Slot(BlacksmithItems.IronOre, 10000));
         itemsForSale.add(new Slot(BlacksmithItems.GoldOre, 10000));
         itemsForSale.add(new Slot(BlacksmithItems.Coal, 10000));
+
+        updates = new ArrayList<>();
+        updates.add(true);
+        updates.add(true);
+        updates.add(true);
+        updates.add(true);
+
+        updates.add(true);
+        updates.add(true);
+        updates.add(true);
+        updates.add(true);
     }
 
     private void constructBlacksmith(int x, int y , Village village){
@@ -99,9 +110,15 @@ public class Blacksmith extends Marketplace implements Building{
         this.y = y;
     }
 
+    public ArrayList<Boolean> getUpdates() {
+        return updates;
+    }
 
     @Override
     public void updateStock() {
+        for (int i = 0; i < 8; i++) {
+            updates.set(i,true);
+        }
         System.out.println("blacksmith updated..");
     }
 }

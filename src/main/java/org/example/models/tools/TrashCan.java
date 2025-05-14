@@ -4,11 +4,11 @@ import org.example.models.App;
 import org.example.models.items.Item;
 import org.example.models.items.Slot;
 
-public class TrashCan implements Tool {
+public class TrashCan implements Tool, LevelTool {
     private ToolLevel level;
 
     public TrashCan() {
-        this.level = ToolLevel.Iridium;
+        this.level = ToolLevel.Default;
     }
 
     public ToolLevel getLevel() {
@@ -16,7 +16,7 @@ public class TrashCan implements Tool {
     }
 
     public void increaseLevel() {
-        int levelNum = Math.max(ToolLevel.values().length-1,level.ordinal()+1);
+        int levelNum = Math.min(ToolLevel.values().length-1,level.ordinal()+1);
         level = ToolLevel.values()[levelNum];
     }
 

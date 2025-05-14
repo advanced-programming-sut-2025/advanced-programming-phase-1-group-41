@@ -1,6 +1,6 @@
 package org.example.models.tools;
 
-public class WateringCan implements Tool{
+public class WateringCan implements Tool, LevelTool {
 
     ToolLevel level;
     int tiles;
@@ -25,7 +25,7 @@ public class WateringCan implements Tool{
     }
 
     public void increaseLevel() {
-        int levelNum = Math.max(ToolLevel.values().length - 1, level.ordinal() + 1);
+        int levelNum = Math.min(ToolLevel.values().length - 1, level.ordinal() + 1);
         level = ToolLevel.values()[levelNum];
     }
 

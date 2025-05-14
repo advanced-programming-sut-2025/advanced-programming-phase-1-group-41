@@ -1,6 +1,6 @@
 package org.example.models.tools;
 
-public class Axe implements Tool{
+public class Axe implements Tool, LevelTool{
     ToolLevel level;
 
     public Axe() {
@@ -12,7 +12,7 @@ public class Axe implements Tool{
     }
 
     public void increaseLevel() {
-        int levelNum = Math.max(ToolLevel.values().length-1,level.ordinal()+1);
+        int levelNum = Math.min(ToolLevel.values().length-1,level.ordinal()+1);
         level = ToolLevel.values()[levelNum];
     }
 

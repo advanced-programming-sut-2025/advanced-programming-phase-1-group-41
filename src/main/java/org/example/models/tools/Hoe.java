@@ -1,6 +1,6 @@
 package org.example.models.tools;
 
-public class Hoe implements Tool{
+public class Hoe implements Tool, LevelTool{
     ToolLevel level;
 
     public Hoe() {
@@ -13,7 +13,7 @@ public class Hoe implements Tool{
     }
 
     public void increaseLevel() {
-        int levelNum = Math.max(ToolLevel.values().length-1,level.ordinal()+1);
+        int levelNum = Math.min(ToolLevel.values().length-1,level.ordinal()+1);
         level = ToolLevel.values()[levelNum];
     }
 

@@ -18,7 +18,10 @@ public class ToolView {
             System.out.println(controller.showAvailableTools(matcher));
         }else if((matcher = InventoryAndToolCommands.UseTool.getMatcher(input))!=null){
             System.out.println(controller.useTool(matcher));
-        }else{
+        }else if((matcher = InventoryAndToolCommands.UpgradeTool.getMatcher(input))!=null){
+            System.out.println(controller.upgradeTool(matcher));
+        }
+        else{
             return false;
         }
         return true;

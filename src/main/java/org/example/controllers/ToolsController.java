@@ -59,7 +59,14 @@ public class ToolsController {
         return new Result(true, message.toString());
     }
 
-    public Result upgradeTool(Matcher matcher){return null;}
+    public Result upgradeTool(Matcher matcher){
+        String itemName = matcher.group(1).trim();
+        Tool tool = Finder.getToolByName(itemName);
+        if(tool == null){
+            return new Result(false, "You don't have"+itemName+" in your inventory");
+        }
+        return (new MarketplaceController()).upgradeTool(tool);
+    }
 
     public Result preValidateUseTool(Matcher matcher){
         String dirName = matcher.group("direction").trim();
