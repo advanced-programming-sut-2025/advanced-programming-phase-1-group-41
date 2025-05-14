@@ -75,4 +75,8 @@ public class MarnieRanch extends Marketplace implements Building {
         this.y = y;
     }
 
+    @Override
+    public void updateStock() {
+
+    }
 }

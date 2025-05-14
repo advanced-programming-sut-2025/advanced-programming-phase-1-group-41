@@ -75,4 +75,8 @@ public class Saloon extends Marketplace implements Building {
         this.y = y;
     }
 
+    @Override
+    public void updateStock() {
+
+    }
 }

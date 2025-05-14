@@ -13,7 +13,7 @@ public class FriendshipView {
         Matcher matcher;
         if((matcher = FriendShipCommands.Friendships.getMatcher(input))!=null){
             System.out.println(controller.friendshipsList(matcher));
-        }else if((matcher = AnimalCommands.BuyAnimal.getMatcher(input))!=null) {
+        }else if(true) {
 
         }else{
             return false;

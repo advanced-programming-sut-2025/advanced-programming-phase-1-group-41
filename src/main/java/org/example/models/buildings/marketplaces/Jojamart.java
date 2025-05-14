@@ -79,4 +79,8 @@ public class Jojamart extends Marketplace implements Building {
     }
 
 
+    @Override
+    public void updateStock() {
+
+    }
 }

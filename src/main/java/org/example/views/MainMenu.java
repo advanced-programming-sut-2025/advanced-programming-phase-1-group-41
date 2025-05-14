@@ -80,8 +80,8 @@ public class MainMenu implements AppMenu {
                 Friendship friendship1 = new Friendship(player11, player22);
                 player11.addFriendship(friendship1);
                 player22.addFriendship(friendship1);
-            } else{
-                Player player11 = App.getGame().getPlayers().get(2);
+            } if(i == 0){
+                Player player11 = App.getGame().getPlayers().get(0);
                 Player player22 = App.getGame().getPlayers().get(3);
                 Friendship friendship1 = new Friendship(player11, player22);
                 player11.addFriendship(friendship1);

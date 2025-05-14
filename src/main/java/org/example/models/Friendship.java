@@ -46,4 +46,15 @@ public class Friendship {
     public void setFriendshipXp(int friendshipXp) {
         this.friendshipXp = friendshipXp;
     }
+
+    public String showResult(Player player) {
+        StringBuilder result = new StringBuilder();
+        String playerName = player1.getUser().getUsername();
+        if(player.equals(player1)){
+            playerName = player2.getUser().getUsername();
+        }
+        result.append("You and ").append(playerName).append(" are ").append(friendshipLevel.getName())
+                .append(". Friendship Level: ").append(level).append(", XP:").append(friendshipXp).append("\n");
+        return result.toString();
+    }
 }

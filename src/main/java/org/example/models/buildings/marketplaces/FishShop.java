@@ -75,4 +75,8 @@ public class FishShop extends Marketplace implements Building {
         this.y = y;
     }
 
+    @Override
+    public void updateStock() {
+
+    }
 }
