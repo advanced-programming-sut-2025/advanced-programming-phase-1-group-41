@@ -9,6 +9,9 @@ public enum MarketplaceItems implements Item {
     Wheatflour("Wf","Wheatflour", 125),
     Sugar("Su","Sugar", 125),
     Rice("Ri","Rice", 250),
+
+    WeddingRing("WR","WeddingRing", 10000),
+    Bouquet("BQ","Bouquet", 1000),
     ;
 
 

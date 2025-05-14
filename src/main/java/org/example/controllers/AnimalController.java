@@ -21,6 +21,51 @@ import static org.example.models.buildings.animalContainer.BarnType.parseBarn;
 import static org.example.models.buildings.animalContainer.CoopType.parseCoop;
 
 public class AnimalController {
+    // the items needed for building barn and coop
+    double cost;
+    int rockCount;
+    int woodCount;
+
+    private void setBarnNeeds(BarnType barnType){
+        switch(barnType){
+            case Normal -> {
+                cost = 6000;
+                woodCount = 350;
+                rockCount = 150;
+            }
+            case Big -> {
+                cost = 12000;
+                woodCount = 450;
+                rockCount = 200;
+            }
+            case Deluxe -> {
+                cost = 25000;
+                woodCount = 550;
+                rockCount = 300;
+            }
+        }
+    }
+
+    private void setCoopNeeds(CoopType coopType){
+        switch(coopType){
+            case Normal -> {
+                cost = 4000;
+                woodCount = 300;
+                rockCount = 100;
+            }
+            case Big -> {
+                cost = 10000;
+                woodCount = 400;
+                rockCount = 150;
+            }
+            case Deluxe -> {
+                cost = 20000;
+                woodCount = 500;
+                rockCount = 200;
+            }
+        }
+    }
+
     public Result build(Matcher matcher) {
         String buildingName = matcher.group("buildingName");
         String x = matcher.group("x");
@@ -44,6 +89,7 @@ public class AnimalController {
     }
 
     private Result buildCoop(int x, int y, CoopType coopType) {
+        setCoopNeeds(coopType);
         int xSize = 0;
         int ySize = 0;
         switch (coopType) {
@@ -75,6 +121,7 @@ public class AnimalController {
     }
 
     private Result buildBarn(int x, int y, BarnType barnType) {
+        setBarnNeeds(barnType);
         int xSize = 0;
         int ySize = 0;
         switch (barnType) {

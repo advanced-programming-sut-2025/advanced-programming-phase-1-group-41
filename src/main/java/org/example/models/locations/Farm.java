@@ -68,7 +68,6 @@ public class Farm {
         greenhouse = new Greenhouse(4,24 + rand.nextInt(4),this);
         buildings.add(greenhouse);
         buildings.add(new Cottage(30 + rand.nextInt(4), 4,this));
-        buildings.add(new Well(20, 50, this));
         mine = new Mine(3,3,this);
 
         int lakeCount = farmType.LakeCoefficient;

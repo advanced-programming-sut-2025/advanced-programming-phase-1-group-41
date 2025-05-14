@@ -4,10 +4,11 @@ import org.example.models.*;
 import org.example.models.animals.Animal;
 import org.example.models.animals.animalKinds.*;
 import org.example.models.buildings.Building;
-import org.example.models.buildings.marketplaces.Blacksmith;
-import org.example.models.buildings.marketplaces.Marketplace;
-import org.example.models.buildings.marketplaces.MarnieRanch;
-import org.example.models.buildings.marketplaces.Saloon;
+import org.example.models.buildings.ShippingBin;
+import org.example.models.buildings.Well;
+import org.example.models.buildings.marketplaces.*;
+import org.example.models.foragings.Nature.Rock;
+import org.example.models.foragings.Nature.Wood;
 import org.example.models.items.*;
 import org.example.models.items.Products.Product;
 import org.example.models.tools.*;
@@ -112,6 +113,25 @@ public class MarketplaceController {
         double delta = player.getMoney() - (wantedQuantity * slot.getItem().getPrice());
         if(delta < 0){
             return new Result(false, "Not enough money for "+itemName+" you need "+(-delta) + " more money");
+        }
+        if(mp instanceof CarpenterShop carpenterShop){
+            Slot neededItem = null;
+            if(item instanceof Well){
+                neededItem = new Slot(new Rock(), 75);
+            }else if(item instanceof ShippingBin){
+                neededItem = new Slot(new Wood(), 150);
+            }
+            if(neededItem != null){
+                Slot s = inventory.getSlotByItem(neededItem.getItem());
+                if(s != null){
+                    if(s.getQuantity() < neededItem.getQuantity()){
+                        return new Result(false,"insufficient material..");
+                    }
+                    inventory.removeFromInventory(neededItem.getItem(), neededItem.getQuantity());
+                }else{
+                    return new Result(false, "you don't have the needed resources");
+                }
+            }
         }
 
         if(!isAvailable(mp, item)){
@@ -295,6 +315,10 @@ public class MarketplaceController {
 
         player.decMoney(animal.getBuyPrice());
         return new Result(true,"");
+    }
+
+    public Result buildBaoop(double cost, int rockCount, int woodCount){
+
     }
 
 }

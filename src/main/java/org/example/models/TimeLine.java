@@ -8,6 +8,7 @@ import org.example.controllers.AnimalController;
 import org.example.controllers.FriendshipController;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.marketplaces.Blacksmith;
+import org.example.models.buildings.marketplaces.CarpenterShop;
 import org.example.models.buildings.marketplaces.MarnieRanch;
 import org.example.models.buildings.marketplaces.Saloon;
 import org.example.models.locations.Farm;
@@ -70,6 +71,9 @@ public class TimeLine {
             }else if(building instanceof Saloon saloon){
                 System.out.println("saloon found ..");
                 saloon.updateStock();
+            }else if(building instanceof CarpenterShop carpenterShop){
+                System.out.println("carpenterShop found ..");
+                carpenterShop.updateStock();
             }
         }
         (new AnimalController()).resetAndCheck();
