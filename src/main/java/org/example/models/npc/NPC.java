@@ -7,21 +7,15 @@ import org.example.models.items.Item;
 import org.example.models.items.Slot;
 
 import java.util.ArrayList;
+import java.util.Random;
 
-public enum NPC {
-//    Sebastien,
-//    Abigail,
-//    Harvey,
-//    Lia,
-//    Robin
-    // TODO
-    ;
+public abstract class NPC {
+
 
     private String name;
     private Occupation job;
     private NPCHome home;
-    private Marketplace marketplace;
-    private String dialogues;
+    private ArrayList<String> dialogues;
     public ArrayList<Item> favorites;
     public ArrayList<Slot> ItemsToGift;
 
@@ -29,17 +23,14 @@ public enum NPC {
     private Quest secondQuest;
     private Quest thirdQuest;
 
-    NPC(String name, Occupation job, NPCHome home,
-        Marketplace marketplace, String dialogues,
+    public NPC(String name, Occupation job,ArrayList<String> dialogues,
         ArrayList<Item> favorites, ArrayList<Slot> itemsToGift,
         Quest firstQuest, Quest secondQuest, Quest thirdQuest) {
         this.name = name;
         this.job = job;
-        this.home = home;
-        this.marketplace = marketplace;
         this.dialogues = dialogues;
         this.favorites = favorites;
-        ItemsToGift = itemsToGift;
+        this.ItemsToGift = itemsToGift;
         this.firstQuest = firstQuest;
         this.secondQuest = secondQuest;
         this.thirdQuest = thirdQuest;
@@ -57,12 +48,8 @@ public enum NPC {
         return home;
     }
 
-    public Marketplace getMarketplace() {
-        return marketplace;
-    }
-
     public String getDialogues() {
-        return dialogues;
+        return dialogues.get(new Random().nextInt(dialogues.size()));
     }
 
     public Quest getFirstQuest() {

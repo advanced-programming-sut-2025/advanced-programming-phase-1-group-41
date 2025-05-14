@@ -9,6 +9,7 @@ import org.example.models.buildings.marketplaces.*;
 import org.example.models.buildings.npchomes.*;
 import org.example.models.foragings.Nature.Grass;
 import org.example.models.foragings.Nature.Lake;
+import org.example.models.npc.NPC;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -25,6 +26,7 @@ public class Village { ;
     private final ArrayList<Building> buildings = new ArrayList<>();
     ArrayList<Cell> transferCells = new ArrayList<>();
     ArrayList<Cell> startPoints = new ArrayList<>();
+    ArrayList<NPC> NPCs = new ArrayList<>();
 
 
 
@@ -35,6 +37,7 @@ public class Village { ;
                 cells.add(new Cell(new Grass(), j, i));
             }
         }
+//        NPCs=NPCBuilder();
         for(int i = 0; i < 95; i++){
             for(int j = 0; j < 65; j++){
                 boolean isGrass = false;
