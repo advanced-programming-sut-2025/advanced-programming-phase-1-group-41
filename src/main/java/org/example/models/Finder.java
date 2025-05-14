@@ -144,4 +144,12 @@ public class Finder {
         }
         return null;
     }
+    public static Player findPlayerByUsername(String username){
+        for(Player player : App.getGame().getPlayers()){
+            if(player.getUser().getUsername().equals(username)){
+                return player;
+            }
+        }
+        return null;
+    }
 }

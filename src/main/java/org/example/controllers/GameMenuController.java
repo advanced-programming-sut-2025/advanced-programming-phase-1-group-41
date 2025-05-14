@@ -58,7 +58,7 @@ public class GameMenuController {
             if(players.get(i).equals(App.getGame().getCurrentPlayer())){
                 App.getGame().setCurrentPlayer(players.get((i+1)%4));
                 App.getGame().setRoundEnergy(0);
-                System.out.println("turn is : "+App.getGame().getCurrentPlayer());
+                printNewMessages(App.getGame().getCurrentPlayer());
                 if(i == 3){
                     App.getGame().getTime().advanceOneHour();
                 }
@@ -66,6 +66,26 @@ public class GameMenuController {
             }
         }
         return new Result(true,"next turn.. : "+App.getGame().getCurrentPlayer());
+    }
+    private void printNewMessages(Player player){
+        System.out.println("turn is : "+App.getGame().getCurrentPlayer());
+        int a = 0;
+        for(Friendship friendship : App.getGame().getCurrentPlayer().getFriendships()){
+            a++;
+        }
+        if(a > 0){
+            System.out.println("New messages:");
+        }
+        for(Friendship friendship : App.getGame().getCurrentPlayer().getFriendships()){
+            System.out.println(friendship.newMessages());
+            friendship.setLastReadMessage();
+        }
+        if(!player.getNewGifts().isEmpty()){
+            System.out.println("New gifts:");
+        }
+        for(Gift gift : player.getNewGifts()){
+            System.out.println(gift.toString());
+        }
     }
 
     public Result tradeMenu(Matcher matcher){ return null ;}

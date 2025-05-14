@@ -301,9 +301,6 @@ public class Village { ;
                 System.out.println();
             }
         }
-        for(Player player : App.getGame().getPlayers()){
-            System.out.println(player.getFarmId());
-        }
         for (Cell cell : cells) {
             if(cell.getObjectMap() instanceof Door){
                 System.out.println("door: "+cell.getX()+","+cell.getY());

@@ -7,7 +7,7 @@ import java.util.PriorityQueue;
 public class Slot {
     Item item;
     private int quantity;
-    private PriorityQueue<Integer> itemsPrice;
+    private final PriorityQueue<Integer> itemsPrice;
     public Slot(Item item, int quantity) {
         this.item = item;
         this.quantity = quantity;
