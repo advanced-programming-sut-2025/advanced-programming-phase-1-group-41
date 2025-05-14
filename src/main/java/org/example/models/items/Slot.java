@@ -34,4 +34,12 @@ public class Slot {
     public PriorityQueue getItemsPrice() {
         return itemsPrice;
     }
+
+    @Override
+    public String toString() {
+        return "Slot{" +
+                "item=" + item.getName() +
+                ", quantity=" + quantity +
+                '}';
+    }
 }

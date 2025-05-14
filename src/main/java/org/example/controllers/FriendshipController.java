@@ -15,5 +15,6 @@ import java.util.regex.Matcher;
 
 public class FriendshipController {
     public Result friendship(Matcher matcher) {
+        return null;
     }
 }

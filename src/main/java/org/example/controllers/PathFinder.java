@@ -1,10 +1,12 @@
 package org.example.controllers;
 
 import org.example.models.*;
+import org.example.models.buildings.Bridge;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.Cottage;
 import org.example.models.buildings.Door;
 import org.example.models.buildings.GreenHouse.Greenhouse;
+import org.example.models.buildings.marketplaces.Marketplace;
 import org.example.models.foragings.Nature.Grass;
 import org.example.models.foragings.Nature.Obstacle;
 
@@ -86,7 +88,9 @@ public class PathFinder {
 
     private boolean village(Cell nextCell){
         if(nextCell.getObjectMap() instanceof Building){
-            if(!(nextCell.getObjectMap() instanceof Door)){
+            if(!(nextCell.getObjectMap() instanceof Door) &&
+            !(nextCell.getObjectMap() instanceof Marketplace) &&
+            !(nextCell.getObjectMap() instanceof Bridge)){
                 System.out.println(nextCell.getObjectMap().getClass());
                 return false;
             }

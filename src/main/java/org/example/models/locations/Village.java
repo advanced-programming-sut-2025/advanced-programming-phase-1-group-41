@@ -3,6 +3,7 @@ package org.example.models.locations;
 import org.example.models.*;
 import org.example.models.buildings.Bridge;
 import org.example.models.buildings.Building;
+import org.example.models.buildings.Door;
 import org.example.models.buildings.animalContainer.Barn;
 import org.example.models.buildings.animalContainer.Coop;
 import org.example.models.buildings.marketplaces.*;
@@ -302,6 +303,11 @@ public class Village { ;
         }
         for(Player player : App.getGame().getPlayers()){
             System.out.println(player.getFarmId());
+        }
+        for (Cell cell : cells) {
+            if(cell.getObjectMap() instanceof Door){
+                System.out.println("door: "+cell.getX()+","+cell.getY());
+            }
         }
     }
     public boolean isSpecialPoint(Cell cell){

@@ -1,5 +1,6 @@
 package org.example.models.buildings.marketplaces;
 
+import org.example.models.items.Item;
 import org.example.models.items.Slot;
 import org.example.models.npc.NPC;
 
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 
 public abstract class Marketplace {
     protected NPC owner;
-    public final ArrayList<Slot> itemsForSale;
+    protected final ArrayList<Slot> itemsForSale;
 
 
 
@@ -26,5 +27,20 @@ public abstract class Marketplace {
 
     public NPC getOwner() {
         return owner;
+    }
+
+    public ArrayList<Slot> getItemsForSale() {
+        return itemsForSale;
+    }
+
+    public abstract void updateStock();
+
+    public Slot getSlotByItem(Item item){
+        for (Slot slot : itemsForSale) {
+            if(slot.getItem().getName().equalsIgnoreCase(item.getName())){
+                return slot;
+            }
+        }
+        return null;
     }
 }

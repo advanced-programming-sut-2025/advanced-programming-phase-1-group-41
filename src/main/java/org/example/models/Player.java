@@ -57,6 +57,7 @@ public class Player {
     @Transient
     private ArrayList<Machine> onGoingMachines;
     private boolean playerIsInVillage;
+    @Transient
     private ArrayList<Friendship> friendships;
 //    private Farm farm;
 //    private ArrayList<Animal> animals;
