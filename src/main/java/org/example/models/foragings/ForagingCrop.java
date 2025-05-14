@@ -28,6 +28,10 @@ public class ForagingCrop implements Foraging, Item {
         return foragingCropType.getBaseSellPrice();
     }
 
+    public ForagingCrop(ForagingCropType foragingCropType) {
+        this.foragingCropType = foragingCropType;
+    }
+
     public ForagingCrop(int x, int y, Farm farm) {
         Random rand = new Random();
         int type = rand.nextInt(ForagingCropType.values().length);

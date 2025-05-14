@@ -94,6 +94,7 @@ public class Player {
         this.cookingRecipes.add(CookingRecipe.BakedFish);
         this.cookingRecipes.add(CookingRecipe.Spaghetti);
         this.cookingRecipes.add(CookingRecipe.Bread);
+        this.cookingRecipes.add(CookingRecipe.SurvivalBurger);
         this.craftingRecipes = new ArrayList<>();
         this.craftingRecipes.add(CraftingRecipe.Furnace);
         this.friendships = new ArrayList<>();
