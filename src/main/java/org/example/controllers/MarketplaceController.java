@@ -7,11 +7,9 @@ import org.example.models.buildings.Building;
 import org.example.models.buildings.marketplaces.Blacksmith;
 import org.example.models.buildings.marketplaces.Marketplace;
 import org.example.models.buildings.marketplaces.MarnieRanch;
-import org.example.models.items.CraftableItem;
-import org.example.models.items.Inventory;
-import org.example.models.items.Item;
+import org.example.models.buildings.marketplaces.Saloon;
+import org.example.models.items.*;
 import org.example.models.items.Products.Product;
-import org.example.models.items.Slot;
 import org.example.models.tools.*;
 
 import java.util.ArrayList;
@@ -116,6 +114,18 @@ public class MarketplaceController {
         System.out.println("wanted "+wantedQuantity+" "+itemName);
         slot.setQuantity(slot.getQuantity() - wantedQuantity);
         player.setMoney(delta);
+
+        if(mp instanceof Saloon saloon){
+            CookingRecipe recipe = CookingRecipe.parseRecipe(item.getName());
+            if(recipe != null){
+                if(!player.getCookingRecipes().contains(recipe)){
+                    player.getCookingRecipes().add(recipe);
+                    return new Result(true, wantedQuantity+" "+itemName+" recipe purchased");
+                }else{
+                    return new Result(false,"you just wasted your money..");
+                }
+            }
+        }
         inventory.addToInventory(slot.getItem(), wantedQuantity);
         return new Result(true, wantedQuantity+"x "+itemName+" purchased");
     }

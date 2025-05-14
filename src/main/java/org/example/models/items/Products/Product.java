@@ -23,4 +23,5 @@ public class Product implements Item {
     public double getPrice() {
         return productType.getPrice();
     }
+
 }

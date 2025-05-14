@@ -6,9 +6,18 @@ import org.example.models.Finder;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.Door;
 import org.example.models.buildings.Wall;
+import org.example.models.buildings.marketplaces.items.SaloonItems;
+import org.example.models.items.CookingRecipe;
+import org.example.models.items.Slot;
 import org.example.models.locations.Village;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class Saloon extends Marketplace implements Building {
+
+    ArrayList<Slot> dailyLimit;
+
     @Override
     public String getChar() {
         return Colors.colorize(136,214,"SS");
@@ -21,6 +30,49 @@ public class Saloon extends Marketplace implements Building {
     private int x;
     private int y;
     public Saloon(int x, int y, Village village) {
+        super(null);
+        constructSaloon(x, y , village);
+
+
+
+        itemsForSale.add(new Slot(SaloonItems.Beer, 10000));
+        itemsForSale.add(new Slot(SaloonItems.Salad, 10000));
+        itemsForSale.add(new Slot(SaloonItems.Bread, 10000));
+        itemsForSale.add(new Slot(SaloonItems.Spaghetti, 10000));
+        itemsForSale.add(new Slot(SaloonItems.Pizza, 10000));
+        itemsForSale.add(new Slot(SaloonItems.Coffee, 10000));
+
+        itemsForSale.add(new Slot(SaloonItems.HashbrownsRecipe, 1));
+        itemsForSale.add(new Slot(SaloonItems.OmeletRecipe, 1));
+        itemsForSale.add(new Slot(SaloonItems.PancakesRecipe, 1));
+        itemsForSale.add(new Slot(SaloonItems.BreadRecipe, 1));
+        itemsForSale.add(new Slot(SaloonItems.TortillaRecipe, 1));
+        itemsForSale.add(new Slot(SaloonItems.PizzaRecipe, 1));
+        itemsForSale.add(new Slot(SaloonItems.MakiRollRecipe, 1));
+        itemsForSale.add(new Slot(SaloonItems.TripleShotEspressoRecipe, 1));
+        itemsForSale.add(new Slot(SaloonItems.CookieRecipe, 1));
+
+        dailyLimit = new ArrayList<>();
+
+        dailyLimit.add(new Slot(SaloonItems.Beer, 10000));
+        dailyLimit.add(new Slot(SaloonItems.Salad, 10000));
+        dailyLimit.add(new Slot(SaloonItems.Bread, 10000));
+        dailyLimit.add(new Slot(SaloonItems.Spaghetti, 10000));
+        dailyLimit.add(new Slot(SaloonItems.Pizza, 10000));
+        dailyLimit.add(new Slot(SaloonItems.Coffee, 10000));
+        dailyLimit.add(new Slot(SaloonItems.HashbrownsRecipe, 1));
+        dailyLimit.add(new Slot(SaloonItems.OmeletRecipe, 1));
+        dailyLimit.add(new Slot(SaloonItems.PancakesRecipe, 1));
+        dailyLimit.add(new Slot(SaloonItems.BreadRecipe, 1));
+        dailyLimit.add(new Slot(SaloonItems.TortillaRecipe, 1));
+        dailyLimit.add(new Slot(SaloonItems.PizzaRecipe, 1));
+        dailyLimit.add(new Slot(SaloonItems.MakiRollRecipe, 1));
+        dailyLimit.add(new Slot(SaloonItems.TripleShotEspressoRecipe, 1));
+        dailyLimit.add(new Slot(SaloonItems.CookieRecipe, 1));
+    }
+
+
+    public void constructSaloon(int x, int y, Village village) {
         this.x = x;
         this.y = y;
         int xWall;
@@ -77,6 +129,8 @@ public class Saloon extends Marketplace implements Building {
 
     @Override
     public void updateStock() {
-
+        for (int i = 0; i < dailyLimit.size(); i++) {
+            this.itemsForSale.get(i).setQuantity(this.dailyLimit.get(i).getQuantity());
+        }
     }
 }

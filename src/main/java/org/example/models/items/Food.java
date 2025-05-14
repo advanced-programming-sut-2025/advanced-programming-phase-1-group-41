@@ -98,7 +98,7 @@ public enum Food implements Item, Eatable {
 
     public static Food parseFood(String food) {
         for (Food value : Food.values()) {
-            if(value.name().equalsIgnoreCase(food)) {
+            if(value.getName().equalsIgnoreCase(food)) {
                 return value;
             }
         }

@@ -2,12 +2,14 @@ package org.example.models;
 
 import org.bson.types.ObjectId;
 import org.example.models.buildings.marketplaces.items.MarketplaceItems;
+import org.example.models.buildings.marketplaces.items.SaloonItems;
 import org.example.models.foragings.*;
 import org.example.models.foragings.Nature.Mineral;
 import org.example.models.foragings.Nature.MineralType;
 import org.example.models.foragings.Nature.Rock;
 import org.example.models.foragings.Nature.Wood;
 import org.example.models.items.*;
+import org.example.models.items.Products.ProductType;
 import org.example.models.items.craftableitems.CraftableNames;
 import org.example.models.locations.Farm;
 import org.example.models.locations.Village;
@@ -73,6 +75,12 @@ public class Finder {
         }
         if(MarketplaceItems.parseItem(itemName)!=null){
             return MarketplaceItems.parseItem(itemName);
+        }
+        if(SaloonItems.parseItem(itemName)!=null){
+            return SaloonItems.parseItem(itemName);
+        }
+        if(ProductType.parseProductType(itemName)!=null){
+            return ProductType.parseProductType(itemName);
         }
         // TODO etc
 

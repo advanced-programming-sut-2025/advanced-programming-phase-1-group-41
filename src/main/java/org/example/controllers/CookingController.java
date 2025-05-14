@@ -126,7 +126,7 @@ public class CookingController {
 
             }else{
                 checker = false;
-                System.out.println(item+" not found");
+                System.out.println(item.getName()+" not found");
                 break;
             }
         }
@@ -165,7 +165,7 @@ public class CookingController {
             return new Result(false, "You're not in a home");
         }
         for (CookingRecipe recipe : App.getGame().getCurrentPlayer().getCookingRecipes()) {
-            System.out.println(recipe.toString());
+            System.out.println(recipe.getName());
         }
         return new Result(true,"that was all..");
     }
