@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 public class WeatherController {
     public static void strikeThunder(Farm farm){
         Random rand = new Random();
+        System.out.println("Farm " + farm.getId() + " Thunderstorm last night:");
         for(int i = 0; i < 3; i++){
             int x = rand.nextInt(App.MaxLength);
             int y = rand.nextInt(App.MaxHeight);
@@ -83,7 +84,7 @@ public class WeatherController {
                 ((ForagingTree) cell.getObjectMap()).thunder();
             }
         } else {
-            return new Result(true,"Location is not available for thundering!");
+            return new Result(true,"Cell '" + cell.getObjectMap().getName() +"' is not available for thundering!");
         }
         return new Result(true,"Thundered " + cell.getObjectMap().getName() + " at " + x + ", " + y + " successfully!.");
     }

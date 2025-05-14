@@ -1,7 +1,6 @@
 package org.example.controllers;
 
 import org.example.models.*;
-import org.example.models.buildings.GreenHouse.Greenhouse;
 import org.example.models.locations.Farm;
 
 import java.util.ArrayList;
@@ -43,17 +42,16 @@ public class MapController {
 
     }
 
-    public Result printMap(Matcher matcher){
+    public void printMap(Matcher matcher){
         Farm farm = App.getGame().getCurrentPlayerFarm();
         if(farm==null){
             System.out.println("Farm is null");
         }else{
             farm.printMap();
         }
-        return new Result(true, "");
     }
 
-    public Result printMapReal(Matcher matcher){
+    public void printMapReal(Matcher matcher){
         int x = Integer.parseInt(matcher.group(1));
         int y = Integer.parseInt(matcher.group(2));
         int size = Integer.parseInt(matcher.group(3));
@@ -64,7 +62,6 @@ public class MapController {
         else{
             farm.printMap(x,y,size);
         }
-        return new Result(true, "");
     }
 
     public List<Node> SSSP(int x , int y){

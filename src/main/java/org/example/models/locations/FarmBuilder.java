@@ -190,8 +190,13 @@ public class FarmBuilder {
         int crows = items / 16;
         Random rand = new Random();
         ArrayList<Crop> removedCrops = new ArrayList<>();
+        boolean message = true;
         for(int i = 0; i < crows; i++){
             if(rand.nextInt(4) == 0){
+                if(message){
+                    System.out.println("Farm " + farm.getId() + "crow attacks last night:");
+                    message = false;
+                }
                 if(rand.nextInt(2) == 0 && !farm.getCrops().isEmpty()){
                     Crop crop = farm.getCrops().get(rand.nextInt(farm.getCrops().size()));
                     if(farm.getGreenhouse().isGreenHouse(crop.getX(), crop.getY())){

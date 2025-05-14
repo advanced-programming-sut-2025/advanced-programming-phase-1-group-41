@@ -409,7 +409,6 @@ public class Farm {
         farmBuilder.weatherUpdates();
         farmBuilder.scarecrowUpdate();
         farmBuilder.crowAttacks();
-//        WeatherController.strikeThunder(this);
     }
     public int getRockCount() {
         return rockCount;

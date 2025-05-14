@@ -205,7 +205,7 @@ public class ToolsController {
                     App.getGame().getCurrentPlayer().getMiningSkill().increaseXp(10);
                 }
                 App.getGame().getCurrentPlayer().decEnergy(energy);
-                String namemeeme = ((Item)cell.getObjectMap()).getName();
+                String name = ((Item)cell.getObjectMap()).getName();
                 if(((Rock) cell.getObjectMap()).getRockType().equals(RockType.BigRock)){
                     Cell cell2 = Finder.findCellByCoordinates(x + 1, y,App.getGame().getCurrentPlayerFarm());
                     assert cell2 != null;
@@ -218,7 +218,7 @@ public class ToolsController {
                     cell4.setObjectMap(new Grass());
                 }
                 cell.setObjectMap(new Grass());
-                return new Result(true, "got a "+namemeeme);
+                return new Result(true, "got a "+name);
             } else{
                 if(cell.getObjectMap() instanceof Rock && !cell.getObjectMap().getName().equals(new Grass().getName())){
                     return new Result(true, "Hits Left: "+((Rock) cell.getObjectMap()).getHitPoints());
