@@ -68,6 +68,26 @@ public class MainMenu implements AppMenu {
             player.setX(farm.getStartPoints().getFirst().getX());
             player.setY(farm.getStartPoints().getFirst().getY());
         }
+        for(int i = 0; i < 3; i++) {
+            Player player1 = App.getGame().getPlayers().get(i);
+            Player player2 = App.getGame().getPlayers().get(i + 1);
+            Friendship friendship = new Friendship(player1, player2);
+            player1.addFriendship(friendship);
+            player2.addFriendship(friendship);
+            if(i <= 1){
+                Player player11 = App.getGame().getPlayers().get(i);
+                Player player22 = App.getGame().getPlayers().get(i + 2);
+                Friendship friendship1 = new Friendship(player11, player22);
+                player11.addFriendship(friendship1);
+                player22.addFriendship(friendship1);
+            } else{
+                Player player11 = App.getGame().getPlayers().get(2);
+                Player player22 = App.getGame().getPlayers().get(3);
+                Friendship friendship1 = new Friendship(player11, player22);
+                player11.addFriendship(friendship1);
+                player22.addFriendship(friendship1);
+            }
+        }
         System.out.println("welcome to the game!");
         App.setMenu(Menu.Game);
     }

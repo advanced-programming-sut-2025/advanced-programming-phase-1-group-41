@@ -49,6 +49,10 @@ public class GameMenu implements AppMenu {
 
             }else if(CraftingView.check(input)){
 
+            }else if(FriendshipView.check(input)){
+
+            }else{
+                System.out.println("Invalid command");
             }
         }
 

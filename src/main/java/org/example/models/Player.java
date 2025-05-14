@@ -11,6 +11,7 @@ import org.example.models.skills.Skill;
 import org.example.models.tools.Tool;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @Entity("players")
 public class Player {
@@ -56,6 +57,7 @@ public class Player {
     @Transient
     private ArrayList<Machine> onGoingMachines;
     private boolean playerIsInVillage;
+    private ArrayList<Friendship> friendships;
 //    private Farm farm;
 //    private ArrayList<Animal> animals;
 //    private ArrayList<Skill> skills;
@@ -72,7 +74,7 @@ public class Player {
 
 //    private ArrayList<HashMap<NPC, Integer>> npcs;
     // needs an augmentation
-//    private ArrayList<HashMap<Player, FriendshipLevel>> friends;
+    private ArrayList<HashMap<Player, FriendshipLevel>> friends;
 
 
     public Player() {
@@ -93,6 +95,7 @@ public class Player {
         this.cookingRecipes.add(CookingRecipe.Bread);
         this.craftingRecipes = new ArrayList<>();
         this.craftingRecipes.add(CraftingRecipe.Furnace);
+        this.friendships = new ArrayList<>();
 
         this.farmingSkill = new Skill();
         this.miningSkill = new Skill();
@@ -169,7 +172,7 @@ public class Player {
         return inventory;
     }
 
-
+    public void addFriendship(Friendship friendship){friendships.add(friendship);}
 
     public void setUserId(ObjectId userId) {
         this.userId = userId;
@@ -260,6 +263,8 @@ public class Player {
     public ArrayList<Machine> getOnGoingMachines() {
         return onGoingMachines;
     }
+
+    public ArrayList<Friendship> getFriendships() {return friendships;}
 
     public boolean hasRecipe(Food food){
         System.out.println("food is: "+food+" "+food.getRecipe());
