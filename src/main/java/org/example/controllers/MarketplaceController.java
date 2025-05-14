@@ -318,7 +318,7 @@ public class MarketplaceController {
     }
 
     public Result buildBaoop(double cost, int rockCount, int woodCount){
-
+        return null;
     }
 
 }
