@@ -28,6 +28,29 @@ public class MapController {
                 }
                 player.setX(cell.x);
                 player.setY(cell.y);
+                if(!player.isPlayerIsInVillage()){
+                    if(App.getGame().getCurrentPlayerFarm().getTransferCells().contains(
+                            Finder.findCellByCoordinates(x, y, App.getGame().getCurrentPlayerFarm())
+                    )){
+                        player.setPlayerIsInVillage(true);
+                        player.setX(App.getGame().getVillage().getStartPoints().getFirst().getX());
+                        player.setY(App.getGame().getVillage().getStartPoints().getFirst().getY());
+                        System.out.println("going to village..");
+                        System.out.println("rn on "+player.getX()+" "+player.getY());
+                        break;
+                    }
+                }else{
+                    if(App.getGame().getVillage().getTransferCells().contains(
+                            Finder.findCellByCoordinatesVillage(x, y, App.getGame().getVillage())
+                    )){
+                        player.setPlayerIsInVillage(false);
+                        player.setX(App.getGame().getCurrentPlayerFarm().getStartPoints().getFirst().getX());
+                        player.setY(App.getGame().getCurrentPlayerFarm().getStartPoints().getFirst().getY());
+                        System.out.println("going to farm ...");
+                        System.out.println("rn on "+player.getX()+" "+player.getY());
+                        break;
+                    }
+                }
 //                Cell c = Finder.findCellByCoordinates(cell.x,cell.y, App.getGame().getCurrentPlayerFarm());
 //                System.out.println(c.getObjectMap().getClass());
             }
@@ -46,7 +69,7 @@ public class MapController {
         Farm farm = App.getGame().getCurrentPlayerFarm();
         if(farm==null){
             System.out.println("Farm is null");
-        }else if(App.getGame().getCurrentPlayer().playerIsInVillage()) {
+        }else if(App.getGame().getCurrentPlayer().isPlayerIsInVillage()) {
             App.getGame().getVillage().printMap();
         }else{
             farm.printMap();

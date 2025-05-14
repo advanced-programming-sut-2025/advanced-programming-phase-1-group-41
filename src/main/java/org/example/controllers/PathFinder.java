@@ -5,6 +5,7 @@ import org.example.models.buildings.Building;
 import org.example.models.buildings.Cottage;
 import org.example.models.buildings.Door;
 import org.example.models.buildings.GreenHouse.Greenhouse;
+import org.example.models.foragings.Nature.Grass;
 import org.example.models.foragings.Nature.Obstacle;
 
 import java.util.*;
@@ -36,20 +37,26 @@ public class PathFinder {
             for (int[] dir : new int[][]{{0, 1}, {1, 0}, {0, -1}, {-1, 0}}) {
                 int newX = current.x + dir[0];
                 int newY = current.y + dir[1];
-
-                Cell nextCell = getCell(newX, newY);
+                Cell nextCell = null;
+                if(!App.getGame().getCurrentPlayer().isPlayerIsInVillage()){
+                    nextCell = getCell(newX, newY);
+                }else{
+                    nextCell = Finder.findCellByCoordinatesVillage(newX, newY, App.getGame().getVillage());
+                }
                 // unavailable
                 if (nextCell == null ||
                    nextCell.getObjectMap() instanceof Obstacle) continue;
 
-                if(nextCell.getObjectMap() instanceof Building){
-                    if(!(nextCell.getObjectMap() instanceof Cottage) &&
-                        !(nextCell.getObjectMap() instanceof Door) &&
-                        !(nextCell.getObjectMap() instanceof Greenhouse)){
-//                        System.out.println(nextCell.getObjectMap().getClass());
+                if(!player.isPlayerIsInVillage()){
+                    if(!farm(nextCell)){
+                        continue;
+                    }
+                }else{
+                    if(!village(nextCell)){
                         continue;
                     }
                 }
+
                 int newTurns = (current.parent != null && directionChanged(current.parent.x, current.parent.y, current.x, current.y, newX, newY))
                         ? current.turns + 1 : current.turns;
                 double newEnergyCost = current.energyCost + 0.1;
@@ -63,6 +70,37 @@ public class PathFinder {
             }
         }
         return null;
+    }
+
+    private boolean farm(Cell nextCell){
+        if(nextCell.getObjectMap() instanceof Building){
+            if(!(nextCell.getObjectMap() instanceof Cottage) &&
+                    !(nextCell.getObjectMap() instanceof Door) &&
+                    !(nextCell.getObjectMap() instanceof Greenhouse)){
+//                        System.out.println(nextCell.getObjectMap().getClass());
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean village(Cell nextCell){
+        if(nextCell.getObjectMap() instanceof Building){
+            if(!(nextCell.getObjectMap() instanceof Door)){
+                System.out.println("building..");
+                        System.out.println(nextCell.getObjectMap().getClass());
+                return false;
+            }
+        }else if(nextCell.getObjectMap() instanceof Grass){
+            if(((Grass) nextCell.getObjectMap()).isGround()
+                    || ((Grass) nextCell.getObjectMap()).isSand()
+                    || ((Grass) nextCell.getObjectMap()).isFarmland()){
+                return true;
+            }
+            System.out.println((nextCell.getX()+" kir "+nextCell.getY()));
+            return false;
+        }
+        return true;
     }
 
     private Cell getCell(int x, int y) {

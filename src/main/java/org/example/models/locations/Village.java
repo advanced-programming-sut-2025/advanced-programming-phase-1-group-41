@@ -272,7 +272,7 @@ public class Village { ;
         int counter = 0;
         for(Cell cell:cells){
             if(cell.getX()==App.getGame().getCurrentPlayer().getX()&&cell.getY()==App.getGame().getCurrentPlayer().getY()){
-                System.out.printf(App.getGame().getCurrentPlayer().getChar());}
+            System.out.printf(App.getGame().getCurrentPlayer().getChar());}
             else if(isSpecialPoint(cell)) {
             }else
              {
@@ -325,9 +325,16 @@ public class Village { ;
         this.cells = cells;
     }
 
+    public ArrayList<Cell> getStartPoints() {
+        return startPoints;
+    }
+
+    public ArrayList<Cell> getTransferCells() {
+        return transferCells;
+    }
 
 
-    //    public void setCells(ArrayList<Cell> cells) {
+//    public void setCells(ArrayList<Cell> cells) {
 //        this.cells = cells;
 //    }
 }
