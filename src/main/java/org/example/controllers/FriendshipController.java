@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 
 public class FriendshipController {
-    public Result friendship(Matcher matcher) {
+    public Result friendshipsList(Matcher matcher) {
+        return null;
     }
 }
