@@ -87,8 +87,7 @@ public class PathFinder {
     private boolean village(Cell nextCell){
         if(nextCell.getObjectMap() instanceof Building){
             if(!(nextCell.getObjectMap() instanceof Door)){
-                System.out.println("building..");
-                        System.out.println(nextCell.getObjectMap().getClass());
+                System.out.println(nextCell.getObjectMap().getClass());
                 return false;
             }
         }else if(nextCell.getObjectMap() instanceof Grass){
@@ -97,7 +96,6 @@ public class PathFinder {
                     || ((Grass) nextCell.getObjectMap()).isFarmland()){
                 return true;
             }
-            System.out.println((nextCell.getX()+" kir "+nextCell.getY()));
             return false;
         }
         return true;

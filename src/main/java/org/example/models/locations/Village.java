@@ -281,11 +281,13 @@ public class Village { ;
                     continue;
                 }
                 if(cell.getX()==player.getX()&&cell.getY()==player.getY()){
-                    System.out.printf(App.getGame().getCurrentPlayer().getChar());
+                    System.out.printf(player.getChar());
                     checker = true;
+                    break;
                 }
             }
             if(checker){
+                counter++;
                 continue;
             }
             if(isSpecialPoint(cell)) {
@@ -297,6 +299,9 @@ public class Village { ;
             if(counter % 95 == 0){
                 System.out.println();
             }
+        }
+        for(Player player : App.getGame().getPlayers()){
+            System.out.println(player.getFarmId());
         }
     }
     public boolean isSpecialPoint(Cell cell){

@@ -20,7 +20,7 @@ public class Player {
             return Colors.colorize(0,199,":]");
         }
         if(farmId == 2){
-            return Colors.colorize(0,12,":]");
+            return Colors.colorize(0,56,":]");
         }
         if(farmId == 3){
             return Colors.colorize(0,226,":]");
