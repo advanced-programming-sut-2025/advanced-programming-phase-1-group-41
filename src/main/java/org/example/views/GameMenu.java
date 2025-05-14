@@ -24,6 +24,8 @@ public class GameMenu implements AppMenu {
             System.out.println(controller.deleteGame(matcher, scanner));
         }else if((matcher=GameMainCommands.NextTurn.getMatcher(input))!=null){
             System.out.println(controller.nextTurn(matcher));
+        } else if((matcher = GameMainCommands.StartTrade.getMatcher(input))!=null){
+            System.out.println(controller.startTrade(matcher));
         }
         if(App.getGame().getCurrentPlayer().getEnergy() <= 0){
             System.out.println(App.getGame().getCurrentPlayer().getEnergy());
@@ -54,8 +56,7 @@ public class GameMenu implements AppMenu {
 
             }else if(MarketplaceView.check(input)){
 
-            }
-            else{
+            }else{
 //                System.out.println("Invalid command");
             }
         }

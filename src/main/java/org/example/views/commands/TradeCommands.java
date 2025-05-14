@@ -1,11 +1,8 @@
-package org.example.views.commands.gameCommands;
-
-import org.example.views.commands.Command;
+package org.example.views.commands;
 
 import java.util.regex.Matcher;
 
 public enum TradeCommands implements Command {
-    StartTrade("\\s*start\\s+trade\\s*"),
     Trade("\\s*trade\\s+-u\\s+(?<username>\\S+)\\s+-t\\s+(?<type>\\S+)\\s+-i\\s+(?<item>\\S+)\\s+" +
             "-a\\s+(?<amount>\\d+)(\\s+-p\\s+(?<price>\\d+))?(\\s+-ti\\s+(?<targetItem>\\S+)\\s+-ta\\s+(?<targetAmount>\\d+))?\\s*"),
     TradeList("\\s*trade\\s+list\\s*"),

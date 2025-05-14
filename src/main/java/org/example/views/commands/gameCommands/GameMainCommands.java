@@ -35,6 +35,7 @@ public enum GameMainCommands implements Command {
     Fishing("\\s*fishing\\s+-p\\s+(?<fishingPole>.+)\\s*"),
     ArtisanUse("\\s*artisan\\s+use\\s+(?<artisanName>\\S+)\\s+(?<item1Name>.+)\\s*"),
     ArtisanGet("\\s*artisan\\s+get\\s+(?<artisanName>.*)\\s*"),
+    StartTrade("\\s*start\\s+trade\\s*"),
     ;
 
     private final String pattern;

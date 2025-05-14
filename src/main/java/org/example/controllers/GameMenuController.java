@@ -35,6 +35,16 @@ public class GameMenuController {
         return new Result(true,"cya") ;
     }
 
+    public Result startTrade(Matcher matcher){
+        StringBuilder result = new StringBuilder();
+        for(Player player : App.getGame().getPlayers()){
+            result.append("Username: ").append(player.getUser().getUsername()).append(" Nickname: ").append(player.getUser().getNickname()).append("\n");
+        }
+        result.append("Starting Trade...");
+        App.setMenu(Menu.Trade);
+        return new Result(true,result.toString()) ;
+    }
+
     public Result deleteGame(Matcher matcher, Scanner scanner){
         boolean success = GameMenu.handleDeleteGame(scanner);
         if(success){
