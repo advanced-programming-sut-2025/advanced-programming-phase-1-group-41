@@ -25,7 +25,7 @@ public class Player {
         if(farmId == 3){
             return Colors.colorize(0,226,":]");
         }
-        return Colors.colorize(0,6,":]");
+        return Colors.colorize(0,40,":]");
     }
 
     @Id
