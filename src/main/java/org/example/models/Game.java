@@ -22,6 +22,7 @@ public class Game {
     private Player currentPlayer;
     @Transient
     private ArrayList<Player> players;
+    @Transient
     private Village village;
 
     private ObjectId loaderId;

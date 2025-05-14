@@ -233,7 +233,7 @@ public class Farm {
     public void printMap(){
         int counter = 0;
         for(Cell cell:cells){
-             if(cell.getX()==App.getGame().getCurrentPlayer().getX()&&cell.getY()==App.getGame().getCurrentPlayer().getY()){System.out.printf(App.getGame().getCurrentPlayer().getChar());}
+            if(cell.getX()==App.getGame().getCurrentPlayer().getX()&&cell.getY()==App.getGame().getCurrentPlayer().getY()){System.out.printf(App.getGame().getCurrentPlayer().getChar());}
              else if(isAnimalHere(cell)){}
              else if(isSpecialPoint(cell)){}
              else {
@@ -426,4 +426,9 @@ public class Farm {
     //    public void setCells(ArrayList<Cell> cells) {
 //        this.cells = cells;
 //    }
+
+
+    public ArrayList<Cell> getTransferCells() {
+        return transferCells;
+    }
 }
