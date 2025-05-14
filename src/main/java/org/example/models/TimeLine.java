@@ -1,20 +1,15 @@
 package org.example.models;
 
-import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import org.bson.types.ObjectId;
-import org.example.controllers.AnimalController;
-import org.example.controllers.FriendshipController;
+import org.example.controllers.subgames.AnimalController;
+import org.example.controllers.subgames.FriendshipController;
 import org.example.models.buildings.Building;
-import org.example.models.buildings.marketplaces.Blacksmith;
-import org.example.models.buildings.marketplaces.CarpenterShop;
-import org.example.models.buildings.marketplaces.MarnieRanch;
-import org.example.models.buildings.marketplaces.Saloon;
+import org.example.models.buildings.marketplaces.*;
 import org.example.models.locations.Farm;
-import org.example.controllers.CraftingController;
+import org.example.controllers.subgames.CraftingController;
 
-import java.util.Date;
 import java.util.Random;
 
 @Entity
@@ -74,6 +69,9 @@ public class TimeLine {
             }else if(building instanceof CarpenterShop carpenterShop){
                 System.out.println("carpenterShop found ..");
                 carpenterShop.updateStock();
+            }else if(building instanceof Jojamart jojamart){
+                System.out.println("jojamart found ..");
+                jojamart.updateStock();
             }
         }
         (new AnimalController()).resetAndCheck();

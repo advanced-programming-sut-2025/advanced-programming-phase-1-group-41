@@ -1,6 +1,6 @@
 package org.example.views.subGames;
 
-import org.example.controllers.FriendshipController;
+import org.example.controllers.subgames.FriendshipController;
 import org.example.views.commands.gameCommands.FriendShipCommands;
 
 import java.util.regex.Matcher;

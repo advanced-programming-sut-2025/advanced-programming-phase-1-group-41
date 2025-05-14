@@ -1,6 +1,6 @@
 package org.example.views.subGames;
 
-import org.example.controllers.PlayerController;
+import org.example.controllers.subgames.PlayerController;
 import org.example.views.commands.gameCommands.GameMainCommands;
 import org.example.views.commands.gameCommands.InventoryAndToolCommands;
 

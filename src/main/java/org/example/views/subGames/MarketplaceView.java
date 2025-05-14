@@ -1,12 +1,6 @@
 package org.example.views.subGames;
 
-import org.example.controllers.FarmingController;
-import org.example.controllers.MarketplaceController;
-import org.example.models.App;
-import org.example.models.Finder;
-import org.example.models.tools.WateringCan;
-import org.example.views.commands.gameCommands.FarmingCommands;
-import org.example.views.commands.gameCommands.GameMainCommands;
+import org.example.controllers.subgames.MarketplaceController;
 import org.example.views.commands.gameCommands.StoreCommands;
 
 import java.util.regex.Matcher;

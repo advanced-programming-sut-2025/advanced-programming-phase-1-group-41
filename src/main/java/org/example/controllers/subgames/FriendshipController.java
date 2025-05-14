@@ -1,14 +1,11 @@
-package org.example.controllers;
+package org.example.controllers.subgames;
 
 import org.example.models.*;
 import org.example.models.buildings.marketplaces.items.MarketplaceItems;
-import org.example.models.foragings.Crop;
-import org.example.models.foragings.Nature.Flower;
 import org.example.models.items.Item;
 import org.example.models.items.Slot;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.regex.Matcher;
 
 public class FriendshipController {

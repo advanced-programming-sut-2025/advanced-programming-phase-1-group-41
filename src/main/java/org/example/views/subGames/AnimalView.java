@@ -1,6 +1,6 @@
 package org.example.views.subGames;
 
-import org.example.controllers.AnimalController;
+import org.example.controllers.subgames.AnimalController;
 import org.example.views.commands.gameCommands.AnimalCommands;
 import org.example.views.commands.gameCommands.FriendShipCommands;
 import org.example.views.commands.gameCommands.GameMainCommands;

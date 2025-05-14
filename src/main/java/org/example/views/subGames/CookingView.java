@@ -1,7 +1,6 @@
 package org.example.views.subGames;
 
-import org.example.controllers.CookingController;
-import org.example.controllers.MapController;
+import org.example.controllers.subgames.CookingController;
 import org.example.views.commands.gameCommands.GameMainCommands;
 
 import java.util.regex.Matcher;

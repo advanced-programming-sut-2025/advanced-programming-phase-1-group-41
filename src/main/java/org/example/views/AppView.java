@@ -29,6 +29,9 @@ public class AppView {
         UserDB.connect();
         while(App.getMenu() != Menu.Exit){
             App.getMenu().getMenu().check(scanner);
+            if(App.getMenu() == Menu.Trade){
+                System.out.print("trade ");
+            }
 //            System.out.println(App.getMenu().getMenu().toString());
             System.out.print("> ");
         }

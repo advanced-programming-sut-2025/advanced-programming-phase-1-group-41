@@ -1,6 +1,6 @@
 package org.example.views.subGames;
 
-import org.example.controllers.CraftingController;
+import org.example.controllers.subgames.CraftingController;
 import org.example.views.commands.gameCommands.GameMainCommands;
 
 import java.util.regex.Matcher;

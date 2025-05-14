@@ -1,4 +1,4 @@
-package org.example.controllers;
+package org.example.controllers.subgames;
 
 import org.example.models.*;
 import org.example.models.animals.Animal;
@@ -12,10 +12,8 @@ import org.example.models.buildings.marketplaces.*;
 import org.example.models.foragings.Nature.Rock;
 import org.example.models.foragings.Nature.Wood;
 import org.example.models.items.*;
-import org.example.models.items.Products.Product;
 import org.example.models.tools.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 

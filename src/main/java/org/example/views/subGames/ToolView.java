@@ -1,7 +1,6 @@
 package org.example.views.subGames;
 
-import org.example.controllers.ToolsController;
-import org.example.views.commands.gameCommands.GameMainCommands;
+import org.example.controllers.subgames.ToolsController;
 import org.example.views.commands.gameCommands.InventoryAndToolCommands;
 
 import java.util.regex.Matcher;
