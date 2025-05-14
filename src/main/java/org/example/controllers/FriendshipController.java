@@ -5,6 +5,7 @@ import org.example.models.items.Item;
 import org.example.models.items.Slot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 
 public class FriendshipController {
@@ -172,5 +173,25 @@ public class FriendshipController {
             return new Result(true, "You hugged " + player2.getUser().getUsername() + " =D");
         }
         return new Result(false, "You should be next to each other!");
+    }
+    public Result flower(Matcher matcher) {
+        String username = matcher.group("username");
+        Player player = Finder.findPlayerByUsername(username);
+        if(player == null){
+            return new Result(false, "Player not found!");
+        }
+        String flowerName = matcher.group("flowerName");
+//        ArrayList<String> flowerNames = new ArrayList<>(Arrays.asList(
+//                "BlueJazz",
+//                "Cauliflower",
+//                ""
+//                "Poppy",
+//                "SummerSpangle",
+//                "Sunflower",
+//                "Tulip",
+//                "FairyRose"
+//        ));
+        return null;
+
     }
 }
