@@ -47,6 +47,8 @@ public class MapController {
         Farm farm = App.getGame().getCurrentPlayerFarm();
         if(farm==null){
             System.out.println("Farm is null");
+        }else if(App.getGame().getCurrentPlayer().playerIsInVillage()) {
+            App.getGame().getVillage().printMap();
         }else{
             farm.printMap();
         }

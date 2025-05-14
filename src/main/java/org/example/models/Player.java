@@ -46,6 +46,7 @@ public class Player {
     private Skill fishingSkill;
     @Transient
     private ArrayList<Machine> onGoingMachines;
+    private boolean playerIsInVillage;
 //    private Farm farm;
 //    private ArrayList<Animal> animals;
 //    private ArrayList<Skill> skills;
@@ -117,6 +118,13 @@ public class Player {
     }
 
 
+    public boolean isPlayerIsInVillage() {
+        return playerIsInVillage;
+    }
+
+    public void setPlayerIsInVillage(boolean playerIsInVillage) {
+        this.playerIsInVillage = playerIsInVillage;
+    }
 
     public User getUser() {
         return user;

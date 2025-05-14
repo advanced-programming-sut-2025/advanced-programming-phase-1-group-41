@@ -11,6 +11,9 @@ import java.security.NoSuchAlgorithmException;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) throws NoSuchAlgorithmException {
+//        Village village = new Village();
+//        village.printMap();
+
         AppView appView = new AppView();
         appView.runApp();
     }
