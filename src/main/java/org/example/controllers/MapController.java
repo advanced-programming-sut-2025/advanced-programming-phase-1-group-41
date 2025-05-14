@@ -21,7 +21,7 @@ public class MapController {
             double energy = 0;
             for (Node cell : cells) {
                 energy = cell.energyCost;
-                if(energy > player.getEnergy() && !player.isEnergyUnilimited()){
+                if(energy > player.getEnergy() && !player.isEnergyUnlimited()){
                     player.decEnergy(player.getEnergy());
                     printMap(null);
                     return new Result(false, "you're running low :(");
@@ -54,7 +54,7 @@ public class MapController {
 //                Cell c = Finder.findCellByCoordinates(cell.x,cell.y, App.getGame().getCurrentPlayerFarm());
 //                System.out.println(c.getObjectMap().getClass());
             }
-            if(!player.isEnergyUnilimited()){
+            if(!player.isEnergyUnlimited()){
                 player.decEnergy(energy);
             }
             return new Result(true,"found the path ;D" +

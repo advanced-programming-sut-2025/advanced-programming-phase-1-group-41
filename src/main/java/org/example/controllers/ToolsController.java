@@ -140,7 +140,7 @@ public class ToolsController {
                 cell.getObjectMap() instanceof Well){
             wc.setTiles(wc.getMaxTilesNumberByLevel());
             // todo count the skill of energy decrease
-            App.getGame().getCurrentPlayer().decEnergy(energy);
+            App.getGame().getCurrentPlayer().decEnergyTool(energy);
             return new Result(true, "wc is filled now with " +
                     wc.getTiles() +
                     " tiles");
@@ -156,7 +156,7 @@ public class ToolsController {
                 }
             }
             if(wc.decreaseTiles()){
-                App.getGame().getCurrentPlayer().decEnergy(energy);
+                App.getGame().getCurrentPlayer().decEnergyTool(energy);
                 if(cell.getObjectMap() instanceof Crop){
                     ((Crop) cell.getObjectMap()).water();
                 } else if(cell.getObjectMap() instanceof Tree){
@@ -193,7 +193,7 @@ public class ToolsController {
             );
             App.getGame().getCurrentPlayer().getForagingSkill().increaseXp(10);
             String name = ((Item)cell.getObjectMap()).getName();
-            App.getGame().getCurrentPlayer().decEnergy(energy);
+            App.getGame().getCurrentPlayer().decEnergyTool(energy);
             cell.setObjectMap(new Mine(x,y,App.getGame().getCurrentPlayerFarm(),12121212));
             return new Result(true, "got a "+name);
         }else if(cell.getObjectMap() instanceof Rock){
@@ -213,7 +213,7 @@ public class ToolsController {
                     App.getGame().getCurrentPlayer().getForagingSkill().increaseXp(10);
                     App.getGame().getCurrentPlayer().getMiningSkill().increaseXp(10);
                 }
-                App.getGame().getCurrentPlayer().decEnergy(energy);
+                App.getGame().getCurrentPlayer().decEnergyTool(energy);
                 String name = ((Item)cell.getObjectMap()).getName();
                 if(((Rock) cell.getObjectMap()).getRockType().equals(RockType.BigRock)){
                     Cell cell2 = Finder.findCellByCoordinates(x + 1, y,App.getGame().getCurrentPlayerFarm());
@@ -235,7 +235,7 @@ public class ToolsController {
                 return new Result(true,"broke");
             }
         }else{
-            App.getGame().getCurrentPlayer().decEnergy(Math.max(0,energy-1));
+            App.getGame().getCurrentPlayer().decEnergyTool(Math.max(0,energy-1));
             try{
                 App.getGame().getCurrentPlayer().getInventory().addToInventory((Item)cell.getObjectMap(),1);
             } catch (Exception e) {
@@ -265,7 +265,7 @@ public class ToolsController {
         if(cell.getObjectMap() instanceof Grass){
             Grass grass = (Grass) cell.getObjectMap();
             grass.setFarmland(true);
-            App.getGame().getCurrentPlayer().decEnergy(energy);
+            App.getGame().getCurrentPlayer().decEnergyTool(energy);
             return new Result(true, "grass is ready for shokhm");
         }
         return new Result(false,"it's not a grass!");
@@ -287,7 +287,7 @@ public class ToolsController {
 
         if(cell.getObjectMap() instanceof Tree tree){
             tree.decreaseHitPoints();
-            App.getGame().getCurrentPlayer().decEnergy(energy);
+            App.getGame().getCurrentPlayer().decEnergyTool(energy);
 
             if(tree.isThundered()){
                 App.getGame().getCurrentPlayer().getInventory().addToInventory(new Mineral(MineralType.Coal), 5);
@@ -316,7 +316,7 @@ public class ToolsController {
             }
         }else if(cell.getObjectMap() instanceof ForagingTree foragingTree){
             foragingTree.decreaseHitPoints();
-            App.getGame().getCurrentPlayer().decEnergy(energy);
+            App.getGame().getCurrentPlayer().decEnergyTool(energy);
 
             if(foragingTree.isThundered()){
                 App.getGame().getCurrentPlayer().getInventory().addToInventory(new Mineral(MineralType.Coal), 5);
@@ -343,7 +343,7 @@ public class ToolsController {
     private Result useScythe(Cell cell, Tool tool){
         Scythe scythe = (Scythe) tool;
         int energy = 2;
-        App.getGame().getCurrentPlayer().decEnergy(energy);
+        App.getGame().getCurrentPlayer().decEnergyTool(energy);
 
         if(cell.getObjectMap() instanceof Bush){
             cell.setObjectMap(new Grass());
@@ -442,7 +442,7 @@ public class ToolsController {
     private Result useMilkPale(Cell cell, Tool tool){
         MilkPale milkPale = (MilkPale) tool;
         int energy = 4;
-        App.getGame().getCurrentPlayer().decEnergy(energy);
+        App.getGame().getCurrentPlayer().decEnergyTool(energy);
 
         for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
             for (Animal animal : barn.getAnimals()) {
@@ -486,7 +486,7 @@ public class ToolsController {
         Shear shear = (Shear) tool;
         int energy = 4;
 
-        App.getGame().getCurrentPlayer().decEnergy(energy);
+        App.getGame().getCurrentPlayer().decEnergyTool(energy);
 
         for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
             for (Animal animal : barn.getAnimals()) {

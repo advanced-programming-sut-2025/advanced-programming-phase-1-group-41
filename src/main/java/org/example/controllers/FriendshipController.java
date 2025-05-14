@@ -1,6 +1,7 @@
 package org.example.controllers;
 
 import org.example.models.*;
+import org.example.models.buildings.marketplaces.items.MarketplaceItems;
 import org.example.models.foragings.Crop;
 import org.example.models.foragings.Nature.Flower;
 import org.example.models.items.Item;
@@ -183,24 +184,87 @@ public class FriendshipController {
         if(player2 == null){
             return new Result(false, "Player not found!");
         }
-        String flowerName = matcher.group("flowerName");
-        Crop flower = Flower.parseItem(flowerName);
-        if(flower == null){
-            return new Result(false, "Flower not found!");
+        Friendship friendship = player.findFriendship(player2);
+        if(friendship.getFriendshipXp() < 300){
+            return new Result(false, "You are not enough friends to give flower.");
+        }
+//        String flowerName = matcher.group("flowerName");
+//        Crop flower = Flower.parseItem(flowerName);
+//        if(flower == null){
+//            return new Result(false, "Flower not found!");
+//        }
+        Slot slot = App.getGame().getCurrentPlayer().getInventory().getSlotByItem(MarketplaceItems.Bouquet);
+        if(slot == null){
+            return new Result(false, "Bouquet not found in your inventory!");
+        }
+        if(Math.abs(player.getX() - player2.getX()) <= 1 && Math.abs(player.getY() - player2.getY()) <= 1
+                && player.isPlayerIsInVillage() && player2.isPlayerIsInVillage()){
+            player.getInventory().removeFromInventory(MarketplaceItems.Bouquet, 1);
+            player2.getInventory().addToInventory(MarketplaceItems.Bouquet, 1);
+            friendship.giveFlower();
+            friendship.interact();
+            friendship.increaseLevel(player);
+            return new Result(true, "Awww, you gave " + player2.getUser().getUsername() + " a bouquet :))");
+        }
+        return new Result(false, "You should be next to each other!");
+    }
+    public Result propose(Matcher matcher) {
+        String username = matcher.group("username");
+        Player player = App.getGame().getCurrentPlayer();
+        Player player2 = Finder.findPlayerByUsername(username);
+        if(player2 == null){
+            return new Result(false, "Player not found!");
+        }
+        if(!player.getUser().getGender().equals(Gender.Male)){
+            return new Result(false, "I'm sorry but you can't propose, you should be male.");
+        }
+        if(player2.getUser().getGender().equals(Gender.Male)){
+            return new Result(false, "I'm sorry but are you LGBTQ+ or smth?!");
         }
         Friendship friendship = player.findFriendship(player2);
-//        if(Math.abs(player.getX() - player2.getX()) <= 1 && Math.abs(player.getY() - player2.getY()) <= 1
-//                && player.isPlayerIsInVillage() && player2.isPlayerIsInVillage()){
-//            Gift gift = new Gift(player, player2, new Slot(slot.getItem(), amount));
-//            player.getInventory().removeFromInventory(slot.getItem(), amount);
-//            player2.getInventory().addToInventory(slot.getItem(), amount);
-//            player2.addNewGift(gift);
-//            player2.addReceivedGift(gift);
-//            friendship.interact();
-//            friendship.increaseLevel(player);
-//            return new Result(true, "Gift sent successfully!");
-//        }
-        return null;
-
+        if(friendship.getFriendshipXp() < 400){
+            return new Result(false, "You are not enough close yet to propose.");
+        }
+        Slot slot = App.getGame().getCurrentPlayer().getInventory().getSlotByItem(MarketplaceItems.WeddingRing);
+        if(slot == null){
+            return new Result(false, "Bouquet not found in your inventory!");
+        }
+        if(Math.abs(player.getX() - player2.getX()) <= 1 && Math.abs(player.getY() - player2.getY()) <= 1
+                && player.isPlayerIsInVillage() && player2.isPlayerIsInVillage()){
+            friendship.propose(player);
+            return new Result(true, "You proposed " + player2.getUser().getUsername() + " :b");
+        }
+        return new Result(false, "You should be next to each other!");
+    }
+    public Result respond(Matcher matcher) {
+        String username = matcher.group("username");
+        Player player = App.getGame().getCurrentPlayer();
+        Player player2 = Finder.findPlayerByUsername(username);
+        if(player2 == null){
+            return new Result(false, "Player not found!");
+        }
+        String respond = matcher.group(1);
+        if(respond == null){
+            return new Result(false, "Invalid respond!");
+        }
+//        respond = respond.substring(1);
+        Friendship friendship = player.findFriendship(player2);
+        if(friendship.getProposer() == null){
+            return new Result(false, "He didn't propose you yet O_o");
+        }
+        if(friendship.getProposer().equals(player)){
+            return new Result(true, "Bro you wanna " + respond + " yourself XD");
+        }
+        if(respond.equals("reject")){
+            friendship.reject();
+            player2.setDepressionDaysLeft(7);
+            return new Result(true, "You rejected " + player2.getUser().getUsername() + " ;((\npoor " + player2.getUser().getUsername() + " D:");
+        }
+        player.getInventory().addToInventory(MarketplaceItems.WeddingRing, 1);
+        player2.getInventory().removeFromInventory(MarketplaceItems.WeddingRing, 1);
+        friendship.marry();
+        friendship.interact();
+        friendship.increaseLevel(player);
+        return new Result(true, "You are so great for each other!");
     }
 }

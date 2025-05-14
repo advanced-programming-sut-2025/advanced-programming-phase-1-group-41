@@ -86,6 +86,11 @@ public class GameMenuController {
         for(Gift gift : player.getNewGifts()){
             System.out.println(gift.toString());
         }
+        for(Friendship friendship : App.getGame().getCurrentPlayer().getFriendships()){
+            if(friendship.getProposer() != null && !friendship.getProposer().equals(player)){
+                System.out.println(friendship.getProposer().getUser().getUsername() + " has proposed you :]");
+            }
+        }
     }
 
     public Result tradeMenu(Matcher matcher){ return null ;}

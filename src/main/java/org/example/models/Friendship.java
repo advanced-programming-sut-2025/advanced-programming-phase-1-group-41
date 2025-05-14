@@ -14,6 +14,8 @@ public class Friendship {
     private boolean hadTalkingToday = false;
     private boolean hadHugToday = false;
     private boolean gaveFlower = false;
+    private boolean areMarried = false;
+    private Player proposer = null;
 
     public Friendship(Player player1, Player player2) {
         this.player1 = player1;
@@ -67,14 +69,21 @@ public class Friendship {
             }
             int previousLevel = level;
             for(FriendshipLevel friendshipLevel : FriendshipLevel.values()){
-                if(friendshipLevel.getLevel() == level){
-                    if((level >= 2 && gaveFlower) || level <= 1){
+                if(friendshipLevel.getLevel() == level + 1){
+                    if((level == 2 && gaveFlower) || level <= 1 || (level >= 3 && areMarried)){
                         this.friendshipLevel = friendshipLevel;
                         friendshipXp -= 100 * (level + 1);
                         level++;
                         System.out.println("You and " + playerName + " are now " + friendshipLevel.getName());
+                        break;
                     } else if(level == 2){
                         System.out.println("You and " + playerName + " can become " + friendshipLevel.getName() + " by giving each other a flower!");
+                        break;
+                    } else if(level == 3){
+                        if(!player1.getUser().getGender().equals(player2.getUser().getGender())){
+                            System.out.println("You and " + playerName + " can become " + friendshipLevel.getName() + " by proposing!");
+                        }
+                        break;
                     }
                 }
             }
@@ -111,6 +120,9 @@ public class Friendship {
     public void setLastReadMessage() {
         lastReadMessage = talks.size();
     }
+    public Player getProposer() {
+        return proposer;
+    }
     public void rateGift(int rate, Player player) {
         int xp = (rate - 3) * 30 + 15;
         friendshipXp += xp;
@@ -121,11 +133,15 @@ public class Friendship {
         }
     }
     public void interact() {
+        if(!hadInteractionToday){
+            player1.incEnergy(50);
+            player2.incEnergy(50);
+        }
         hadInteractionToday = true;
     }
     public void talk() {
         if(!hadTalkingToday){
-            friendshipXp += 20;
+            friendshipXp += 100;
         }
         hadTalkingToday = true;
     }
@@ -137,6 +153,13 @@ public class Friendship {
     }
     public void giveFlower() {
         gaveFlower = true;
+    }
+    public void propose(Player player) {
+        proposer = player;
+    }
+    public void marry(){
+        areMarried = true;
+        proposer = null;
     }
     public void dailyUpdate() {
         if(!hadInteractionToday) {
@@ -157,6 +180,17 @@ public class Friendship {
         hadInteractionToday = false;
         hadTalkingToday = false;
         hadHugToday = false;
+    }
+    public void reject(){
+        friendshipLevel = FriendshipLevel.Stranger;
+        friendshipXp = 0;
+        level = 0;
+        hadInteractionToday = false;
+        hadTalkingToday = false;
+        hadHugToday = false;
+        gaveFlower = false;
+        areMarried = false;
+        proposer = null;
     }
 
     public String showResult(Player player) {
@@ -189,7 +223,7 @@ public class Friendship {
         for(int i = lastReadMessage; !talks.isEmpty() && i < talks.size(); i++){
             result.append(talks.get(i).getFirst()).append(": ").append(talks.get(i).get(1)).append("\n");
         }
-        result.delete(result.length() - 1, result.length());
+//        result.delete(result.length() - 1, result.length());
         return result.toString();
     }
 }

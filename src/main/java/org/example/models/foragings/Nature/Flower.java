@@ -36,6 +36,10 @@ public enum Flower implements Item {
         return cropType.getBaseSellPrice();
     }
 
+    public CropType getCropType() {
+        return cropType;
+    }
+
     public static Crop parseItem(String item) {
         for (Flower value : Flower.values()) {
             if(value.getName().equalsIgnoreCase(item)){

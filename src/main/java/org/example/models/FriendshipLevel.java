@@ -5,7 +5,8 @@ public enum FriendshipLevel {
     Stranger("Strangers", 0),
     Friend("Just Friends", 1),
     CloseFriend("Close Friends", 2),
-    BestFriend("Best Friends", 3),
+//    BestFriend("Best Friends", 3),
+    Partner("Partners", 3),
     Spouse("Married",4),
     ;
 

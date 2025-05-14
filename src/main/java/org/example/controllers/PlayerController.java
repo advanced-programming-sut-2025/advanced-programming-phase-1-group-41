@@ -58,7 +58,7 @@ public class PlayerController {
     }
 
     public Result cheatEnergyUnlimited(Matcher matcher) {
-        App.getGame().getCurrentPlayer().setEnergyUnilimited(true);
+        App.getGame().getCurrentPlayer().setEnergyUnlimited(true);
         return new Result(true, App.getGame().getCurrentPlayer().getUser().getUsername()+
                 " energy is now unlimited");
     }

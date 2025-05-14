@@ -4,12 +4,10 @@ import org.example.controllers.WeatherController;
 import org.example.models.App;
 import org.example.models.Cell;
 import org.example.models.Finder;
-import org.example.models.foragings.Nature.Grass;
+import org.example.models.buildings.marketplaces.items.MarketplaceItems;
+import org.example.models.foragings.Nature.*;
 import org.example.models.WeatherType;
 import org.example.models.foragings.*;
-import org.example.models.foragings.Nature.Plant;
-import org.example.models.foragings.Nature.Rock;
-import org.example.models.foragings.Nature.Tree;
 import org.example.models.items.CraftableItem;
 import org.example.models.items.CraftableMachine;
 
@@ -123,6 +121,9 @@ public class FarmBuilder {
         App.getGame().getCurrentPlayer().getInventory().addToInventory(new Seed(SeedType.CoffeeBeanSeed), 100);
         App.getGame().getCurrentPlayer().getInventory().addToInventory(CraftableMachine.DeluxeScarecrow, 100);
         App.getGame().getCurrentPlayer().getInventory().addToInventory(CraftableMachine.Scarecrow, 100);
+        App.getGame().getCurrentPlayer().getInventory().addToInventory(new Crop(Flower.Poppy.getCropType()), 100);
+        App.getGame().getCurrentPlayer().getInventory().addToInventory(MarketplaceItems.Bouquet, 100);
+        App.getGame().getCurrentPlayer().getInventory().addToInventory(MarketplaceItems.WeddingRing, 100);
     }
     public void growTrees(){
         List<Tree> toRemove = new ArrayList<>();

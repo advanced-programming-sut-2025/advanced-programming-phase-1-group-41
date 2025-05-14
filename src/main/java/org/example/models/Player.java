@@ -39,7 +39,8 @@ public class Player {
     private int x;
     private int y;
     private double energy;
-    private boolean energyUnilimited;
+    private boolean energyUnlimited;
+    private int depressionDaysLeft = 0;
     @Transient
     private Inventory inventory;
     @Transient
@@ -93,7 +94,7 @@ public class Player {
         y = 0;
         energy = 100;
         this.inventory = new Inventory();
-        this.energyUnilimited = false;
+        this.energyUnlimited = false;
         this.currentTool = null;
         this.cookingRecipes = new ArrayList<>();
         this.cookingRecipes.add(CookingRecipe.BakedFish);
@@ -237,6 +238,10 @@ public class Player {
         this.energy = energy;
     }
     public void decEnergy(double delta) {
+        App.getGame().incRoundEnergy(delta);
+        this.energy -= delta;
+    }
+    public void decEnergyTool(double delta) {
         delta *= App.getGame().getWeatherType().getEnergy();
         App.getGame().incRoundEnergy(delta);
         this.energy -= delta;
@@ -246,12 +251,12 @@ public class Player {
     }
 
 
-    public boolean isEnergyUnilimited() {
-        return energyUnilimited;
+    public boolean isEnergyUnlimited() {
+        return energyUnlimited;
     }
 
-    public void setEnergyUnilimited(boolean energyUnilimited) {
-        this.energyUnilimited = energyUnilimited;
+    public void setEnergyUnlimited(boolean energyUnlimited) {
+        this.energyUnlimited = energyUnlimited;
     }
 
     public Tool getCurrentTool() {
@@ -287,6 +292,10 @@ public class Player {
         return fishingSkill;
     }
 
+    public void setDepressionDaysLeft(int depressionDaysLeft) {
+        this.depressionDaysLeft = depressionDaysLeft;
+    }
+
     public ArrayList<Machine> getOnGoingMachines() {
         return onGoingMachines;
     }
@@ -314,6 +323,16 @@ public class Player {
             }
         }
         return null;
+    }
+
+    public void dailyUpdates(){
+        //TODO Half Energy
+        if(depressionDaysLeft > 0){
+            depressionDaysLeft--;
+            energy = energy / 2;
+        }
+        money += savings;
+        savings = 0;
     }
 
     public ArrayList<CraftingRecipe> getCraftingRecipes() {
