@@ -6,11 +6,20 @@ import org.example.models.ObjectMap;
 public class Door implements Building {
     @Override
     public String getChar() {
-        return Colors.colorize(250,0,"[]");
+        if(isClosed){
+            return Colors.colorize(250,0,"[]");
+        }
+        return Colors.colorize(196,0,"][");
     }
 
     @Override
     public String getName() {
         return "Door";
+    }
+
+    boolean isClosed = true;
+
+    public void setClosed(boolean closed) {
+        isClosed = closed;
     }
 }

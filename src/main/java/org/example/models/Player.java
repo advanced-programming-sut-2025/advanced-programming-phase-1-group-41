@@ -16,7 +16,16 @@ import java.util.ArrayList;
 public class Player {
 
     public String getChar() {
-        return Colors.colorize(0,199,":]");
+        if(farmId == 1){
+            return Colors.colorize(0,199,":]");
+        }
+        if(farmId == 2){
+            return Colors.colorize(0,12,":]");
+        }
+        if(farmId == 3){
+            return Colors.colorize(0,226,":]");
+        }
+        return Colors.colorize(0,6,":]");
     }
 
     @Id
