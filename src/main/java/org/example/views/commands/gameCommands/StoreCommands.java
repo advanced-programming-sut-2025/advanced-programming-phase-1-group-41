@@ -10,7 +10,7 @@ public enum StoreCommands implements Command {
     ShowCurrentMenu("\\s*menu\\s+show\\s+(?<menuName>.*)\\s*"),
     ShowAllProducts("\\s*show\\s+all\\s+products\\s*"),
     ShowAllAvailableProducts("\\s*show\\s+all\\s+available\\s+products\\s*"),
-    Purchase("\\s*purchase\\s+(?<productName>.*)\\s+-n\\s+(?<count>.*)\\s*"),
+    Purchase("\\s*purchase\\s+(?<productName>.+?)(?=\\s+-n\\s+\\d+|$)\\s*(-n\\s+(?<count>\\d+))?\\s*"),
     CheatAddDollars("\\s*cheat\\s+add\\s+(?<count>\\d+)\\s+dollars\\s*"),
     Sell("\\s*sell\\s+(?<productName>.+)\\s+-n\\s+(?<count>\\d+)\\s*"),
     ;

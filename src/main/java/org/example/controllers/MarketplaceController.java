@@ -88,7 +88,13 @@ public class MarketplaceController {
         }
         Marketplace mp = (Marketplace) currentCell.getObjectMap();
         String itemName = matcher.group(1).trim();
-        int wantedQuantity = Integer.parseInt(matcher.group(2).trim());
+        String wqn = matcher.group("count");
+        int wantedQuantity;
+        if(wqn != null){
+            wantedQuantity = Integer.parseInt(wqn.trim());
+        }else{
+            wantedQuantity = 1;
+        }
         Item item = Finder.parseItem(itemName);
         if(item == null){
             return new Result(false, "Item doesn't exist");

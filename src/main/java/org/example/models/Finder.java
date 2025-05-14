@@ -4,10 +4,7 @@ import org.bson.types.ObjectId;
 import org.example.models.buildings.marketplaces.items.MarketplaceItems;
 import org.example.models.buildings.marketplaces.items.SaloonItems;
 import org.example.models.foragings.*;
-import org.example.models.foragings.Nature.Mineral;
-import org.example.models.foragings.Nature.MineralType;
-import org.example.models.foragings.Nature.Rock;
-import org.example.models.foragings.Nature.Wood;
+import org.example.models.foragings.Nature.*;
 import org.example.models.items.*;
 import org.example.models.items.Products.ProductType;
 import org.example.models.items.craftableitems.CraftableNames;
@@ -81,6 +78,9 @@ public class Finder {
         }
         if(ProductType.parseProductType(itemName)!=null){
             return ProductType.parseProductType(itemName);
+        }
+        if(Flower.parseItem(itemName)!=null){
+            return Flower.parseItem(itemName);
         }
         // TODO etc
 
