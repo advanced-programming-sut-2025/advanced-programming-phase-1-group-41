@@ -6,6 +6,8 @@ import org.example.models.animals.animalKinds.*;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.ShippingBin;
 import org.example.models.buildings.Well;
+import org.example.models.buildings.animalContainer.BarnType;
+import org.example.models.buildings.animalContainer.CoopType;
 import org.example.models.buildings.marketplaces.*;
 import org.example.models.foragings.Nature.Rock;
 import org.example.models.foragings.Nature.Wood;
@@ -317,8 +319,88 @@ public class MarketplaceController {
         return new Result(true,"");
     }
 
-    public Result buildBaoop(double cost, int rockCount, int woodCount){
-        return null;
+    public Result buildBaoop(double cost, int rockCount, int woodCount, int index){
+        Result preResult = inMarketPlace();
+        if(!preResult.success()){
+            return preResult;
+        }
+        Slot rockSlot = new Slot(new Rock(), rockCount);
+        Slot woodSlot = new Slot(new Wood(), woodCount);
+        Slot playerRock = inventory.getSlotByItem(rockSlot.getItem());
+        Slot playerWood = inventory.getSlotByItem(woodSlot.getItem());
+        if(playerRock == null || playerWood ==null){
+            return new Result(false,"you're missing a material..");
+        }
+        if(playerRock.getQuantity() < rockSlot.getQuantity()){
+            return new Result(false,"need "+(rockSlot.getQuantity()-playerRock.getQuantity())+" more rock!");
+        }
+        if(playerWood.getQuantity() < woodSlot.getQuantity()){
+            return new Result(false, "need"+(woodSlot.getQuantity()-playerWood.getQuantity())+" more rock!");
+        }
+        if(player.getMoney() < cost){
+            return new Result(false, "need "+(cost-player.getMoney())+" more money!");
+        }
+        CarpenterShop cr = null;
+        if((currentCell.getObjectMap() instanceof CarpenterShop carpenterShop)){
+            cr = carpenterShop;
+        }else{
+            return new Result(false, "you're not in CarpenterShop!");
+        }
+        if(index > 2){
+            index -= 3;
+            switch (index){
+                case 0 -> {
+                    if(cr.getCoopLimits().get(CoopType.Normal) >0){
+                        cr.getCoopLimits().put(CoopType.Normal, 0);
+                    }else{
+                        return new Result(false,"comeback tmrw..");
+                    }
+                }
+                case 1-> {
+                    if(cr.getCoopLimits().get(CoopType.Big) >0){
+                        cr.getCoopLimits().put(CoopType.Big, 0);
+                    }else{
+                        return new Result(false,"comeback tmrw..");
+                    }
+                }
+                case 2-> {
+                    if(cr.getCoopLimits().get(CoopType.Deluxe) >0){
+                        cr.getCoopLimits().put(CoopType.Deluxe, 0);
+                    }else{
+                        return new Result(false,"comeback tmrw..");
+                    }
+                }
+            }
+        }else{
+            switch (index){
+                case 0 -> {
+                    if(cr.getBarnLimits().get(BarnType.Normal) >0){
+                        cr.getBarnLimits().put(BarnType.Normal, 0);
+                    }else{
+                        return new Result(false,"comeback tmrw..");
+                    }
+                }
+                case 1-> {
+                    if(cr.getBarnLimits().get(BarnType.Big) >0){
+                        cr.getBarnLimits().put(BarnType.Big, 0);
+                    }else{
+                        return new Result(false,"comeback tmrw..");
+                    }
+                }
+                case 2-> {
+                    if(cr.getBarnLimits().get(BarnType.Deluxe) >0){
+                        cr.getBarnLimits().put(BarnType.Deluxe, 0);
+                    }else{
+                        return new Result(false,"comeback tmrw..");
+                    }
+                }
+            }
+        }
+
+        inventory.removeFromInventory(rockSlot.getItem(), rockSlot.getQuantity());
+        inventory.removeFromInventory(woodSlot.getItem(), woodSlot.getQuantity());
+        player.decMoney(cost);
+        return new Result(true,"");
     }
 
 }

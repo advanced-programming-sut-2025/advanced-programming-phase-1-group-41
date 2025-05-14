@@ -120,4 +120,13 @@ public class CarpenterShop extends Marketplace implements Building {
             }
         }
     }
+
+
+    public HashMap<BarnType, Integer> getBarnLimits() {
+        return barnLimits;
+    }
+
+    public HashMap<CoopType, Integer> getCoopLimits() {
+        return coopLimits;
+    }
 }

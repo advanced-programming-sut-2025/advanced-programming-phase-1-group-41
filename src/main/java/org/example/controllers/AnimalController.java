@@ -22,26 +22,32 @@ import static org.example.models.buildings.animalContainer.CoopType.parseCoop;
 
 public class AnimalController {
     // the items needed for building barn and coop
-    double cost;
-    int rockCount;
-    int woodCount;
-
+    double cost = 100000000;
+    int rockCount = 100000000;
+    int woodCount = 100000000;
+    int index = 0;
     private void setBarnNeeds(BarnType barnType){
         switch(barnType){
             case Normal -> {
                 cost = 6000;
                 woodCount = 350;
                 rockCount = 150;
+                index = 0;
             }
             case Big -> {
                 cost = 12000;
                 woodCount = 450;
                 rockCount = 200;
+                index = 1;
             }
             case Deluxe -> {
                 cost = 25000;
                 woodCount = 550;
                 rockCount = 300;
+                index = 2;
+            }
+            default -> {
+                System.out.println("smth went wrong..");
             }
         }
     }
@@ -52,16 +58,22 @@ public class AnimalController {
                 cost = 4000;
                 woodCount = 300;
                 rockCount = 100;
+                index = 3;
             }
             case Big -> {
                 cost = 10000;
                 woodCount = 400;
                 rockCount = 150;
+                index = 4;
             }
             case Deluxe -> {
                 cost = 20000;
                 woodCount = 500;
                 rockCount = 200;
+                index = 5;
+            }
+            default -> {
+                System.out.println("smth went wrong..");
             }
         }
     }
@@ -116,6 +128,10 @@ public class AnimalController {
                 }
             }
         }
+        Result preResult = (new MarketplaceController()).buildBaoop(cost, rockCount, woodCount, index);
+        if(!preResult.success()){
+            return preResult;
+        }
         App.getGame().getCurrentPlayerFarm().creatNewCoop(x, y, coopType);
         return new Result(true, "coop added");
     }
@@ -147,6 +163,10 @@ public class AnimalController {
                     return new Result(false, "there is obstackle in the way");
                 }
             }
+        }
+        Result preResult = (new MarketplaceController()).buildBaoop(cost, rockCount, woodCount, index);
+        if(!preResult.success()){
+            return preResult;
         }
         App.getGame().getCurrentPlayerFarm().creatNewBarn(x, y, barnType);
         return new Result(true, "Barn added");
