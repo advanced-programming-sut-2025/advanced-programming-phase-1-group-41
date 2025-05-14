@@ -11,7 +11,22 @@ public class FriendshipView {
         Matcher matcher;
         if((matcher = FriendShipCommands.Friendships.getMatcher(input))!=null){
             System.out.println(controller.friendshipsList(matcher));
-        }else{
+        } else if((matcher = FriendShipCommands.Talk.getMatcher(input))!=null){
+            System.out.println(controller.talk(matcher));
+        } else if((matcher = FriendShipCommands.TalkHistory.getMatcher(input))!=null){
+            System.out.println(controller.talkHistory(matcher));
+        } else if((matcher = FriendShipCommands.Gift.getMatcher(input))!=null){
+            System.out.println(controller.gift(matcher));
+        } else if((matcher = FriendShipCommands.GiftList.getMatcher(input))!=null){
+            System.out.println(controller.giftList(matcher));
+        } else if((matcher = FriendShipCommands.GiftRate.getMatcher(input))!=null){
+            System.out.println(controller.giftRate(matcher));
+        } else if((matcher = FriendShipCommands.GiftHistory.getMatcher(input))!=null){
+            System.out.println(controller.giftHistory(matcher));
+        } else if((matcher = FriendShipCommands.Hug.getMatcher(input))!=null){
+            System.out.println(controller.hug(matcher));
+        }
+        else{
             return false;
         }
         return true;

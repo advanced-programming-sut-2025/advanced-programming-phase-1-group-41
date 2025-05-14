@@ -1,6 +1,7 @@
 package org.example.models;
 
 public enum FriendshipLevel {
+    Enemy("Enemies", -1),
     Stranger("Strangers", 0),
     Friend("Just Friends", 1),
     CloseFriend("Close Friends", 2),

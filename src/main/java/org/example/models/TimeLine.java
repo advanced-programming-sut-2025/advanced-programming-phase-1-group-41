@@ -5,6 +5,7 @@ import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import org.bson.types.ObjectId;
 import org.example.controllers.AnimalController;
+import org.example.controllers.FriendshipController;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.marketplaces.Blacksmith;
 import org.example.models.buildings.marketplaces.MarnieRanch;
@@ -74,6 +75,7 @@ public class TimeLine {
         for(Farm farm : App.getGame().getFarms()){
             farm.update();
         }
+        FriendshipController.dailyUpdate();
 
         day++;
         if(day >= 28){

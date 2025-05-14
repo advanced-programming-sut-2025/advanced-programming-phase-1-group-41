@@ -8,7 +8,7 @@ public enum FriendShipCommands implements Command {
     Friendships("\\s*friendships\\s*"),
     Talk("\\s*talk\\s+-u\\s+(?<username>.*)\\s+-m\\s+(?<message>.*)\\s*"),
     TalkHistory("\\s*talk\\s+history\\s+-u\\s+(?<username>.*)\\s*"),
-    Gift("\\s*gift\\s+-u\\s+<username>.*)\\s+-i\\s+(?<item>.*)\\s+-a\\s+(?<amount>.*)\\s*"),
+    Gift("\\s*gift\\s+-u\\s+(?<username>.*)\\s+-i\\s+(?<item>.*)\\s+-a\\s+(?<amount>.*)\\s*"),
     GiftList("\\s*gift\\s+list\\s*"),
     GiftRate("\\s*gift\\s+rate\\s+-i\\s+(?<giftNumber>.*)\\s+-r\\s+(?<rate>.*)\\s*"),
     GiftHistory("\\s*gift\\s+history\\s+-u\\s+(?<username>.*)\\s*"),

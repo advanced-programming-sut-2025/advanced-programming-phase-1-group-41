@@ -6,7 +6,6 @@ import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
 import org.example.models.items.*;
 import org.example.models.items.craftablemachines.Machine;
-import org.example.models.locations.Farm;
 import org.example.models.skills.Skill;
 import org.example.models.tools.Tool;
 
@@ -59,6 +58,10 @@ public class Player {
     private boolean playerIsInVillage;
     @Transient
     private ArrayList<Friendship> friendships;
+    @Transient
+    private final ArrayList<Gift> newGifts = new ArrayList<>();
+    @Transient
+    private final ArrayList<Gift> receivedGifts = new ArrayList<>();
 //    private Farm farm;
 //    private ArrayList<Animal> animals;
 //    private ArrayList<Skill> skills;
@@ -176,6 +179,12 @@ public class Player {
 
     public void addFriendship(Friendship friendship){friendships.add(friendship);}
 
+    public void addReceivedGift(Gift gift){receivedGifts.add(gift);}
+
+    public void addNewGift(Gift gift){newGifts.add(gift);}
+
+    public void removeNewGift(Gift gift){newGifts.remove(gift);}
+
     public void setUserId(ObjectId userId) {
         this.userId = userId;
     }
@@ -268,6 +277,10 @@ public class Player {
 
     public ArrayList<Friendship> getFriendships() {return friendships;}
 
+    public ArrayList<Gift> getReceivedGifts(){return receivedGifts;}
+
+    public ArrayList<Gift> getNewGifts(){return newGifts;}
+
     public boolean hasRecipe(Food food){
         System.out.println("food is: "+food+" "+food.getRecipe());
         for (CookingRecipe recipe : cookingRecipes) {
@@ -277,6 +290,14 @@ public class Player {
             }
         }
         return false;
+    }
+    public Friendship findFriendship(Player player){
+        for (Friendship friendship : friendships) {
+            if(friendship.getPlayer1() == player || friendship.getPlayer2() == player){
+                return friendship;
+            }
+        }
+        return null;
     }
 
     public ArrayList<CraftingRecipe> getCraftingRecipes() {
