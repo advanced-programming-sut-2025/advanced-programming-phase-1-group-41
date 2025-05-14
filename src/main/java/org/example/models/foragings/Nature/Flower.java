@@ -14,7 +14,7 @@ public enum Flower implements Item {
     SummerSpangle(CropType.SummerSpangle)
     ;
 
-    private CropType cropType;
+    private final CropType cropType;
 
     Flower(CropType cropType) {
         this.cropType = cropType;
@@ -23,7 +23,7 @@ public enum Flower implements Item {
 
     @Override
     public String getChar() {
-        return "ki";
+        return "fl";
     }
 
     @Override
@@ -36,7 +36,7 @@ public enum Flower implements Item {
         return cropType.getBaseSellPrice();
     }
 
-    public static Item parseItem(String item) {
+    public static Crop parseItem(String item) {
         for (Flower value : Flower.values()) {
             if(value.getName().equalsIgnoreCase(item)){
                 return new Crop(value.cropType);

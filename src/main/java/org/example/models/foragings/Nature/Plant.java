@@ -10,7 +10,7 @@ import java.util.Random;
 public class Plant implements Nature {
     @Override
     public String getChar() {
-        return Colors.colorize(109,0,"**");
+        return Colors.colorize(109,0,"++");
     }
 
     @Override

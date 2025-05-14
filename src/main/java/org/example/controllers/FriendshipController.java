@@ -1,6 +1,8 @@
 package org.example.controllers;
 
 import org.example.models.*;
+import org.example.models.foragings.Crop;
+import org.example.models.foragings.Nature.Flower;
 import org.example.models.items.Item;
 import org.example.models.items.Slot;
 
@@ -176,21 +178,28 @@ public class FriendshipController {
     }
     public Result flower(Matcher matcher) {
         String username = matcher.group("username");
-        Player player = Finder.findPlayerByUsername(username);
-        if(player == null){
+        Player player = App.getGame().getCurrentPlayer();
+        Player player2 = Finder.findPlayerByUsername(username);
+        if(player2 == null){
             return new Result(false, "Player not found!");
         }
         String flowerName = matcher.group("flowerName");
-//        ArrayList<String> flowerNames = new ArrayList<>(Arrays.asList(
-//                "BlueJazz",
-//                "Cauliflower",
-//                ""
-//                "Poppy",
-//                "SummerSpangle",
-//                "Sunflower",
-//                "Tulip",
-//                "FairyRose"
-//        ));
+        Crop flower = Flower.parseItem(flowerName);
+        if(flower == null){
+            return new Result(false, "Flower not found!");
+        }
+        Friendship friendship = player.findFriendship(player2);
+//        if(Math.abs(player.getX() - player2.getX()) <= 1 && Math.abs(player.getY() - player2.getY()) <= 1
+//                && player.isPlayerIsInVillage() && player2.isPlayerIsInVillage()){
+//            Gift gift = new Gift(player, player2, new Slot(slot.getItem(), amount));
+//            player.getInventory().removeFromInventory(slot.getItem(), amount);
+//            player2.getInventory().addToInventory(slot.getItem(), amount);
+//            player2.addNewGift(gift);
+//            player2.addReceivedGift(gift);
+//            friendship.interact();
+//            friendship.increaseLevel(player);
+//            return new Result(true, "Gift sent successfully!");
+//        }
         return null;
 
     }

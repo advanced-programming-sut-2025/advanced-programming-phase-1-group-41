@@ -30,6 +30,12 @@ public class Lake implements ObjectMap, Obstacle {
             cell.setObjectMap(this);
         }
     }
+    public Lake(int x, int y, Farm farm, int a) {
+        Cell cell = Finder.findCellByCoordinates(x, y, farm);
+        if (cell != null) {
+            cell.setObjectMap(this);
+        }
+    }
     public Lake(int startX, int startY1, Village village) {
         boolean[][] map = new boolean[WIDTH][HEIGHT];
         double startY = (int) Math.sqrt(startX * 55) - 7;

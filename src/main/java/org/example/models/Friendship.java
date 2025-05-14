@@ -13,6 +13,7 @@ public class Friendship {
     private boolean hadInteractionToday = false;
     private boolean hadTalkingToday = false;
     private boolean hadHugToday = false;
+    private boolean gaveFlower = false;
 
     public Friendship(Player player1, Player player2) {
         this.player1 = player1;
@@ -60,18 +61,26 @@ public class Friendship {
 
     public void increaseLevel(Player player) {
         if(friendshipXp >= 100 * (level + 1)){
-            friendshipXp -= 100 * (level + 1);
             String playerName = player1.getUser().getUsername();
             if(playerName.equals(player.getUser().getUsername())){
                 playerName = player2.getUser().getUsername();
             }
+            int previousLevel = level;
             for(FriendshipLevel friendshipLevel : FriendshipLevel.values()){
                 if(friendshipLevel.getLevel() == level){
-                    this.friendshipLevel = friendshipLevel;
-                    level++;
+                    if((level >= 2 && gaveFlower) || level <= 1){
+                        this.friendshipLevel = friendshipLevel;
+                        friendshipXp -= 100 * (level + 1);
+                        level++;
+                        System.out.println("You and " + playerName + " are now " + friendshipLevel.getName());
+                    } else if(level == 2){
+                        System.out.println("You and " + playerName + " can become " + friendshipLevel.getName() + " by giving each other a flower!");
+                    }
                 }
             }
-            System.out.println("You and " + playerName + " are now " + friendshipLevel.getName());
+            if(previousLevel == level){
+                friendshipXp = 100 * (level + 1);
+            }
         }
     }
     public void decreaseLevel(Player player) {
@@ -125,6 +134,9 @@ public class Friendship {
             friendshipXp += 60;
         }
         hadHugToday = true;
+    }
+    public void giveFlower() {
+        gaveFlower = true;
     }
     public void dailyUpdate() {
         if(!hadInteractionToday) {

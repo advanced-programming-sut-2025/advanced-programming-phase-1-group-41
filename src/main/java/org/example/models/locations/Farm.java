@@ -4,6 +4,7 @@ import org.example.controllers.WeatherController;
 import org.example.models.*;
 import org.example.models.animals.Animal;
 import org.example.models.buildings.Door;
+import org.example.models.buildings.Well;
 import org.example.models.foragings.Nature.*;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.Cottage;
@@ -67,6 +68,7 @@ public class Farm {
         greenhouse = new Greenhouse(4,24 + rand.nextInt(4),this);
         buildings.add(greenhouse);
         buildings.add(new Cottage(30 + rand.nextInt(4), 4,this));
+        buildings.add(new Well(20, 50, this));
         mine = new Mine(3,3,this);
 
         int lakeCount = farmType.LakeCoefficient;
