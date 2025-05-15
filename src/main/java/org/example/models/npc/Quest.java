@@ -1,5 +1,7 @@
 package org.example.models.npc;
 
+import org.example.models.App;
+import org.example.models.items.CookingRecipe;
 import org.example.models.items.Slot;
 
 import java.util.ArrayList;
@@ -11,6 +13,9 @@ public class Quest {
     private String questName;
     private String questPreTalk;
     private String questPostTalk;
+    private Double MoneyPrize;
+    private CookingRecipe cookingRecipe;
+    private int friendShip;
 
     public String getQuestName() {
         return questName;
@@ -27,6 +32,30 @@ public class Quest {
     public Quest(Slot request, Slot reward, String questName, String questPreTalk, String questPostTalk) {
         this.request = request;
         this.reward = reward;
+        this.owner = owner;
+        this.questName = questName;
+        this.questPreTalk = questPreTalk;
+        this.questPostTalk = questPostTalk;
+    }
+    public Quest(Slot request, Double MoneyPrize, String questName, String questPreTalk, String questPostTalk) {
+        this.request = request;
+        this.MoneyPrize = MoneyPrize;
+        this.owner = owner;
+        this.questName = questName;
+        this.questPreTalk = questPreTalk;
+        this.questPostTalk = questPostTalk;
+    }
+    public Quest(Slot request, CookingRecipe cookingRecipe, String questName, String questPreTalk, String questPostTalk) {
+        this.request = request;
+        this.cookingRecipe = cookingRecipe;
+        this.owner = owner;
+        this.questName = questName;
+        this.questPreTalk = questPreTalk;
+        this.questPostTalk = questPostTalk;
+    }
+    public Quest(Slot request,int friendShip, String questName, String questPreTalk, String questPostTalk) {
+        this.request = request;
+        this.friendShip = friendShip;
         this.owner = owner;
         this.questName = questName;
         this.questPreTalk = questPreTalk;

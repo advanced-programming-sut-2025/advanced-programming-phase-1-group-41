@@ -1,5 +1,6 @@
 package org.example.models.npc;
 
+import org.example.models.Colors;
 import org.example.models.Occupation;
 import org.example.models.buildings.marketplaces.Marketplace;
 import org.example.models.buildings.npchomes.NPCHome;
@@ -15,7 +16,13 @@ public class Robin extends NPC{
         super(name, job, dialogues, favorites, itemsToGift, quests);
         this.marketplace = marketplace;
         this.home = home;
+        setX(70);setY(13);
     }
+    @Override
+    public String getChar(){
+        return Colors.colorize(198,0,"웃 ");
+    }
+
     public Marketplace getMarketplace() {
         return marketplace;
     }
