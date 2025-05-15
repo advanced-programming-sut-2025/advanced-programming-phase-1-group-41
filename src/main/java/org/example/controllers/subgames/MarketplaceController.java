@@ -9,6 +9,7 @@ import org.example.models.buildings.Well;
 import org.example.models.buildings.animalContainer.BarnType;
 import org.example.models.buildings.animalContainer.CoopType;
 import org.example.models.buildings.marketplaces.*;
+import org.example.models.buildings.marketplaces.items.GeneralStoreItems;
 import org.example.models.foragings.Nature.Rock;
 import org.example.models.foragings.Nature.Wood;
 import org.example.models.items.*;
@@ -180,6 +181,25 @@ public class MarketplaceController {
                 }
             }
         }
+        if(mp instanceof  GeneralStore gs){
+            Backpack bp = Backpack.parseBackpack(itemName);
+            if(bp != null){
+                switch (bp){
+                    case Deluxe -> {
+                        if(player.getInventory().getBackpack() == Backpack.Default){
+                            return new Result(false, "you need to buy a large backpack first");
+                        }
+                    }
+                }
+                if(bp.equals(player.getInventory().getBackpack())){
+                    return new Result(false,"you already have " +
+                            player.getInventory().getBackpack()+" backpack");
+                }
+                if(bp.ordinal() < player.getInventory().getBackpack().ordinal()){
+                    return new Result(false,"you can't downgrade your backpack..");
+                }
+            }
+        }
 
         Item item = Finder.parseItem(itemName);
         if(item == null){
@@ -265,6 +285,24 @@ public class MarketplaceController {
                 return new Result(true,"got "+slot.getItem());
             }
 
+        }
+        if(mp instanceof GeneralStore gs){
+            CraftingRecipe recipe = CraftingRecipe.parseRecipe(item.getName());
+            if(recipe != null){
+                if(!player.getCraftingRecipes().contains(recipe)){
+                    player.getCraftingRecipes().add(recipe);
+                    return new Result(true, wantedQuantity+" "+itemName+" recipe purchased");
+                }else{
+                    return new Result(false,"you just wasted your money..");
+                }
+            }
+
+            Backpack bp = Backpack.parseBackpack(item.getName());
+            if(bp != null){
+                player.getInventory().upgradeBackpack(bp);
+                return new Result(true,"your backpack has been upgraded," +
+                        " new size: "+player.getInventory().getBackpack().getSize());
+            }
         }
         inventory.addToInventory(slot.getItem(), wantedQuantity);
         return new Result(true, wantedQuantity+"x "+itemName+" purchased");

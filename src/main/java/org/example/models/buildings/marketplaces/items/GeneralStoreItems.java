@@ -139,4 +139,13 @@ public enum GeneralStoreItems implements Item {
     public boolean isOffSeason() {
         return isOffSeason;
     }
+
+    public static GeneralStoreItems parseItem(String itemName){
+        for (GeneralStoreItems value : GeneralStoreItems.values()) {
+            if(value.getName().equalsIgnoreCase(itemName)){
+                return value;
+            }
+        }
+        return null;
+    }
 }

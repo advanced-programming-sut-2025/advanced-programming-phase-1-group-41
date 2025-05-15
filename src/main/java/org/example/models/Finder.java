@@ -4,10 +4,7 @@ import org.bson.types.ObjectId;
 import org.example.models.buildings.ShippingBin;
 import org.example.models.buildings.Well;
 import org.example.models.buildings.marketplaces.FishShop;
-import org.example.models.buildings.marketplaces.items.FishShopItems;
-import org.example.models.buildings.marketplaces.items.MarketplaceItems;
-import org.example.models.buildings.marketplaces.items.SaloonItems;
-import org.example.models.buildings.marketplaces.items.Troutsoup;
+import org.example.models.buildings.marketplaces.items.*;
 import org.example.models.foragings.*;
 import org.example.models.foragings.Nature.*;
 import org.example.models.items.*;
@@ -96,6 +93,9 @@ public class Finder {
         }
         if(FishShopItems.parseItem(itemName)!=null){
             return FishShopItems.parseItem(itemName);
+        }
+        if(GeneralStoreItems.parseItem(itemName)!=null){
+            return GeneralStoreItems.parseItem(itemName);
         }
         if(ProductType.parseProductType(itemName)!=null){
             return ProductType.parseProductType(itemName);

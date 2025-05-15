@@ -21,4 +21,13 @@ public enum Backpack {
     public String getName() {
         return name;
     }
+    
+    public static Backpack parseBackpack(String backpack) {
+        for (Backpack value : Backpack.values()) {
+            if(value.getName().equalsIgnoreCase(backpack)){
+                return value;
+            }
+        }
+        return null;
+    }
 }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Inventory {
     private ArrayList<Slot> slots=new ArrayList<>();
-    private Backpack backpack=Backpack.Deluxe;
+    private Backpack backpack=Backpack.Default;
     private int lastGottenSumOfItemsPrice;
     public Inventory()
     {
@@ -28,14 +28,14 @@ public class Inventory {
             slots.add(new Slot(null,0));
         }
     }
-    public void Upgrade(){
-        if(backpack.equals(Backpack.Default)){
+    public void upgradeBackpack(Backpack bp){
+        if(bp.equals(Backpack.Large)){
             backpack = Backpack.Large;
             for(int i = 0; i < backpack.getSize()-Backpack.Default.getSize(); i++){
                 slots.add(new Slot(null,0));
             }
         }
-        else if(backpack.equals(Backpack.Large)){
+        else if(bp.equals(Backpack.Deluxe)){
             backpack = Backpack.Deluxe;
             for(int i = 0; i < backpack.getSize()-Backpack.Large.getSize(); i++){
                 slots.add(new Slot(null,0));
