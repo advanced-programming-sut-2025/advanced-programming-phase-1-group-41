@@ -16,28 +16,42 @@ public abstract class NPC {
     private Occupation job;
     private NPCHome home;
     private ArrayList<String> dialogues;
-    public ArrayList<Item> favorites;
-    public ArrayList<Slot> ItemsToGift;
+    private ArrayList<Item> favorites;
+    private ArrayList<Slot> ItemsToGift;
+    private ArrayList<Quest> quests;
+    private int x=-10;
+    private int y=-10;
 
-    private Quest firstQuest;
-    private Quest secondQuest;
-    private Quest thirdQuest;
+    public int getY() {
+        return y;
+    }
 
-    public NPC(String name) {
-        this.name = name;
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public String getChar(){
+        return "";
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
     }
 
     public NPC(String name, Occupation job, ArrayList<String> dialogues,
                ArrayList<Item> favorites, ArrayList<Slot> itemsToGift,
-               Quest firstQuest, Quest secondQuest, Quest thirdQuest) {
+               ArrayList<Quest> quests) {
         this.name = name;
         this.job = job;
         this.dialogues = dialogues;
         this.favorites = favorites;
         this.ItemsToGift = itemsToGift;
-        this.firstQuest = firstQuest;
-        this.secondQuest = secondQuest;
-        this.thirdQuest = thirdQuest;
+        this.quests = quests;
+
     }
 
     public String getName() {
@@ -48,23 +62,10 @@ public abstract class NPC {
         return job;
     }
 
-    public NPCHome getHome() {
-        return home;
-    }
-
     public String getDialogues() {
         return dialogues.get(new Random().nextInt(dialogues.size()));
     }
 
-    public Quest getFirstQuest() {
-        return firstQuest;
-    }
 
-    public Quest getSecondQuest() {
-        return secondQuest;
-    }
 
-    public Quest getThirdQuest() {
-        return thirdQuest;
-    }
 }

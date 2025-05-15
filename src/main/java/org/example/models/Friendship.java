@@ -213,7 +213,7 @@ public class Friendship {
             return "";
         }
         for(ArrayList<String> talk : talks){
-            result.append(talk.getFirst()).append(": ").append(talk.get(1)).append("\n");
+            result.append(talk.get(0)).append(": ").append(talk.get(1)).append("\n");
         }
         result.delete(result.length() - 1, result.length());
         return result.toString();
@@ -224,7 +224,7 @@ public class Friendship {
             return "";
         }
         for(int i = lastReadMessage; !talks.isEmpty() && i < talks.size(); i++){
-            result.append(talks.get(i).getFirst()).append(": ").append(talks.get(i).get(1)).append("\n");
+            result.append(talks.get(i).get(0)).append(": ").append(talks.get(i).get(1)).append("\n");
         }
 //        result.delete(result.length() - 1, result.length());
         if(result.isEmpty()){

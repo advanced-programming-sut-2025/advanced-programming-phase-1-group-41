@@ -12,6 +12,7 @@ import org.example.models.foragings.Nature.Grass;
 import org.example.models.foragings.Nature.Lake;
 import org.example.models.npc.Clint;
 import org.example.models.npc.NPC;
+import org.example.models.npc.NPCBuilder;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -39,7 +40,6 @@ public class Village { ;
                 cells.add(new Cell(new Grass(), j, i));
             }
         }
-//        NPCs=NPCBuilder();
         for(int i = 0; i < 95; i++){
             for(int j = 0; j < 65; j++){
                 boolean isGrass = false;
@@ -101,6 +101,9 @@ public class Village { ;
         buildings.add(new SebastienHome(12,58,this));
         buildings.add(new RobinHome(24,58,this));
         buildings.add(new HarveyHome(59,54,this));
+
+
+
 
     }
         Random rand = new Random();
@@ -307,7 +310,19 @@ public class Village { ;
             }
         }
     }
+
+    public void setNPCs(ArrayList<NPC> NPCs) {
+        this.NPCs = NPCs;
+    }
+
     public boolean isSpecialPoint(Cell cell){
+        for(NPC npc : NPCs){
+            if(cell.getY()==npc.getY()&&cell.getX()==npc.getX()){
+                System.out.printf(npc.getChar());
+                return true;
+            }
+        }
+
         if(transferCells.contains(cell)){
             showTransferCell(cell);
             return true;

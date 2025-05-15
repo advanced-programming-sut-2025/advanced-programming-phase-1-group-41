@@ -4,6 +4,7 @@ import org.example.controllers.CheckerController;
 import org.example.controllers.MainMenuController;
 import org.example.models.*;
 import org.example.models.locations.Farm;
+import org.example.models.npc.NPCBuilder;
 import org.example.views.commands.MainMenuCommands;
 import org.example.views.commands.gameCommands.GameMainCommands;
 
@@ -65,8 +66,8 @@ public class MainMenu implements AppMenu {
         for(Player player : App.getGame().getPlayers()) {
             Farm farm = Finder.findFarmByPlayer(player);
             assert farm != null;
-            player.setX(farm.getStartPoints().getFirst().getX());
-            player.setY(farm.getStartPoints().getFirst().getY());
+            player.setX(farm.getStartPoints().get(0).getX());
+            player.setY(farm.getStartPoints().get(0).getY());
         }
         for(int i = 0; i < 3; i++) {
             Player player1 = App.getGame().getPlayers().get(i);
@@ -88,6 +89,7 @@ public class MainMenu implements AppMenu {
                 player22.addFriendship(friendship1);
             }
         }
+        new NPCBuilder();
         System.out.println("welcome to the game!");
         App.setMenu(Menu.Game);
     }
