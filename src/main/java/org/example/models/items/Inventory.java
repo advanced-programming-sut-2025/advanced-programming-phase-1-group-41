@@ -56,6 +56,9 @@ public class Inventory {
                 continue;
             }
             if(item.getName().equals((slot.getItem().getName()))){
+                if(Math.abs(item.getPrice() - slot.getItem().getPrice()) > 0.1){
+                    continue;
+                }
                 slot.setQuantity(slot.getQuantity()+quantity);
                 return true;
             }
@@ -125,7 +128,7 @@ public class Inventory {
 
     public boolean removeFromInventory(Item item, int quantity) {
         for(Slot slot : slots){
-            if(slot.getItem() == null) continue;
+            if(slot.getItem() == null || slot.getQuantity() == 0) continue;
             if(slot.getItem().getName().equals(item.getName())){
                 if(slot.getQuantity() >= quantity){
                     slot.setQuantity(slot.getQuantity()-quantity);
@@ -195,7 +198,7 @@ public class Inventory {
 
     public Slot getSlotByItem(Item item){
         for(Slot slot : slots){
-            if(slot == null || slot.getItem() == null) continue;
+            if(slot == null || slot.getItem() == null || slot.getQuantity() == 0) continue;
             if(slot.getItem().getName().equals(item.getName())){
                 return slot;
             }
