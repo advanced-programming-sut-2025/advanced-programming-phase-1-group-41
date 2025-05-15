@@ -106,6 +106,9 @@ public class Finder {
         if(Flower.parseItem(itemName)!=null){
             return Flower.parseItem(itemName);
         }
+        if(Mushroom.parseItem(itemName)!=null){
+            return Mushroom.parseItem(itemName);
+        }
         // TODO etc
 
         return null;
