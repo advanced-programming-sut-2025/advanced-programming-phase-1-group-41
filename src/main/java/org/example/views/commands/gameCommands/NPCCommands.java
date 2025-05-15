@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 
 public enum NPCCommands implements Command {
     MeetNPC("\\s*meet\\s+NPC\\s+(?<npcName>\\S+)\\s*"),
-    GiftNPC("\\s*gift\\s+NPC\\s+(?<npcName>\\S+)\\s+-i\\s+(?<item>\\S+)\\s*"),
+    GiftNPC("\\s*gift\\s+NPC\\s+(?<npcName>\\S+)\\s+-i\\s+(?<item>.*)\\s*"),
     FriendshipNPCList("\\s*friendship\\s+NPC\\s+list\\s*"),
     QuestsList("\\s*quests\\s+list\\s*"),
     QuestFinish("\\s*quests\\s+finish\\s+-i\\s+(?<index>\\d+)\\s*"),

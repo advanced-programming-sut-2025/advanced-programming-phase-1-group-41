@@ -9,6 +9,9 @@ public class Tree implements Nature, Obstacle {
         if(isThundered){
             return Colors.colorize(53,0,(typeIndex/10) + "" + typeIndex % 10);
         }
+        if(treeType.equals(TreeType.Mystic)){
+            return Colors.colorize(53,214 - 6 * currentStage,"MY");
+        }
         return Colors.colorize(53,214 - 6 * currentStage,(typeIndex/10) + "" + typeIndex % 10);
     }
 
@@ -87,7 +90,7 @@ public class Tree implements Nature, Obstacle {
             if(currentStage >= 4){
                 currentStage--;
             } else {
-                currentStageLevel = 0;
+//                currentStageLevel = 0;
             }
         }
     }

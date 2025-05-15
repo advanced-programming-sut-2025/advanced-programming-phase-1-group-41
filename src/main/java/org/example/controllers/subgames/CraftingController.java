@@ -6,10 +6,7 @@ import org.example.models.animals.FishType;
 import org.example.models.buildings.Cottage;
 import org.example.models.buildings.Well;
 import org.example.models.foragings.*;
-import org.example.models.foragings.Nature.MineralType;
-import org.example.models.foragings.Nature.Mushroom;
-import org.example.models.foragings.Nature.Vegetable;
-import org.example.models.foragings.Nature.Wood;
+import org.example.models.foragings.Nature.*;
 import org.example.models.items.*;
 import org.example.models.items.Products.Product;
 import org.example.models.items.Products.ProductType;
@@ -46,6 +43,72 @@ public class CraftingController {
         return new Result(true, "x: " + x + " y: " + y);
     }
 
+
+    private void placeBomb(CraftableMachine craftableMachine, Cell cell) {
+        int size = 3;
+        if(craftableMachine.equals(CraftableMachine.Bomb)){
+            size = 5;
+        } else if(craftableMachine.equals(CraftableMachine.MegaBomb)){
+            size = 7;
+        }
+        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
+        for(int x = cell.getX() - size; x < cell.getX() + size; x++) {
+            for(int y = cell.getY() - size; y < cell.getY() + size; y++) {
+                Cell cell1 = Finder.findCellByCoordinates(x, y, App.getGame().getCurrentPlayerFarm());
+                if(cell1 == null){
+                    continue;
+                }
+                ObjectMap objectMap = cell1.getObjectMap();
+                if(objectMap instanceof Rock || objectMap instanceof Bush || objectMap instanceof Plant
+                    || objectMap instanceof Tree || objectMap instanceof Mineral || objectMap instanceof Crop
+                    || objectMap instanceof ForagingTree || objectMap instanceof ForagingCrop || objectMap instanceof Grass){
+                    if(objectMap instanceof Tree || objectMap instanceof ForagingTree){
+                        inventory.addToInventory(new Wood(), 100);
+                        System.out.println("You got 100 wood by burning a " + objectMap.getName());
+                    } else if(objectMap instanceof Rock){
+                        if(((Rock) objectMap).getRockType() == RockType.BigRock){
+                            continue;
+                        }
+                        inventory.addToInventory(new Rock(), 1);
+                        System.out.println("You got 1 rock by cracking a Small Rock");
+                    } else if(objectMap instanceof Mineral){
+                        inventory.addToInventory(new Mineral(((Mineral) objectMap).getMineralType()), 1);
+                        System.out.println("You got a " + ((Mineral) objectMap).getMineralType().getName() + " by destroying a Mineral.");
+                        cell1.setObjectMap(new Mine(x,y,App.getGame().getCurrentPlayerFarm(),0));
+                        continue;
+                    }
+                    Grass grass = new Grass();
+                    grass.setBombed(true);
+                    cell1.setObjectMap(grass);
+                }
+            }
+        }
+    }
+    public void placeSprinkler(CraftableMachine craftableMachine, Cell cell) {
+        int size = 4;
+        if(craftableMachine.equals(CraftableMachine.QualitySprinkler)){
+            size = 8;
+        }
+        if(craftableMachine.equals(CraftableMachine.IridiumSprinkler)) {
+            size = 24;
+        }
+        for(int x = cell.getX() - size; x < cell.getX() + size; x++) {
+            for (int y = cell.getY() - size; y < cell.getY() + size; y++) {
+                Cell cell1 = Finder.findCellByCoordinates(x, y, App.getGame().getCurrentPlayerFarm());
+                if (cell1 == null) {
+                    continue;
+                }
+                ObjectMap objectMap = cell1.getObjectMap();
+                if(objectMap instanceof Crop crop){
+                    crop.water();
+                    System.out.println("You watered a " + crop.getCropType().getName() + " at " + x + ", " + y);
+                } else if(objectMap instanceof Tree tree){
+                    tree.water();
+                    System.out.println("You watered a " + tree.getTreeType().getName() + " at " + x + ", " + y);
+                }
+            }
+        }
+    }
     public Result placeItem(Matcher matcher) {
         Result preResult = preValidateUseTool(matcher);
         if (!preResult.success()) {
@@ -70,11 +133,28 @@ public class CraftingController {
             && cell.getX() <= App.getGame().getCurrentPlayer().getX()){
                 return new Result(false,"choose another direction");
             }
-            Well well =new Well(cell.getX(), cell.getY(), App.getGame().getCurrentPlayerFarm());
+            Well well = new Well(cell.getX(), cell.getY(), App.getGame().getCurrentPlayerFarm());
             App.getGame().getCurrentPlayerFarm().getBuildings().add(well);
+            inventory.removeFromInventory(item, 1);
             return new Result(true, "well was placed");
         }
-
+        if(item instanceof CraftableMachine machine){
+            inventory.removeFromInventory(item, 1);
+            if(machine.equals(CraftableMachine.Bomb) || machine.equals(CraftableMachine.CherryBomb) || machine.equals(CraftableMachine.MegaBomb)){
+                placeBomb(machine, cell);
+                return new Result(true, "Ka-Booooom");
+            }
+            if(machine.equals(CraftableMachine.Sprinkler) || machine.equals(CraftableMachine.QualitySprinkler) || machine.equals(CraftableMachine.IridiumSprinkler)){
+                placeSprinkler(machine ,cell);
+                return new Result(true, "Fshhhh.., watering all");
+            }
+            if(machine.equals(CraftableMachine.MysticTreeSeed)){
+                Tree tree = new Tree(cell.getX(), cell.getY(), App.getGame().getCurrentPlayerFarm(), TreeType.Mystic);
+                App.getGame().getCurrentPlayerFarm().addTree(tree);
+                cell.setObjectMap(tree);
+                return new Result(true, "Mystical tree planted O_o");
+            }
+        }
         cell.setObjectMap(item);
         inventory.removeFromInventory(item, 1);
         return new Result(true, itemName + " placed on " + x + " " + y);

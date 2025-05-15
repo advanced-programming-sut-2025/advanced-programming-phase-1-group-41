@@ -8,8 +8,8 @@ public enum ForagingTreeType {
     Maple(TreeType.Maple),
     Pine(TreeType.Pine),
     Mahogany(TreeType.Mahogany),
-    Mushroom(TreeType.Mushroom),
-    Mystic(TreeType.Mystic);
+    Mushroom(TreeType.Mushroom);
+//    Mystic(TreeType.Mystic);
 
     private final TreeType treeType;
 

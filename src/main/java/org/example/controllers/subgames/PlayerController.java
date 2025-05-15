@@ -93,7 +93,7 @@ public class PlayerController {
             return new Result(false, "Invalid item name");
         }
 
-        Item item=parseItem(itemName);
+        Item item = parseItem(itemName);
         int itemQuantity = Integer.parseInt(quantity);
 
         if(App.getGame().getCurrentPlayer().getInventory().addToInventory(item,itemQuantity)){
@@ -364,9 +364,12 @@ public class PlayerController {
 
             }
         }
+        int value = App.getGame().getCurrentPlayer().getFishingSkill().isMaxLevel() ? -1 : 0;
+        if(fishingRod.getLevel().getEnergyUsage() + value > App.getGame().getCurrentPlayer().getEnergy()){
+                new Result(false, "your energy is too low..");
+        }
         fishQuality=(Math.random()*( App.getGame().getCurrentPlayer().getFishingSkill().getLevel() + 2)*fishingRod.getLevel().getPole())/(7-weatherEffect);
         caughtFish.setQuality(fishQuality);
-        int value = App.getGame().getCurrentPlayer().getFishingSkill().isMaxLevel() ? -1 : 0;
         App.getGame().getCurrentPlayer().getFishingSkill().increaseXp(quantityOfFish * 5);
         game.getCurrentPlayer().decEnergy(fishingRod.getLevel().getEnergyUsage() + value);
         game.getCurrentPlayer().getInventory().addToInventory(caughtFish,quantityOfFish);

@@ -138,6 +138,10 @@ public class CookingController {
             return new Result(false,"you don't have enough empty slots");
         }
 
+        if(App.getGame().getCurrentPlayer().getEnergy() < 3){
+            return new Result(false,"you don't have enough energy");
+        }
+
         // remove items
 
         for (Item item : food.getRecipe().neededItems.keySet()) {

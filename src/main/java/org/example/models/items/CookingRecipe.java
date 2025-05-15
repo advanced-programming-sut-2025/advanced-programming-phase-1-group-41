@@ -120,7 +120,7 @@ public enum CookingRecipe {
     }}, "SurvivalBurgerRecipe"),
 
     // needs completion
-    dishOSea(new HashMap<>(){{
+    DishOSea(new HashMap<>(){{
         put(new Fish(FishType.Sardine), 2);
         // hash browns
     }}, "DishOSeaRecipe"),
@@ -161,7 +161,7 @@ public enum CookingRecipe {
     public static void updateRecipe(){
         FarmerLunch.neededItems.put(Food.Omelet, 1);
         SurvivalBurger.neededItems.put(Food.Bread, 1);
-        dishOSea.neededItems.put(Food.HashBrowns, 1);
+        DishOSea.neededItems.put(Food.HashBrowns, 1);
     }
 
     public String getName() {
