@@ -214,6 +214,7 @@ public class CraftingController {
             case CheesePress -> this.cheesePress(items, cell);
             case BeeHouse -> this.beeHouse(items, cell);
             case Loom -> this.loom(items, cell);
+            case MayonnaiseMachine -> this.mayonnaiseMachine(items, cell);
             default -> new Result(false, machineName + " is not useable");
         };
     }
@@ -695,7 +696,56 @@ public class CraftingController {
         }
     }
 
-    private Result MayonnaiseMachine(Matcher matcher){return null;}
+
+    private Item setMayo(ArrayList<Item> items){
+        for (Item item : items) {
+            ProductType type = ProductType.parseType(item.getName());
+            if(type != null ){
+                if(type == ProductType.ChickenEgg || type == ProductType.BigChickenEgg ||
+                type == ProductType.DuckEgg || type == ProductType.DinoEgg){
+                    return new Product(type);
+                }
+            }
+        }
+        return null;
+    }
+
+    private Result mayonnaiseMachine(ArrayList<Item> items, Cell cell){
+        Item type= setMayo(items);
+        Player player = App.getGame().getCurrentPlayer();
+        if(type == null){
+            return new Result(false, "Wrong item!");
+        }
+        for (Machine x : player.getOnGoingMachines()) {
+            if (x instanceof MayoMachine mayoMachine) {
+                mayoHelper(mayoMachine, items, player, type);
+                return new Result(true, "done");
+            }
+        }
+        MayoMachine mayoMachine = null;
+        if(type instanceof Product product){
+            mayoMachine = new MayoMachine(product);
+        }
+        if(mayoMachine == null){
+            return new Result(false, "invalid item type "+type.getName());
+        }
+        player.getOnGoingMachines().add(mayoMachine);
+        mayoHelper(mayoMachine, items, player, type);
+        return new Result(true, "donee");
+    }
+
+    private void mayoHelper(MayoMachine mayoMachine, ArrayList<Item> items, Player player, Item type){
+        for (Item item : items) {
+            if(item.getName().equalsIgnoreCase(type.getName())){
+                updateItems(item, mayoMachine, player, 1);
+            }else{
+                System.out.println(item.getName()+" is not a valid input");
+                return;
+            }
+        }
+    }
+
+
 
     private Item setLoom(ArrayList<Item> items){
         for (Item item : items) {
@@ -734,7 +784,6 @@ public class CraftingController {
         return new Result(true, "donee");
     }
 
-
     private void loomHelper(Loom loom, ArrayList<Item> items, Player player, Item type){
         for (Item item : items) {
             if(item.getName().equalsIgnoreCase(type.getName())){
@@ -745,6 +794,7 @@ public class CraftingController {
             }
         }
     }
+
 
     public static void check(){
         Player player = App.getGame().getCurrentPlayer();
