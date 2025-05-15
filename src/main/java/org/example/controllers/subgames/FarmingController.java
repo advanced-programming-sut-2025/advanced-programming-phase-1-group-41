@@ -6,6 +6,7 @@ import org.example.models.foragings.*;
 import org.example.models.foragings.Nature.Grass;
 import org.example.models.foragings.Nature.Tree;
 import org.example.models.foragings.Nature.TreeType;
+import org.example.models.foragings.Nature.Wood;
 import org.example.models.items.Inventory;
 import org.example.models.items.Slot;
 import org.example.models.locations.Farm;
@@ -28,7 +29,15 @@ public class FarmingController {
         }
         return new Result(false, "Craft not found!");
     }
-
+    public Result buildGreenhouse(Matcher matcher) {
+        Player player = App.getGame().getCurrentPlayer();
+        if(player.getMoney() < 1000 || player.getInventory().getSlotByItem(new Wood()).getQuantity() < 500){
+            return new Result(false, "insufficient funds, you need at least 1000 money and 500 wood!\nMoney: "
+                    + player.getMoney() + "\nWood: " + player.getInventory().getSlotByItem(new Wood()).getQuantity());
+        }
+        App.getGame().getCurrentPlayerFarm().getGreenhouse().unlock();
+        return new Result(true, "Greenhouse has been built!");
+    }
     public Result plant(Matcher matcher){
         String seed = matcher.group("seed");
         SeedType seedType = SeedType.parseSeedType(seed);

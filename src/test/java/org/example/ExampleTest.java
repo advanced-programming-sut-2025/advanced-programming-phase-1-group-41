@@ -7,6 +7,6 @@ class ExampleTest {
     @Test
     void testAddition() {
         int sum = 2 + 3;
-        assertEquals(5, sum);
+        assertEquals(5, sum, "Hi");
     }
 }

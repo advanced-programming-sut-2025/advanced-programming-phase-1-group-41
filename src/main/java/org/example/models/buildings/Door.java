@@ -7,9 +7,9 @@ public class Door implements Building {
     @Override
     public String getChar() {
         if(isClosed){
-            return Colors.colorize(250,0,"[]");
+            return Colors.colorize(196,0,"[]");
         }
-        return Colors.colorize(196,0,"][");
+        return Colors.colorize(82,0,"][");
     }
 
     @Override
@@ -17,7 +17,7 @@ public class Door implements Building {
         return "Door";
     }
 
-    boolean isClosed = true;
+    boolean isClosed = false;
 
     public void setClosed(boolean closed) {
         isClosed = closed;

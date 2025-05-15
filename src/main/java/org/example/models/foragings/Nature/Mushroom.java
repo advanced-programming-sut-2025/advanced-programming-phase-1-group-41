@@ -7,7 +7,7 @@ import org.example.models.foragings.ForagingCropType;
 import org.example.models.items.Eatable;
 import org.example.models.items.Item;
 
-public enum Mushroom implements Item {
+public enum Mushroom implements Item, Eatable {
     CommonMushroom(ForagingCropType.CommonMushroom),
     RedMushroom(ForagingCropType.RedMushroom),
     PurpleMushroom(ForagingCropType.PurpleMushroom);
@@ -56,4 +56,8 @@ public enum Mushroom implements Item {
         return null;
     }
 
+    @Override
+    public double getEnergy() {
+        return foragingCropType.getEnergy();
+    }
 }

@@ -13,11 +13,15 @@ import java.util.ArrayList;
 public class Greenhouse implements Building {
     @Override
     public String getChar() {
-        return Colors.colorize(0,3,"XX");
+        if(isUnlocked){
+            return Colors.colorize(0,3,"XX");
+        }
+        return Colors.colorize(0,237,"XX");
     }
-    public int x;
-    public int y;
+    private int x;
+    private int y;
     private Farm farm;
+    private boolean isUnlocked = false;
     private int[][] cells;
 
     @Override
@@ -47,7 +51,9 @@ public class Greenhouse implements Building {
                     cell.setObjectMap(new Wall());
                 }
                 if(i == x + 3 && yWall == y + 7){
-                    cell.setObjectMap(new Door());
+                    Door door = new Door();
+                    door.setClosed(true);
+                    cell.setObjectMap(door);
                 }
 
             }
@@ -60,7 +66,9 @@ public class Greenhouse implements Building {
                 assert cell != null;
                 cell.setObjectMap(new Wall());
                 if((j == y + 3 && xWall == x + 6) || (j == y + 4 && xWall == x + 6)){
-                    cell.setObjectMap(new Door());
+                    Door door = new Door();
+                    door.setClosed(true);
+                    cell.setObjectMap(door);
                 }
             }
             xWall+=6;
@@ -87,6 +95,7 @@ public class Greenhouse implements Building {
     public Farm getFarm() {
         return farm;
     }
+    public void unlock() {isUnlocked = true;}
     public boolean isGreenHouse(int x1, int y1) {
         for(int i = x; i< x + 5; i++) {
             for(int j = y; j< y + 6; j++) {
