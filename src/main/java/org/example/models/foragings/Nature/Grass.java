@@ -1,6 +1,5 @@
 package org.example.models.foragings.Nature;
 
-import org.example.models.Cell;
 import org.example.models.Colors;
 import org.example.models.ObjectMap;
 import org.example.models.locations.Farm;
@@ -14,6 +13,8 @@ public class Grass implements ObjectMap {
             return Colors.colorize(228,0,"ww");
         } else if(isThundered){
             return Colors.colorize(15,0,"ww");
+        } else if(isBombed){
+            return Colors.colorize(237,0,"ww");
         } else if(isGround){
             return Colors.colorize(215,0,"ww");
         }else{
@@ -30,12 +31,14 @@ public class Grass implements ObjectMap {
     private boolean isGround;
     private boolean isSand;
     private boolean isThundered;
+    private boolean isBombed;
 
     public Grass(){
         isGround = false;
         isFarmland = false;
         isSand = false;
         isThundered = false;
+        isBombed = false;
     }
 
     public boolean isFarmland() {
@@ -46,6 +49,7 @@ public class Grass implements ObjectMap {
         isGround = false;
         isSand = false;
         isThundered = false;
+        isBombed = false;
     }
     public boolean isSand() {return isSand;}
 
@@ -58,16 +62,15 @@ public class Grass implements ObjectMap {
     public void setSand(boolean isSand) {
         this.isSand = isSand;
     }
-    public boolean isThundered() {
-        return isThundered;
-    }
     public void setThundered(boolean isThundered) {
         this.isThundered = isThundered;
     }
+    public void setBombed(boolean bombed) {this.isBombed = bombed;}
     public Grass(int startX, int startY, Farm farm) {
         isGround = true;
         isFarmland = false;
         isSand = false;
+        isBombed = false;
 //        for(int i = startX; i < startX + 13; i++) {
 //            Objects.requireNonNull(Finder.findCellByCoordinates(i, startY, farm)).setObjectMap(this);
 //        }

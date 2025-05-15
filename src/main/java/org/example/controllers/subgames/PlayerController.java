@@ -93,7 +93,7 @@ public class PlayerController {
             return new Result(false, "Invalid item name");
         }
 
-        Item item=parseItem(itemName);
+        Item item = parseItem(itemName);
         int itemQuantity = Integer.parseInt(quantity);
 
         if(App.getGame().getCurrentPlayer().getInventory().addToInventory(item,itemQuantity)){
