@@ -1,9 +1,8 @@
 package org.example.models.items;
 
-import org.example.models.foragings.Nature.Mineral;
-import org.example.models.foragings.Nature.MineralType;
-import org.example.models.foragings.Nature.Rock;
-import org.example.models.foragings.Nature.Wood;
+import org.example.models.buildings.marketplaces.items.BlacksmithItems;
+import org.example.models.buildings.marketplaces.items.MarketplaceItems;
+import org.example.models.foragings.Nature.*;
 import org.example.models.foragings.SeedType;
 
 import java.util.HashMap;
@@ -21,30 +20,80 @@ public enum CraftingRecipe {
         put(new Mineral(MineralType.GoldOre),4);
         put(new Mineral(MineralType.Coal), 1);
     }}, "MegaBombRecipe"),
-    // sprinkler
-    // quality sprinkler
-    // iridium sprinkler
-    // charcoal klin
+    Sprinkler(new HashMap<>(){{
+        put(CraftableItem.IronBar,1);
+        put(CraftableItem.CopperBar,1);
+    }} , "SprinklerRecipe"),
+    QualitySprinkler(new HashMap<>(){{
+        put(CraftableItem.IronBar,1);
+        put(CraftableItem.GoldBar,1);
+    }} , "QualitySprinklerRecipe"),
+    IridiumSprinkler(new HashMap<>(){{
+        put(CraftableItem.GoldBar,1);
+        put(CraftableItem.IridiumBar,1);
+    }} , "IridiumSprinklerRecipe"),
+    CharcoalKiln(new HashMap<>(){{
+        put(new Wood(), 20);
+        put(CraftableItem.CopperBar, 2);
+    }}, "CharcoalKilnRecipe"),
     Furnace(new HashMap<>(){{
         put(new Mineral(MineralType.CopperOre),20);
         put(new Rock(), 20);
     }}, "FurnaceRecipe"),
-    // scarecrow
-    // deluxe scarecrow
-    // bee house
-    // cheese press
-    // keg
-    // Loom
-    // mayonnaise machine
-    // oil maker
+    ScareCrow(new HashMap<>(){{
+        put(new Wood(), 50);
+        put(new Mineral(MineralType.Coal),1);
+        // fiber
+    }}, "ScareCrowRecipe"),
+    DeluxeScareCrow(new HashMap<>(){{
+        put(new Wood(), 50);
+        put(new Mineral(MineralType.Coal),1);
+        put(new Mineral(MineralType.IridiumOre),1);
+        // fiber
+    }}, "DeluxeScareCrowRecipe"),
+    BeeHouse(new HashMap<>(){{
+        put(new Wood(),40);
+        put(new Mineral(MineralType.Coal),8);
+        put(CraftableItem.IronBar, 1);
+    }}, "BeehouseRecipe"),
+    CheesePress(new HashMap<>(){{
+        put(new Wood(),45);
+        put(new Rock(),45);
+        put(CraftableItem.CopperBar, 1);
+    }}, "CheesePressRecipe"),
+    Keg(new HashMap<>(){{
+        put(new Wood(),30);
+        put(CraftableItem.CopperBar, 1);
+        put(CraftableItem.IronBar, 1);
+    }}, "KegRecipe"),
+    Loom(new HashMap<>(){{
+        put(new Wood(),60);
+        // fiber
+    }}, "LoomRecipe"),
+    MayonnaiseMachine(new HashMap<>(){{
+        put(new Wood(),15);
+        put(new Rock(),15);
+        put(CraftableItem.CopperBar, 1);
+    }} , "MayonnaiseMachineRecipe"),
+    OilMaker(new HashMap<>(){{
+        put(new Wood(),100);
+        put(CraftableItem.GoldBar, 1);
+        put(CraftableItem.IronBar, 1);
+    }}, "OilMakerRecipe"),
     PreservesJar(new HashMap<>(){{
         put(new Wood(), 50);
         put(new Rock(), 40);
         put(new Mineral(MineralType.Coal),8);
     }}, "PreservesJarRecipe"),
-    // dehydrator
-    // grass starter
-    // fish smoker
+    Dehydrator(new HashMap<>(){{
+        put(new Wood(),30);
+        put(new Rock(),20);
+        // fiber
+    }}, "DehydratorRecipe"),
+    GrassStarter(new HashMap<>(){{
+        put(new Wood(), 1);
+        // fiber
+    }}, "GrassStarterRecipe"),
     FishSmoker(new HashMap<>(){{
         put(new Wood(), 50);
         put(CraftableItem.IronBar, 3);

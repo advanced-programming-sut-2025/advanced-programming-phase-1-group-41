@@ -7,6 +7,7 @@ import org.example.models.buildings.Building;
 import org.example.models.buildings.Door;
 import org.example.models.buildings.Wall;
 import org.example.models.buildings.marketplaces.items.FishShopItems;
+import org.example.models.buildings.marketplaces.items.Troutsoup;
 import org.example.models.items.Slot;
 import org.example.models.locations.Village;
 
@@ -32,7 +33,7 @@ public class FishShop extends Marketplace implements Building {
         constructFishShop(x, y, village);
 
         stock.add(new Slot(FishShopItems.FishSmokerRecipe, 1));
-        stock.add(new Slot(FishShopItems.TroutSoup, 1));
+        stock.add(new Slot(new Troutsoup(), 1));
         stock.add(new Slot(FishShopItems.TrainingRod, 1));
         stock.add(new Slot(FishShopItems.BambooRod, 1));
         stock.add(new Slot(FishShopItems.FiberglassRod, 1));

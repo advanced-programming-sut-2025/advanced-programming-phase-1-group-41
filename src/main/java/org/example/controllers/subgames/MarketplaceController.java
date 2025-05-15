@@ -56,7 +56,8 @@ public class MarketplaceController {
         message.append("Available products:\n");
         for(Slot slot : mp.getItemsForSale()){
             if(slot.getQuantity() > 0){
-                message.append(slot.getItem().getName()+" : "+slot.getQuantity()+"\n");
+                message.append(slot.getItem().getName()+" : "+slot.getQuantity()).append(" ");
+                message.append("price: "+slot.getItem().getPrice()).append("\n");
             }
         }
         message.delete(message.length()-1,message.length());

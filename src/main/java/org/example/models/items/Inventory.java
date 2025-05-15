@@ -30,14 +30,14 @@ public class Inventory {
     }
     public void Upgrade(){
         if(backpack.equals(Backpack.Default)){
-            backpack = Backpack.Big;
+            backpack = Backpack.Large;
             for(int i = 0; i < backpack.getSize()-Backpack.Default.getSize(); i++){
                 slots.add(new Slot(null,0));
             }
         }
-        else if(backpack.equals(Backpack.Big)){
+        else if(backpack.equals(Backpack.Large)){
             backpack = Backpack.Deluxe;
-            for(int i = 0; i < backpack.getSize()-Backpack.Big.getSize(); i++){
+            for(int i = 0; i < backpack.getSize()-Backpack.Large.getSize(); i++){
                 slots.add(new Slot(null,0));
             }
         }

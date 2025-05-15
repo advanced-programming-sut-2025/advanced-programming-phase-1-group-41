@@ -12,8 +12,9 @@ public enum MarketplaceItems implements Item {
     Rice("Ri","Rice", 250),
 
 
-    WeddingRing("WR","WeddingRing", 10000),
     Bouquet("BQ","Bouquet", 1000),
+    WeddingRing("WR","WeddingRing", 10000),
+
 
 
     TroutSoup(new Troutsoup()),

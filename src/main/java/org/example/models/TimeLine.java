@@ -75,6 +75,9 @@ public class TimeLine {
             }else if(building instanceof FishShop fishShop){
                 System.out.println("fishShop found ..");
                 fishShop.updateStock();
+            }else if(building instanceof GeneralStore generalStore){
+                System.out.println("generalStore found ..");
+                generalStore.updateStock();
             }
         }
         (new AnimalController()).resetAndCheck();

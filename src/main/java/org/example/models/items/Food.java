@@ -1,5 +1,7 @@
 package org.example.models.items;
 
+import org.example.models.buildings.marketplaces.items.Troutsoup;
+
 public enum Food implements Item, Eatable {
     FriedEgg(50, 35, CookingRecipe.FriedEgg, "FriedEgg"),
     BakedFish(75, 100, CookingRecipe.BakedFish, "BakedFish"),
@@ -24,6 +26,7 @@ public enum Food implements Item, Eatable {
     DishOTheSea(150, 220, CookingRecipe.dishOSea, "DishOTheSea"),
     SeaFormPudding(175, 300, CookingRecipe.SeaformPuddin, "SeaFormPudding"),
     MinerTreat(125, 200, CookingRecipe.MinerTreat, "MinerTreat"),
+//    TroutSoup(250, 250, null, "TroutSoup"),
 //    Beer(50, 200, null, "Beer"),
 //    Vineqar(13, 100, null, "Vineqar"),
 //    Coffee(75, 150, null, "Coffee"),

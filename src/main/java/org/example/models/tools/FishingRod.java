@@ -19,18 +19,6 @@ public class FishingRod implements Tool {
         return level;
     }
 
-    public void increaseLevel() {
-        int nextLevel = Math.min(level.ordinal()+1,FishingRodLevel.values().length - 1);
-        level = FishingRodLevel.values()[nextLevel];
-    }
-    public static FishingRod findFishingRod(){
-        for (Slot slot : App.getGame().getCurrentPlayer().getInventory().getSlots()) {
-            if(slot.getItem() instanceof FishingRod){
-                return (FishingRod) slot.getItem();
-            }
-        }
-        return null;
-    }
 
     @Override
     public String getChar() {

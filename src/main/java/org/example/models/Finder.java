@@ -7,6 +7,7 @@ import org.example.models.buildings.marketplaces.FishShop;
 import org.example.models.buildings.marketplaces.items.FishShopItems;
 import org.example.models.buildings.marketplaces.items.MarketplaceItems;
 import org.example.models.buildings.marketplaces.items.SaloonItems;
+import org.example.models.buildings.marketplaces.items.Troutsoup;
 import org.example.models.foragings.*;
 import org.example.models.foragings.Nature.*;
 import org.example.models.items.*;
@@ -44,6 +45,9 @@ public class Finder {
         }
         if(FishingRodLevel.parseFishingRod(itemName)!=null){
             return FishingRodLevel.parseFishingRod(itemName);
+        }
+        if(itemName.equalsIgnoreCase(new Troutsoup().getName())){
+            return new Troutsoup();
         }
         if(parseFish(itemName)!=null){
             return parseFish(itemName);
