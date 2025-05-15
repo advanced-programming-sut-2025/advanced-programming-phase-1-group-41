@@ -17,15 +17,15 @@ public class RegisterTest {
     }
 
     @Test
-    void testInvalidUsernameLength() {
+    void testInvalidUsernameError() {
         String username = "TooLongUser";
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-//            username.matches(USERNAME_REGEX);
-                validateUsername("TooLongUser");
+            validateUsername(username);
         });
-        assertEquals("Username must not exceed 8 characters", exception.getMessage());
 
+        assertEquals("Username must not exceed 8 characters", exception.getMessage());
     }
+
 
     @Test
     void testValidPassword() {
@@ -52,6 +52,7 @@ public class RegisterTest {
     }
     void validateUsername(String username) {
         if (username.length() > 8) {
+            System.out.println("Throwing exception...");
             throw new IllegalArgumentException("Username must not exceed 8 characters");
         }
     }

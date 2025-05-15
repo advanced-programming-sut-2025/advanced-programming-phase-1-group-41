@@ -149,7 +149,7 @@ public class Friendship {
     }
     public void talk() {
         if(!hadTalkingToday){
-            friendshipXp += 100;
+            friendshipXp += 20;
         }
         hadTalkingToday = true;
     }
