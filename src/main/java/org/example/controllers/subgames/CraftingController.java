@@ -178,7 +178,11 @@ public class CraftingController {
 
     public Result artisanUse(Matcher matcher) {
         String machineName = matcher.group(1).trim();
-        String[] puttingItems = matcher.group(2).trim().split(" ");
+        String itemsInput = matcher.group("items");
+        String[] puttingItems = new String[0];
+        if(itemsInput != null) {
+            puttingItems = itemsInput.trim().split(" ");
+        }
         Cell cell = findArtisan(machineName);
         if (cell == null) {
             return new Result(false, machineName + " is not around you");
@@ -208,6 +212,7 @@ public class CraftingController {
             case OilMaker -> this.oilMaker(items, cell);
             case Keg -> this.keg(items, cell);
             case CheesePress -> this.cheesePress(items, cell);
+            case BeeHouse -> this.beeHouse(items, cell);
             default -> new Result(false, machineName + " is not useable");
         };
     }
@@ -348,9 +353,18 @@ public class CraftingController {
         }
     }
 
-    private Result beeHouse(Matcher matcher) {
-        return null;
+    private Result beeHouse(ArrayList<Item> items, Cell cell) {
+        Player player = App.getGame().getCurrentPlayer();
+        for (Machine x : player.getOnGoingMachines()) {
+            if (x instanceof BeeHouse bh) {
+                return new Result(true, "it's already ongoing ..");
+            }
+        }
+        BeeHouse bh = new BeeHouse();
+        player.getOnGoingMachines().add(bh);
+        return new Result(true, "done");
     }
+
 
     private Item setKeg(ArrayList<Item> items) {
         for (Item item : items) {
