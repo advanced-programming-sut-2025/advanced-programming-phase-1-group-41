@@ -13,11 +13,11 @@ public class Lia extends NPC{
     NPCHome home;
     public Lia(String name, Occupation job, NPCHome home, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift,ArrayList<Quest> quests) {
         super(name, job, dialogues, favorites, itemsToGift,quests);
-        this.home = home;setX(1);setY(60);
+        this.home = home;setX(11);setY(53);
     }
     @Override
     public String getChar(){
-        return Colors.colorize(196,0,"웃 ");
+        return Colors.colorize(208,0,"웃 ");
     }
 
     public NPCHome getHome() {

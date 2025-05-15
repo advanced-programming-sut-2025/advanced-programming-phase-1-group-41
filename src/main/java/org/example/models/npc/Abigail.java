@@ -15,11 +15,11 @@ public class Abigail extends NPC{
     public Abigail(String name, Occupation job, NPCHome home, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift,ArrayList<Quest> quests) {
         super(name, job, dialogues, favorites, itemsToGift, quests);
         this.home = home;
-        setX(0);setY(60);
+        setX(26);setY(43);
     }
     @Override
     public String getChar(){
-        return Colors.colorize(196,0,"웃 ");
+        return Colors.colorize(93,0,"웃 ");
     }
 
     public NPCHome getHome() {

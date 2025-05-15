@@ -13,11 +13,11 @@ public class Harvey extends NPC{
     NPCHome home;
     public Harvey(String name, Occupation job, NPCHome home, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift,ArrayList<Quest> quests) {
         super(name, job, dialogues, favorites, itemsToGift, quests);
-        setX(2);setY(60);
+        setX(60);setY(55);
     }
     @Override
     public String getChar(){
-        return Colors.colorize(196,0,"웃 ");
+        return Colors.colorize(239,0,"웃 ");
     }
 
     public NPCHome getHome() {
