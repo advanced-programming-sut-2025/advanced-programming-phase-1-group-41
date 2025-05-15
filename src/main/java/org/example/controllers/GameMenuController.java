@@ -41,6 +41,14 @@ public class GameMenuController {
             result.append("Username: ").append(player.getUser().getUsername()).append(" Nickname: ").append(player.getUser().getNickname()).append("\n");
         }
         result.append("Starting Trade...");
+        if(!App.getGame().getCurrentPlayer().getNewTradesList().isEmpty()){
+            result.append("\nNew Trades Available:\n");
+            for(Trade trade : App.getGame().getCurrentPlayer().getNewTradesList()){
+                result.append(trade.toString()).append("\n");
+            }
+            result.delete(result.length() - 1, result.length());
+            App.getGame().getCurrentPlayer().getNewTradesList().clear();
+        }
         App.setMenu(Menu.Trade);
         return new Result(true,result.toString()) ;
     }

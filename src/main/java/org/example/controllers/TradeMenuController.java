@@ -46,6 +46,8 @@ public class TradeMenuController {
         }
         Trade trade = new Trade(trader, target, firstSlot, secondSlot, isRequest);
         target.getTradesList().add(trade);
+        target.getNewTradesList().add(trade);
+        trader.getTotalTradesList().add(trade);
 
         return new Result(true, "Trade added successfully!");
     }
