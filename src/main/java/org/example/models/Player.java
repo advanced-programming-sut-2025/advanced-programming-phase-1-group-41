@@ -39,6 +39,7 @@ public class Player {
     private int x;
     private int y;
     private double energy;
+    private int maxEnergy = 200;
     private boolean energyUnlimited;
     private int depressionDaysLeft = 0;
     @Transient
@@ -70,6 +71,8 @@ public class Player {
     private final ArrayList<Trade> newTradesList = new ArrayList<>();
     @Transient
     private final ArrayList<Trade> totalTradesList = new ArrayList<>();
+    @Transient
+    private Buff currentBuff = null;
 //    private Farm farm;
 //    private ArrayList<Animal> animals;
 //    private ArrayList<Skill> skills;
@@ -201,6 +204,8 @@ public class Player {
         return inventory;
     }
 
+    public void setMaxEnergy(int maxEnergy) {this.maxEnergy = maxEnergy;}
+
     public void addFriendship(Friendship friendship){friendships.add(friendship);}
 
     public void addReceivedGift(Gift gift){receivedGifts.add(gift);}
@@ -263,8 +268,8 @@ public class Player {
     }
     public void incEnergy(double delta) {
         this.energy += delta;
-        if(this.energy > 200){
-            this.energy = 200;
+        if(this.energy > maxEnergy){
+            this.energy = maxEnergy;
         }
     }
 
@@ -331,6 +336,10 @@ public class Player {
 
     public ArrayList<Trade> getTotalTradesList(){return totalTradesList;}
 
+    public Buff getBuff() {return currentBuff;}
+
+    public void setBuff(Buff buff) {currentBuff = buff;}
+
     public boolean hasRecipe(Food food){
         System.out.println("food is: "+food+" "+food.getRecipe());
         for (CookingRecipe recipe : cookingRecipes) {
@@ -358,6 +367,7 @@ public class Player {
         }
         money += savings;
         savings = 0;
+        maxEnergy = 200;
     }
 
     public ArrayList<CraftingRecipe> getCraftingRecipes() {
@@ -376,8 +386,18 @@ public class Player {
             this.energy = 175;
             return;
         }
-        this.energy = 200;
+        this.energy = maxEnergy;
+    }
 
+    public void updateHourly(){
+        if(currentBuff != null){
+            currentBuff.hourPass();
+            if(currentBuff.getBuffTime() <= 0){
+                currentBuff = null;
+                maxEnergy = 200;
+                return;
+            }
+        }
     }
 
 }

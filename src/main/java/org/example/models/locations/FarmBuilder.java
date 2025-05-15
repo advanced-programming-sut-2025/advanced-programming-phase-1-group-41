@@ -117,12 +117,12 @@ public class FarmBuilder {
 //        player.getInventory().addToInventory(new Seed(SeedType.StarfruitSeed), 100);
 //        player.getInventory().addToInventory(new Seed(SeedType.CauliflowerSeed), 100);
 //        player.getInventory().addToInventory(new Seed(SeedType.CoffeeBeanSeed), 100);
-//        player.getInventory().addToInventory(CraftableMachine.DeluxeScarecrow, 100);
-//        player.getInventory().addToInventory(CraftableMachine.Scarecrow, 100);
+        player.getInventory().addToInventory(CraftableMachine.DeluxeScarecrow, 100);
+        player.getInventory().addToInventory(CraftableMachine.Scarecrow, 100);
 //        player.getInventory().addToInventory(new Crop(Flower.Poppy.getCropType()), 100);
 //        player.getInventory().addToInventory(MarketplaceItems.Bouquet, 100);
 //        player.getInventory().addToInventory(MarketplaceItems.WeddingRing, 100);
-//        player.incMoney(100000);
+        player.incMoney(100000);
     }
     public void growTrees(){
         List<Tree> toRemove = new ArrayList<>();

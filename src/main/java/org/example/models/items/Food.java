@@ -1,5 +1,7 @@
 package org.example.models.items;
 
+import org.example.models.buildings.marketplaces.items.Troutsoup;
+
 public enum Food implements Item, Eatable {
     FriedEgg(50, 35, CookingRecipe.FriedEgg, "FriedEgg"),
     BakedFish(75, 100, CookingRecipe.BakedFish, "BakedFish"),
@@ -10,20 +12,20 @@ public enum Food implements Item, Eatable {
     Pizza(150, 300, CookingRecipe.Pizza, "Pizza"),
     Tortilla(50, 50, CookingRecipe.Tortilla, "Tortilla"),
     MakiRoll(100, 220, CookingRecipe.MakiRoll, "MakiRoll"),
-    TripleShotEspresso(200, 450, CookingRecipe.TripleShotExspresso, "TripleShotEspresso"),
+    TripleShotEspresso(200, 450, CookingRecipe.TripleShotExspresso, "TripleShotEspresso", new Buff(5, 100, BuffType.MaxEnergy)),
     Cookie(90, 140, CookingRecipe.Cookie, "Cookie"),
-    HashBrowns(90, 120, CookingRecipe.HashBrown, "HashBrowns"),
-    Pancakes(90, 80, CookingRecipe.Pancake, "Pancakes"),
+    HashBrowns(90, 120, CookingRecipe.HashBrown, "HashBrowns", new Buff(5, 0, BuffType.Farming)),
+    Pancakes(90, 80, CookingRecipe.Pancake, "Pancakes", new Buff(11, 0, BuffType.Foraging)),
     FruitSalad(263, 450, CookingRecipe.FruitSalad, "FruitSalad"),
-    RedPlate(240, 400, CookingRecipe.RedPlate, "RedPlate"),
+    RedPlate(240, 400, CookingRecipe.RedPlate, "RedPlate", new Buff(3, 50, BuffType.MaxEnergy)),
     Bread(50, 60, CookingRecipe.Bread, "Bread"),
     SalmonDinner(125, 300, CookingRecipe.SalmonDinner, "SalmonDinner"),
     VegetableMedley(165, 120, CookingRecipe.VegetableMedly, "VegetableMedley"),
-    FarmerLunch(200, 150, CookingRecipe.FarmerLunch, "FarmerLunch"),
-    SurvivalBurger(125, 180, CookingRecipe.SurvivalBurger, "SurvivalBurger"),
-    DishOTheSea(150, 220, CookingRecipe.DishOSea, "DishOTheSea"),
-    SeaFormPudding(175, 300, CookingRecipe.SeaformPuddin, "SeaFormPudding"),
-    MinerTreat(125, 200, CookingRecipe.MinerTreat, "MinerTreat"),
+    FarmerLunch(200, 150, CookingRecipe.FarmerLunch, "FarmerLunch", new Buff(5, 0, BuffType.Farming)),
+    SurvivalBurger(125, 180, CookingRecipe.SurvivalBurger, "SurvivalBurger", new Buff(5, 0, BuffType.Foraging)),
+    DishOTheSea(150, 220, CookingRecipe.DishOSea, "DishOTheSea", new Buff(5, 0, BuffType.Fishing)),
+    SeaFormPudding(175, 300, CookingRecipe.SeaformPuddin, "SeaFormPudding", new Buff(10, 0, BuffType.Fishing)),
+    MinerTreat(125, 200, CookingRecipe.MinerTreat, "MinerTreat", new Buff(5, 0, BuffType.Mining)),
 //    TroutSoup(250, 250, null, "TroutSoup"),
 //    Beer(50, 200, null, "Beer"),
 //    Vineqar(13, 100, null, "Vineqar"),
@@ -48,19 +50,26 @@ public enum Food implements Item, Eatable {
         CookingRecipe.values();
     }
 
-    private int energyValue;
-    private int sellPrice;
-    private Buff buff;
-    private CookingRecipe recipe;
-    private String name;
+    private final int energyValue;
+    private final int sellPrice;
+    private Buff buff = null;
+    private final CookingRecipe recipe;
+    private final String name;
 
-    // TODO fill the buff as welll
+    // TODO fill the buff as well
 
     Food(int energyValue, int SellPrice, CookingRecipe recipe, String name) {
         this.energyValue = energyValue;
         this.sellPrice = SellPrice;
         this.recipe = recipe;
         this.name = name;
+    }
+    Food(int energyValue, int SellPrice, CookingRecipe recipe, String name, Buff buff) {
+        this.energyValue = energyValue;
+        this.sellPrice = SellPrice;
+        this.recipe = recipe;
+        this.name = name;
+        this.buff = buff;
     }
 
     @Override

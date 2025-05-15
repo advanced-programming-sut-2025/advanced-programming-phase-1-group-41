@@ -71,6 +71,9 @@ public class TimeLine {
             advanceOneDay();
         }
         MarketplaceController.updateHourly();
+        for(Player player : App.getGame().getPlayers()){
+            player.updateHourly();
+        }
     }
     public void advanceOneDay(){
         if(hour == 0){

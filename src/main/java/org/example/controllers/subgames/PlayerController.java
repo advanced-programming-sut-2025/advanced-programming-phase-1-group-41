@@ -209,6 +209,15 @@ public class PlayerController {
         if(slot==null){
             return new Result(false,"you don't have this food");
         }
+        if(slot.getItem() instanceof Food){
+            if(((Food) slot.getItem()).getBuff() != null){
+                Buff buff = ((Food) slot.getItem()).getBuff();
+                App.getGame().getCurrentPlayer().setBuff(new Buff(buff.getBuffTime(), buff.getBuffAmount(), buff.getBuffType()));
+                if(buff.getBuffType().equals(BuffType.MaxEnergy)){
+                    App.getGame().getCurrentPlayer().setMaxEnergy(200 + buff.getBuffAmount());
+                }
+            }
+        }
         App.getGame().getCurrentPlayer().incEnergy(wantedFood.getEnergy());
         double value  = wantedFood.getEnergy();
         inventory.removeFromInventory(wantedFood, 1);

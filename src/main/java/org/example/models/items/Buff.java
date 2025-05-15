@@ -1,21 +1,15 @@
 package org.example.models.items;
 
-public enum Buff {
-//    MaxEnergy,
-//    Farming,
-//    Foraging,
-//    Fishing,
-//    Mining,
-    // etc
-    // TODO
-    ;
-    private int buffTime;
-    private int buffAmount;
+public class Buff {
+    private int buffTime = 0;
+    private int buffAmount = 0;
+    private final BuffType buffType;
 
 
-    Buff(int buffTime, int buffAmount) {
+    public Buff(int buffTime, int buffAmount, BuffType buffType) {
         this.buffTime = buffTime;
         this.buffAmount = buffAmount;
+        this.buffType = buffType;
     }
 
     public int getBuffTime() {
@@ -24,5 +18,13 @@ public enum Buff {
 
     public int getBuffAmount() {
         return buffAmount;
+    }
+
+    public void hourPass(){
+        buffTime--;
+    }
+
+    public BuffType getBuffType() {
+        return buffType;
     }
 }
