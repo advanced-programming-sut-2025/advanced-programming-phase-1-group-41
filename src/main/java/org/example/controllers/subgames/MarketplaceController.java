@@ -15,6 +15,7 @@ import org.example.models.foragings.Nature.Wood;
 import org.example.models.items.*;
 import org.example.models.tools.*;
 
+import java.sql.SQLOutput;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -49,7 +50,28 @@ public class MarketplaceController {
             return preResult;
         }
         Marketplace mp = (Marketplace) currentCell.getObjectMap();
-        return new Result(true,mp.getItemsForSale().toString());
+        System.out.println("All Products: \n");
+        for(Slot slot : mp.getItemsForSale()){
+            if(slot.getQuantity() > 0){
+                if(slot.getQuantity()<5){
+                    System.out.print(Colors.foreColor(202));
+                }
+                else{
+                    System.out.print(Colors.foreColor(46));
+                }
+                System.out.printf(
+                        "%-40s -> %7d left | price: %6.0f%n",
+                        slot.getItem().getName(),
+                        slot.getQuantity(),
+                        slot.getItem().getPrice()
+                );
+            }else {
+                System.out.print(Colors.foreColor(124));
+                System.out.printf("%-40s ->       SOLD OUT\n",slot.getItem().getName());
+
+            } System.out.print(Colors.RESET);
+        }
+        return new Result(true,"");
     }
 
     public Result showAllAvailableProducts(Matcher matcher){
@@ -59,15 +81,28 @@ public class MarketplaceController {
         }
         Marketplace mp = (Marketplace) currentCell.getObjectMap();
         StringBuilder message = new StringBuilder();
-        message.append("Available products:\n");
+        System.out.println("Available products:\n");
         for(Slot slot : mp.getItemsForSale()){
             if(slot.getQuantity() > 0){
-                message.append(slot.getItem().getName()+" : "+slot.getQuantity()).append(" ");
-                message.append("price: "+slot.getItem().getPrice()).append("\n");
+                if(slot.getQuantity()<10){
+                    System.out.print(Colors.foreColor(202));
+                }else if(slot.getQuantity()<4){
+                    System.out.print(Colors.foreColor(124));
+                }
+                else{
+                    System.out.print(Colors.foreColor(46));
+                }
+                System.out.printf(
+                        "%-40s -> %7d left | price: %6.0f%n",
+                        slot.getItem().getName(),
+                        slot.getQuantity(),
+                        slot.getItem().getPrice()
+                );
+                System.out.print(Colors.RESET);
             }
         }
-        message.delete(message.length()-1,message.length());
-        return new Result(true,message.toString());
+
+        return new Result(true,"");
     }
 
     private boolean isAvailable(Marketplace marketplace, Item item){

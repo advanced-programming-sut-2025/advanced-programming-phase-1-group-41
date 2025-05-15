@@ -90,63 +90,67 @@ public class Trade {
     }
     public String toString2(){
         if(isDone){
+            System.out.print(Colors.foreColor(46));
             if(paidInMoney){
                 if(isRequest){
+
                     return "Trade Done: " + from.getUser().getUsername() + " got " + item.getQuantity() + " " + item.getItem().getName()
-                            + " purchased with " + price + " money" + " from " + to.getUser().getUsername();
+                            + " purchased with " + price + " money" + " from " + to.getUser().getUsername()+Colors.RESET;
                 }else{
                     return "Trade Done: " + from.getUser().getUsername() + " gave " + item.getQuantity() + " " + item.getItem().getName()
-                            + " purchased with " + price + " money" + " to " + to.getUser().getUsername();
+                            + " purchased with " + price + " money" + " to " + to.getUser().getUsername()+Colors.RESET;
                 }
             }else{
                 if(isRequest){
                     assert targetItem != null;
                     return "Trade Done: " + from.getUser().getUsername() + " got " + item.getQuantity() + " " + item.getItem().getName()
-                            + " and gave " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " to " + to.getUser().getUsername();
+                            + " and gave " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " to " + to.getUser().getUsername()+Colors.RESET;
                 }else{
                     assert targetItem != null;
                     return "Trade Done: " + from.getUser().getUsername() + " gave " + item.getQuantity() + " " + item.getItem().getName()
-                            + " and got " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " with " + to.getUser().getUsername();
+                            + " and got " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " with " + to.getUser().getUsername()+Colors.RESET;
                 }
             }
         } else if(isRejected){
+            System.out.print(Colors.foreColor(124));
             if(paidInMoney){
                 if(isRequest){
                     return "Trade Rejected: You requested " + item.getQuantity() + " " + item.getItem().getName()
-                            + " purchased with " + price + " money from " + to.getUser().getUsername();
+                            + " purchased with " + price + " money from " + to.getUser().getUsername()+Colors.RESET;
                 }else{
                     return "Trade Rejected: You offered " + item.getQuantity() + " " + item.getItem().getName()
-                            + " purchased with " + price + " money to " + to.getUser().getUsername();
+                            + " purchased with " + price + " money to " + to.getUser().getUsername()+Colors.RESET;
                 }
             }else{
                 if(isRequest){
                     assert targetItem != null;
                     return "Trade Rejected: You requested " + item.getQuantity() + " " + item.getItem().getName()
-                            + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " from " + to.getUser().getUsername();
+                            + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " from " + to.getUser().getUsername()+Colors.RESET;
                 }else{
                     assert targetItem != null;
                     return "Trade Rejected: You offered " + item.getQuantity() + " " + item.getItem().getName()
-                            + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " to " + to.getUser().getUsername();
+                            + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " to " + to.getUser().getUsername()+Colors.RESET;
                 }
             }
         } else{
+            System.out.print(Colors.foreColor(123));
             if(paidInMoney){
                 if(isRequest){
                     return "Trade Pending: " + from.getUser().getUsername() + " requests " + item.getQuantity() + " " + item.getItem().getName()
-                            + " purchased with " + price + " money from " + to.getUser().getUsername();
+                            + " purchased with " + price + " money from " + to.getUser().getUsername()+Colors.RESET;
                 }else{
                     return "Trade Pending: " + from.getUser().getUsername() + " offers " + item.getQuantity() + " " + item.getItem().getName()
-                            + " purchased with " + price + " money to " + to.getUser().getUsername();
+                            + " purchased with " + price + " money to " + to.getUser().getUsername()+Colors.RESET;
                 }
             }else{
                 if(isRequest){
                     assert targetItem != null;
                     return "Trade Pending: " + from.getUser().getUsername() + " requests " + item.getQuantity() + " " + item.getItem().getName()
-                            + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " from " + to.getUser().getUsername();
+                            + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " from " + to.getUser().getUsername()+Colors.RESET;
                 }else{
                     assert targetItem != null;
                     return "Trade Pending: " + from.getUser().getUsername() + " offers " + item.getQuantity() + " " + item.getItem().getName()
-                            + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " to " + to.getUser().getUsername();
+                            + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " to " + to.getUser().getUsername()+Colors.RESET;
                 }
             }
         }
