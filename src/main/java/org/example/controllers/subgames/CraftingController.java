@@ -207,6 +207,7 @@ public class CraftingController {
             case PreservesJar -> this.jarPreserver(items, cell);
             case OilMaker -> this.oilMaker(items, cell);
             case Keg -> this.keg(items, cell);
+            case CheesePress -> this.cheesePress(items, cell);
             default -> new Result(false, machineName + " is not useable");
         };
     }
@@ -298,9 +299,53 @@ public class CraftingController {
         return null;
     }
 
-
-    private Result cheesePress(Matcher matcher) {
+    private Item setCheese(ArrayList<Item> items) {
+        for (Item item : items) {
+            if(item instanceof Product product){
+                if(product.getProductType()==ProductType.CowMilk ||
+                        product.getProductType()==ProductType.BigCowMilk ||
+                        product.getProductType()==ProductType.GoatMilk ||
+                        product.getProductType()==ProductType.BigGoatMilk ){
+                    return item;
+                }
+            }
+        }
         return null;
+    }
+
+    private Result cheesePress(ArrayList<Item> items, Cell cell) {
+        Item type= setCheese(items);
+        Player player = App.getGame().getCurrentPlayer();
+        if(type == null){
+            return new Result(false, "Wrong item!");
+        }
+        for (Machine x : player.getOnGoingMachines()) {
+            if (x instanceof CheesePress cp) {
+                cheeseHelper(cp, items, player, type);
+                return new Result(true, "done");
+            }
+        }
+        CheesePress cp = null;
+        if(type instanceof Product product){
+            cp = new CheesePress(product);
+        }
+        if(cp == null){
+            return new Result(false, "invalid item type "+type.getName());
+        }
+        player.getOnGoingMachines().add(cp);
+        cheeseHelper(cp, items, player, type);
+        return new Result(true, "donee");
+    }
+
+    private void cheeseHelper(CheesePress cp , ArrayList<Item> items , Player player, Item item){
+        for (Item item1 : items) {
+            if(item1.getName().equalsIgnoreCase(item.getName())){
+                updateItems(item1, cp, player, 1);
+            }else{
+                System.out.println(item1.getName()+" is not a valid item");
+                return;
+            }
+        }
     }
 
     private Result beeHouse(Matcher matcher) {
