@@ -8,6 +8,8 @@ public class Door implements Building {
     public String getChar() {
         if(isClosed){
             return Colors.colorize(196,0,"[]");
+        } else if(closesSoon) {
+            return Colors.colorize(208, 0, "||");
         }
         return Colors.colorize(82,0,"][");
     }
@@ -18,6 +20,7 @@ public class Door implements Building {
     }
 
     boolean isClosed = false;
+    boolean closesSoon = false;
 
     public void setClosed(boolean closed) {
         isClosed = closed;
@@ -25,5 +28,9 @@ public class Door implements Building {
 
     public boolean isClosed() {
         return isClosed;
+    }
+
+    public void setClosesSoon(boolean closesSoon) {
+        this.closesSoon = closesSoon;
     }
 }

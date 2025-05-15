@@ -35,6 +35,8 @@ public abstract class Marketplace {
 
     public abstract void updateStock();
 
+    public abstract void updateHourly();
+
     public Slot getSlotByItem(Item item){
         for (Slot slot : itemsForSale) {
             if(slot.getItem().getName().equalsIgnoreCase(item.getName())){

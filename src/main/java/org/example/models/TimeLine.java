@@ -5,6 +5,7 @@ import dev.morphia.annotations.Id;
 import org.bson.types.ObjectId;
 import org.example.controllers.subgames.AnimalController;
 import org.example.controllers.subgames.FriendshipController;
+import org.example.controllers.subgames.MarketplaceController;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.marketplaces.*;
 import org.example.models.locations.Farm;
@@ -54,6 +55,7 @@ public class TimeLine {
             hour = 0;
             advanceOneDay();
         }
+        MarketplaceController.updateHourly();
     }
     public void advanceOneDay(){
         for (Building building : App.getGame().getVillage().getBuildings()) {

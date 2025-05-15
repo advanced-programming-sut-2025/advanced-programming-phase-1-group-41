@@ -19,6 +19,7 @@ public class GeneralStore extends Marketplace implements Building {
     ArrayList<Slot> spring = new ArrayList<>();
     ArrayList<Slot> summer = new ArrayList<>();
     ArrayList<Slot> fall = new ArrayList<>();
+    private final Door door = new Door();
 
 
     @Override
@@ -84,7 +85,7 @@ public class GeneralStore extends Marketplace implements Building {
                 assert cell != null;
                 cell.setObjectMap(new Wall());
                 if(i == x + 9&&yWall==y+8){
-                    cell.setObjectMap(new Door());
+                    cell.setObjectMap(door);
                 }
             }
             yWall+=8;
@@ -242,5 +243,18 @@ public class GeneralStore extends Marketplace implements Building {
             }
         }
         return false;
+    }
+    @Override
+    public void updateHourly() {
+        if(App.getGame().getTime().getHour() >= 9 && App.getGame().getTime().getHour() < 17) {
+            door.setClosed(false);
+            door.setClosesSoon(false);
+            if(App.getGame().getTime().getHour() >= 15) {
+                door.setClosesSoon(true);
+            }
+        } else{
+            door.setClosed(true);
+            door.setClosesSoon(false);
+        }
     }
 }

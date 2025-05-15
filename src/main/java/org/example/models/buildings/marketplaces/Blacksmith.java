@@ -1,5 +1,6 @@
 package org.example.models.buildings.marketplaces;
 
+import org.example.models.App;
 import org.example.models.Cell;
 import org.example.models.Colors;
 import org.example.models.Finder;
@@ -16,6 +17,7 @@ public class Blacksmith extends Marketplace implements Building{
 
     private ArrayList<Boolean> updates;
 
+    private final Door door = new Door();
 
     @Override
     public String getChar() {
@@ -70,7 +72,7 @@ public class Blacksmith extends Marketplace implements Building{
                 assert cell != null;
                 cell.setObjectMap(new Wall());
                 if(j == y + 2&&xWall==x+5){
-                    cell.setObjectMap(new Door());
+                    cell.setObjectMap(door);
                 }
             }
             xWall+=5;
@@ -86,6 +88,7 @@ public class Blacksmith extends Marketplace implements Building{
                 cell.setObjectMap(this);
             }
         }
+        updateHourly();
     }
 
     public int getX() {
@@ -114,5 +117,19 @@ public class Blacksmith extends Marketplace implements Building{
             updates.set(i,true);
         }
         System.out.println("blacksmith updated..");
+    }
+
+    @Override
+    public void updateHourly() {
+        if(App.getGame().getTime().getHour() >= 9 && App.getGame().getTime().getHour() < 16) {
+            door.setClosed(false);
+            door.setClosesSoon(false);
+            if(App.getGame().getTime().getHour() >= 14) {
+                door.setClosesSoon(true);
+            }
+        } else{
+            door.setClosed(true);
+            door.setClosesSoon(false);
+        }
     }
 }

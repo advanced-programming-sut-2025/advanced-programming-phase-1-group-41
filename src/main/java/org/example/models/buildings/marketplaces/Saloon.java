@@ -1,5 +1,6 @@
 package org.example.models.buildings.marketplaces;
 
+import org.example.models.App;
 import org.example.models.Cell;
 import org.example.models.Colors;
 import org.example.models.Finder;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 public class Saloon extends Marketplace implements Building {
 
     ArrayList<Slot> dailyLimit;
+    private Door door = new Door();
 
     @Override
     public String getChar() {
@@ -84,7 +86,7 @@ public class Saloon extends Marketplace implements Building {
                 assert cell != null;
                 cell.setObjectMap(new Wall());
                 if(i == x + 3&&yWall==y){
-                    cell.setObjectMap(new Door());
+                    cell.setObjectMap(door);
                 }
             }
             yWall+=7;
@@ -131,6 +133,20 @@ public class Saloon extends Marketplace implements Building {
     public void updateStock() {
         for (int i = 0; i < dailyLimit.size(); i++) {
             this.itemsForSale.get(i).setQuantity(this.dailyLimit.get(i).getQuantity());
+        }
+    }
+
+    @Override
+    public void updateHourly() {
+        if(App.getGame().getTime().getHour() >= 12 && App.getGame().getTime().getHour() < 24) {
+            door.setClosed(false);
+            door.setClosesSoon(false);
+            if(App.getGame().getTime().getHour() >= 22) {
+                door.setClosesSoon(true);
+            }
+        } else{
+            door.setClosed(true);
+            door.setClosesSoon(false);
         }
     }
 }

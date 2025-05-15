@@ -20,6 +20,8 @@ public class Jojamart extends Marketplace implements Building {
     ArrayList<Slot> summer = new ArrayList<>();
     ArrayList<Slot> fall = new ArrayList<>();
     ArrayList<Slot> winter = new ArrayList<>();
+    private final Door door = new Door();
+    private final Door door2 = new Door();
 
     @Override
     public String getChar() {
@@ -105,7 +107,7 @@ public class Jojamart extends Marketplace implements Building {
                 assert cell != null;
                 cell.setObjectMap(new Wall());
                 if(i == x + 5&&yWall==y+7) {
-                    cell.setObjectMap(new Door());
+                    cell.setObjectMap(door);
                 }
             }
             yWall+=7;
@@ -117,7 +119,7 @@ public class Jojamart extends Marketplace implements Building {
                 assert cell != null;
                 cell.setObjectMap(new Wall());
                 if(j == y + 1&&xWall==x) {
-                    cell.setObjectMap(new Door());
+                    cell.setObjectMap(door2);
                 }
             }
             xWall+=10;
@@ -176,6 +178,24 @@ public class Jojamart extends Marketplace implements Building {
 
         for (Slot slot : whichSeason) {
             this.itemsForSale.add(new Slot(slot.getItem(), slot.getQuantity()));
+        }
+    }
+    @Override
+    public void updateHourly() {
+        if(App.getGame().getTime().getHour() >= 9 && App.getGame().getTime().getHour() < 23) {
+            door.setClosed(false);
+            door2.setClosed(false);
+            door.setClosesSoon(false);
+            door2.setClosesSoon(false);
+            if(App.getGame().getTime().getHour() >= 21) {
+                door.setClosesSoon(true);
+                door2.setClosesSoon(true);
+            }
+        } else{
+            door.setClosed(true);
+            door2.setClosed(true);
+            door.setClosesSoon(false);
+            door2.setClosesSoon(false);
         }
     }
 }

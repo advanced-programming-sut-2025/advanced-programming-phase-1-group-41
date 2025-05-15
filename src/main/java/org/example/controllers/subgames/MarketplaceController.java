@@ -36,8 +36,13 @@ public class MarketplaceController {
         }
         return new Result(true,"");
     }
-
-
+    public static void updateHourly(){
+        for(Building market : App.getGame().getVillage().getBuildings()){
+            if(market instanceof Marketplace){
+                ((Marketplace) market).updateHourly();
+            }
+        }
+    }
     public Result showAllProducts(Matcher matcher){
         Result preResult = inMarketPlace();
         if(!preResult.success()){
