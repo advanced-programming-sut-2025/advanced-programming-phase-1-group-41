@@ -2,7 +2,7 @@ package org.example.models.buildings.marketplaces;
 
 import org.example.models.items.Item;
 import org.example.models.items.Slot;
-import org.example.models.npc.NPC;
+import org.example.models.npc.npcCharacters.NPC;
 
 import java.util.ArrayList;
 

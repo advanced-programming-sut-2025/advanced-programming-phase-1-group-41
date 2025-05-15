@@ -1,11 +1,9 @@
 package org.example.controllers;
 
 import org.example.models.*;
-import org.example.models.locations.Farm;
-import org.example.models.npc.NPC;
+import org.example.models.npc.npcCharacters.NPC;
 import org.example.views.GameMenu;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.regex.Matcher;
 

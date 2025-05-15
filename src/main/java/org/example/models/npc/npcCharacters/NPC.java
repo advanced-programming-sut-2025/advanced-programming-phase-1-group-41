@@ -1,8 +1,7 @@
-package org.example.models.npc;
+package org.example.models.npc.npcCharacters;
 
 import org.example.models.Occupation;
-import org.example.models.buildings.marketplaces.Marketplace;
-import org.example.models.buildings.npchomes.NPCHome;
+import org.example.models.npc.npchomes.NPCHome;
 import org.example.models.items.Item;
 import org.example.models.items.Slot;
 
@@ -19,6 +18,7 @@ public abstract class NPC {
     private ArrayList<Item> favorites;
     private ArrayList<Slot> ItemsToGift;
     private ArrayList<Quest> quests;
+    private int friendShip;
     private int x=-10;
     private int y=-10;
 
@@ -51,7 +51,16 @@ public abstract class NPC {
         this.favorites = favorites;
         this.ItemsToGift = itemsToGift;
         this.quests = quests;
+        this.friendShip = 0;
 
+    }
+
+    public int getFriendShip() {
+        return friendShip;
+    }
+
+    public void incFriendShip(int friendShip) {
+        this.friendShip =+ friendShip;
     }
 
     public String getName() {
@@ -62,8 +71,8 @@ public abstract class NPC {
         return job;
     }
 
-    public String getDialogues() {
-        return dialogues.get(new Random().nextInt(dialogues.size()));
+    public String getDialogues(int i) {
+        return dialogues.get(i);
     }
 
 

@@ -1,4 +1,4 @@
-package org.example.models.buildings.npchomes;
+package org.example.models.npc.npchomes;
 
 import org.example.models.Cell;
 import org.example.models.Colors;
@@ -8,19 +8,18 @@ import org.example.models.buildings.Door;
 import org.example.models.buildings.Wall;
 import org.example.models.locations.Village;
 
-public class RobinHome extends NPCHome implements Building {
+public class AbigailHome extends NPCHome implements Building {
     @Override
     public String getChar() {
-        return Colors.colorize(0,161,"..");
+        return Colors.colorize(0,93,"..");
     }
-
     @Override
     public String getName() {
-        return "Rabin Home";
+        return "Abigail Home";
     }
     private int x;
     private int y;
-    public RobinHome(int x, int y, Village village) {
+    public AbigailHome(int x, int y, Village village) {
         this.x = x;
         this.y = y;
         int xWall;
@@ -31,7 +30,7 @@ public class RobinHome extends NPCHome implements Building {
                 Cell cell = Finder.findCellByCoordinatesVillage(i, yWall,village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
-                if(i == x + 4&&yWall==y){
+                if(i == x + 4&&yWall==y+6){
                     cell.setObjectMap(new Door());
                 }
             }

@@ -1,4 +1,4 @@
-package org.example.models.npc;
+package org.example.models.npc.npcCharacters;
 
 
 import org.example.models.App;
@@ -7,8 +7,6 @@ import org.example.models.animals.Fish;
 import org.example.models.animals.FishType;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.marketplaces.*;
-import org.example.models.buildings.marketplaces.items.FishShopItems;
-import org.example.models.buildings.npchomes.*;
 import org.example.models.foragings.Crop;
 import org.example.models.foragings.CropType;
 import org.example.models.foragings.Nature.Mineral;
@@ -18,10 +16,9 @@ import org.example.models.foragings.Nature.Wood;
 import org.example.models.items.*;
 import org.example.models.items.Products.Product;
 import org.example.models.items.Products.ProductType;
-import org.example.models.items.craftableitems.CraftableNames;
 import org.example.models.items.craftableitems.Pickles;
 import org.example.models.items.craftableitems.SmokedFish;
-import org.example.models.locations.Village;
+import org.example.models.npc.npchomes.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,7 +38,12 @@ public class NPCBuilder {
                                 "You found legend fish back in you farm?, i though they are just legend",
                                 "Best season for fishing, yeah?",
                                 "Rain makes the fishes to hide, just wait for its time",
-                                "Do not let your lake to freeze, now it`s the time")),
+                                "Do not let your lake to freeze, now it`s the time",
+                                "At least the worms are happy. Fisher’s delight, right?",
+                                "Snowball fight later? ...No? Fine.",
+                                "At least the weeds are getting ripped out for free.",
+                                "Night air’s crisp. Shame I’m stuck mending tools.",
+                                "Missed your face. What’s new?")),
                         new ArrayList<Item>(Arrays.asList(
                                 new Fish(FishType.Sunfish),
                                 Food.DishOTheSea,
@@ -60,7 +62,12 @@ public class NPCBuilder {
                                 "Crops need love and sunlight.",
                                 "Best feeling? Harvest day!",
                                 "Watch out for crows... they’re smart.",
-                                "Dawn is the perfect time to start work."
+                                "Dawn is the perfect time to start work.",
+                                "If I hear one more ‘April showers’ joke, I’ll scream.",
+                                "If I hibernate like a bear, wake me in spring.",
+                                "Think the gods are mad at us, or just bored?",
+                                "You ever get spooked by your own scarecrow? Just me?",
+                                "Saved you a seat. Try not to spill this time."
                         )),
                         new ArrayList<Item>(Arrays.asList(
                                 Food.FarmerLunch,
@@ -84,7 +91,12 @@ public class NPCBuilder {
                                 "Nothing like a cold one after a long day.",
                                 "Got stories and ales for everyone.",
                                 "Keep the bar clean and the mugs full.",
-                                "Try the house special – it bites back!"
+                                "Try the house special – it bites back!",
+                                "Perfect weather for staying in... too bad I’ve got chores.",
+                                "Can’t feel my toes. That’s normal, right?",
+                                "Rain’s sideways. How is rain SIDEWAYS?",
+                                "If I wasn’t so tired, I’d stargaze with you.",
+                                "Stop working for once—come gossip with me!"
                         )),
                         new ArrayList<Item>(Arrays.asList(
                                 CraftableItem.Beer,
@@ -108,7 +120,14 @@ public class NPCBuilder {
                                 "Animals are like family – treat them right.",
                                 "Milk day is the best day!",
                                 "Happy animals give better produce.",
-                                "Don't forget to feed them before sunset!"
+                                "Don't forget to feed them before sunset!",
+                                "I swear, my chickens hate rain more than foxes.",
+                                "My sheep look like fluffy clouds now.",
+                                "My chickens are hiding UNDER the coop. Smart.",
+                                "My cows sleep standing up. Creepy, huh?",
+                                "You look terrible. Long night? Let’s get coffee."
+
+
                         )),
                         new ArrayList<Item>(Arrays.asList(
                                 CraftableItem.Cheese,
@@ -132,7 +151,12 @@ public class NPCBuilder {
                                 "Forge work is loud but satisfying.",
                                 "Steel sings when it's strong.",
                                 "Don't touch the anvil. It's hot.",
-                                "A good hammer is worth its weight."
+                                "A good hammer is worth its weight.",
+                                "Mud everywhere. My floors will never be clean.",
+                                "Path’s icy—watch your step, farmer.",
+                                "If my roof survives this, I’ll fix it. Maybe.",
+                                "Early to bed, early to rise... or so they say.",
+                                "Knew I’d find you here. Predictable as always."
                         )),
                         new ArrayList<Item>(Arrays.asList(
                                 Food.MinerTreat,
@@ -158,7 +182,12 @@ public class NPCBuilder {
                                         "Wood is the soul of any home.",
                                         "Sawdust in your lungs builds character.",
                                         "A hammer and a dream — that’s all you need.",
-                                        "Ever built your own chair? Try it sometime."
+                                        "Ever built your own chair? Try it sometime.",
+                                        "Rain means free water for the fields, at least.",
+                                        "Winter’s long, but at least the pests are gone.",
+                                        "Worst part? The noise. Can’t even nap.",
+                                        "Stars are nice. Too bad I’m too tired to look.",
+                                        "Was just about to hunt you down—help me with this?"
                                 )),
                                 new ArrayList<Item>(Arrays.asList(
                                         Food.Spaghetti,
@@ -185,7 +214,12 @@ public class NPCBuilder {
                                 "Prices go up, prices go down — supply and demand!",
                                 "A good deal is a good day.",
                                 "Restocking is half the job.",
-                                "Let me know if you're buying in bulk!"
+                                "Let me know if you're buying in bulk!",
+                                "My roof’s leaking again. Got any spare straw?",
+                                "You ever eaten snow? Tastes like regret.",
+                                "Sky’s angry today. What’d we do?",
+                                "Ever seen a fox sneaking past midnight? Sneaky buggers.",
+                                "There’s my favorite troublemaker!"
                         )),
                         new ArrayList<Item>(Arrays.asList(
                                 Food.Bread,
@@ -209,7 +243,12 @@ public class NPCBuilder {
                                 "Spring feels so fresh!",
                                 "Summer days are long and warm.",
                                 "Fall leaves are beautiful to watch.",
-                                "Winter brings quiet and peace."
+                                "Winter brings quiet and peace.",
+                                "Ever tried dancing in the rain? ...No? Just me?",
+                                "Kids love this. I just love my fireplace.",
+                                "Stay inside unless you wanna fly to the next town.",
+                                "Night’s for resting... unless you’re a weirdo.",
+                                "Ugh, it’s you. Guess I’ll tolerate your company."
                         )),
                         new ArrayList<Item>(Arrays.asList(
                                 new Product(ProductType.SheepWool),
@@ -251,7 +290,13 @@ public class NPCBuilder {
                                 "Springtime is when everything wakes up.",
                                 "Summer is perfect for adventures.",
                                 "Fall means cozy sweaters.",
-                                "Winter nights are great for stories."
+                                "Winter nights are great for stories.",
+                                "You’d think I’d be used to wet socks by now.",
+                                "Bet my turnips are frozen solid under this.",
+                                "My fence is gone. Just... gone.",
+                                "Hear that? Owls. Means the mice are doomed.",
+                                "You’re late. I already ate all the good snacks."
+
                         )),
                         new ArrayList<Item>(Arrays.asList(
                                 Food.Salad,
@@ -293,7 +338,13 @@ public class NPCBuilder {
                                 "Springtime is when everything wakes up.",
                                 "Summer is perfect for adventures.",
                                 "Fall means cozy sweaters.",
-                                "Winter nights are great for stories."
+                                "Winter nights are great for stories.",
+                                "Ugh, my crops are drowning... hope yours are doing same.",
+                                "My fingers are numb... why do I farm again?",
+                                "ugh, I hate typhoon... and you",
+                                "Moon’s bright enough to work, but I’d rather sleep.",
+                                "Hey, you! Just the person I wanted to annoy today."
+
                         )),
                         new ArrayList<Item>(Arrays.asList(
                                 CraftableItem.Coffee,
@@ -335,7 +386,13 @@ public class NPCBuilder {
                                 "Spring feels so fresh!",
                                 "Summer days are long and warm.",
                                 "Fall leaves are beautiful to watch.",
-                                "Winter brings quiet and peace."
+                                "Winter brings quiet and peace.",
+                                "Rain’s good for the soil, but not for my mood.",
+                                "Snow’s pretty until you have to shovel it.",
+                                "Hope your barn’s sturdier than my shed!",
+                                "You farm at night? That’s dedication... or madness.",
+                                "Look who’s here! My day just got better."
+
                         )),
                         new ArrayList<Item>(Arrays.asList(
                                 new Rock(),

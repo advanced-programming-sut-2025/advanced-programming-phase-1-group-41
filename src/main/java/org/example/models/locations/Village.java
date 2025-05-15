@@ -7,20 +7,14 @@ import org.example.models.buildings.Door;
 import org.example.models.buildings.animalContainer.Barn;
 import org.example.models.buildings.animalContainer.Coop;
 import org.example.models.buildings.marketplaces.*;
-import org.example.models.buildings.npchomes.*;
 import org.example.models.foragings.Nature.Grass;
 import org.example.models.foragings.Nature.Lake;
-import org.example.models.npc.Clint;
-import org.example.models.npc.NPC;
-import org.example.models.npc.NPCBuilder;
+import org.example.models.npc.npcCharacters.NPC;
+import org.example.models.npc.npchomes.*;
 
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
-
-import static org.example.models.App.MaxHeight;
-import static org.example.models.App.MaxLength;
-import static org.example.models.animals.Breed.Coop;
 
 
 public class Village { ;
@@ -345,7 +339,7 @@ public class Village { ;
             System.out.printf(Colors.colorize(15,196,"↙↙"));
         }
         else if(transferCells.get(2).equals(cell)){
-            System.out.printf(Colors.colorize(0,39,"⛵"));
+            System.out.printf(Colors.colorize(0,39,"⛴ "));
         }
         else if(transferCells.get(3).equals(cell)){
             System.out.printf(Colors.colorize(15,196,"←←"));

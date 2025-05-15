@@ -1,4 +1,4 @@
-package org.example.models.buildings.npchomes;
+package org.example.models.npc.npchomes;
 
 import org.example.models.Cell;
 import org.example.models.Colors;
@@ -8,19 +8,19 @@ import org.example.models.buildings.Door;
 import org.example.models.buildings.Wall;
 import org.example.models.locations.Village;
 
-public class SebastienHome extends NPCHome implements Building {
+public class RobinHome extends NPCHome implements Building {
     @Override
     public String getChar() {
-        return Colors.colorize(0,82,"..");
+        return Colors.colorize(0,161,"..");
     }
 
     @Override
     public String getName() {
-        return "Sebastien Home";
+        return "Rabin Home";
     }
     private int x;
     private int y;
-    public SebastienHome(int x, int y, Village village) {
+    public RobinHome(int x, int y, Village village) {
         this.x = x;
         this.y = y;
         int xWall;

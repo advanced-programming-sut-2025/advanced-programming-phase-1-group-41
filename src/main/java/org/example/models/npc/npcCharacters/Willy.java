@@ -1,13 +1,10 @@
-package org.example.models.npc;
+package org.example.models.npc.npcCharacters;
 
-import org.example.models.Colors;
 import org.example.models.Occupation;
 import org.example.models.buildings.marketplaces.Marketplace;
-import org.example.models.buildings.npchomes.NPCHome;
 import org.example.models.items.Item;
 import org.example.models.items.Slot;
 
-import javax.crypto.MacSpi;
 import java.util.ArrayList;
 
 public class Willy extends NPC{

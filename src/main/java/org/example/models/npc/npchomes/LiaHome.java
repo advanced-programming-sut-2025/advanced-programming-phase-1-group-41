@@ -1,4 +1,4 @@
-package org.example.models.buildings.npchomes;
+package org.example.models.npc.npchomes;
 
 import org.example.models.Cell;
 import org.example.models.Colors;
@@ -8,48 +8,48 @@ import org.example.models.buildings.Door;
 import org.example.models.buildings.Wall;
 import org.example.models.locations.Village;
 
-public class HarveyHome extends NPCHome implements Building {
+public class LiaHome extends NPCHome implements Building {
     @Override
     public String getChar() {
-        return Colors.colorize(15,0,"..");
+        return Colors.colorize(0,208,"..");
     }
 
     @Override
     public String getName() {
-        return "HarveyHome";
+        return "Lia Home";
     }
     private int x;
     private int y;
-    public HarveyHome(int x, int y, Village village) {
+    public LiaHome(int x, int y, Village village) {
         this.x = x;
         this.y = y;
         int xWall;
         int yWall;
         yWall = y;
-        while(yWall<=y+4) {
-            for (int i = x; i <= x + 6; i++) {
+        while(yWall<=y+6) {
+            for (int i = x; i <= x + 8; i++) {
                 Cell cell = Finder.findCellByCoordinatesVillage(i, yWall,village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
-                if(i == x + 3&&yWall==y+4){
-                    cell.setObjectMap(new Door());
-                }
             }
-            yWall+=4;
+            yWall+=6;
         }
         xWall = x;
-        while(xWall<=x+6) {
-            for (int j = y+1; j <= y+4; j++) {
+        while(xWall<=x+8) {
+            for (int j = y+1; j <= y+6; j++) {
                 Cell cell = Finder.findCellByCoordinatesVillage(xWall, j, village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
+                if(j == y + 3&&xWall==x+8){
+                    cell.setObjectMap(new Door());
+                }
             }
-            xWall+=6;
+            xWall+=8;
         }
         x++;
         y++;
-        int xLength=5;
-        int yLength=3;
+        int xLength=7;
+        int yLength=5;
         for(int i=x; i<xLength+x; i++) {
             for(int j=y; j<yLength+y; j++) {
                 Cell cell=Finder.findCellByCoordinatesVillage(i, j, village);
@@ -74,4 +74,5 @@ public class HarveyHome extends NPCHome implements Building {
     public void setY(int y) {
         this.y = y;
     }
+
 }

@@ -1,10 +1,7 @@
-package org.example.models.npc;
+package org.example.models.npc.npcCharacters;
 
-import org.example.models.App;
 import org.example.models.items.CookingRecipe;
 import org.example.models.items.Slot;
-
-import java.util.ArrayList;
 
 public class Quest {
     private Slot request;

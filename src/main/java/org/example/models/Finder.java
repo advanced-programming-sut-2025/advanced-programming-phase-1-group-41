@@ -12,6 +12,7 @@ import org.example.models.items.Products.ProductType;
 import org.example.models.items.craftableitems.CraftableNames;
 import org.example.models.locations.Farm;
 import org.example.models.locations.Village;
+import org.example.models.npc.npcCharacters.NPC;
 import org.example.models.tools.FishingRodLevel;
 import org.example.models.tools.NormalTools;
 import org.example.models.tools.Tool;
@@ -172,6 +173,14 @@ public class Finder {
         for(Player player : App.getGame().getPlayers()){
             if(player.getUser().getUsername().equals(username)){
                 return player;
+            }
+        }
+        return null;
+    }
+    public static NPC parseNPC(String name){
+        for(NPC npc:App.getGame().getVillage().getNPCs()){
+            if(npc.getName().equals(name)){
+                return npc;
             }
         }
         return null;

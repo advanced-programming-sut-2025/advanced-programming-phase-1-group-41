@@ -4,7 +4,7 @@ import org.example.controllers.CheckerController;
 import org.example.controllers.MainMenuController;
 import org.example.models.*;
 import org.example.models.locations.Farm;
-import org.example.models.npc.NPCBuilder;
+import org.example.models.npc.npcCharacters.NPCBuilder;
 import org.example.views.commands.MainMenuCommands;
 import org.example.views.commands.gameCommands.GameMainCommands;
 
