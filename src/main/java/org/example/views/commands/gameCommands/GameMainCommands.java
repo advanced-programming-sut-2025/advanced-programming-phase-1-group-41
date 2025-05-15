@@ -12,7 +12,6 @@ public enum GameMainCommands implements Command {
     ExitGame("\\s*exit\\s+game\\s*"),
     DeleteGame("\\s*delete\\s+game\\s*"),
     NextTurn("\\s*next\\s+turn\\s*"),
-    GreenhouseBuild("\\s*greenhouse\\s+build\\s*"),
     Walk("\\s*walk\\s+-l\\s+(?<x>-?\\d+)\\s*,\\s*(?<y>-?\\d+)\\s*"),
     PrintMapReal("\\s*print\\s+map\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s+-s\\s+(?<size>\\d+)\\s*"),
     PrintMap("\\s*print\\s+map\\s*"),

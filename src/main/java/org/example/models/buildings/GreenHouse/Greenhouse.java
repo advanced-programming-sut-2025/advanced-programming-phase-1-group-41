@@ -22,7 +22,7 @@ public class Greenhouse implements Building {
     private int y;
     private Farm farm;
     private boolean isUnlocked = false;
-    private int[][] cells;
+    private ArrayList<Door> doors = new ArrayList<>();
 
     @Override
     public String getName() {
@@ -53,6 +53,7 @@ public class Greenhouse implements Building {
                 if(i == x + 3 && yWall == y + 7){
                     Door door = new Door();
                     door.setClosed(true);
+                    doors.add(door);
                     cell.setObjectMap(door);
                 }
 
@@ -68,6 +69,7 @@ public class Greenhouse implements Building {
                 if((j == y + 3 && xWall == x + 6) || (j == y + 4 && xWall == x + 6)){
                     Door door = new Door();
                     door.setClosed(true);
+                    doors.add(door);
                     cell.setObjectMap(door);
                 }
             }
@@ -95,7 +97,12 @@ public class Greenhouse implements Building {
     public Farm getFarm() {
         return farm;
     }
-    public void unlock() {isUnlocked = true;}
+    public void unlock() {
+        isUnlocked = true;
+        for (Door door : doors) {
+            door.setClosed(false);
+        }
+    }
     public boolean isGreenHouse(int x1, int y1) {
         for(int i = x; i< x + 5; i++) {
             for(int j = y; j< y + 6; j++) {

@@ -31,11 +31,16 @@ public class FarmingController {
     }
     public Result buildGreenhouse(Matcher matcher) {
         Player player = App.getGame().getCurrentPlayer();
+        if(player.getInventory().getSlotByItem(new Wood()) == null){
+            return new Result(false, "You don't have any wood! Try to chop some trees first!");
+        }
         if(player.getMoney() < 1000 || player.getInventory().getSlotByItem(new Wood()).getQuantity() < 500){
             return new Result(false, "insufficient funds, you need at least 1000 money and 500 wood!\nMoney: "
                     + player.getMoney() + "\nWood: " + player.getInventory().getSlotByItem(new Wood()).getQuantity());
         }
         App.getGame().getCurrentPlayerFarm().getGreenhouse().unlock();
+        player.getInventory().removeFromInventory(new Wood(), 500);
+        player.decMoney(1000);
         return new Result(true, "Greenhouse has been built!");
     }
     public Result plant(Matcher matcher){

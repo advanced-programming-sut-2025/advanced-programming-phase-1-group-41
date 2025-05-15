@@ -5,6 +5,7 @@ import org.example.models.App;
 import org.example.models.Finder;
 import org.example.models.tools.WateringCan;
 import org.example.views.commands.gameCommands.FarmingCommands;
+import org.example.views.commands.gameCommands.GameMainCommands;
 
 import java.util.regex.Matcher;
 
@@ -14,7 +15,9 @@ public class FarmingView {
         Matcher matcher;
         if ((matcher = FarmingCommands.CraftInfo.getMatcher(input)) != null) {
             System.out.println(controller.craftInfo(matcher));
-        } else if((matcher = FarmingCommands.Plant.getMatcher(input)) != null){
+        }else if ((matcher = FarmingCommands.GreenhouseBuild.getMatcher(input)) != null) {
+            System.out.println(controller.buildGreenhouse(matcher));
+        }else if((matcher = FarmingCommands.Plant.getMatcher(input)) != null){
             System.out.println(controller.plant(matcher));
         } else if((matcher = FarmingCommands.ShowPlant.getMatcher(input)) != null){
             System.out.println(controller.showPlant(matcher));

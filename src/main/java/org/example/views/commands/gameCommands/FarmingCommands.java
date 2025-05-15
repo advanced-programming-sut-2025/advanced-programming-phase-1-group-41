@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 
 public enum FarmingCommands implements Command {
     CraftInfo("\\s*craftinfo\\s+-n\\s+(?<craftName>.*)\\s*"),
+    GreenhouseBuild("\\s*greenhouse\\s+build\\s*"),
     Plant("\\s*plant\\s+-s\\s+(?<seed>.*)\\s+-d\\s+(?<direction>.*)\\s*"),
     ShowPlant("\\s*showplant\\s+-l\\s+(?<x>.*)\\s*,\\s*(?<y>.*)\\s*"),
     Fertilize("\\s*fertilize\\s+-f\\s+(?<fertilizer>.*)\\s+-d\\s+(?<direction>.*)\\s*"),
