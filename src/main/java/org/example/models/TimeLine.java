@@ -24,11 +24,17 @@ public class TimeLine {
     private Season season;
     private int year;
 
+
+    public final int firstHour = 9;
+    public final int firstDay = 0;
+    public final Season firstSeason = Season.Spring;
+    public final int firstYear = 1990;
+
     public TimeLine() {
-        this.hour = 9;
-        this.day = 0;
-        this.season = Season.Spring;
-        this.year = 1990;
+        this.hour = firstHour;
+        this.day = firstDay;
+        this.season = firstSeason;
+        this.year = firstYear;
     }
 
 
