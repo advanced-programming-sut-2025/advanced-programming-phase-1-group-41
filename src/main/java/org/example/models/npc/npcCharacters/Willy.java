@@ -13,6 +13,7 @@ public class Willy extends NPC{
         super(name, job, dialogues, favorites, itemsToGift, quests);
         this.marketplace = marketplace;
         setX(19);setY(1);
+        setDaysToUnlockQ3(28*3);
     }
     @Override
     public String getChar(){

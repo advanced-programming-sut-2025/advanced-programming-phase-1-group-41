@@ -13,6 +13,7 @@ public class Pierre extends NPC{
     public Pierre(String name, Occupation job, Marketplace marketplace, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift,ArrayList<Quest> quests) {
         super(name, job, dialogues, favorites, itemsToGift, quests);
         setX(45);setY(10);
+        setDaysToUnlockQ3(2*28);
     }
     @Override
     public String getChar(){

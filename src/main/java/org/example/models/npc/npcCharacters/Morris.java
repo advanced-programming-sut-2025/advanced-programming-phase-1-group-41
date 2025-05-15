@@ -14,6 +14,7 @@ public class Morris extends NPC{
         super(name, job, dialogues, favorites, itemsToGift, quests);
         this.marketplace = marketplace;
         setX(75);setY(36);
+        setDaysToUnlockQ3(14*28);
     }
     @Override
     public String getChar(){

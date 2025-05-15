@@ -43,7 +43,10 @@ public class NPCBuilder {
                                 "Snowball fight later? ...No? Fine.",
                                 "At least the weeds are getting ripped out for free.",
                                 "Night air’s crisp. Shame I’m stuck mending tools.",
-                                "Missed your face. What’s new?")),
+                                "Missed your face. What’s new?",
+                                "Oh. You... really shouldn't have. Like, at all.",
+                                "No way… You remembered?! I could hug you right now!"
+                                )),
                         new ArrayList<Item>(Arrays.asList(
                                 new Fish(FishType.Sunfish),
                                 Food.DishOTheSea,
@@ -67,7 +70,8 @@ public class NPCBuilder {
                                 "If I hibernate like a bear, wake me in spring.",
                                 "Think the gods are mad at us, or just bored?",
                                 "You ever get spooked by your own scarecrow? Just me?",
-                                "Saved you a seat. Try not to spill this time."
+                                "Saved you a seat. Try not to spill this time.",
+                                "This is my favorite thing in the world. How are you this good to me?"
                         )),
                         new ArrayList<Item>(Arrays.asList(
                                 Food.FarmerLunch,
@@ -96,7 +100,9 @@ public class NPCBuilder {
                                 "Can’t feel my toes. That’s normal, right?",
                                 "Rain’s sideways. How is rain SIDEWAYS?",
                                 "If I wasn’t so tired, I’d stargaze with you.",
-                                "Stop working for once—come gossip with me!"
+                                "Stop working for once—come gossip with me!",
+                                "I don’t deserve you. Seriously, thank you!",
+                                "Wait—this is the exact one I’ve been saving up for! Did you read my mind?!"
                         )),
                         new ArrayList<Item>(Arrays.asList(
                                 CraftableItem.Beer,
@@ -125,7 +131,9 @@ public class NPCBuilder {
                                 "My sheep look like fluffy clouds now.",
                                 "My chickens are hiding UNDER the coop. Smart.",
                                 "My cows sleep standing up. Creepy, huh?",
-                                "You look terrible. Long night? Let’s get coffee."
+                                "You look terrible. Long night? Let’s get coffee.",
+                                "This is so thoughtful! You’re the best.",
+                                "I’ve dropped subtle hints for months… You actually listened!"
 
 
                         )),
@@ -156,7 +164,9 @@ public class NPCBuilder {
                                 "Path’s icy—watch your step, farmer.",
                                 "If my roof survives this, I’ll fix it. Maybe.",
                                 "Early to bed, early to rise... or so they say.",
-                                "Knew I’d find you here. Predictable as always."
+                                "Knew I’d find you here. Predictable as always.",
+                                "Is it my birthday and I forgot? Either way, thanks!",
+                                "This is so me. You get me better than my own family."
                         )),
                         new ArrayList<Item>(Arrays.asList(
                                 Food.MinerTreat,
@@ -187,7 +197,9 @@ public class NPCBuilder {
                                         "Winter’s long, but at least the pests are gone.",
                                         "Worst part? The noise. Can’t even nap.",
                                         "Stars are nice. Too bad I’m too tired to look.",
-                                        "Was just about to hunt you down—help me with this?"
+                                        "Was just about to hunt you down—help me with this?",
+                                        "Aw, you didn’t have to! …But I love it.",
+                                        "I was just about to buy this for myself! Now it’s extra special."
                                 )),
                                 new ArrayList<Item>(Arrays.asList(
                                         Food.Spaghetti,
@@ -219,7 +231,9 @@ public class NPCBuilder {
                                 "You ever eaten snow? Tastes like regret.",
                                 "Sky’s angry today. What’d we do?",
                                 "Ever seen a fox sneaking past midnight? Sneaky buggers.",
-                                "There’s my favorite troublemaker!"
+                                "There’s my favorite troublemaker!",
+                                "You’re spoiling me. I might get used to it.",
+                                "I’ll treasure this forever. Seriously—check my will, it’s in there now."
                         )),
                         new ArrayList<Item>(Arrays.asList(
                                 Food.Bread,
@@ -248,7 +262,9 @@ public class NPCBuilder {
                                 "Kids love this. I just love my fireplace.",
                                 "Stay inside unless you wanna fly to the next town.",
                                 "Night’s for resting... unless you’re a weirdo.",
-                                "Ugh, it’s you. Guess I’ll tolerate your company."
+                                "Ugh, it’s you. Guess I’ll tolerate your company.",
+                                "This is perfect! How’d you know I needed this?",
+                                "Every time I use this, I’ll think of you. That’s a threat."
                         )),
                         new ArrayList<Item>(Arrays.asList(
                                 new Product(ProductType.SheepWool),
@@ -283,9 +299,9 @@ public class NPCBuilder {
                                         "tnx mate"
                                 )
                         ))
-                ));
+                        ));
             } else if (building instanceof LiaHome) {
-                NPCs.add(new Lia("Harvey", Occupation.Jobless, (LiaHome) building,
+                NPCs.add(new Lia("Lia", Occupation.Jobless, (LiaHome) building,
                         new ArrayList<String>(Arrays.asList(
                                 "Springtime is when everything wakes up.",
                                 "Summer is perfect for adventures.",
@@ -295,8 +311,9 @@ public class NPCBuilder {
                                 "Bet my turnips are frozen solid under this.",
                                 "My fence is gone. Just... gone.",
                                 "Hear that? Owls. Means the mice are doomed.",
-                                "You’re late. I already ate all the good snacks."
-
+                                "You’re late. I already ate all the good snacks.",
+                                "A gift? What’s the catch? …Just kidding, thank you!",
+                                "This is the perfect version too! Did you stalk the shopkeeper for me?!"
                         )),
                         new ArrayList<Item>(Arrays.asList(
                                 Food.Salad,
@@ -335,15 +352,17 @@ public class NPCBuilder {
             }else if (building instanceof HarveyHome) {
                 NPCs.add(new Harvey("Harvey", Occupation.Jobless, (HarveyHome) building,
                         new ArrayList<String>(Arrays.asList(
-                                "Springtime is when everything wakes up.",
-                                "Summer is perfect for adventures.",
-                                "Fall means cozy sweaters.",
-                                "Winter nights are great for stories.",
+                                "get out of here",
+                                "take a shower some time you stinky ass",
+                                "i wish you were one of these leaves below my shoe",
+                                "i dont know witch is more annoying, winter or you",
                                 "Ugh, my crops are drowning... hope yours are doing same.",
                                 "My fingers are numb... why do I farm again?",
                                 "ugh, I hate typhoon... and you",
                                 "Moon’s bright enough to work, but I’d rather sleep.",
-                                "Hey, you! Just the person I wanted to annoy today."
+                                "Hey, you! Just the person I wanted to annoy today.",
+                                "Cool. My pile of junk just got bigger.",
+                                "I don’t deserve you. Or this. But I’m keeping both."
 
                         )),
                         new ArrayList<Item>(Arrays.asList(
@@ -391,7 +410,10 @@ public class NPCBuilder {
                                 "Snow’s pretty until you have to shovel it.",
                                 "Hope your barn’s sturdier than my shed!",
                                 "You farm at night? That’s dedication... or madness.",
-                                "Look who’s here! My day just got better."
+                                "Look who’s here! My day just got better.",
+                                "For me? You shouldn’t have! …But I’m glad you did.",
+                                "You’re banned from being this thoughtful. My heart can’t take it."
+
 
                         )),
                         new ArrayList<Item>(Arrays.asList(

@@ -14,6 +14,7 @@ public class Sebastien extends NPC{
         super(name, job, dialogues, favorites, itemsToGift, quests);
         this.home = home;
         setX(16);setY(55);
+        setDaysToUnlockQ3(7);
     }
     @Override
     public String getChar(){

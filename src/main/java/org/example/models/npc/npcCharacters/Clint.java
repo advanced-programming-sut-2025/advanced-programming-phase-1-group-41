@@ -18,6 +18,7 @@ public class Clint extends NPC{
         super(name, job, dialogues, favorites, itemsToGift, quests);
         this.marketplace = marketplace;
         setX(86);setY(55);
+        setDaysToUnlockQ3(5*28);
     }
     @Override
     public String getChar(){

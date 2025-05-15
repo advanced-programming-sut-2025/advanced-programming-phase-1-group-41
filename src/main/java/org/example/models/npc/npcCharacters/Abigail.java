@@ -14,6 +14,7 @@ public class Abigail extends NPC{
     public Abigail(String name, Occupation job, NPCHome home, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift,ArrayList<Quest> quests) {
         super(name, job, dialogues, favorites, itemsToGift, quests);
         this.home = home;
+        setDaysToUnlockQ3(4*28);
         setX(26);setY(43);
     }
     @Override

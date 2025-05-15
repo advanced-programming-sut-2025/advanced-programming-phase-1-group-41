@@ -13,6 +13,7 @@ public class Marine extends NPC{
     public Marine(String name, Occupation job,  Marketplace marketplace, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift,ArrayList<Quest> quests) {
         super(name, job, dialogues, favorites, itemsToGift, quests);
         setX(85);setY(9);
+        setDaysToUnlockQ3(1*28);
     }
     @Override
     public String getChar(){

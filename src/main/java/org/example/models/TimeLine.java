@@ -3,13 +3,10 @@ package org.example.models;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import org.bson.types.ObjectId;
-import org.example.controllers.subgames.AnimalController;
-import org.example.controllers.subgames.FriendshipController;
-import org.example.controllers.subgames.MarketplaceController;
+import org.example.controllers.subgames.*;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.marketplaces.*;
 import org.example.models.locations.Farm;
-import org.example.controllers.subgames.CraftingController;
 
 import java.util.Random;
 
@@ -37,6 +34,13 @@ public class TimeLine {
         this.year = firstYear;
     }
 
+    public int howManyDaysPassed() {
+        int sum=0;
+        sum+=(getYear()-firstYear)*4*28;
+        sum+=(getSeason().ordinal()-firstSeason.ordinal())*28;
+        sum+=(getDay()-firstDay);
+        return sum;
+    }
 
     public int getHour() {
         return hour;
@@ -89,6 +93,7 @@ public class TimeLine {
             }
         }
         (new AnimalController()).resetAndCheck();
+        (new NPCController()).resetAndCheck();
         for (Player player : App.getGame().getPlayers()) {
             player.dailyUpdates();
         }

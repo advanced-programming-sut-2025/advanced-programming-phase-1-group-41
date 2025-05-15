@@ -13,6 +13,7 @@ public class Harvey extends NPC{
     public Harvey(String name, Occupation job, NPCHome home, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift,ArrayList<Quest> quests) {
         super(name, job, dialogues, favorites, itemsToGift, quests);
         setX(60);setY(55);
+        setDaysToUnlockQ3(12*28);
     }
     @Override
     public String getChar(){

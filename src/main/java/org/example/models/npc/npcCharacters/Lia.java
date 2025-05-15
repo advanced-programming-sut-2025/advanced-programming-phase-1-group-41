@@ -13,6 +13,7 @@ public class Lia extends NPC{
     public Lia(String name, Occupation job, NPCHome home, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift,ArrayList<Quest> quests) {
         super(name, job, dialogues, favorites, itemsToGift,quests);
         this.home = home;setX(11);setY(53);
+        setDaysToUnlockQ3(7*28);
     }
     @Override
     public String getChar(){

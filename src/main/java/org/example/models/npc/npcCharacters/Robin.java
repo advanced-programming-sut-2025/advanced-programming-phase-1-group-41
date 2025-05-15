@@ -17,6 +17,7 @@ public class Robin extends NPC{
         this.marketplace = marketplace;
         this.home = home;
         setX(70);setY(13);
+        setDaysToUnlockQ3(11*28);
     }
     @Override
     public String getChar(){

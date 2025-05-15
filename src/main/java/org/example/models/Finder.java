@@ -182,7 +182,7 @@ public class Finder {
     }
     public static NPC parseNPC(String name){
         for(NPC npc:App.getGame().getVillage().getNPCs()){
-            if(npc.getName().equals(name)){
+            if(npc.getName().equalsIgnoreCase(name)){
                 return npc;
             }
         }

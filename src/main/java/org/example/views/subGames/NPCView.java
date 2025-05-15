@@ -12,7 +12,13 @@ public class NPCView {
         Matcher matcher;
         if((matcher = NPCCommands.MeetNPC.getMatcher(input))!=null){
             System.out.println(controller.meetNpc(matcher));
-        }else{
+        }else if((matcher = NPCCommands.GiftNPC.getMatcher(input))!=null){
+            System.out.println(controller.giftToNpc(matcher));
+        }else if((matcher = NPCCommands.FriendshipNPCList.getMatcher(input))!=null){
+            System.out.println(controller.friendshipList(matcher));
+        }else if((matcher = NPCCommands.QuestsList.getMatcher(input))!=null){
+            System.out.println(controller.questList(matcher));
+        } else{
             return false;
         }
         return true;
