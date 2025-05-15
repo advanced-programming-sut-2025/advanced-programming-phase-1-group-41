@@ -95,6 +95,9 @@ public class Friendship {
         }
     }
     public void decreaseLevel(Player player) {
+        if(level <= -1 && friendshipXp < 0){
+            friendshipXp = 0;
+        }
         if(friendshipXp <= 0 && level >= 0){
             level--;
             for(FriendshipLevel friendshipLevel : FriendshipLevel.values()){

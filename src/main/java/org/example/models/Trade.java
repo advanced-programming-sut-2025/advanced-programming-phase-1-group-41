@@ -80,11 +80,11 @@ public class Trade {
             if(isRequest){
                 assert targetItem != null;
                 return from.getUser().getUsername() + ": requests " + item.getQuantity() + " " + item.getItem().getName()
-                        + " changed with " + targetItem.getQuantity() + " " + item.getItem().getName() + ".";
+                        + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + ".";
             }else{
                 assert targetItem != null;
                 return from.getUser().getUsername() + ": offers " + item.getQuantity() + " " + item.getItem().getName()
-                        + " changed with " + targetItem.getQuantity() + " " + item.getItem().getName() + ".";
+                        + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + ".";
             }
         }
     }
@@ -92,21 +92,21 @@ public class Trade {
         if(isDone){
             if(paidInMoney){
                 if(isRequest){
-                    return "Trade done: " + from.getUser().getUsername() + " got " + item.getQuantity() + " " + item.getItem().getName()
-                            + " purchased with " + price + " money." + " from " + to.getUser().getUsername();
+                    return "Trade Done: " + from.getUser().getUsername() + " got " + item.getQuantity() + " " + item.getItem().getName()
+                            + " purchased with " + price + " money" + " from " + to.getUser().getUsername();
                 }else{
-                    return "Trade done: " + from.getUser().getUsername() + " gave " + item.getQuantity() + " " + item.getItem().getName()
-                            + " purchased with " + price + " money." + " to " + to.getUser().getUsername();
+                    return "Trade Done: " + from.getUser().getUsername() + " gave " + item.getQuantity() + " " + item.getItem().getName()
+                            + " purchased with " + price + " money" + " to " + to.getUser().getUsername();
                 }
             }else{
                 if(isRequest){
                     assert targetItem != null;
-                    return "Trade done: " + from.getUser().getUsername() + " got " + item.getQuantity() + " " + item.getItem().getName()
-                            + " changed with " + targetItem.getQuantity() + " " + item.getItem().getName() + " from " + to.getUser().getUsername();
+                    return "Trade Done: " + from.getUser().getUsername() + " got " + item.getQuantity() + " " + item.getItem().getName()
+                            + " and gave " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " to " + to.getUser().getUsername();
                 }else{
                     assert targetItem != null;
-                    return "Trade done: " + from.getUser().getUsername() + " gave " + item.getQuantity() + " " + item.getItem().getName()
-                            + " changed with " + targetItem.getQuantity() + " " + item.getItem().getName() + " to " + to.getUser().getUsername();
+                    return "Trade Done: " + from.getUser().getUsername() + " gave " + item.getQuantity() + " " + item.getItem().getName()
+                            + " and got " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " with " + to.getUser().getUsername();
                 }
             }
         } else if(isRejected){
@@ -122,31 +122,31 @@ public class Trade {
                 if(isRequest){
                     assert targetItem != null;
                     return "Trade Rejected: You requested " + item.getQuantity() + " " + item.getItem().getName()
-                            + " changed with " + targetItem.getQuantity() + " " + item.getItem().getName() + " from " + to.getUser().getUsername();
+                            + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " from " + to.getUser().getUsername();
                 }else{
                     assert targetItem != null;
                     return "Trade Rejected: You offered " + item.getQuantity() + " " + item.getItem().getName()
-                            + " changed with " + targetItem.getQuantity() + " " + item.getItem().getName() + " to " + to.getUser().getUsername();
+                            + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " to " + to.getUser().getUsername();
                 }
             }
         } else{
             if(paidInMoney){
                 if(isRequest){
-                    return "Trade Pending: " + from.getUser().getUsername() + ": requests " + item.getQuantity() + " " + item.getItem().getName()
+                    return "Trade Pending: " + from.getUser().getUsername() + " requests " + item.getQuantity() + " " + item.getItem().getName()
                             + " purchased with " + price + " money from " + to.getUser().getUsername();
                 }else{
-                    return "Trade Pending: " + from.getUser().getUsername() + ": offers " + item.getQuantity() + " " + item.getItem().getName()
+                    return "Trade Pending: " + from.getUser().getUsername() + " offers " + item.getQuantity() + " " + item.getItem().getName()
                             + " purchased with " + price + " money to " + to.getUser().getUsername();
                 }
             }else{
                 if(isRequest){
                     assert targetItem != null;
-                    return "Trade Pending: " + from.getUser().getUsername() + ": requests " + item.getQuantity() + " " + item.getItem().getName()
-                            + " changed with " + targetItem.getQuantity() + " " + item.getItem().getName() + " from " + to.getUser().getUsername();
+                    return "Trade Pending: " + from.getUser().getUsername() + " requests " + item.getQuantity() + " " + item.getItem().getName()
+                            + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " from " + to.getUser().getUsername();
                 }else{
                     assert targetItem != null;
-                    return "Trade Pending: " + from.getUser().getUsername() + ": offers " + item.getQuantity() + " " + item.getItem().getName()
-                            + " changed with " + targetItem.getQuantity() + " " + item.getItem().getName() + " to " + to.getUser().getUsername();
+                    return "Trade Pending: " + from.getUser().getUsername() + " offers " + item.getQuantity() + " " + item.getItem().getName()
+                            + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " to " + to.getUser().getUsername();
                 }
             }
         }

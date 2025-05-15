@@ -107,7 +107,7 @@ public class TradeMenuController {
 
     public Result tradeHistory(Matcher matcher){
         StringBuilder tradeList = new StringBuilder();
-        for(Trade trade : App.getGame().getCurrentPlayer().getTradesList()){
+        for(Trade trade : App.getGame().getCurrentPlayer().getTotalTradesList()){
             tradeList.append(trade.toString2()).append("\n");
         }
         if(tradeList.isEmpty()){
@@ -203,7 +203,7 @@ public class TradeMenuController {
                     resPlayer.getInventory().addToInventory(item, amount);
                 }
             }
-            return new Result(true, "Trade with + " + traderPlayer.getUser().getUsername() + " accepted!");
+            return new Result(true, "Trade with " + traderPlayer.getUser().getUsername() + " accepted!");
 
         } else{
             resPlayer.getTradesList().remove(trade);
@@ -211,7 +211,7 @@ public class TradeMenuController {
             friendship.rejectTrade();
             friendship.interact();
             friendship.decreaseLevel(resPlayer);
-            return new Result(true, "Trade with + " + traderPlayer.getUser().getUsername() + " rejected!");
+            return new Result(true, "Trade with " + traderPlayer.getUser().getUsername() + " rejected!");
         }
     }
 
