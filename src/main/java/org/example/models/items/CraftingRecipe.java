@@ -43,13 +43,13 @@ public enum CraftingRecipe {
     ScareCrow(new HashMap<>(){{
         put(new Wood(), 50);
         put(new Mineral(MineralType.Coal),1);
-        // fiber
+        put(new Fiber(), 20);
     }}, "ScareCrowRecipe"),
     DeluxeScareCrow(new HashMap<>(){{
         put(new Wood(), 50);
         put(new Mineral(MineralType.Coal),1);
         put(new Mineral(MineralType.IridiumOre),1);
-        // fiber
+        put(new Fiber(), 20);
     }}, "DeluxeScareCrowRecipe"),
     BeeHouse(new HashMap<>(){{
         put(new Wood(),40);
@@ -68,7 +68,7 @@ public enum CraftingRecipe {
     }}, "KegRecipe"),
     Loom(new HashMap<>(){{
         put(new Wood(),60);
-        // fiber
+        put(new Fiber(), 30);
     }}, "LoomRecipe"),
     MayonnaiseMachine(new HashMap<>(){{
         put(new Wood(),15);
@@ -88,11 +88,11 @@ public enum CraftingRecipe {
     Dehydrator(new HashMap<>(){{
         put(new Wood(),30);
         put(new Rock(),20);
-        // fiber
+        put(new Fiber(), 30);
     }}, "DehydratorRecipe"),
     GrassStarter(new HashMap<>(){{
         put(new Wood(), 1);
-        // fiber
+        put(new Fiber(), 30);
     }}, "GrassStarterRecipe"),
     FishSmoker(new HashMap<>(){{
         put(new Wood(), 50);

@@ -4,6 +4,7 @@ import org.example.models.animals.Fish;
 import org.example.models.animals.FishType;
 import org.example.models.buildings.marketplaces.items.MarketplaceItems;
 import org.example.models.foragings.*;
+import org.example.models.foragings.Nature.Fiber;
 import org.example.models.items.Products.Product;
 import org.example.models.items.Products.ProductType;
 
@@ -56,7 +57,7 @@ public enum CookingRecipe {
     MakiRoll(new HashMap<>(){{
         // fish
         put(MarketplaceItems.Rice, 1);
-        // fiber
+        put(new Fiber(), 1);
     }}, "MakiRollRecipe"),
 
     TripleShotExspresso(new HashMap<>(){{

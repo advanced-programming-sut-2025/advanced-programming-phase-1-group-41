@@ -79,6 +79,9 @@ public class Finder {
         if(itemName.equalsIgnoreCase((new ShippingBin()).getName())){
             return new ShippingBin();
         }
+        if(itemName.equalsIgnoreCase((new Fiber()).getName())){
+            return new Fiber();
+        }
         if(CraftableNames.parseItem(itemName)!=null){
             return CraftableNames.parseItem(itemName);
         }
