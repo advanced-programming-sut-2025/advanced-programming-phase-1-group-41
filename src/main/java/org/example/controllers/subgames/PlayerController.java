@@ -150,19 +150,36 @@ public class PlayerController {
         Food food = Food.parseFood(itemName);
         FruitType fruitType = FruitType.parseFruitType(itemName);
         Item item = Finder.parseItem(itemName);
-        if(food == null && fruitType == null && !(item instanceof Eatable)){
+        if(item instanceof CraftableItem ci){
+            if(!ci.isEatable()){
+                return new Result(false, "Invalid item");
+            }
+        }else if(food == null && fruitType == null && !(item instanceof Eatable)){
             return new Result(false, "Invalid item");
         }
         if(food != null){
             return eatFood(itemName);
         }else if(fruitType != null){
             return eatFruit(itemName);
+        }else if(item instanceof CraftableItem ci){
+            return eatCraftable(ci);
         }
         Slot e = App.getGame().getCurrentPlayer().getInventory().getSlotByItem(item);
         if(e.getItem() instanceof Eatable eatable){
             return eatEatable(eatable);
         }
         return new Result(false, "Invalid item");
+    }
+
+    private Result eatCraftable(CraftableItem item){
+        App.getGame().getCurrentPlayer().incEnergy(item.getEnergy());
+        if(App.getGame().getCurrentPlayer().getEnergy() > 100){
+            App.getGame().getCurrentPlayer().setEnergy(100);
+        }
+        double value = item.getEnergy();
+        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
+        inventory.removeFromInventory(item, 1);
+        return new Result (true, "you got "+value+" energy");
     }
 
     private Result eatFruit(String fruitName){

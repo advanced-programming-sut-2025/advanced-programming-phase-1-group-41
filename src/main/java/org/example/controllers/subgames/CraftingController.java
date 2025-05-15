@@ -5,13 +5,12 @@ import org.example.models.animals.Fish;
 import org.example.models.animals.FishType;
 import org.example.models.buildings.Cottage;
 import org.example.models.buildings.Well;
+import org.example.models.foragings.*;
 import org.example.models.foragings.Nature.MineralType;
+import org.example.models.foragings.Nature.Mushroom;
 import org.example.models.foragings.Nature.Wood;
 import org.example.models.items.*;
-import org.example.models.items.craftablemachines.FishSmoker;
-import org.example.models.items.craftablemachines.Furnace;
-import org.example.models.items.craftablemachines.Kiln;
-import org.example.models.items.craftablemachines.Machine;
+import org.example.models.items.craftablemachines.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -156,8 +155,8 @@ public class CraftingController {
     }
 
     private Cell findArtisan(String machineName) {
-        for (int i = -1; i < 1; i++) {
-            for (int j = -1; j < 1; j++) {
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
                 x = App.getGame().getCurrentPlayer().getX() + i;
                 y = App.getGame().getCurrentPlayer().getY() + j;
                 Cell cell = App.getGame().getCurrentPlayerFarm().getCell(x, y);
@@ -201,6 +200,7 @@ public class CraftingController {
             case Furnace -> this.furnace(items, cell);
             case CharcoalKiln -> this.charcoalKiln(items, cell);
             case FishSmoker -> this.fishSmoker(items, cell);
+            case Dehydrator -> this.dehydrator(items, cell);
             default -> new Result(false, machineName + " is not useable");
         };
     }
@@ -226,7 +226,7 @@ public class CraftingController {
                 }
                 player.getInventory().addToInventory(slot.getItem(), slot.getQuantity());
                 iterator.remove();
-                return new Result(true, slot.getItem() + " added to inventory");
+                return new Result(true, slot.getItem().getName() + " added to inventory");
             }
         }
         return new Result(false, machineName + " is not ongoing");
@@ -267,6 +267,8 @@ public class CraftingController {
         return new Result(true, "done");
     }
 
+
+
     private void fishSmokerHelper(FishSmoker fs,ArrayList<Item> items, Cell cell, Player player, Fish fish) {
         for (Item item : items) {
             if(item.getName().equalsIgnoreCase(fish.getFishType().getName())){
@@ -305,9 +307,7 @@ public class CraftingController {
         return null;
     }
 
-    private Result dehydrator(Matcher matcher) {
-        return null;
-    }
+
 
     private Result charcoalKiln(ArrayList<Item> items, Cell cell) {
         Player player = App.getGame().getCurrentPlayer();
@@ -333,6 +333,51 @@ public class CraftingController {
         }
     }
 
+    public Item setDehydratorType(ArrayList<Item> items){
+        for (Item item : items) {
+            Mushroom mushroom = Mushroom.parseMushroom(item.getName());
+            if(mushroom != null){
+                return mushroom;
+            }
+            FruitType fruit = FruitType.parseFruitType(item.getName());
+            if(fruit != null){
+                return new Fruit(fruit);
+            }
+            CropType cropType = CropType.parseCropType(item.getName());
+            if(cropType != null && cropType.equals(CropType.Grape)){
+                return new Crop(cropType);
+            }
+        }
+        return null;
+    }
+
+    private Result dehydrator(ArrayList<Item> items, Cell cell) {
+        Item type = setDehydratorType(items);
+        if(type == null){
+            return new Result(false, "invalid item type ");
+        }
+        Player player = App.getGame().getCurrentPlayer();
+        for (Machine x : player.getOnGoingMachines()) {
+            if (x instanceof Dehydrator dh) {
+                dehyderatorHelper(dh, items, player, type);
+                return new Result(true, "done");
+            }
+        }
+        Dehydrator dehydrator = null;
+        if(type instanceof Fruit){
+            dehydrator = new Dehydrator((Fruit) type);
+        }else if(type instanceof Crop){
+            dehydrator = new Dehydrator((Crop) type, true);
+        }else if(type instanceof Mushroom){
+            dehydrator = new Dehydrator((Mushroom) type);
+        }
+        if(dehydrator == null){
+            return new Result(false, "invalid item type "+type.getName());
+        }
+        player.getOnGoingMachines().add(dehydrator);
+        dehyderatorHelper(dehydrator, items, player, type);
+        return new Result(true, "donee");
+    }
 
     private Result furnace(ArrayList<Item> items, Cell cell) {
         MineralType mineralType = setMineralType(items);
@@ -378,6 +423,17 @@ public class CraftingController {
                 updateItems(item, furnace, player, 1);
             }else if(mineralType != null && item.getName().equalsIgnoreCase(mineralType.getName())){
                 updateItems(item, furnace, player, 5);
+            }else{
+                System.out.println(item.getName() + " is not a valid input");
+                return;
+            }
+        }
+    }
+
+    private void dehyderatorHelper(Dehydrator dehydrator, ArrayList<Item> items, Player player, Item type){
+        for (Item item : items) {
+            if(item.getName().equalsIgnoreCase(type.getName())){
+                updateItems(item, dehydrator, player, 5);
             }else{
                 System.out.println(item.getName() + " is not a valid input");
                 return;

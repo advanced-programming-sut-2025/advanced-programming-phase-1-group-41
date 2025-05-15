@@ -1,25 +1,26 @@
 package org.example.models.items.craftableitems;
 
 import org.example.models.foragings.ForagingCropType;
+import org.example.models.foragings.Nature.Mushroom;
 import org.example.models.items.Eatable;
 import org.example.models.items.Item;
 
 public class DriedMushroom implements Eatable, Item {
-    ForagingCropType cropType;
+    Mushroom mushroom;
 
     public DriedMushroom() {
     }
 
-    public DriedMushroom(ForagingCropType cropType) {
-        this.cropType = cropType;
+    public DriedMushroom(Mushroom mushroom) {
+        this.mushroom = mushroom;
     }
 
-    public ForagingCropType getCropType() {
-        return cropType;
+    public Mushroom getMushroom() {
+        return mushroom;
     }
 
-    public void setCropType(ForagingCropType cropType) {
-        this.cropType = cropType;
+    public void setMushroom(Mushroom mushroom) {
+        this.mushroom = mushroom;
     }
 
     @Override
@@ -34,7 +35,7 @@ public class DriedMushroom implements Eatable, Item {
 
     @Override
     public double getPrice() {
-        return 25+7.5*cropType.getBaseSellPrice();
+        return 25+7.5*mushroom.getPrice();
     }
 
     @Override
