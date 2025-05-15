@@ -14,7 +14,7 @@ public enum CraftableMachine implements Item{
     Scarecrow(Colors.colorize(160, 0, "!!"), "Scarecrow", 0, CraftingRecipe.ScareCrow),
     DeluxeScarecrow(Colors.colorize(160, 0, "??"), "DeluxeScarecrow", 0, CraftingRecipe.DeluxeScareCrow),
     BeeHouse("bh", "BeeHouse", 0, CraftingRecipe.BeeHouse),
-    CheesePress("cp", "Cheese Press", 0, CraftingRecipe.CheesePress),
+    CheesePress("cp", "CheesePress", 0, CraftingRecipe.CheesePress),
     Keg("k", "Keg", 0, CraftingRecipe.Keg),
     Loom("l", "Loom", 0, CraftingRecipe.Loom),
     MayonnaiseMachine("mm", "MayonnaiseMachine", 0, CraftingRecipe.MayonnaiseMachine),
