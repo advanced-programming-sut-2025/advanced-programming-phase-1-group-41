@@ -47,4 +47,13 @@ public enum Mushroom implements Item {
         return null;
     }
 
+    public static Mushroom parseMushroom(String item) {
+        for (Mushroom value : Mushroom.values()) {
+            if(value.getName().equalsIgnoreCase(item)){
+                return value;
+            }
+        }
+        return null;
+    }
+
 }

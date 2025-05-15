@@ -20,7 +20,7 @@ public enum CraftableMachine implements Item{
     MayonnaiseMachine("mm", "MayonnaiseMachine", 0, CraftingRecipe.MayonnaiseMachine),
     OilMaker("om", "OilMaker", 0, CraftingRecipe.OilMaker),
     PreservesJar("pj", "PreservesJar", 0, CraftingRecipe.PreservesJar),
-    Dehydrator("d", "Dehydrator", 0, CraftingRecipe.Dehydrator),
+    Dehydrator("dh", "Dehydrator", 0, CraftingRecipe.Dehydrator),
     GrassStarter("gs", "GrassStarter", 0, CraftingRecipe.GrassStarter),
     FishSmoker("fs", "FishSmoker", 0, CraftingRecipe.FishSmoker),
     MysticTreeSeed("mts", "MysticTreeSeed", 100, CraftingRecipe.MysticTreeSeed),

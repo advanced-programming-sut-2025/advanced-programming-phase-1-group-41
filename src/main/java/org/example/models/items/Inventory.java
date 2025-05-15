@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Inventory {
     private ArrayList<Slot> slots=new ArrayList<>();
-    private Backpack backpack=Backpack.Default;
+    private Backpack backpack=Backpack.Deluxe;
     private int lastGottenSumOfItemsPrice;
     public Inventory()
     {
