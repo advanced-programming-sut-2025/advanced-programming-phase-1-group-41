@@ -83,6 +83,11 @@ public class PathFinder {
                 return false;
             }
         }
+        if(nextCell.getObjectMap() instanceof Door door){
+            if(door.isClosed()){
+                return false;
+            }
+        }
         return true;
     }
 
@@ -101,6 +106,11 @@ public class PathFinder {
                 return true;
             }
             return false;
+        }
+        if(nextCell.getObjectMap() instanceof Door door){
+            if(door.isClosed()){
+                return false;
+            }
         }
         return true;
     }

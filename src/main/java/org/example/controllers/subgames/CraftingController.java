@@ -10,6 +10,8 @@ import org.example.models.foragings.Nature.MineralType;
 import org.example.models.foragings.Nature.Mushroom;
 import org.example.models.foragings.Nature.Wood;
 import org.example.models.items.*;
+import org.example.models.items.Products.Product;
+import org.example.models.items.Products.ProductType;
 import org.example.models.items.craftablemachines.*;
 
 import java.util.ArrayList;
@@ -202,6 +204,7 @@ public class CraftingController {
             case FishSmoker -> this.fishSmoker(items, cell);
             case Dehydrator -> this.dehydrator(items, cell);
             case PreservesJar -> this.jarPreserver(items, cell);
+            case OilMaker -> this.oilMaker(items, cell);
             default -> new Result(false, machineName + " is not useable");
         };
     }
@@ -499,7 +502,68 @@ public class CraftingController {
         }
     }
 
-    private Result oilMaker(Matcher matcher){return null;}
+
+
+    private Item setOilType(ArrayList<Item> items) {
+        for (Item item : items) {
+            SeedType seedType = SeedType.parseSeedType(item.getName());
+            if(seedType != null && seedType == SeedType.SunflowerSeed){
+                return new Seed(seedType);
+            }
+            CropType cropType = CropType.parseCropType(item.getName());
+            if(cropType != null && (cropType == CropType.Corn || cropType == CropType.Sunflower)){
+                return new Crop(cropType);
+            }
+            ProductType productType = ProductType.parseType(item.getName());
+            if(productType != null && productType == ProductType.PigTruffle){
+                return new Product(productType);
+            }
+        }
+        return null;
+    }
+
+    private Result oilMaker(ArrayList<Item> items, Cell cell){
+        Item type= setOilType(items);
+        Player player = App.getGame().getCurrentPlayer();
+        if(type == null){
+            return new Result(false, "Wrong item!");
+        }
+        for (Machine x : player.getOnGoingMachines()) {
+            if (x instanceof OilMaker o) {
+                oilHelper(o, items, player, type);
+                return new Result(true, "done");
+            }
+        }
+        OilMaker oilMaker = null;
+        if(type instanceof Seed seed){
+            oilMaker = new OilMaker(seed.getSeedType());
+        }else if(type instanceof Crop crop){
+            if(crop.getCropType() == CropType.Corn){
+                oilMaker = new OilMaker(crop.getCropType(), true);
+            }else{
+                oilMaker = new OilMaker(crop.getCropType());
+            }
+        }else if(type instanceof Product product){
+            oilMaker = new OilMaker(product.getProductType());
+        }
+        if(oilMaker == null){
+            return new Result(false, "invalid item type "+type.getName());
+        }
+        player.getOnGoingMachines().add(oilMaker);
+        oilHelper(oilMaker, items, player, type);
+        return new Result(true, "donee");
+    }
+
+    private void oilHelper(OilMaker oilMaker, ArrayList<Item> items, Player player, Item type){
+        for (Item item : items) {
+            if(item.getName().equalsIgnoreCase(type.getName())){
+                updateItems(item, oilMaker, player, 1);
+            }else{
+                System.out.println(item.getName()+" is not a valid input");
+                return;
+            }
+        }
+    }
 
     private Result MayonnaiseMachine(Matcher matcher){return null;}
 

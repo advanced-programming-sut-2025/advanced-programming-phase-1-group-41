@@ -56,11 +56,14 @@ public class TimeLineController {
         if(deltaH < 0){
             return new Result(false,"Invalid hour");
         }
-        int deltaD = deltaH / 24;
-        advanceDay(deltaD);
-        for(int i=0;i<deltaH % 24;i++){
+        for (int i = 0; i < deltaH; i++) {
             tl.advanceOneHour();
         }
+//        int deltaD = deltaH / 24;
+//        advanceDay(deltaD);
+//        for(int i=0;i<deltaH % 24;i++){
+//            tl.advanceOneHour();
+//        }
         return new Result(true,"advanced time");
     }
 

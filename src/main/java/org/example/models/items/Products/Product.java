@@ -9,6 +9,10 @@ public class Product implements Item {
     }
     private ProductType productType;
 
+    public ProductType getProductType() {
+        return productType;
+    }
+
     @Override
     public String getChar() {
         return productType.getCharacter();

@@ -46,4 +46,13 @@ public enum ProductType {
         }
         return null;
     }
+
+    public static ProductType parseType(String productType){
+        for (ProductType value : ProductType.values()) {
+            if(value.getName().equalsIgnoreCase(productType)){
+                return value;
+            }
+        }
+        return null;
+    }
 }

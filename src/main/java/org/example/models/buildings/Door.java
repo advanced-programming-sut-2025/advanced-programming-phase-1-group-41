@@ -22,4 +22,8 @@ public class Door implements Building {
     public void setClosed(boolean closed) {
         isClosed = closed;
     }
+
+    public boolean isClosed() {
+        return isClosed;
+    }
 }
