@@ -1,41 +1,42 @@
 package org.example.models.items.craftableitems;
 
+import org.example.models.foragings.Crop;
 import org.example.models.foragings.CropType;
 import org.example.models.items.Eatable;
 import org.example.models.items.Item;
 
 public class Pickles implements Item , Eatable {
-    private CropType cropType;
+    private Crop crop;
 
     public Pickles() {
     }
 
-    public Pickles(CropType cropType) {
-        this.cropType = cropType;
+    public Pickles(Crop crop) {
+        this.crop = crop;
     }
 
 
-    public CropType getCropType() {
-        return cropType;
+    public Crop getCrop() {
+        return crop;
     }
 
-    public void setCropType(CropType cropType) {
-        this.cropType = cropType;
+    public void setCrop(Crop crop) {
+        this.crop = crop;
     }
 
     @Override
     public double getEnergy() {
-        return cropType.getEnergy()*1.75;
+        return crop.getCropType().getEnergy()*1.75;
     }
 
     @Override
     public String getName() {
-        return cropType+"Pickle";
+        return "Pickle";
     }
 
     @Override
     public double getPrice() {
-        return 2* cropType.getBaseSellPrice()+50;
+        return 2* crop.getPrice()+50;
     }
 
     @Override

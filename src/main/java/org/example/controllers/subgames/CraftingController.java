@@ -201,6 +201,7 @@ public class CraftingController {
             case CharcoalKiln -> this.charcoalKiln(items, cell);
             case FishSmoker -> this.fishSmoker(items, cell);
             case Dehydrator -> this.dehydrator(items, cell);
+            case PreservesJar -> this.jarPreserver(items, cell);
             default -> new Result(false, machineName + " is not useable");
         };
     }
@@ -267,8 +268,6 @@ public class CraftingController {
         return new Result(true, "done");
     }
 
-
-
     private void fishSmokerHelper(FishSmoker fs,ArrayList<Item> items, Cell cell, Player player, Fish fish) {
         for (Item item : items) {
             if(item.getName().equalsIgnoreCase(fish.getFishType().getName())){
@@ -333,6 +332,8 @@ public class CraftingController {
         }
     }
 
+
+
     public Item setDehydratorType(ArrayList<Item> items){
         for (Item item : items) {
             Mushroom mushroom = Mushroom.parseMushroom(item.getName());
@@ -379,6 +380,19 @@ public class CraftingController {
         return new Result(true, "donee");
     }
 
+    private void dehyderatorHelper(Dehydrator dehydrator, ArrayList<Item> items, Player player, Item type){
+        for (Item item : items) {
+            if(item.getName().equalsIgnoreCase(type.getName())){
+                updateItems(item, dehydrator, player, 5);
+            }else{
+                System.out.println(item.getName() + " is not a valid input");
+                return;
+            }
+        }
+    }
+
+
+
     private Result furnace(ArrayList<Item> items, Cell cell) {
         MineralType mineralType = setMineralType(items);
         Player player = App.getGame().getCurrentPlayer();
@@ -415,8 +429,6 @@ public class CraftingController {
         return null;
     }
 
-
-
     private void furnaceHelper(Furnace furnace, ArrayList<Item> items, Player player, MineralType mineralType){
         for (Item item : items) {
             if(item.getName().equalsIgnoreCase(MineralType.Coal.getName())){
@@ -430,18 +442,62 @@ public class CraftingController {
         }
     }
 
-    private void dehyderatorHelper(Dehydrator dehydrator, ArrayList<Item> items, Player player, Item type){
+
+    private Item setPreserver(ArrayList<Item> items) {
+        for (Item item : items) {
+            CropType croptype = CropType.parseCropType(item.getName());
+            if(croptype != null){
+                if(croptype.isEatable()){
+                    return new Crop(croptype);
+                }else{
+                    System.out.println(item.getName()+" is not eatable!");
+                    return null;
+                }
+            }
+            FruitType fruittype = FruitType.parseFruitType(item.getName());
+            if(fruittype != null){
+                return new Fruit(fruittype);
+            }
+        }
+        return null;
+    }
+
+    private Result jarPreserver(ArrayList<Item> items, Cell cell){
+        Item type= setPreserver(items);
+        Player player = App.getGame().getCurrentPlayer();
+        if(type == null){
+            return new Result(false, "Wrong item!");
+        }
+        for (Machine x : player.getOnGoingMachines()) {
+            if (x instanceof PreserveJar pj) {
+                preserveHelper(pj, items, player, type);
+                return new Result(true, "done");
+            }
+        }
+        PreserveJar preserveJar = null;
+        if(type instanceof Fruit fruit){
+            preserveJar = new PreserveJar(fruit);
+        }else if(type instanceof Crop crop){
+            preserveJar = new PreserveJar(crop);
+        }
+        if(preserveJar == null){
+            return new Result(false, "invalid item type "+type.getName());
+        }
+        player.getOnGoingMachines().add(preserveJar);
+        preserveHelper(preserveJar, items, player, type);
+        return new Result(true, "donee");
+    }
+
+    private void preserveHelper(PreserveJar pj, ArrayList<Item> items, Player player, Item type){
         for (Item item : items) {
             if(item.getName().equalsIgnoreCase(type.getName())){
-                updateItems(item, dehydrator, player, 5);
+                updateItems(item, pj, player, 1);
             }else{
-                System.out.println(item.getName() + " is not a valid input");
+                System.out.println(item.getName()+" is not a valid input");
                 return;
             }
         }
     }
-
-    private Result jarPreserver(Matcher matcher){return null;}
 
     private Result oilMaker(Matcher matcher){return null;}
 

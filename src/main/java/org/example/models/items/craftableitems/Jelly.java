@@ -7,7 +7,7 @@ import org.example.models.items.Food;
 import org.example.models.items.Item;
 
 public class Jelly implements Item, Eatable {
-    private Fruit fruit;
+    private Fruit fruit = null;
 
     public Jelly() {
     }

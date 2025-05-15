@@ -69,6 +69,9 @@ public class Inventory {
                 continue;
             }
             if(item.getName().equals((slot.getItem().getName()))){
+                if(Math.abs(item.getPrice() - slot.getItem().getPrice()) > 0.1){
+                    continue;
+                }
                 slot.setQuantity(slot.getQuantity()+quantity);
                 slot.getItemsPrice().add(price);
                 return true;

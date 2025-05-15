@@ -56,7 +56,10 @@ public class GameMenu implements AppMenu {
 
             }else if(MarketplaceView.check(input)){
 
-            }else{
+            }else if(NPCView.check(input)){
+
+            }
+            else{
 //                System.out.println("Invalid command");
             }
         }
