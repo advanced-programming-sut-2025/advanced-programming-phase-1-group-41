@@ -62,7 +62,9 @@ public class Trade {
 
     public boolean isRequest() {return isRequest;}
 
-    public void setDone() {isDone = true;}
+    public void Done() {isDone = true;}
+
+    public void reject() {isRejected = true;}
 
     @Override
     public String toString() {

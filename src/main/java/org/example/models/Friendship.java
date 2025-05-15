@@ -13,6 +13,8 @@ public class Friendship {
     private boolean hadInteractionToday = false;
     private boolean hadTalkingToday = false;
     private boolean hadHugToday = false;
+    private boolean hadTradeToday = false;
+    private boolean hadRejectedTradeToday = false;
     private boolean gaveFlower = false;
     private boolean areMarried = false;
     private Player proposer = null;
@@ -153,6 +155,18 @@ public class Friendship {
             friendshipXp += 60;
         }
         hadHugToday = true;
+    }
+    public void acceptTrade() {
+        if(!hadTradeToday){
+            friendshipXp += 50;
+        }
+        hadTradeToday = true;
+    }
+    public void rejectTrade() {
+        if(!hadRejectedTradeToday){
+            friendshipXp -= 30;
+        }
+        hadRejectedTradeToday = true;
     }
     public void giveFlower() {
         gaveFlower = true;

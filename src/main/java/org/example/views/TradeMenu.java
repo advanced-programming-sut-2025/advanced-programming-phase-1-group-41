@@ -12,10 +12,10 @@ public class TradeMenu implements AppMenu{
     @Override
     public void check(Scanner scanner) {
         String input = scanner.nextLine();
-        Matcher matcher = null;
+        Matcher matcher;
         if(CheckerController.checkCommand(input)) {
 
-        } else if((matcher = TradeCommands.Trade.getMatcher(input)) != null){
+        } else if(TradeCommands.Trade.getMatcher(input) != null){
             System.out.println("Enter only one Target!");
         } else if((matcher = TradeCommands.TradeToItem.getMatcher(input)) != null){
             System.out.println(controller.tradeToItem(matcher));
@@ -23,6 +23,10 @@ public class TradeMenu implements AppMenu{
             System.out.println(controller.tradeToMoney(matcher));
         } else if((matcher = TradeCommands.TradeList.getMatcher(input)) != null){
             System.out.println(controller.tradeList(matcher));
+        } else if((matcher = TradeCommands.TradeHistory.getMatcher(input)) != null){
+            System.out.println(controller.tradeHistory(matcher));
+        } else if((matcher = TradeCommands.TradeResponse.getMatcher(input)) != null){
+            System.out.println(controller.tradeResponse(matcher));
         }
     }
 }

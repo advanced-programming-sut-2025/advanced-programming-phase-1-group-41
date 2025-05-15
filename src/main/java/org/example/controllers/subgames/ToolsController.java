@@ -346,6 +346,7 @@ public class ToolsController {
         App.getGame().getCurrentPlayer().decEnergyTool(energy);
 
         if(cell.getObjectMap() instanceof Bush){
+            App.getGame().getCurrentPlayer().getInventory().addToInventory(new Fiber(), 5);
             cell.setObjectMap(new Grass());
             return new Result(true, "caught the bush");
         }else if(cell.getObjectMap() instanceof Grass){

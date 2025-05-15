@@ -83,10 +83,11 @@ public class GameMenuController {
                 break;
             }
         }
-        return new Result(true,"next turn.. : "+App.getGame().getCurrentPlayer());
+//        return new Result(true,"next turn.. : "+App.getGame().getCurrentPlayer());
+        return new Result(true,"turn is: "+App.getGame().getCurrentPlayer());
     }
     private void printNewMessages(Player player){
-        System.out.println("turn is : "+App.getGame().getCurrentPlayer());
+//        System.out.println("turn is : "+App.getGame().getCurrentPlayer());
         int a = 0;
         for(Friendship friendship : App.getGame().getCurrentPlayer().getFriendships()){
             if(friendship.newMessages().length() != friendship.getLastReadMessage()){
