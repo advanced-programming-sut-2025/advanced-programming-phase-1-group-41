@@ -18,7 +18,7 @@ public enum CropType {
     Rhubarb("Rhubarb", SeedType.RhubarbSeed, new ArrayList<>(Arrays.asList(2, 2, 2, 3, 4)), 13, true, -1, 220, false, -1,  false, Season.Spring),
     Strawberry("Strawberry", SeedType.StrawberrySeed, new ArrayList<>(Arrays.asList(1, 1, 2, 2, 2)), 8, false, 4, 120, true, 50, false, Season.Spring),
     Tulip("Tulip", SeedType.TulipSeed, new ArrayList<>(Arrays.asList(1, 1, 2, 2)), 6, true, -1, 30, true, 45,  false, Season.Spring),
-    UnmilledRice("UnmilledRice", SeedType.Rice, new ArrayList<>(Arrays.asList(1, 2, 2, 3)), 8, true, -1, 30, true, 3, false, Season.Spring),
+    Rice("Rice", SeedType.Rice, new ArrayList<>(Arrays.asList(1, 2, 2, 3)), 8, true, -1, 30, true, 3, false, Season.Spring),
     Blueberry("Blueberry", SeedType.BlueberrySeed, new ArrayList<>(Arrays.asList(1, 3, 3, 4, 2)), 13, false, 4, 50, true, 25, false, Season.Summer),
     Corn("Corn", SeedType.CornSeed, new ArrayList<>(Arrays.asList(2, 3, 3, 3, 3)), 14, false, 4, 50, true, 25, false, Season.Summer, Season.Autumn),
     Hops("Hops", SeedType.HopsStarter, new ArrayList<>(Arrays.asList(1, 1, 2, 3, 4)), 11, false, 1, 25, true, 45, false, Season.Summer),

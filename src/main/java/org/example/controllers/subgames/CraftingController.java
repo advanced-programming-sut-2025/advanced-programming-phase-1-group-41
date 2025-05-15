@@ -8,6 +8,7 @@ import org.example.models.buildings.Well;
 import org.example.models.foragings.*;
 import org.example.models.foragings.Nature.MineralType;
 import org.example.models.foragings.Nature.Mushroom;
+import org.example.models.foragings.Nature.Vegetable;
 import org.example.models.foragings.Nature.Wood;
 import org.example.models.items.*;
 import org.example.models.items.Products.Product;
@@ -205,6 +206,7 @@ public class CraftingController {
             case Dehydrator -> this.dehydrator(items, cell);
             case PreservesJar -> this.jarPreserver(items, cell);
             case OilMaker -> this.oilMaker(items, cell);
+            case Keg -> this.keg(items, cell);
             default -> new Result(false, machineName + " is not useable");
         };
     }
@@ -305,8 +307,76 @@ public class CraftingController {
         return null;
     }
 
-    private Result keg(Matcher matcher) {
+    private Item setKeg(ArrayList<Item> items) {
+        for (Item item : items) {
+            Vegetable vegetable = Vegetable.parseVegetable(item.getName());
+            if(vegetable != null){
+                return vegetable;
+            }
+            CropType type = CropType.parseCropType(item.getName());
+            if(type != null){
+                if(type == CropType.Wheat || type == CropType.Rice ||
+                type == CropType.CoffeeBean || type == CropType.Hops){
+                    return new Crop(type);
+                }
+            }
+            FruitType fruit = FruitType.parseFruitType(item.getName());
+            if(fruit != null){
+                return new Fruit(fruit);
+            }
+            CraftableItem craftableItem = CraftableItem.parseCraftable(item.getName());
+            if(craftableItem != null && craftableItem == CraftableItem.Honey){
+                return craftableItem;
+            }
+        }
         return null;
+    }
+
+    private Result keg(ArrayList<Item> items, Cell cell) {
+        Item type= setKeg(items);
+        Player player = App.getGame().getCurrentPlayer();
+        if(type == null){
+            return new Result(false, "Wrong item!");
+        }
+        for (Machine x : player.getOnGoingMachines()) {
+            if (x instanceof Keg keg) {
+                kegHelper(keg, items, player, type);
+                return new Result(true, "done");
+            }
+        }
+        Keg keg = null;
+        if(type instanceof Fruit fruit){
+            keg = new Keg(fruit);
+        }else if(type instanceof CraftableItem craftableItem){
+            keg = new Keg(craftableItem);
+        }else if(type instanceof Vegetable vegetable){
+            keg = new Keg(vegetable);
+        }else if(type instanceof Crop crop){
+            keg = new Keg(crop);
+        }
+        if(keg == null){
+            return new Result(false, "invalid item type "+type.getName());
+        }
+        player.getOnGoingMachines().add(keg);
+        kegHelper(keg, items, player, type);
+        return new Result(true, "donee");
+    }
+
+    private void kegHelper(Keg keg, ArrayList<Item> items, Player player, Item item) {
+        for (Item item1 : items) {
+            if(item1.getName().equalsIgnoreCase(item.getName())){
+                int max = 1;
+                if(item instanceof Crop crop){
+                    if(crop.getCropType() == CropType.CoffeeBean){
+                        max = 5;
+                    }
+                }
+                updateItems(item1, keg, player, max);
+            }else{
+                System.out.println(item1.getName()+" is not a valid item");
+                return;
+            }
+        }
     }
 
 

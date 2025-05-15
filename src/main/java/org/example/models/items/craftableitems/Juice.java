@@ -1,31 +1,24 @@
 package org.example.models.items.craftableitems;
 
-import org.example.models.foragings.CropType;
+import org.example.models.foragings.Nature.Vegetable;
 import org.example.models.items.Eatable;
 import org.example.models.items.Item;
 
 public class Juice implements Item, Eatable {
 
-    private CropType cropType;
+    private Vegetable vegetable;
 
     public Juice() {
     }
 
-    public Juice(CropType cropType) {
-        this.cropType = cropType;
-    }
 
-    public CropType getCropType() {
-        return cropType;
-    }
-
-    public void setCropType(CropType cropType) {
-        this.cropType = cropType;
+    public Juice(Vegetable vegetable) {
+        this.vegetable = vegetable;
     }
 
     @Override
     public double getEnergy() {
-        return 2*cropType.getEnergy();
+        return 2* vegetable.getEnergy();
     }
 
     @Override
@@ -35,7 +28,7 @@ public class Juice implements Item, Eatable {
 
     @Override
     public double getPrice() {
-        return 2.25*cropType.getBaseSellPrice();
+        return 2.25* vegetable.getPrice();
     }
 
     @Override

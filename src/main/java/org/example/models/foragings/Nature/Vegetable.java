@@ -14,14 +14,12 @@ public enum Vegetable implements Item, Eatable {
     Parsnip(CropType.Parsnip),
     Potato(CropType.Potato),
     Rhubarb(CropType.Rhubarb),
-    UnmilledRice(CropType.UnmilledRice),
     Corn(CropType.Corn),
     HotPepper(CropType.HotPepper),
     Radish(CropType.Radish),
     RedCabbage(CropType.RedCabbage),
     SummerSquash(CropType.SummerSquash),
     Tomato(CropType.Tomato),
-    Wheat(CropType.Wheat),
     Amaranth(CropType.Amaranth),
     Artichoke(CropType.Artichoke),
     Beet(CropType.Beet),
@@ -63,6 +61,15 @@ public enum Vegetable implements Item, Eatable {
         for (Vegetable value : Vegetable.values()) {
             if(value.getName().equalsIgnoreCase(item)){
                 return new Crop(value.cropType);
+            }
+        }
+        return null;
+    }
+
+    public static Vegetable parseVegetable(String item) {
+        for (Vegetable value : Vegetable.values()) {
+            if(value.getName().equalsIgnoreCase(item)){
+                return value;
             }
         }
         return null;
