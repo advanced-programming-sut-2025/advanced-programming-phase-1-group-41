@@ -102,12 +102,14 @@ public class Player {
         this.energyUnlimited = false;
         this.currentTool = null;
         this.cookingRecipes = new ArrayList<>();
+        this.cookingRecipes.add(CookingRecipe.FriedEgg);
         this.cookingRecipes.add(CookingRecipe.BakedFish);
-        this.cookingRecipes.add(CookingRecipe.Spaghetti);
-        this.cookingRecipes.add(CookingRecipe.Bread);
-        this.cookingRecipes.add(CookingRecipe.SurvivalBurger);
+        this.cookingRecipes.add(CookingRecipe.Salad);
         this.craftingRecipes = new ArrayList<>();
         this.craftingRecipes.add(CraftingRecipe.Furnace);
+        this.craftingRecipes.add(CraftingRecipe.ScareCrow);
+        this.craftingRecipes.add(CraftingRecipe.MayonnaiseMachine);
+
         this.friendships = new ArrayList<>();
 
         this.farmingSkill = new Skill();
@@ -243,10 +245,18 @@ public class Player {
         this.energy = energy;
     }
     public void decEnergy(double delta) {
+        if(this.energyUnlimited){
+            System.out.println("since your energy is set to unlimited, no decrease of energy for u");
+            return;
+        }
         App.getGame().incRoundEnergy(delta);
         this.energy -= delta;
     }
     public void decEnergyTool(double delta) {
+        if(this.energyUnlimited){
+            System.out.println("since your energy is set to unlimited, no decrease of energy for u");
+            return;
+        }
         delta *= App.getGame().getWeatherType().getEnergy();
         App.getGame().incRoundEnergy(delta);
         this.energy -= delta;
@@ -261,6 +271,7 @@ public class Player {
     }
 
     public void setEnergyUnlimited(boolean energyUnlimited) {
+        this.energy = 10000;
         this.energyUnlimited = energyUnlimited;
     }
 

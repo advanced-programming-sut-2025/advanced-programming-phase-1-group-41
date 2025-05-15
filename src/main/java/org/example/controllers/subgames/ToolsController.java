@@ -138,9 +138,12 @@ public class ToolsController {
         if(cell.getObjectMap() instanceof Lake ||
                 cell.getObjectMap() instanceof WaterTank ||
                 cell.getObjectMap() instanceof Well){
+            if(energy > App.getGame().getCurrentPlayer().getEnergy()){
+                return new Result(false, "you don't have enough energy for this tool");
+            }
+            App.getGame().getCurrentPlayer().decEnergyTool(energy);
             wc.setTiles(wc.getMaxTilesNumberByLevel());
             // todo count the skill of energy decrease
-            App.getGame().getCurrentPlayer().decEnergyTool(energy);
             return new Result(true, "wc is filled now with " +
                     wc.getTiles() +
                     " tiles");
@@ -156,6 +159,9 @@ public class ToolsController {
                 }
             }
             if(wc.decreaseTiles()){
+                if(energy > App.getGame().getCurrentPlayer().getEnergy()){
+                    return new Result(false, "you don't have enough energy for this tool");
+                }
                 App.getGame().getCurrentPlayer().decEnergyTool(energy);
                 if(cell.getObjectMap() instanceof Crop){
                     ((Crop) cell.getObjectMap()).water();
@@ -186,6 +192,10 @@ public class ToolsController {
 
         System.out.println(cell.getObjectMap().getClass());
         if(cell.getObjectMap() instanceof Mineral){
+            if(energy > App.getGame().getCurrentPlayer().getEnergy()){
+                return new Result(false ,"you don't have enough energy for this tool");
+            }
+            App.getGame().getCurrentPlayer().decEnergyTool(energy);
             int value =  App.getGame().getCurrentPlayer().getMiningSkill().getLevel() >= 2 ? 1 : 0;
             App.getGame().getCurrentPlayer().getMiningSkill().increaseXp(10);
             App.getGame().getCurrentPlayer().getInventory().addToInventory(
@@ -193,12 +203,15 @@ public class ToolsController {
             );
             App.getGame().getCurrentPlayer().getForagingSkill().increaseXp(10);
             String name = ((Item)cell.getObjectMap()).getName();
-            App.getGame().getCurrentPlayer().decEnergyTool(energy);
             cell.setObjectMap(new Mine(x,y,App.getGame().getCurrentPlayerFarm(),12121212));
             return new Result(true, "got a "+name);
         }else if(cell.getObjectMap() instanceof Rock){
             ((Rock) cell.getObjectMap()).decreaseHitPoints();
             if(((Rock) cell.getObjectMap()).getHitPoints() == 0){
+                if(energy > App.getGame().getCurrentPlayer().getEnergy()){
+                    return new Result(false, "you don't have enough energy for this tool");
+                }
+                App.getGame().getCurrentPlayer().decEnergyTool(energy);
                 int value =  App.getGame().getCurrentPlayer().getMiningSkill().getLevel() >= 2 ? 1 : 0;
                 if(((Rock) cell.getObjectMap()).getRockType().equals(RockType.BigRock)){
                     App.getGame().getCurrentPlayer().getInventory().addToInventory(
@@ -213,7 +226,6 @@ public class ToolsController {
                     App.getGame().getCurrentPlayer().getForagingSkill().increaseXp(10);
                     App.getGame().getCurrentPlayer().getMiningSkill().increaseXp(10);
                 }
-                App.getGame().getCurrentPlayer().decEnergyTool(energy);
                 String name = ((Item)cell.getObjectMap()).getName();
                 if(((Rock) cell.getObjectMap()).getRockType().equals(RockType.BigRock)){
                     Cell cell2 = Finder.findCellByCoordinates(x + 1, y,App.getGame().getCurrentPlayerFarm());
@@ -235,6 +247,9 @@ public class ToolsController {
                 return new Result(true,"broke");
             }
         }else{
+            if(energy - 1 > App.getGame().getCurrentPlayer().getEnergy()){
+                return new Result(false, "you don't have enough energy to use this tool");
+            }
             App.getGame().getCurrentPlayer().decEnergyTool(Math.max(0,energy-1));
             try{
                 App.getGame().getCurrentPlayer().getInventory().addToInventory((Item)cell.getObjectMap(),1);
@@ -263,9 +278,12 @@ public class ToolsController {
             energy--;
         }
         if(cell.getObjectMap() instanceof Grass){
+            if(energy > App.getGame().getCurrentPlayer().getEnergy()){
+                return new Result(false,"you don't have enough energy to use this tool");
+            }
+            App.getGame().getCurrentPlayer().decEnergyTool(energy);
             Grass grass = (Grass) cell.getObjectMap();
             grass.setFarmland(true);
-            App.getGame().getCurrentPlayer().decEnergyTool(energy);
             return new Result(true, "grass is ready for shokhm");
         }
         return new Result(false,"it's not a grass!");
@@ -287,6 +305,9 @@ public class ToolsController {
 
         if(cell.getObjectMap() instanceof Tree tree){
             tree.decreaseHitPoints();
+            if(energy > App.getGame().getCurrentPlayer().getEnergy()){
+                return new Result(false, "you don't have enough energy to use this tool");
+            }
             App.getGame().getCurrentPlayer().decEnergyTool(energy);
 
             if(tree.isThundered()){
@@ -315,8 +336,11 @@ public class ToolsController {
                 return new Result(true, "hit points left: "+tree.getHitPoints());
             }
         }else if(cell.getObjectMap() instanceof ForagingTree foragingTree){
-            foragingTree.decreaseHitPoints();
+            if(energy > App.getGame().getCurrentPlayer().getEnergy()){
+                return new Result(false, "you don't have enough energy to use this tool");
+            }
             App.getGame().getCurrentPlayer().decEnergyTool(energy);
+            foragingTree.decreaseHitPoints();
 
             if(foragingTree.isThundered()){
                 App.getGame().getCurrentPlayer().getInventory().addToInventory(new Mineral(MineralType.Coal), 5);
@@ -343,6 +367,9 @@ public class ToolsController {
     private Result useScythe(Cell cell, Tool tool){
         Scythe scythe = (Scythe) tool;
         int energy = 2;
+        if(energy > App.getGame().getCurrentPlayer().getEnergy()){
+            return new Result(false,"you don't have enough energy to use this tool");
+        }
         App.getGame().getCurrentPlayer().decEnergyTool(energy);
 
         if(cell.getObjectMap() instanceof Bush){
@@ -443,6 +470,9 @@ public class ToolsController {
     private Result useMilkPale(Cell cell, Tool tool){
         MilkPale milkPale = (MilkPale) tool;
         int energy = 4;
+        if(energy > App.getGame().getCurrentPlayer().getEnergy()){
+            return new Result(false, "you don't have enough energy to use this tool");
+        }
         App.getGame().getCurrentPlayer().decEnergyTool(energy);
 
         for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
@@ -486,7 +516,9 @@ public class ToolsController {
     private Result useShear(Cell cell, Tool tool){
         Shear shear = (Shear) tool;
         int energy = 4;
-
+        if(energy > App.getGame().getCurrentPlayer().getEnergy()){
+            return new Result(false, "you don't have enough energy to use this tool");
+        }
         App.getGame().getCurrentPlayer().decEnergyTool(energy);
 
         for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
