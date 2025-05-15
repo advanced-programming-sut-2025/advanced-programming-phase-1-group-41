@@ -173,9 +173,6 @@ public class PlayerController {
 
     private Result eatCraftable(CraftableItem item){
         App.getGame().getCurrentPlayer().incEnergy(item.getEnergy());
-        if(App.getGame().getCurrentPlayer().getEnergy() > 100){
-            App.getGame().getCurrentPlayer().setEnergy(100);
-        }
         double value = item.getEnergy();
         Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
         inventory.removeFromInventory(item, 1);
@@ -196,9 +193,6 @@ public class PlayerController {
             return new Result(false,"fruit "+fruitName+" is not eatable");
         }
         App.getGame().getCurrentPlayer().incEnergy(fruitType.getEnergy());
-        if(App.getGame().getCurrentPlayer().getEnergy() > 100){
-            App.getGame().getCurrentPlayer().setEnergy(100);
-        }
         double value = fruitType.getEnergy();
         inventory.removeFromInventory(new Fruit(fruitType), 1);
         return new Result (true, "you got "+value+" energy");
@@ -216,9 +210,6 @@ public class PlayerController {
             return new Result(false,"you don't have this food");
         }
         App.getGame().getCurrentPlayer().incEnergy(wantedFood.getEnergy());
-        if(App.getGame().getCurrentPlayer().getEnergy() > 100){
-            App.getGame().getCurrentPlayer().setEnergy(100);
-        }
         double value  = wantedFood.getEnergy();
         inventory.removeFromInventory(wantedFood, 1);
         return new Result(true, value+
@@ -233,9 +224,6 @@ public class PlayerController {
         }
         Eatable e = (Eatable)slot.getItem();
         App.getGame().getCurrentPlayer().incEnergy(e.getEnergy());
-        if(App.getGame().getCurrentPlayer().getEnergy() > 100){
-            App.getGame().getCurrentPlayer().setEnergy(100);
-        }
         double value = e.getEnergy();
         inventory.removeFromInventory((Item) e, 1);
         return new Result(true, value+" energy added :)");

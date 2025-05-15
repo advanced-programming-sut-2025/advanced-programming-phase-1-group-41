@@ -97,7 +97,7 @@ public class Player {
         savings = 0;
         x = 0;
         y = 0;
-        energy = 100;
+        energy = 200;
         this.inventory = new Inventory();
         this.energyUnlimited = false;
         this.currentTool = null;
@@ -263,6 +263,9 @@ public class Player {
     }
     public void incEnergy(double delta) {
         this.energy += delta;
+        if(this.energy > 200){
+            this.energy = 200;
+        }
     }
 
 
@@ -366,5 +369,15 @@ public class Player {
         return user.getUsername();
     }
 
+
+    public void resetEnergy(){
+        if(this.energy == 0){
+            System.out.println("since you passed out, you're starting with 175");
+            this.energy = 175;
+            return;
+        }
+        this.energy = 200;
+
+    }
 
 }

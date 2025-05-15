@@ -8,11 +8,18 @@ import java.util.List;
 import java.util.regex.Matcher;
 
 public class MapController {
-    public Result walk(Matcher matcher){
-        String xRaw = matcher.group(1);
-        String yRaw = matcher.group(2);
-        int x = Integer.parseInt(xRaw);
-        int y = Integer.parseInt(yRaw);
+    public Result walk(Matcher matcher, Integer inputX , Integer inputY){
+        int x;
+        int y;
+        if(inputX==null && inputY==null){
+            String xRaw = matcher.group(1);
+            String yRaw = matcher.group(2);
+            x = Integer.parseInt(xRaw);
+            y = Integer.parseInt(yRaw);
+        }else{
+            x = inputX;
+            y = inputY;
+        }
         List<Node> cells = SSSP(x,y);
         if (cells == null) {
             return new Result(false, "no path found!");
@@ -20,7 +27,9 @@ public class MapController {
             Player player = App.getGame().getCurrentPlayer();
             double energy = 0;
             for (Node cell : cells) {
+//                System.out.println(cell);
                 energy = cell.energyCost;
+//                System.out.println("energy: "+energy);
                 if(energy > player.getEnergy() && !player.isEnergyUnlimited()){
                     player.decEnergy(player.getEnergy());
                     printMap(null);
@@ -30,7 +39,7 @@ public class MapController {
                 player.setY(cell.y);
                 if(!player.isPlayerIsInVillage()){
                     if(App.getGame().getCurrentPlayerFarm().getTransferCells().contains(
-                            Finder.findCellByCoordinates(x, y, App.getGame().getCurrentPlayerFarm())
+                            Finder.findCellByCoordinates(cell.x, cell.y, App.getGame().getCurrentPlayerFarm())
                     )){
                         player.setPlayerIsInVillage(true);
                         player.setX(App.getGame().getVillage().getStartPoints().getFirst().getX());
@@ -41,7 +50,7 @@ public class MapController {
                     }
                 }else{
                     if(App.getGame().getVillage().getTransferCells().contains(
-                            Finder.findCellByCoordinatesVillage(x, y, App.getGame().getVillage())
+                            Finder.findCellByCoordinatesVillage(cell.x, cell.y, App.getGame().getVillage())
                     )){
                         player.setPlayerIsInVillage(false);
                         player.setX(App.getGame().getCurrentPlayerFarm().getStartPoints().get(0).getX());

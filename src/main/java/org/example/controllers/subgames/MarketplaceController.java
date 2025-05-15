@@ -53,7 +53,7 @@ public class MarketplaceController {
         System.out.println("All Products: \n");
         for(Slot slot : mp.getItemsForSale()){
             if(slot.getQuantity() > 0){
-                if(slot.getQuantity()<5){
+                if(slot.getQuantity()<=5){
                     System.out.print(Colors.foreColor(202));
                 }
                 else{
@@ -243,6 +243,7 @@ public class MarketplaceController {
 
         Item item = Finder.parseItem(itemName);
         if(item == null){
+            System.out.println("["+itemName+"]");
             return new Result(false, "Item doesn't exist");
         }
         Slot slot = mp.getSlotByItem(item);

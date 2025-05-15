@@ -85,6 +85,7 @@ public class PathFinder {
         }
         if(nextCell.getObjectMap() instanceof Door door){
             if(door.isClosed()){
+                System.out.println("door is closed :(");
                 return false;
             }
         }
@@ -109,6 +110,7 @@ public class PathFinder {
         }
         if(nextCell.getObjectMap() instanceof Door door){
             if(door.isClosed()){
+                System.out.println("door is closed :(");
                 return false;
             }
         }

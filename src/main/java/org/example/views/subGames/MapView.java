@@ -13,7 +13,7 @@ public class MapView {
         if((matcher = GameMainCommands.PrintMap.getMatcher(input))!=null){
             controller.printMap(matcher);
         }else if((matcher = GameMainCommands.Walk.getMatcher(input))!=null){
-            System.out.println(controller.walk(matcher));
+            System.out.println(controller.walk(matcher, null , null));
         }else if((matcher = GameMainCommands.HelpReadingMap.getMatcher(input))!=null){
             controller.helpReadingMap(matcher);
         }else if((matcher = GameMainCommands.PrintMapReal.getMatcher(input))!=null){

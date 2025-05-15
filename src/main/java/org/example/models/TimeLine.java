@@ -4,9 +4,14 @@ import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import org.bson.types.ObjectId;
 import org.example.controllers.subgames.*;
+import org.example.controllers.MapController;
+import org.example.controllers.subgames.AnimalController;
+import org.example.controllers.subgames.FriendshipController;
+import org.example.controllers.subgames.MarketplaceController;
 import org.example.models.buildings.Building;
 import org.example.models.buildings.marketplaces.*;
 import org.example.models.locations.Farm;
+import org.example.controllers.subgames.CraftingController;
 
 import java.util.Random;
 
@@ -68,30 +73,20 @@ public class TimeLine {
         MarketplaceController.updateHourly();
     }
     public void advanceOneDay(){
-        for (Building building : App.getGame().getVillage().getBuildings()) {
-            if(building instanceof Blacksmith blacksmith){
-                System.out.println("blacksmith found ..");
-                blacksmith.updateStock();
-            }else if(building instanceof MarnieRanch marnieRanch){
-                System.out.println("marnieRanch found ..");
-                marnieRanch.updateStock();
-            }else if(building instanceof Saloon saloon){
-                System.out.println("saloon found ..");
-                saloon.updateStock();
-            }else if(building instanceof CarpenterShop carpenterShop){
-                System.out.println("carpenterShop found ..");
-                carpenterShop.updateStock();
-            }else if(building instanceof Jojamart jojamart){
-                System.out.println("jojamart found ..");
-                jojamart.updateStock();
-            }else if(building instanceof FishShop fishShop){
-                System.out.println("fishShop found ..");
-                fishShop.updateStock();
-            }else if(building instanceof GeneralStore generalStore){
-                System.out.println("generalStore found ..");
-                generalStore.updateStock();
+        if(hour == 0){
+            goHome();
+            for (Player player : App.getGame().getPlayers()) {
+                player.resetEnergy();
             }
         }
+
+        for (Building building : App.getGame().getVillage().getBuildings()) {
+            if(building instanceof Marketplace marketplace){
+                marketplace.updateStock();
+            }
+        }
+        System.out.println("updated marketplace stocks..");
+
         (new AnimalController()).resetAndCheck();
         (new NPCController()).resetAndCheck();
         for (Player player : App.getGame().getPlayers()) {
@@ -110,6 +105,13 @@ public class TimeLine {
             day = 0;
             advanceOneSeason();
         }
+
+        if(hour == 0){
+
+            for (int i = 0; i < 9; i++) {
+                advanceOneHour();
+            }
+        }
     }
     public void advanceOneSeason(){
         Season[] seasons = Season.values();
@@ -122,6 +124,21 @@ public class TimeLine {
         year++;
     }
 
+    public void goHome(){
+        for (Player player : App.getGame().getPlayers()) {
+            Farm farm = Finder.findFarmByPlayer(player);
+            MapController controller = new MapController();
+            Cell villageCell = App.getGame().getVillage().getTransferCells().getFirst();
+            Cell playerCell = farm.getStartPoints().getFirst();
+            if(player.isPlayerIsInVillage()){
+                Result preResult = controller.walk(null,villageCell.getX(),villageCell.getY());
+                if(!preResult.success()){
+                    System.out.println("you're stuck "+preResult);
+                }
+            }
+            System.out.println(controller.walk(null, playerCell.getX(),playerCell.getY()));
+        }
+    }
 
     public void predictTmrwWeather() {
         WeatherType tmrw = null;
