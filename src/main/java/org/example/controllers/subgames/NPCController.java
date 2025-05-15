@@ -4,12 +4,14 @@ import org.example.models.*;
 import org.example.models.items.CraftableMachine;
 import org.example.models.items.Inventory;
 import org.example.models.items.Item;
+import org.example.models.items.Slot;
 import org.example.models.npc.npcCharacters.NPC;
 import org.example.models.npc.npcCharacters.Quest;
 import org.example.models.tools.Tool;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.regex.Matcher;
 
 import static org.example.models.Finder.parseItem;
@@ -132,13 +134,16 @@ public class NPCController {
         Inventory inventory=App.getGame().getCurrentPlayer().getInventory();
         Player player=App.getGame().getCurrentPlayer();
         for(NPC npc :App.getGame().getVillage().getNPCs()){
+            int i=1;
             System.out.println(Colors.foreColor(15)+npc.getName()+"`s quests :"+Colors.RESET);
             for(Quest quest:npc.getQuests()){
                 if(quest.isLocked(player)){
-                    System.out.println(Colors.foreColor(124)+"quest "+quest.getQuestName()+" is locked"+Colors.RESET);
+                    System.out.println(Colors.foreColor(124)+i+"-quest "+quest.getQuestName()+" is locked"+Colors.RESET);
+                }else if(quest.isFinished(player)){
+                    System.out.println(i+"-quest "+quest.getQuestName()+" is finished");
                 }
                 else{
-                    System.out.printf(Colors.foreColor(46)+"quest "+quest.getQuestName()+" -> "+quest.getQuestPreTalk()+" | objective : deliver "+quest.getRequest().getQuantity()+" "+quest.getRequest().getItem().getName()+" to "+npc.getName()+Colors.RESET);
+                    System.out.printf(Colors.foreColor(46)+i+"-quest "+quest.getQuestName()+" -> "+quest.getQuestPreTalk()+" | objective : deliver "+quest.getRequest().getQuantity()+" "+quest.getRequest().getItem().getName()+" to "+npc.getName()+Colors.RESET);
                     if(quest.getMoneyPrize()!=0.0){
                         System.out.printf(Colors.foreColor(46)+" | reward : "+quest.getMoneyPrize()+" gold\n"+Colors.RESET);
                     }
@@ -152,16 +157,40 @@ public class NPCController {
                         System.out.printf(Colors.foreColor(46)+" | reward : "+quest.getReward().getQuantity()+" "+quest.getReward().getItem().getName()+"\n"+Colors.RESET);
                     }
                 }
+                i++;
             }
         }
         return new Result(true, " ");
     }
 
-    public Result finishQuest(Matcher matcher){return null;}
+    public Result finishQuest(Matcher matcher){
+        Inventory inventory=App.getGame().getCurrentPlayer().getInventory();
+        Player player=App.getGame().getCurrentPlayer();
+        int indexOfQuest=Integer.parseInt(matcher.group(1));
+        for(NPC npc :App.getGame().getVillage().getNPCs()){
+            if(findNPCAround(npc.getName())!=null){
+                Quest quest =npc.getQuests().get(indexOfQuest-1);
+                if(quest.isLocked(player)){
+                    if(indexOfQuest==1){
+                        return new Result(false,"quest "+quest.getQuestName()+" is locked, talk to "+npc.getName()+" to unlock it");
+                    }
+                    else if(indexOfQuest==2){
+                        return new Result(false,"quest "+quest.getQuestName()+" is locked, befriend with "+npc.getName()+" to unlock it");
+                    }
+                    else if(indexOfQuest==3){
+                        return new Result(false,"quest "+quest.getQuestName()+" is locked, wait "+npc.getDaysToUnlockQ3()+" days to unlock it");
+                    }
+                }
+                if(canQuestBeFinished(quest)){
+                    quest.setFinished(player,true);
+                    return new Result(true,"quest "+quest.getQuestName()+" finished successfully, "+quest.getReward().getQuantity()+" "+quest.getReward().getItem().getName()+" added to your inventory");
+                }
+            }
+        }
+            return new Result(false,  "nobody is around");
 
-    public void increaseFriendshipLevel(){}
+    }
 
-    public void ReceiveGiftFromNpc(){}
 
     private NPC findNPCAround(String name){
         Player player = App.getGame().getCurrentPlayer();
@@ -192,6 +221,26 @@ public class NPCController {
               if (npc.getDaysToUnlockQ3() <= 0) {
                   npc.getQuests().get(2).setLocked(player, false);
               }
+              Random random=new Random();
+              if(npc.getFriendShip(player)>=600&&random.nextBoolean()){
+                  Random rand = new Random();
+                  Item item=null;
+                  int quantity=0;
+                  int Random = rand.nextInt(100) + 1;
+                  if(Random<=33){
+                      item=npc.getItemsToGift().get(0).getItem();
+                      quantity=npc.getItemsToGift().get(0).getQuantity();
+                  }
+                  else if(Random<=66){
+                      item=npc.getItemsToGift().get(1).getItem();
+                      quantity=npc.getItemsToGift().get(1).getQuantity();
+                  }
+                  else{
+                      item=npc.getItemsToGift().get(2).getItem();
+                      quantity=npc.getItemsToGift().get(2).getQuantity();
+                  }
+                  System.out.println(npc.getName()+" sent you a special gift, "+quantity+" "+item.getName());
+              }
           }
       }
     }
@@ -204,6 +253,23 @@ public class NPCController {
                 npc.setDaysToUnlockQ3(npc.getDaysToUnlockQ3()-1);
             }
         }
+    }
+    private boolean canQuestBeFinished(Quest quest){
+        Player player=App.getGame().getCurrentPlayer();
+        Slot slot =player.getInventory().getSlotByItem(quest.getRequest().getItem());
+        if(slot==null){
+            return false;
+        }
+        else if(slot.getQuantity()<quest.getRequest().getQuantity()){
+            return false;
+        }
+        player.getInventory().removeFromInventory(quest.getRequest().getItem(),quest.getRequest().getQuantity());
+        int quantity=quest.getReward().getQuantity();
+        if(quest.getOwner().getFriendShip(player)>=400){
+            quantity*=2;
+        }
+        player.getInventory().addToInventory(quest.getReward().getItem(),quantity);
+        return true;
     }
     public void resetAndCheck(){
         check();

@@ -17,14 +17,23 @@ public class Quest {
     private Double MoneyPrize=0.0;
     private CookingRecipe cookingRecipe=null;
     private HashMap<Player,Boolean> isLocked=new HashMap<>();
+    private HashMap<Player,Boolean> isFinished=new HashMap<>();
 
 
     public boolean isLocked(Player player) {
         return isLocked.get(player);
     }
 
+    public boolean isFinished(Player player) {
+        return isFinished.get(player);
+    }
+
     public void setLocked(Player player, boolean locked) {
         this.isLocked.put(player, locked);
+    }
+
+    public void setFinished(Player player, boolean finished) {
+        this.isFinished.put(player, finished);
     }
 
 

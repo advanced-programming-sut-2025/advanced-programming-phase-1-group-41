@@ -18,7 +18,9 @@ public class NPCView {
             System.out.println(controller.friendshipList(matcher));
         }else if((matcher = NPCCommands.QuestsList.getMatcher(input))!=null){
             System.out.println(controller.questList(matcher));
-        } else{
+        }else if((matcher = NPCCommands.QuestFinish.getMatcher(input))!=null){
+            System.out.println(controller.finishQuest(matcher));
+        }  else{
             return false;
         }
         return true;

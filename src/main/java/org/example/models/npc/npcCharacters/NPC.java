@@ -111,6 +111,7 @@ public abstract class NPC {
             isGiftedToday.put(player,false);
             for(int i=0;i<3;i++){
                     quests.get(i).setLocked(player, true);
+                    quests.get(i).setFinished(player, false);
             }
         }
 
