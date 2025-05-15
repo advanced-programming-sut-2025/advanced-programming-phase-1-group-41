@@ -19,7 +19,7 @@ public class Willy extends NPC{
     }
     @Override
     public String getChar(){
-        return Colors.colorize(0,15,":/");
+        return "\u001B[48;2;101;67;33m\u001B[38;5;15m웃 \u001B[0m";
     }
 
     public Marketplace getMarketplace() {

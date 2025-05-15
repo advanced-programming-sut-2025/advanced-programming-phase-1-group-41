@@ -22,7 +22,7 @@ public class Clint extends NPC{
     }
     @Override
     public String getChar(){
-        return Colors.colorize(0,15,":{");
+        return Colors.colorize(196,0,"웃 ");
     }
 
     public Marketplace getMarketplace() {
