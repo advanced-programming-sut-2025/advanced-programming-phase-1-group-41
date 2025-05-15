@@ -213,6 +213,7 @@ public class CraftingController {
             case Keg -> this.keg(items, cell);
             case CheesePress -> this.cheesePress(items, cell);
             case BeeHouse -> this.beeHouse(items, cell);
+            case Loom -> this.loom(items, cell);
             default -> new Result(false, machineName + " is not useable");
         };
     }
@@ -696,8 +697,54 @@ public class CraftingController {
 
     private Result MayonnaiseMachine(Matcher matcher){return null;}
 
-    private Result loom(Matcher matcher){return null;}
+    private Item setLoom(ArrayList<Item> items){
+        for (Item item : items) {
+            Product product = ProductType.parseProductType(item.getName());
+            if(product != null){
+                if(product.getProductType() == ProductType.SheepWool ||
+                product.getProductType() == ProductType.RabbitWool){
+                    return product;
+                }
+            }
+        }
+        return null;
+    }
 
+    private Result loom(ArrayList<Item> items, Cell cell){
+        Item item = setLoom(items);
+        Player player = App.getGame().getCurrentPlayer();
+        if(item == null){
+            return new Result(false, "Wrong item!");
+        }
+        for (Machine x : player.getOnGoingMachines()) {
+            if (x instanceof Loom loom) {
+                loomHelper(loom, items, player, item);
+                return new Result(true, "done");
+            }
+        }
+        Loom loom = null;
+        if(item instanceof Product product){
+            loom = new Loom(product);
+        }
+        if(loom == null){
+            return new Result(false, "invalid item type "+item.getName());
+        }
+        player.getOnGoingMachines().add(loom);
+        loomHelper(loom, items, player, item);
+        return new Result(true, "donee");
+    }
+
+
+    private void loomHelper(Loom loom, ArrayList<Item> items, Player player, Item type){
+        for (Item item : items) {
+            if(item.getName().equalsIgnoreCase(type.getName())){
+                updateItems(item, loom, player, 1);
+            }else{
+                System.out.println(item.getName()+" is not a valid input");
+                return;
+            }
+        }
+    }
 
     public static void check(){
         Player player = App.getGame().getCurrentPlayer();
