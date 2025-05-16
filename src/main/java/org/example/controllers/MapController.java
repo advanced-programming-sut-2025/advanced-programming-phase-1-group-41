@@ -43,7 +43,8 @@ public class MapController {
                     )){
                         player.setPlayerIsInVillage(true);
                         player.setX(App.getGame().getVillage().getStartPoints().getFirst().getX());
-                        player.setY(App.getGame().getVillage().getStartPoints().get(0).getY());
+                        player.setY(App.getGame().getVillage().getStartPoints().getFirst().getY());
+                        player.setInFarmId(player.getFarmId());
                         System.out.println("going to village..");
                         System.out.println("rn on "+player.getX()+" "+player.getY());
                         break;
@@ -53,8 +54,8 @@ public class MapController {
                             Finder.findCellByCoordinatesVillage(cell.x, cell.y, App.getGame().getVillage())
                     )){
                         player.setPlayerIsInVillage(false);
-                        player.setX(App.getGame().getCurrentPlayerFarm().getStartPoints().get(0).getX());
-                        player.setY(App.getGame().getCurrentPlayerFarm().getStartPoints().get(0).getY());
+                        player.setX(App.getGame().getCurrentPlayerFarm().getStartPoints().getFirst().getX());
+                        player.setY(App.getGame().getCurrentPlayerFarm().getStartPoints().getFirst().getY());
                         System.out.println("going to farm ...");
                         System.out.println("rn on "+player.getX()+" "+player.getY());
                         break;
