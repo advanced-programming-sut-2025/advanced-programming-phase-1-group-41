@@ -243,6 +243,10 @@ public class PlayerController {
         if(slot.getItem() instanceof Food){
             if(((Food) slot.getItem()).getBuff() != null){
                 Buff buff = ((Food) slot.getItem()).getBuff();
+                Buff playerBuff = App.getGame().getCurrentPlayer().getBuff();
+                if(playerBuff != null){
+                    App.getGame().getCurrentPlayer().setMaxEnergy(200);
+                }
                 App.getGame().getCurrentPlayer().setBuff(new Buff(buff.getBuffTime(), buff.getBuffAmount(), buff.getBuffType()));
                 if(buff.getBuffType().equals(BuffType.MaxEnergy)){
                     App.getGame().getCurrentPlayer().setMaxEnergy(200 + buff.getBuffAmount());

@@ -89,9 +89,9 @@ public class FarmingController {
                         if(slot.getItem().getName().equals(seed)
                             || ((Seed) slot.getItem()).getSeedType().equals(seedType)){
                             List<String> mixedCropNames = Arrays.asList(
-                                    "Cauliflower", "Parsnip", "Potato", "BlueJazz", "Tulip",
-                                    "Corn", "HotPepper", "Radish", "Wheat", "Poppy", "Sunflower", "SummerSpangle",
-                                    "Artichoke", "Eggplant", "Pumpkin", "FairyRose", "Powdermelon"
+                                    "CauliflowerSeed", "ParsnipSeed", "PotatoSeed", "BlueJazzSeed", "TulipSeed",
+                                    "CornSeed", "HotPepperSeed", "RadishSeed", "WheatSeed", "PoppySeed", "SunflowerSeed", "SummerSpangleSeed",
+                                    "ArtichokeSeed", "EggplantSeed", "PumpkinSeed", "FairyRoseSeed", "PowdermelonSeed"
                             );
                             if(seedType.equals(SeedType.Mixed)){
                                 Random rand = new Random();
