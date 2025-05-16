@@ -260,7 +260,8 @@ public class Farm {
         int counter = 0;
         for(int i=x;i<x+squareSize;i++) {
             for (int j = y; j < y + squareSize; j++) {
-                Cell cell = getCell(i, j);
+                Cell cell = getCell(j, i);
+                if(cell == null) continue;
                  if (cell.getX() == App.getGame().getCurrentPlayer().getX() && cell.getY() == App.getGame().getCurrentPlayer().getY()) {
                     System.out.printf(App.getGame().getCurrentPlayer().getChar());}
                     else if (isAnimalHere(cell)) {}

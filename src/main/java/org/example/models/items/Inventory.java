@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Inventory {
     private ArrayList<Slot> slots=new ArrayList<>();
-    private Backpack backpack=Backpack.Deluxe;
+    private Backpack backpack=Backpack.Default;
     private int lastGottenSumOfItemsPrice;
     public Inventory()
     {
@@ -15,12 +15,12 @@ public class Inventory {
         addToInventory(new TrashCan(), 1);
         addToInventory(new Pickaxe(), 1);
         // todo buy this
-        addToInventory(new FishingRod(), 1);
+//        addToInventory(new FishingRod(), 1);
         addToInventory(new WateringCan(), 1);
         addToInventory(new Hoe(), 1);
         addToInventory(new Axe(), 1);
         addToInventory(new Scythe(), 1);
-        addToInventory(new Shear(), 1);
+//        addToInventory(new Shear(), 1);
     }
 
     public void setDefaultBag() {
@@ -92,6 +92,7 @@ public class Inventory {
                     return true;
                 }
             }
+            System.out.println("inventory is full..");
             return false;
         }
         return true;

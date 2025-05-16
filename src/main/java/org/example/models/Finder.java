@@ -129,7 +129,7 @@ public class Finder {
             if(slot.getItem() == null){
                 continue;
             }
-            System.out.println("checking.. "+slot.getItem().getName()+" "+name);
+//            System.out.println("checking.. "+slot.getItem().getName()+" "+name);
             if(slot.getItem() instanceof Tool){
                 if(slot.getItem().getName().equalsIgnoreCase(name)){
                     return (Tool) slot.getItem();

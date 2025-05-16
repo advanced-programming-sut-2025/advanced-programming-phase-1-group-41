@@ -383,7 +383,7 @@ public class Player {
     public void resetEnergy(){
         if(this.energy == 0){
             System.out.println("since you passed out, you're starting with 175");
-            this.energy = 175;
+            this.energy = (double) (3 * maxEnergy) / 4;
             return;
         }
         this.energy = maxEnergy;
@@ -395,6 +395,9 @@ public class Player {
             if(currentBuff.getBuffTime() <= 0){
                 currentBuff = null;
                 maxEnergy = 200;
+                if(energy > maxEnergy){
+                    energy = maxEnergy;
+                }
                 return;
             }
         }
