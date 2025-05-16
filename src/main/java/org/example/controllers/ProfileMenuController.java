@@ -35,7 +35,7 @@ public class ProfileMenuController {
         if(newPassword.equals(oldPassword)){
             return new Result(false, "Passwords are the same!");
         }
-        if(!newPassword.matches("^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};:'\",.<>?/\\\\|`~]+$")){
+        if(!newPassword.matches("^[a-zA-Z0-9!@#$%^&*()+=\\[\\]{};:'\",<>?/\\\\|]+$")){
             return new Result(false, "Invalid password format!");
         }
         if(newPassword.length() < 8){

@@ -82,7 +82,7 @@ public class AuthenticationController {
             passwordConfirm = password;
             successMessage = "User registered successfully!\nYour password is: " + password;
         }
-        if(!password.matches("^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};:'\",.<>?/\\\\|`~]+$")){
+        if(!password.matches("^[a-zA-Z0-9!@#$%^&*()+=\\[\\]{};:'\",<>?/\\\\|]+$")){
             return new Result(false, "Invalid password format!");
         }
         if(password.length() < 8){
@@ -119,7 +119,7 @@ public class AuthenticationController {
                     break;
                 }
                 else{
-                    System.out.println("Invalid command!");
+                    System.out.println("Answers should be the same!");
                 }
             }
             else{

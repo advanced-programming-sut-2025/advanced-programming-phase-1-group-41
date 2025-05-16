@@ -35,11 +35,17 @@ public class ForagingCrop implements Foraging, Item {
 
     public ForagingCrop(int x, int y, Farm farm) {
         Random rand = new Random();
-        do {
+        while (true){
             int type = rand.nextInt(ForagingCropType.values().length);
             typeIndex = type;
             foragingCropType = ForagingCropType.values()[type];
-        } while (!foragingCropType.getGrowingSeason().equals(App.getGame().getTime().getSeason()));
+            if(App.getGame() == null){
+                break;
+            }
+            if(foragingCropType.getGrowingSeason().equals(App.getGame().getTime().getSeason())){
+                break;
+            }
+        }
         Cell cell = Finder.findCellByCoordinates(x, y, farm);
         assert cell != null;
         cell.setObjectMap(this);
