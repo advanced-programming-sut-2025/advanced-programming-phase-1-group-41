@@ -39,9 +39,9 @@ public class ForagingCrop implements Foraging, Item {
             int type = rand.nextInt(ForagingCropType.values().length);
             typeIndex = type;
             foragingCropType = ForagingCropType.values()[type];
-            if(App.getGame() == null){
-                break;
-            }
+//            if(App.getGame() == null){
+//                break;
+//            }
             if(foragingCropType.getGrowingSeason().equals(App.getGame().getTime().getSeason())){
                 break;
             }
