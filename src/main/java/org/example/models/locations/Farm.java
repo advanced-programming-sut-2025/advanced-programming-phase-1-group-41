@@ -249,10 +249,14 @@ public class Farm {
                 if(cell.getX() == player.getX() && cell.getY() == player.getY()){
                     System.out.printf(player.getChar());
                     found = true;
+                    break;
                 }
             }
             if(found){
                 counter++;
+                if(counter % 60 == 0){
+                    System.out.println();
+                }
                 continue;
             }
             if(cell.getX()==App.getGame().getCurrentPlayer().getX()&&cell.getY()==App.getGame().getCurrentPlayer().getY()){System.out.printf(App.getGame().getCurrentPlayer().getChar());}
