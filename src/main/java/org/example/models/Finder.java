@@ -56,6 +56,9 @@ public class Finder {
         if(CropType.parseCropType(itemName)!=null){
             return new Crop(Objects.requireNonNull(CropType.parseCropType(itemName)));
         }
+        if(ForagingCropType.parseForagingCropType(itemName)!=null){
+            return new ForagingCrop(Objects.requireNonNull(ForagingCropType.parseForagingCropType(itemName)));
+        }
         if(SeedType.parseSeedType(itemName)!=null){
             return new Seed(SeedType.parseSeedType(itemName));
         }
@@ -66,7 +69,7 @@ public class Finder {
             return new Fertilizer(FertilizerType.parseFertilizerType(itemName));
         }
         if(MineralType.parseMineralType(itemName)!=null){
-            return new Mineral(MineralType.parseMineralType(itemName));
+            return new Mineral(Objects.requireNonNull(MineralType.parseMineralType(itemName)));
         }
         if(itemName.equalsIgnoreCase((new Wood()).getName())){
             return new Wood();
