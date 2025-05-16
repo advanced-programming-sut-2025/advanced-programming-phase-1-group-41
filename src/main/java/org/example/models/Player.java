@@ -434,4 +434,7 @@ public class Player {
     public void setInFarmId(int inFarmId) {
         this.inFarmId = inFarmId;
     }
+    public void resetInFarmId() {
+        this.inFarmId = this.farmId;
+    }
 }

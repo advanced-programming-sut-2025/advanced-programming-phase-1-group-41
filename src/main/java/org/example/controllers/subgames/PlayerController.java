@@ -1,5 +1,6 @@
 package org.example.controllers.subgames;
 
+import org.example.controllers.MapController;
 import org.example.models.App;
 import org.example.models.Result;
 import org.example.models.*;
@@ -8,6 +9,8 @@ import org.example.models.animals.FishType;
 import org.example.models.foragings.Fruit;
 import org.example.models.foragings.FruitType;
 import org.example.models.items.*;
+import org.example.models.locations.Farm;
+import org.example.models.locations.Village;
 import org.example.models.skills.Skill;
 import org.example.models.tools.FishingRod;
 import org.example.models.tools.FishingRodLevel;
@@ -419,10 +422,31 @@ public class PlayerController {
 
     }
     public Result walkHome(Matcher matcher){
-        return null;
+        Player player = App.getGame().getCurrentPlayer();
+        Farm farm = null;
+        for (Farm farm1 : App.getGame().getFarms()) {
+            if(farm1.getId() == player.getFarmId()){
+                farm = farm1;
+            }
+        }
+        if(farm == null){
+            return new Result(false, "farm not found!");
+        }
+        Village village = App.getGame().getVillage();
+        MapController c = new MapController();
+        if(player.isPlayerIsInVillage()){
+            player.resetInFarmId();
+            Result preResult = c.walk(null,village.getTransferCells().getFirst().getX(),village.getTransferCells().getFirst().getY());
+            if(!preResult.success()){
+                return new Result(false,"you're probably stuck..");
+            }
+        }
+        return c.walk(null,farm.getTransferCells().getFirst().getX(),farm.getTransferCells().getFirst().getY());
     }
     public Result walkVillage(Matcher matcher){
-        return null;
+        Farm farm = App.getGame().getCurrentPlayerFarm();
+        MapController c = new MapController();
+        return c.walk(null,farm.getTransferCells().getFirst().getX(),farm.getTransferCells().getFirst().getY());
     }
 
     public Result sellProduct(Matcher matcher){return null;}

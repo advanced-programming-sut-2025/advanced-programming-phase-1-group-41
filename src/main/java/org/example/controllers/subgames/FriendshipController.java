@@ -281,8 +281,8 @@ public class FriendshipController {
             if(friendship.getPlayer1().equals(player)){
                 if(friendship.getPlayer2().equals(to)){
                     System.out.println("going to new farm..");
-                    setFarm(to);
                     if(friendship.isAreMarried()){
+                        setFarm(to);
                         return new Result(true,"going to "+to.getUser().getUsername()+" farm.");
                     }else{
                         return new Result(false,"your not married");
@@ -291,8 +291,8 @@ public class FriendshipController {
             }else{
                 if(friendship.getPlayer1().equals(to)){
                     System.out.println("going to new farm..");
-                    setFarm(to);
                     if(friendship.isAreMarried()){
+                        setFarm(to);
                         return new Result(true,"going to "+to.getUser().getUsername()+" farm.");
                     }else{
                         return new Result(false,"your not married");
