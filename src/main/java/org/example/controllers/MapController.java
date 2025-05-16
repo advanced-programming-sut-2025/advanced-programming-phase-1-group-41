@@ -110,7 +110,11 @@ public class MapController {
         for(Cell cell : cells){
             if(!objectNames.contains(cell.getObjectMap().getName())){
                 objectNames.add(cell.getObjectMap().getName());
-                System.out.println(cell.getObjectMap().getName()+": "+cell.getObjectMap().getChar());
+                System.out.printf(
+                        "%-20s -> %7s\n\n",
+                        cell.getObjectMap().getName(),
+                        cell.getObjectMap().getChar()
+                );
             }
         }
         objectNames.clear();

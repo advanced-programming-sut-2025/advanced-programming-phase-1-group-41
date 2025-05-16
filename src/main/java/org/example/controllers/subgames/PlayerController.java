@@ -12,6 +12,7 @@ import org.example.models.skills.Skill;
 import org.example.models.tools.FishingRod;
 import org.example.models.tools.FishingRodLevel;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -66,22 +67,49 @@ public class PlayerController {
 
     public Result showInventory(Matcher matcher){
         ArrayList<Slot> inventory=App.getGame().getCurrentPlayer().getInventory().getSlots();
+        System.out.print(Colors.backColor(243));
+        System.out.printf("┏");
+        for(int i=0;i<52;i++){
+            System.out.printf("━");
+        }
+        System.out.printf("┓");
+        System.out.print(Colors.RESET);
+        System.out.printf("\n");
+
         for(Slot slot : inventory){
             if(slot.getQuantity()>0) {
-                System.out.printf(slot.getQuantity() + " " + slot.getItem().getName());
+                System.out.print(Colors.backColor(243));
+                System.out.print(Colors.foreColor(15));
+                System.out.printf(
+                        "┃%-40s -> %7d ┃",
+                        slot.getItem().getName(),
+                        slot.getQuantity()
+                );
+//                System.out.printf(slot.getQuantity() + " " + slot.getItem().getName());
+                System.out.print(Colors.RESET);
+                System.out.printf("\n");
             }
-            if(slot.getQuantity()>1){
-                char lastChar = slot.getItem().getName().charAt(slot.getItem().getName().length() - 1);
-                if(lastChar == 'e' || lastChar == 'a' || lastChar == 'i' || lastChar == 'o' || lastChar == 'u' || lastChar == 'd') {
-                    System.out.print("s\n");
-                } else {
-                    System.out.print("es\n");
-                }
-            }
-            else if(slot.getQuantity()==1){
-                System.out.print("\n");
-            }
+
+//            if(slot.getQuantity()>1){
+//                char lastChar = slot.getItem().getName().charAt(slot.getItem().getName().length() - 1);
+//                if(lastChar == 'e' || lastChar == 'a' || lastChar == 'i' || lastChar == 'o' || lastChar == 'u' || lastChar == 'd') {
+//                    System.out.print("s\n");
+//                } else {
+//                    System.out.print("es\n");
+//                }
+//            }
+//            else if(slot.getQuantity()==1){
+//                System.out.print("\n");
+//            }
         }
+        System.out.print(Colors.backColor(243));
+        System.out.printf("┗");
+        for(int i=0;i<52;i++){
+            System.out.printf("━");
+        }
+        System.out.printf("┛");
+        System.out.print(Colors.RESET);
+        System.out.printf("\n");
         return new Result(true,App.getGame().getCurrentPlayer().getInventory().getEmptySlots()+" empty slots in your "+App.getGame().getCurrentPlayer().getInventory().getBackpack().name()+" backPack");
     }
 
