@@ -70,21 +70,21 @@ public class Trade {
     public String toString() {
         if(paidInMoney){
             if(isRequest){
-                return from.getUser().getUsername() + ": requests " + item.getQuantity() + " " + item.getItem().getName()
-                        + " purchased with " + price + " money.";
+                return Colors.foreColor(87) + from.getUser().getUsername() + ": requests " + item.getQuantity() + " " + item.getItem().getName()
+                        + " purchased with " + price + " money." + Colors.RESET;
             }else{
-                return from.getUser().getUsername() + ": offers " + item.getQuantity() + " " + item.getItem().getName()
-                        + " purchased with " + price + " money.";
+                return Colors.foreColor(87) + from.getUser().getUsername() + ": offers " + item.getQuantity() + " " + item.getItem().getName()
+                        + " purchased with " + price + " money." + Colors.RESET;
             }
         }else{
             if(isRequest){
                 assert targetItem != null;
-                return from.getUser().getUsername() + ": requests " + item.getQuantity() + " " + item.getItem().getName()
-                        + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + ".";
+                return Colors.foreColor(87) + from.getUser().getUsername() + ": requests " + item.getQuantity() + " " + item.getItem().getName()
+                        + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + "." + Colors.RESET;
             }else{
                 assert targetItem != null;
-                return from.getUser().getUsername() + ": offers " + item.getQuantity() + " " + item.getItem().getName()
-                        + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + ".";
+                return Colors.foreColor(87) + from.getUser().getUsername() + ": offers " + item.getQuantity() + " " + item.getItem().getName()
+                        + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + "." + Colors.RESET;
             }
         }
     }
@@ -94,20 +94,20 @@ public class Trade {
             if(paidInMoney){
                 if(isRequest){
 
-                    return "Trade Done: " + from.getUser().getUsername() + " got " + item.getQuantity() + " " + item.getItem().getName()
+                    return Colors.foreColor(40) + "Trade Done: " + from.getUser().getUsername() + " got " + item.getQuantity() + " " + item.getItem().getName()
                             + " purchased with " + price + " money" + " from " + to.getUser().getUsername()+Colors.RESET;
                 }else{
-                    return "Trade Done: " + from.getUser().getUsername() + " gave " + item.getQuantity() + " " + item.getItem().getName()
+                    return Colors.foreColor(40) + "Trade Done: " + from.getUser().getUsername() + " gave " + item.getQuantity() + " " + item.getItem().getName()
                             + " purchased with " + price + " money" + " to " + to.getUser().getUsername()+Colors.RESET;
                 }
             }else{
                 if(isRequest){
                     assert targetItem != null;
-                    return "Trade Done: " + from.getUser().getUsername() + " got " + item.getQuantity() + " " + item.getItem().getName()
+                    return Colors.foreColor(40) + "Trade Done: " + from.getUser().getUsername() + " got " + item.getQuantity() + " " + item.getItem().getName()
                             + " and gave " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " to " + to.getUser().getUsername()+Colors.RESET;
                 }else{
                     assert targetItem != null;
-                    return "Trade Done: " + from.getUser().getUsername() + " gave " + item.getQuantity() + " " + item.getItem().getName()
+                    return Colors.foreColor(40) + "Trade Done: " + from.getUser().getUsername() + " gave " + item.getQuantity() + " " + item.getItem().getName()
                             + " and got " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " with " + to.getUser().getUsername()+Colors.RESET;
                 }
             }
@@ -115,20 +115,20 @@ public class Trade {
             System.out.print(Colors.foreColor(124));
             if(paidInMoney){
                 if(isRequest){
-                    return "Trade Rejected: You requested " + item.getQuantity() + " " + item.getItem().getName()
+                    return Colors.foreColor(196) + "Trade Rejected: You requested " + item.getQuantity() + " " + item.getItem().getName()
                             + " purchased with " + price + " money from " + to.getUser().getUsername()+Colors.RESET;
                 }else{
-                    return "Trade Rejected: You offered " + item.getQuantity() + " " + item.getItem().getName()
+                    return Colors.foreColor(196) + "Trade Rejected: You offered " + item.getQuantity() + " " + item.getItem().getName()
                             + " purchased with " + price + " money to " + to.getUser().getUsername()+Colors.RESET;
                 }
             }else{
                 if(isRequest){
                     assert targetItem != null;
-                    return "Trade Rejected: You requested " + item.getQuantity() + " " + item.getItem().getName()
+                    return Colors.foreColor(196) + "Trade Rejected: You requested " + item.getQuantity() + " " + item.getItem().getName()
                             + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " from " + to.getUser().getUsername()+Colors.RESET;
                 }else{
                     assert targetItem != null;
-                    return "Trade Rejected: You offered " + item.getQuantity() + " " + item.getItem().getName()
+                    return Colors.foreColor(196) + "Trade Rejected: You offered " + item.getQuantity() + " " + item.getItem().getName()
                             + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " to " + to.getUser().getUsername()+Colors.RESET;
                 }
             }
@@ -136,20 +136,20 @@ public class Trade {
             System.out.print(Colors.foreColor(123));
             if(paidInMoney){
                 if(isRequest){
-                    return "Trade Pending: " + from.getUser().getUsername() + " requests " + item.getQuantity() + " " + item.getItem().getName()
+                    return Colors.foreColor(190) + "Trade Pending: " + from.getUser().getUsername() + " requests " + item.getQuantity() + " " + item.getItem().getName()
                             + " purchased with " + price + " money from " + to.getUser().getUsername()+Colors.RESET;
                 }else{
-                    return "Trade Pending: " + from.getUser().getUsername() + " offers " + item.getQuantity() + " " + item.getItem().getName()
+                    return Colors.foreColor(190) + "Trade Pending: " + from.getUser().getUsername() + " offers " + item.getQuantity() + " " + item.getItem().getName()
                             + " purchased with " + price + " money to " + to.getUser().getUsername()+Colors.RESET;
                 }
             }else{
                 if(isRequest){
                     assert targetItem != null;
-                    return "Trade Pending: " + from.getUser().getUsername() + " requests " + item.getQuantity() + " " + item.getItem().getName()
+                    return Colors.foreColor(190) + "Trade Pending: " + from.getUser().getUsername() + " requests " + item.getQuantity() + " " + item.getItem().getName()
                             + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " from " + to.getUser().getUsername()+Colors.RESET;
                 }else{
                     assert targetItem != null;
-                    return "Trade Pending: " + from.getUser().getUsername() + " offers " + item.getQuantity() + " " + item.getItem().getName()
+                    return Colors.foreColor(190) + "Trade Pending: " + from.getUser().getUsername() + " offers " + item.getQuantity() + " " + item.getItem().getName()
                             + " changed with " + targetItem.getQuantity() + " " + targetItem.getItem().getName() + " to " + to.getUser().getUsername()+Colors.RESET;
                 }
             }

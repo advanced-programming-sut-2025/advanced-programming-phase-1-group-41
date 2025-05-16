@@ -10,12 +10,14 @@ import org.example.models.buildings.GreenHouse.Greenhouse;
 import org.example.models.buildings.GreenHouse.WaterTank;
 import org.example.models.buildings.Well;
 import org.example.models.buildings.animalContainer.Barn;
+import org.example.models.buildings.animalContainer.BarnType;
 import org.example.models.foragings.*;
 import org.example.models.foragings.Nature.*;
 import org.example.models.foragings.Nature.Mineral;
 import org.example.models.foragings.Nature.Rock;
 import org.example.models.foragings.Nature.RockType;
 import org.example.models.foragings.Nature.Tree;
+import org.example.models.items.BuffType;
 import org.example.models.items.Item;
 import org.example.models.items.Products.Product;
 import org.example.models.items.Products.ProductType;
@@ -195,7 +197,12 @@ public class ToolsController {
             if(energy > App.getGame().getCurrentPlayer().getEnergy()){
                 return new Result(false ,"you don't have enough energy for this tool");
             }
-            App.getGame().getCurrentPlayer().decEnergyTool(energy);
+            if(App.getGame().getCurrentPlayer().getBuff() != null){
+                if(App.getGame().getCurrentPlayer().getBuff().getBuffType().equals(BuffType.Mining)){
+                    energy--;
+                }
+            }
+            App.getGame().getCurrentPlayer().decEnergyTool(Math.max(energy, 0));
             int value =  App.getGame().getCurrentPlayer().getMiningSkill().getLevel() >= 2 ? 1 : 0;
             App.getGame().getCurrentPlayer().getMiningSkill().increaseXp(10);
             App.getGame().getCurrentPlayer().getInventory().addToInventory(
@@ -210,6 +217,14 @@ public class ToolsController {
             if(((Rock) cell.getObjectMap()).getHitPoints() == 0){
                 if(energy > App.getGame().getCurrentPlayer().getEnergy()){
                     return new Result(false, "you don't have enough energy for this tool");
+                }
+                if(App.getGame().getCurrentPlayer().getBuff() != null){
+                    if(App.getGame().getCurrentPlayer().getBuff().getBuffType().equals(BuffType.Mining)
+                            || App.getGame().getCurrentPlayer().getBuff().getBuffType().equals(BuffType.Foraging)){
+                        if(energy >= 1){
+                            energy--;
+                        }
+                    }
                 }
                 App.getGame().getCurrentPlayer().decEnergyTool(energy);
                 int value =  App.getGame().getCurrentPlayer().getMiningSkill().getLevel() >= 2 ? 1 : 0;
@@ -250,6 +265,14 @@ public class ToolsController {
             if(energy - 1 > App.getGame().getCurrentPlayer().getEnergy()){
                 return new Result(false, "you don't have enough energy to use this tool");
             }
+            if(App.getGame().getCurrentPlayer().getBuff() != null){
+                if(App.getGame().getCurrentPlayer().getBuff().getBuffType().equals(BuffType.Mining)
+                        || App.getGame().getCurrentPlayer().getBuff().getBuffType().equals(BuffType.Foraging)){
+                    if(energy >= 1){
+                        energy--;
+                    }
+                }
+            }
             App.getGame().getCurrentPlayer().decEnergyTool(Math.max(0,energy-1));
             try{
                 App.getGame().getCurrentPlayer().getInventory().addToInventory((Item)cell.getObjectMap(),1);
@@ -277,6 +300,13 @@ public class ToolsController {
         if(App.getGame().getCurrentPlayer().getFarmingSkill().isMaxLevel()){
             energy--;
         }
+        if(App.getGame().getCurrentPlayer().getBuff() != null){
+            if(App.getGame().getCurrentPlayer().getBuff().getBuffType().equals(BuffType.Farming)){
+                if(energy >= 1){
+                    energy--;
+                }
+            }
+        }
         if(cell.getObjectMap() instanceof Grass){
             if(energy > App.getGame().getCurrentPlayer().getEnergy()){
                 return new Result(false,"you don't have enough energy to use this tool");
@@ -302,7 +332,13 @@ public class ToolsController {
         if(App.getGame().getCurrentPlayer().getForagingSkill().isMaxLevel()){
             energy--;
         }
-
+        if(App.getGame().getCurrentPlayer().getBuff() != null){
+            if(App.getGame().getCurrentPlayer().getBuff().getBuffType().equals(BuffType.Foraging)){
+                if(energy >= 1){
+                    energy--;
+                }
+            }
+        }
         if(cell.getObjectMap() instanceof Tree tree){
             tree.decreaseHitPoints();
             if(energy > App.getGame().getCurrentPlayer().getEnergy()){
@@ -367,6 +403,11 @@ public class ToolsController {
     private Result useScythe(Cell cell, Tool tool){
         Scythe scythe = (Scythe) tool;
         int energy = 2;
+        if(App.getGame().getCurrentPlayer().getBuff() != null){
+            if(App.getGame().getCurrentPlayer().getBuff().getBuffType().equals(BuffType.Farming)){
+                energy--;
+            }
+        }
         if(energy > App.getGame().getCurrentPlayer().getEnergy()){
             return new Result(false,"you don't have enough energy to use this tool");
         }

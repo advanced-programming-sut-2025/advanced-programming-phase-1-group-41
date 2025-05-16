@@ -414,6 +414,7 @@ public class Farm {
         farmBuilder.weatherUpdates();
         farmBuilder.scarecrowUpdate();
         farmBuilder.crowAttacks();
+        mine.renewMinerals();
     }
     public int getRockCount() {
         return rockCount;
