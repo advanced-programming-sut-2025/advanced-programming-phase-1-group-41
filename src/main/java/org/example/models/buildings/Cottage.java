@@ -28,7 +28,7 @@ public class Cottage implements Building {
         this.machines = new HashSet<>();
         this.x = x;
         this.y = y;
-        System.out.println( "cottage in : "+x+" "+y);
+//        System.out.println( "cottage in : "+x+" "+y);
         int xWall;
         int yWall;
         yWall = y;

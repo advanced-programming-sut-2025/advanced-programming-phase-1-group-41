@@ -75,7 +75,7 @@ public class AuthenticationController {
         if(!username.matches("^[a-zA-Z0-9-]+$")){
             return new Result(false, "Invalid username format!");
         }
-        if(!email.matches("^[a-zA-Z0-9][a-zA-Z0-9._-]*@[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+$")){
+        if(!email.matches("^[a-zA-Z0-9][a-zA-Z0-9_-]*\\.?[a-zA-Z0-9_-]*[a-zA-Z0-9]@[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+$")){
             return new Result(false, "Invalid email format!");
         }
         if(password.equalsIgnoreCase("random") && passwordConfirm.equalsIgnoreCase("password")) {
