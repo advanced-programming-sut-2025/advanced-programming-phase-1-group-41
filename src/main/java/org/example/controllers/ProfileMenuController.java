@@ -29,6 +29,7 @@ public class ProfileMenuController {
         }
         String newPassword = matcher.group("newPassword");
         String oldPassword = matcher.group("oldPassword");
+        oldPassword = (new AuthenticationController()).getHash(oldPassword);
         if(!App.getCurrentUser().getPassword().equals(oldPassword)){
             return new Result(false, "Wrong password!");
         }

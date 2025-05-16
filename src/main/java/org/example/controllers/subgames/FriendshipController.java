@@ -191,6 +191,10 @@ public class FriendshipController {
         if(player2 == null){
             return new Result(false, "Player not found!");
         }
+        Slot slot = App.getGame().getCurrentPlayer().getInventory().getSlotByItem(MarketplaceItems.Bouquet);
+        if(slot == null){
+            return new Result(false, "Bouquet not found in your inventory!");
+        }
         Friendship friendship = player.findFriendship(player2);
         if(friendship.getFriendshipXp() < 300){
             return new Result(false, "You are not enough friends to give flower.");
@@ -200,10 +204,6 @@ public class FriendshipController {
 //        if(flower == null){
 //            return new Result(false, "Flower not found!");
 //        }
-        Slot slot = App.getGame().getCurrentPlayer().getInventory().getSlotByItem(MarketplaceItems.Bouquet);
-        if(slot == null){
-            return new Result(false, "Bouquet not found in your inventory!");
-        }
         if(Math.abs(player.getX() - player2.getX()) <= 1 && Math.abs(player.getY() - player2.getY()) <= 1
                 && player.isPlayerIsInVillage() && player2.isPlayerIsInVillage()){
             player.getInventory().removeFromInventory(MarketplaceItems.Bouquet, 1);
@@ -234,7 +234,7 @@ public class FriendshipController {
         }
         Slot slot = App.getGame().getCurrentPlayer().getInventory().getSlotByItem(MarketplaceItems.WeddingRing);
         if(slot == null){
-            return new Result(false, "Bouquet not found in your inventory!");
+            return new Result(false, "Ring not found in your inventory!");
         }
         if(Math.abs(player.getX() - player2.getX()) <= 1 && Math.abs(player.getY() - player2.getY()) <= 1
                 && player.isPlayerIsInVillage() && player2.isPlayerIsInVillage()){
@@ -265,6 +265,7 @@ public class FriendshipController {
         if(respond.equals("reject")){
             friendship.reject();
             player2.setDepressionDaysLeft(7);
+            player2.setEnergy(player.getEnergy() / 2);
             return new Result(true, "You rejected " + player2.getUser().getUsername() + " ;((\npoor " + player2.getUser().getUsername() + " D:");
         }
         player.getInventory().addToInventory(MarketplaceItems.WeddingRing, 1);

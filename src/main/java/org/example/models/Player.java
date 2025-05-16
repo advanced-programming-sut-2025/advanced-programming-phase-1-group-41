@@ -383,10 +383,9 @@ public class Player {
     }
 
     public void dailyUpdates(){
-        //TODO Half Energy
         if(depressionDaysLeft > 0){
             depressionDaysLeft--;
-            energy = energy / 2;
+            energy = 100;
         }
         money += savings;
         savings = 0;
@@ -420,6 +419,9 @@ public class Player {
                 maxEnergy = 200;
                 if(energy > maxEnergy){
                     energy = maxEnergy;
+                    if(depressionDaysLeft > 0){
+                        energy /= 2;
+                    }
                 }
                 return;
             }
