@@ -30,6 +30,6 @@ public class Gift {
         return slot.getQuantity() + " " + slot.getItem().getName() + " from " + from.getUser().getUsername();
     }
     public String toString2() {
-        return slot.getQuantity() + " " + slot.getItem().getName();
+        return slot.getQuantity() + " " + slot.getItem().getName() + " sent to " + to.getUser().getUsername();
     }
 }

@@ -68,6 +68,8 @@ public class Player {
     @Transient
     private final ArrayList<Gift> receivedGifts = new ArrayList<>();
     @Transient
+    private final ArrayList<Gift> sendGifts = new ArrayList<>();
+    @Transient
     private final ArrayList<Trade> tradesList = new ArrayList<>();
     @Transient
     private final ArrayList<Trade> newTradesList = new ArrayList<>();
@@ -226,6 +228,8 @@ public class Player {
 
     public void addReceivedGift(Gift gift){receivedGifts.add(gift);}
 
+    public void addSendGift(Gift gift){sendGifts.add(gift);}
+
     public void addNewGift(Gift gift){newGifts.add(gift);}
 
     public void removeNewGift(Gift gift){newGifts.remove(gift);}
@@ -344,6 +348,8 @@ public class Player {
     public ArrayList<Friendship> getFriendships() {return friendships;}
 
     public ArrayList<Gift> getReceivedGifts(){return receivedGifts;}
+
+    public ArrayList<Gift> getSendGifts(){return sendGifts;}
 
     public ArrayList<Gift> getNewGifts(){return newGifts;}
 

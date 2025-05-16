@@ -107,6 +107,7 @@ public class Friendship {
                 if(level >= 0){
                     int xp = -friendshipXp;
                     friendshipXp = 100 * (level + 1) - xp;
+                    break;
                 }
             }
             String playerName = player1.getUser().getUsername();

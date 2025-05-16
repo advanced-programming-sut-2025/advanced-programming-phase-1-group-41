@@ -67,6 +67,9 @@ public class FriendshipController {
         String itemName = matcher.group("item");
         int amount = Integer.parseInt(matcher.group("amount"));
         Item item = Finder.parseItem(itemName);
+        if(item == null){
+            return new Result(false, "Item not found");
+        }
         Slot slot = App.getGame().getCurrentPlayer().getInventory().getSlotByItem(item);
         if(slot == null){
             return new Result(false, "Item not found in your inventory!");
@@ -91,6 +94,7 @@ public class FriendshipController {
             player2.getInventory().addToInventory(slot.getItem(), amount);
             player2.addNewGift(gift);
             player2.addReceivedGift(gift);
+            player.addSendGift(gift);
             friendship.interact();
             friendship.increaseLevel(player);
             return new Result(true, "Gift sent successfully!");
@@ -144,6 +148,11 @@ public class FriendshipController {
         StringBuilder result = new StringBuilder();
         for(Gift gift : App.getGame().getCurrentPlayer().getReceivedGifts()){
             if(gift.getFrom().equals(player)){
+                result.append(gift).append("\n");
+            }
+        }
+        for(Gift gift : App.getGame().getCurrentPlayer().getSendGifts()){
+            if(gift.getTo().equals(player)){
                 result.append(gift.toString2()).append("\n");
             }
         }
