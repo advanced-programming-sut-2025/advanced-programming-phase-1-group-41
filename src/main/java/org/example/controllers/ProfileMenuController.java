@@ -14,7 +14,7 @@ public class ProfileMenuController {
         if(AuthenticationValidator.usernameExists(username)){
             return new Result(false, "Username already exists!");
         }
-        if(!username.matches("^[a-zA-Z0-9-]+$")){
+        if(!username.matches("^[a-zA-Z0-9-]{1,8}$")){
             return new Result(false, "Invalid username format!");
         }
         App.getCurrentUser().setUsername(username);

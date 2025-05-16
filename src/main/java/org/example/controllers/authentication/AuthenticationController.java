@@ -72,7 +72,7 @@ public class AuthenticationController {
         if(AuthenticationValidator.usernameExists(username)){
             return new Result(false, "Username already exists!");
         }
-        if(!username.matches("^[a-zA-Z0-9-]+$")){
+        if(!username.matches("^[a-zA-Z0-9-]{1,8}$")){
             return new Result(false, "Invalid username format!");
         }
         if(!email.matches("^[a-zA-Z0-9][a-zA-Z0-9_-]*\\.?[a-zA-Z0-9_-]*[a-zA-Z0-9]@[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+$")){
