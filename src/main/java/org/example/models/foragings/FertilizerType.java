@@ -1,11 +1,11 @@
 package org.example.models.foragings;
 
 public enum FertilizerType {
-    BasicRetainingSoil("Basic Retaining Soil", 100),
-    QualityRetainingSoil("Quality Retaining Soil", 150),
-    DeluxeRetainingSoil("Deluxe Retaining Soil", 150),
-    GrassStarter("Grass Starter", 100),
-    PlantGrow("Plant Grow", 100),
+    BasicRetainingSoil("BasicRetainingSoil", 100),
+    QualityRetainingSoil("QualityRetainingSoil", 150),
+    DeluxeRetainingSoil("DeluxeRetainingSoil", 200),
+    GrassStarter("GrassStarter", 100),
+    PlantGrow("PlantGrow", 100),
 
     ;
     private final String name;

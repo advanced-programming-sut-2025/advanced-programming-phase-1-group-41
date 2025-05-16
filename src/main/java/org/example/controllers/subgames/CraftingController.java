@@ -107,10 +107,10 @@ public class CraftingController {
                 ObjectMap objectMap = cell1.getObjectMap();
                 if(objectMap instanceof Crop crop){
                     crop.water();
-                    System.out.println("You watered a " + crop.getCropType().getName() + " at " + x + ", " + y);
+                    System.out.println("You watered " + crop.getCropType().getName() + " at " + x + ", " + y);
                 } else if(objectMap instanceof Tree tree){
                     tree.water();
-                    System.out.println("You watered a " + tree.getTreeType().getName() + " at " + x + ", " + y);
+                    System.out.println("You watered " + tree.getTreeType().getName() + " at " + x + ", " + y);
                 }
             }
         }

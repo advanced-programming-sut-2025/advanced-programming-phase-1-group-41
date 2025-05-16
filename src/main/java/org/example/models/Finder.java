@@ -17,6 +17,7 @@ import org.example.models.tools.FishingRodLevel;
 import org.example.models.tools.NormalTools;
 import org.example.models.tools.Tool;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static org.example.models.animals.FishType.parseFish;
@@ -174,6 +175,15 @@ public class Finder {
             }
         }
         return null;
+    }
+    public static ArrayList<Player> findPlayersByFarm(Farm farm){
+        ArrayList<Player> players = new ArrayList<>();
+        for(Player player : App.getGame().getPlayers()){
+            if(farm.getId() == player.getFarmId()){
+                players.add(player);
+            }
+        }
+        return players;
     }
     public static Player findPlayerByUsername(String username){
         for(Player player : App.getGame().getPlayers()){

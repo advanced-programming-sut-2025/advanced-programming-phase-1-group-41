@@ -262,6 +262,17 @@ public class Farm {
             for (int j = y; j < y + squareSize; j++) {
                 Cell cell = getCell(j, i);
                 if(cell == null) continue;
+                ArrayList<Player> players = Finder.findPlayersByFarm(this);
+                boolean found = false;
+                for(Player player : players){
+                    if(cell.getX() == player.getX() && cell.getY() == player.getY()){
+                        System.out.printf(player.getChar());
+                        found = true;
+                    }
+                }
+                if(found){
+                    continue;
+                }
                  if (cell.getX() == App.getGame().getCurrentPlayer().getX() && cell.getY() == App.getGame().getCurrentPlayer().getY()) {
                     System.out.printf(App.getGame().getCurrentPlayer().getChar());}
                     else if (isAnimalHere(cell)) {}
