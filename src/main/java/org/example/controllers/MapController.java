@@ -44,6 +44,7 @@ public class MapController {
                         player.setPlayerIsInVillage(true);
                         player.setX(App.getGame().getVillage().getStartPoints().getFirst().getX());
                         player.setY(App.getGame().getVillage().getStartPoints().getFirst().getY());
+//                        player.setInFarmId(player.getFarmId());
                         System.out.println("going to village..");
                         System.out.println("rn on "+player.getX()+" "+player.getY());
                         break;

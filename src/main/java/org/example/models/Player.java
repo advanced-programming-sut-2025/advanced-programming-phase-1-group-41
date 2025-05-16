@@ -174,7 +174,7 @@ public class Player {
                 if(friendship.getPlayer1().getUser().getUsername().equals(App.getGame().getCurrentPlayer().getUser().getUsername())){
                     value += friendship.getPlayer2().getRealMoney();
                 }else{
-                    value += friendship.getPlayer1().getMoney();
+                    value += friendship.getPlayer1().getRealMoney();
                 }
             }
         }
