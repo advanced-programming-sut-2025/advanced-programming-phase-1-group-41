@@ -101,7 +101,7 @@ public class Farm {
         for(int i = 0; i < rockCount ;i++){
             int y = rand.nextInt(MaxLength - 4) + 2;
             int x = rand.nextInt(MaxHeight - 4) + 2;
-            if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap().getChar(), new Grass().getChar())){
+            if(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap() instanceof Grass){
                 Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(new Rock(x, y, this));
             } else{
                 i--;
@@ -110,7 +110,7 @@ public class Farm {
         for(int i = 0; i < foragingTreeCount ;i++){
             int y = rand.nextInt(MaxLength - 4) + 4;
             int x = rand.nextInt(MaxHeight - 4) + 4;
-            if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap().getChar(), new Grass().getChar())){
+            if(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap() instanceof Grass){
                 Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(new ForagingTree(x, y, this));
             } else{
                 i--;
@@ -119,7 +119,7 @@ public class Farm {
         for(int i = 0; i < plantCount ;i++){
             int y = rand.nextInt(MaxLength - 4) + 4;
             int x = rand.nextInt(MaxHeight - 4) + 4;
-            if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap().getChar(), new Grass().getChar())){
+            if(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap() instanceof Grass){
                 Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(new Plant(x, y, this));
             } else{
                 i--;
@@ -128,7 +128,7 @@ public class Farm {
         for(int i = 0; i < foragingCropCount ;i++){
             int y = rand.nextInt(MaxLength - 4) + 4;
             int x = rand.nextInt(MaxHeight - 4) + 4;
-            if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap().getChar(), new Grass().getChar())){
+            if(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap() instanceof Grass){
                 Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(new ForagingCrop(x, y, this));
             } else{
                 i--;
@@ -137,7 +137,7 @@ public class Farm {
 //        for(int i = 0; i < 400 ;i++){
 //            int y = rand.nextInt(MaxLength - 4) + 4;
 //            int x = rand.nextInt(MaxHeight - 4) + 4;
-//            if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap().getChar(), new Grass().getChar())){
+//            if(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap() instanceof Grass){
 //                Crop crop = new Crop(x, y, this, CropType.values()[rand.nextInt(CropType.values().length)]);
 //                (Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this))).setObjectMap(crop);
 //                crops.add(crop);
@@ -148,7 +148,7 @@ public class Farm {
 //        for(int i = 0; i < 300 ;i++){
 //            int y = rand.nextInt(MaxLength - 4) + 4;
 //            int x = rand.nextInt(MaxHeight - 4) + 4;
-//            if(Objects.equals(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap().getChar(), new Grass().getChar())){
+//            if(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap() instanceof Grass){
 //                Tree tree = new Tree(x, y, this, TreeType.values()[rand.nextInt(TreeType.values().length)]);
 //                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(tree);
 //                trees.add(tree);

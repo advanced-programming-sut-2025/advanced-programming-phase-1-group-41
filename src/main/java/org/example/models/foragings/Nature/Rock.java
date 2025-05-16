@@ -37,15 +37,15 @@ public class Rock implements Nature, Obstacle {
         cell.setObjectMap(this);
         if(rockType.equals(RockType.BigRock)){
             Cell cell2 = Finder.findCellByCoordinates(x + 1, y, farm);
-            if(cell2 != null&& cell2.getObjectMap().getChar().equals(new Grass().getChar())){
+            if(cell2 != null&& cell2.getObjectMap() instanceof Grass){
                 cell2.setObjectMap(this);
             }
             Cell cell3 = Finder.findCellByCoordinates(x + 1, y + 1, farm);
-            if(cell3 != null && cell3.getObjectMap().getChar().equals(new Grass().getChar())){
+            if(cell3 != null && cell3.getObjectMap() instanceof Grass){
                 cell3.setObjectMap(this);
             }
             Cell cell4 = Finder.findCellByCoordinates(x, y + 1, farm);
-            if(cell4 != null && cell4.getObjectMap().getChar().equals(new Grass().getChar())){
+            if(cell4 != null && cell4.getObjectMap() instanceof Grass){
                 cell4.setObjectMap(this);
             }
         }

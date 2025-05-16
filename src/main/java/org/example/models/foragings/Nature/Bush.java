@@ -37,7 +37,7 @@ public class Bush implements Nature {
             for (int y = 0; y < HEIGHT; y++) {
                 if (map[x][y]) {
                     Cell cell = Finder.findCellByCoordinates(startX + x, startY + y, farm);
-                    if (cell != null && cell.getObjectMap().getChar().equals(new Grass().getChar())) {
+                    if (cell != null && cell.getObjectMap() instanceof Grass) {
                         cell.setObjectMap(this);
                     }
                 }

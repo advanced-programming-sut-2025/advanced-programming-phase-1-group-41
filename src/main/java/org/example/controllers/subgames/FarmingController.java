@@ -68,7 +68,9 @@ public class FarmingController {
                 && !App.getGame().getCurrentPlayerFarm().getGreenhouse().isGreenHouse(x, y)){
             return new Result(false, "Can't plant this seed on this season!");
         }
-
+        if(App.getGame().getCurrentPlayer().getInventory().getSlotByItem(new Seed(seedType)) == null){
+            return new Result(false, "You don't have any seed in your inventory!");
+        }
 
         Farm farm = App.getCurrentUser().getCurrentGame().getCurrentPlayerFarm();
         Inventory inventory = App.getCurrentUser().getCurrentGame().getCurrentPlayer().getInventory();
@@ -78,10 +80,7 @@ public class FarmingController {
         if(cell.getObjectMap() instanceof Grass || cell.getObjectMap() instanceof Greenhouse){
             boolean canPlant = true;
             if(cell.getObjectMap() instanceof Grass){
-                canPlant = false;
-                if(((Grass) cell.getObjectMap()).isFarmland()){
-                    canPlant = true;
-                }
+                canPlant = ((Grass) cell.getObjectMap()).isFarmland();
             }
             if(canPlant){
                 for(Slot slot : inventory.getSlots()){
@@ -133,6 +132,7 @@ public class FarmingController {
                                 }
                             }
                             for(TreeType treeType : TreeType.values()){
+                                System.out.println("TreeType " + treeType.getName());
                                 if(treeType.getSource().equals(seedType)){
                                     farm.addTree(new Tree(x, y, farm, treeType));
                                     inventory.removeFromInventory(slot.getItem(), 1);
