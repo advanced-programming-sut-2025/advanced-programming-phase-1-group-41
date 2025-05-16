@@ -205,7 +205,7 @@ public class Village { ;
         makeGround(getCell(83,11));
         makeGround(getCell(20,2));
         makeGround(getCell(21,2));
-        getCell(49, 32).setObjectMap(new ShippingBin());
+        getCell(48, 31).setObjectMap(new ShippingBin());
 
     }
     private void makeGround(Cell cell){
