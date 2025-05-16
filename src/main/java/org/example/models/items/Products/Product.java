@@ -3,6 +3,7 @@ package org.example.models.items.Products;
 import org.example.models.items.Item;
 
 public class Product implements Item {
+    private double Quality;
 
     public Product(ProductType type) {
         this.productType = type;

@@ -580,25 +580,67 @@ public class AnimalController {
                         return new Result(false,"no product is available");
                     }
                     String productName=theAnimal.getProduct().getName();
-                    App.getGame().getCurrentPlayer().getInventory().addToInventory(theAnimal.getProduct(),1);
+                    double quality=(((double) theAnimal.getFriendShip() /1000)*((0.5 + Math.random())));
+                    double lastPrice=0.0;
+                    String rarity="";
+                    if(quality<=0.5){
+                        rarity="normal";
+                        lastPrice=theAnimal.getProduct().getPrice();
+                    }
+                    else if(quality<=0.7){
+                        rarity="silver";
+                        lastPrice=theAnimal.getProduct().getPrice()*1.25;
+                    }
+                    else if(quality<=0.9){
+                        rarity="golden";
+                        lastPrice=theAnimal.getProduct().getPrice()*1.5;
+                    }
+                    else{
+                        rarity="iridium";
+                        lastPrice=theAnimal.getProduct().getPrice()*2;
+                    }
+                    App.getGame().getCurrentPlayer().getInventory().addToInventory(theAnimal.getProduct(),1,(int)Math.floor(lastPrice));
                     if(theAnimal.getProduct().getName().contains("Milk")||theAnimal.getProduct().getName().contains("Sheep")){
                         theAnimal.increaseFriendShip(5);
                     }
                     theAnimal.setProduct(null);
 
-                    return new Result(true,"you collected " + productName + " from " + theAnimal.getName());
+
+                    return new Result(true,"you collected " +rarity+" "+ productName + " from " + theAnimal.getName());
                 }
                 else if(objectMap instanceof Barn){
                     for(Animal animal:((Barn) objectMap).getAnimals()){
                         if(animal.getName().equals(name)){
                             if(animal.getProduct()!=null) {
+                                if(animal instanceof Pig){
+                                    return new Result(false,animal.getChar()+" do not let the truffles go");
+                                }
+                                double quality=(((double) theAnimal.getFriendShip() /1000)*((0.5 + Math.random())));
+                                double lastPrice=0.0;
+                                String rarity="";
+                                if(quality<=0.5){
+                                    rarity="normal";
+                                    lastPrice=theAnimal.getProduct().getPrice();
+                                }
+                                else if(quality<=0.7){
+                                    rarity="silver";
+                                    lastPrice=theAnimal.getProduct().getPrice()*1.25;
+                                }
+                                else if(quality<=0.9){
+                                    rarity="golden";
+                                    lastPrice=theAnimal.getProduct().getPrice()*1.5;
+                                }
+                                else{
+                                    rarity="iridium";
+                                    lastPrice=theAnimal.getProduct().getPrice()*2;
+                                }
                                 String productName = animal.getProduct().getName();
-                                App.getGame().getCurrentPlayer().getInventory().addToInventory(animal.getProduct(),1);
+                                App.getGame().getCurrentPlayer().getInventory().addToInventory(animal.getProduct(),1,(int)Math.floor(lastPrice));
                                 if(theAnimal.getProduct().getName().contains("Milk")||theAnimal.getProduct().getName().contains("Sheep")){
                                     theAnimal.increaseFriendShip(5);
                                 }
                                 animal.setProduct(null);
-                                return new Result(true, "you collected " + productName + " from " + animal.getName());
+                                return new Result(true, "you collected " +rarity+" "+ productName + " from " + animal.getName());
                             }
                             return new Result(false, "no product is available");
                         }
@@ -608,13 +650,32 @@ public class AnimalController {
                     for(Animal animal:((Coop) objectMap).getAnimals()){
                         if(animal.getName().equals(name)){
                             if(animal.getProduct()!=null) {
+                                double quality=(((double) theAnimal.getFriendShip() /1000)*((0.5 + Math.random())));
+                                double lastPrice=0.0;
+                                String rarity="";
+                                if(quality<=0.5){
+                                    rarity="normal";
+                                    lastPrice=theAnimal.getProduct().getPrice();
+                                }
+                                else if(quality<=0.7){
+                                    rarity="silver";
+                                    lastPrice=theAnimal.getProduct().getPrice()*1.25;
+                                }
+                                else if(quality<=0.9){
+                                    rarity="golden";
+                                    lastPrice=theAnimal.getProduct().getPrice()*1.5;
+                                }
+                                else{
+                                    rarity="iridium";
+                                    lastPrice=theAnimal.getProduct().getPrice()*2;
+                                }
                                 String productName = animal.getProduct().getName();
-                                App.getGame().getCurrentPlayer().getInventory().addToInventory(animal.getProduct(),1);
+                                App.getGame().getCurrentPlayer().getInventory().addToInventory(animal.getProduct(),1,(int)Math.floor(lastPrice));
                                 if(theAnimal.getProduct().getName().contains("Milk")||theAnimal.getProduct().getName().contains("Sheep")){
                                     theAnimal.increaseFriendShip(5);
                                 }
                                 animal.setProduct(null);
-                                return new Result(true, "you collected " + productName + " from " + animal.getName());
+                                return new Result(true, "you collected " +rarity+" "+productName + " from " + animal.getName());
                             }
                             return new Result(false, "no product is available");
                         }
@@ -652,13 +713,17 @@ public class AnimalController {
         }
         if(theBarn!=null){
             theBarn.updateCapacity(+1);
+            theBarn.getAnimals().remove(theAnimal);
+
         }
         if(theCoop!=null){
             theCoop.updateCapacity(+1);
+            theCoop.getAnimals().remove(theAnimal);
 
         }
         double sellPrice = theAnimal.getBuyPrice()*(((double) theAnimal.getFriendShip() /1000)+0.3);
-        // todo sell;
+        App.getGame().getCurrentPlayer().incMoney(sellPrice);
+
         return new Result(true,"sold "+name+" for "+sellPrice);
 
     }
