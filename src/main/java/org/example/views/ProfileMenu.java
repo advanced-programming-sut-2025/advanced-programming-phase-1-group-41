@@ -5,13 +5,14 @@ import org.example.models.App;
 import org.example.models.Menu;
 import org.example.views.commands.ProfileCommands;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class ProfileMenu implements AppMenu {
     ProfileMenuController profileMenuController = new ProfileMenuController();
     @Override
-    public void check(Scanner scanner) {
+    public void check(Scanner scanner) throws NoSuchAlgorithmException {
         String command = scanner.nextLine();
         Matcher matcher = null;
 

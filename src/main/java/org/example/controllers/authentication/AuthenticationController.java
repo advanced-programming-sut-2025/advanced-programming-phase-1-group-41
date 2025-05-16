@@ -34,10 +34,9 @@ public class AuthenticationController {
 
         password = getHash(password);
         if(!user.getPassword().equals(password)){
-            return new Result(false, "Incorrect password! "+
-                    password);
+            return new Result(false, "Incorrect password!");
         }
-        System.out.println(stayLoggedIn);
+//        System.out.println(stayLoggedIn);
         login(user, stayLoggedIn);
         return new Result(true, "User logged in successfully!");
     }
@@ -191,7 +190,7 @@ public class AuthenticationController {
         return questionAndAnswer;
     }
 
-    public Result forgotPassword(Matcher matcher, Scanner scanner){
+    public Result forgotPassword(Matcher matcher, Scanner scanner) throws NoSuchAlgorithmException {
         if(!matcher.matches()) {
             return new Result(false, "Invalid command!");
         }
@@ -211,7 +210,7 @@ public class AuthenticationController {
         return new Result(true, "Password updated!");
     }
 
-    private void answerSecurityQuestion(User user, Scanner scanner){
+    private void answerSecurityQuestion(User user, Scanner scanner) throws NoSuchAlgorithmException {
         while(true){
             String password = scanner.nextLine();
             if(!password.matches("^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};:'\",.<>?/\\\\|`~]+$")){
@@ -233,6 +232,7 @@ public class AuthenticationController {
                 System.out.println("Password must contain at least one special character!");
             }
             else{
+                password = getHash(password);
                 user.setPassword(password);
                 return;
             }

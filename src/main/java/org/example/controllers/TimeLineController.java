@@ -15,7 +15,11 @@ public class TimeLineController {
     }
 
     public Result getDate(Matcher matcher){
-        return new Result(true,"Season:"+tl.getSeason());
+        StringBuilder message=new StringBuilder();
+        message.append("day:").append(convertDay(tl.getDay())).append("\n");
+        message.append("season:").append(tl.getSeason()).append("\n");
+        message.append("year:").append(tl.getYear()).append("\n");
+        return new Result(true,message.toString());
     }
 
     public Result getDateAndTime(Matcher matcher){
@@ -32,6 +36,7 @@ public class TimeLineController {
     }
 
     private String convertDay(int dayNum){
+        dayNum %= 7;
         return switch(dayNum){
             case 0 -> "Saturday";
             case 1 -> "Sunday";

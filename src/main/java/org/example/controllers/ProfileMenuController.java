@@ -1,8 +1,10 @@
 package org.example.controllers;
 
+import org.example.controllers.authentication.AuthenticationController;
 import org.example.controllers.authentication.AuthenticationValidator;
 import org.example.models.*;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
 
 public class ProfileMenuController {
@@ -21,7 +23,7 @@ public class ProfileMenuController {
         return new Result(true, "Username changed successfully!");
     }
 
-    public Result changePassword(Matcher matcher){
+    public Result changePassword(Matcher matcher) throws NoSuchAlgorithmException {
         if(!matcher.matches()){
             return new Result(false, "Invalid command!");
         }
@@ -51,6 +53,7 @@ public class ProfileMenuController {
         if (!newPassword.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};:'\",.<>?/\\\\|`~].*")) {
             return new Result(false, "Password must contain at least one special character!");
         }
+        newPassword = new AuthenticationController().getHash(newPassword);
         App.getCurrentUser().setPassword(newPassword);
         return new Result(true, "Password changed successfully!");
     }
