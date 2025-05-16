@@ -96,6 +96,7 @@ public class MainMenuController {
         // TODO save the game
         Game game = new Game(players, player1);
         App.setGame(game);
+        game.setFarms();
         App.getGame().setCurrentPlayer(player1);
         App.games.add(game);
         setPlayerGames(players, game);

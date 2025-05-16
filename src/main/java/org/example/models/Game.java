@@ -42,12 +42,6 @@ public class Game {
         return village;
     }
 
-    {
-        this.farms.add(new Farm(1));
-        this.farms.add(new Farm(2));
-        this.farms.add(new Farm(3));
-        this.farms.add(new Farm(4));
-    }
 
 
 
@@ -64,6 +58,14 @@ public class Game {
 
         this.roundEnergy = 0;
         this._id = new ObjectId();
+
+    }
+
+    public void setFarms(){
+        this.farms.add(new Farm(1));
+        this.farms.add(new Farm(2));
+        this.farms.add(new Farm(3));
+        this.farms.add(new Farm(4));
     }
 
     public void setPlayers(List<Player> players) {

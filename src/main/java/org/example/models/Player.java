@@ -112,7 +112,7 @@ public class Player {
         this.craftingRecipes.add(CraftingRecipe.Furnace);
         this.craftingRecipes.add(CraftingRecipe.ScareCrow);
         this.craftingRecipes.add(CraftingRecipe.MayonnaiseMachine);
-        this.craftingRecipes.add(CraftingRecipe.CherryBomb);
+//        this.craftingRecipes.add(CraftingRecipe.CherryBomb);
 
         this.friendships = new ArrayList<>();
 

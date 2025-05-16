@@ -61,7 +61,7 @@ public enum CookingRecipe {
     }}, "MakiRollRecipe"),
 
     TripleShotExspresso(new HashMap<>(){{
-        put(new Crop(CropType.CoffeeBean), 3);
+//        put(new Crop(CropType.CoffeeBean), 3);
     }}, "TripleShotExspressoRecipe"),
 
     Cookie(new HashMap<>(){{
@@ -162,6 +162,7 @@ public enum CookingRecipe {
         FarmerLunch.neededItems.put(Food.Omelet, 1);
         SurvivalBurger.neededItems.put(Food.Bread, 1);
         DishOSea.neededItems.put(Food.HashBrowns, 1);
+        TripleShotExspresso.neededItems.put(CraftableItem.Coffee, 3);
     }
 
     public String getName() {
