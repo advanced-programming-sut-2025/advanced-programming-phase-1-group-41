@@ -410,6 +410,12 @@ public class PlayerController {
         return new Result(true,"You have "+quantityOfFish+" fresh fish of "+caughtFish.getFishType().getName());
 
     }
+    public Result walkHome(Matcher matcher){
+        return null;
+    }
+    public Result walkVillage(Matcher matcher){
+        return null;
+    }
 
     public Result sellProduct(Matcher matcher){return null;}
 

@@ -27,7 +27,7 @@ public class GameMenu implements AppMenu {
         } else if((matcher = GameMainCommands.StartTrade.getMatcher(input))!=null){
             System.out.println(controller.startTrade(matcher));
         }
-        if(App.getGame().getCurrentPlayer().getEnergy() <= 0){
+        if(App.getGame().getCurrentPlayer().getEnergy() <= 0){//todo sepehr(exit game error mikhore)
             System.out.println(App.getGame().getCurrentPlayer().getEnergy());
             System.out.println("you've passed out.. either exit or pass the turn");
         }else if(App.getGame().getRoundEnergy() > 50){

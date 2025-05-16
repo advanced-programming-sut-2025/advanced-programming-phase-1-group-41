@@ -8,7 +8,7 @@ public enum GameMainCommands implements Command {
     MenuEnter("\\s*menu\\s+enter\\s+(?<menuName>.*)\\s*"),
     MenuExit("\\s*menu\\s+exit\\s*"),
     ShowCurrentMenu("\\s*menu\\s+show\\s+(?<menuName>.*)\\s*"),
-    GameMap("\\s*game\\s+map\\s+(?<mapNumber>.*)\\s*"),
+    GameMap("\\s*game\\s+map\\s+(?<mapNumber>-?\\d+)\\s*"),
     ExitGame("\\s*exit\\s+game\\s*"),
     DeleteGame("\\s*delete\\s+game\\s*"),
     NextTurn("\\s*next\\s+turn\\s*"),
@@ -35,6 +35,8 @@ public enum GameMainCommands implements Command {
     ArtisanUse("\\s*artisan\\s+use\\s+(?<artisanName>\\S+)(?<items>\\s+.*)?\\s*"),
     ArtisanGet("\\s*artisan\\s+get\\s+(?<artisanName>.*)\\s*"),
     StartTrade("\\s*start\\s+trade\\s*"),
+    WalkHome("\\s*walk\\s+-l\\s+home\\s*"),
+    WalkVillage("\\s*walk\\s+-l\\s+village\\s*"),
     ;
 
     private final String pattern;

@@ -30,6 +30,10 @@ public class PlayerView {
             System.out.println(controller.eat(matcher));
         }else if((matcher = GameMainCommands.SkillShow.getMatcher(input))!=null){
             System.out.println(controller.showSkill(matcher));
+        }else if((matcher = GameMainCommands.WalkHome.getMatcher(input))!=null){
+            System.out.println(controller.walkHome(matcher));
+        }else if((matcher = GameMainCommands.WalkVillage.getMatcher(input))!=null){
+            System.out.println(controller.walkVillage(matcher));
         }
         else{
             return false;

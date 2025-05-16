@@ -116,7 +116,7 @@ public class Blacksmith extends Marketplace implements Building{
         for (int i = 0; i < 8; i++) {
             updates.set(i,true);
         }
-        System.out.println("blacksmith updated..");
+//        System.out.println("blacksmith updated..");
     }
 
     @Override

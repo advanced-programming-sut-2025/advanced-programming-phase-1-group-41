@@ -40,11 +40,14 @@ public class MainMenuController {
         if(username3 == null){
             return new Result(false,"Fewer than 3 players");
         }
+        if(username1 == null){
+            return new Result(false,"Empty username");
+        }
         username1 = username1.trim();
         username2 = username2.trim();
         username3 = username3.trim();
         if(matcher.group("trash")!=null&&!matcher.group("trash").trim().isEmpty()){
-            return new Result(false,matcher.group("More than 3 players"));
+            return new Result(false,"More than 3 players");
         }
         User user1 = null, user2 = null, user3 = null, user4 = null;
 
@@ -126,7 +129,9 @@ public class MainMenuController {
     }
 
     public Result selectFarm(Matcher matcher, HashSet<Integer> pickedFarms){
-
+        if(matcher==null||matcher.group("mapNumber")==null){
+            return new Result(false,"invalid command");
+        }
         String numberRaw = matcher.group("mapNumber");
         int mapNumber = Integer.parseInt(numberRaw);
         if(!numberRaw.matches("\\d+")||mapNumber<=0||mapNumber>4){
