@@ -111,6 +111,7 @@ public class FarmBuilder {
 
         Random rand = new Random();
         Player player = App.getGame().getCurrentPlayer();
+//        player.getInventory().addToInventory(new Crop(CropType.values()[rand.nextInt(CropType.values().length)]), rand.nextInt(10) + 1);
 //        player.getInventory().addToInventory(new Fertilizer(FertilizerType.PlantGrow), 100);
 //        player.getInventory().addToInventory(new Fertilizer(FertilizerType.BasicRetainingSoil), 100);
 //        player.getInventory().addToInventory(new Fertilizer(FertilizerType.QualityRetainingSoil), 100);
