@@ -62,7 +62,7 @@ public class Mine implements ObjectMap {
         }
         Random rand = new Random();
         for(int i = 0; i < mineralCount - nowCount; i++) {
-            Cell cell = Finder.findCellByCoordinates(x + rand.nextInt(xLength), y + rand.nextInt(yLength), farm);
+            Cell cell = Finder.findCellByCoordinates(x + rand.nextInt(xLength) + rand.nextInt(5), y + rand.nextInt(yLength) + rand.nextInt(5), farm);
             assert cell != null;
             if(cell.getObjectMap() instanceof Mine){
                 cell.setObjectMap(new Mineral(cell.getX(), cell.getY(), farm));

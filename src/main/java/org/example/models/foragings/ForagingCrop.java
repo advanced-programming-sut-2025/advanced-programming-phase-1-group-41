@@ -1,5 +1,6 @@
 package org.example.models.foragings;
 
+import org.example.models.App;
 import org.example.models.Cell;
 import org.example.models.Colors;
 import org.example.models.Finder;
@@ -10,7 +11,7 @@ import java.util.Random;
 
 public class ForagingCrop implements Foraging, Item {
 
-    private final ForagingCropType foragingCropType;
+    private ForagingCropType foragingCropType;
     int typeIndex;
 
     @Override
@@ -34,9 +35,14 @@ public class ForagingCrop implements Foraging, Item {
 
     public ForagingCrop(int x, int y, Farm farm) {
         Random rand = new Random();
-        int type = rand.nextInt(ForagingCropType.values().length);
-        typeIndex = type;
-        foragingCropType = ForagingCropType.values()[type];
+        while (true){
+            int type = rand.nextInt(ForagingCropType.values().length);
+            typeIndex = type;
+            foragingCropType = ForagingCropType.values()[type];
+            if(foragingCropType.getGrowingSeason().equals(App.getGame().getTime().getSeason())){
+                break;
+            }
+        }
         Cell cell = Finder.findCellByCoordinates(x, y, farm);
         assert cell != null;
         cell.setObjectMap(this);

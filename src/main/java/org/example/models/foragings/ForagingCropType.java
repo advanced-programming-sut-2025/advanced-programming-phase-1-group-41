@@ -2,6 +2,8 @@ package org.example.models.foragings;
 
 import org.example.models.Season;
 
+import java.util.ArrayList;
+
 public enum ForagingCropType {
     WildHorseradish("Wild Horseradish", 50, 13, Season.Spring),
     FiddleheadFern("Fiddlehead Fern", 90, 25, Season.Summer),
@@ -42,8 +44,25 @@ public enum ForagingCropType {
     public int getBaseSellPrice() { return BaseSellPrice; }
     public int getEnergy() { return Energy; }
     public Season getGrowingSeason() { return GrowingSeason; }
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append("Name: ").append(getName()).append("\n");
+        result.append("Base Sell Price: ").append(getBaseSellPrice()).append("\n");
+        String res;
+        res = String.valueOf(getEnergy());
+        if(getEnergy() == -1){
+            res = "-";
+        }
+        result.append("Base Energy: ").append(res).append("\n");
+        res = String.valueOf(getEnergy() / 2);
+        if(getEnergy() == -1){
+            res = "-";
+        }
+        result.append("Base Health: ").append(res).append("\n");
+        return result.toString();
+    }
 
-    public static ForagingCropType foragingCropType(String type) {
+    public static ForagingCropType parseForagingCropType(String type) {
         for (ForagingCropType value : ForagingCropType.values()) {
             if(value.getName().equalsIgnoreCase(type)){
                 return value;

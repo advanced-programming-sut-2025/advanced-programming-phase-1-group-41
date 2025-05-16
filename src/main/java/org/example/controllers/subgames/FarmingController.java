@@ -27,6 +27,11 @@ public class FarmingController {
                 return new Result(true, treeType.toString());
             }
         }
+//        for(ForagingTree treeType : ForagingTreeType.values()){
+//            if(craftName.equalsIgnoreCase(treeType.getName())){
+//                return new Result(true, treeType.toString());
+//            }
+//        }
         return new Result(false, "Craft not found!");
     }
     public Result buildGreenhouse(Matcher matcher) {

@@ -14,7 +14,7 @@ public enum FruitType {
     PineTar("Pine Tar",	100,	false,	0),
     Sap("Sap", 2, true,	-2),
     CommonMushroom("Common Mushroom", 40, true, 38),
-    MysticSyrup("Mystic Syrup",	1000, true, 500),
+    MysticSyrup("Mystic Syrup",1000, true, 500),
     ;
     private final String name;
     private final int baseSellPrice;
