@@ -75,6 +75,9 @@ public class TimeLineController {
     public Result cheatAdvanceDate(Matcher matcher){
         String dayRaw = matcher.group(1).trim();
         int deltaD = Integer.parseInt(dayRaw);
+        if(deltaD < 0){
+            return new Result(false,"Invalid date");
+        }
         advanceDay(deltaD);
         return new Result(true,"advanced date");
     }
