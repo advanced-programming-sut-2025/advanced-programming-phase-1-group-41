@@ -11,6 +11,7 @@ import org.example.models.tools.Tool;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 @Entity("players")
 public class Player {
@@ -36,6 +37,7 @@ public class Player {
     private double money;
     private double savings;
     private int farmId;
+    private int inFarmId;
     private int x;
     private int y;
     private double energy;
@@ -238,6 +240,7 @@ public class Player {
 
     public void setFarmId(int farmId) {
         this.farmId = farmId;
+        this.inFarmId = farmId;
     }
 
     public int getX() {
@@ -417,4 +420,18 @@ public class Player {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return Objects.equals(user.getUsername(), player.user.getUsername());
+    }
+
+    public int getInFarmId() {
+        return inFarmId;
+    }
+
+    public void setInFarmId(int inFarmId) {
+        this.inFarmId = inFarmId;
+    }
 }

@@ -4,6 +4,7 @@ import org.example.models.*;
 import org.example.models.buildings.marketplaces.items.MarketplaceItems;
 import org.example.models.items.Item;
 import org.example.models.items.Slot;
+import org.example.models.locations.Farm;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -263,5 +264,53 @@ public class FriendshipController {
         friendship.interact();
         friendship.increaseLevel(player);
         return new Result(true, "You are so great for each other!");
+    }
+
+    public Result goToFarm(Matcher matcher){
+        String username = matcher.group(1).trim();
+        Player to = App.getGame().getPlayerByUsername(username);
+        if(to == null){
+            return new Result(false, "Player not found!");
+        }
+        Player player = App.getGame().getCurrentPlayer();
+        if(to.equals(player)){
+            setFarm(player);
+            return new Result(true,"returning to your farm..");
+        }
+        for (Friendship friendship : player.getFriendships()) {
+            if(friendship.getPlayer1().equals(player)){
+                if(friendship.getPlayer2().equals(to)){
+                    System.out.println("going to new farm..");
+                    setFarm(to);
+                    if(friendship.isAreMarried()){
+                        return new Result(true,"going to "+to.getUser().getUsername()+" farm.");
+                    }else{
+                        return new Result(false,"your not married");
+                    }
+                }
+            }else{
+                if(friendship.getPlayer1().equals(to)){
+                    System.out.println("going to new farm..");
+                    setFarm(to);
+                    if(friendship.isAreMarried()){
+                        return new Result(true,"going to "+to.getUser().getUsername()+" farm.");
+                    }else{
+                        return new Result(false,"your not married");
+                    }
+                }
+            }
+        }
+        return new Result(false,"smth went wrong");
+    }
+
+    private void setFarm(Player which){
+        for (Farm farm : App.getGame().getFarms()) {
+            if(farm.getId() == which.getFarmId()){
+                App.getGame().setCurrentFarmId(farm.getId(), which);
+                which.setX(farm.getStartPoints().getFirst().getX());
+                which.setY(farm.getStartPoints().getFirst().getY());
+            }
+        }
+
     }
 }

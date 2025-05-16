@@ -31,6 +31,8 @@ public class FriendshipView {
             System.out.println(controller.propose(matcher));
         } else if((matcher = FriendShipCommands.Respond.getMatcher(input)) != null){
             System.out.println(controller.respond(matcher));
+        }else if((matcher = FriendShipCommands.GoTo.getMatcher(input)) != null){
+            System.out.println(controller.goToFarm(matcher));
         }
         else{
             return false;

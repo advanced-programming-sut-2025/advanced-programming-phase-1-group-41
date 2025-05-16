@@ -28,7 +28,6 @@ public class Game {
     private ObjectId loaderId;
     private ObjectId currentPlayerId;
     private ArrayList<ObjectId> playersId;
-
     private WeatherType weatherType;
     private WeatherType tmrwWeatherType;
 
@@ -109,12 +108,24 @@ public class Game {
     }
 
     public Farm getCurrentPlayerFarm() {
+        if(currentPlayer.getInFarmId() != currentPlayer.getFarmId()) {
+//            System.out.println("im here!!");
+            for (Farm farm : farms) {
+                if(farm.getId() == currentPlayer.getInFarmId()){
+                    return farm;
+                }
+            }
+        }
         for(Farm farm : farms) {
             if(farm.getId() == currentPlayer.getFarmId()){
                 return farm;
             }
         }
         return null;
+    }
+    public void setCurrentFarmId(int id, Player player){
+        System.out.println(App.getGame().getCurrentPlayer().getInFarmId()+" "+id+"check");
+        App.getGame().getCurrentPlayer().setInFarmId(id);
     }
 
     public ArrayList<Player> getPlayers() {
@@ -209,5 +220,14 @@ public class Game {
         roundEnergy -= delta;
     }
 
+
+    public Player getPlayerByUsername(String username) {
+        for (Player player : players) {
+            if(player.getUser().getUsername().equalsIgnoreCase(username)) {
+                return player;
+            }
+        }
+        return null;
+    }
 
 }
