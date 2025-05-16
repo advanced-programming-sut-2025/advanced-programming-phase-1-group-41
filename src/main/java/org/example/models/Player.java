@@ -112,6 +112,7 @@ public class Player {
         this.craftingRecipes.add(CraftingRecipe.Furnace);
         this.craftingRecipes.add(CraftingRecipe.ScareCrow);
         this.craftingRecipes.add(CraftingRecipe.MayonnaiseMachine);
+        this.craftingRecipes.add(CraftingRecipe.CherryBomb);
 
         this.friendships = new ArrayList<>();
 
@@ -381,7 +382,7 @@ public class Player {
 
 
     public void resetEnergy(){
-        if(this.energy == 0){
+        if(this.energy <= 0){
             System.out.println("since you passed out, you're starting with 175");
             this.energy = (double) (3 * maxEnergy) / 4;
             return;

@@ -11,6 +11,7 @@ import org.example.models.items.*;
 import org.example.models.items.Products.Product;
 import org.example.models.items.Products.ProductType;
 import org.example.models.items.craftablemachines.*;
+import org.example.models.tools.Tool;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -128,6 +129,9 @@ public class CraftingController {
         if (item == null) {
             return new Result(false, "item not found");
         }
+        if (item instanceof Tool){
+            return new Result(false,"u can't place a tool");
+        }
         Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
         Slot slot = inventory.getSlotByItem(item);
         if (slot == null) {
@@ -159,6 +163,10 @@ public class CraftingController {
                 cell.setObjectMap(tree);
                 return new Result(true, "Mystical tree planted O_o");
             }
+        }
+        if(!(cell.getObjectMap() instanceof Grass ) ||
+        !(cell.getObjectMap() instanceof Cottage)){
+            return new Result(false, "there is already an item there named "+cell.getObjectMap().getName());
         }
         cell.setObjectMap(item);
         inventory.removeFromInventory(item, 1);
@@ -193,10 +201,10 @@ public class CraftingController {
             return new Result(false, "Item not found");
         }
 
-        if (item.getName().equals(CraftableMachine.CherryBomb.getName())) {
-            App.getGame().getCurrentPlayer().getInventory().addToInventory(CraftableMachine.CherryBomb, 1);
-            return new Result(true, "you have a cherry bomb now");
-        }
+//        if (item.getName().equals(CraftableMachine.CherryBomb.getName())) {
+//            App.getGame().getCurrentPlayer().getInventory().addToInventory(CraftableMachine.CherryBomb, 1);
+//            return new Result(true, "you have a cherry bomb now");
+//        }
 
 
         for (CraftableMachine machine : CraftableMachine.values()) {
@@ -211,7 +219,7 @@ public class CraftingController {
                 }
 
                 removeItems(machine);
-
+                App.getGame().getCurrentPlayer().decEnergy(2);
                 App.getGame().getCurrentPlayer().getInventory().addToInventory(machine, 1);
                 return new Result(true, "You received a " + machine.getName());
             }
@@ -235,7 +243,7 @@ public class CraftingController {
             if (invSlot != null && invSlot.getQuantity() >= machine.getRecipe().neededItems.get(item)) {
             } else {
                 checker = false;
-                System.out.println(item + " not found");
+                System.out.println(item.getName() + " not found");
                 break;
             }
         }

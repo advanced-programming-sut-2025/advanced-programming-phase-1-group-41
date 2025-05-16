@@ -123,6 +123,9 @@ public class PlayerController {
 
         Item item = parseItem(itemName);
         int itemQuantity = Integer.parseInt(quantity);
+        if(itemQuantity < 1){
+            return new Result(false, "invalid quantity");
+        }
 
         if(App.getGame().getCurrentPlayer().getInventory().addToInventory(item,itemQuantity)){
             return new Result(true, itemName+" added to the inventory");

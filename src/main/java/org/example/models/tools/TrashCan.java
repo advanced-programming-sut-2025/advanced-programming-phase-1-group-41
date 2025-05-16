@@ -8,7 +8,7 @@ public class TrashCan implements Tool, LevelTool {
     private ToolLevel level;
 
     public TrashCan() {
-        this.level = ToolLevel.Default;
+        this.level = ToolLevel.Iridium;
     }
 
     public ToolLevel getLevel() {

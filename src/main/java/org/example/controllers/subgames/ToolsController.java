@@ -192,7 +192,7 @@ public class ToolsController {
             energy--;
         }
 
-        System.out.println(cell.getObjectMap().getClass());
+        System.out.println(cell.getObjectMap().getName());
         if(cell.getObjectMap() instanceof Mineral){
             if(energy > App.getGame().getCurrentPlayer().getEnergy()){
                 return new Result(false ,"you don't have enough energy for this tool");
@@ -282,7 +282,7 @@ public class ToolsController {
             if(!(cell.getObjectMap() instanceof Building)){
                 cell.setObjectMap(new Grass());
             }
-            return new Result(false,"fck this sht");
+            return new Result(false,"you used your pickaxe..");
         }
     }
 
