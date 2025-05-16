@@ -1,5 +1,6 @@
 package org.example.models.foragings.Nature;
 
+import org.example.models.App;
 import org.example.models.Colors;
 import org.example.models.ObjectMap;
 import org.example.models.locations.Farm;
@@ -18,7 +19,13 @@ public class Grass implements ObjectMap {
         } else if(isGround){
             return Colors.colorize(215,0,"ww");
         }else{
-            return Colors.colorize(2,0,"ww");
+            if(App.getGame() != null){
+                if(App.getGame().getTime().getHour() >= 19){
+                    return Colors.colorize(22,0,"ww");
+                }
+            }
+            return Colors.colorize(40,0,"ww");
+//            return Colors.colorize(2,0,"ww");
         }
     }
 

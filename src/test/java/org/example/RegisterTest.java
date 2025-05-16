@@ -1,6 +1,9 @@
 package org.example;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.example.controllers.authentication.AuthenticationController;
+import org.example.models.Result;
 import org.junit.jupiter.api.Test;
 
 public class RegisterTest {
@@ -9,6 +12,8 @@ public class RegisterTest {
     private static final String PASSWORD_REGEX = "^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};:'\",.<>?/\\\\|`~]+$";
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9][a-zA-Z0-9._-]*@[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+$";
 
+    AuthenticationController authenticationController = new AuthenticationController();
+    Result result;
 
     @Test
     void testValidUsername() {
