@@ -133,8 +133,8 @@ public class Finder {
                 continue;
             }
 //            System.out.println("checking.. "+slot.getItem().getName()+" "+name);
-            if(slot.getItem() instanceof Tool){
-                if(slot.getItem().getName().equalsIgnoreCase(name)){
+            if(slot.getItem().getName().equalsIgnoreCase(name)){
+                if(slot.getItem() instanceof Tool){
                     return (Tool) slot.getItem();
                 }
             }
