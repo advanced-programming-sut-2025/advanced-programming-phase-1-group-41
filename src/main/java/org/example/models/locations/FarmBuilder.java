@@ -56,6 +56,11 @@ public class FarmBuilder {
         foragingTreeCount = farm.getForagingTreeCount() - foragingTreeCount - 5 + rand.nextInt(11);
         plantCount = farm.getPlantCount() - plantCount - 5 + rand.nextInt(11);
         foragingCropCount = farm.getForagingCropCount() - foragingCropCount - 5 + rand.nextInt(11);
+        //Change To Test
+//        rockCount = 20;
+//        foragingTreeCount = 20;
+//        plantCount = 20;
+//        foragingCropCount = 20;
         for(int i = 0; i < rockCount ;i++){
             int y = rand.nextInt(MaxLength - 4) + 2;
             int x = rand.nextInt(MaxHeight - 4) + 2;

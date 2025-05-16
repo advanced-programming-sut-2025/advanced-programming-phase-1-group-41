@@ -54,6 +54,11 @@ public class CraftingController {
         Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
         for(int x = cell.getX() - size; x < cell.getX() + size; x++) {
             for(int y = cell.getY() - size; y < cell.getY() + size; y++) {
+                int x1 = x - cell.getX();
+                int y1 = y - cell.getY();
+                if(x1 * x1 + y1 * y1 >= size * size){
+                    continue;
+                }
                 Cell cell1 = Finder.findCellByCoordinates(x, y, App.getGame().getCurrentPlayerFarm());
                 if(cell1 == null){
                     continue;
