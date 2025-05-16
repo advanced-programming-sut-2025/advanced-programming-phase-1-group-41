@@ -38,7 +38,7 @@ public enum CraftingRecipe {
     }}, "CharcoalKilnRecipe"),
     Furnace(new HashMap<>(){{
         put(new Mineral(MineralType.CopperOre),20);
-        put(new Rock(), 20);
+        put(new Rock(), 25);
     }}, "FurnaceRecipe"),
     ScareCrow(new HashMap<>(){{
         put(new Wood(), 50);
