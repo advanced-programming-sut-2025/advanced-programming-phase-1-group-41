@@ -1,6 +1,7 @@
 package org.example.controllers;
 
 import org.example.models.*;
+import org.example.models.foragings.Nature.Lake;
 import org.example.models.locations.Farm;
 
 import java.util.ArrayList;
@@ -83,6 +84,47 @@ public class MapController {
             App.getGame().getVillage().printMap();
         }else{
             farm.printMap();
+        }
+    }
+    public void printWholeMap(Matcher matcher){
+        System.out.println("ffddfdfgxdgzgf");
+        System.out.println(App.getGame().getFarms().getFirst().getCell(0,0).getObjectMap().getChar());
+        ArrayList<String> wholeChars=new ArrayList<>();
+        for (int i = 0; i <75; i++) {
+            for(int j=0;j<60;j++) {
+                wholeChars.add(App.getGame().getFarms().getFirst().getCell(j, i).getObjectMap().getChar());
+            }for(int j=0;j<95;j++){
+                wholeChars.add(Colors.colorize(39,39,"LL"));
+            }for(int j=0;j<60;j++) {
+                wholeChars.add(App.getGame().getFarms().get(1).getCell(j,i).getObjectMap().getChar());
+            }
+        }for(int i=0;i<65;i++){
+            for(int j=0;j<60;j++){
+                wholeChars.add(Colors.colorize(39,39,"LL"));
+            }
+            for(int j=0;j<95;j++){
+                wholeChars.add(App.getGame().getVillage().getCell(j,i).getObjectMap().getChar());
+            }
+            for(int j=0;j<60;j++){
+                wholeChars.add(Colors.colorize(39,39,"LL"));
+            }
+        }for(int i=0;i<65;i++){
+            for(int j=0;j<60;j++) {
+                wholeChars.add(App.getGame().getFarms().get(2).getCell(j, i).getObjectMap().getChar());
+            }for(int j=0;j<95;j++){
+                wholeChars.add(Colors.colorize(39,39,"LL"));
+            }for(int j=0;j<60;j++) {
+                wholeChars.add(App.getGame().getFarms().get(3).getCell(j,i).getObjectMap().getChar());
+            }
+        }
+        int i=0;
+        for(String chars : wholeChars){
+            i++;
+            System.out.printf(chars);
+            if(i%215==0){
+                System.out.println();
+            }
+
         }
     }
 

@@ -179,7 +179,6 @@ public class TimeLine {
                 tmrw = WeatherType.Snowy;
             }
         }
-
         App.getGame().setTmrwWeatherType(tmrw);
     }
 

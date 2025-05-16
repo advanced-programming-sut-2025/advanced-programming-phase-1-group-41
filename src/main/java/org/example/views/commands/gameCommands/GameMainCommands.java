@@ -14,6 +14,7 @@ public enum GameMainCommands implements Command {
     NextTurn("\\s*next\\s+turn\\s*"),
     Walk("\\s*walk\\s+-l\\s+(?<x>-?\\d+)\\s*,\\s*(?<y>-?\\d+)\\s*"),
     PrintMapReal("\\s*print\\s+map\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s+-s\\s+(?<size>\\d+)\\s*"),
+    PrintMapWhole("\\s*print\\s+whole\\s+map\\s*"),
     PrintMap("\\s*print\\s+map\\s*"),
     HelpReadingMap("\\s*help\\s+reading\\s+map\\s*"),
     EnergyShow("\\s*energy\\s+show\\s*"),

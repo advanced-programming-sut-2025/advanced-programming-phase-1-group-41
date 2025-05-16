@@ -91,6 +91,16 @@ public class WeatherController {
 
     public Result cheatChangeTmrwWeather(Matcher matcher){
         String raw = matcher.group(1).trim();
+        if(raw.isEmpty()){
+            return new Result(false,"empty command");
+
+        }
+        try {
+            WeatherType weatherType = WeatherType.valueOf(raw);
+        } catch (IllegalArgumentException e) {
+            return new Result(false, "Invalid weather type provided");
+        }
+
         WeatherType weatherType = WeatherType.valueOf(raw);
 
         App.getGame().setTmrwWeatherType(weatherType);

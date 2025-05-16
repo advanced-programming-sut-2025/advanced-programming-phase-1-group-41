@@ -8,6 +8,7 @@ import org.example.models.buildings.animalContainer.Barn;
 import org.example.models.buildings.animalContainer.BarnType;
 import org.example.models.buildings.animalContainer.Coop;
 import org.example.models.buildings.animalContainer.CoopType;
+import org.example.models.buildings.marketplaces.items.MarketplaceItems;
 import org.example.models.foragings.Nature.Grass;
 import org.example.models.foragings.Nature.Nature;
 import org.example.models.items.Products.Product;
@@ -321,6 +322,9 @@ public class AnimalController {
                 }
                 ObjectMap objectMap = cell.getObjectMap();
                 if (theAnimal.getX() == x && theAnimal.getY() == y) {
+                    if(theAnimal.isPetToday()){
+                        return new Result(true, "you pet " + name + " again");
+                    }
                     theAnimal.increaseFriendShip(15);
                     theAnimal.setPetToday(true);
                     return new Result(true, "you pet " + name + ", now it loves you more");
@@ -370,6 +374,7 @@ public class AnimalController {
     }
 
     public Result animalsList(Matcher matcher) {
+        System.out.println("int your barns you have :");
         for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
             for (Animal animal : barn.getAnimals()) {
                 String name = "animal";
@@ -390,10 +395,10 @@ public class AnimalController {
                 } else if (animal instanceof Duck) {
                     name = "Duck";
                 }
-                System.out.println("int your barns you have :");
                 System.out.println(animal.getName() + " the " + name + " -> friendShip : " + animal.getFriendShip() + ", is pet today : " + animal.isPetToday() + ", is fed today :" + animal.isFedToday());
             }
         }
+        System.out.println("int your coops you have :");
         for (Coop coop : App.getGame().getCurrentPlayerFarm().getCoops()) {
             for (Animal animal : coop.getAnimals()) {
                 String name = "animal";
@@ -414,7 +419,6 @@ public class AnimalController {
                 } else if (animal instanceof Duck) {
                     name = "Duck";
                 }
-                System.out.println("int your coops you have :");
                 System.out.println(animal.getName() + " the " + name + " -> friendShip : " + animal.getFriendShip() + ", is pet today : " + animal.isPetToday() + ", is fed today :" + animal.isFedToday());
             }
         }
@@ -495,6 +499,13 @@ public class AnimalController {
                 if (objectMap instanceof Barn) {
                     for (Animal animal : ((Barn) objectMap).getAnimals()) {
                         if (animal.getName().equals(name)) {
+                            if(App.getGame().getCurrentPlayer().getInventory().getSlotByItem(MarketplaceItems.Hay)==null) {
+                                return new Result(false, "you dont have any hay, buy it from Marine`s Ranch");
+                            }
+                            App.getGame().getCurrentPlayer().getInventory().removeFromInventory(MarketplaceItems.Hay,1);
+                            if(animal.isFedToday()){
+                                return new Result(true, name + " is fed with Hay, again");
+                            }
                             animal.increaseFriendShip(8);
                             animal.setFedToday(true);
                             return new Result(true, name + " is fed with Hay, now it loves you more");
@@ -660,15 +671,21 @@ public class AnimalController {
             for(Barn barn:farm.getBarns()){
                 for(Animal animal: barn.getAnimals()){
                     animal.setPetToday(false);
-                    animal.setFedToday(true);
-//                    animal.setFedToday(false);
+//                    animal.setFedToday(true);
+                    animal.setFedToday(false);
+                    animal.setHome(true);
+                    animal.setX(-10);
+                    animal.setY(-10);
                 }
             }
             for(Coop coop:farm.getCoops()){
                 for(Animal animal: coop.getAnimals()){
                     animal.setPetToday(false);
-                    animal.setFedToday(true);
-//                    animal.setFedToday(false);
+//                    animal.setFedToday(true);
+                    animal.setFedToday(false);
+                    animal.setHome(true);
+                    animal.setX(-10);
+                    animal.setY(-10);
                 }
             }
         }

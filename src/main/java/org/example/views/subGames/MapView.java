@@ -16,8 +16,10 @@ public class MapView {
             System.out.println(controller.walk(matcher, null , null));
         }else if((matcher = GameMainCommands.HelpReadingMap.getMatcher(input))!=null){
             controller.helpReadingMap(matcher);
-        }else if((matcher = GameMainCommands.PrintMapReal.getMatcher(input))!=null){
+        }else if((matcher = GameMainCommands.PrintMapReal.getMatcher(input))!=null) {
             controller.printMapReal(matcher);
+        }else if((matcher = GameMainCommands.PrintMapWhole.getMatcher(input))!=null) {
+            controller.printWholeMap(matcher);
         }
         else{
             return false;
