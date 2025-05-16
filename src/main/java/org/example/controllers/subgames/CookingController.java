@@ -25,6 +25,11 @@ public class CookingController {
 
 
     private boolean inHome(){
+        for (Building building : App.getGame().getCurrentPlayerFarm().getBuildings()) {
+            if(building instanceof Cottage) {
+                refrigerator = (Refrigerator) ((Cottage) building).getRefrigerator();
+            }
+        }
         int x = App.getGame().getCurrentPlayer().getX();
         int y = App.getGame().getCurrentPlayer().getY();
         Cell cell = App.getGame().getCurrentPlayerFarm().getCell(x, y);
@@ -40,20 +45,28 @@ public class CookingController {
         if(slot == null){
             return new Result(false, "Slot not found");
         }
-        App.getGame().getCurrentPlayer().getInventory().addToInventory(slot.getItem(),slot.getQuantity());
+        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
+        if(inventory.getEmptySlots() <= 0){
+            return new Result(false, "Inventory is full");
+        }
+        inventory.addToInventory(slot.getItem(),slot.getQuantity());
         refrigerator.removeFromRef(slot.getItem(),slot.getQuantity());
         return new Result(true, "removed from ref :D");
     }
 
     private Result putInRef(Item item){
         Slot slot = App.getGame().getCurrentPlayer().getInventory().getSlotByItem(item);
+        int q = slot.getQuantity();
         if(slot==null){
             return new Result(false,"Slot not found");
+        }
+        if(refrigerator.getEmptySlots() <= 0){
+            return new Result(false,"Refrigerator is full");
         }
         refrigerator.addToRef(slot.getItem(), slot.getQuantity());
         App.getGame().getCurrentPlayer().getInventory().removeFromInventory(slot.getItem(), slot.getQuantity());
 
-        return new Result(true,slot.getItem()+" "+slot.getQuantity());
+        return new Result(true,slot.getItem().getName()+" "+q);
     }
 
     public Result cookingRef(Matcher matcher) {
@@ -117,6 +130,9 @@ public class CookingController {
         }
         boolean checker = true;
         Inventory inventory = App.getGame().getLoader().getInventory();
+        if(inventory.getEmptySlots() <= 0){
+            return new Result(false,"inventory is full :(");
+        }
         for (Item item : food.getRecipe().neededItems.keySet()) {
             Slot invSlot = inventory.getSlotByItem(item);
             Slot refSlot = refrigerator.getSlotByItem(item);
@@ -161,7 +177,7 @@ public class CookingController {
         inventory.addToInventory(food, 1);
         App.getGame().getCurrentPlayer().decEnergy(3);
 
-        return new Result(true,":))");
+        return new Result(true,"food made.");
     }
 
     public Result showRecepies(Matcher matcher) {

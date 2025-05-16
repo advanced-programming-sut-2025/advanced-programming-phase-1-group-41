@@ -22,7 +22,7 @@ public class Refrigerator implements ObjectMap {
 
     public Refrigerator() {
         this.slots = new ArrayList<>();
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 2; i++) {
             this.slots.add(new Slot(null,0));
         }
     }

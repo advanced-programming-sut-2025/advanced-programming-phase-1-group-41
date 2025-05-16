@@ -355,9 +355,9 @@ public class Player {
     public void setBuff(Buff buff) {currentBuff = buff;}
 
     public boolean hasRecipe(Food food){
-        System.out.println("food is: "+food+" "+food.getRecipe());
+//        System.out.println("food is: "+food+" "+food.getRecipe());
         for (CookingRecipe recipe : cookingRecipes) {
-            System.out.println(recipe.toString()+" "+food.getRecipe());
+//            System.out.println(recipe.toString()+" "+food.getRecipe());
             if(recipe.equals(food.getRecipe())){
                 return true;
             }

@@ -395,7 +395,8 @@ public class PlayerController {
         int value = App.getGame().getCurrentPlayer().getFishingSkill().isMaxLevel() ? -1 : 0;
         int energy = fishingRod.getLevel().getEnergyUsage() + value;
         if(App.getGame().getCurrentPlayer().getBuff() != null){
-            if(App.getGame().getCurrentPlayer().getBuff().getBuffType().equals(BuffType.Farming)){
+            if(App.getGame().getCurrentPlayer().getBuff().getBuffType().equals(BuffType.Fishing)){
+                System.out.println("since you have a buff you're gonna lose 1 less energy");
                 if(energy >= 1){
                     energy--;
                 }
