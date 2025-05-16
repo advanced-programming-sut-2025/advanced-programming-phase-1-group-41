@@ -179,7 +179,7 @@ public class Finder {
     public static ArrayList<Player> findPlayersByFarm(Farm farm){
         ArrayList<Player> players = new ArrayList<>();
         for(Player player : App.getGame().getPlayers()){
-            if(farm.getId() == player.getFarmId()){
+            if(farm.getId() == player.getInFarmId()){
                 players.add(player);
             }
         }

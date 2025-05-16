@@ -243,6 +243,18 @@ public class Farm {
     public void printMap(){
         int counter = 0;
         for(Cell cell:cells){
+            ArrayList<Player> players = Finder.findPlayersByFarm(this);
+            boolean found = false;
+            for(Player player : players){
+                if(cell.getX() == player.getX() && cell.getY() == player.getY()){
+                    System.out.printf(player.getChar());
+                    found = true;
+                }
+            }
+            if(found){
+                counter++;
+                continue;
+            }
             if(cell.getX()==App.getGame().getCurrentPlayer().getX()&&cell.getY()==App.getGame().getCurrentPlayer().getY()){System.out.printf(App.getGame().getCurrentPlayer().getChar());}
              else if(isAnimalHere(cell)){}
              else if(isSpecialPoint(cell)){}
