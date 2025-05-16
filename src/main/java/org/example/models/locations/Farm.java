@@ -256,7 +256,7 @@ public class Farm {
         }
     }
 
-    public void printMap(int x , int y ,int squareSize){
+    public void printMap(int y , int x ,int squareSize){
         int counter = 0;
         for(int i=x;i<x+squareSize;i++) {
             for (int j = y; j < y + squareSize; j++) {

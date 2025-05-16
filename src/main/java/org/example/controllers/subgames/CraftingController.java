@@ -164,7 +164,7 @@ public class CraftingController {
                 return new Result(true, "Mystical tree planted O_o");
             }
         }
-        if(!(cell.getObjectMap() instanceof Grass ) ||
+        if(!(cell.getObjectMap() instanceof Grass ) &&
         !(cell.getObjectMap() instanceof Cottage)){
             return new Result(false, "there is already an item there named "+cell.getObjectMap().getName());
         }
@@ -181,7 +181,7 @@ public class CraftingController {
         message.append("Crafting recipes :\n");
         Player player = App.getGame().getCurrentPlayer();
         for (CraftingRecipe craftingRecipe : player.getCraftingRecipes()) {
-            message.append(craftingRecipe.toString()).append("\n");
+            message.append(craftingRecipe.getName()).append("\n");
         }
         message.delete(message.length() - 1, message.length());
         return new Result(true, message.toString());
@@ -353,6 +353,11 @@ public class CraftingController {
                 player.getInventory().removeFromInventory(item , playerQua);
                 System.out.println("added "+playerQua+" of "+slot.getItem().getName());
                 break;
+            }else if(slot.getItem() instanceof Mineral && item instanceof Mineral && (
+                    !((Mineral) slot.getItem()).getMineralType().equals(MineralType.Coal) &&
+                            !((Mineral)item).getMineralType().equals(MineralType.Coal))
+                    ){
+                System.out.println(slot.getItem().getName()+" doesn't match "+item.getName());
             }
         }
 
@@ -893,7 +898,7 @@ public class CraftingController {
         Player player = App.getGame().getCurrentPlayer();
         for (Machine onGoingMachine : player.getOnGoingMachines()) {
             if(onGoingMachine.suffice()){
-                System.out.println("it suffices reducing time..");
+//                System.out.println("it suffices reducing time..");
                 onGoingMachine.decreaseProcessTime();
             if(onGoingMachine.getProcessTime()<=0 && onGoingMachine.getProduce() == null){
                 onGoingMachine.setProduce();
