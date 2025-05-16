@@ -166,9 +166,22 @@ public class Player {
     }
 
     public double getMoney() {
-        return money;
+        double value = 0;
+        for (Friendship friendship : this.friendships) {
+            if(friendship.isAreMarried()){
+                if(friendship.getPlayer1().getUser().getUsername().equals(App.getGame().getCurrentPlayer().getUser().getUsername())){
+                    value += friendship.getPlayer2().getRealMoney();
+                }else{
+                    value += friendship.getPlayer1().getMoney();
+                }
+            }
+        }
+        return money + value;
     }
 
+    public double getRealMoney(){
+        return money;
+    }
     public void setMoney(double money) {
         this.money = money;
     }

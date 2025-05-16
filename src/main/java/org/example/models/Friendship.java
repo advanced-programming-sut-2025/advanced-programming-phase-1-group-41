@@ -249,4 +249,32 @@ public class Friendship {
         }
         return result.toString();
     }
+
+    public boolean isAreMarried() {
+        return areMarried;
+    }
+
+    public boolean isGaveFlower() {
+        return gaveFlower;
+    }
+
+    public boolean isHadHugToday() {
+        return hadHugToday;
+    }
+
+    public boolean isHadInteractionToday() {
+        return hadInteractionToday;
+    }
+
+    public boolean isHadRejectedTradeToday() {
+        return hadRejectedTradeToday;
+    }
+
+    public boolean isHadTalkingToday() {
+        return hadTalkingToday;
+    }
+
+    public boolean isHadTradeToday() {
+        return hadTradeToday;
+    }
 }
