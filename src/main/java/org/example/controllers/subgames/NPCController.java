@@ -265,7 +265,13 @@ public class NPCController {
         }
         player.getInventory().removeFromInventory(quest.getRequest().getItem(),quest.getRequest().getQuantity());
         int quantity=quest.getReward().getQuantity();
-        if(quest.getOwner().getFriendShip(player)>=400){
+        NPC theNPC=null;
+        for(NPC npc:App.getGame().getVillage().getNPCs()){
+            if(npc.getQuests().contains(quest)){
+                theNPC=npc;
+            }
+        }
+        if(theNPC.getFriendShip(player)>=400){
             quantity*=2;
         }
         player.getInventory().addToInventory(quest.getReward().getItem(),quantity);
