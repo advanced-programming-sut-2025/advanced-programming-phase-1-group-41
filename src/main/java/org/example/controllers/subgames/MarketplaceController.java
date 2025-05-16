@@ -183,6 +183,8 @@ public class MarketplaceController {
         cof /= 8;
         System.out.println(value+" "+wantedQuantity+" "+slot.getItem().getPrice());
         value *= cof;
+        // shipping bin checkk heree
+        value += 1;
         player.incSavings(value);
         player.getInventory().removeFromInventory(slot.getItem(), wantedQuantity);
         return new Result(true,"you're gonna gain "+value+" later.. current saving: "+player.getSavings());
@@ -248,9 +250,9 @@ public class MarketplaceController {
         }
         Slot slot = mp.getSlotByItem(item);
         if(slot == null){
-            return new Result(false, "Slot doesn't exist");
+            return new Result(false, "this marketplace doesn't have this item");
         }
-        if(slot.getQuantity() == 0){
+        if(slot.getQuantity() <= 0){
             return new Result(false, "Out of stock for "+itemName);
         }
         if(slot.getQuantity() < wantedQuantity){
