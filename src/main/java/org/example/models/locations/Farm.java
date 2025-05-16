@@ -159,30 +159,35 @@ public class Farm {
         if(this.getId()==1){
             for(Cell cell : cells){
                 if(cell.getX()==59&&cell.getY()>=73||cell.getY()==74&&cell.getX()>=58){
+                    cell.setObjectMap(new Grass());
                     transferCells.add(cell);
                 }
             }
         }else if(this.getId()==2){
             for(Cell cell : cells){
                 if(cell.getX()==0&&cell.getY()>=73||cell.getY()==74&&cell.getX()<=1){
+                    cell.setObjectMap(new Grass());
                     transferCells.add(cell);
                 }
             }
         }else if(this.getId()==3){
             for(Cell cell : cells){
                 if(cell.getX()==59&&cell.getY()<=1||cell.getY()==0&&cell.getX()>=58){
+                    cell.setObjectMap(new Grass());
                     transferCells.add(cell);
                 }
             }
         } else if(this.getId()==4){
             for(Cell cell : cells){
                 if(cell.getX()==0&&cell.getY()<=1||cell.getY()==0&&cell.getX()<=1){
+                    cell.setObjectMap(new Grass());
                     transferCells.add(cell);
                 }
             }
         }
         for(Cell cell : cells){
             if(cell.getY()>2&&getCell(cell.getX(),cell.getY()-1).getObjectMap() instanceof Door&&getCell(cell.getX(),cell.getY()-2).getObjectMap() instanceof Cottage){
+                cell.setObjectMap(new Grass());
                 startPoints.add(cell);
 //                Objects.requireNonNull(Finder.findPlayerByFarm(this)).setX(cell.getX());
 //                Objects.requireNonNull(Finder.findPlayerByFarm(this)).setY(cell.getY());

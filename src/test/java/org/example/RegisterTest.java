@@ -17,14 +17,14 @@ public class RegisterTest {
 
     @Test
     void testValidUsername() {
-        String username = "User123";
+        String username = "register -u User123";
         assertTrue(username.matches(USERNAME_REGEX));
     }
 
     @Test
-    void testInvalidUsernameError() {
-        String username = "TooLongUser";
-        assertTrue(username.matches(USERNAME_REGEX), "Username must not exceed 8 characters.");
+    void testInvalidUsernameFormatError() {
+        String register = "register -u LongUsername -p Test@123 Test@123 -e email@gmail.com -g male";
+        assertEquals(username.matches(USERNAME_REGEX), "Username must not exceed 8 characters.");
     }
 
     @Test
