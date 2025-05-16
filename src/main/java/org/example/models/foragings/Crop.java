@@ -68,6 +68,13 @@ public class Crop implements Item {
         this.currentStage = currentStage;
         this.currentStageLevel = currentStageLevel;
 
+        for(CropType type : CropType.values()){
+            if(type.equals(cropType)){
+                break;
+            }
+            typeIndex++;
+        }
+
         stages = cropType.getStages();
         isWateredToday = true;
         isGiantCrop = true;

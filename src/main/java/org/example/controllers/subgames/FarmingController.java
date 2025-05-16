@@ -27,11 +27,11 @@ public class FarmingController {
                 return new Result(true, treeType.toString());
             }
         }
-//        for(ForagingTree treeType : ForagingTreeType.values()){
-//            if(craftName.equalsIgnoreCase(treeType.getName())){
-//                return new Result(true, treeType.toString());
-//            }
-//        }
+        for(ForagingCropType foragingCropType : ForagingCropType.values()){
+            if(craftName.equalsIgnoreCase(foragingCropType.getName())){
+                return new Result(true, foragingCropType.toString());
+            }
+        }
         return new Result(false, "Craft not found!");
     }
     public Result buildGreenhouse(Matcher matcher) {
@@ -95,20 +95,25 @@ public class FarmingController {
                             );
                             if(seedType.equals(SeedType.Mixed)){
                                 Random rand = new Random();
-                                String randomType = mixedCropNames.get(rand.nextInt(mixedCropNames.size()));
-                                for(CropType cropType : CropType.values()){
-                                    if(cropType.getSource().getName().equalsIgnoreCase(randomType)){
-                                        Result result = new Result(false, "");
-                                        if(!farm.getGreenhouse().isGreenHouse(x, y)){
-                                            result = giantCrop(x, y, cropType, farm);
-                                        }
-                                        if(result.success()){
+                                while (true){
+                                    String randomType = mixedCropNames.get(rand.nextInt(mixedCropNames.size()));
+                                    for(CropType cropType : CropType.values()){
+                                        if(cropType.getSource().getName().equalsIgnoreCase(randomType)){
+                                            if(!cropType.getSource().getSeason().equals(App.getGame().getTime().getSeason())){
+                                                break;
+                                            }
+                                            Result result = new Result(false, "");
+                                            if(!farm.getGreenhouse().isGreenHouse(x, y)){
+                                                result = giantCrop(x, y, cropType, farm);
+                                            }
+                                            if(result.success()){
+                                                inventory.removeFromInventory(slot.getItem(), 1);
+                                                return result;
+                                            }
+                                            farm.addCrop(new Crop(x, y, farm, cropType));
                                             inventory.removeFromInventory(slot.getItem(), 1);
-                                            return result;
+                                            return new Result(true, "A " + cropType.getName() + " planted at " + x + "," + y);
                                         }
-                                        farm.addCrop(new Crop(x, y, farm, cropType));
-                                        inventory.removeFromInventory(slot.getItem(), 1);
-                                        return new Result(true, "A " + cropType.getName() + " planted at " + x + "," + y);
                                     }
                                 }
                             }
