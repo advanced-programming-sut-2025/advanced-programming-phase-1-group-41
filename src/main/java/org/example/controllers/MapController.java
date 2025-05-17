@@ -6,6 +6,7 @@ import org.example.models.locations.Farm;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 
 public class MapController {
@@ -87,14 +88,34 @@ public class MapController {
         }
     }
     public void printWholeMap(Matcher matcher){
-        System.out.println("ffddfdfgxdgzgf");
         System.out.println(App.getGame().getFarms().getFirst().getCell(0,0).getObjectMap().getChar());
         ArrayList<String> wholeChars=new ArrayList<>();
+        Random rand = new Random();
         for (int i = 0; i <75; i++) {
             for(int j=0;j<60;j++) {
                 wholeChars.add(App.getGame().getFarms().getFirst().getCell(j, i).getObjectMap().getChar());
             }for(int j=0;j<95;j++){
-                wholeChars.add(Colors.colorize(39,39,"LL"));
+                if(i <= 25){
+//                    int color = rand.nextInt(15) + 232;
+                    int color = 17;
+                    if(i <= 10){
+                        color = 16;
+                    }
+//                    if(color == 0){
+//                        color = 246;
+//                    } else if(color == 1){
+//                        color = 239;
+//                    } else {
+//                        color = 235;
+//                    }
+                    wholeChars.add(Colors.colorize(color,color,"LL"));
+                }else{
+                    int color = (i - 25) / 6 + 17;
+                    if(i >= 55){
+                        color = 21 + ((i - 57) / 6 + 1) * 6;
+                    }
+                    wholeChars.add(Colors.colorize(color,color,"LL"));
+                }
             }for(int j=0;j<60;j++) {
                 wholeChars.add(App.getGame().getFarms().get(1).getCell(j,i).getObjectMap().getChar());
             }

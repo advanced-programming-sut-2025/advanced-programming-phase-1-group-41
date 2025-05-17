@@ -412,12 +412,12 @@ public class PlayerController {
         if(energy > App.getGame().getCurrentPlayer().getEnergy()){
                 new Result(false, "your energy is too low..");
         }
-        fishQuality=(Math.random()*( App.getGame().getCurrentPlayer().getFishingSkill().getLevel() + 2)*fishingRod.getLevel().getPole())/(7-weatherEffect);
+        fishQuality=Math.floor(Math.random()*( App.getGame().getCurrentPlayer().getFishingSkill().getLevel() + 2)*fishingRod.getLevel().getPole())/(7-weatherEffect);
         assert caughtFish != null;
         caughtFish.setQuality(fishQuality);
         App.getGame().getCurrentPlayer().getFishingSkill().increaseXp(quantityOfFish * 5);
         game.getCurrentPlayer().decEnergy(energy);
-        game.getCurrentPlayer().getInventory().addToInventory(caughtFish,quantityOfFish);
+        game.getCurrentPlayer().getInventory().addToInventory(caughtFish,quantityOfFish,(int)fishQuality);
         return new Result(true,"You have "+quantityOfFish+" fresh fish of "+caughtFish.getFishType().getName());
 
     }
