@@ -204,7 +204,7 @@ public class ToolsController {
             }
             App.getGame().getCurrentPlayer().decEnergyTool(Math.max(energy, 0));
             int value =  App.getGame().getCurrentPlayer().getMiningSkill().getLevel() >= 2 ? 1 : 0;
-            App.getGame().getCurrentPlayer().getMiningSkill().increaseXp(10);
+            App.getGame().getCurrentPlayer().getMiningSkill().increaseXp(100);
             App.getGame().getCurrentPlayer().getInventory().addToInventory(
                     (Item) cell.getObjectMap(), 1 + value
             );
@@ -515,7 +515,6 @@ public class ToolsController {
             return new Result(false, "you don't have enough energy to use this tool");
         }
         App.getGame().getCurrentPlayer().decEnergyTool(energy);
-
         for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
             for (Animal animal : barn.getAnimals()) {
                 System.out.println(animal.getName()+" "+animal.getX()+" "+animal.getY());
@@ -561,7 +560,6 @@ public class ToolsController {
             return new Result(false, "you don't have enough energy to use this tool");
         }
         App.getGame().getCurrentPlayer().decEnergyTool(energy);
-
         for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
             for (Animal animal : barn.getAnimals()) {
                 if(animal.getX() == cell.getX() && animal.getY() == cell.getY()){
