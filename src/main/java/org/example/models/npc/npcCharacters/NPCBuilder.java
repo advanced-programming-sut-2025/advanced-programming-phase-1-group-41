@@ -59,6 +59,32 @@ public class NPCBuilder {
                                 new Quest(new Slot(new Fish(FishType.Legend), 1), new Slot(new Fish(FishType.Angler), 10), "find the legend", "Find me a legend fish, i`ll give you 10 angler", "it`s beautiful!"),
                                 new Quest(new Slot(new SmokedFish(), 2), new Slot(new Fish(FishType.Glacierfish), 5), "cook the fish", "I love Glacier Fish, more than that,I love food", "Yummy"),
                                 new Quest(new Slot(CraftableItem.Beer, 10), new Slot(new Fish(FishType.RainbowTrout), 100), "better than fish", "Can you find it for me?", "oh Gosh , thank you")))));
+                NPCs.add(new Mohsen("Mohsen", Occupation.Fisher,(FishShop) building,
+                        new ArrayList<String>(Arrays.asList(
+                                "Are kheili jaleb bood",
+                                "Are kheili jaleb bood",
+                                "Are kheili jaleb bood",
+                                "Are kheili jaleb bood",
+                                "Are kheili jaleb bood",
+                                "Hamin dige?",
+                                "Hamin dige?",
+                                "Hamin dige?",
+                                "Hamin dige?",
+                                "khodafez dige",
+                                "beram dige"
+                                )),
+                        new ArrayList<Item>(Arrays.asList(
+                                new Fish(FishType.Sunfish),
+                                Food.DishOTheSea,
+                                Food.BakedFish)),
+                        new ArrayList<Slot>(Arrays.asList(
+                                new Slot(new Fish(FishType.Crimsonfish),1),
+                                new Slot(new Fish(FishType.Tilapia),2),
+                                new Slot(new Fish(FishType.Perch),10))),
+                        new ArrayList<Quest>(Arrays.asList(
+                                new Quest(new Slot(new Fish(FishType.Legend), 1), new Slot(new Fish(FishType.Angler), 10), "find the legend", "Find me a legend fish, i`ll give you 10 angler", "it`s beautiful!"),
+                                new Quest(new Slot(new SmokedFish(), 2), new Slot(new Fish(FishType.Glacierfish), 5), "cook the fish", "I love Glacier Fish, more than that,I love food", "Yummy"),
+                                new Quest(new Slot(CraftableItem.Beer, 10), new Slot(new Fish(FishType.RainbowTrout), 100), "better than fish", "Can you find it for me?", "oh Gosh , thank you")))));
             }else if(building instanceof Jojamart){
                 NPCs.add(new Morris("Morris", Occupation.Farmer, (Jojamart) building,
                         new ArrayList<String>(Arrays.asList(

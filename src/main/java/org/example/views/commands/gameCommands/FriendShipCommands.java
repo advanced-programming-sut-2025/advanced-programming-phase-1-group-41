@@ -18,7 +18,7 @@ public enum FriendShipCommands implements Command {
     Marriage("\\s*ask\\s+marriage\\s+-u\\s+(?<username>\\S+)\\s*"),
 //    Marriage("\\s*ask\\s+marriage\\s+-u\\s+(?<username>\\S+)\\s+-r\\s+(?<ring>\\S+)\\s*"),
     Respond("\\s*respond\\s+(accept|reject)\\s+-u\\s+(?<username>\\S+)\\s*"),
-    GoTo("\\s*go\\s+to\\s+(?<farmname>.+)\\s*"),
+    GoTo("\\s*go\\s+to\\s+-u\\s+(?<farmName>.+)\\s*"),
     CheatSetFriendship("\\s*cheat\\s+set\\s+friendship\\s+-n\\s+(?<animalName>\\S+)\\s+-c\\s+(?<amount>\\S+)\\s*"),
     ;
 

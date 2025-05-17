@@ -33,7 +33,7 @@ public class NPCController {
         if(!npc.isTalkedToday(player)){
             npc.incFriendShip(player,20);
             npc.setTalkedToday(player,true);
-            npc.getQuests().get(0).setLocked(player,false);
+            npc.getQuests().getFirst().setLocked(player,false);
         }
         if(!App.getGame().getWeatherType().equals(WeatherType.Sunny)){
             switch (App.getGame().getWeatherType()){
