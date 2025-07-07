@@ -1,7 +1,40 @@
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 eclipse.project.name = appName + '-core'
 
+//plugins {
+//  id 'java'
+//}
+//
+//java {
+//  toolchain {
+//    languageVersion = JavaLanguageVersion.of(24)
+//  }
+//}
+//
+//tasks.withType(JavaCompile).configureEach {
+//  options.compilerArgs += '--enable-preview'
+//}
+//
+//tasks.withType(Test).configureEach {
+//  jvmArgs += '--enable-preview'
+//}
+//
+//test {
+//  useJUnitPlatform()
+//}
+
 dependencies {
+  // Maven dependencies
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+  implementation 'ch.qos.logback:logback-classic:1.4.14'
+  implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0'
+  implementation 'org.mongodb:mongodb-driver-sync:4.9.1'
+  implementation 'dev.morphia.morphia:morphia-core:2.4.18'
+  implementation 'org.mongodb:mongodb-driver-sync:4.10.2'
+  implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+  // implementation 'org.jline:jline:3.23.0'
+
+  // Your LibGDX-related dependencies
   implementation "com.badlogicgames.gdx:gdx-ai:1.8.2"
   api "com.badlogicgames.box2dlights:box2dlights:$box2dlightsVersion"
   api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
@@ -13,7 +46,7 @@ dependencies {
   api "com.rafaskoberg.gdx:typing-label:$typingLabelVersion"
   api "org.mini2Dx:universal-tween-engine:$universalTweenVersion"
 
-  if(enableGraalNative == 'true') {
+  if (enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
   }
 }
