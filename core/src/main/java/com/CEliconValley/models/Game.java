@@ -53,7 +53,6 @@ public class Game {
         this.weatherType = WeatherType.Sunny;
         this.tmrwWeatherType = WeatherType.Sunny;
         this.time = new TimeLine();
-        this.currentPlayer = loader;//todo,not true
 //        this.map = new Map();
 
         this.roundEnergy = 0;
@@ -110,6 +109,7 @@ public class Game {
 
     public Farm getCurrentPlayerFarm() {
         if(currentPlayer.getInFarmId() != currentPlayer.getFarmId()) {
+//            System.out.println("im here!!");
             for (Farm farm : farms) {
                 if(farm.getId() == currentPlayer.getInFarmId()){
                     return farm;

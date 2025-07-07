@@ -1,6 +1,5 @@
 package com.CEliconValley.models;
 
-import com.CEliconValley.views.Lobby;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
@@ -12,7 +11,6 @@ public class App {
     public final static ArrayList<User> users = new ArrayList<>();
     public final static ArrayList<Game> games = new ArrayList<>();
     public final static HashMap<ObjectId, User> userMap = new HashMap<>();
-    public static ArrayList<Lobby> lobbies = new ArrayList<>();
     private static User currentUser;
     private static Menu menu;
     private static Game game;
@@ -22,17 +20,13 @@ public class App {
         App.questions.clear();
         App.questions.addAll(questions);
     }
-    public static ArrayList<Lobby> addToLobbies(Lobby lobby){
-        lobbies.add(lobby);
-        return null;
-    }
 
 //    public static Map getMap() {
 //        return map;
 //    }
 
     public static Menu getMenu() {
-        return App.menu;
+        return menu;
     }
     public static void setMenu(Menu menu) {
         App.menu = menu;

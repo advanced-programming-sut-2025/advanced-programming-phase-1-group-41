@@ -50,9 +50,6 @@ public class ForagingCrop implements Foraging, Item {
         assert cell != null;
         cell.setObjectMap(this);
     }
-    public ForagingCropType getForagingCropType() {
-        return foragingCropType;
-    }
 
 
 }

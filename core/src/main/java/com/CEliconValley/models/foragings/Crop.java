@@ -48,7 +48,7 @@ public class Crop implements Item {
             typeIndex++;
         }
         stages = cropType.getStages();
-        currentStage = 3;
+        currentStage = 0;
         if(!cropType.isOneTimeHarvest()){
             regrowthTime = cropType.getRegrowthTime();
             canRegrow = true;

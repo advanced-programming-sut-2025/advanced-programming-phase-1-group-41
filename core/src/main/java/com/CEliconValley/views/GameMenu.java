@@ -8,12 +8,10 @@ import com.CEliconValley.controllers.GameMenuController;
 import com.CEliconValley.models.App;
 import com.CEliconValley.views.commands.gameCommands.GameMainCommands;
 import com.CEliconValley.views.subGames.*;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 
-public class GameMenu implements AppMenu, Screen {
+public class GameMenu implements AppMenu {
     GameMenuController controller = new GameMenuController();
-//    @Override
+    @Override
     public void check(Scanner scanner) {
         String input = scanner.nextLine();
         Matcher matcher = null;
@@ -89,45 +87,5 @@ public class GameMenu implements AppMenu, Screen {
             }
         }
         return answer;
-    }
-
-    @Override
-    public void show() {
-
-    }
-
-    @Override
-    public void render(float v) {
-
-    }
-
-    @Override
-    public void resize(int i, int i1) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
-    }
-
-    @Override
-    public void setMessage(String message, Color color) {
-
     }
 }

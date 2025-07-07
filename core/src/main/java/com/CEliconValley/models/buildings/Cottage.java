@@ -16,8 +16,6 @@ public class Cottage implements Building {
     }
     private int x;
     private int y;
-    private int anchorX;
-    private int anchorY;
     private Refrigerator refrigerator;
     private HashSet<Item> machines;
     @Override
@@ -26,8 +24,6 @@ public class Cottage implements Building {
     }
 
     public Cottage(int x, int y, Farm farm) {
-        anchorX = x+4;
-        anchorY = y+1;
         this.refrigerator = new Refrigerator();
         this.machines = new HashSet<>();
         this.x = x;
@@ -95,12 +91,5 @@ public class Cottage implements Building {
 
     public HashSet<Item> getMachines() {
         return machines;
-    }
-
-    public int getAnchorY(){
-        return anchorY;
-    }
-    public int getAnchorX(){
-        return anchorX;
     }
 }

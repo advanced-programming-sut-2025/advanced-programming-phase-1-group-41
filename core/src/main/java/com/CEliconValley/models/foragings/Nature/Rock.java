@@ -21,38 +21,24 @@ public class Rock implements Nature, Obstacle {
 
     private int hitPoints;
     private final RockType rockType;
-    private final int variant;
-    private int anchorX;
-    private  int anchorY;
 
-    public int getType() {
-        return variant;
-    }
     public Rock(){
-
         rockType = RockType.SmallRock;
-        this.variant = (int)(Math.random() * 15);
     }
 
     public Rock(int x, int y, Farm farm) {
-        anchorX = x;
-        anchorY = y;
         Random rand = new Random();
         if(y >= 40){
             rockType = RockType.BigRock;
             hitPoints = 3;
-            this.variant = (int)(Math.random() * 4);
         } else{
             rockType = RockType.SmallRock;
             hitPoints = 1;
-            this.variant = (int)(Math.random() * 15);
         }
         Cell cell = Finder.findCellByCoordinates(x, y, farm);
         assert cell != null;
         cell.setObjectMap(this);
         if(rockType.equals(RockType.BigRock)){
-            anchorX=x+1;
-            anchorY=y;
             Cell cell2 = Finder.findCellByCoordinates(x + 1, y, farm);
             if(cell2 != null&& cell2.getObjectMap() instanceof Grass){
                 cell2.setObjectMap(this);
@@ -81,16 +67,5 @@ public class Rock implements Nature, Obstacle {
     @Override
     public double getPrice() {
         return 0;
-    }
-
-    public int getVariant(){
-        return variant;
-    }
-    public int getAnchorX() {
-        return anchorX;
-    }
-
-    public int getAnchorY() {
-        return anchorY;
     }
 }
