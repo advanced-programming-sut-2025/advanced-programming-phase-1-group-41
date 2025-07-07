@@ -7,7 +7,7 @@ public class Pickaxe implements Tool, LevelTool{
     ToolLevel level;
 
     public Pickaxe() {
-        level = ToolLevel.Default;
+        level = ToolLevel.Iridium;
     }
 
     public ToolLevel getLevel() {

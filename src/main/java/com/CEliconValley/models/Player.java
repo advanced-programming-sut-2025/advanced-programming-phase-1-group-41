@@ -404,7 +404,7 @@ public class Player {
 
     public void resetEnergy(){
         if(this.energy <= 0){
-            System.out.println("since you passed out, you're starting with 175");
+            System.out.println("since you passed out, you're starting with 150");
             this.energy = (double) (3 * maxEnergy) / 4;
             return;
         }

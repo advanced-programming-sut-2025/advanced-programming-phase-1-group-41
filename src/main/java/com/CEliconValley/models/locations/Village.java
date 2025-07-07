@@ -300,7 +300,7 @@ public class Village { ;
         }
         for (Cell cell : cells) {
             if(cell.getObjectMap() instanceof Door){
-//                System.out.println("door: "+cell.getX()+","+cell.getY());
+                System.out.println("door: "+cell.getX()+","+cell.getY());
             }
         }
     }
