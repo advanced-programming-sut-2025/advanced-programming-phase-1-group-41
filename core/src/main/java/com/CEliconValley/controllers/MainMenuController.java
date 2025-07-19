@@ -17,17 +17,19 @@ public class MainMenuController {
 
     public void setupListeners() {
         view.getStartGameButton().addListener(new ClickListener() {
-            //TODO
-//            SettingsMenuController settingsController = new SettingsMenuController();
-//            SettingsMenuView settingsView = new SettingsMenuView(settingsController);
-//            Main.setScreen(settingsView);
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                App.setMenu(Menu.Game);
+                Main.getMain().setScreen(App.getMenu().getScreen());
+            }
         });
 
         view.getProfileButton().addListener(new ClickListener() {
-            ProfileMenuController profileController = new ProfileMenuController();
-            //TODO
-//            ProfileMenuView profileView = new ProfileMenuView(profileController);
-//            Main.setScreen(profileView);
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                App.setMenu(Menu.Profile);
+                Main.getMain().setScreen(App.getMenu().getScreen());
+            }
         });
 
         view.getLogoutButton().addListener(new ClickListener() {

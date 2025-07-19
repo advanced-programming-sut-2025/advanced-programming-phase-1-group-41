@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
-public class ProfileMenu implements AppMenu, Screen {
+public class ProfileMenuView implements AppMenu, Screen {
     ProfileMenuController profileMenuController = new ProfileMenuController();
     @Override
     public void check(Scanner scanner) throws NoSuchAlgorithmException {
