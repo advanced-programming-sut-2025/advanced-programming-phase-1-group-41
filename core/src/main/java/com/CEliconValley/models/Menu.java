@@ -1,5 +1,6 @@
 package com.CEliconValley.models;
 
+import com.CEliconValley.controllers.MainMenuController;
 import com.CEliconValley.controllers.authentication.AuthenticationMenuController;
 import com.CEliconValley.views.*;
 import com.badlogic.gdx.Screen;
@@ -7,7 +8,7 @@ import com.badlogic.gdx.Screen;
 public enum Menu {
     Authentication(new AuthenticationMenuView(new AuthenticationMenuController()),"AuthenticationMenu"),
     Profile(new ProfileMenu(),"ProfileMenu"),
-    Main(new MainMenu(),"MainMenu"),
+    Main(new MainMenuView(new MainMenuController()),"MainMenu"),
     Exit(new ExitMenu(),"ExitMenu"),
     Game(new GameMenu(),"GameMenu"),
     Trade(new TradeMenu(),"TradeMenu"),

@@ -161,11 +161,6 @@ public class AuthenticationMenuController {
                     throw new RuntimeException(e);
                 }
 
-                view.regUsername.setText("");
-                view.regEmail.setText("");
-                view.regNickname.setText("");
-                view.regPassword.setText("");
-                view.regConfirmPassword.setText("");
                 view.switchForm("register");
                 view.setMessage("User Registered Successfully. ✅", Color.LIME);
             }
@@ -240,7 +235,9 @@ public class AuthenticationMenuController {
         login(user, stayLoggedIn);
 
         // مثال لاگین
-        view.setMessage("Login attempted. (dummy logic)", Color.YELLOW);
+//        view.setMessage("Login attempted. (dummy logic)", Color.YELLOW);
+        emptyFields();
+        view.setMessage("", Color.WHITE);
         System.out.println(">> LOGIN:");
         System.out.println("Username: " + username);
         System.out.println("Password: " + password);
@@ -286,9 +283,6 @@ public class AuthenticationMenuController {
         view.forgotSubmitButton.getLabel().setText("Show Security Question");
         view.securityQuestionLabel.setText("Your Security Question");
         view.securityQuestionLabel.setColor(Color.WHITE);
-        view.forgotUsername.setText("");
-        view.forgotAnswer.setText("");
-        view.newPassword.setText("");
         view.switchForm("login");
 
         // مثال فراموشی رمز
@@ -357,5 +351,17 @@ public class AuthenticationMenuController {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] hashBytes = digest.digest(pass.getBytes(StandardCharsets.UTF_8));
         return Base64.getEncoder().encodeToString(hashBytes);
+    }
+    public void emptyFields() {
+        view.loginPassword.setText("");
+        view.loginUsername.setText("");
+        view.forgotUsername.setText("");
+        view.forgotAnswer.setText("");
+        view.newPassword.setText("");
+        view.regUsername.setText("");
+        view.regEmail.setText("");
+        view.regNickname.setText("");
+        view.regPassword.setText("");
+        view.regConfirmPassword.setText("");
     }
 }
