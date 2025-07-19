@@ -7,7 +7,7 @@ import com.badlogic.gdx.Screen;
 
 public enum Menu {
     Authentication(new AuthenticationMenuView(new AuthenticationMenuController()),"AuthenticationMenu"),
-    Profile(new ProfileMenu(),"ProfileMenu"),
+    Profile(new ProfileMenuView(),"ProfileMenu"),
     Main(new MainMenuView(new MainMenuController()),"MainMenu"),
     Exit(new ExitMenu(),"ExitMenu"),
     Game(new GameMenu(),"GameMenu"),
