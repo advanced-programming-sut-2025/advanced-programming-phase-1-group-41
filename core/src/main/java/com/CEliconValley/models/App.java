@@ -26,7 +26,7 @@ public class App {
 //    }
 
     public static Menu getMenu() {
-        return menu;
+        return App.menu;
     }
     public static void setMenu(Menu menu) {
         App.menu = menu;

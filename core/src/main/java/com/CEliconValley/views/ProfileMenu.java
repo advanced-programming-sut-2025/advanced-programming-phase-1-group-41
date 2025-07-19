@@ -4,12 +4,13 @@ import com.CEliconValley.controllers.ProfileMenuController;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Menu;
 import com.CEliconValley.views.commands.ProfileCommands;
+import com.badlogic.gdx.Screen;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
-public class ProfileMenu implements AppMenu {
+public class ProfileMenu implements AppMenu, Screen {
     ProfileMenuController profileMenuController = new ProfileMenuController();
     @Override
     public void check(Scanner scanner) throws NoSuchAlgorithmException {
@@ -44,5 +45,40 @@ public class ProfileMenu implements AppMenu {
         else {
             System.out.println("Invalid command!");
         }
+    }
+
+    @Override
+    public void show() {
+
+    }
+
+    @Override
+    public void render(float v) {
+
+    }
+
+    @Override
+    public void resize(int i, int i1) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

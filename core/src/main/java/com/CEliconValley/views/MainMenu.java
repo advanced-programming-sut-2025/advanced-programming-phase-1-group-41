@@ -8,12 +8,13 @@ import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.npc.npcCharacters.NPCBuilder;
 import com.CEliconValley.views.commands.MainMenuCommands;
 import com.CEliconValley.views.commands.gameCommands.GameMainCommands;
+import com.badlogic.gdx.Screen;
 
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
-public class MainMenu implements AppMenu {
+public class MainMenu implements AppMenu, Screen {
     MainMenuController controller = new MainMenuController();
     @Override
     public void check(Scanner scanner) {
@@ -93,5 +94,40 @@ public class MainMenu implements AppMenu {
         new NPCBuilder();
         System.out.println("welcome to the game!");
         App.setMenu(Menu.Game);
+    }
+
+    @Override
+    public void show() {
+
+    }
+
+    @Override
+    public void render(float v) {
+
+    }
+
+    @Override
+    public void resize(int i, int i1) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

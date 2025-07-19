@@ -1,9 +1,11 @@
 package com.CEliconValley.models;
 
+import com.CEliconValley.controllers.authentication.AuthenticationMenuController;
 import com.CEliconValley.views.*;
+import com.badlogic.gdx.Screen;
 
 public enum Menu {
-    Authentication(new AuthenticationMenu(),"AuthenticationMenu"),
+    Authentication(new AuthenticationMenuView(new AuthenticationMenuController()),"AuthenticationMenu"),
     Profile(new ProfileMenu(),"ProfileMenu"),
     Main(new MainMenu(),"MainMenu"),
     Exit(new ExitMenu(),"ExitMenu"),
@@ -12,17 +14,18 @@ public enum Menu {
     ;
 
 
-    public final AppMenu menu;
+    public final Screen menu;
     private final String menuName;
 
 
-    public AppMenu getMenu() {
+    public Screen getScreen() {
         return menu;
     }
+
     public String getMenuName() {return menuName;}
 
 
-    Menu(AppMenu menu, String menuName) {
+    Menu(Screen menu, String menuName) {
         this.menu = menu;
         this.menuName=menuName;
     }
@@ -35,33 +38,33 @@ public enum Menu {
         }
         return null;
     }
-    public static Menu goToLastMenu(String input) {
-        if(input.equals("AuthenticationMenu")) {
-            System.out.println("thanks for playing");
-        }
-         return switch (input){
-            case "AuthenticationMenu" -> Exit;
-
-            case "ProfileMenu", "GameMenu" -> Main;
-
-            case "MainMenu" -> Authentication;
-
-            case "TradeMenu" -> Game;
-
-            default -> throw new IllegalStateException("Unexpected value: " + input);
-        };
-    }
-    public static Menu goToMenu(String input) {
-        return switch (input){
-            case "AuthenticationMenu" -> Authentication;
-            case "ProfileMenu" -> Profile;
-            case "g" -> Game;
-            case "TradeMenu" -> Trade;
-            case "MainMenu" -> Main;
-            case "Exit" -> Exit;
-            default -> null;
-        };
-    }
+//    public static Menu goToLastMenu(String input) {
+//        if(input.equals("AuthenticationMenu")) {
+//            System.out.println("thanks for playing");
+//        }
+//         return switch (input){
+//            case "AuthenticationMenu" -> Exit;
+//
+//            case "ProfileMenu", "GameMenu" -> Main;
+//
+//            case "MainMenu" -> Authentication;
+//
+//            case "TradeMenu" -> Game;
+//
+//            default -> throw new IllegalStateException("Unexpected value: " + input);
+//        };
+//    }
+//    public static Menu goToMenu(String input) {
+//        return switch (input){
+//            case "AuthenticationMenu" -> Authentication;
+//            case "ProfileMenu" -> Profile;
+//            case "g" -> Game;
+//            case "TradeMenu" -> Trade;
+//            case "MainMenu" -> Main;
+//            case "Exit" -> Exit;
+//            default -> null;
+//        };
+//    }
 
 
 }

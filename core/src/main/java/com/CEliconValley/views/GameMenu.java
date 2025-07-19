@@ -8,8 +8,9 @@ import com.CEliconValley.controllers.GameMenuController;
 import com.CEliconValley.models.App;
 import com.CEliconValley.views.commands.gameCommands.GameMainCommands;
 import com.CEliconValley.views.subGames.*;
+import com.badlogic.gdx.Screen;
 
-public class GameMenu implements AppMenu {
+public class GameMenu implements AppMenu, Screen {
     GameMenuController controller = new GameMenuController();
     @Override
     public void check(Scanner scanner) {
@@ -87,5 +88,40 @@ public class GameMenu implements AppMenu {
             }
         }
         return answer;
+    }
+
+    @Override
+    public void show() {
+
+    }
+
+    @Override
+    public void render(float v) {
+
+    }
+
+    @Override
+    public void resize(int i, int i1) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

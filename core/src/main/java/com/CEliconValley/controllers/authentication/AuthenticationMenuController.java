@@ -2,7 +2,6 @@ package com.CEliconValley.controllers.authentication;
 
 import com.CEliconValley.Main;
 import com.CEliconValley.models.*;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -60,13 +59,6 @@ public class AuthenticationMenuController {
                 view.setMessage("", Color.CLEAR);
             }
         });
-        view.getExitTab().addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
-            }
-        });
-
 
         // --- Gender Selection ---
         view.genderMaleButton.addListener(new ClickListener() {
@@ -169,6 +161,11 @@ public class AuthenticationMenuController {
                     throw new RuntimeException(e);
                 }
 
+                view.regUsername.setText("");
+                view.regEmail.setText("");
+                view.regNickname.setText("");
+                view.regPassword.setText("");
+                view.regConfirmPassword.setText("");
                 view.switchForm("register");
                 view.setMessage("User Registered Successfully. ✅", Color.LIME);
             }
@@ -243,9 +240,7 @@ public class AuthenticationMenuController {
         login(user, stayLoggedIn);
 
         // مثال لاگین
-//        view.setMessage("Login attempted. (dummy logic)", Color.YELLOW);
-        emptyFields();
-        view.setMessage("", Color.WHITE);
+        view.setMessage("Login attempted. (dummy logic)", Color.YELLOW);
         System.out.println(">> LOGIN:");
         System.out.println("Username: " + username);
         System.out.println("Password: " + password);
@@ -291,6 +286,9 @@ public class AuthenticationMenuController {
         view.forgotSubmitButton.getLabel().setText("Show Security Question");
         view.securityQuestionLabel.setText("Your Security Question");
         view.securityQuestionLabel.setColor(Color.WHITE);
+        view.forgotUsername.setText("");
+        view.forgotAnswer.setText("");
+        view.newPassword.setText("");
         view.switchForm("login");
 
         // مثال فراموشی رمز
@@ -353,24 +351,11 @@ public class AuthenticationMenuController {
         user.setStayLoggedIn(stayLoggedIn);
         App.setCurrentUser(user);
         App.setMenu(Menu.Main);
-        Menu.Main.resetMenu();
         Main.getMain().setScreen(App.getMenu().getScreen());
     }
     public String getHash(String pass) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] hashBytes = digest.digest(pass.getBytes(StandardCharsets.UTF_8));
         return Base64.getEncoder().encodeToString(hashBytes);
-    }
-    public void emptyFields() {
-        view.loginPassword.setText("");
-        view.loginUsername.setText("");
-        view.forgotUsername.setText("");
-        view.forgotAnswer.setText("");
-        view.newPassword.setText("");
-        view.regUsername.setText("");
-        view.regEmail.setText("");
-        view.regNickname.setText("");
-        view.regPassword.setText("");
-        view.regConfirmPassword.setText("");
     }
 }
