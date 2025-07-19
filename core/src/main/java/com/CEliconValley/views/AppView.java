@@ -28,7 +28,7 @@ public class AppView {
         CookingRecipe.updateRecipe();
         UserDB.connect();
         while(App.getMenu() != Menu.Exit){
-            App.getMenu().getMenu().check(scanner);
+//            App.getMenu().getMenu().check(scanner);
             if(App.getMenu() == Menu.Trade){
                 System.out.print("trade ");
             }

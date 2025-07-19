@@ -1,6 +1,6 @@
 package com.CEliconValley.controllers;
 
-import com.CEliconValley.controllers.authentication.AuthenticationController;
+import com.CEliconValley.controllers.authentication.AuthenticationMenuController;
 import com.CEliconValley.controllers.authentication.AuthenticationValidator;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Menu;
@@ -33,7 +33,7 @@ public class ProfileMenuController {
         }
         String newPassword = matcher.group("newPassword");
         String oldPassword = matcher.group("oldPassword");
-        oldPassword = (new AuthenticationController()).getHash(oldPassword);
+        oldPassword = (new AuthenticationMenuController()).getHash(oldPassword);
         if(!App.getCurrentUser().getPassword().equals(oldPassword)){
             return new Result(false, "Wrong password!");
         }
@@ -58,7 +58,7 @@ public class ProfileMenuController {
         if (!newPassword.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};:'\",.<>?/\\\\|`~].*")) {
             return new Result(false, "Password must contain at least one special character!");
         }
-        newPassword = new AuthenticationController().getHash(newPassword);
+        newPassword = new AuthenticationMenuController().getHash(newPassword);
         App.getCurrentUser().setPassword(newPassword);
         return new Result(true, "Password changed successfully!");
     }
