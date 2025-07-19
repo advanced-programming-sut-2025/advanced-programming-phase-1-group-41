@@ -222,6 +222,7 @@ public class AuthenticationMenuView implements Screen {
         loginForm.setVisible(formName.equals("login"));
         forgotForm.setVisible(formName.equals("forgot"));
         securityQuestionForm.setVisible(formName.equals("securityQuestion"));
+        controller.emptyFields();
     }
 
     public void setMessage(String message, Color color) {
