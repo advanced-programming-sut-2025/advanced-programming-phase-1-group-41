@@ -345,6 +345,7 @@ public class AuthenticationMenuController {
         user.setStayLoggedIn(stayLoggedIn);
         App.setCurrentUser(user);
         App.setMenu(Menu.Main);
+        Menu.Main.resetMenu();
         Main.getMain().setScreen(App.getMenu().getScreen());
     }
     public String getHash(String pass) throws NoSuchAlgorithmException {

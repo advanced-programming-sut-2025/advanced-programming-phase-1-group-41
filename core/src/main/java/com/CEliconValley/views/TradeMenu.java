@@ -4,13 +4,14 @@ import com.CEliconValley.controllers.CheckerController;
 import com.CEliconValley.controllers.TradeMenuController;
 import com.CEliconValley.views.commands.TradeCommands;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class TradeMenu implements AppMenu, Screen {
     TradeMenuController controller = new TradeMenuController();
-    @Override
+//    @Override
     public void check(Scanner scanner) {
         String input = scanner.nextLine();
         Matcher matcher;
@@ -63,6 +64,11 @@ public class TradeMenu implements AppMenu, Screen {
 
     @Override
     public void dispose() {
+
+    }
+
+    @Override
+    public void setMessage(String message, Color color) {
 
     }
 }

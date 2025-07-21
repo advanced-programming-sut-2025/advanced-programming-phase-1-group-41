@@ -20,7 +20,7 @@ import com.CEliconValley.GameAssetManager;
 import java.util.ArrayList;
 
 
-public class AuthenticationMenuView implements Screen {
+public class AuthenticationMenuView implements Screen, AppMenu {
 
     private final AuthenticationMenuController controller;
     private Stage stage;
@@ -287,9 +287,4 @@ public class AuthenticationMenuView implements Screen {
     public TextButton getForgotTab() {
         return forgotTab;
     }
-
-//    @Override
-//    public void check(Scanner scanner) throws NoSuchAlgorithmException {
-//
-//    }
 }

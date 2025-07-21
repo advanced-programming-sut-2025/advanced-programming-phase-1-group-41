@@ -9,10 +9,11 @@ import com.CEliconValley.models.App;
 import com.CEliconValley.views.commands.gameCommands.GameMainCommands;
 import com.CEliconValley.views.subGames.*;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 
 public class GameMenu implements AppMenu, Screen {
     GameMenuController controller = new GameMenuController();
-    @Override
+//    @Override
     public void check(Scanner scanner) {
         String input = scanner.nextLine();
         Matcher matcher = null;
@@ -122,6 +123,11 @@ public class GameMenu implements AppMenu, Screen {
 
     @Override
     public void dispose() {
+
+    }
+
+    @Override
+    public void setMessage(String message, Color color) {
 
     }
 }

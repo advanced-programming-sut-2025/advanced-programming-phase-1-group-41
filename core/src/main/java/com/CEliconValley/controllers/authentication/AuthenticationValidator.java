@@ -2,6 +2,7 @@ package com.CEliconValley.controllers.authentication;
 
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.User;
+import com.CEliconValley.views.AppMenu;
 import com.CEliconValley.views.AuthenticationMenuView;
 import com.badlogic.gdx.graphics.Color;
 
@@ -15,7 +16,7 @@ public class AuthenticationValidator {
         }
         return false;
     }
-    public static boolean passwordValidation(String password, AuthenticationMenuView view) {
+    public static boolean passwordValidation(String password, AppMenu view) {
         if(!password.matches("^[a-zA-Z0-9!@#$%^&*()+=\\[\\]{}\\-_.;:'`~\",<>?/\\\\|]+$")){
             view.setMessage("Invalid password format!", Color.RED);
             return false;
