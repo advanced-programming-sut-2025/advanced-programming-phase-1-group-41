@@ -1,14 +1,11 @@
 package com.CEliconValley.views;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 
 import java.util.Scanner;
 
 public class ExitMenu implements AppMenu, Screen {
-    @Override
-    public void check(Scanner scanner) {
-
-    }
 
     @Override
     public void show() {
@@ -42,6 +39,11 @@ public class ExitMenu implements AppMenu, Screen {
 
     @Override
     public void dispose() {
+
+    }
+
+    @Override
+    public void setMessage(String message, Color color) {
 
     }
 }
