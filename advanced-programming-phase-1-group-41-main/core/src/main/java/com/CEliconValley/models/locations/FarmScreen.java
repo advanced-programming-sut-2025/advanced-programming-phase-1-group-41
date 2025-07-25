@@ -46,7 +46,7 @@ public class FarmScreen implements Screen {
 
     private OrthographicCamera camera;
 
-    public static final int CELL_SIZE = 150;
+    public static final int CELL_SIZE = 160;
 
     private Animation<TextureRegion>[] walkAnimations;
     private Animation<TextureRegion>[] coastAnimations;
