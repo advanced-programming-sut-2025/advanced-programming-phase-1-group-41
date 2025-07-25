@@ -4,7 +4,6 @@ import com.CEliconValley.models.Player;
 import com.CEliconValley.models.items.CookingRecipe;
 import com.CEliconValley.models.items.CraftingRecipe;
 import com.CEliconValley.models.items.craftablemachines.Machine;
-import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Transient;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class PlayerData {
     int maxEnergy;
     boolean energyUnlimited;
     int depressionDaysLeft;
-    // inventory
+    InventoryData inventoryData;
     String currentToolName;
     ArrayList<CookingRecipe> cookingRecipes;
     ArrayList<CraftingRecipe> craftingRecipes;
@@ -53,11 +52,13 @@ public class PlayerData {
         this.currentToolName = player.getCurrentTool().getName();
         this.cookingRecipes = new ArrayList<>(player.getCookingRecipes());
         this.craftingRecipes = new ArrayList<>(player.getCraftingRecipes());
+        this.isPlayerInVillage = player.isPlayerIsInVillage();
+
         this.skillLevels = new ArrayList<>();
         fillSkillLevels();
         this.onGoingMachines = new ArrayList<>();
         fillOngoingMachinesNames();
-        this.isPlayerInVillage = player.isPlayerIsInVillage();
+        this.inventoryData = new InventoryData(player.getInventory());
     }
 
 

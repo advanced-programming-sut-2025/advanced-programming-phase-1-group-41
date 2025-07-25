@@ -23,6 +23,15 @@ public class Inventory {
 //        addToInventory(new Shear(), 1);
     }
 
+    public Inventory(Backpack backpack){
+        this.backpack=backpack;
+        lastGottenSumOfItemsPrice=0;
+        slots=new ArrayList<>();
+        for (int i = 0; i < backpack.getSize(); i++) {
+            slots.add(new Slot(null, 0));
+        }
+    }
+
     public void setDefaultBag() {
         for(int i = 0; i < backpack.getSize(); i++){
             slots.add(new Slot(null,0));
