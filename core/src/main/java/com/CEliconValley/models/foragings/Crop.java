@@ -37,6 +37,28 @@ public class Crop implements Item {
     private int x;
     private int y;
 
+
+    public Crop(boolean canRegrow, CropType cropType, int currentStage,
+                int currentStageLevel, boolean isFertilizedToday,
+                boolean isGiantCrop, boolean isProtected, boolean isWateredToday,
+                int regrowthTime, ArrayList<Integer> stages, int typeIndex,
+                int waterStreak, int x, int y) {
+        this.canRegrow = canRegrow;
+        this.cropType = cropType;
+        this.currentStage = currentStage;
+        this.currentStageLevel = currentStageLevel;
+        this.isFertilizedToday = isFertilizedToday;
+        this.isGiantCrop = isGiantCrop;
+        this.isProtected = isProtected;
+        this.isWateredToday = isWateredToday;
+        this.regrowthTime = regrowthTime;
+        this.stages = stages;
+        this.typeIndex = typeIndex;
+        this.waterStreak = waterStreak;
+        this.x = x;
+        this.y = y;
+    }
+
     public Crop(int x, int y, Farm farm, CropType cropType) {
         this.x = x;
         this.y = y;
@@ -200,5 +222,22 @@ public class Crop implements Item {
     public double getPrice() {
         // TODO needs to change ?
         return this.cropType.getBaseSellPrice();
+    }
+
+
+    public boolean isCanRegrow() {
+        return canRegrow;
+    }
+
+    public boolean isFertilizedToday() {
+        return isFertilizedToday;
+    }
+
+    public int getTypeIndex() {
+        return typeIndex;
+    }
+
+    public int getWaterStreak() {
+        return waterStreak;
     }
 }

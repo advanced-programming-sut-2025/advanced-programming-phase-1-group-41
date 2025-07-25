@@ -1,0 +1,140 @@
+package com.CEliconValley.common;
+
+import com.CEliconValley.models.App;
+import com.CEliconValley.models.Cell;
+import com.CEliconValley.models.Finder;
+import com.CEliconValley.models.foragings.*;
+import com.CEliconValley.models.foragings.Nature.*;
+import com.CEliconValley.models.items.Item;
+import dev.morphia.annotations.Transient;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class CellData {
+    @Transient
+    private Cell cell;
+
+    int x;
+    int y;
+    String objectName;
+    String className = null;
+    HashMap<String, Object> data;
+
+    public CellData(Cell cell) {
+        this.cell = cell;
+        data = new HashMap<>();
+        this.x = cell.getX();
+        this.y = cell.getY();
+        this.objectName = cell.getObjectMap().getName();
+        fillData();
+    }
+
+    private void fillData(){
+        if(cell.getObjectMap() instanceof ForagingTree f){
+            data.put("hitPoints", f.getHitPoints());
+            data.put("typeIndex", f.getTypeIndex());
+            data.put("isThundered", f.isThundered());
+            this.className = f.getClass().getName();
+        }
+        else if(cell.getObjectMap() instanceof Tree t){
+            data.put("hitPoints", t.getHitPoints());
+            data.put("typeIndex", t.getTypeIndex());
+            data.put("currentStage", t.getCurrentStage());
+            data.put("currentStageLevel", t.getCurrentStageLevel());
+            data.put("isWateredToday", t.isWateredToday());
+            data.put("waterStreak", t.getWaterStreak());
+            data.put("isFertilizedToday", t.isFertilizedToday());
+            data.put("isProtected", t.isProtected());
+            data.put("isThundered", t.isThundered());
+            data.put("isAttacked", t.isAttacked());
+            data.put("x", t.getX());
+            data.put("y", t.getY());
+            this.className = t.getClass().getName();
+        }
+        else if(cell.getObjectMap() instanceof ForagingCrop fc){
+            data.put("typeIndex", fc.getTypeIndex());
+            this.className = fc.getClass().getName();
+        }
+        else if(cell.getObjectMap() instanceof Crop c){
+            data.put("canRegrow", c.getCanRegrow());
+            data.put("currentStage", c.getCurrentStage());
+            data.put("currentStageLevel", c.getCurrentStageLevel());
+            data.put("isFertilizedToday", c.isFertilizedToday());
+            data.put("isGiantCrop", c.isGiantCrop());
+            data.put("isProtected", c.isProtected());
+            data.put("isWateredToday", c.isWateredToday());
+            data.put("regrowthTime", c.getRegrowthTime());
+            data.put("stages", c.getStages());
+            data.put("typeIndex", c.getTypeIndex());
+            data.put("waterStreak", c.getWaterStreak());
+            data.put("x", c.getX());
+            data.put("y", c.getY());
+            this.className = c.getClass().getName();
+        }
+        else if(cell.getObjectMap() instanceof Rock r){
+            data.put("hitPoints", r.getHitPoints());
+            data.put("rockType", r.getRockType());
+        }
+        else if(cell.getObjectMap() instanceof Grass grass){
+            data.put("isFarmland", grass.isFarmland());
+            data.put("isGround", grass.isGround());
+            data.put("isSand", grass.isSand());
+            data.put("isThundered", grass.isThundered());
+            data.put("isBombed", grass.isBombed());
+        }
+    }
+    public Cell extractData(){
+        TreeType treeType= TreeType.parseTreeType(this.objectName);
+        if(treeType != null){
+            if(ForagingTree.class.getName().equals(className)){
+                ForagingTree ft = new ForagingTree(treeType, (int)data.get("hitPoints"), (int)data.get("typeIndex"), (boolean)data.get("isThundered"));
+                Cell newCell = new Cell(ft, x, y);
+                return newCell;
+            }else if(Tree.class.getName().equals(className)){
+                Tree t = new Tree((int) data.get("currentStage"),
+                    (int) data.get("currentStageLevel"), (int) data.get("hitPoints"),
+                    (boolean) data.get("isAttacked"), (boolean) data.get("isFertilizedToday"),
+                    (boolean) data.get("isProtected"), (boolean) data.get("isThundered"),
+                    (boolean) data.get("isWateredToday"), treeType,
+                    (int) data.get("typeIndex"), (int) data.get("waterStreak"),
+                    (int) data.get("x"), (int) data.get("y"));
+                Cell newCell = new Cell(t, x, y);
+                return newCell;
+            }
+        }
+        ForagingCropType foragingCropType = ForagingCropType.parseForagingCropType(this.objectName);
+        if(foragingCropType != null){
+            ForagingCrop fc = new ForagingCrop(foragingCropType, (int)data.get("typeIndex"));
+            Cell newCell = new Cell(fc, x, y);
+            return newCell;
+        }
+        CropType cropType = CropType.parseCropType(this.objectName);
+        if(cropType != null){
+            ArrayList<Integer> stages = (ArrayList<Integer>) data.get("stages");
+            Crop c = new Crop((boolean) data.get("canRegrow"), cropType, (int) data.get("currentStage"),
+                (int) data.get("currentStageLevel"), (boolean) data.get("isFertilizedToday"),
+                (boolean) data.get("isGiantCrop"), (boolean) data.get("isProtected") ,
+                (boolean) data.get("isWateredToday"), (int) data.get("regrowthTime"),
+                stages, (int) data.get("typeIndex"),
+                (int) data.get("waterStreak"), (int) data.get("x"), (int) data.get("y"));
+            Cell newCell = new Cell(c, x, y);
+            return newCell;
+        }
+        if(this.objectName.equals(new Rock().getName())){
+            Rock r = new Rock((int) data.get("hitPoints"), (RockType) data.get("rockType"));
+            Cell newCell = new Cell(r, x, y);
+            return newCell;
+        }
+        if(this.objectName.equals(new Grass().getName())){
+            Grass g = new Grass((boolean) data.get("isBombed"), (boolean) data.get("isFarmland"),
+                (boolean) data.get("isGround"), (boolean) data.get("isSand"),
+                (boolean) data.get("isThundered"));
+            Cell newCell = new Cell(g, x, y);
+            return newCell;
+        }
+        // TODO
+        Item item = Finder.parseItem(this.objectName);
+        return new Cell(item, x, y);
+    }
+}

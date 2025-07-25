@@ -26,6 +26,12 @@ public class Rock implements Nature, Obstacle {
         rockType = RockType.SmallRock;
     }
 
+
+    public Rock(int hitPoints, RockType rockType) {
+        this.hitPoints = hitPoints;
+        this.rockType = rockType;
+    }
+
     public Rock(int x, int y, Farm farm) {
         Random rand = new Random();
         if(y >= 40){

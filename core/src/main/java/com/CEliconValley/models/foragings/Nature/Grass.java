@@ -48,6 +48,14 @@ public class Grass implements ObjectMap {
         isBombed = false;
     }
 
+    public Grass(boolean isBombed, boolean isFarmland, boolean isGround, boolean isSand, boolean isThundered) {
+        this.isBombed = isBombed;
+        this.isFarmland = isFarmland;
+        this.isGround = isGround;
+        this.isSand = isSand;
+        this.isThundered = isThundered;
+    }
+
     public boolean isFarmland() {
         return isFarmland;
     }
@@ -73,6 +81,16 @@ public class Grass implements ObjectMap {
         this.isThundered = isThundered;
     }
     public void setBombed(boolean bombed) {this.isBombed = bombed;}
+
+
+    public boolean isBombed() {
+        return isBombed;
+    }
+
+    public boolean isThundered() {
+        return isThundered;
+    }
+
     public Grass(int startX, int startY, Farm farm) {
         isGround = true;
         isFarmland = false;

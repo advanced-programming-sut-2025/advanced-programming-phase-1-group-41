@@ -37,6 +37,26 @@ public class Tree implements Nature, Obstacle {
     private final int x;
     private final int y;
 
+
+    public Tree(int currentStage, int currentStageLevel, int hitPoints,
+                boolean isAttacked, boolean isFertilizedToday, boolean isProtected,
+                    boolean isThundered, boolean isWateredToday, TreeType treeType,
+                int typeIndex, int waterStreak, int x, int y) {
+        this.currentStage = currentStage;
+        this.currentStageLevel = currentStageLevel;
+        this.hitPoints = hitPoints;
+        this.isAttacked = isAttacked;
+        this.isFertilizedToday = isFertilizedToday;
+        this.isProtected = isProtected;
+        this.isThundered = isThundered;
+        this.isWateredToday = isWateredToday;
+        this.treeType = treeType;
+        this.typeIndex = typeIndex;
+        this.waterStreak = waterStreak;
+        this.x = x;
+        this.y = y;
+    }
+
     public Tree(int x, int y, Farm farm, TreeType treeType) {
         this.x = x;
         this.y = y;
@@ -156,6 +176,10 @@ public class Tree implements Nature, Obstacle {
         result.append("Quality: ").append(getPrice() / 2 + 10).append("\n");
         result.append("Fertilized Today: ").append(isFertilizedToday).append("\n");
         return result.toString();
+    }
+
+    public int getWaterStreak() {
+        return waterStreak;
     }
 
     @Override

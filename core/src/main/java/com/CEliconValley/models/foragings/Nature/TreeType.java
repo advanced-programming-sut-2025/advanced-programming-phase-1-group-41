@@ -85,4 +85,13 @@ public enum TreeType {
         result.append("Season: ").append(getSource().getSeason()).append("\n");
         return result.toString();
     }
+
+    public static TreeType parseTreeType(String name) {
+        for(TreeType t : TreeType.values()){
+            if(t.getName().equals(name)){
+                return t;
+            }
+        }
+        return null;
+    }
 }

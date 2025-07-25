@@ -18,6 +18,8 @@ public class Plant implements Nature {
         return "Plant";
     }
     private final PlantType plantType;
+
+
     public Plant(int x, int y, Farm farm) {
         Random rand = new Random();
         int type = rand.nextInt(PlantType.values().length);

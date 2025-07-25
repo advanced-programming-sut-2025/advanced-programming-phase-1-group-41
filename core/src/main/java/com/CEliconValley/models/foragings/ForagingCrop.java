@@ -33,6 +33,11 @@ public class ForagingCrop implements Foraging, Item {
         this.foragingCropType = foragingCropType;
     }
 
+    public ForagingCrop(ForagingCropType foragingCropType, int typeIndex) {
+        this.foragingCropType = foragingCropType;
+        this.typeIndex = typeIndex;
+    }
+
     public ForagingCrop(int x, int y, Farm farm) {
         Random rand = new Random();
         while (true){
@@ -52,4 +57,11 @@ public class ForagingCrop implements Foraging, Item {
     }
 
 
+    public ForagingCropType getForagingCropType() {
+        return foragingCropType;
+    }
+
+    public int getTypeIndex() {
+        return typeIndex;
+    }
 }

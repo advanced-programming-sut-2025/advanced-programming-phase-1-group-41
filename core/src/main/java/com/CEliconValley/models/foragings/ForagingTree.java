@@ -40,6 +40,14 @@ public class ForagingTree implements Foraging, Obstacle {
         cell.setObjectMap(this);
     }
 
+    public ForagingTree(TreeType foragingTreeType,
+                        int hitPoints, int typeIndex, boolean isThundered) {
+        this.foragingTreeType = foragingTreeType;
+        this.hitPoints = hitPoints;
+        this.typeIndex = typeIndex;
+        this.isThundered = isThundered;
+    }
+
     public void thunder(){
         isThundered = true;
     }
@@ -57,5 +65,13 @@ public class ForagingTree implements Foraging, Obstacle {
 
     public TreeType getTreeType() {
         return foragingTreeType;
+    }
+
+    public TreeType getForagingTreeType() {
+        return foragingTreeType;
+    }
+
+    public int getTypeIndex() {
+        return typeIndex;
     }
 }

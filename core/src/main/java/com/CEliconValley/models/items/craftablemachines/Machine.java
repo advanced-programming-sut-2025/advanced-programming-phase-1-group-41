@@ -19,6 +19,16 @@ public abstract class Machine {
         this.receivedItems = new ArrayList<>();
     }
 
+
+    public Machine(CraftableMachine craftableMachine, int processTime,
+                   Slot produce, ArrayList<Slot> receivedItems, ArrayList<Slot> slots) {
+        this.craftableMachine = craftableMachine;
+        this.processTime = processTime;
+        this.produce = produce;
+        this.receivedItems = receivedItems;
+        this.slots = slots;
+    }
+
     public int getProcessTime() {
         return processTime;
     }
