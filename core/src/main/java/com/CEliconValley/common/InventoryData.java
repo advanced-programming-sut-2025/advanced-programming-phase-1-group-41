@@ -8,6 +8,7 @@ import com.CEliconValley.models.items.Slot;
 import java.util.ArrayList;
 
 public class InventoryData {
+    // testing..
     ArrayList<SlotData> slots;
     int whichBackpack;
     public InventoryData(Inventory inventory) {
