@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MachineData {
-
+    // testing..
     String craftableMachineName;
     int processTime;
     SlotData produceData;
