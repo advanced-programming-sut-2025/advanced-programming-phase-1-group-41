@@ -55,7 +55,7 @@ public class TreeSpawner {
             if (cell.getObjectMap() instanceof ForagingTree) {
                 ForagingTree tree = (ForagingTree) cell.getObjectMap();
                 TreeType type = tree.getTreeType();
-                int stage = 7;
+                int stage = 5;
 
                 TextureRegion[] frames = treeFramesMap.get(type.name());
                 if (frames != null && stage >= 0 && stage < frames.length) {
@@ -75,7 +75,7 @@ public class TreeSpawner {
             if (cell.getObjectMap() instanceof Tree) {
                 Tree tree = (Tree) cell.getObjectMap();
                 TreeType type = tree.getTreeType();
-                int stage = 7;
+                int stage = 5;
 
                 TextureRegion[] frames = treeFramesMap.get(type.name());
                 if (frames != null && stage >= 0 && stage < frames.length) {

@@ -57,7 +57,7 @@ public class WaterSpawner {
         for (int i = 0; i < 4; i++) {
             seFrames[i] = tmp[0][i];
         }
-        animCornerSE = new Animation<>(0.15f, seFrames);
+        animCornerSE = new Animation<>(0.15f,seFrames);
         animCornerNE = new Animation<>(0.15f, flipY(seFrames));
         animCornerNW = new Animation<>(0.15f, flipXY(seFrames));
         animCornerSW = new Animation<>(0.15f, flipX(seFrames));

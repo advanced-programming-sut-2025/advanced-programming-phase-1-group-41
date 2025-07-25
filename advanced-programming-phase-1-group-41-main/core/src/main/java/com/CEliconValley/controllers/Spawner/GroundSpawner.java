@@ -18,7 +18,7 @@ public class GroundSpawner {
 
     public GroundSpawner(Farm farm) {
         this.farm = farm;
-        groundTexture = new Texture("game/general/tiles/ground.png");
+        groundTexture = new Texture("game/general/tiles/ground.png");;
         grassBorderTexture = new Texture("game/general/tiles/grassBorder.png");
 
         grassBorders = new TextureRegion[9];

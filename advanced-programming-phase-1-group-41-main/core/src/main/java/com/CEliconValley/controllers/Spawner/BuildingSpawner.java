@@ -18,8 +18,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.HashMap;
-import java.util.Map;
-import java.util.function.DoubleToIntFunction;
 
 import static com.CEliconValley.models.locations.FarmScreen.CELL_SIZE;
 import static com.CEliconValley.models.locations.FarmScreen.grassTexture;
