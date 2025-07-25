@@ -27,10 +27,11 @@ public class AuthenticationMenuView implements Screen, AppMenu {
     private final Image background = new Image(new Texture(GameAssetManager.getGameAssetManager().CEliconValleyBackground));
 
     // Navigation buttons
-    private final TextButton registerTab, loginTab, forgotTab;
+    private final TextButton registerTab, loginTab, forgotTab, exitTab;
 
     // Shared
     private final Label messageLabel;
+
 
     // Register form
     public final TextField regUsername, regPassword, regConfirmPassword, regNickname, regEmail;
@@ -64,6 +65,7 @@ public class AuthenticationMenuView implements Screen, AppMenu {
         registerTab = new TextButton("Register", skin);
         loginTab = new TextButton("Login", skin);
         forgotTab = new TextButton("Forgot Password", skin);
+        exitTab = new TextButton("Exit", skin);
 
         // --- Message
         messageLabel = new Label("", skin);
@@ -148,6 +150,7 @@ public class AuthenticationMenuView implements Screen, AppMenu {
         tabRow.add(registerTab).pad(10);
         tabRow.add(loginTab).pad(10);
         tabRow.add(forgotTab).pad(10);
+        tabRow.add(exitTab).pad(10);
 
         // Register Form Layout
         Table genderRow = new Table();
@@ -287,4 +290,6 @@ public class AuthenticationMenuView implements Screen, AppMenu {
     public TextButton getForgotTab() {
         return forgotTab;
     }
+
+    public TextButton getExitTab() {return exitTab;}
 }

@@ -5,8 +5,6 @@ import com.CEliconValley.models.items.CraftableItem;
 import com.CEliconValley.models.items.CraftableMachine;
 import com.CEliconValley.models.items.Slot;
 
-import java.util.ArrayList;
-
 public class Kiln extends Machine{
     public Kiln() {
         super(1, CraftableMachine.CharcoalKiln);
@@ -14,10 +12,6 @@ public class Kiln extends Machine{
         receivedItems.add(new Slot(new Wood(),0));
     }
 
-    public Kiln(int processTime, Slot produce,
-                ArrayList<Slot> receivedItems, ArrayList<Slot> slots){
-        super(CraftableMachine.CharcoalKiln, processTime, produce, receivedItems, slots);
-    }
 
     @Override
     public void setProduce() {

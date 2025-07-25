@@ -6,8 +6,6 @@ import com.CEliconValley.models.items.Products.Product;
 import com.CEliconValley.models.items.Products.ProductType;
 import com.CEliconValley.models.items.Slot;
 
-import java.util.ArrayList;
-
 public class CheesePress extends Machine{
     Product item = null;
     int which = 0;
@@ -30,12 +28,6 @@ public class CheesePress extends Machine{
         receivedItems.add(new Slot(item, 0));
     }
 
-    public CheesePress(int processTime, Slot produce,
-                       ArrayList<Slot> receivedItems, ArrayList<Slot> slots, int which){
-        super(CraftableMachine.CheesePress, processTime, produce, receivedItems, slots);
-        this.which = which;
-    }
-
     @Override
     public void setProduce() {
         switch (which){
@@ -52,9 +44,5 @@ public class CheesePress extends Machine{
                 produce = new Slot(CraftableItem.LargeGoatCheese, 1);
             }
         }
-    }
-
-    public int getWhich() {
-        return which;
     }
 }

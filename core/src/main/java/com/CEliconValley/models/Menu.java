@@ -1,5 +1,6 @@
 package com.CEliconValley.models;
 
+import com.CEliconValley.controllers.LobbyController;
 import com.CEliconValley.controllers.MainMenuController;
 import com.CEliconValley.controllers.ProfileMenuController;
 import com.CEliconValley.controllers.authentication.AuthenticationMenuController;
@@ -13,6 +14,8 @@ public enum Menu {
     Exit(new ExitMenu(),"ExitMenu"),
     Game(new GameMenu(),"GameMenu"),
     Trade(new TradeMenu(),"TradeMenu"),
+//    Lobby(new Lobby(new LobbyController()),"Lobby")
+    Lobby(new Lobby(new LobbyController(),"Test",false,true,"TestPass"),"Lobby"),
     ;
 
 

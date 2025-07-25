@@ -445,21 +445,4 @@ public class Player {
     public void resetInFarmId() {
         this.inFarmId = this.farmId;
     }
-
-
-    public Buff getCurrentBuff() {
-        return currentBuff;
-    }
-
-    public int getDepressionDaysLeft() {
-        return depressionDaysLeft;
-    }
-
-    public ArrayList<HashMap<Player, FriendshipLevel>> getFriends() {
-        return friends;
-    }
-
-    public int getMaxEnergy() {
-        return maxEnergy;
-    }
 }

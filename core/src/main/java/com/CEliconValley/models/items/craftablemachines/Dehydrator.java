@@ -10,8 +10,6 @@ import com.CEliconValley.models.items.Slot;
 import com.CEliconValley.models.items.craftableitems.DriedFruit;
 import com.CEliconValley.models.items.craftableitems.DriedMushroom;
 
-import java.util.ArrayList;
-
 public class Dehydrator extends Machine {
     Fruit fruit;
     Mushroom mushroom;
@@ -45,32 +43,6 @@ public class Dehydrator extends Machine {
         isGrape = false;
         slots.add(new Slot(mushroom, 5));
         receivedItems.add(new Slot(mushroom, 0));
-    }
-    public Dehydrator(int processTime, Slot produce,
-                       ArrayList<Slot> receivedItems, ArrayList<Slot> slots, Fruit fruit,
-                      Mushroom mushroom, Crop grape , boolean isGrape) {
-        super(CraftableMachine.Dehydrator, processTime, produce, receivedItems, slots);
-        this.fruit = fruit;
-        this.mushroom = mushroom;
-        this.grape = grape;
-        this.isGrape = isGrape;
-    }
-
-
-    public Fruit getFruit() {
-        return fruit;
-    }
-
-    public Crop getGrape() {
-        return grape;
-    }
-
-    public boolean isGrape() {
-        return isGrape;
-    }
-
-    public Mushroom getMushroom() {
-        return mushroom;
     }
 
     @Override

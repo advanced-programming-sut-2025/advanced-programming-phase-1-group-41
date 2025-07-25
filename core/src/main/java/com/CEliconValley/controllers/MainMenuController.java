@@ -22,8 +22,8 @@ public class MainMenuController {
         view.getStartGameButton().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                App.setMenu(Menu.Game);
-                Menu.Game.resetMenu();
+                App.setMenu(Menu.Lobby);
+                Menu.Lobby.resetMenu();
                 Main.getMain().setScreen(App.getMenu().getScreen());
             }
         });
