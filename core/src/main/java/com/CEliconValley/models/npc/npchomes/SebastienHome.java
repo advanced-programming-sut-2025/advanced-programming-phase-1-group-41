@@ -75,4 +75,13 @@ public class SebastienHome extends NPCHome implements Building {
         this.y = y;
     }
 
+    @Override
+    public int getAnchorX() {
+        return 0;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return 0;
+    }
 }

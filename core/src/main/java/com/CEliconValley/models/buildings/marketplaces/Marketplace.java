@@ -1,12 +1,13 @@
 package com.CEliconValley.models.buildings.marketplaces;
 
+import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
 import com.CEliconValley.models.npc.npcCharacters.NPC;
 
 import java.util.ArrayList;
 
-public abstract class Marketplace {
+public abstract class Marketplace implements Building {
     protected NPC owner;
     protected final ArrayList<Slot> itemsForSale;
 

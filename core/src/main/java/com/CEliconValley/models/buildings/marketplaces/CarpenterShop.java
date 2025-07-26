@@ -148,4 +148,14 @@ public class CarpenterShop extends Marketplace implements Building {
     public HashMap<CoopType, Integer> getCoopLimits() {
         return coopLimits;
     }
+
+    @Override
+    public int getAnchorX() {
+        return 0;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return 0;
+    }
 }

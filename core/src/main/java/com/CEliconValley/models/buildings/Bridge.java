@@ -1,5 +1,8 @@
 package com.CEliconValley.models.buildings;
 
+import com.CEliconValley.models.foragings.Nature.Obstacle;
+import com.CEliconValley.models.items.Item;
+
 public class Bridge implements Building {
     @Override
     public String getChar() {
@@ -9,6 +12,26 @@ public class Bridge implements Building {
     @Override
     public String getName() {
         return "Bridge";
+    }
+
+    @Override
+    public int getAnchorX() {
+        return 0;
+    }
+
+    @Override
+    public int getX() {
+        return 0;
+    }
+
+    @Override
+    public int getY() {
+        return 0;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return 0;
     }
 }
 

@@ -142,6 +142,15 @@ public abstract class NPC {
         return dialogues.get(i);
     }
 
+    public HashMap<Player, Integer> getFriendShip() {
+        return friendShip;
+    }
 
+    public HashMap<Player, Boolean> getIsGiftedToday() {
+        return isGiftedToday;
+    }
 
+    public HashMap<Player, Boolean> getIsTalkedToday() {
+        return isTalkedToday;
+    }
 }

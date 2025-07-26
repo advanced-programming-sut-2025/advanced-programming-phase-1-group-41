@@ -257,4 +257,14 @@ public class GeneralStore extends Marketplace implements Building {
             door.setClosesSoon(false);
         }
     }
+
+    @Override
+    public int getAnchorX() {
+        return 0;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return 0;
+    }
 }

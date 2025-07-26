@@ -129,4 +129,14 @@ public class Barn implements Building {
     public void setY(int y){
         this.y=y;
     }
+
+    @Override
+    public int getAnchorX() {
+        return 0;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return 0;
+    }
 }

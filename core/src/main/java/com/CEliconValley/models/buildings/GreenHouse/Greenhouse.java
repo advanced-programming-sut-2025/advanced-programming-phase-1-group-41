@@ -113,4 +113,14 @@ public class Greenhouse implements Building {
         }
         return false;
     }
+
+    @Override
+    public int getAnchorX() {
+        return 0;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return 0;
+    }
 }

@@ -122,4 +122,19 @@ public class Coop implements Building {
     public void addAnimal(Animal animal) {
         animals.add(animal);
     }
+
+    @Override
+    public int getAnchorX() {
+        return 0;
+    }
+
+    @Override
+    public int getY() {
+        return this.y;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return 0;
+    }
 }
