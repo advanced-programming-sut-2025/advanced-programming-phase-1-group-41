@@ -48,14 +48,6 @@ public class Grass implements ObjectMap {
         isBombed = false;
     }
 
-    public Grass(boolean isBombed, boolean isFarmland, boolean isGround, boolean isSand, boolean isThundered) {
-        this.isBombed = isBombed;
-        this.isFarmland = isFarmland;
-        this.isGround = isGround;
-        this.isSand = isSand;
-        this.isThundered = isThundered;
-    }
-
     public boolean isFarmland() {
         return isFarmland;
     }
@@ -83,12 +75,12 @@ public class Grass implements ObjectMap {
     public void setBombed(boolean bombed) {this.isBombed = bombed;}
 
 
-    public boolean isBombed() {
-        return isBombed;
-    }
-
-    public boolean isThundered() {
-        return isThundered;
+    public Grass(boolean isBombed, boolean isFarmland, boolean isGround, boolean isSand, boolean isThundered) {
+        this.isBombed = isBombed;
+        this.isFarmland = isFarmland;
+        this.isGround = isGround;
+        this.isSand = isSand;
+        this.isThundered = isThundered;
     }
 
     public Grass(int startX, int startY, Farm farm) {
@@ -128,4 +120,14 @@ public class Grass implements ObjectMap {
 //            Objects.requireNonNull(Finder.findCellByCoordinates(startX, i, farm)).setObjectMap(this);
 //        }
     }
+
+
+    public boolean isBombed() {
+        return isBombed;
+    }
+
+    public boolean isThundered() {
+        return isThundered;
+    }
+
 }

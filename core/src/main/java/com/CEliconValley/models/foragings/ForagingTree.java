@@ -29,6 +29,15 @@ public class ForagingTree implements Foraging, Obstacle {
     private final int typeIndex;
     private boolean isThundered = false;
 
+
+    public ForagingTree(TreeType foragingTreeType,
+                        int hitPoints, int typeIndex, boolean isThundered) {
+        this.foragingTreeType = foragingTreeType;
+        this.hitPoints = hitPoints;
+        this.typeIndex = typeIndex;
+        this.isThundered = isThundered;
+    }
+
     public ForagingTree(int x, int y, Farm farm) {
         Random rand = new Random();
         int type = rand.nextInt(ForagingTreeType.values().length);
@@ -38,14 +47,6 @@ public class ForagingTree implements Foraging, Obstacle {
         Cell cell= Finder.findCellByCoordinates(x, y, farm);
         assert cell != null;
         cell.setObjectMap(this);
-    }
-
-    public ForagingTree(TreeType foragingTreeType,
-                        int hitPoints, int typeIndex, boolean isThundered) {
-        this.foragingTreeType = foragingTreeType;
-        this.hitPoints = hitPoints;
-        this.typeIndex = typeIndex;
-        this.isThundered = isThundered;
     }
 
     public void thunder(){
@@ -67,6 +68,8 @@ public class ForagingTree implements Foraging, Obstacle {
         return foragingTreeType;
     }
 
+
+
     public TreeType getForagingTreeType() {
         return foragingTreeType;
     }
@@ -74,4 +77,6 @@ public class ForagingTree implements Foraging, Obstacle {
     public int getTypeIndex() {
         return typeIndex;
     }
+
+
 }

@@ -33,6 +33,7 @@ public class ForagingCrop implements Foraging, Item {
         this.foragingCropType = foragingCropType;
     }
 
+
     public ForagingCrop(ForagingCropType foragingCropType, int typeIndex) {
         this.foragingCropType = foragingCropType;
         this.typeIndex = typeIndex;
@@ -55,8 +56,6 @@ public class ForagingCrop implements Foraging, Item {
         assert cell != null;
         cell.setObjectMap(this);
     }
-
-
     public ForagingCropType getForagingCropType() {
         return foragingCropType;
     }

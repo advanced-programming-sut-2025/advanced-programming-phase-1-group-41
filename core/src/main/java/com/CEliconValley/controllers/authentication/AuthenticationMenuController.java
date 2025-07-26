@@ -2,6 +2,7 @@ package com.CEliconValley.controllers.authentication;
 
 import com.CEliconValley.Main;
 import com.CEliconValley.models.*;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -59,6 +60,13 @@ public class AuthenticationMenuController {
                 view.setMessage("", Color.CLEAR);
             }
         });
+        view.getExitTab().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+            }
+        });
+
 
         // --- Gender Selection ---
         view.genderMaleButton.addListener(new ClickListener() {

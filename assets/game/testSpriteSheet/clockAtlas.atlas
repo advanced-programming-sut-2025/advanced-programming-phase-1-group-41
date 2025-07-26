@@ -1,0 +1,41 @@
+clockAtlas.png
+size: 61, 108
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Raw-Clock
+  bounds: 1, 1, 72, 59
+  rotate: 90
+Arrow
+  bounds: 1, 75, 7, 19
+Spring
+  bounds: 10, 75, 12, 8
+Summer
+  bounds: 10, 85, 12, 8
+Fall
+  bounds: 24, 75, 12, 8
+Winter
+  bounds: 24, 85, 12, 8
+Clock-6
+  bounds: 38, 75, 12, 8
+Clock-7
+  bounds: 52, 75, 12, 8
+  rotate: 90
+Rain
+  bounds: 38, 85, 12, 8
+Sunny
+  bounds: 52, 89, 12, 8
+  rotate: 90
+Clock-10
+  bounds: 10, 95, 12, 8
+  rotate: 90
+Snow
+  bounds: 20, 95, 12, 8
+  rotate: 90
+Clock-12
+  bounds: 30, 95, 12, 8
+  rotate: 90
+Storm
+  bounds: 40, 95, 12, 8
+  rotate: 90

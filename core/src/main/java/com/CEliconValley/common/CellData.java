@@ -75,6 +75,7 @@ public class CellData {
         else if(cell.getObjectMap() instanceof Rock r){
             data.put("hitPoints", r.getHitPoints());
             data.put("rockType", r.getRockType());
+            data.put("variant", r.getVariant());
         }
         else if(cell.getObjectMap() instanceof Grass grass){
             data.put("isFarmland", grass.isFarmland());
@@ -122,7 +123,7 @@ public class CellData {
             return newCell;
         }
         if(this.objectName.equals(new Rock().getName())){
-            Rock r = new Rock((int) data.get("hitPoints"), (RockType) data.get("rockType"));
+            Rock r = new Rock((int) data.get("hitPoints"), (RockType) data.get("rockType"), (int)data.get("variant"));
             Cell newCell = new Cell(r, x, y);
             return newCell;
         }

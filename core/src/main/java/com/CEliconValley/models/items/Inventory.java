@@ -8,6 +8,16 @@ public class Inventory {
     private ArrayList<Slot> slots=new ArrayList<>();
     private Backpack backpack=Backpack.Default;
     private int lastGottenSumOfItemsPrice;
+
+    public Inventory(Backpack backpack){
+        this.backpack=backpack;
+        lastGottenSumOfItemsPrice=0;
+        slots=new ArrayList<>();
+        for (int i = 0; i < backpack.getSize(); i++) {
+            slots.add(new Slot(null, 0));
+        }
+    }
+
     public Inventory()
     {
         lastGottenSumOfItemsPrice=0;
@@ -21,15 +31,6 @@ public class Inventory {
         addToInventory(new Axe(), 1);
         addToInventory(new Scythe(), 1);
 //        addToInventory(new Shear(), 1);
-    }
-
-    public Inventory(Backpack backpack){
-        this.backpack=backpack;
-        lastGottenSumOfItemsPrice=0;
-        slots=new ArrayList<>();
-        for (int i = 0; i < backpack.getSize(); i++) {
-            slots.add(new Slot(null, 0));
-        }
     }
 
     public void setDefaultBag() {

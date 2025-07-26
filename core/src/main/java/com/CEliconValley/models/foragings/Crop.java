@@ -38,6 +38,7 @@ public class Crop implements Item {
     private int y;
 
 
+
     public Crop(boolean canRegrow, CropType cropType, int currentStage,
                 int currentStageLevel, boolean isFertilizedToday,
                 boolean isGiantCrop, boolean isProtected, boolean isWateredToday,
@@ -70,7 +71,7 @@ public class Crop implements Item {
             typeIndex++;
         }
         stages = cropType.getStages();
-        currentStage = 0;
+        currentStage = 3;
         if(!cropType.isOneTimeHarvest()){
             regrowthTime = cropType.getRegrowthTime();
             canRegrow = true;
@@ -224,7 +225,6 @@ public class Crop implements Item {
         return this.cropType.getBaseSellPrice();
     }
 
-
     public boolean isCanRegrow() {
         return canRegrow;
     }
@@ -240,4 +240,6 @@ public class Crop implements Item {
     public int getWaterStreak() {
         return waterStreak;
     }
+
+
 }

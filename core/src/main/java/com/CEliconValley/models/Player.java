@@ -447,6 +447,7 @@ public class Player {
     }
 
 
+
     public Buff getCurrentBuff() {
         return currentBuff;
     }
@@ -462,4 +463,5 @@ public class Player {
     public int getMaxEnergy() {
         return maxEnergy;
     }
+
 }
