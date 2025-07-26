@@ -10,6 +10,8 @@ import com.CEliconValley.models.items.Slot;
 import com.CEliconValley.models.items.craftableitems.Juice;
 import com.CEliconValley.models.items.craftableitems.Wine;
 
+import java.util.ArrayList;
+
 public class Keg extends Machine{
     Crop crop = null;
     boolean isWheat = false;
@@ -19,6 +21,22 @@ public class Keg extends Machine{
     Fruit fruit = null;
     CraftableItem honey;
     Vegetable vegetable = null;
+
+
+    public Keg(int processTime, Slot produce,
+               ArrayList<Slot> receivedItems, ArrayList<Slot> slots, Crop crop,
+               boolean isWheat, boolean isRice, boolean isCoffee, boolean isHops, Fruit fruit, CraftableItem honey, Vegetable vegetable){
+        super(CraftableMachine.Keg, processTime, produce, receivedItems, slots);
+        this.crop = crop;
+        this.isWheat = isWheat;
+        this.isRice = isRice;
+        this.isCoffee = isCoffee;
+        this.isHops = isHops;
+        this.fruit = fruit;
+        this.honey = honey;
+        this.vegetable = vegetable;
+    }
+
     public Keg(Crop crop) {
         super(1, CraftableMachine.Keg);
         if(crop.getCropType()==CropType.Wheat){
@@ -99,5 +117,38 @@ public class Keg extends Machine{
             this.produce = new Slot(new Juice(vegetable), 1);
             return;
         }
+    }
+
+
+    public Crop getCrop() {
+        return crop;
+    }
+
+    public Fruit getFruit() {
+        return fruit;
+    }
+
+    public CraftableItem getHoney() {
+        return honey;
+    }
+
+    public boolean isCoffee() {
+        return isCoffee;
+    }
+
+    public boolean isHops() {
+        return isHops;
+    }
+
+    public boolean isRice() {
+        return isRice;
+    }
+
+    public boolean isWheat() {
+        return isWheat;
+    }
+
+    public Vegetable getVegetable() {
+        return vegetable;
     }
 }

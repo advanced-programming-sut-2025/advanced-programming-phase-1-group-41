@@ -16,6 +16,7 @@ import com.CEliconValley.models.buildings.animalContainer.Barn;
 import com.CEliconValley.models.buildings.animalContainer.BarnType;
 import com.CEliconValley.models.buildings.animalContainer.Coop;
 import com.CEliconValley.models.buildings.animalContainer.CoopType;
+import dev.morphia.annotations.Transient;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -26,25 +27,40 @@ import static com.CEliconValley.models.App.MaxLength;
 
 
 public class Farm {
+
     private FarmType farmType;
+    @Transient
     private final FarmBuilder farmBuilder;
+    @Transient
     private ArrayList<Cell> cells = new ArrayList<>();
     private int id;
+    @Transient
     private final ArrayList<Building> buildings = new ArrayList<>();
+    @Transient
     private final ArrayList<Foraging> foragings = new ArrayList<>();
+    @Transient
     private final ArrayList<Lake> lakes = new ArrayList<>();
+    @Transient
     private final ArrayList<Bush> bushes = new ArrayList<>();
+    @Transient
     private final ArrayList<Barn> barns = new ArrayList<>();
+    @Transient
     private final ArrayList<Coop> coops = new ArrayList<>();
+    @Transient
     private final ArrayList<Crop> crops = new ArrayList<>();
+    @Transient
     private final ArrayList<Tree> trees = new ArrayList<>();
     private final int rockCount;
     private final int foragingTreeCount;
     private final int plantCount;
     private final int foragingCropCount;
+    @Transient
     private final ArrayList<Cell> transferCells = new ArrayList<>();
+    @Transient
     private final ArrayList<Cell> startPoints = new ArrayList<>();
+    @Transient
     private Mine mine;
+    @Transient
     private final Greenhouse greenhouse;
 
     public Farm(int id) {

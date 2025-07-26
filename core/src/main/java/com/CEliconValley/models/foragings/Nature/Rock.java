@@ -34,6 +34,14 @@ public class Rock implements Nature, Obstacle {
         this.variant = (int)(Math.random() * 15);
     }
 
+
+    public Rock(int hitPoints, RockType rockType, int variant) {
+        this.hitPoints = hitPoints;
+        this.rockType = rockType;
+        this.variant = variant;
+    }
+
+
     public Rock(int x, int y, Farm farm) {
         anchorX = x;
         anchorY = y;

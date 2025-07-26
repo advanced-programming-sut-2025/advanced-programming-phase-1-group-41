@@ -7,9 +7,20 @@ import com.CEliconValley.models.items.Slot;
 import com.CEliconValley.models.items.craftableitems.Jelly;
 import com.CEliconValley.models.items.craftableitems.Pickles;
 
+import java.util.ArrayList;
+
 public class PreserveJar extends Machine{
     Fruit fruit;
     Crop crop;
+
+
+    public PreserveJar(int processTime, Slot produce,
+                       ArrayList<Slot> receivedItems, ArrayList<Slot> slots,
+                       Fruit fruit, Crop crop) {
+        super(CraftableMachine.PreservesJar, processTime, produce, receivedItems, slots);
+        this.fruit = fruit;
+        this.crop = crop;
+    }
 
     public PreserveJar(Crop crop) {
         super(6, CraftableMachine.PreservesJar);
@@ -36,5 +47,13 @@ public class PreserveJar extends Machine{
         if(fruit != null){
             this.produce = new Slot(new Jelly(fruit), 1);
         }
+    }
+
+    public Crop getCrop() {
+        return crop;
+    }
+
+    public Fruit getFruit() {
+        return fruit;
     }
 }
