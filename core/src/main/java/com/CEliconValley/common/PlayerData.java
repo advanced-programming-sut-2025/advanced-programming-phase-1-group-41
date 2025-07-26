@@ -1,6 +1,9 @@
 package com.CEliconValley.common;
 
+import com.CEliconValley.models.Friendship;
+import com.CEliconValley.models.Gift;
 import com.CEliconValley.models.Player;
+import com.CEliconValley.models.Trade;
 import com.CEliconValley.models.items.CookingRecipe;
 import com.CEliconValley.models.items.CraftingRecipe;
 import com.CEliconValley.models.items.craftablemachines.Machine;
@@ -31,10 +34,14 @@ public class PlayerData {
     ArrayList<ArrayList<Integer>> skillLevels;
     ArrayList<MachineData> onGoingMachines;
     boolean isPlayerInVillage;
-    // friendship
-    // gifts
-    // trades
-    // buff
+    ArrayList<FriendshipData> friendshipsData;
+    ArrayList<GiftData> newGiftsData;
+    ArrayList<GiftData> receivedGiftsData;
+    ArrayList<GiftData> sendGiftsData;
+    ArrayList<TradeData> tradesListData;
+    ArrayList<TradeData> newTradesListData;
+    ArrayList<TradeData> totalTradesListData;
+    BuffData buffData;
 
     public PlayerData(Player player) {
         this.player = player;
@@ -59,6 +66,35 @@ public class PlayerData {
         this.onGoingMachines = new ArrayList<>();
         fillOngoingMachinesNames();
         this.inventoryData = new InventoryData(player.getInventory());
+        this.friendshipsData = new ArrayList<>();
+        for (Friendship friendship : player.getFriendships()) {
+            this.friendshipsData.add(new FriendshipData(friendship));
+        }
+        this.newGiftsData = new ArrayList<>();
+        this.receivedGiftsData = new ArrayList<>();
+        this.sendGiftsData = new ArrayList<>();
+        for (Gift newGift : player.getNewGifts()) {
+            this.newGiftsData.add(new GiftData(newGift));
+        }
+        for (Gift receivedGift : player.getReceivedGifts()) {
+            this.receivedGiftsData.add(new GiftData(receivedGift));
+        }
+        for (Gift sendGift : player.getSendGifts()) {
+            this.sendGiftsData.add(new GiftData(sendGift));
+        }
+        this.tradesListData = new ArrayList<>();
+        this.newTradesListData = new ArrayList<>();
+        this.totalTradesListData = new ArrayList<>();
+        for (Trade trade : player.getTradesList()) {
+            tradesListData.add(new TradeData(trade));
+        }
+        for (Trade trade : player.getNewTradesList()) {
+            this.newTradesListData.add(new TradeData(trade));
+        }
+        for (Trade trade : player.getTotalTradesList()) {
+            this.totalTradesListData.add(new TradeData(trade));
+        }
+        this.buffData = player.getBuff() == null ? null : new BuffData(player.getBuff());
     }
 
 
