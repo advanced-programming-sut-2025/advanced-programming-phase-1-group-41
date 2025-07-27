@@ -15,6 +15,9 @@ public class Barn implements Building {
     private final ArrayList<Animal> animals = new ArrayList<>();
     private int x;
     private int y;
+    // TODO these anchor things need to be handled, rn there is no logic behind them
+    private int anchorX;
+    private int anchorY;
     private BarnType barnType;
     private int capacity;
 
@@ -28,6 +31,15 @@ public class Barn implements Building {
 
     public BarnType getBarnType() {
         return barnType;
+    }
+
+    public Barn(int anchorX, int anchorY, BarnType barnType, int capacity, int x, int y) {
+        this.anchorX = anchorX;
+        this.anchorY = anchorY;
+        this.barnType = barnType;
+        this.capacity = capacity;
+        this.x = x;
+        this.y = y;
     }
 
     public Barn(int x, int y, Farm farm, BarnType barnType) {
@@ -129,4 +141,17 @@ public class Barn implements Building {
     public void setY(int y){
         this.y=y;
     }
+
+    @Override
+    public int getAnchorX() {
+        return 0;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return 0;
+    }
+
+
+
 }

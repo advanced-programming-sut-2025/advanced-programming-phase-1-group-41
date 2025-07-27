@@ -146,5 +146,16 @@ public class MarnieRanch extends Marketplace implements Building {
             door.setClosed(true);
             door.setClosesSoon(false);
         }
+
+    }
+
+    @Override
+    public int getAnchorX() {
+        return 0;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return 0;
     }
 }

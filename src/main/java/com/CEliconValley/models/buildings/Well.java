@@ -62,4 +62,14 @@ public class Well implements Building, Item{
     public double getPrice() {
         return 1000;
     }
+
+    @Override
+    public int getAnchorX() {
+        return 0;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return 0;
+    }
 }

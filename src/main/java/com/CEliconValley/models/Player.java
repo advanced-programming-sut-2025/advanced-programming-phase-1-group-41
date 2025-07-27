@@ -1,13 +1,13 @@
 package com.CEliconValley.models;
 
 import com.CEliconValley.models.items.*;
+import com.CEliconValley.models.items.craftablemachines.Machine;
+import com.CEliconValley.models.skills.Skill;
+import com.CEliconValley.models.tools.Tool;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
-import com.CEliconValley.models.items.craftablemachines.Machine;
-import com.CEliconValley.models.skills.Skill;
-import com.CEliconValley.models.tools.Tool;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -404,7 +404,7 @@ public class Player {
 
     public void resetEnergy(){
         if(this.energy <= 0){
-            System.out.println("since you passed out, you're starting with 175");
+            System.out.println("since you passed out, you're starting with 150");
             this.energy = (double) (3 * maxEnergy) / 4;
             return;
         }
@@ -445,4 +445,23 @@ public class Player {
     public void resetInFarmId() {
         this.inFarmId = this.farmId;
     }
+
+
+
+    public Buff getCurrentBuff() {
+        return currentBuff;
+    }
+
+    public int getDepressionDaysLeft() {
+        return depressionDaysLeft;
+    }
+
+    public ArrayList<HashMap<Player, FriendshipLevel>> getFriends() {
+        return friends;
+    }
+
+    public int getMaxEnergy() {
+        return maxEnergy;
+    }
+
 }

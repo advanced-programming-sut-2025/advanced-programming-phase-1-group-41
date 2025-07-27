@@ -3,7 +3,6 @@ package com.CEliconValley.models.foragings;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Colors;
 import com.CEliconValley.models.Finder;
-
 import com.CEliconValley.models.foragings.Nature.Obstacle;
 import com.CEliconValley.models.foragings.Nature.TreeType;
 import com.CEliconValley.models.locations.Farm;
@@ -28,6 +27,15 @@ public class ForagingTree implements Foraging, Obstacle {
     private final TreeType foragingTreeType;
     private final int typeIndex;
     private boolean isThundered = false;
+
+
+    public ForagingTree(TreeType foragingTreeType,
+                        int hitPoints, int typeIndex, boolean isThundered) {
+        this.foragingTreeType = foragingTreeType;
+        this.hitPoints = hitPoints;
+        this.typeIndex = typeIndex;
+        this.isThundered = isThundered;
+    }
 
     public ForagingTree(int x, int y, Farm farm) {
         Random rand = new Random();
@@ -58,4 +66,16 @@ public class ForagingTree implements Foraging, Obstacle {
     public TreeType getTreeType() {
         return foragingTreeType;
     }
+
+
+
+    public TreeType getForagingTreeType() {
+        return foragingTreeType;
+    }
+
+    public int getTypeIndex() {
+        return typeIndex;
+    }
+
+
 }

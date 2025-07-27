@@ -6,6 +6,8 @@ import com.CEliconValley.models.items.Products.Product;
 import com.CEliconValley.models.items.Products.ProductType;
 import com.CEliconValley.models.items.Slot;
 
+import java.util.ArrayList;
+
 public class MayoMachine extends Machine{
     Product product;
     int which = 0;
@@ -25,6 +27,12 @@ public class MayoMachine extends Machine{
         this.receivedItems.add(new Slot(product, 0));
     }
 
+    public MayoMachine(int processTime, Slot produce,
+                       ArrayList<Slot> receivedItems, ArrayList<Slot> slots, int which){
+        super(CraftableMachine.MayonnaiseMachine, processTime, produce, receivedItems, slots);
+        this.which = which;
+    }
+
     @Override
     public void setProduce() {
         switch (which){
@@ -41,5 +49,10 @@ public class MayoMachine extends Machine{
                 produce = new Slot(CraftableItem.DinosaurMayonnaise, 1);
             }
         }
+    }
+
+
+    public int getWhich() {
+        return which;
     }
 }

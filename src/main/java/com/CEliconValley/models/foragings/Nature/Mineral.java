@@ -3,7 +3,6 @@ package com.CEliconValley.models.foragings.Nature;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Colors;
 import com.CEliconValley.models.Finder;
-
 import com.CEliconValley.models.locations.Farm;
 
 import java.util.Random;

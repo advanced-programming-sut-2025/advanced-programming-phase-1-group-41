@@ -1,18 +1,17 @@
 package com.CEliconValley.models.locations;
 
 import com.CEliconValley.models.*;
-import com.CEliconValley.models.buildings.marketplaces.*;
-import com.CEliconValley.models.npc.npchomes.*;
-
 import com.CEliconValley.models.buildings.Bridge;
 import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.buildings.ShippingBin;
 import com.CEliconValley.models.buildings.animalContainer.Barn;
 import com.CEliconValley.models.buildings.animalContainer.Coop;
+import com.CEliconValley.models.buildings.marketplaces.*;
 import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.foragings.Nature.Lake;
 import com.CEliconValley.models.npc.npcCharacters.NPC;
+import com.CEliconValley.models.npc.npchomes.*;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -300,7 +299,7 @@ public class Village { ;
         }
         for (Cell cell : cells) {
             if(cell.getObjectMap() instanceof Door){
-//                System.out.println("door: "+cell.getX()+","+cell.getY());
+                System.out.println("door: "+cell.getX()+","+cell.getY());
             }
         }
     }

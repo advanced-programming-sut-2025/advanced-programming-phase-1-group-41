@@ -1,7 +1,6 @@
 package com.CEliconValley.models.foragings;
 
 import com.CEliconValley.models.*;
-
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.locations.Farm;
 
@@ -37,6 +36,29 @@ public class Crop implements Item {
     private int x;
     private int y;
 
+
+
+    public Crop(boolean canRegrow, CropType cropType, int currentStage,
+                int currentStageLevel, boolean isFertilizedToday,
+                boolean isGiantCrop, boolean isProtected, boolean isWateredToday,
+                int regrowthTime, ArrayList<Integer> stages, int typeIndex,
+                int waterStreak, int x, int y) {
+        this.canRegrow = canRegrow;
+        this.cropType = cropType;
+        this.currentStage = currentStage;
+        this.currentStageLevel = currentStageLevel;
+        this.isFertilizedToday = isFertilizedToday;
+        this.isGiantCrop = isGiantCrop;
+        this.isProtected = isProtected;
+        this.isWateredToday = isWateredToday;
+        this.regrowthTime = regrowthTime;
+        this.stages = new ArrayList<>(stages);
+        this.typeIndex = typeIndex;
+        this.waterStreak = waterStreak;
+        this.x = x;
+        this.y = y;
+    }
+
     public Crop(int x, int y, Farm farm, CropType cropType) {
         this.x = x;
         this.y = y;
@@ -48,7 +70,7 @@ public class Crop implements Item {
             typeIndex++;
         }
         stages = cropType.getStages();
-        currentStage = 0;
+        currentStage = 3;
         if(!cropType.isOneTimeHarvest()){
             regrowthTime = cropType.getRegrowthTime();
             canRegrow = true;
@@ -201,4 +223,22 @@ public class Crop implements Item {
         // TODO needs to change ?
         return this.cropType.getBaseSellPrice();
     }
+
+    public boolean isCanRegrow() {
+        return canRegrow;
+    }
+
+    public boolean isFertilizedToday() {
+        return isFertilizedToday;
+    }
+
+    public int getTypeIndex() {
+        return typeIndex;
+    }
+
+    public int getWaterStreak() {
+        return waterStreak;
+    }
+
+
 }

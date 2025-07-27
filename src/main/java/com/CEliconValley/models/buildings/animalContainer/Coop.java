@@ -15,6 +15,8 @@ public class Coop implements Building {
     private final ArrayList<Animal> animals = new ArrayList<>();
     private int x;
     private int y;
+    private int anchorX;
+    private int anchorY;
     private CoopType coopType;
     private int capacity;
 
@@ -28,6 +30,16 @@ public class Coop implements Building {
 
     public int getCapacity() {
         return capacity;
+    }
+
+
+    public Coop(int anchorX, int anchorY,  CoopType coopType, int capacity,int x, int y) {
+        this.anchorX = anchorX;
+        this.anchorY = anchorY;
+        this.capacity = capacity;
+        this.coopType = coopType;
+        this.x = x;
+        this.y = y;
     }
 
     public Coop(int x, int y, Farm farm, CoopType coopType) {
@@ -121,5 +133,20 @@ public class Coop implements Building {
 
     public void addAnimal(Animal animal) {
         animals.add(animal);
+    }
+
+    @Override
+    public int getAnchorX() {
+        return 0;
+    }
+
+    @Override
+    public int getY() {
+        return this.y;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return 0;
     }
 }

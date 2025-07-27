@@ -10,5 +10,25 @@ public class Bridge implements Building {
     public String getName() {
         return "Bridge";
     }
+
+    @Override
+    public int getAnchorX() {
+        return 0;
+    }
+
+    @Override
+    public int getX() {
+        return 0;
+    }
+
+    @Override
+    public int getY() {
+        return 0;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return 0;
+    }
 }
 

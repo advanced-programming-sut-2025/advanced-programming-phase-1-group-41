@@ -13,6 +13,20 @@ public class Trade {
     private boolean isDone;
     private boolean isRejected;
 
+    public Trade(Player from, Player to, boolean isDone, boolean isRejected,
+                 boolean isRequest, Slot item, boolean paidInMoney,
+                 int price, Slot targetItem) {
+        this.from = from;
+        this.to = to;
+        this.isDone = isDone;
+        this.isRejected = isRejected;
+        this.isRequest = isRequest;
+        this.item = item;
+        this.paidInMoney = paidInMoney;
+        this.price = price;
+        this.targetItem = targetItem;
+    }
+
     public Trade(Player from, Player to, Slot item, int price, boolean isRequest) {
         this.from = from;
         this.to = to;
@@ -154,5 +168,14 @@ public class Trade {
                 }
             }
         }
+    }
+
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public boolean isRejected() {
+        return isRejected;
     }
 }

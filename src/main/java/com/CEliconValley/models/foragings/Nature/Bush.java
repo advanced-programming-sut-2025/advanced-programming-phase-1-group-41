@@ -3,7 +3,6 @@ package com.CEliconValley.models.foragings.Nature;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Colors;
 import com.CEliconValley.models.Finder;
-
 import com.CEliconValley.models.locations.Farm;
 
 import java.util.Random;
@@ -21,6 +20,9 @@ public class Bush implements Nature {
     private static final int HEIGHT = 12;
     private static final int ITERATIONS = 5;
     private static final double INITIAL_WATER_CHANCE = 0.6;
+
+    public Bush() {
+    }
 
     public Bush(int startX, int startY, Farm farm) {
         boolean[][] map = new boolean[WIDTH][HEIGHT];

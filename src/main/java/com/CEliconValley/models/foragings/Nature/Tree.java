@@ -3,7 +3,6 @@ package com.CEliconValley.models.foragings.Nature;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Colors;
 import com.CEliconValley.models.Finder;
-
 import com.CEliconValley.models.locations.Farm;
 
 public class Tree implements Nature, Obstacle {
@@ -26,7 +25,7 @@ public class Tree implements Nature, Obstacle {
     private int hitPoints;
     private final TreeType treeType;
     private int typeIndex = 0;
-    private int currentStage = 0;
+    private int currentStage = 6;
     private int currentStageLevel = 0;
     private boolean isWateredToday = false;
     private int waterStreak = 0;
@@ -36,6 +35,45 @@ public class Tree implements Nature, Obstacle {
     private boolean isAttacked = false;
     private final int x;
     private final int y;
+
+    public Tree(int y, int x, int waterStreak, int typeIndex, TreeType treeType,
+                boolean isWateredToday, boolean isThundered, boolean isProtected,
+                boolean isFertilizedToday, boolean isAttacked, int hitPoints,
+                int currentStageLevel, int currentStage) {
+        this.y = y;
+        this.x = x;
+        this.waterStreak = waterStreak;
+        this.typeIndex = typeIndex;
+        this.treeType = treeType;
+        this.isWateredToday = isWateredToday;
+        this.isThundered = isThundered;
+        this.isProtected = isProtected;
+        this.isFertilizedToday = isFertilizedToday;
+        this.isAttacked = isAttacked;
+        this.hitPoints = hitPoints;
+        this.currentStageLevel = currentStageLevel;
+        this.currentStage = currentStage;
+    }
+
+    public Tree(int currentStage, int currentStageLevel, int hitPoints,
+                boolean isAttacked, boolean isFertilizedToday, boolean isProtected,
+                boolean isThundered, boolean isWateredToday, TreeType treeType,
+                int typeIndex, int waterStreak, int x, int y) {
+        this.currentStage = currentStage;
+        this.currentStageLevel = currentStageLevel;
+        this.hitPoints = hitPoints;
+        this.isAttacked = isAttacked;
+        this.isFertilizedToday = isFertilizedToday;
+        this.isProtected = isProtected;
+        this.isThundered = isThundered;
+        this.isWateredToday = isWateredToday;
+        this.treeType = treeType;
+        this.typeIndex = typeIndex;
+        this.waterStreak = waterStreak;
+        this.x = x;
+        this.y = y;
+    }
+
 
     public Tree(int x, int y, Farm farm, TreeType treeType) {
         this.x = x;
@@ -162,4 +200,10 @@ public class Tree implements Nature, Obstacle {
     public double getPrice() {
         return 0;
     }
+
+
+    public int getWaterStreak() {
+        return waterStreak;
+    }
+
 }

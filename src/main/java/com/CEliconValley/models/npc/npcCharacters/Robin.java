@@ -3,9 +3,9 @@ package com.CEliconValley.models.npc.npcCharacters;
 import com.CEliconValley.models.Colors;
 import com.CEliconValley.models.Occupation;
 import com.CEliconValley.models.buildings.marketplaces.Marketplace;
-import com.CEliconValley.models.npc.npchomes.NPCHome;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
+import com.CEliconValley.models.npc.npchomes.NPCHome;
 
 import java.util.ArrayList;
 

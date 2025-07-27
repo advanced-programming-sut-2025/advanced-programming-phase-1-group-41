@@ -9,7 +9,6 @@ import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.foragings.Nature.Plant;
 import com.CEliconValley.models.foragings.Nature.Rock;
 import com.CEliconValley.models.foragings.Nature.Tree;
-
 import com.CEliconValley.models.items.CraftableMachine;
 
 import java.util.ArrayList;

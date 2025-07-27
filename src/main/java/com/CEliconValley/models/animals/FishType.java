@@ -87,4 +87,13 @@ public enum FishType implements Item, Eatable {
     }
 
 
+    public static FishType parseFishType(String name) {
+        for (FishType fishType : FishType.values()) {
+            if(fishType.getName().equals(name)){
+                return fishType;
+            }
+        }
+        return null;
+    }
+
 }

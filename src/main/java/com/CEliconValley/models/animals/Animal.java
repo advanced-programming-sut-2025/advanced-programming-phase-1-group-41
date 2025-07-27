@@ -6,7 +6,7 @@ import com.CEliconValley.models.animals.animalKinds.*;
 import com.CEliconValley.models.items.Products.Product;
 
 public abstract class Animal {
-    public abstract void doTheFuckingJob();
+    public abstract String getAnimalType();
     protected String name;
     protected int x;
     protected int y;
@@ -43,6 +43,24 @@ public abstract class Animal {
         this.x = x;
     }
 
+    public Animal(Breed breed, int buyPrice, int daysUntilProduce,
+                  int friendShip, boolean isFedToday, boolean isHome,
+                  boolean isPetToday, String name, Player owner,
+                  Product product, BarnOrCageSize sizeNeeded, int x, int y) {
+        this.breed = breed;
+        this.buyPrice = buyPrice;
+        this.daysUntilProduce = daysUntilProduce;
+        this.friendShip = friendShip;
+        this.isFedToday = isFedToday;
+        this.isHome = isHome;
+        this.isPetToday = isPetToday;
+        this.name = name;
+        this.owner = owner;
+        this.product = product;
+        this.sizeNeeded = sizeNeeded;
+        this.x = x;
+        this.y = y;
+    }
 
     public Animal(Player owner, String name, int buyPrice, BarnOrCageSize sizeNeeded) {
         this.name = name;

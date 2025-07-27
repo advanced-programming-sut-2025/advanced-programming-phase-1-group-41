@@ -3,9 +3,9 @@ package com.CEliconValley.models.npc.npcCharacters;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Occupation;
 import com.CEliconValley.models.Player;
-import com.CEliconValley.models.npc.npchomes.NPCHome;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
+import com.CEliconValley.models.npc.npchomes.NPCHome;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -142,6 +142,15 @@ public abstract class NPC {
         return dialogues.get(i);
     }
 
+    public HashMap<Player, Integer> getFriendShip() {
+        return friendShip;
+    }
 
+    public HashMap<Player, Boolean> getIsGiftedToday() {
+        return isGiftedToday;
+    }
 
+    public HashMap<Player, Boolean> getIsTalkedToday() {
+        return isTalkedToday;
+    }
 }

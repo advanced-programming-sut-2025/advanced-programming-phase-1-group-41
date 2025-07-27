@@ -1,7 +1,6 @@
 package com.CEliconValley.models.buildings.marketplaces;
 
 import com.CEliconValley.models.*;
-
 import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.buildings.Wall;
@@ -256,5 +255,15 @@ public class GeneralStore extends Marketplace implements Building {
             door.setClosed(true);
             door.setClosesSoon(false);
         }
+    }
+
+    @Override
+    public int getAnchorX() {
+        return 0;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return 0;
     }
 }

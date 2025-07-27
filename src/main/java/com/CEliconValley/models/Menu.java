@@ -39,7 +39,7 @@ public enum Menu {
         if(input.equals("AuthenticationMenu")) {
             System.out.println("thanks for playing");
         }
-         return switch (input){
+        return switch (input){
             case "AuthenticationMenu" -> Exit;
 
             case "ProfileMenu", "GameMenu" -> Main;

@@ -197,4 +197,14 @@ public class Jojamart extends Marketplace implements Building {
             door2.setClosesSoon(false);
         }
     }
+
+    @Override
+    public int getAnchorX() {
+        return 0;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return 0;
+    }
 }
