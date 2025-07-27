@@ -101,7 +101,7 @@ public class FarmBuilder {
                 i--;
             }
         }
-        farm.getStartPoints().getFirst().setObjectMap(new Grass());
+        farm.getStartPoints().get(0).setObjectMap(new Grass());
         for(int i = 0; i < farm.getTransferCells().size(); i++){
             farm.getTransferCells().get(i).setObjectMap(new Grass());
         }

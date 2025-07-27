@@ -104,8 +104,8 @@ public class MainMenuController {
 //        for(Player player : players){
 //            Farm farm = Finder.findFarmByPlayer(player);
 //            assert farm != null;
-//            player.setX(farm.getStartPoints().getFirst().getX());
-//            player.setY(farm.getStartPoints().getFirst().getY());
+//            player.setX(farm.getStartPoints().get(0).getX());
+//            player.setY(farm.getStartPoints().get(0).getY());
 //        }
         saveGame(game);
         return new Result(true,"Game created successfully");

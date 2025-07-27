@@ -373,19 +373,19 @@ public class MarketplaceController {
         Slot neededItem = null;
         if(tool instanceof LevelTool lt){
             switch (lt.getLevel()){
-                case ToolLevel.Default -> {
+                case Default -> {
                     cost = 2000;
                     neededItem = new Slot(CraftableItem.CopperBar, 5);
                 }
-                case ToolLevel.Copper -> {
+                case Copper -> {
                     cost = 5000;
                     neededItem = new Slot(CraftableItem.IronBar, 5);
                 }
-                case ToolLevel.Iron -> {
+                case Iron -> {
                     cost = 10000;
                     neededItem = new Slot(CraftableItem.GoldBar, 5);
                 }
-                case ToolLevel.Gold -> {
+                case Gold -> {
                     cost = 25000;
                     neededItem = new Slot(CraftableItem.IridiumBar, 5);
                 }

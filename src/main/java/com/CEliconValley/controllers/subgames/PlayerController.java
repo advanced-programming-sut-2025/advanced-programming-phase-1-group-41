@@ -433,17 +433,17 @@ public class PlayerController {
         MapController c = new MapController();
         if(player.isPlayerIsInVillage()){
             player.resetInFarmId();
-            Result preResult = c.walk(null,village.getTransferCells().getFirst().getX(),village.getTransferCells().getFirst().getY());
+            Result preResult = c.walk(null,village.getTransferCells().get(0).getX(),village.getTransferCells().get(0).getY());
             if(!preResult.success()){
                 return new Result(false,"you're probably stuck..");
             }
         }
-        return c.walk(null,farm.getTransferCells().getFirst().getX(),farm.getTransferCells().getFirst().getY());
+        return c.walk(null,farm.getTransferCells().get(0).getX(),farm.getTransferCells().get(0).getY());
     }
     public Result walkVillage(Matcher matcher){
         Farm farm = App.getGame().getCurrentPlayerFarm();
         MapController c = new MapController();
-        return c.walk(null,farm.getTransferCells().getFirst().getX(),farm.getTransferCells().getFirst().getY());
+        return c.walk(null,farm.getTransferCells().get(0).getX(),farm.getTransferCells().get(0).getY());
     }
 
     public Result sellProduct(Matcher matcher){return null;}

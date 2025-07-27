@@ -43,8 +43,8 @@ public class MapController {
                             Finder.findCellByCoordinates(cell.x, cell.y, App.getGame().getCurrentPlayerFarm())
                     )){
                         player.setPlayerIsInVillage(true);
-                        player.setX(App.getGame().getVillage().getStartPoints().getFirst().getX());
-                        player.setY(App.getGame().getVillage().getStartPoints().getFirst().getY());
+                        player.setX(App.getGame().getVillage().getStartPoints().get(0).getX());
+                        player.setY(App.getGame().getVillage().getStartPoints().get(0).getY());
 //                        player.setInFarmId(player.getFarmId());
                         System.out.println("going to village..");
                         System.out.println("rn on "+player.getX()+" "+player.getY());
@@ -55,8 +55,8 @@ public class MapController {
                             Finder.findCellByCoordinatesVillage(cell.x, cell.y, App.getGame().getVillage())
                     )){
                         player.setPlayerIsInVillage(false);
-                        player.setX(App.getGame().getCurrentPlayerFarm().getStartPoints().getFirst().getX());
-                        player.setY(App.getGame().getCurrentPlayerFarm().getStartPoints().getFirst().getY());
+                        player.setX(App.getGame().getCurrentPlayerFarm().getStartPoints().get(0).getX());
+                        player.setY(App.getGame().getCurrentPlayerFarm().getStartPoints().get(0).getY());
                         System.out.println("going to farm ...");
                         System.out.println("rn on "+player.getX()+" "+player.getY());
                         break;
@@ -87,12 +87,12 @@ public class MapController {
         }
     }
     public void printWholeMap(Matcher matcher){
-        System.out.println(App.getGame().getFarms().getFirst().getCell(0,0).getObjectMap().getChar());
+        System.out.println(App.getGame().getFarms().get(0).getCell(0,0).getObjectMap().getChar());
         ArrayList<String> wholeChars=new ArrayList<>();
         Random rand = new Random();
         for (int i = 0; i <75; i++) {
             for(int j=0;j<60;j++) {
-                wholeChars.add(App.getGame().getFarms().getFirst().getCell(j, i).getObjectMap().getChar());
+                wholeChars.add(App.getGame().getFarms().get(0).getCell(j, i).getObjectMap().getChar());
             }for(int j=0;j<95;j++){
                 if(i <= 25){
 //                    int color = rand.nextInt(15) + 232;

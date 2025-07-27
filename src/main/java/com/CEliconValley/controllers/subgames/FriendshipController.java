@@ -318,8 +318,8 @@ public class FriendshipController {
         for (Farm farm : App.getGame().getFarms()) {
             if(farm.getId() == which.getFarmId()){
                 App.getGame().setCurrentFarmId(farm.getId(), which);
-                which.setX(farm.getStartPoints().getFirst().getX());
-                which.setY(farm.getStartPoints().getFirst().getY());
+                which.setX(farm.getStartPoints().get(0).getX());
+                which.setY(farm.getStartPoints().get(0).getY());
             }
         }
 

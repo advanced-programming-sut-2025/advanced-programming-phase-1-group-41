@@ -127,8 +127,8 @@ public class TimeLine {
         for (Player player : App.getGame().getPlayers()) {
             Farm farm = Finder.findFarmByPlayer(player);
             MapController controller = new MapController();
-            Cell villageCell = App.getGame().getVillage().getTransferCells().getFirst();
-            Cell playerCell = farm.getStartPoints().getFirst();
+            Cell villageCell = App.getGame().getVillage().getTransferCells().get(0);
+            Cell playerCell = farm.getStartPoints().get(0);
             if(player.isPlayerIsInVillage()){
                 Result preResult = controller.walk(null,villageCell.getX(),villageCell.getY());
                 if(!preResult.success()){
