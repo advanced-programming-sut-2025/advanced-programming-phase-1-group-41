@@ -54,7 +54,7 @@ public class RockSpawner {
 
                 if (cell.getX() == rock.getAnchorX() && cell.getY() == rock.getAnchorY()) {
                     int variant = rock.getVariant();
-                    int frameCount = 4;
+                    int frameCount = 5;
                     int frameWidth = bigRockTexture.getWidth() / frameCount;
                     int frameHeight = bigRockTexture.getHeight();
 
@@ -71,7 +71,7 @@ public class RockSpawner {
             } else {
 
                 int variant = rock.getVariant();
-                int frameCount = 15;
+                int frameCount = 12;
                 int frameWidth = rockTexture.getWidth() / frameCount;
                 int frameHeight = rockTexture.getHeight();
 

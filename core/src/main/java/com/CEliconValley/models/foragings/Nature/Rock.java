@@ -31,7 +31,7 @@ public class Rock implements Nature, Obstacle {
     public Rock(){
 
         rockType = RockType.SmallRock;
-        this.variant = (int)(Math.random() * 15);
+        this.variant = (int)(Math.random() * 12);
     }
 
 
@@ -49,11 +49,11 @@ public class Rock implements Nature, Obstacle {
         if(y >= 40){
             rockType = RockType.BigRock;
             hitPoints = 3;
-            this.variant = (int)(Math.random() * 4);
+            this.variant = (int)(Math.random() * 5);
         } else{
             rockType = RockType.SmallRock;
             hitPoints = 1;
-            this.variant = (int)(Math.random() * 15);
+            this.variant = (int)(Math.random() * 12);
         }
         Cell cell = Finder.findCellByCoordinates(x, y, farm);
         assert cell != null;
