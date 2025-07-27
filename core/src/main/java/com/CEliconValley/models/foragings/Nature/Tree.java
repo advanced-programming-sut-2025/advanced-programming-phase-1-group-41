@@ -37,6 +37,24 @@ public class Tree implements Nature, Obstacle {
     private final int x;
     private final int y;
 
+    public Tree(int y, int x, int waterStreak, int typeIndex, TreeType treeType,
+                boolean isWateredToday, boolean isThundered, boolean isProtected,
+                boolean isFertilizedToday, boolean isAttacked, int hitPoints,
+                int currentStageLevel, int currentStage) {
+        this.y = y;
+        this.x = x;
+        this.waterStreak = waterStreak;
+        this.typeIndex = typeIndex;
+        this.treeType = treeType;
+        this.isWateredToday = isWateredToday;
+        this.isThundered = isThundered;
+        this.isProtected = isProtected;
+        this.isFertilizedToday = isFertilizedToday;
+        this.isAttacked = isAttacked;
+        this.hitPoints = hitPoints;
+        this.currentStageLevel = currentStageLevel;
+        this.currentStage = currentStage;
+    }
 
     public Tree(int currentStage, int currentStageLevel, int hitPoints,
                 boolean isAttacked, boolean isFertilizedToday, boolean isProtected,
