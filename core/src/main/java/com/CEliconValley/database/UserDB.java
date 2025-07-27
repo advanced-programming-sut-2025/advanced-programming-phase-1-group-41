@@ -1,12 +1,12 @@
 package com.CEliconValley.database;
 
+import com.CEliconValley.common.GameData;
 import com.CEliconValley.models.*;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
 import org.bson.types.ObjectId;
-
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,10 +18,6 @@ public class UserDB {
             MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
             Datastore datastore = Morphia.createDatastore(mongoClient, "ProjectDB");
 
-            datastore.getMapper().map(TimeLine.class);
-            datastore.getMapper().map(Player.class);
-            datastore.getMapper().map(Game.class);
-            datastore.getMapper().map(User.class);
 
         System.out.println("reached here");
 
@@ -99,7 +95,6 @@ public class UserDB {
         System.out.println("Connected to database: " + datastore.getDatabase().getName());
 
         // Step 5: Load LastUser
-        datastore.getMapper().map(LastUser.class);
         LastUser lu = datastore.find(LastUser.class).first();
         if (lu != null) {
             User user = Finder.getUserById(lu.getUserId());
@@ -122,13 +117,17 @@ public class UserDB {
     }
 
 
+    public static void saveGame(Game game){
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        Datastore datastore = Morphia.createDatastore(mongoClient, "ProjectDB");
+
+        GameData gameData = new GameData(game);
+        datastore.save(gameData);
+    }
+
     public static void disconnect() {
         MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
         Datastore datastore = Morphia.createDatastore(mongoClient, "ProjectDB");
-        datastore.getMapper().map(TimeLine.class);
-        datastore.getMapper().map(Player.class);
-        datastore.getMapper().map(Game.class);
-        datastore.getMapper().map(User.class);
 
         for (Game game : App.games) {
             if (game.getPlayers() != null) {
@@ -184,7 +183,6 @@ public class UserDB {
         System.out.println("User references restored");
 
         // Step 5: Save Last User Session
-        datastore.getMapper().map(LastUser.class);
         datastore.find(LastUser.class).delete();
         if (App.getCurrentUser() != null) {
             LastUser lu = new LastUser(App.getCurrentUser().get_id());
