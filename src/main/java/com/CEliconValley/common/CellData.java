@@ -7,11 +7,14 @@ import com.CEliconValley.models.buildings.GreenHouse.WaterTank;
 import com.CEliconValley.models.foragings.*;
 import com.CEliconValley.models.foragings.Nature.*;
 import com.CEliconValley.models.items.Item;
+import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Transient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
+@Embedded
 public class CellData {
     @Transient
     private Cell cell;

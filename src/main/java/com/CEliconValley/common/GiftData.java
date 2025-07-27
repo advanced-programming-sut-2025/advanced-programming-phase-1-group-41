@@ -2,7 +2,9 @@ package com.CEliconValley.common;
 
 import com.CEliconValley.models.Gift;
 import com.CEliconValley.models.Player;
+import dev.morphia.annotations.Embedded;
 
+@Embedded
 public class GiftData {
     String fromName;
     SlotData slotData;

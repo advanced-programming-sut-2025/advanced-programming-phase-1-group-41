@@ -38,6 +38,7 @@ public enum GameMainCommands implements Command {
     StartTrade("\\s*start\\s+trade\\s*"),
     WalkHome("\\s*walk\\s+-l\\s+home\\s*"),
     WalkVillage("\\s*walk\\s+-l\\s+village\\s*"),
+    Save("\\s*save\\s*"),
     ;
 
     private final String pattern;

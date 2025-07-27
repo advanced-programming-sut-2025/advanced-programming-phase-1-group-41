@@ -7,7 +7,10 @@ import com.CEliconValley.models.animals.Breed;
 import com.CEliconValley.models.animals.animalKinds.*;
 import com.CEliconValley.models.items.Products.Product;
 import com.CEliconValley.models.items.Products.ProductType;
+import dev.morphia.annotations.Embedded;
 
+
+@Embedded
 public class AnimalData {
     String name;
     String animalType;

@@ -3,9 +3,12 @@ package com.CEliconValley.common;
 import com.CEliconValley.models.Friendship;
 import com.CEliconValley.models.FriendshipLevel;
 import com.CEliconValley.models.Player;
+import dev.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
 
+
+@Embedded
 public class FriendshipData {
     String player1Name;
     String player2Name;

@@ -52,7 +52,7 @@
         <dependency>
             <groupId>dev.morphia.morphia</groupId>
             <artifactId>morphia-core</artifactId>
-            <version>2.3.1</version> <!-- Make sure this version exists in Maven Repository -->
+            <version>2.4.18</version> <!-- Make sure this version exists in Maven Repository -->
         </dependency>
 
         <dependency>

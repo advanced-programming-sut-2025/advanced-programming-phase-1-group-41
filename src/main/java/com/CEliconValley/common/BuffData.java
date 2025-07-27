@@ -2,7 +2,9 @@ package com.CEliconValley.common;
 
 import com.CEliconValley.models.items.Buff;
 import com.CEliconValley.models.items.BuffType;
+import dev.morphia.annotations.Embedded;
 
+@Embedded
 public class BuffData {
     int buffTime;
     int buffAmount;

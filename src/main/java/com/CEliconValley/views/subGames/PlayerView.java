@@ -1,6 +1,8 @@
 package com.CEliconValley.views.subGames;
 
 import com.CEliconValley.controllers.subgames.PlayerController;
+import com.CEliconValley.database.UserDB;
+import com.CEliconValley.models.App;
 import com.CEliconValley.views.commands.gameCommands.GameMainCommands;
 import com.CEliconValley.views.commands.gameCommands.InventoryAndToolCommands;
 
@@ -34,6 +36,8 @@ public class PlayerView {
             System.out.println(controller.walkHome(matcher));
         }else if((matcher = GameMainCommands.WalkVillage.getMatcher(input))!=null){
             System.out.println(controller.walkVillage(matcher));
+        }else if((matcher = GameMainCommands.Save.getMatcher(input))!=null){
+            UserDB.saveGame(App.getGame());
         }
         else{
             return false;

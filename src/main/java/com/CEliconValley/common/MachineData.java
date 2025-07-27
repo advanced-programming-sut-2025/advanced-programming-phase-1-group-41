@@ -12,10 +12,12 @@ import com.CEliconValley.models.items.CraftableItem;
 import com.CEliconValley.models.items.CraftableMachine;
 import com.CEliconValley.models.items.Slot;
 import com.CEliconValley.models.items.craftablemachines.*;
+import dev.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+@Embedded
 public class MachineData {
     // testing..
     String craftableMachineName;
