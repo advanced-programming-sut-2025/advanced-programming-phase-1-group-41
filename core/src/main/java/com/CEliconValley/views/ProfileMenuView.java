@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.awt.*;
+import java.util.Scanner;
 
 public class ProfileMenuView implements Screen, AppMenu {
 
@@ -201,5 +202,10 @@ public class ProfileMenuView implements Screen, AppMenu {
         nicknameLabel.setText("Nickname: " + user.getNickname());
         emailLabel.setText("Email: " + user.getEmail());
         genderLabel.setText("Gender: " + user.getGender());
+    }
+
+    @Override
+    public void check(Scanner scanner) {
+        System.out.println("aghebat profile");
     }
 }

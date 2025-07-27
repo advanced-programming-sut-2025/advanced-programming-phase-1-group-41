@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.Color;
 
 public class GameMenu implements AppMenu, Screen {
     GameMenuController controller = new GameMenuController();
-//    @Override
+    @Override
     public void check(Scanner scanner) {
         String input = scanner.nextLine();
         Matcher matcher = null;

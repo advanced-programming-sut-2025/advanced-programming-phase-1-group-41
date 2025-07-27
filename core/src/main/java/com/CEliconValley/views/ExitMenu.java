@@ -46,4 +46,9 @@ public class ExitMenu implements AppMenu, Screen {
     public void setMessage(String message, Color color) {
 
     }
+
+    @Override
+    public void check(Scanner scanner) {
+        System.out.println("aghebat exit");
+    }
 }

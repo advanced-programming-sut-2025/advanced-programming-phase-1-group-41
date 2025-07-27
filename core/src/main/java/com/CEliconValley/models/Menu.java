@@ -44,8 +44,8 @@ public enum Menu {
         return null;
     }
 
-    public Screen getMenu() {
-        return menu;
+    public AppMenu getMenu() {
+        return (AppMenu) menu;
     }
 
     public void resetMenu(){
