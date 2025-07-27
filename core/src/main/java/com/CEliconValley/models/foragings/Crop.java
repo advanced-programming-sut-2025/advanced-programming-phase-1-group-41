@@ -53,7 +53,7 @@ public class Crop implements Item {
         this.isProtected = isProtected;
         this.isWateredToday = isWateredToday;
         this.regrowthTime = regrowthTime;
-        this.stages = stages;
+        this.stages = new ArrayList<>(stages);
         this.typeIndex = typeIndex;
         this.waterStreak = waterStreak;
         this.x = x;

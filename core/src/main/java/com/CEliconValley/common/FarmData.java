@@ -1,25 +1,62 @@
 package com.CEliconValley.common;
 
 import com.CEliconValley.models.Cell;
+import com.CEliconValley.models.buildings.Building;
+import com.CEliconValley.models.buildings.animalContainer.Barn;
+import com.CEliconValley.models.buildings.animalContainer.Coop;
+import com.CEliconValley.models.foragings.Crop;
+import com.CEliconValley.models.foragings.Nature.Tree;
 import com.CEliconValley.models.locations.Farm;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Transient;
 
 import java.util.ArrayList;
 
-@Entity("farmdata")
 public class FarmData {
-    Farm farm;
+    int farmTypeInt;
+    int id;
+    ArrayList<BuildingData> buildingsData;
+    // foragings
+    // lakes
+    // bushes
+    ArrayList<BarnData> barnsData;
+    ArrayList<CoopData> coopsData;
+    ArrayList<TreeData> treesData;
+    ArrayList<CropData> cropsData;
     ArrayList<CellData> cells;
     ArrayList<CellData> transferCells;
     ArrayList<CellData> startPoints;
+    // mine
+    // greenhouse
+
 
     public FarmData(Farm farm) {
-        this.farm = farm;
-        makeCellData();
+        farmTypeInt = farm.getFarmType().ordinal();
+        id = farm.getId();
+        buildingsData = new ArrayList<>();
+        for (Building building : farm.getBuildings()) {
+            buildingsData.add(new BuildingData(building));
+        }
+        makeCellData(farm);
+        this.barnsData = new ArrayList<>();
+        for (Barn barn : farm.getBarns()) {
+            barnsData.add(new BarnData(barn));
+        }
+        this.coopsData = new ArrayList<>();
+        for (Coop coop : farm.getCoops()) {
+            coopsData.add(new CoopData(coop));
+        }
+        this.treesData = new ArrayList<>();
+        for (Tree tree : farm.getTrees()) {
+            treesData.add(new TreeData(tree));
+        }
+        this.cropsData = new ArrayList<>();
+        for (Crop crop : farm.getCrops()) {
+            cropsData.add(new CropData(crop));
+        }
     }
 
-    private void makeCellData(){
+    private void makeCellData(Farm farm){
         for (Cell cell : farm.getCells()) {
             cells.add(new CellData(cell));
         }

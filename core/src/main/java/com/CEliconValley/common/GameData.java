@@ -37,11 +37,12 @@ public class GameData {
         this.currentPlayerName = game.getCurrentPlayer().getUser().getUsername();
         fillPlayers(game);
         fillFarms(game);
+        this.villageData = new VillageData(game.getVillage());
     }
 
     private void fillFarms(Game game) {
         for (Farm farm : game.getFarms()) {
-
+            this.farmsData.add(new FarmData(farm));
         }
     }
 

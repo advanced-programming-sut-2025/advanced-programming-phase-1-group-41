@@ -5,8 +5,19 @@ import com.CEliconValley.models.Player;
 import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.animals.BarnOrCageSize;
 import com.CEliconValley.models.animals.Breed;
+import com.CEliconValley.models.items.Products.Product;
 
 public class Duck extends Animal {
+
+
+    public Duck(Breed breed, int buyPrice, int daysUntilProduce,
+                   int friendShip, boolean isFedToday, boolean isHome,
+                   boolean isPetToday, String name, Player owner,
+                   Product product, BarnOrCageSize sizeNeeded, int x, int y){
+        super(breed, buyPrice, daysUntilProduce, friendShip, isFedToday, isHome
+            , isPetToday, name, owner, product, sizeNeeded, x, y);
+    }
+
     public Duck(Player owner, String name) {
         super(owner, name, 1200, BarnOrCageSize.Big);
         super.breed = Breed.Coop;
@@ -14,8 +25,8 @@ public class Duck extends Animal {
     }
 
     @Override
-    public void doTheFuckingJob() {
-
+    public String getAnimalType() {
+        return "Duck";
     }
     @Override
     public boolean canGiveProduct(){
