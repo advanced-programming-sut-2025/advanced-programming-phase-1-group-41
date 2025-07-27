@@ -4,9 +4,12 @@ import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.items.Backpack;
 import com.CEliconValley.models.items.Inventory;
 import com.CEliconValley.models.items.Slot;
+import dev.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
 
+
+@Embedded
 public class InventoryData {
     // testing..
     ArrayList<SlotData> slots;

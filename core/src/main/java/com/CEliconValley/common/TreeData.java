@@ -2,7 +2,9 @@ package com.CEliconValley.common;
 
 import com.CEliconValley.models.foragings.Nature.Tree;
 import com.CEliconValley.models.foragings.Nature.TreeType;
+import dev.morphia.annotations.Embedded;
 
+@Embedded
 public class TreeData {
     int hitPoints;
     int treeTypeInt;

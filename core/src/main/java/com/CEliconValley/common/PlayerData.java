@@ -7,11 +7,13 @@ import com.CEliconValley.models.Trade;
 import com.CEliconValley.models.items.CookingRecipe;
 import com.CEliconValley.models.items.CraftingRecipe;
 import com.CEliconValley.models.items.craftablemachines.Machine;
+import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Transient;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Embedded
 public class PlayerData {
     @Transient
     private Player player;
@@ -56,7 +58,7 @@ public class PlayerData {
         this.maxEnergy = player.getMaxEnergy();
         this.energyUnlimited = player.isEnergyUnlimited();
         this.depressionDaysLeft = player.getDepressionDaysLeft();
-        this.currentToolName = player.getCurrentTool().getName();
+        this.currentToolName = player.getCurrentTool() == null ? null : player.getCurrentTool().getName();
         this.cookingRecipes = new ArrayList<>(player.getCookingRecipes());
         this.craftingRecipes = new ArrayList<>(player.getCraftingRecipes());
         this.isPlayerInVillage = player.isPlayerIsInVillage();

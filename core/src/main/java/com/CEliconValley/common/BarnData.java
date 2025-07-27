@@ -3,9 +3,11 @@ package com.CEliconValley.common;
 import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.buildings.animalContainer.Barn;
 import com.CEliconValley.models.buildings.animalContainer.BarnType;
+import dev.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
 
+@Embedded
 public class BarnData {
     ArrayList<AnimalData> animalsData;
     int x;

@@ -1,13 +1,14 @@
 package com.CEliconValley.common;
 
-import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.buildings.marketplaces.Marketplace;
 import com.CEliconValley.models.locations.Village;
 import com.CEliconValley.models.npc.npcCharacters.NPC;
+import dev.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
 
+@Embedded
 public class VillageData {
     ArrayList<CellData> cellsData;
     ArrayList<MarketPlaceData> markplacesData;

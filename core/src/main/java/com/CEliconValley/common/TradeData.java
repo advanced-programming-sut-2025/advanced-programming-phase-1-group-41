@@ -2,8 +2,9 @@ package com.CEliconValley.common;
 
 import com.CEliconValley.models.Player;
 import com.CEliconValley.models.Trade;
-import com.CEliconValley.models.items.Slot;
+import dev.morphia.annotations.Embedded;
 
+@Embedded
 public class TradeData {
     String fromName;
     String toName;

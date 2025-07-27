@@ -2,9 +2,11 @@ package com.CEliconValley.common;
 
 import com.CEliconValley.models.Player;
 import com.CEliconValley.models.npc.npcCharacters.NPC;
+import dev.morphia.annotations.Embedded;
 
 import java.util.HashMap;
 
+@Embedded
 public class NPCData {
     HashMap<String,Integer> friendShipData;
     HashMap<String,Boolean> isTalkedTodayData;
