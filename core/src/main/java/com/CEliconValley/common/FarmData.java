@@ -28,6 +28,7 @@ public class FarmData {
     ArrayList<CellData> startPoints;
     // mine
     // greenhouse
+    boolean isGreenHouseLocked;
 
 
     public FarmData(Farm farm) {
@@ -54,6 +55,7 @@ public class FarmData {
         for (Crop crop : farm.getCrops()) {
             cropsData.add(new CropData(crop));
         }
+        this.isGreenHouseLocked = farm.getGreenhouse().isUnlocked();
     }
 
     private void makeCellData(Farm farm){
