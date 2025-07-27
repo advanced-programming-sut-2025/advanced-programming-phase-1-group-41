@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
@@ -25,6 +26,11 @@ public class Main extends Game {
 
     @Override
     public void create() {
+        startApp();
+        graphical();
+    }
+
+    public void graphical(){
         main = this;
         batch = new SpriteBatch();
         stage = new Stage(new ScreenViewport(), batch);
@@ -34,19 +40,12 @@ public class Main extends Game {
         Gdx.graphics.setFullscreenMode(displayMode);
         background.setSize(stage.getWidth(), stage.getHeight());
         stage.addActor(background);
-//        AppView appView = new AppView();
-//        try {
-//            appView.runApp();
-//        } catch (NoSuchAlgorithmException e) {
-//            throw new RuntimeException(e);
-//        }
-        startApp();
         main.setScreen(App.getMenu().getScreen());
 //        main.setScreen(new StartMenuView(new StartMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
 //        main.setScreen(new AuthenticationMenuView(new AuthenticationMenuController()));
     }
 
-    private void startApp(){
+    private static void startApp(){
         ArrayList<String> questions = new ArrayList<>();
         questions.add("What is your favorite color?");
         questions.add("What is your favorite food?");

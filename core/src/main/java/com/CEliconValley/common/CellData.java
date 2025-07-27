@@ -4,6 +4,7 @@ import com.CEliconValley.models.App;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.buildings.Bridge;
+import com.CEliconValley.models.buildings.GreenHouse.WaterTank;
 import com.CEliconValley.models.foragings.*;
 import com.CEliconValley.models.foragings.Nature.*;
 import com.CEliconValley.models.items.Item;
@@ -147,9 +148,14 @@ public class CellData {
         if(this.objectName.equals(new Plant().getName())){
             return new Cell(new Plant(), x, y);
         }
-
+        if(this.objectName.equals(new WaterTank().getName())){
+            return new Cell(new WaterTank(), x, y);
+        }
         // TODO
         Item item = Finder.parseItem(this.objectName);
+        if(item == null){
+            System.out.println("null : "+this.objectName);
+        }
         return new Cell(item, x, y);
     }
 }

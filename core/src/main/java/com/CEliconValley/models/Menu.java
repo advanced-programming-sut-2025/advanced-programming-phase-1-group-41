@@ -44,6 +44,10 @@ public enum Menu {
         return null;
     }
 
+    public Screen getMenu() {
+        return menu;
+    }
+
     public void resetMenu(){
         if(menu == Menu.Authentication.menu){
             Menu.Authentication.menu = new AuthenticationMenuView(new AuthenticationMenuController());
