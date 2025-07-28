@@ -122,32 +122,32 @@ public class FarmData {
         // need rebuilding on map
         farm.setBarns(getBarns(owner, farm));
         farm.setCoops(getCoops(owner, farm));
-        int counter = 0;
-        for (Cell cell : farm.getCells()) {
-            if(farm.getTransferCells().contains(cell)) {
-                System.out.print("tt");
-            }else if(farm.getStartPoints().contains(cell)) {
-                System.out.print("ss");
-            }
-            else{
-                System.out.print(cell.getObjectMap().getChar());
-            }
-            counter++;
-            if(counter % 60 == 0){
-                System.out.println();
-            }
-        }
-        System.out.println("that was "+farm.getId());
-        for (Cell transferCell : farm.getTransferCells()) {
-            System.out.println(transferCell.getX()+" "+transferCell.getY());
-        }
+//        int counter = 0;
+//        for (Cell cell : farm.getCells()) {
+//            if(farm.getTransferCells().contains(cell)) {
+//                System.out.print("tt");
+//            }else if(farm.getStartPoints().contains(cell)) {
+//                System.out.print("ss");
+//            }
+//            else{
+//                System.out.print(cell.getObjectMap().getChar());
+//            }
+//            counter++;
+//            if(counter % 60 == 0){
+//                System.out.println();
+//            }
+//        }
+//        System.out.println("that was "+farm.getId());
+//        for (Cell transferCell : farm.getTransferCells()) {
+//            System.out.println(transferCell.getX()+" "+transferCell.getY());
+//        }
         farm.getGreenhouse().setUnlocked(isGreenHouseUnlocked);
         loadTreesAndCrops(farm);
-        System.out.println("loaded trees");
+//        System.out.println("loaded trees");
         loadRefrigerator(farm);
-        System.out.println("loaded refrigerator");
+//        System.out.println("loaded refrigerator");
         loadCells(farm);
-        System.out.println("loaded cells");
+//        System.out.println("loaded cells");
         farm.setTransferCells(getTransferCells(farm));
         farm.setStartPoints(getStartCells(farm));
         return farm;
