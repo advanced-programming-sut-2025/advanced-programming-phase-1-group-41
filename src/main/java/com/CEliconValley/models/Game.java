@@ -41,8 +41,23 @@ public class Game {
         return village;
     }
 
+    public Game(TimeLine time, Village village,
+                WeatherType weatherType, WeatherType tmrwWeatherType,
+                double roundEnergy, ArrayList<Farm> farms) {
+        this.time = time;
+        this.village = village;
+        this.weatherType = weatherType;
+        this.tmrwWeatherType = tmrwWeatherType;
+        this.roundEnergy = roundEnergy;
+        this.farms = new ArrayList<>(farms);
+    }
 
 
+    public void handmadePostLoad(Player currentPlayer, Player loader, ArrayList<Player> players) {
+        this.currentPlayer = currentPlayer;
+        this.loader = loader;
+        this.players = new ArrayList<>(players);
+    }
 
     public Game() {
     }
@@ -104,7 +119,7 @@ public class Game {
             }
         }
         if(village == null) {
-            this.village = new Village();
+            this.village = new Village(false);
         }
     }
 

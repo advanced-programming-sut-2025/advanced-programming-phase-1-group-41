@@ -28,7 +28,7 @@ public class Village { ;
 
 
 
-    public Village() {
+    public Village(boolean load) {
 
         for (int i = 0; i < 65; i++) {
             for (int j = 0; j < 95; j++) {
@@ -82,15 +82,15 @@ public class Village { ;
         transferCells.add(getCell(44,36));
         startPoints.add(getCell(47,32));
 
-        buildings.add(new Blacksmith(80,54,this));
-        buildings.add(new FishShop(22,0,this));
-        buildings.add(new GeneralStore(38,3,this));
+        buildings.add(new Blacksmith(80,54,this, load));
+        buildings.add(new FishShop(22,0,this, load));
+        buildings.add(new GeneralStore(38,3,this, load));
         buildings.add(new Saloon(80,20,this));
         buildings.add(new MarnieRanch(80,0,this));
         buildings.add(new CarpenterShop(67,0,this));
         buildings.add(new Barn(77,0,this));
         buildings.add(new Coop(77,4,this));
-        buildings.add(new Jojamart(84,10,this));
+        buildings.add(new Jojamart(84,10,this, load));
         buildings.add(new AbigailHome(9,43,this));
         buildings.add(new LiaHome(0,51,this));
         buildings.add(new SebastienHome(12,58,this));

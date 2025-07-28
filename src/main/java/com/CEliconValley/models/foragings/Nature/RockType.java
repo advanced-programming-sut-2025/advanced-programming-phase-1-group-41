@@ -5,4 +5,5 @@ public enum RockType {
     BigRock,
     // etc
     ;
+
 }

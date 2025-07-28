@@ -12,6 +12,10 @@ public class NPCData {
     HashMap<String,Boolean> isTalkedTodayData;
     HashMap<String,Boolean> isGiftedTodayData;
     int daysToUnlockQ3;
+
+    public NPCData() {
+    }
+
     public NPCData(NPC npc) {
         friendShipData = new HashMap<>();
         isTalkedTodayData = new HashMap<>();
@@ -26,5 +30,21 @@ public class NPCData {
         for (Player player : npc.getIsGiftedToday().keySet()) {
             isGiftedTodayData.put(player.getUser().getUsername(), npc.getIsGiftedToday().get(player));
         }
+    }
+
+    public int getDaysToUnlockQ3() {
+        return daysToUnlockQ3;
+    }
+
+    public HashMap<String, Integer> getFriendShipData() {
+        return friendShipData;
+    }
+
+    public HashMap<String, Boolean> getIsGiftedTodayData() {
+        return isGiftedTodayData;
+    }
+
+    public HashMap<String, Boolean> getIsTalkedTodayData() {
+        return isTalkedTodayData;
     }
 }

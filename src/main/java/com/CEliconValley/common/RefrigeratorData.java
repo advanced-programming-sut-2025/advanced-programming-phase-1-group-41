@@ -9,6 +9,10 @@ import java.util.ArrayList;
 @Embedded
 public class RefrigeratorData {
     ArrayList<SlotData> slotsData;
+
+    public RefrigeratorData() {
+    }
+
     public RefrigeratorData(Refrigerator refrigerator) {
         slotsData = new ArrayList<>();
         for (Slot slot : refrigerator.getSlots()) {
@@ -19,6 +23,7 @@ public class RefrigeratorData {
 
     public Refrigerator getRefrigerator() {
         ArrayList<Slot> slots = new ArrayList<>();
+        if(slotsData == null) slotsData = new ArrayList<>();
         for (SlotData slotData : slotsData) {
             slots.add(slotData.getSlot());
         }

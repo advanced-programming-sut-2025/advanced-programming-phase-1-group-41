@@ -10,6 +10,9 @@ public class SlotData {
     String itemName;
     int quantity;
 
+    public SlotData() {
+    }
+
     public SlotData(Slot slot) {
         this.itemName = slot.getItem().getName();
         this.quantity = slot.getQuantity();

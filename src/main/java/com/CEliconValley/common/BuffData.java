@@ -10,6 +10,9 @@ public class BuffData {
     int buffAmount;
     int buffTypeInt;
 
+    public BuffData() {
+    }
+
     public BuffData(Buff buff) {
         this.buffTime = buff.getBuffTime();
         this.buffAmount = buff.getBuffAmount();

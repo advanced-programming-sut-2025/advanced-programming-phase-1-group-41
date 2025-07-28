@@ -1,6 +1,7 @@
 package com.CEliconValley.database;
 
 import com.CEliconValley.common.GameData;
+import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.models.*;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -124,6 +125,19 @@ public class UserDB {
 
         GameData gameData = new GameData(game);
         datastore.save(gameData);
+    }
+
+    public static Game loadGame(String username){
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        Datastore datastore = Morphia.createDatastore(mongoClient, "ProjectDB");
+        for (GameData gameData : datastore.find(GameData.class)) {
+            for (PlayerData pd : gameData.getPlayersData()) {
+                if(pd.getUsername().equals(username)){
+                    return gameData.makeGame();
+                }
+            }
+        }
+        return null;
     }
 
     public static void disconnect() {

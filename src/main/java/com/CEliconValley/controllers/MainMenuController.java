@@ -1,5 +1,6 @@
 package com.CEliconValley.controllers;
 
+import com.CEliconValley.database.UserDB;
 import com.CEliconValley.models.*;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -159,6 +160,15 @@ public class MainMenuController {
         setLoader(game);
         return new Result(true,"Game loaded successfully, current player: "+
                 game.getCurrentPlayer());
+    }
+
+    public Result loadGameForReal(Matcher matcher){
+        User user = App.getCurrentUser();
+        if(user==null) return new Result(false, "you are guest dummy");
+        Game game = UserDB.loadGame(user.getUsername());
+        App.setGame(game);
+        App.setMenu(Menu.Game);
+        return new Result(true,"Game loaded successfully");
     }
 
     private void setLoader(Game game) {

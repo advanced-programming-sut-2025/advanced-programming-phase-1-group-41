@@ -25,6 +25,9 @@ public class CellData {
     String className = null;
     HashMap<String, Object> data;
 
+    public CellData() {
+    }
+
     public CellData(Cell cell) {
         this.cell = cell;
         data = new HashMap<>();
@@ -78,7 +81,7 @@ public class CellData {
         }
         else if(cell.getObjectMap() instanceof Rock r){
             data.put("hitPoints", r.getHitPoints());
-            data.put("rockType", r.getRockType());
+            data.put("rockType", r.getRockType().ordinal());
             data.put("variant", r.getVariant());
         }
         else if(cell.getObjectMap() instanceof Grass grass){
@@ -93,11 +96,13 @@ public class CellData {
         TreeType treeType= TreeType.parseTreeType(this.objectName);
         if(treeType != null){
             if(ForagingTree.class.getName().equals(className)){
-                ForagingTree ft = new ForagingTree(treeType, (int)data.get("hitPoints"), (int)data.get("typeIndex"), (boolean)data.get("isThundered"));
+                ForagingTree ft = new ForagingTree(treeType, (int) data.get("hitPoints"),
+                        (Integer) data.get("typeIndex"),
+                        (Boolean) data.get("isThundered"));
                 Cell newCell = new Cell(ft, x, y);
                 return newCell;
             }else if(Tree.class.getName().equals(className)){
-                Tree t = new Tree((int) data.get("currentStage"),
+                Tree t = new Tree(Integer.parseInt((String) data.get("currentStage")),
                     (int) data.get("currentStageLevel"), (int) data.get("hitPoints"),
                     (boolean) data.get("isAttacked"), (boolean) data.get("isFertilizedToday"),
                     (boolean) data.get("isProtected"), (boolean) data.get("isThundered"),
@@ -127,7 +132,11 @@ public class CellData {
             return newCell;
         }
         if(this.objectName.equals(new Rock().getName())){
-            Rock r = new Rock((int) data.get("hitPoints"), (RockType) data.get("rockType"), (int)data.get("variant"));
+            int rockTypeInt = (int) data.get("rockType");
+            RockType rockType = RockType.values()[rockTypeInt];
+            Rock r = new Rock((int) data.get("hitPoints"),
+                    rockType,
+                    (int) data.get("variant"));
             Cell newCell = new Cell(r, x, y);
             return newCell;
         }
@@ -156,7 +165,8 @@ public class CellData {
         // TODO
         Item item = Finder.parseItem(this.objectName);
         if(item == null){
-            System.out.println("null : "+this.objectName);
+
+            System.out.println("null : "+this.objectName+" "+x+" "+y);
         }
         return new Cell(item, x, y);
     }

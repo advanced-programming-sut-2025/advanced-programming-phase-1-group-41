@@ -26,7 +26,7 @@ public class MainMenu implements AppMenu {
         else if((matcher= MainMenuCommands.NewGame.getMatcher(input))!=null){
             handleNewGame(input, matcher, scanner);
         } else if(MainMenuCommands.LoadGame.getMatcher(input)!=null){
-            Result result = controller.loadGame(MainMenuCommands.LoadGame.getMatcher(input));
+            Result result = controller.loadGameForReal(MainMenuCommands.LoadGame.getMatcher(input));
             System.out.println(result);
         }
         else if(MainMenuCommands.UserLogout.getMatcher(input) != null) {

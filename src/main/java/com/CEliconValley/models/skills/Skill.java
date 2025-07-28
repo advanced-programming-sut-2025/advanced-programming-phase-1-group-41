@@ -8,6 +8,12 @@ import com.CEliconValley.models.items.CraftingRecipe;
 public class Skill {
     private int level;
     private int xp;
+
+    public Skill(int level, int xp) {
+        this.level = level;
+        this.xp = xp;
+    }
+
     public Skill() {
         this.level = 0;
         this.xp = 0;
