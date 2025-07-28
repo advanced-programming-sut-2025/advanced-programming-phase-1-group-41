@@ -84,8 +84,15 @@ public class GameData {
         Player currentPlayer = PlayerFinder.getPlayerByName(players, currentPlayerName);
         Player loader = PlayerFinder.getPlayerByName(players, loaderName);
         game.handmadePostLoad(currentPlayer, loader, players);
-
+        setUsersCurrentGame(game);
         return game;
+    }
+
+    // TODO remember to unset it as well
+    private void setUsersCurrentGame(Game game){
+        for (Player player : game.getPlayers()) {
+            player.getUser().setCurrentGame(game);
+        }
     }
 
     public ArrayList<Farm> getFarms(ArrayList<Player> players){
