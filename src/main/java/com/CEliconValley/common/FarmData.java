@@ -125,9 +125,9 @@ public class FarmData {
         int counter = 0;
         for (Cell cell : farm.getCells()) {
             if(farm.getTransferCells().contains(cell)) {
-                System.out.println("tt");
+                System.out.print("tt");
             }else if(farm.getStartPoints().contains(cell)) {
-                System.out.println("ss");
+                System.out.print("ss");
             }
             else{
                 System.out.print(cell.getObjectMap().getChar());
@@ -143,8 +143,11 @@ public class FarmData {
         }
         farm.getGreenhouse().setUnlocked(isGreenHouseUnlocked);
         loadTreesAndCrops(farm);
+        System.out.println("loaded trees");
         loadRefrigerator(farm);
+        System.out.println("loaded refrigerator");
         loadCells(farm);
+        System.out.println("loaded cells");
         farm.setTransferCells(getTransferCells(farm));
         farm.setStartPoints(getStartCells(farm));
         return farm;

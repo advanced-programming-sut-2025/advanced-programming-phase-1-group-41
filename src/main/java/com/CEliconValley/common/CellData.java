@@ -16,8 +16,6 @@ import java.util.HashMap;
 
 @Embedded
 public class CellData {
-    @Transient
-    private Cell cell;
 
     int x;
     int y;
@@ -29,15 +27,14 @@ public class CellData {
     }
 
     public CellData(Cell cell) {
-        this.cell = cell;
         data = new HashMap<>();
         this.x = cell.getX();
         this.y = cell.getY();
         this.objectName = cell.getObjectMap().getName();
-        fillData();
+        fillData(cell);
     }
 
-    private void fillData(){
+    private void fillData(Cell cell){
         if(cell.getObjectMap() instanceof ForagingTree f){
             data.put("hitPoints", f.getHitPoints());
             data.put("typeIndex", f.getTypeIndex());
@@ -96,47 +93,49 @@ public class CellData {
         TreeType treeType= TreeType.parseTreeType(this.objectName);
         if(treeType != null){
             if(ForagingTree.class.getName().equals(className)){
-                ForagingTree ft = new ForagingTree(treeType, (int) data.get("hitPoints"),
-                        (Integer) data.get("typeIndex"),
+                ForagingTree ft = new ForagingTree(treeType, getInt(data.get("hitPoints")),
+                        getInt(data.get("typeIndex")),
                         (Boolean) data.get("isThundered"));
                 Cell newCell = new Cell(ft, x, y);
                 return newCell;
             }else if(Tree.class.getName().equals(className)){
-                Tree t = new Tree(Integer.parseInt((String) data.get("currentStage")),
-                    (int) data.get("currentStageLevel"), (int) data.get("hitPoints"),
+                Tree t = new Tree(getInt(data.get("currentStage")),
+                    getInt(data.get("currentStageLevel")), getInt(data.get("hitPoints")),
                     (boolean) data.get("isAttacked"), (boolean) data.get("isFertilizedToday"),
                     (boolean) data.get("isProtected"), (boolean) data.get("isThundered"),
                     (boolean) data.get("isWateredToday"), treeType,
-                    (int) data.get("typeIndex"), (int) data.get("waterStreak"),
-                    (int) data.get("x"), (int) data.get("y"));
+                    getInt(data.get("typeIndex")), getInt(data.get("waterStreak")),
+                    getInt(data.get("x")), getInt(data.get("y")));
                 Cell newCell = new Cell(t, x, y);
                 return newCell;
             }
         }
         ForagingCropType foragingCropType = ForagingCropType.parseForagingCropType(this.objectName);
         if(foragingCropType != null){
-            ForagingCrop fc = new ForagingCrop(foragingCropType, (int)data.get("typeIndex"));
+            ForagingCrop fc = new ForagingCrop(foragingCropType, getInt(data.get("typeIndex")));
             Cell newCell = new Cell(fc, x, y);
             return newCell;
         }
         CropType cropType = CropType.parseCropType(this.objectName);
         if(cropType != null){
-            ArrayList<Integer> stages = (ArrayList<Integer>) data.get("stages");
-            Crop c = new Crop((boolean) data.get("canRegrow"), cropType, (int) data.get("currentStage"),
-                (int) data.get("currentStageLevel"), (boolean) data.get("isFertilizedToday"),
+            ArrayList<Integer> stages = getIntegerList(data.get("stages")) ;
+            Crop c = new Crop((boolean) data.get("canRegrow"),
+                    cropType, getInt(data.get("currentStage")),
+                getInt(data.get("currentStageLevel")), (boolean) data.get("isFertilizedToday"),
                 (boolean) data.get("isGiantCrop"), (boolean) data.get("isProtected") ,
-                (boolean) data.get("isWateredToday"), (int) data.get("regrowthTime"),
-                stages, (int) data.get("typeIndex"),
-                (int) data.get("waterStreak"), (int) data.get("x"), (int) data.get("y"));
+                (boolean) data.get("isWateredToday"), getInt(data.get("regrowthTime")),
+                stages, getInt(data.get("typeIndex")) ,
+                getInt(data.get("waterStreak")), getInt(data.get("x")),
+                    getInt(data.get("y")));
             Cell newCell = new Cell(c, x, y);
             return newCell;
         }
         if(this.objectName.equals(new Rock().getName())){
-            int rockTypeInt = (int) data.get("rockType");
+            int rockTypeInt = getInt(data.get("rockType"));
             RockType rockType = RockType.values()[rockTypeInt];
-            Rock r = new Rock((int) data.get("hitPoints"),
+            Rock r = new Rock(getInt(data.get("hitPoints")),
                     rockType,
-                    (int) data.get("variant"));
+                    getInt(data.get("variant")));
             Cell newCell = new Cell(r, x, y);
             return newCell;
         }
@@ -169,5 +168,33 @@ public class CellData {
             System.out.println("null : "+this.objectName+" "+x+" "+y);
         }
         return new Cell(item, x, y);
+    }
+
+
+    public static int getInt(Object value) {
+        if (value instanceof Double) {
+            return ((Double) value).intValue(); // trims decimals
+        } else if (value instanceof Integer) {
+            return (Integer) value;
+        } else {
+            throw new IllegalArgumentException("Unexpected value type: " + value);
+        }
+    }
+    public static ArrayList<Integer> getIntegerList(Object value) {
+        ArrayList<Integer> result = new ArrayList<>();
+        if (value instanceof ArrayList<?>) {
+            for (Object item : (ArrayList<?>) value) {
+                if (item instanceof Double) {
+                    result.add(((Double) item).intValue());
+                } else if (item instanceof Integer) {
+                    result.add((Integer) item);
+                } else {
+                    throw new IllegalArgumentException("Unexpected list item type: " + item.getClass().getName());
+                }
+            }
+        } else {
+            throw new IllegalArgumentException("Expected ArrayList but got " + value.getClass().getName());
+        }
+        return result;
     }
 }

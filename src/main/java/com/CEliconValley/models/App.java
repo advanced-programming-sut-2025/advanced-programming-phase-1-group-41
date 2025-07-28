@@ -1,7 +1,11 @@
 package com.CEliconValley.models;
 
+import com.CEliconValley.client.GameClient;
+import com.CEliconValley.server.GameServer;
 import org.bson.types.ObjectId;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -15,6 +19,28 @@ public class App {
     private static Menu menu;
     private static Game game;
     public final static ArrayList<String> questions = new ArrayList<>();
+    private static GameServer server;
+    private static GameClient client;
+
+    public static void setupConnections(){
+        server = new GameServer();
+        server.start();
+        System.out.println("GameServer started on port " + GameServer.PORT);
+        try {
+            Thread.sleep(100);
+            String first = "ws://localhost:8080";
+            URI serverUri = new URI(first);
+            client = new GameClient(serverUri);
+            client.connect();
+            Thread.sleep(1000);
+            client.send("hi");
+            System.out.println("i sent hi!!!!!");
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static void setQuestions(ArrayList<String> questions){
         App.questions.clear();
@@ -51,5 +77,13 @@ public class App {
     }
     public static void setCurrentUser(User currentUser){
         App.currentUser = currentUser;
+    }
+
+    public static GameServer getServer() {
+        return server;
+    }
+
+    public static GameClient getClient() {
+        return client;
     }
 }

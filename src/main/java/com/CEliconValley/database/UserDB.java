@@ -3,6 +3,7 @@ package com.CEliconValley.database;
 import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.models.*;
+import com.google.gson.Gson;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import dev.morphia.Datastore;
@@ -124,6 +125,9 @@ public class UserDB {
         Datastore datastore = Morphia.createDatastore(mongoClient, "ProjectDB");
 
         GameData gameData = new GameData(game);
+        Gson gson = new Gson();
+        String jsonData = gson.toJson(gameData);
+        App.getServer().broadcast(jsonData);
         datastore.save(gameData);
     }
 
