@@ -2,9 +2,7 @@ package com.CEliconValley.controllers.authentication;
 
 import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
-import com.CEliconValley.common.messages.ForgotpassCred;
-import com.CEliconValley.common.messages.GameMessage;
-import com.CEliconValley.common.messages.LoginCred;
+import com.CEliconValley.common.messages.*;
 import com.CEliconValley.models.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -28,8 +26,8 @@ public class AuthenticationMenuController {
 
     private AuthenticationMenuView view;
     private String selectedGender = "male";
-    private String securityQuestion = "";
-    private String securityAnswer = "";
+    public String securityQuestion = "";
+    public String securityAnswer = "";
     private String password;
     private String username;
     private String nickname;
@@ -171,14 +169,10 @@ public class AuthenticationMenuController {
                 if(selectedGender.equals("female")){
                     gender = Gender.Female;
                 }
-                try {
-                    register(gender);
-                } catch (NoSuchAlgorithmException e) {
-                    throw new RuntimeException(e);
-                }
-
-                view.switchForm("register");
-                view.setMessage("User Registered Successfully. ✅", Color.LIME);
+                GameMessage<RegisterCred> message = new GameMessage<>("register_request",
+                    new RegisterCred(username, password, email, nickname, gender, securityQuestion, securityAnswer));
+                String json = new Gson().toJson(message);
+                AppClient.getClient().send(json);
             }
         });
     }
@@ -189,43 +183,16 @@ public class AuthenticationMenuController {
         String confirm = view.regConfirmPassword.getText();
         nickname = view.regNickname.getText();
         email = view.regEmail.getText();
-
-        //Validations
         if (username.isEmpty() || password.isEmpty() || confirm.isEmpty() ||
             nickname.isEmpty() || email.isEmpty() || (!view.genderFemaleButton.isChecked() && !view.genderMaleButton.isChecked())) {
             view.setMessage("Please fill all fields.", Color.RED);
             return;
         }
-        if(AuthenticationValidator.usernameExists(username)){
-            view.setMessage("Username already exists!", Color.RED);
-            return;
-        }
-        if(!username.matches("^[a-zA-Z0-9-]{1,8}$")){
-            view.setMessage("Invalid username format!", Color.RED);
-            return;
-        }
-        if(!email.matches("^[a-zA-Z0-9][a-zA-Z0-9_-]*\\.?[a-zA-Z0-9_-]*[a-zA-Z0-9]@[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+$")){
-            view.setMessage("Invalid email format!", Color.RED);
-            return;
-        }
-        if(!AuthenticationValidator.passwordValidation(password, view)){
-            return;
-        }
-        if (!password.equals(confirm)) {
-            view.setMessage("Passwords do not match!", Color.RED);
-            return;
-        }
+        GameMessage<PreRegisterCred> message = new GameMessage<>("prereg_request",
+            new PreRegisterCred(username, password, confirm, nickname, email));
+        String json = new Gson().toJson(message);
+        AppClient.getClient().send(json);
 
-        view.setMessage("", Color.CLEAR);
-        view.switchForm("securityQuestion");
-
-        // اینجا می‌تونی کاربر رو بسازی یا بفرستی به سرور
-        System.out.println(">> REGISTER:");
-        System.out.println("Username: " + username);
-        System.out.println("Password: " + password);
-        System.out.println("Nickname: " + nickname);
-        System.out.println("Email: " + email);
-        System.out.println("Gender: " + selectedGender);
     }
 
 
@@ -277,32 +244,6 @@ public class AuthenticationMenuController {
         view.regConfirmPassword.setText(password);
     }
 
-    private void register(Gender gender) throws NoSuchAlgorithmException {
-        password = getHash(password);
-        User user = new User(username, password, email, nickname, gender, securityQuestion, securityAnswer);
-        saveUser(user);
-        App.addUser(user);
-        securityAnswer = "";
-        securityQuestion = "";
-    }
-
-    private void saveUser(User user){
-        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
-        Datastore datastore = Morphia.createDatastore(mongoClient, "ProjectDB");
-
-        datastore.getMapper().map(TimeLine.class);
-        datastore.getMapper().map(Player.class);
-        datastore.getMapper().map(Game.class);
-        datastore.getMapper().map(User.class);
-
-        datastore.save(user);
-
-    }
-    public String getHash(String pass) throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] hashBytes = digest.digest(pass.getBytes(StandardCharsets.UTF_8));
-        return Base64.getEncoder().encodeToString(hashBytes);
-    }
     public void emptyFields() {
         view.loginPassword.setText("");
         view.loginUsername.setText("");

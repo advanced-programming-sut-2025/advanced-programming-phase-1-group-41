@@ -30,7 +30,7 @@ public class ServerAuthentication {
             return new ErrorMessage("login_request","Password does not match!");
         }
         login(user, stayLoggedIn);
-        return new SuccessMessage("login_request",username);
+        return new SuccessMessage("login_request",new UserData(user).toJson());
     }
     public static Message showForgotPassword(String username) {
         if(username.isEmpty()){
@@ -68,6 +68,45 @@ public class ServerAuthentication {
         return new SuccessMessage("fp_request",newPass);
     }
 
+    public static Message handlePreReg(PreRegisterCred cred) {
+        String username = cred.username;
+        String password = cred.password;
+        String confirm = cred.confirm;
+        String nickname = cred.nickname;
+        String email = cred.email;
+        if(AuthenticationValidator.usernameExists(username)){
+            return new ErrorMessage("prereg_request","Username already exists!");
+        }
+        if(!username.matches("^[a-zA-Z0-9-]{1,8}$")){
+            return new ErrorMessage("prereg_request","Invalid username format!");
+        }
+        if(!email.matches("^[a-zA-Z0-9][a-zA-Z0-9_-]*\\.?[a-zA-Z0-9_-]*[a-zA-Z0-9]@[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+$")){
+            return new ErrorMessage("prereg_request","Invalid email format!");
+        }
+        Result result = AuthenticationValidator.passwordValidation(password);
+        if(!result.success()){
+            return new ErrorMessage("prereg_request",result.message());
+        }
+        if (!password.equals(confirm)) {
+            return new ErrorMessage("prereg_request","Passwords do not match!");
+        }
+        return new SuccessMessage("prereg_request","success");
+    }
+
+    public static Message register(RegisterCred cred) throws NoSuchAlgorithmException {
+        String username = cred.username;
+        String password = cred.password;
+        String email = cred.email;
+        String nickname = cred.nickname;
+        Gender gender = cred.gender;
+        String question = cred.question;
+        String answer = cred.answer;
+        password = getHash(password);
+        User user = new User(username, password, email, nickname, gender, question, answer);
+        UserDB.saveUser(user);
+        App.addUser(user);
+        return new SuccessMessage("register_request",new UserData(user).toJson());
+    }
 
     private static void login(User user, boolean stayLoggedIn){
         user.setStayLoggedIn(stayLoggedIn);

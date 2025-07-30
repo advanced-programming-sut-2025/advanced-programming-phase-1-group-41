@@ -1,9 +1,6 @@
 package com.CEliconValley.server;
 
-import com.CEliconValley.common.messages.ForgotpassCred;
-import com.CEliconValley.common.messages.GameMessage;
-import com.CEliconValley.common.messages.LoginCred;
-import com.CEliconValley.common.messages.Message;
+import com.CEliconValley.common.messages.*;
 import com.CEliconValley.controllers.authentication.ServerAuthentication;
 import com.CEliconValley.models.App;
 import com.google.gson.Gson;
@@ -33,6 +30,24 @@ public class Request {
     public static void forgotPassword(ForgotpassCred creds, WebSocket conn) {
         try{
             GameMessage<Message> response = new GameMessage<>("fp_response",ServerAuthentication.forgotPass(creds));
+            String json = gson.toJson(response);
+            conn.send(json);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public static void preRegister(PreRegisterCred creds, WebSocket conn) {
+        try{
+            GameMessage<Message> response = new GameMessage<>("prereg_response",ServerAuthentication.handlePreReg(creds));
+            String json = gson.toJson(response);
+            conn.send(json);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public static void register(RegisterCred creds, WebSocket conn) {
+        try{
+            GameMessage<Message> response = new GameMessage<>("register_response",ServerAuthentication.register(creds));
             String json = gson.toJson(response);
             conn.send(json);
         } catch (Exception e){

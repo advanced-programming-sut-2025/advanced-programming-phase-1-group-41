@@ -1,18 +1,19 @@
 package com.CEliconValley.client;
 
 import com.CEliconValley.common.GameData;
+import com.CEliconValley.common.UserData;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Menu;
 
 public class AppClient {
     private static GameClient client = null;
-    private static String loggedInUsername = "";
+    private static UserData userData = null;
     private static boolean loggedIn = false;
     private static Menu menu;
     private static GameData gameData = null;
 
-    public static void login(String username) {
-        loggedInUsername = username;
+    public static void login(UserData ud) {
+        userData = ud;
         loggedIn = true;
     }
 
@@ -24,9 +25,9 @@ public class AppClient {
         return loggedIn;
     }
 
-    public static String getLoggedInUsername() {
+    public static UserData getLoggedInUserData() {
         if(loggedIn) {
-            return loggedInUsername;
+            return userData;
         }
         return null;
     }
@@ -35,9 +36,6 @@ public class AppClient {
         loggedIn = l;
     }
 
-    public static void setLoggedInUsername(String l) {
-        loggedInUsername = l;
-    }
 
     public static GameClient getClient() {
         if(client == null) {

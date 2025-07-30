@@ -3,6 +3,7 @@ package com.CEliconValley.client;
 import com.CEliconValley.common.UserData;
 import com.CEliconValley.common.messages.ErrorMessage;
 import com.CEliconValley.common.messages.SuccessMessage;
+import com.CEliconValley.controllers.authentication.AuthenticationValidator;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.User;
@@ -16,7 +17,8 @@ public class Response {
         switch (message.type) {
             case "login_request" -> {
                 System.out.println("here!");
-                AppClient.login(message.success);
+                UserData userData = gson.fromJson(message.success, UserData.class);
+                AppClient.login(userData);
             }
             case "forgotpass_request" -> {
                 AuthenticationMenuView screen = (AuthenticationMenuView) App.getMenu().getScreen();
@@ -33,12 +35,24 @@ public class Response {
                 screen.switchForm("login");
                 screen.setMessage("Password Changed Successfully.", Color.LIME);
             }
+            case "prereg_request" -> {
+                AuthenticationMenuView screen = (AuthenticationMenuView) App.getMenu().getScreen();
+                screen.setMessage("", Color.CLEAR);
+                screen.switchForm("securityQuestion");
+            }
+            case "register_request" -> {
+                AuthenticationMenuView screen = (AuthenticationMenuView) App.getMenu().getScreen();
+                screen.controller.securityAnswer = "";
+                screen.controller.securityQuestion = "";
+                screen.switchForm("register");
+                screen.setMessage("User Registered Successfully. ✅", Color.LIME);
+            }
         }
     }
 
     public static void errorResponse(ErrorMessage message) {
         switch (message.type) {
-            case "login_request", "forgotpass_request", "fp_request" -> {
+            case "login_request", "forgotpass_request", "fp_request","prereg_request" -> {
                 AuthenticationMenuView screen = (AuthenticationMenuView) App.getMenu().getScreen();
                 screen.setMessage(message.error, Color.RED);
             }
