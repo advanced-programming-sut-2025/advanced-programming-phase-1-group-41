@@ -14,6 +14,26 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
+//llmClient.sendMessageAsync(
+//        prompt,
+//        npcReply -> {
+//GameMessage<String> response = new GameMessage<>("npc_reply", npcReply);
+//String json = new Gson().toJson(response);
+//                conn.send(json); // 👈 replies to client once LLM responds
+//            },
+//error -> {
+//GameMessage<String> errorMsg = new GameMessage<>(
+//        "npc_reply_error",
+//        "The NPC is having trouble thinking right now..."
+//);
+//String json = new Gson().toJson(errorMsg);
+//                conn.send(json);
+//                error.printStackTrace();
+//            }
+//                    );
+
+
 public abstract class NPC {
 
 
@@ -37,7 +57,7 @@ public abstract class NPC {
 
     public String speakToPlayer(String input) throws IOException {
         String prompt = PromptBuilder.buildPrompt(name, personality, input);
-        return llmClient.sendMessage(prompt);
+        return llmClient.sendMessageSync(prompt);
     }
 
 
