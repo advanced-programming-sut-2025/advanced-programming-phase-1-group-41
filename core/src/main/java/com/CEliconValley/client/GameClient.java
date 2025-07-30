@@ -1,9 +1,16 @@
 package com.CEliconValley.client;
 
 import com.CEliconValley.common.GameData;
+import com.CEliconValley.common.messages.*;
 import com.CEliconValley.models.Game;
+import com.CEliconValley.models.Result;
 import com.CEliconValley.models.locations.Farm;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+import net.bytebuddy.description.method.MethodDescription;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -41,18 +48,41 @@ public class GameClient extends WebSocketClient {
     @Override
     public void onMessage(String message) {
         Gson gson = new Gson();
-        try {
-            GameData data = gson.fromJson(message, GameData.class);
-            System.out.println("received the data :D");
-            System.out.println("client code:");
-            Game game = data.makeGame();
-            for (Farm farm : game.getFarms()) {
-                farm.printMap();
+        try{
+            GameMessage<Object> genericMsg = gson.fromJson(message, new TypeToken<GameMessage<Object>>() {}.getType());
+            switch (genericMsg.type){
+                case "login_response" -> {
+                    JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+                    JsonElement bodyElement = jsonObject.get("body");
+                    if(bodyElement.getAsJsonObject().has("success")) {
+                        GameMessage<SuccessMessage> loginMessage = gson.fromJson(message, new TypeToken<GameMessage<SuccessMessage>>() {}.getType());
+                        System.out.println("here2");
+                        Response.successResponse(loginMessage.body);
+                    }
+                    else if(bodyElement.getAsJsonObject().has("error")) {
+                        GameMessage<ErrorMessage> loginMessage = gson.fromJson(message, new TypeToken<GameMessage<ErrorMessage>>() {}.getType());
+                        System.out.println("here3");
+                        Response.errorResponse(loginMessage.body);
+                    }
+                }
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-//            System.out.println("received message: "+message);
+            System.out.println("CmessageE: "+message);
         }
+        System.out.println("Cmessage: "+message);
+//        try {
+//            GameData data = gson.fromJson(message, GameData.class);
+//            System.out.println("received the data :D");
+//            System.out.println("client code:");
+//            Game game = data.makeGame();
+//            for (Farm farm : game.getFarms()) {
+//                farm.printMap();
+//            }
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+////            System.out.println("received message: "+message);
+//        }
     }
 
     @Override

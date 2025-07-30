@@ -9,7 +9,7 @@ public class TerminalMain {
         AppView appView = new AppView();
         try {
             appView.runApp();
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }

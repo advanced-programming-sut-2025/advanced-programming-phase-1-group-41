@@ -1,5 +1,9 @@
 package com.CEliconValley.server;
 
+import com.CEliconValley.common.messages.GameMessage;
+import com.CEliconValley.common.messages.LoginCred;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -29,8 +33,24 @@ public class GameServer extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket conn, String message) {
-        System.out.println("Received: " + message);
-        broadcast("Echo: " + message); // Echo back to all clients
+        Gson gson = new Gson();
+        try{
+            GameMessage<Object> genericMsg = gson.fromJson(message, new TypeToken<GameMessage<Object>>() {}.getType());
+            switch (genericMsg.type){
+                case "login_request" -> {
+                    GameMessage<LoginCred> loginMsg =
+                        gson.fromJson(message, new TypeToken<GameMessage<LoginCred>>() {}.getType());
+                    LoginCred creds = loginMsg.body;
+                    Request.login_req(creds);
+                }
+                default -> {
+                    System.out.println("invalid type: "+genericMsg.type);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("ESmessage: "+message);
+        }
+        System.out.println("Smessage: "+message);
     }
 
     @Override

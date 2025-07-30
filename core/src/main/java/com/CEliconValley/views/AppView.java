@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class AppView {
-    public void runApp() throws NoSuchAlgorithmException {
+    public void runApp() throws NoSuchAlgorithmException, InterruptedException {
         ArrayList<String> questions = new ArrayList<>();
         questions.add("What is your favorite color?");
         questions.add("What is your favorite food?");
@@ -36,5 +36,6 @@ public class AppView {
             System.out.print("> ");
         }
         UserDB.disconnect();
+        App.getServer().stop();
     }
 }

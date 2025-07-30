@@ -23,7 +23,7 @@ import java.util.Scanner;
 
 public class AuthenticationMenuView implements Screen, AppMenu {
 
-    private final AuthenticationMenuController controller;
+    public final AuthenticationMenuController controller;
     private Stage stage;
     private final Image background = new Image(new Texture(GameAssetManager.getGameAssetManager().CEliconValleyBackground));
 

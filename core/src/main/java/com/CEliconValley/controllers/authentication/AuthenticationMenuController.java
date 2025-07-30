@@ -1,6 +1,9 @@
 package com.CEliconValley.controllers.authentication;
 
 import com.CEliconValley.Main;
+import com.CEliconValley.client.AppClient;
+import com.CEliconValley.common.messages.GameMessage;
+import com.CEliconValley.common.messages.LoginCred;
 import com.CEliconValley.models.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -8,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.CEliconValley.views.AuthenticationMenuView;
+import com.google.gson.Gson;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import dev.morphia.Datastore;
@@ -107,8 +111,12 @@ public class AuthenticationMenuController {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    handleLogin();
-                } catch (NoSuchAlgorithmException e) {
+                    LoginCred credentials = new LoginCred(view.loginUsername.getText(), view.loginPassword.getText());
+                    GameMessage<LoginCred> message = new GameMessage<>("login_request", credentials);
+                    String json = new Gson().toJson(message);
+                    AppClient.getClient().send(json);
+//                    handleLogin();
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -349,12 +357,12 @@ public class AuthenticationMenuController {
         datastore.save(user);
 
     }
-    private void login(User user, boolean stayLoggedIn){
+    public void login(User user, boolean stayLoggedIn){
         user.setStayLoggedIn(stayLoggedIn);
         App.setCurrentUser(user);
         App.setMenu(Menu.Main);
         Menu.Main.resetMenu();
-        Main.getMain().setScreen(App.getMenu().getScreen());
+//        Main.getMain().setScreen(App.getMenu().getScreen());
     }
     public String getHash(String pass) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");

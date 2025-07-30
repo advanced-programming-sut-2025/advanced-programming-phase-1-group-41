@@ -1,10 +1,12 @@
 package com.CEliconValley.models;
 
+import com.CEliconValley.Main;
 import com.CEliconValley.controllers.LobbyController;
 import com.CEliconValley.controllers.MainMenuController;
 import com.CEliconValley.controllers.ProfileMenuController;
 import com.CEliconValley.controllers.authentication.AuthenticationMenuController;
 import com.CEliconValley.views.*;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
 public enum Menu {
@@ -49,13 +51,18 @@ public enum Menu {
     }
 
     public void resetMenu(){
-        if(menu == Menu.Authentication.menu){
-            Menu.Authentication.menu = new AuthenticationMenuView(new AuthenticationMenuController());
-        } else if(menu == Menu.Profile.menu){
-            Menu.Profile.menu = new ProfileMenuView(new ProfileMenuController());
-        } else if(menu == Menu.Main.menu) {
-            Menu.Main.menu = new MainMenuView(new MainMenuController());
-        }
+        Gdx.app.postRunnable(() -> {
+            if(menu == Menu.Authentication.menu){
+                Menu.Authentication.menu = new AuthenticationMenuView(new AuthenticationMenuController());
+            } else if(menu == Menu.Profile.menu){
+                Menu.Profile.menu = new ProfileMenuView(new ProfileMenuController());
+            } else if(menu == Menu.Main.menu) {
+                Menu.Main.menu = new MainMenuView(new MainMenuController());
+            }
+            if(menu == Menu.Main.menu || menu == Profile.menu){
+                com.CEliconValley.Main.getMain().setScreen(App.getMenu().getScreen());
+            }
+        });
     }
 //    public static Menu goToLastMenu(String input) {
 //        if(input.equals("AuthenticationMenu")) {
