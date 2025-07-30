@@ -59,7 +59,7 @@ public enum Menu {
             } else if(menu == Menu.Main.menu) {
                 Menu.Main.menu = new MainMenuView(new MainMenuController());
             }
-            if(menu == Menu.Main.menu || menu == Profile.menu){
+            if(menu == Menu.Main.menu || menu == Profile.menu || menu == Authentication.menu){
                 com.CEliconValley.Main.getMain().setScreen(App.getMenu().getScreen());
             }
         });

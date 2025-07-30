@@ -1,11 +1,10 @@
-package com.CEliconValley.controllers.authentication;
+package com.CEliconValley.server.controller;
 
-import com.CEliconValley.Main;
 import com.CEliconValley.common.UserData;
 import com.CEliconValley.common.messages.*;
+import com.CEliconValley.controllers.authentication.AuthenticationValidator;
 import com.CEliconValley.database.UserDB;
 import com.CEliconValley.models.*;
-import com.badlogic.gdx.graphics.Color;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

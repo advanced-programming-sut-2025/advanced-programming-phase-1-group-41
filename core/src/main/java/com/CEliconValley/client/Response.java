@@ -1,13 +1,17 @@
 package com.CEliconValley.client;
 
+import com.CEliconValley.Main;
 import com.CEliconValley.common.UserData;
 import com.CEliconValley.common.messages.ErrorMessage;
 import com.CEliconValley.common.messages.SuccessMessage;
 import com.CEliconValley.controllers.authentication.AuthenticationValidator;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Finder;
+import com.CEliconValley.models.Menu;
 import com.CEliconValley.models.User;
 import com.CEliconValley.views.AuthenticationMenuView;
+import com.CEliconValley.views.ProfileMenuView;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.google.gson.Gson;
 
@@ -47,13 +51,30 @@ public class Response {
                 screen.switchForm("register");
                 screen.setMessage("User Registered Successfully. ✅", Color.LIME);
             }
+            case "profile_request" -> {
+                if(message.success.equals("delete")) {
+                    Gdx.app.postRunnable(() -> {
+                        App.setMenu(Menu.Authentication);
+                        Menu.Authentication.resetMenu();
+                    });
+                }else{
+                    ProfileMenuView screen = (ProfileMenuView) App.getMenu().getScreen();
+                    screen.setMessage("Profile updated Successfully.", Color.LIME);
+                    AppClient.setUserData(gson.fromJson(message.success, UserData.class));
+                    screen.updateInfo();
+                }
+            }
         }
     }
 
     public static void errorResponse(ErrorMessage message) {
         switch (message.type) {
-            case "login_request", "forgotpass_request", "fp_request","prereg_request" -> {
+            case "login_request", "forgotpass_request", "fp_request","prereg_request"-> {
                 AuthenticationMenuView screen = (AuthenticationMenuView) App.getMenu().getScreen();
+                screen.setMessage(message.error, Color.RED);
+            }
+            case "profile_request" ->{
+                ProfileMenuView screen = (ProfileMenuView) App.getMenu().getScreen();
                 screen.setMessage(message.error, Color.RED);
             }
         }

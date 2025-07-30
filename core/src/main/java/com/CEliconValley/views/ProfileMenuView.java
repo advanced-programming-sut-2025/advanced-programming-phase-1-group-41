@@ -3,7 +3,10 @@ package com.CEliconValley.views;
 import com.CEliconValley.CustomColors;
 import com.CEliconValley.GameAssetManager;
 import com.CEliconValley.Main;
+import com.CEliconValley.client.AppClient;
+import com.CEliconValley.common.UserData;
 import com.CEliconValley.controllers.ProfileMenuController;
+import com.CEliconValley.database.UserDB;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.User;
 import com.badlogic.gdx.Gdx;
@@ -119,15 +122,15 @@ public class ProfileMenuView implements Screen, AppMenu {
         mainTable.add(deleteAccountButton).colspan(2).width(400).padTop(40).row();
         mainTable.add(backButton).colspan(2).width(400).padTop(20).row();
 
-        User user = App.getCurrentUser();
+        UserData userData = AppClient.getUserData();
 
-        usernameLabel = new Label("Username: " + user.getUsername(), skin);
+        usernameLabel = new Label("Username: " + userData.getUsername(), skin);
         usernameLabel.setColor(CustomColors.GAMEGREENCOLOR);
-        nicknameLabel = new Label("Nickname: " + user.getNickname(), skin);
+        nicknameLabel = new Label("Nickname: " + userData.getNickname(), skin);
         nicknameLabel.setColor(CustomColors.GAMEGREENCOLOR);
-        emailLabel = new Label("Email: " + user.getEmail(), skin);
+        emailLabel = new Label("Email: " + userData.getEmail(), skin);
         emailLabel.setColor(CustomColors.GAMEGREENCOLOR);
-        genderLabel = new Label("Gender: " + user.getGender(), skin);
+        genderLabel = new Label("Gender: " + userData.getGender(), skin);
         genderLabel.setColor(CustomColors.GAMEGREENCOLOR);
 
         rightTable.add(new Label("Current Info", skin, "title")).padBottom(20).row();
@@ -197,11 +200,11 @@ public class ProfileMenuView implements Screen, AppMenu {
     }
 
     public void updateInfo(){
-        User user = App.getCurrentUser();
-        usernameLabel.setText("Username: " + user.getUsername());
-        nicknameLabel.setText("Nickname: " + user.getNickname());
-        emailLabel.setText("Email: " + user.getEmail());
-        genderLabel.setText("Gender: " + user.getGender());
+        UserData userData = AppClient.getUserData();
+        usernameLabel.setText("Username: " + userData.getUsername());
+        nicknameLabel.setText("Nickname: " + userData.getNickname());
+        emailLabel.setText("Email: " + userData.getEmail());
+        genderLabel.setText("Gender: " + userData.getGender());
     }
 
     @Override

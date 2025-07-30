@@ -1,8 +1,8 @@
 package com.CEliconValley.server;
 
 import com.CEliconValley.common.messages.*;
-import com.CEliconValley.controllers.authentication.ServerAuthentication;
-import com.CEliconValley.models.App;
+import com.CEliconValley.server.controller.ServerAuthentication;
+import com.CEliconValley.server.controller.ServerProfile;
 import com.google.gson.Gson;
 import org.java_websocket.WebSocket;
 
@@ -54,4 +54,35 @@ public class Request {
             e.printStackTrace();
         }
     }
+    public static void profile(ProfCred creds, WebSocket conn) {
+        try{
+            Message message = null;
+            switch (creds.key){
+                case "username" -> {
+                    message = ServerProfile.handleChangeUsername(creds.value, creds.userData.getUsername());
+                }
+                case "password" -> {
+                    message = ServerProfile.handleChangePassword(creds.value, creds.userData.getUsername());
+                }
+                case "email" -> {
+                    message = ServerProfile.handleChangeEmail(creds.value, creds.userData.getUsername());
+                }
+                case "nickname" -> {
+                    message = ServerProfile.handleChangeNickname(creds.value, creds.userData.getUsername());
+                }
+                case "delete" -> {
+                    message = ServerProfile.delete(creds.userData.getUsername());
+                }
+                default -> {
+                    System.out.println("unknown key");
+                }
+            }
+            GameMessage<Message> messageResponse = new GameMessage<>("profile_response",message);
+            String json = gson.toJson(messageResponse);
+            conn.send(json);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 }

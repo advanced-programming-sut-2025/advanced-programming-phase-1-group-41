@@ -58,6 +58,10 @@ public class GameServer extends WebSocketServer {
                     GameMessage<RegisterCred> msg = gson.fromJson(message, new TypeToken<GameMessage<RegisterCred>>() {}.getType());
                     Request.register(msg.body, conn);
                 }
+                case "profile_request" ->{
+                    GameMessage<ProfCred> msg = gson.fromJson(message, new TypeToken<GameMessage<ProfCred>>() {}.getType());
+                    Request.profile(msg.body, conn);
+                }
                 default -> {
                     System.out.println("invalid type: "+genericMsg.type);
                 }

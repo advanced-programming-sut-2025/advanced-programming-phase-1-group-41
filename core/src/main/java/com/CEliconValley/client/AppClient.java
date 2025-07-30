@@ -25,7 +25,7 @@ public class AppClient {
         return loggedIn;
     }
 
-    public static UserData getLoggedInUserData() {
+    public static UserData getUserData() {
         if(loggedIn) {
             return userData;
         }
@@ -50,5 +50,9 @@ public class AppClient {
 
     public static void setGameData(GameData gameData) {
         AppClient.gameData = gameData;
+    }
+
+    public static void setUserData(UserData userData) {
+        AppClient.userData = userData;
     }
 }

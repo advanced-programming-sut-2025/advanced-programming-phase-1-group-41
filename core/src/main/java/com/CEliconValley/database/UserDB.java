@@ -149,6 +149,11 @@ public class UserDB {
         Datastore datastore = Morphia.createDatastore(mongoClient, "ProjectDB");
         datastore.save(user);
     }
+    public static void deleteUser(User user){
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        Datastore datastore = Morphia.createDatastore(mongoClient, "ProjectDB");
+        datastore.delete(user);
+    }
 
     public static void disconnect() {
         MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");

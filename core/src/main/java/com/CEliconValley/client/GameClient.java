@@ -68,7 +68,7 @@ public class GameClient extends WebSocketClient {
             }
             switch (genericMsg.type){
                 case "login_response", "forgotpass_response" ,
-                     "fp_response" -> {
+                     "fp_response","profile_response" -> {
                     System.out.println("Cmessage: "+message);
                 }
 

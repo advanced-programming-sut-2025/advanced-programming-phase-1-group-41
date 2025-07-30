@@ -1,5 +1,8 @@
 package com.CEliconValley.controllers;
 
+import com.CEliconValley.client.AppClient;
+import com.CEliconValley.common.messages.GameMessage;
+import com.CEliconValley.common.messages.ProfCred;
 import com.CEliconValley.controllers.authentication.AuthenticationValidator;
 import com.CEliconValley.models.App;
 import com.CEliconValley.Main;
@@ -8,6 +11,7 @@ import com.CEliconValley.views.ProfileMenuView;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.google.gson.Gson;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -26,29 +30,31 @@ public class ProfileMenuController {
         view.changeUsernameButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                handleChangeUsername(view.newUsernameField.getText());
+                change("username",view.newUsernameField.getText());
+//                handleChangeUsername(view.newUsernameField.getText());
             }
         });
         view.changePasswordButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                try {
-                    handleChangePassword(view.newPasswordField.getText());
-                } catch (NoSuchAlgorithmException e) {
-                    throw new RuntimeException(e);
-                }
+                change("password",view.newPasswordField.getText());
+//                try {
+//                    handleChangePassword(view.newPasswordField.getText());
+//                } catch (NoSuchAlgorithmException e) {
+//                    throw new RuntimeException(e);
+//                }
             }
         });
         view.changeNicknameButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                handleChangeNickname(view.newNicknameField.getText());
+                change("nickname",view.newNicknameField.getText());
             }
         });
         view.changeEmailButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                handleChangeEmail(view.newEmailField.getText());
+                change("email",view.newEmailField.getText());
             }
         });
 
@@ -57,7 +63,7 @@ public class ProfileMenuController {
         view.deleteAccountButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                change("delete",":)");
             }
         });
 
@@ -69,48 +75,11 @@ public class ProfileMenuController {
             }
         });
     }
-    private void handleChangeUsername(String username) {
-        if(!username.matches("^[a-zA-Z0-9-]{1,8}$")){
-            view.setMessage("Invalid username format!", Color.RED);
-            return;
-        }
-        App.getCurrentUser().setUsername(username);
-        view.setMessage("Username Changed Successfully!", Color.GREEN);
-        view.newUsernameField.setText("");
-        view.updateInfo();
-    }
-    private void handleChangePassword(String password) throws NoSuchAlgorithmException {
-        if(!AuthenticationValidator.passwordValidation(password, view)){
-            return;
-        }
-        App.getCurrentUser().setPassword(getHash(password));
-        view.setMessage("Password Changed Successfully!", Color.GREEN);
-        view.newPasswordField.setText("");
-        view.updateInfo();
-    }
-    private void handleChangeNickname(String nickname) {
-        if(!nickname.matches("^[a-zA-Z0-9-]{1,8}$")){
-            view.setMessage("Invalid nickname format!", Color.RED);
-            return;
-        }
-        App.getCurrentUser().setNickname(nickname);
-        view.setMessage("Nickname Changed Successfully!", Color.GREEN);
-        view.newNicknameField.setText("");
-        view.updateInfo();
-    }
-    private void handleChangeEmail(String email) {
-        if(!email.matches("^[a-zA-Z0-9][a-zA-Z0-9_-]*\\.?[a-zA-Z0-9_-]*[a-zA-Z0-9]@[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+$")){
-            view.setMessage("Invalid email format!", Color.RED);
-            return;
-        }
-        App.getCurrentUser().setEmail(email);
-        view.setMessage("Email Changed Successfully!", Color.GREEN);
-        view.newEmailField.setText("");
-        view.updateInfo();
-    }
-    public String getHash(String pass) throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] hashBytes = digest.digest(pass.getBytes(StandardCharsets.UTF_8));
-        return Base64.getEncoder().encodeToString(hashBytes);
+    private void change(String key, String value){
+        GameMessage<ProfCred> message =
+            new GameMessage<>("profile_request",
+                new ProfCred(key,value,AppClient.getUserData()));
+        String json = new Gson().toJson(message);
+        AppClient.getClient().send(json);
     }
 }
