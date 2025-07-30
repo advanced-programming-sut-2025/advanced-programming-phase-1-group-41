@@ -23,6 +23,7 @@ public class NPCController {
         Inventory inventory= App.getGame().getCurrentPlayer().getInventory();
         Player player=App.getGame().getCurrentPlayer();
         String npcName = matcher.group(1);
+        String input = matcher.group(2);
         NPC npc=findNPCAround(npcName);
         if(npc==null){
             if(!getNPCList().contains(npcName)){
@@ -34,6 +35,11 @@ public class NPCController {
             npc.incFriendShip(player,20);
             npc.setTalkedToday(player,true);
             npc.getQuests().get(0).setLocked(player,false);
+        }
+        try{
+            return new Result(true, npc.speakToPlayer(input));
+        } catch (Exception e){
+            System.out.println(e.getMessage());
         }
         if(!App.getGame().getWeatherType().equals(WeatherType.Sunny)){
             switch (App.getGame().getWeatherType()){

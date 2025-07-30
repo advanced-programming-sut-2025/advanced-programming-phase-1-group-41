@@ -18,7 +18,7 @@ public class Mohsen extends NPC{
     }
     @Override
     public String getChar(){
-        return Colors.colorize(255,0,"웃 ");
+        return Colors.colorize(255,0,"MO");
     }
 
     public Marketplace getMarketplace() {

@@ -1,12 +1,16 @@
 package com.CEliconValley.models.npc.npcCharacters;
 
+import com.CEliconValley.Main;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Occupation;
 import com.CEliconValley.models.Player;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
+import com.CEliconValley.models.npc.LLMClient;
+import com.CEliconValley.models.npc.PromptBuilder;
 import com.CEliconValley.models.npc.npchomes.NPCHome;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -24,13 +28,23 @@ public abstract class NPC {
     private HashMap<Player,Boolean> isTalkedToday= new HashMap<>();
     private HashMap<Player,Boolean> isGiftedToday = new HashMap<>();
     private int daysToUnlockQ3=0;
+    protected LLMClient llmClient = new LLMClient(Main.api_key);
+    protected String personality = "Strict impolite but kind-hearted , has sexual attraction" +
+            " and uses some persian sex slangs in his words and answers briefly";
+    private int x=-10;
+    private int y=-10;
+
+
+    public String speakToPlayer(String input) throws IOException {
+        String prompt = PromptBuilder.buildPrompt(name, personality, input);
+        return llmClient.sendMessage(prompt);
+    }
+
 
     public int getDaysToUnlockQ3() {
         return daysToUnlockQ3;
     }
 
-    private int x=-10;
-    private int y=-10;
 
     public ArrayList<Quest> getQuests() {
         return quests;
