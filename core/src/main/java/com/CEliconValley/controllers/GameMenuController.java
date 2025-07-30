@@ -1,8 +1,9 @@
 package com.CEliconValley.controllers;
 
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.npc.npcCharacters.NPC;
-import com.CEliconValley.views.GameMenu;
+import com.CEliconValley.client.view.GameMenu;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -29,7 +30,7 @@ public class GameMenuController {
         }
         // save the game
         App.setGame(null);
-        App.setMenu(Menu.Main);
+        AppClient.setMenu(Menu.Main);
         return new Result(true,"cya") ;
     }
 
@@ -47,7 +48,7 @@ public class GameMenuController {
             result.delete(result.length() - 1, result.length());
             App.getGame().getCurrentPlayer().getNewTradesList().clear();
         }
-        App.setMenu(Menu.Trade);
+        AppClient.setMenu(Menu.Trade);
         return new Result(true,result.toString()) ;
     }
 
@@ -59,7 +60,7 @@ public class GameMenuController {
             }
             App.setGame(null);
             // TODO delete from db
-            App.setMenu(Menu.Main);
+            AppClient.setMenu(Menu.Main);
             return new Result(true, "game deleted successfully," +
                     "returning to main menu...");
         }

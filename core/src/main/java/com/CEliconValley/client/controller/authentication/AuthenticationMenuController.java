@@ -1,6 +1,5 @@
-package com.CEliconValley.controllers.authentication;
+package com.CEliconValley.client.controller.authentication;
 
-import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.messages.*;
 import com.CEliconValley.models.*;
@@ -9,18 +8,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.CEliconValley.views.AuthenticationMenuView;
+import com.CEliconValley.client.view.AuthenticationMenuView;
 import com.google.gson.Gson;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import dev.morphia.Datastore;
-import dev.morphia.Morphia;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.Base64;
 
 public class AuthenticationMenuController {
 

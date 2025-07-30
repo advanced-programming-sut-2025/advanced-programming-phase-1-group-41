@@ -1,7 +1,9 @@
 package com.CEliconValley.database;
 
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.PlayerData;
+import com.CEliconValley.common.UserData;
 import com.CEliconValley.models.*;
 import com.google.gson.Gson;
 import com.mongodb.client.MongoClient;
@@ -103,8 +105,9 @@ public class UserDB {
             User user = Finder.getUserById(lu.getUserId());
             if (user != null && user.isStayLoggedIn()) {
                 System.out.println("Logged user: " + user);
-                App.setMenu(Menu.Main);
+                AppClient.setMenu(Menu.Main);
                 App.setCurrentUser(user);
+                AppClient.login(new UserData(user));
             } else {
                 System.out.println("User doesn't want to stay logged in.");
             }

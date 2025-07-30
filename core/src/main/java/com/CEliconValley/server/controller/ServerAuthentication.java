@@ -2,7 +2,6 @@ package com.CEliconValley.server.controller;
 
 import com.CEliconValley.common.UserData;
 import com.CEliconValley.common.messages.*;
-import com.CEliconValley.controllers.authentication.AuthenticationValidator;
 import com.CEliconValley.database.UserDB;
 import com.CEliconValley.models.*;
 
@@ -110,8 +109,6 @@ public class ServerAuthentication {
     private static void login(User user, boolean stayLoggedIn){
         user.setStayLoggedIn(stayLoggedIn);
         App.setCurrentUser(user);
-        App.setMenu(Menu.Main);
-        Menu.Main.resetMenu();
     }
     public static String getHash(String pass) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");

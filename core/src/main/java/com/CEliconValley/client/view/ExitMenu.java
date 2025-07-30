@@ -1,4 +1,4 @@
-package com.CEliconValley.views;
+package com.CEliconValley.client.view;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;

@@ -4,13 +4,11 @@ import com.CEliconValley.common.UserData;
 import com.CEliconValley.common.messages.ErrorMessage;
 import com.CEliconValley.common.messages.Message;
 import com.CEliconValley.common.messages.SuccessMessage;
-import com.CEliconValley.controllers.authentication.AuthenticationValidator;
 import com.CEliconValley.database.UserDB;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Result;
 import com.CEliconValley.models.User;
-import com.badlogic.gdx.graphics.Color;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

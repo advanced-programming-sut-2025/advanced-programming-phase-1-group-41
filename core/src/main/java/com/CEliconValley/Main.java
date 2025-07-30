@@ -1,5 +1,6 @@
 package com.CEliconValley;
 
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.database.UserDB;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Menu;
@@ -41,7 +42,7 @@ public class Main extends Game {
 //        Gdx.graphics.setFullscreenMode(displayMode);
         background.setSize(stage.getWidth(), stage.getHeight());
         stage.addActor(background);
-        main.setScreen(App.getMenu().getScreen());
+        main.setScreen(AppClient.getMenu().getScreen());
 //        main.setScreen(new StartMenuView(new StartMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
 //        main.setScreen(new AuthenticationMenuView(new AuthenticationMenuController()));
     }
@@ -58,11 +59,11 @@ public class Main extends Game {
         questions.add("What is name of the city you're living in?");
         questions.add("What is your best friend's name?");
         questions.add("What is your body count?");
-        App.setQuestions(questions);
+        AppClient.setQuestions(questions);
         CookingRecipe.updateRecipe();
         UserDB.connect();
         App.setupConnections();
-        App.setMenu(Menu.Authentication);
+        AppClient.setMenu(Menu.Authentication);
     }
 
     @Override

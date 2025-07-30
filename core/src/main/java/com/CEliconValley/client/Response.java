@@ -1,16 +1,12 @@
 package com.CEliconValley.client;
 
-import com.CEliconValley.Main;
 import com.CEliconValley.common.UserData;
 import com.CEliconValley.common.messages.ErrorMessage;
 import com.CEliconValley.common.messages.SuccessMessage;
-import com.CEliconValley.controllers.authentication.AuthenticationValidator;
 import com.CEliconValley.models.App;
-import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Menu;
-import com.CEliconValley.models.User;
-import com.CEliconValley.views.AuthenticationMenuView;
-import com.CEliconValley.views.ProfileMenuView;
+import com.CEliconValley.client.view.AuthenticationMenuView;
+import com.CEliconValley.client.view.ProfileMenuView;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.google.gson.Gson;
@@ -20,19 +16,18 @@ public class Response {
     public static void successResponse(SuccessMessage message) {
         switch (message.type) {
             case "login_request" -> {
-                System.out.println("here!");
                 UserData userData = gson.fromJson(message.success, UserData.class);
                 AppClient.login(userData);
             }
             case "forgotpass_request" -> {
-                AuthenticationMenuView screen = (AuthenticationMenuView) App.getMenu().getScreen();
+                AuthenticationMenuView screen = (AuthenticationMenuView) AppClient.getMenu().getScreen();
                 screen.forgotSubmitButton.getLabel().setText("Submit");
                 UserData userData = gson.fromJson(message.success, UserData.class);
                 screen.securityQuestionLabel.setText(userData.getQuestion());
                 screen.securityQuestionLabel.setColor(Color.YELLOW);
             }
             case "fp_request" -> {
-                AuthenticationMenuView screen = (AuthenticationMenuView) App.getMenu().getScreen();
+                AuthenticationMenuView screen = (AuthenticationMenuView) AppClient.getMenu().getScreen();
                 screen.forgotSubmitButton.getLabel().setText("Show Security Question");
                 screen.securityQuestionLabel.setText("Your Security Question");
                 screen.securityQuestionLabel.setColor(Color.WHITE);
@@ -40,12 +35,12 @@ public class Response {
                 screen.setMessage("Password Changed Successfully.", Color.LIME);
             }
             case "prereg_request" -> {
-                AuthenticationMenuView screen = (AuthenticationMenuView) App.getMenu().getScreen();
+                AuthenticationMenuView screen = (AuthenticationMenuView) AppClient.getMenu().getScreen();
                 screen.setMessage("", Color.CLEAR);
                 screen.switchForm("securityQuestion");
             }
             case "register_request" -> {
-                AuthenticationMenuView screen = (AuthenticationMenuView) App.getMenu().getScreen();
+                AuthenticationMenuView screen = (AuthenticationMenuView) AppClient.getMenu().getScreen();
                 screen.controller.securityAnswer = "";
                 screen.controller.securityQuestion = "";
                 screen.switchForm("register");
@@ -54,11 +49,11 @@ public class Response {
             case "profile_request" -> {
                 if(message.success.equals("delete")) {
                     Gdx.app.postRunnable(() -> {
-                        App.setMenu(Menu.Authentication);
+                        AppClient.setMenu(Menu.Authentication);
                         Menu.Authentication.resetMenu();
                     });
                 }else{
-                    ProfileMenuView screen = (ProfileMenuView) App.getMenu().getScreen();
+                    ProfileMenuView screen = (ProfileMenuView) AppClient.getMenu().getScreen();
                     screen.setMessage("Profile updated Successfully.", Color.LIME);
                     AppClient.setUserData(gson.fromJson(message.success, UserData.class));
                     screen.updateInfo();
@@ -70,11 +65,11 @@ public class Response {
     public static void errorResponse(ErrorMessage message) {
         switch (message.type) {
             case "login_request", "forgotpass_request", "fp_request","prereg_request"-> {
-                AuthenticationMenuView screen = (AuthenticationMenuView) App.getMenu().getScreen();
+                AuthenticationMenuView screen = (AuthenticationMenuView) AppClient.getMenu().getScreen();
                 screen.setMessage(message.error, Color.RED);
             }
             case "profile_request" ->{
-                ProfileMenuView screen = (ProfileMenuView) App.getMenu().getScreen();
+                ProfileMenuView screen = (ProfileMenuView) AppClient.getMenu().getScreen();
                 screen.setMessage(message.error, Color.RED);
             }
         }

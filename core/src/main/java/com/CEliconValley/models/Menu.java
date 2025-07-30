@@ -1,10 +1,11 @@
 package com.CEliconValley.models;
 
-import com.CEliconValley.Main;
+import com.CEliconValley.client.AppClient;
+import com.CEliconValley.client.view.*;
 import com.CEliconValley.controllers.LobbyController;
-import com.CEliconValley.controllers.MainMenuController;
-import com.CEliconValley.controllers.ProfileMenuController;
-import com.CEliconValley.controllers.authentication.AuthenticationMenuController;
+import com.CEliconValley.client.controller.MainMenuController;
+import com.CEliconValley.client.controller.ProfileMenuController;
+import com.CEliconValley.client.controller.authentication.AuthenticationMenuController;
 import com.CEliconValley.views.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -60,7 +61,7 @@ public enum Menu {
                 Menu.Main.menu = new MainMenuView(new MainMenuController());
             }
             if(menu == Menu.Main.menu || menu == Profile.menu || menu == Authentication.menu){
-                com.CEliconValley.Main.getMain().setScreen(App.getMenu().getScreen());
+                com.CEliconValley.Main.getMain().setScreen(AppClient.getMenu().getScreen());
             }
         });
     }

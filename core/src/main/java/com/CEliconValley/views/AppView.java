@@ -1,5 +1,6 @@
 package com.CEliconValley.views;
 
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.database.UserDB;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Menu;
@@ -22,17 +23,17 @@ public class AppView {
         questions.add("What is name of the city you're living in?");
         questions.add("What is your best friend's name?");
         questions.add("What is your body count?");
-        App.setQuestions(questions);
+        AppClient.setQuestions(questions);
         Scanner scanner = new Scanner(System.in);
-        App.setMenu(Menu.Authentication);
+        AppClient.setMenu(Menu.Authentication);
         CookingRecipe.updateRecipe();
         UserDB.connect();
-        while(App.getMenu() != Menu.Exit){
-            App.getMenu().getMenu().check(scanner);
-            if(App.getMenu() == Menu.Trade){
+        while(AppClient.getMenu() != Menu.Exit){
+            AppClient.getMenu().getMenu().check(scanner);
+            if(AppClient.getMenu() == Menu.Trade){
                 System.out.print("trade ");
             }
-            System.out.println(App.getMenu().getMenu().toString());
+            System.out.println(AppClient.getMenu().getMenu().toString());
             System.out.print("> ");
         }
         UserDB.disconnect();

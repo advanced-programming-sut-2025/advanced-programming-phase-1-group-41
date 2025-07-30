@@ -1,4 +1,4 @@
-package com.CEliconValley.views.screen;
+package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.controllers.Spawner.*;
 import com.CEliconValley.models.Cell;
@@ -236,7 +236,7 @@ public class FarmScreen implements Screen {
             if(playerX == cell.getX() && playerY == cell.getY()){
 
                 TextureRegion currentFrame = currentAnimation.getKeyFrame(stateTime, onRepeat);
-                System.out.println("stateTime: " + stateTime + ", frameIndex: " + currentAnimation.getKeyFrameIndex(stateTime));
+//                System.out.println("stateTime: " + stateTime + ", frameIndex: " + currentAnimation.getKeyFrameIndex(stateTime));
                 if (!onRepeat&&currentAnimation.isAnimationFinished(stateTime)) {
                     currentAnimation = hero.walk(false, playerDirection);
                     isActing=false;

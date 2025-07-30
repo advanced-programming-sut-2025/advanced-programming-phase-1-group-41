@@ -1,22 +1,15 @@
-package com.CEliconValley.controllers;
+package com.CEliconValley.client.controller;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.ProfCred;
-import com.CEliconValley.controllers.authentication.AuthenticationValidator;
 import com.CEliconValley.models.App;
 import com.CEliconValley.Main;
 import com.CEliconValley.models.Menu;
-import com.CEliconValley.views.ProfileMenuView;
-import com.badlogic.gdx.graphics.Color;
+import com.CEliconValley.client.view.ProfileMenuView;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.google.gson.Gson;
-
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 
 public class ProfileMenuController {
 
@@ -70,8 +63,8 @@ public class ProfileMenuController {
         view.backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                App.setMenu(Menu.Main);
-                Main.getMain().setScreen(App.getMenu().getScreen());
+                AppClient.setMenu(Menu.Main);
+                Main.getMain().setScreen(AppClient.getMenu().getScreen());
             }
         });
     }

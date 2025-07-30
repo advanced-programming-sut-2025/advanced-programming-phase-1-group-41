@@ -2,8 +2,7 @@ package com.CEliconValley.models;
 
 import com.CEliconValley.client.GameClient;
 import com.CEliconValley.server.GameServer;
-import com.CEliconValley.views.Lobby;
-import com.mongodb.internal.connection.Server;
+import com.CEliconValley.client.view.Lobby;
 import org.bson.types.ObjectId;
 
 import java.net.URI;
@@ -19,16 +18,10 @@ public class App {
     public final static HashMap<ObjectId, User> userMap = new HashMap<>();
     public static ArrayList<Lobby> lobbies = new ArrayList<>();
     private static User currentUser;
-    private static Menu menu;
     private static Game game;
     private static GameServer server;
     private static GameClient client;
-    public final static ArrayList<String> questions = new ArrayList<>();
 
-    public static void setQuestions(ArrayList<String> questions){
-        App.questions.clear();
-        App.questions.addAll(questions);
-    }
     public static ArrayList<Lobby> addToLobbies(Lobby lobby){
         lobbies.add(lobby);
         return null;
@@ -58,12 +51,6 @@ public class App {
 //        return map;
 //    }
 
-    public static Menu getMenu() {
-        return App.menu;
-    }
-    public static void setMenu(Menu menu) {
-        App.menu = menu;
-    }
 
     public static Game getGame() {
         return game;

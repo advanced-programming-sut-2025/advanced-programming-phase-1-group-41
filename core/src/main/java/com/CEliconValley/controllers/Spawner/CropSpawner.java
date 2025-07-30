@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.CEliconValley.views.screen.FarmScreen.CELL_SIZE;
+import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class CropSpawner {
     private final Farm farm;

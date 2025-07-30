@@ -1,9 +1,10 @@
-package com.CEliconValley.controllers;
+package com.CEliconValley.client.controller;
 
 import com.CEliconValley.Main;
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.database.UserDB;
 import com.CEliconValley.models.*;
-import com.CEliconValley.views.MainMenuView;
+import com.CEliconValley.client.view.MainMenuView;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mongodb.client.MongoClient;
@@ -25,18 +26,18 @@ public class MainMenuController {
         view.getStartGameButton().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                App.setMenu(Menu.Lobby);
+                AppClient.setMenu(Menu.Lobby);
                 Menu.Lobby.resetMenu();
-                Main.getMain().setScreen(App.getMenu().getScreen());
+                Main.getMain().setScreen(AppClient.getMenu().getScreen());
             }
         });
 
         view.getProfileButton().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                App.setMenu(Menu.Profile);
+                AppClient.setMenu(Menu.Profile);
                 Menu.Profile.resetMenu();
-                Main.getMain().setScreen(App.getMenu().getScreen());
+                Main.getMain().setScreen(AppClient.getMenu().getScreen());
             }
         });
 
@@ -44,9 +45,10 @@ public class MainMenuController {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 App.setCurrentUser(null);
-                App.setMenu(Menu.Authentication);
+                AppClient.logout();
+                AppClient.setMenu(Menu.Authentication);
                 Menu.Authentication.resetMenu();
-                Main.getMain().setScreen(App.getMenu().getScreen());
+                Main.getMain().setScreen(AppClient.getMenu().getScreen());
             }
         });
     }
@@ -63,7 +65,7 @@ public class MainMenuController {
         if(user==null) return new Result(false, "you are guest dummy");
         Game game = UserDB.loadGame(user.getUsername());
         App.setGame(game);
-        App.setMenu(Menu.Game);
+        AppClient.setMenu(Menu.Game);
         return new Result(true,"Game loaded successfully");
     }
 }

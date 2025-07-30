@@ -1,9 +1,8 @@
-package com.CEliconValley.views;
+package com.CEliconValley.client.view;
 
 import com.CEliconValley.GameAssetManager;
 import com.CEliconValley.Main;
 import com.CEliconValley.controllers.LobbyController;
-import com.CEliconValley.controllers.MainMenuController;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Player;
@@ -19,12 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Lobby implements Screen {
     private String name;

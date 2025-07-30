@@ -1,4 +1,4 @@
-package com.CEliconValley.views.screen;
+package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;

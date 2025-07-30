@@ -1,14 +1,11 @@
-package com.CEliconValley.views;
+package com.CEliconValley.client.view;
 
 import com.CEliconValley.CustomColors;
 import com.CEliconValley.GameAssetManager;
 import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.UserData;
-import com.CEliconValley.controllers.ProfileMenuController;
-import com.CEliconValley.database.UserDB;
-import com.CEliconValley.models.App;
-import com.CEliconValley.models.User;
+import com.CEliconValley.client.controller.ProfileMenuController;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
@@ -24,7 +21,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import java.awt.*;
 import java.util.Scanner;
 
 public class ProfileMenuView implements Screen, AppMenu {

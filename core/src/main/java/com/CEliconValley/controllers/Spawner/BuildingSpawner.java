@@ -13,12 +13,12 @@ import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
 import com.CEliconValley.models.buildings.GreenHouse.WaterTank;
 import com.CEliconValley.models.buildings.animalContainer.Barn;
 import com.CEliconValley.models.locations.Farm;
-import com.CEliconValley.views.screen.FarmScreen;
+import com.CEliconValley.client.view.screen.FarmScreen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import static com.CEliconValley.views.screen.FarmScreen.CELL_SIZE;
+import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class BuildingSpawner {
     private final Farm farm;

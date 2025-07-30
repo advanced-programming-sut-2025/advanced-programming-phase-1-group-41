@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.CEliconValley.views.screen.FarmScreen.CELL_SIZE;
+import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class TreeSpawner {
     private final Farm farm;

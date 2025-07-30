@@ -1,8 +1,7 @@
-package com.CEliconValley.views;
+package com.CEliconValley.client.view;
 
 import com.badlogic.gdx.graphics.Color;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 public interface AppMenu {
