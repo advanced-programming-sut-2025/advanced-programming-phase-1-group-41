@@ -17,21 +17,18 @@ public class Plant implements Nature {
     public String getName() {
         return "Plant";
     }
-    private final PlantType plantType;
+
+    public Plant() {
+    }
+
     public Plant(int x, int y, Farm farm) {
-        Random rand = new Random();
-        int type = rand.nextInt(PlantType.values().length);
-        plantType = PlantType.values()[type];
         Cell cell= Finder.findCellByCoordinates(x, y, farm);
         assert cell != null;
         cell.setObjectMap(this);
     }
-    public PlantType getPlantType() {
-        return plantType;
-    }
 
     @Override
     public double getPrice() {
-        return plantType.getPrice();
+        return 0;
     }
 }

@@ -1,7 +1,10 @@
 package com.CEliconValley.common;
 
 import com.CEliconValley.models.buildings.Building;
+import dev.morphia.annotations.Embedded;
 
+
+@Embedded
 public class BuildingData {
     String name;
     int x;

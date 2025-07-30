@@ -2,16 +2,17 @@ package com.CEliconValley.common;
 
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.buildings.Building;
+import com.CEliconValley.models.buildings.Cottage;
 import com.CEliconValley.models.buildings.animalContainer.Barn;
 import com.CEliconValley.models.buildings.animalContainer.Coop;
 import com.CEliconValley.models.foragings.Crop;
 import com.CEliconValley.models.foragings.Nature.Tree;
 import com.CEliconValley.models.locations.Farm;
-import dev.morphia.annotations.Entity;
-import dev.morphia.annotations.Transient;
+import dev.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
 
+@Embedded
 public class FarmData {
     int farmTypeInt;
     int id;
@@ -28,7 +29,8 @@ public class FarmData {
     ArrayList<CellData> startPoints;
     // mine
     // greenhouse
-
+    boolean isGreenHouseLocked;
+    RefrigeratorData refrigeratorData;
 
     public FarmData(Farm farm) {
         farmTypeInt = farm.getFarmType().ordinal();
@@ -54,9 +56,20 @@ public class FarmData {
         for (Crop crop : farm.getCrops()) {
             cropsData.add(new CropData(crop));
         }
+        this.isGreenHouseLocked = farm.getGreenhouse().isUnlocked();
+        Cottage cottage = null;
+        for (Building building : farm.getBuildings()) {
+            if(building instanceof Cottage c){
+                cottage = c;
+            }
+        }
+        this.refrigeratorData = new RefrigeratorData(
+                cottage.getRefrigerator()
+        );
     }
 
     private void makeCellData(Farm farm){
+        this.cells = new ArrayList<>();
         for (Cell cell : farm.getCells()) {
             cells.add(new CellData(cell));
         }

@@ -2,9 +2,12 @@ package com.CEliconValley.common;
 
 import com.CEliconValley.models.foragings.Crop;
 import com.CEliconValley.models.foragings.CropType;
+import dev.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
 
+
+@Embedded
 public class CropData {
     int cropTypeInt;
     ArrayList<Integer> stages;

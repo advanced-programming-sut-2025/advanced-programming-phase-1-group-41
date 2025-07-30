@@ -19,6 +19,10 @@ public class Refrigerator implements ObjectMap {
     }
     public final ArrayList<Slot> slots;
 
+    public Refrigerator(ArrayList<Slot> slots) {
+        this.slots = slots;
+    }
+
     public Refrigerator() {
         this.slots = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
@@ -85,5 +89,10 @@ public class Refrigerator implements ObjectMap {
             }
         }
         return null;
+    }
+
+
+    public ArrayList<Slot> getSlots() {
+        return slots;
     }
 }

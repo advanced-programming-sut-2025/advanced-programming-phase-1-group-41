@@ -1,16 +1,20 @@
 package com.CEliconValley.common;
 
-import com.CEliconValley.models.App;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
+import com.CEliconValley.models.buildings.Bridge;
+import com.CEliconValley.models.buildings.GreenHouse.WaterTank;
 import com.CEliconValley.models.foragings.*;
 import com.CEliconValley.models.foragings.Nature.*;
 import com.CEliconValley.models.items.Item;
+import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Transient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
+@Embedded
 public class CellData {
     @Transient
     private Cell cell;
@@ -134,8 +138,26 @@ public class CellData {
             Cell newCell = new Cell(g, x, y);
             return newCell;
         }
+        if(this.objectName.equals(new Lake().getName())){
+            return new Cell(new Lake(), x, y);
+        }
+        if(this.objectName.equals(new Bridge().getName())){
+            return new Cell(new Bridge(), x, y);
+        }
+        if(this.objectName.equals(new Bush().getName())){
+            return new Cell(new Bush(), x, y);
+        }
+        if(this.objectName.equals(new Plant().getName())){
+            return new Cell(new Plant(), x, y);
+        }
+        if(this.objectName.equals(new WaterTank().getName())){
+            return new Cell(new WaterTank(), x, y);
+        }
         // TODO
         Item item = Finder.parseItem(this.objectName);
+        if(item == null){
+            System.out.println("null : "+this.objectName);
+        }
         return new Cell(item, x, y);
     }
 }

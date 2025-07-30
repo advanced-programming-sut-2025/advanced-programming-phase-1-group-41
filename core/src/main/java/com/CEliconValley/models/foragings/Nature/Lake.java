@@ -24,6 +24,7 @@ public class Lake implements ObjectMap, Obstacle {
         return "Lake";
     }
 
+
     public Lake(int x, int y, Village village, int YoHaHa) {
         Cell cell = Finder.findCellByCoordinatesVillage(x, y, village);
         if (cell != null) {

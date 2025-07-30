@@ -2,8 +2,9 @@ package com.CEliconValley.common;
 
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.items.Slot;
-import dev.morphia.annotations.Transient;
+import dev.morphia.annotations.Embedded;
 
+@Embedded
 public class SlotData {
 
     String itemName;

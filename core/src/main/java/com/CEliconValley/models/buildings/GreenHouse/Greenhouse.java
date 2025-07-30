@@ -127,4 +127,12 @@ public class Greenhouse implements Building {
     public int getAnchorY() {
         return anchorY;
     }
+
+    public ArrayList<Door> getDoors() {
+        return doors;
+    }
+
+    public boolean isUnlocked() {
+        return isUnlocked;
+    }
 }

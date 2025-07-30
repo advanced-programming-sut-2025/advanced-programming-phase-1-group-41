@@ -28,11 +28,11 @@ public class AppView {
         CookingRecipe.updateRecipe();
         UserDB.connect();
         while(App.getMenu() != Menu.Exit){
-//            App.getMenu().getMenu().check(scanner);
+            App.getMenu().getMenu().check(scanner);
             if(App.getMenu() == Menu.Trade){
                 System.out.print("trade ");
             }
-//            System.out.println(App.getMenu().getMenu().toString());
+            System.out.println(App.getMenu().getMenu().toString());
             System.out.print("> ");
         }
         UserDB.disconnect();

@@ -1,13 +1,13 @@
 package com.CEliconValley.common;
 
 import com.CEliconValley.models.animals.Animal;
-import com.CEliconValley.models.buildings.animalContainer.Barn;
-import com.CEliconValley.models.buildings.animalContainer.BarnType;
 import com.CEliconValley.models.buildings.animalContainer.Coop;
 import com.CEliconValley.models.buildings.animalContainer.CoopType;
+import dev.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
 
+@Embedded
 public class CoopData {
     ArrayList<AnimalData> animalsData;
     int x;

@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.CEliconValley.GameAssetManager;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 
 public class AuthenticationMenuView implements Screen, AppMenu {
@@ -292,4 +293,10 @@ public class AuthenticationMenuView implements Screen, AppMenu {
     }
 
     public TextButton getExitTab() {return exitTab;}
+
+
+    @Override
+    public void check(Scanner scanner) {
+        System.out.println("aghebat authentication");
+    }
 }
