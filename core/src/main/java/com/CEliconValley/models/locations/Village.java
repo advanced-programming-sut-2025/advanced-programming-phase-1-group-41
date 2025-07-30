@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.Random;
 
 
-public class Village { ;
+public class Village implements Location{ ;
     private ArrayList<Cell> cells = new ArrayList<>();
 
     private final ArrayList<Building> buildings = new ArrayList<>();

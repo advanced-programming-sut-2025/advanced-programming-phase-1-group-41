@@ -1,67 +1,91 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
+
 package com.CEliconValley.controllers.Spawner;
 
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
-import com.CEliconValley.models.Player;
+import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.buildings.Cottage;
-import com.CEliconValley.models.buildings.Wall;
-import com.CEliconValley.models.foragings.ForagingTree;
-import com.CEliconValley.models.foragings.Nature.Rock;
-import com.CEliconValley.models.foragings.Nature.RockType;
-import com.CEliconValley.models.foragings.Nature.Tree;
-import com.CEliconValley.models.foragings.Nature.TreeType;
+import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
+import com.CEliconValley.models.buildings.GreenHouse.WaterTank;
+import com.CEliconValley.models.buildings.animalContainer.Barn;
 import com.CEliconValley.models.locations.Farm;
+import com.CEliconValley.models.locations.FarmScreen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.DoubleToIntFunction;
-
 import static com.CEliconValley.models.locations.FarmScreen.CELL_SIZE;
-import static com.CEliconValley.models.locations.FarmScreen.grassTexture;
 
 public class BuildingSpawner {
     private final Farm farm;
     private final WaterSpawner waterSpawner;
-    private final Texture cottageTexture =new Texture("game/cottage.png");
+    private final Texture cottageTexture = new Texture("game/cottage.png");
+    private final Texture greenhouseTexture = new Texture("game/Buildings/GreenHouse.png");
+    private final Texture waterTankTexture = new Texture("game/Buildings/WaterTank.png");
+    private final Texture barnTexture = new Texture("game/Buildings/Barn.png");
+    private final Texture bigBarnTexture = new Texture("game/Buildings/Big_Barn.png");
+    private final Texture deluxeTexture = new Texture("game/Buildings/Deluxe_Barn.png");
+    private final Texture coopTexture = new Texture("game/Buildings/Coop.png");
+    private final Texture bigCoopTexture = new Texture("game/Buildings/Big_Coop.png");
+    private final Texture deluxeCoopTexture = new Texture("game/Buildings/Deluxe_Coop.png");
 
 
     public BuildingSpawner(Farm farm) {
-        waterSpawner=new WaterSpawner(farm);
+        this.waterSpawner = new WaterSpawner(farm);
         this.farm = farm;
-
     }
-    public boolean renderBuildings(SpriteBatch batch,Cell cell,float passiveState) {
-        float x = cell.getX()*CELL_SIZE;
-        float y = cell.getY()*CELL_SIZE;
-        if (cell.getObjectMap() instanceof Wall){
-            if(Finder.findCellByCoordinates(cell.getX()-1,cell.getY()+1,this.farm).getObjectMap() instanceof Cottage) {
-                Cottage cottage=(Cottage) Finder.findCellByCoordinates(cell.getX()-1,cell.getY()+1,this.farm).getObjectMap();
-                batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
-                if (cell.getX() - 1 == cottage.getAnchorX() && cell.getY() + 1 == cottage.getAnchorY()) {
-                    int frameWidth = cottageTexture.getWidth();
-                    int frameHeight = cottageTexture.getHeight();
 
-                    TextureRegion cottageFrame = new TextureRegion(
-                        cottageTexture,
-                        0, 0,
-                        frameWidth, frameHeight
-                    );
-                    batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
+    public boolean renderBuildings(SpriteBatch batch, Cell cell, float passiveState) {
+        float x = (float)(cell.getX() * 160);
+        float y = (float)(cell.getY() * 160);
+        if (cell.getObjectMap() instanceof Building) {
+            batch.draw(FarmScreen.grassTexture, x, y, CELL_SIZE, CELL_SIZE);
+        }
 
-                    batch.draw(cottageFrame, x - CELL_SIZE * 5, y, CELL_SIZE * 6, CELL_SIZE * 6);
-                }
+        Cell tmpCell = Finder.findCellByCoordinates(cell.getX() - 1, cell.getY() + 1, this.farm);
+        if (tmpCell != null && tmpCell.getObjectMap() instanceof Cottage) {
+            Cottage cottage = (Cottage)tmpCell.getObjectMap();
+            batch.draw(FarmScreen.grassTexture, x, y, 160.0F, 160.0F);
+            if (cell.getX() - 1 == cottage.getAnchorX() && cell.getY() + 1 == cottage.getAnchorY()) {
+                int frameWidth = this.cottageTexture.getWidth();
+                int frameHeight = this.cottageTexture.getHeight();
+                TextureRegion cottageFrame = new TextureRegion(this.cottageTexture, 0, 0, frameWidth, frameHeight);
+                batch.draw(FarmScreen.grassTexture, x, y, 160.0F, 160.0F);
+                batch.draw(cottageFrame, x - CELL_SIZE*5, y, CELL_SIZE*6, CELL_SIZE*6);
+            }
+        } else if (tmpCell != null && tmpCell.getObjectMap() instanceof Greenhouse) {
+            Greenhouse greenhouse = (Greenhouse)tmpCell.getObjectMap();
+            if (cell.getX() - 1 == greenhouse.getAnchorX() && cell.getY() + 1 == greenhouse.getAnchorY()) {
+                int frameWidth = this.greenhouseTexture.getWidth();
+                int frameHeight = this.greenhouseTexture.getHeight();
+                TextureRegion greenHouseFrame = new TextureRegion(this.greenhouseTexture, 0, 0, frameWidth, frameHeight);
+                batch.draw(FarmScreen.grassTexture, x, y, CELL_SIZE, CELL_SIZE);
+                batch.draw(greenHouseFrame, x - CELL_SIZE*6, y, CELL_SIZE*7, CELL_SIZE*8);
+            }
+        }else if (tmpCell != null && tmpCell.getObjectMap() instanceof WaterTank) {
+            WaterTank waterTank = (WaterTank)tmpCell.getObjectMap();
+            int frameWidth = this.waterTankTexture.getWidth();
+            int frameHeight = this.waterTankTexture.getHeight();
+            TextureRegion waterTankFrame = new TextureRegion(this.waterTankTexture, 0, 0, frameWidth, frameHeight);
+            batch.draw(FarmScreen.grassTexture, x, y, CELL_SIZE, CELL_SIZE);
+            batch.draw(waterTankFrame, x, y, CELL_SIZE, CELL_SIZE);
 
-            }else{
-                batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
+        }
+        else if(tmpCell != null && tmpCell.getObjectMap() instanceof Barn){
+            Barn barn = (Barn)tmpCell.getObjectMap();
+            if (cell.getX() - 1 == barn.getAnchorX() && cell.getY() + 1 == barn.getAnchorY()) {
+                int frameWidth = this.barnTexture.getWidth();
+                int frameHeight = this.barnTexture.getHeight();
+                TextureRegion barnFrame = new TextureRegion(this.barnTexture, 0, 0, frameWidth, frameHeight);
+                batch.draw(FarmScreen.grassTexture, x, y, CELL_SIZE, CELL_SIZE);
+                batch.draw(barnFrame, x - CELL_SIZE*6, y, CELL_SIZE*7, CELL_SIZE*8);
             }
         }
+
         return false;
-
     }
-
-
-
 }

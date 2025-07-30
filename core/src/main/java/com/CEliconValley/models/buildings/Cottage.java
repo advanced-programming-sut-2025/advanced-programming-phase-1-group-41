@@ -41,7 +41,7 @@ public class Cottage implements Building {
                 Cell cell = Finder.findCellByCoordinates(i, yWall, farm);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
-                if(i == x + 2 && yWall == y + 5){
+                if(i == x + 3 && yWall == y ){
                     cell.setObjectMap(new Door());
                 }
             }

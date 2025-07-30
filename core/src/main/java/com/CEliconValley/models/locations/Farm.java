@@ -16,6 +16,7 @@ import com.CEliconValley.models.buildings.animalContainer.Barn;
 import com.CEliconValley.models.buildings.animalContainer.BarnType;
 import com.CEliconValley.models.buildings.animalContainer.Coop;
 import com.CEliconValley.models.buildings.animalContainer.CoopType;
+import com.badlogic.gdx.maps.Map;
 import dev.morphia.annotations.Transient;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import static com.CEliconValley.models.App.MaxHeight;
 import static com.CEliconValley.models.App.MaxLength;
 
 
-public class Farm {
+public class Farm implements Location {
 
     private FarmType farmType;
     @Transient
@@ -85,9 +86,11 @@ public class Farm {
         }
 //        Objects.requireNonNull(Finder.findCellByCoordinates(20, 50, this)).setObjectMap(new Grass(20, 50, this));
         farmType = FarmType.values()[rand.nextInt(FarmType.values().length)];
-        greenhouse = new Greenhouse(4,24 + rand.nextInt(4),this);
+        greenhouse = new Greenhouse(4,MaxHeight-24 - rand.nextInt(4),this);
         buildings.add(greenhouse);
-        buildings.add(new Cottage(30 + rand.nextInt(4), 4,this));
+        buildings.add(new Cottage(30 + rand.nextInt(4), MaxHeight-4,this));
+        creatNewCoop(30,MaxHeight-14,CoopType.Normal);
+        creatNewBarn(30,MaxHeight-34,BarnType.Normal);
         mine = new Mine(3,3,this);
 
         int lakeCount = farmType.LakeCoefficient;
@@ -95,28 +98,28 @@ public class Farm {
 
 
         for(int i = 0; i < lakeCount; i++){
-            lakes.add(new Lake(25 + 10 * i + rand.nextInt(5 + 5 * i), 25 + 10 * i + rand.nextInt(5 + 5 * i), this));
+            lakes.add(new Lake(25 + 10 * i + rand.nextInt(5 + 5 * i), MaxHeight-(25 + 10 * i + rand.nextInt(5 + 5 * i)), this));
         }
-        lakes.add(new Lake(30 + rand.nextInt(10), 35 + rand.nextInt(10), this));
+        lakes.add(new Lake(30 + rand.nextInt(10), MaxHeight-(35 + rand.nextInt(10)), this));
         for(int i = 0; i < bushCount; i++){
-            bushes.add(new Bush(20 + rand.nextInt(10) + i * 20, 20 + rand.nextInt(10), this));
+            bushes.add(new Bush(20 + rand.nextInt(10) + i * 20, MaxHeight-(20 + rand.nextInt(10)), this));
         }
-        bushes.add(new Bush(35 + rand.nextInt(10), 10, this));
-        bushes.add(new Bush(20 + rand.nextInt(10), 35 + rand.nextInt(10), this));
-        bushes.add(new Bush(25 + rand.nextInt(10), 40 + rand.nextInt(10), this));
+        bushes.add(new Bush(35 + rand.nextInt(10), MaxHeight-(10), this));
+        bushes.add(new Bush(20 + rand.nextInt(10), MaxHeight-(35 + rand.nextInt(10)), this));
+        bushes.add(new Bush(25 + rand.nextInt(10), MaxHeight-(40 + rand.nextInt(10)), this));
 
-        rockCount = (35 + rand.nextInt(10)) * farmType.rockCoefficient;
-        foragingTreeCount = (35 + rand.nextInt(10)) * farmType.treeCoefficient;
-        plantCount = (40 + rand.nextInt(10)) * farmType.treeCoefficient;
-        foragingCropCount = (30 + rand.nextInt(5));
+//        rockCount = (35 + rand.nextInt(10)) * farmType.rockCoefficient;
+//        foragingTreeCount = (35 + rand.nextInt(10)) * farmType.treeCoefficient;
+//        plantCount = (40 + rand.nextInt(10)) * farmType.treeCoefficient;
+//        foragingCropCount = (30 + rand.nextInt(5));
 //        rockCount = (5 + rand.nextInt(10)) * farmType.rockCoefficient;
 //        foragingTreeCount = (5 + rand.nextInt(10)) * farmType.treeCoefficient;
 //        plantCount = (4 + rand.nextInt(10)) * farmType.treeCoefficient;
 //        foragingCropCount = (3 + rand.nextInt(5));
-//        rockCount = 0;
-//        foragingTreeCount = 0;
-//        foragingCropCount = 0;
-//        plantCount = 0;
+        rockCount = 0;
+        foragingTreeCount = 0;
+        foragingCropCount = 0;
+        plantCount = 0;
 
         for(int i = 0; i < rockCount ;i++){
             int y = rand.nextInt(MaxLength - 4) + 2;
@@ -212,7 +215,7 @@ public class Farm {
                     transferCells.add(cell);
                 }
             }
-        }
+        }//todo تو فاز یک ، ایگرگ از بالا به پایین زیاد میشد ولی تو گرافیک برعکسه این، ترنسفر سل ها باید عوض شن
         for(Cell cell : cells){
             if(cell.getY()>2&&getCell(cell.getX(),cell.getY()-1).getObjectMap() instanceof Door&&getCell(cell.getX(),cell.getY()-2).getObjectMap() instanceof Cottage){
                 cell.setObjectMap(new Grass());

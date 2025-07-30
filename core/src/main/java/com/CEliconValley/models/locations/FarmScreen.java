@@ -3,9 +3,10 @@ package com.CEliconValley.models.locations;
 import com.CEliconValley.controllers.Spawner.*;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
+import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.Player;
-import com.CEliconValley.models.buildings.Cottage;
-import com.CEliconValley.models.buildings.Wall;
+import com.CEliconValley.models.buildings.*;
+import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
 import com.CEliconValley.models.foragings.ForagingTree;
 import com.CEliconValley.models.foragings.Nature.*;
 import com.badlogic.gdx.Gdx;
@@ -30,6 +31,9 @@ public class FarmScreen implements Screen {
     private final BuildingSpawner buildingSpawner;
     private final GroundSpawner groundSpawner;
     private final CropSpawner cropSpawner;
+    private final Hero hero;
+    private boolean onRepeat=true;
+    private boolean didHit=false;
 
 
     Map<Cell, TextureRegion> groundCache;
@@ -57,18 +61,13 @@ public class FarmScreen implements Screen {
     private int playerX;
     private int playerY;
 
-    int[][] directions = {
-        {0, 1},
-        {1, 0},
-        {0, -1},
-        {-1, 0},
-    };
 
     private float renderX;
     private float renderY;
 
     private int playerDirection = 0;
 
+    private boolean isActing = false;
     private boolean isMoving = false;
     private int targetX;
     private int targetY;
@@ -85,6 +84,7 @@ public class FarmScreen implements Screen {
         buildingSpawner=new BuildingSpawner(this.farm);
         groundSpawner=new GroundSpawner(this.farm);
         cropSpawner=new CropSpawner(this.farm);
+        hero=new Hero(this.farm);
 
 
         batch = new SpriteBatch();
@@ -130,9 +130,16 @@ public class FarmScreen implements Screen {
 
 
         currentAnimation = walkAnimations[0];
-
-        playerX = farm.getCells().get(0).getX();
-        playerY = farm.getCells().get(0).getY();
+        for(Cell cell: farm.getCells()) {
+            Cell doorCell=Finder.findCellByCoordinates(cell.getX(),cell.getY()+1,this.farm);
+            Cell homeCell=Finder.findCellByCoordinates(cell.getX(),cell.getY()+2,this.farm);
+            if(doorCell!=null&& doorCell.getObjectMap() instanceof Door){
+                if(homeCell!=null && homeCell.getObjectMap() instanceof Cottage){
+                    playerX = cell.getX();
+                    playerY = cell.getY();
+                }
+            }
+        }
 
         renderX = playerX * CELL_SIZE;
         renderY = playerY * CELL_SIZE;
@@ -186,10 +193,10 @@ public class FarmScreen implements Screen {
         }
 
         batch.begin();
-        int minX = (int)((camera.position.x - camera.viewportWidth / 2) / CELL_SIZE) - 1;
-        int maxX = (int)((camera.position.x + camera.viewportWidth / 2) / CELL_SIZE) + 1;
-        int minY = (int)((camera.position.y - camera.viewportHeight / 2) / CELL_SIZE) - 1;
-        int maxY = (int)((camera.position.y + camera.viewportHeight / 2) / CELL_SIZE) + 1;
+        int minX = (int)((camera.position.x - camera.viewportWidth / 2) / CELL_SIZE) - 8;
+        int maxX = (int)((camera.position.x + camera.viewportWidth / 2) / CELL_SIZE) + 8;
+        int minY = (int)((camera.position.y - camera.viewportHeight / 2) / CELL_SIZE) - 8;
+        int maxY = (int)((camera.position.y + camera.viewportHeight / 2) / CELL_SIZE) + 8;
 
         List<Cell> visibleCells = new ArrayList<>();
 
@@ -222,15 +229,25 @@ public class FarmScreen implements Screen {
             rockSpawner.renderRocks(batch,cell,passiveStateTime);
             cropSpawner.renderCrops(batch,cell,passiveStateTime);
             waterSpawner.renderWater(batch,cell,passiveStateTime);
+            rockSpawner.renderBreakingEffectForCell(batch, cell, delta);
             if(playerX == cell.getX() && playerY == cell.getY()){
 
-                TextureRegion currentFrame = currentAnimation.getKeyFrame(stateTime, true);
-                if (currentFrame.isFlipX() != flip) {
-                    currentFrame.flip(true, false);
+                TextureRegion currentFrame = currentAnimation.getKeyFrame(stateTime, onRepeat);
+                System.out.println("stateTime: " + stateTime + ", frameIndex: " + currentAnimation.getKeyFrameIndex(stateTime));
+                if (!onRepeat&&currentAnimation.isAnimationFinished(stateTime)) {
+                    currentAnimation = hero.walk(false, playerDirection);
+                    isActing=false;
+
+
                 }
-                batch.draw(currentFrame, renderX, renderY, CELL_SIZE, CELL_SIZE);
+
+                batch.draw(currentFrame, renderX-CELL_SIZE/2f, renderY-CELL_SIZE/2, CELL_SIZE*2f, CELL_SIZE*2f);
             }
             treeSpawner.renderTrees(batch,cell,passiveStateTime);
+//            if (didHit) {
+//                hit(playerDirection, playerX, playerY);
+//                didHit = false;
+//            }
 
 
 
@@ -255,45 +272,68 @@ public class FarmScreen implements Screen {
 
 
     private void handleInput() {
-        if (isMoving) return;
+        if (isActing||isMoving) return;
+
 
         boolean moved = false;
+        onRepeat=true;
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+//            currentAnimation = hero.walk(canMoveTo(playerX, playerY+1),1);
+                playerDirection = 1;
             if (canMoveTo(playerX, playerY + 1)) {
                 targetX = playerX;
                 targetY = playerY + 1;
-                playerDirection = 1;
                 moved = true;
             }
+            currentAnimation = hero.walk(moved,playerDirection);
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+//            currentAnimation = hero.walk(canMoveTo(playerX, playerY-1),3);
+                playerDirection = 3;
+
             if (canMoveTo(playerX, playerY - 1)) {
                 targetX = playerX;
                 targetY = playerY - 1;
-                playerDirection = 0;
                 moved = true;
             }
+            currentAnimation = hero.walk(moved,playerDirection);
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+//            currentAnimation = hero.walk(canMoveTo(playerX-1, playerY),4);
+                playerDirection = 4;
             if (canMoveTo(playerX - 1, playerY)) {
                 targetX = playerX - 1;
                 targetY = playerY;
-                playerDirection = 2;
-                flip = false;
-                moved = true;
-            }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            if (canMoveTo(playerX + 1, playerY)) {
-                targetX = playerX + 1;
-                targetY = playerY;
-                playerDirection = 2;
                 flip = true;
                 moved = true;
             }
+            currentAnimation = hero.walk(moved,playerDirection);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+//            currentAnimation = hero.walk(canMoveTo(playerX+1, playerY),2);
+                playerDirection = 2;
+                flip = false;
+            if (canMoveTo(playerX + 1, playerY)) {
+                targetX = playerX + 1;
+                targetY = playerY;
+                moved = true;
+            }
+            currentAnimation = hero.walk(moved,playerDirection);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+            onRepeat=false;
+            currentAnimation = hero.useTool(3);
+            isActing=true;
+            stateTime = 0;
+            didHit=true;
+            hit(playerDirection,playerX,playerY);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            transfer();
+        }
+        else{
+            currentAnimation = hero.walk(false,playerDirection);
         }
 
         if (moved) {
             isMoving = true;
-            currentAnimation = walkAnimations[playerDirection];
+//            currentAnimation = walkAnimations[playerDirection];
         }
     }
 
@@ -318,6 +358,37 @@ public class FarmScreen implements Screen {
     public void resize(int width, int height) {
         camera.setToOrtho(false, width, height);
     }
+    private void hit(int direction,int cellX,int cellY) {
+        switch (direction) {
+            case 1:
+                rockSpawner.hitRock(Finder.findCellByCoordinates(cellX, cellY+1,this.farm));
+                return;
+            case 2:
+                rockSpawner.hitRock(Finder.findCellByCoordinates(cellX+1, cellY,this.farm));
+                return;
+            case 3:
+                rockSpawner.hitRock(Finder.findCellByCoordinates(cellX, cellY-1, this.farm));
+                return;
+            case 4:
+                rockSpawner.hitRock(Finder.findCellByCoordinates(cellX-1, cellY, this.farm));
+                return;
+        }
+    }
+    public void transfer(){
+        Cell cell=Finder.findCellByCoordinates(playerX,playerY,this.farm);
+        if(cell.getObjectMap() instanceof Door) {
+            for (int i = -1; i < 2; i++) {
+                for (int j = -1; j < 2; j++) {
+                    if (Finder.findCellByCoordinates(playerX + i, playerY + j, this.farm).getObjectMap() instanceof Greenhouse) {
+
+                        ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new GreenHouseScreen(this, new GreenhouseMap(0, 0), player));
+                    } else if (Finder.findCellByCoordinates(playerX + i, playerY + j, this.farm).getObjectMap() instanceof Cottage) {
+                        ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new CottageScreen(this, new CottageMap(0, 0), player));
+                    }
+                }
+            }
+        }
+    }
 
 
 
@@ -325,7 +396,9 @@ public class FarmScreen implements Screen {
 
     @Override
     public void dispose() {
-        batch.dispose();
+
+            batch.dispose();
+
 
 
         grassTexture.dispose();

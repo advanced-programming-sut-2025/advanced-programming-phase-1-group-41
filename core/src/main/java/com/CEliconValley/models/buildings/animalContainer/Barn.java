@@ -48,6 +48,8 @@ public class Barn implements Building {
         this.y = y;
         this.barnType=barnType;
         int size = 5 + barnType.getCapacity() / 4;
+        anchorX=x+size-1;
+        anchorY=y+1;
         int xWall;
         int yWall;
         yWall = y;
@@ -144,12 +146,12 @@ public class Barn implements Building {
 
     @Override
     public int getAnchorX() {
-        return 0;
+        return anchorX;
     }
 
     @Override
     public int getAnchorY() {
-        return 0;
+        return anchorY;
     }
 
 

@@ -1,9 +1,12 @@
 package com.CEliconValley.models;
 
+import com.CEliconValley.models.buildings.Cottage;
 import com.CEliconValley.models.buildings.marketplaces.items.*;
 import com.CEliconValley.models.foragings.*;
 import com.CEliconValley.models.foragings.Nature.*;
 import com.CEliconValley.models.items.*;
+import com.CEliconValley.models.locations.CottageMap;
+import com.CEliconValley.models.locations.GreenhouseMap;
 import org.bson.types.ObjectId;
 import com.CEliconValley.models.buildings.ShippingBin;
 import com.CEliconValley.models.buildings.Well;
@@ -152,6 +155,22 @@ public class Finder {
     }
     public static Cell findCellByCoordinatesVillage(int x, int y, Village village){
         for(Cell cell : village.getCells()){
+            if(cell.getX() == x && cell.getY() == y){
+                return cell;
+            }
+        }
+        return null;
+    }
+    public static Cell findCellByCoordinatesGreenHouse(int x, int y, GreenhouseMap greenhouse){
+        for(Cell cell : greenhouse.getCells()){
+            if(cell.getX() == x && cell.getY() == y){
+                return cell;
+            }
+        }
+        return null;
+    }
+    public static Cell findCellByCoordinatesCottage(int x, int y, CottageMap cottage){
+        for(Cell cell : cottage.getCells()){
             if(cell.getX() == x && cell.getY() == y){
                 return cell;
             }
