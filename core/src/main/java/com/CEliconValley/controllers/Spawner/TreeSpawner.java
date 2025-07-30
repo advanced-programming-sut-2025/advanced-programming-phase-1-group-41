@@ -1,7 +1,6 @@
 package com.CEliconValley.controllers.Spawner;
 
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Player;
 import com.CEliconValley.models.foragings.ForagingTree;
 import com.CEliconValley.models.foragings.Nature.Tree;
 import com.CEliconValley.models.foragings.Nature.TreeType;
@@ -12,9 +11,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.DoubleToIntFunction;
 
-import static com.CEliconValley.models.locations.FarmScreen.CELL_SIZE;
+import static com.CEliconValley.views.screen.FarmScreen.CELL_SIZE;
 
 public class TreeSpawner {
     private final Farm farm;

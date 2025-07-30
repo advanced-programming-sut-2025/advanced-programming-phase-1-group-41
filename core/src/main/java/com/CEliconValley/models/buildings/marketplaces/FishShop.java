@@ -30,9 +30,9 @@ public class FishShop extends Marketplace implements Building {
     }
     private int x;
     private int y;
-    public FishShop(int x, int y, Village village) {
+    public FishShop(int x, int y, Village village, boolean load) {
         super(null);
-        constructFishShop(x, y, village);
+        constructFishShop(x, y, village, load);
 
         stock.add(new Slot(FishShopItems.FishSmokerRecipe, 1));
         stock.add(new Slot(new Troutsoup(), 1));
@@ -44,7 +44,7 @@ public class FishShop extends Marketplace implements Building {
         this.updateStock();
     }
 
-    public void constructFishShop(int x , int y , Village village){
+    public void constructFishShop(int x , int y , Village village, boolean laod){
         this.x = x;
         this.y = y;
         int xWall;

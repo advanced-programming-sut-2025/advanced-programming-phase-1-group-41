@@ -1,8 +1,10 @@
 package com.CEliconValley.common;
 
+import com.CEliconValley.models.Player;
 import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.buildings.animalContainer.Coop;
 import com.CEliconValley.models.buildings.animalContainer.CoopType;
+import com.CEliconValley.models.locations.Farm;
 import dev.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
@@ -16,6 +18,9 @@ public class CoopData {
     int anchorY;
     int coopTypeInt;
     int capacity;
+
+    public CoopData() {
+    }
 
     public CoopData(Coop coop) {
         this.animalsData = new ArrayList<>();
@@ -31,8 +36,16 @@ public class CoopData {
     }
 
 
-    public Coop getCoop() {
-        return new Coop(this.anchorX, this.anchorY, CoopType.values()[this.coopTypeInt],
-            this.capacity, this.x, this.y);
+    public Coop getCoop(Player owner, Farm farm) {
+        return new Coop(getAnimals(owner),this.anchorX, this.anchorY, CoopType.values()[this.coopTypeInt],
+            this.capacity, this.x, this.y, farm);
+    }
+
+    private ArrayList<Animal> getAnimals(Player owner) {
+        ArrayList<Animal> animals = new ArrayList<>();
+        for (AnimalData animalData : this.animalsData) {
+            animals.add(animalData.getAnimal(owner));
+        }
+        return animals;
     }
 }

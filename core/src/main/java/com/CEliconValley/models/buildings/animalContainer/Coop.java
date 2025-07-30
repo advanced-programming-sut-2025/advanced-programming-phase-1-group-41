@@ -12,7 +12,7 @@ import com.CEliconValley.models.locations.Village;
 import java.util.ArrayList;
 
 public class Coop implements Building {
-    private final ArrayList<Animal> animals = new ArrayList<>();
+    private ArrayList<Animal> animals = new ArrayList<>();
     private int x;
     private int y;
     private int anchorX;
@@ -33,15 +33,46 @@ public class Coop implements Building {
     }
 
 
-    public Coop(int anchorX, int anchorY,  CoopType coopType, int capacity,int x, int y) {
+    public Coop(ArrayList<Animal> animals,int anchorX, int anchorY,
+                CoopType coopType, int capacity,int x, int y, Farm farm) {
+        this.animals = new ArrayList<>(animals);
         this.anchorX = anchorX;
         this.anchorY = anchorY;
         this.capacity = capacity;
         this.coopType = coopType;
         this.x = x;
         this.y = y;
+        int size = 5 + coopType.getCapacity() / 4;
+        int xWall;
+        int yWall;
+        yWall = y;
+        while(yWall<=y + size) {
+            for (int i = x; i <= x + size; i++) {
+                Cell cell = Finder.findCellByCoordinates(i, yWall, farm);
+                assert cell != null;
+                cell.setObjectMap(new Wall());
+            }
+            yWall+=size;
+        }
+        xWall = x;
+        while(xWall<=x+size) {
+            for (int j = y+1; j <= y+size; j++) {
+                Cell cell = Finder.findCellByCoordinates(xWall, j, farm);
+                assert cell != null;
+                cell.setObjectMap(new Wall());
+            }
+            xWall+=size;
+        }
+        x++;
+        y++;
+        for(int i = x; i< size +x - 1; i++) {
+            for(int j = y; j< size +y - 1; j++) {
+                Cell cell=Finder.findCellByCoordinates(i, j, farm);
+                assert cell != null;
+                cell.setObjectMap(this);
+            }
+        }
     }
-
     public Coop(int x, int y, Farm farm, CoopType coopType) {
         this.capacity = coopType.getCapacity();
         this.x = x;

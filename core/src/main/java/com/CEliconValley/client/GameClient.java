@@ -1,5 +1,9 @@
 package com.CEliconValley.client;
 
+import com.CEliconValley.common.GameData;
+import com.CEliconValley.models.Game;
+import com.CEliconValley.models.locations.Farm;
+import com.google.gson.Gson;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -18,7 +22,7 @@ public class GameClient extends WebSocketClient {
             URI serverUri = new URI(first);
             GameClient client = new GameClient(serverUri);
             client.connect(); // Starts async connection
-            while(!client.isOpen()) {
+            while (!client.isOpen()) {
                 Thread.sleep(50);
             }
             client.send("sup");
@@ -36,7 +40,19 @@ public class GameClient extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-        System.out.println("Received from server: " + message);
+        Gson gson = new Gson();
+        try {
+            GameData data = gson.fromJson(message, GameData.class);
+            System.out.println("received the data :D");
+            System.out.println("client code:");
+            Game game = data.makeGame();
+            for (Farm farm : game.getFarms()) {
+                farm.printMap();
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+//            System.out.println("received message: "+message);
+        }
     }
 
     @Override

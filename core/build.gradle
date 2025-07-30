@@ -43,6 +43,7 @@ dependencies {
   api "com.rafaskoberg.gdx:typing-label:$typingLabelVersion"
   api "org.mini2Dx:universal-tween-engine:$universalTweenVersion"
   api "com.github.MrStahlfelge.gdx-websockets:core:$websocketVersion"
+  implementation 'com.google.code.gson:gson:2.10.1'
 
   if (enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"

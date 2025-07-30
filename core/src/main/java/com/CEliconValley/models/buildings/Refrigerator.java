@@ -21,6 +21,9 @@ public class Refrigerator implements ObjectMap {
 
     public Refrigerator(ArrayList<Slot> slots) {
         this.slots = slots;
+        for (int i = 0; i < 2; i++) {
+            this.slots.add(new Slot(null, 0));
+        }
     }
 
     public Refrigerator() {

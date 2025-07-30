@@ -14,6 +14,10 @@ public class InventoryData {
     // testing..
     ArrayList<SlotData> slots;
     int whichBackpack;
+
+    public InventoryData() {
+    }
+
     public InventoryData(Inventory inventory) {
         slots=new ArrayList<>();
         for (Slot slot : inventory.getSlots()) {

@@ -30,10 +30,10 @@ public class Blacksmith extends Marketplace implements Building{
     }
     private int x;
     private int y;
-    public Blacksmith(int x, int y, Village village) {
+    public Blacksmith(int x, int y, Village village, boolean load) {
 //        super(App.getGame().getVillage().getnpcByName("clint"));
         super(null);
-        constructBlacksmith(x,y,village);
+        constructBlacksmith(x,y,village, load);
         itemsForSale.add(new Slot(BlacksmithItems.Coal, 10000));
         itemsForSale.add(new Slot(BlacksmithItems.IronOre, 10000));
         itemsForSale.add(new Slot(BlacksmithItems.GoldOre, 10000));
@@ -51,7 +51,7 @@ public class Blacksmith extends Marketplace implements Building{
         updates.add(true);
     }
 
-    private void constructBlacksmith(int x, int y , Village village){
+    private void constructBlacksmith(int x, int y , Village village, boolean load){
         this.x = x;
         this.y = y;
         int xWall;
@@ -88,7 +88,9 @@ public class Blacksmith extends Marketplace implements Building{
                 cell.setObjectMap(this);
             }
         }
-        updateHourly();
+        if(!load) {
+            updateHourly();
+        }
     }
 
     public int getX() {

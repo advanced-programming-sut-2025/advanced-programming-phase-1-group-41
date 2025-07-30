@@ -33,7 +33,7 @@ public class Jojamart extends Marketplace implements Building {
     }
     private int x;
     private int y;
-    public Jojamart(int x, int y, Village village) {
+    public Jojamart(int x, int y, Village village, boolean load) {
         super(null);
         constructJojamart(x,y,village);
 
@@ -90,7 +90,9 @@ public class Jojamart extends Marketplace implements Building {
 
         winter.add(new Slot(JojamartItems.PowdermelonSeeds, 10));
 
-        this.updateStock();
+        if(!load){
+            this.updateStock();
+        }
 
     }
 

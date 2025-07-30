@@ -1,12 +1,11 @@
 package com.CEliconValley.models;
 
-import com.CEliconValley.models.buildings.Cottage;
 import com.CEliconValley.models.buildings.marketplaces.items.*;
 import com.CEliconValley.models.foragings.*;
 import com.CEliconValley.models.foragings.Nature.*;
 import com.CEliconValley.models.items.*;
-import com.CEliconValley.models.locations.CottageMap;
-import com.CEliconValley.models.locations.GreenhouseMap;
+import com.CEliconValley.views.maps.CottageMap;
+import com.CEliconValley.views.maps.GreenhouseMap;
 import org.bson.types.ObjectId;
 import com.CEliconValley.models.buildings.ShippingBin;
 import com.CEliconValley.models.buildings.Well;

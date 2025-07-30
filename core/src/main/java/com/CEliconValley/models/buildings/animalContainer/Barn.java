@@ -12,7 +12,7 @@ import com.CEliconValley.models.locations.Village;
 import java.util.ArrayList;
 
 public class Barn implements Building {
-    private final ArrayList<Animal> animals = new ArrayList<>();
+    private ArrayList<Animal> animals = new ArrayList<>();
     private int x;
     private int y;
     // TODO these anchor things need to be handled, rn there is no logic behind them
@@ -33,13 +33,45 @@ public class Barn implements Building {
         return barnType;
     }
 
-    public Barn(int anchorX, int anchorY, BarnType barnType, int capacity, int x, int y) {
+    public Barn(ArrayList<Animal> animals,int anchorX,
+                int anchorY, BarnType barnType, int capacity, int x, int y, Farm farm) {
+        this.animals = new ArrayList<>(animals);
         this.anchorX = anchorX;
         this.anchorY = anchorY;
         this.barnType = barnType;
         this.capacity = capacity;
         this.x = x;
         this.y = y;
+        int size = 5 + barnType.getCapacity() / 4;
+        int xWall;
+        int yWall;
+        yWall = y;
+        while(yWall<=y + size) {
+            for (int i = x; i <= x + size; i++) {
+                Cell cell = Finder.findCellByCoordinates(i, yWall, farm);
+                assert cell != null;
+                cell.setObjectMap(new Wall());
+            }
+            yWall+=size;
+        }
+        xWall = x;
+        while(xWall<=x+size) {
+            for (int j = y+1; j <= y+size; j++) {
+                Cell cell = Finder.findCellByCoordinates(xWall, j, farm);
+                assert cell != null;
+                cell.setObjectMap(new Wall());
+            }
+            xWall+=size;
+        }
+        x++;
+        y++;
+        for(int i = x; i< size +x - 1; i++) {
+            for(int j = y; j< size +y - 1; j++) {
+                Cell cell=Finder.findCellByCoordinates(i, j, farm);
+                assert cell != null;
+                cell.setObjectMap(this);
+            }
+        }
     }
 
     public Barn(int x, int y, Farm farm, BarnType barnType) {

@@ -1,12 +1,15 @@
 package com.CEliconValley.database;
 
 import com.CEliconValley.common.GameData;
+import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.models.*;
+import com.google.gson.Gson;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
 import org.bson.types.ObjectId;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,8 +18,8 @@ import java.util.stream.Collectors;
 
 public class UserDB {
     public static void connect() {
-            MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
-            Datastore datastore = Morphia.createDatastore(mongoClient, "ProjectDB");
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        Datastore datastore = Morphia.createDatastore(mongoClient, "ProjectDB");
 
 
         System.out.println("reached here");
@@ -64,8 +67,8 @@ public class UserDB {
         HashMap<ObjectId, Game> gameMap = new HashMap<>();
         datastore.find(Game.class).forEach(game -> {
             List<Player> resolvedPlayers = game.getPlayersId() != null
-                    ? game.getPlayersId().stream().map(playerMap::get).collect(Collectors.toList())
-                    : new ArrayList<>();
+                ? game.getPlayersId().stream().map(playerMap::get).collect(Collectors.toList())
+                : new ArrayList<>();
 
             game.setPlayers(resolvedPlayers);
 
@@ -122,7 +125,23 @@ public class UserDB {
         Datastore datastore = Morphia.createDatastore(mongoClient, "ProjectDB");
 
         GameData gameData = new GameData(game);
+        Gson gson = new Gson();
+        String jsonData = gson.toJson(gameData);
+        App.getServer().broadcast(jsonData);
         datastore.save(gameData);
+    }
+
+    public static Game loadGame(String username){
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        Datastore datastore = Morphia.createDatastore(mongoClient, "ProjectDB");
+        for (GameData gameData : datastore.find(GameData.class)) {
+            for (PlayerData pd : gameData.getPlayersData()) {
+                if(pd.getUsername().equals(username)){
+                    return gameData.makeGame();
+                }
+            }
+        }
+        return null;
     }
 
     public static void disconnect() {

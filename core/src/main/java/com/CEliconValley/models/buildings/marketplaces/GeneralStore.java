@@ -1,7 +1,6 @@
 package com.CEliconValley.models.buildings.marketplaces;
 
 import com.CEliconValley.models.*;
-
 import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.buildings.Wall;
@@ -33,7 +32,7 @@ public class GeneralStore extends Marketplace implements Building {
     }
     private int x;
     private int y;
-    public GeneralStore(int x, int y, Village village) {
+    public GeneralStore(int x, int y, Village village, boolean load) {
         super(null);
         constructGeneralStore(x,y,village);
 
@@ -47,7 +46,9 @@ public class GeneralStore extends Marketplace implements Building {
 
         constructFallStock();
 
-        updateStock();
+        if(!load) {
+            updateStock();
+        }
 
     }
 

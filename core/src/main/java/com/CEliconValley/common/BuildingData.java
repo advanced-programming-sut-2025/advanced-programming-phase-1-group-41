@@ -11,6 +11,10 @@ public class BuildingData {
     int y;
     int anchorX;
     int anchorY;
+
+    public BuildingData() {
+    }
+
     public BuildingData(Building building) {
         this.name = building.getName();
         this.x = building.getX();

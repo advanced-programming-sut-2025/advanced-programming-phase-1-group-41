@@ -1,4 +1,4 @@
-package com.CEliconValley.models.locations;
+package com.CEliconValley.views.screen;
 
 import com.CEliconValley.controllers.Spawner.*;
 import com.CEliconValley.models.Cell;
@@ -9,6 +9,9 @@ import com.CEliconValley.models.buildings.*;
 import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
 import com.CEliconValley.models.foragings.ForagingTree;
 import com.CEliconValley.models.foragings.Nature.*;
+import com.CEliconValley.views.maps.CottageMap;
+import com.CEliconValley.models.locations.Farm;
+import com.CEliconValley.views.maps.GreenhouseMap;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;

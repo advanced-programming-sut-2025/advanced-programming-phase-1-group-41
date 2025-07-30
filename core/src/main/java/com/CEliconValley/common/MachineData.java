@@ -26,6 +26,11 @@ public class MachineData {
     ArrayList<SlotData> slotsData;
     ArrayList<SlotData> receivedItemsData;
     HashMap<String, Object> metaData;
+
+
+    public MachineData() {
+    }
+
     public MachineData(Machine machine) {
         this.craftableMachineName = machine.getCraftableMachine().getName();
         this.processTime = machine.getProcessTime();

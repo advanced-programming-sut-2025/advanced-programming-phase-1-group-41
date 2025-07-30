@@ -3,9 +3,9 @@ package com.CEliconValley.models.npc.npcCharacters;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Occupation;
 import com.CEliconValley.models.Player;
-import com.CEliconValley.models.npc.npchomes.NPCHome;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
+import com.CEliconValley.models.npc.npchomes.NPCHome;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -109,8 +109,8 @@ public abstract class NPC {
             isTalkedToday.put(player,false);
             isGiftedToday.put(player,false);
             for(int i=0;i<3;i++){
-                    quests.get(i).setLocked(player, true);
-                    quests.get(i).setFinished(player, false);
+                quests.get(i).setLocked(player, true);
+                quests.get(i).setFinished(player, false);
             }
         }
 
@@ -152,5 +152,45 @@ public abstract class NPC {
 
     public HashMap<Player, Boolean> getIsTalkedToday() {
         return isTalkedToday;
+    }
+
+    public void setDialogues(ArrayList<String> dialogues) {
+        this.dialogues = dialogues;
+    }
+
+    public void setFavorites(ArrayList<Item> favorites) {
+        this.favorites = favorites;
+    }
+
+    public void setFriendShip(HashMap<Player, Integer> friendShip) {
+        this.friendShip = friendShip;
+    }
+
+    public void setHome(NPCHome home) {
+        this.home = home;
+    }
+
+    public void setIsGiftedToday(HashMap<Player, Boolean> isGiftedToday) {
+        this.isGiftedToday = isGiftedToday;
+    }
+
+    public void setIsTalkedToday(HashMap<Player, Boolean> isTalkedToday) {
+        this.isTalkedToday = isTalkedToday;
+    }
+
+    public void setItemsToGift(ArrayList<Slot> itemsToGift) {
+        ItemsToGift = itemsToGift;
+    }
+
+    public void setJob(Occupation job) {
+        this.job = job;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setQuests(ArrayList<Quest> quests) {
+        this.quests = quests;
     }
 }

@@ -3,12 +3,13 @@ package com.CEliconValley.server;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
+
 import java.net.InetSocketAddress;
 import java.util.HashSet;
 import java.util.Set;
 
 public class GameServer extends WebSocketServer {
-    private static final int PORT = 8080;
+    public static final int PORT = 8080;
     private final Set<WebSocket> connections = new HashSet<>();
     public GameServer() {
         super(new InetSocketAddress(PORT));

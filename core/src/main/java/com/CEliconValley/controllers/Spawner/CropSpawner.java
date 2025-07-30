@@ -1,7 +1,6 @@
 package com.CEliconValley.controllers.Spawner;
 
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.foragings.Crop;
 import com.CEliconValley.models.foragings.CropType;
 import com.CEliconValley.models.foragings.ForagingCrop;
 import com.CEliconValley.models.foragings.ForagingCropType;
@@ -14,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.CEliconValley.models.locations.FarmScreen.CELL_SIZE;
+import static com.CEliconValley.views.screen.FarmScreen.CELL_SIZE;
 
 public class CropSpawner {
     private final Farm farm;
