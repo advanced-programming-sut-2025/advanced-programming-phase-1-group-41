@@ -1,6 +1,8 @@
 package com.CEliconValley.controllers;
 
 import com.CEliconValley.Main;
+import com.CEliconValley.common.GameData;
+import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.views.screen.FarmScreen;
@@ -8,6 +10,8 @@ import com.CEliconValley.views.Lobby;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Timer;
+import com.google.gson.Gson;
 
 public class LobbyController {
 
@@ -35,7 +39,17 @@ public class LobbyController {
                 App.setGame(new Game(view.getPlayers(),new Player(App.getCurrentUser())));
 //                Main.getMain().setScreen(App.getMenu().getScreen());
                 ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new FarmScreen(new Farm(1),view.getPlayers().get(0)));
-
+                Gdx.app.postRunnable(() -> {
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            if(App.getGame() == null) return;
+                            GameMessage<GameData> gameMessage = new GameMessage<>("gamedata", new GameData(App.getGame()));
+                            Gson gson = new Gson();
+                            App.getServer().broadcast(gson.toJson(gameMessage));
+                        }
+                    }, 1, 1);
+                });
             }
         });
 

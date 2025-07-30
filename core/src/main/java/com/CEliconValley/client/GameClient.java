@@ -5,6 +5,7 @@ import com.CEliconValley.common.messages.*;
 import com.CEliconValley.models.Game;
 import com.CEliconValley.models.Result;
 import com.CEliconValley.models.locations.Farm;
+import com.badlogic.gdx.Gdx;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -64,13 +65,20 @@ public class GameClient extends WebSocketClient {
                         System.out.println("here3");
                         Response.errorResponse(loginMessage.body);
                     }
+                    System.out.println("Cmessage: "+message);
+                }
+                case "gamedata" -> {
+                    GameMessage<GameData> gameDataMessage = gson.fromJson(message, new TypeToken<GameMessage<GameData>>() {}.getType());
+                    Gdx.app.postRunnable(() -> {
+                        AppClient.setGameData(gameDataMessage.body);
+                    });
+                    System.out.println("Cmessage: updated gamedata");
                 }
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("CmessageE: "+message);
         }
-        System.out.println("Cmessage: "+message);
 //        try {
 //            GameData data = gson.fromJson(message, GameData.class);
 //            System.out.println("received the data :D");

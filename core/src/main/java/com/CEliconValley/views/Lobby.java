@@ -5,7 +5,9 @@ import com.CEliconValley.Main;
 import com.CEliconValley.controllers.LobbyController;
 import com.CEliconValley.controllers.MainMenuController;
 import com.CEliconValley.models.App;
+import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Player;
+import com.CEliconValley.models.User;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
@@ -62,8 +64,9 @@ public class Lobby implements Screen {
         this.password = password;
         this.controller=controller;
         players=new ArrayList<>();
-        players.add(new Player(App.getCurrentUser()));
-
+        User user = Finder.getUserByUsername("user1");
+        players.add(new Player(App.getCurrentUser() == null ? user:App.getCurrentUser()));
+        System.out.println(players.get(0).getUser().getUsername());
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
 
         label1=new Label("PLAYER1", skin);

@@ -48,6 +48,7 @@ public class GameData {
 
     private void fillPlayers(Game game){
         for (Player player : game.getPlayers()) {
+            System.out.println(player.getFarmId());
             this.playersData.add(new PlayerData(player));
         }
     }

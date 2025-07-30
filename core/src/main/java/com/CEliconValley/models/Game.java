@@ -77,7 +77,8 @@ public class Game {
 
         this.roundEnergy = 0;
         this._id = new ObjectId();
-
+        App.setGame(this);
+        this.village = new Village(false);
     }
 
     public void setFarms(){
