@@ -51,22 +51,27 @@ public class GameClient extends WebSocketClient {
         Gson gson = new Gson();
         try{
             GameMessage<Object> genericMsg = gson.fromJson(message, new TypeToken<GameMessage<Object>>() {}.getType());
+            JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+            JsonElement bodyElement = jsonObject.get("body");
+            GameMessage<SuccessMessage> successMsg = null;
+            GameMessage<ErrorMessage> errorMsg = null;
+            if(bodyElement.getAsJsonObject().has("success")) {
+                successMsg = gson.fromJson(message, new TypeToken<GameMessage<SuccessMessage>>() {}.getType());
+            }
+            else if(bodyElement.getAsJsonObject().has("error")) {
+                errorMsg = gson.fromJson(message, new TypeToken<GameMessage<ErrorMessage>>() {}.getType());
+            }
+            if(successMsg != null){
+                Response.successResponse(successMsg.body);
+            }else if(errorMsg != null){
+                Response.errorResponse(errorMsg.body);
+            }
             switch (genericMsg.type){
-                case "login_response" -> {
-                    JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
-                    JsonElement bodyElement = jsonObject.get("body");
-                    if(bodyElement.getAsJsonObject().has("success")) {
-                        GameMessage<SuccessMessage> loginMessage = gson.fromJson(message, new TypeToken<GameMessage<SuccessMessage>>() {}.getType());
-                        System.out.println("here2");
-                        Response.successResponse(loginMessage.body);
-                    }
-                    else if(bodyElement.getAsJsonObject().has("error")) {
-                        GameMessage<ErrorMessage> loginMessage = gson.fromJson(message, new TypeToken<GameMessage<ErrorMessage>>() {}.getType());
-                        System.out.println("here3");
-                        Response.errorResponse(loginMessage.body);
-                    }
+                case "login_response", "forgotpass_response" ,
+                     "fp_response" -> {
                     System.out.println("Cmessage: "+message);
                 }
+
                 case "gamedata" -> {
                     GameMessage<GameData> gameDataMessage = gson.fromJson(message, new TypeToken<GameMessage<GameData>>() {}.getType());
                     Gdx.app.postRunnable(() -> {

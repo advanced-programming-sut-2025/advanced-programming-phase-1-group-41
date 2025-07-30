@@ -1,5 +1,6 @@
 package com.CEliconValley.server;
 
+import com.CEliconValley.common.messages.ForgotpassCred;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.LoginCred;
 import com.google.gson.Gson;
@@ -41,7 +42,15 @@ public class GameServer extends WebSocketServer {
                     GameMessage<LoginCred> loginMsg =
                         gson.fromJson(message, new TypeToken<GameMessage<LoginCred>>() {}.getType());
                     LoginCred creds = loginMsg.body;
-                    Request.login_req(creds);
+                    Request.login_req(creds, conn);
+                }
+                case "forgotpass_request" -> {
+                    GameMessage<String> msg = gson.fromJson(message, new TypeToken<GameMessage<String>>() {}.getType());
+                    Request.showForgotPassword(msg.body, conn);
+                }
+                case "fp_request" -> {
+                    GameMessage<ForgotpassCred> msg = gson.fromJson(message, new TypeToken<GameMessage<ForgotpassCred>>() {}.getType());
+                    Request.forgotPassword(msg.body, conn);
                 }
                 default -> {
                     System.out.println("invalid type: "+genericMsg.type);

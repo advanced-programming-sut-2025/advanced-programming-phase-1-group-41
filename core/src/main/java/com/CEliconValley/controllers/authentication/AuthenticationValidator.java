@@ -1,6 +1,8 @@
 package com.CEliconValley.controllers.authentication;
 
+import com.CEliconValley.client.Response;
 import com.CEliconValley.models.App;
+import com.CEliconValley.models.Result;
 import com.CEliconValley.models.User;
 import com.CEliconValley.views.AppMenu;
 import com.CEliconValley.views.AuthenticationMenuView;
@@ -42,5 +44,26 @@ public class AuthenticationValidator {
             return false;
         }
         return true;
+    }
+    public static Result passwordValidation(String password) {
+        if(!password.matches("^[a-zA-Z0-9!@#$%^&*()+=\\[\\]{}\\-_.;:'`~\",<>?/\\\\|]+$")){
+            return new Result(false,"Invalid password format!");
+        }
+        if(password.length() < 8){
+            return new Result(false,"Password must be at least 8 characters!");
+        }
+        if (!password.matches(".*[a-z].*")) {
+            return new Result(false,"Password must contain at least one lowercase letter!");
+        }
+        if (!password.matches(".*[A-Z].*")) {
+            return new Result(false,"Password must contain at least one uppercase letter!");
+        }
+        if (!password.matches(".*\\d.*")) {
+            return new Result(false,"Password must contain at least one digit!");
+        }
+        if (!password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};:'\",.<>?/\\\\|`~].*")) {
+            return new Result(false,"assword must contain at least one special character!");
+        }
+        return new Result(true,"Password valid!");
     }
 }

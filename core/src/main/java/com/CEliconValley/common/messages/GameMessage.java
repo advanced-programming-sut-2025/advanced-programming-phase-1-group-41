@@ -8,4 +8,12 @@ public class GameMessage<T> {
         this.type = type;
         this.body = body;
     }
+
+    @Override
+    public String toString() {
+        return "GameMessage{" +
+            "body=" + body +
+            ", type='" + type + '\'' +
+            '}';
+    }
 }

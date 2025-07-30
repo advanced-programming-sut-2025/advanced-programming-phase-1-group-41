@@ -2,6 +2,7 @@ package com.CEliconValley.controllers.authentication;
 
 import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
+import com.CEliconValley.common.messages.ForgotpassCred;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.LoginCred;
 import com.CEliconValley.models.*;
@@ -115,7 +116,6 @@ public class AuthenticationMenuController {
                     GameMessage<LoginCred> message = new GameMessage<>("login_request", credentials);
                     String json = new Gson().toJson(message);
                     AppClient.getClient().send(json);
-//                    handleLogin();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -228,85 +228,26 @@ public class AuthenticationMenuController {
         System.out.println("Gender: " + selectedGender);
     }
 
-    private void handleLogin() throws NoSuchAlgorithmException {
-        String username = view.loginUsername.getText();
-        String password = view.loginPassword.getText();
-        boolean stayLoggedIn = view.stayLoggedInCheckbox.isChecked();
-
-        if (username.isEmpty() || password.isEmpty()) {
-            view.setMessage("Please enter username and password.", Color.RED);
-            return;
-        }
-        if(!AuthenticationValidator.usernameExists(username)){
-            view.setMessage("Username does not exist!", Color.RED);
-            return;
-        }
-        User user = Finder.getUserByUsername(username);
-        String passHash = getHash(password);
-        assert user != null;
-        if(!passHash.equals(user.getPassword())){
-            view.setMessage("Password does not match!", Color.RED);
-            return;
-        }
-        login(user, stayLoggedIn);
-
-        // مثال لاگین
-//        view.setMessage("Login attempted. (dummy logic)", Color.YELLOW);
-        emptyFields();
-        view.setMessage("", Color.WHITE);
-        System.out.println(">> LOGIN:");
-        System.out.println("Username: " + username);
-        System.out.println("Password: " + password);
-        System.out.println("Stay Logged In: " + stayLoggedIn);
-    }
 
     private void handleForgotPassword() throws NoSuchAlgorithmException {
         if(view.forgotSubmitButton.getLabel().getText().toString().equals("Show Security Question")){
             String username = view.forgotUsername.getText();
-            if(username.isEmpty()){
-                view.setMessage("Please fill username field.", Color.RED);
-                return;
+            try {
+                GameMessage<String> message = new GameMessage<>("forgotpass_request", username);
+                String json = new Gson().toJson(message);
+                AppClient.getClient().send(json);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-            if(!AuthenticationValidator.usernameExists(username)){
-                view.setMessage("Username does not exist!", Color.RED);
-                return;
-            }
-            view.forgotSubmitButton.getLabel().setText("Submit");
-            view.securityQuestionLabel.setText(Finder.getUserByUsername(username).getQuestion());
-            view.securityQuestionLabel.setColor(Color.YELLOW);
             return;
         }
 
         String username = view.forgotUsername.getText();
         String answer = view.forgotAnswer.getText();
         String newPass = view.newPassword.getText();
-
-        if (username.isEmpty() || answer.isEmpty() || newPass.isEmpty()) {
-            view.setMessage("Please fill all fields.", Color.RED);
-            return;
-        }
-        User user = Finder.getUserByUsername(username);
-        assert user != null;
-        if(!answer.equals(user.getAnswer())){
-            view.setMessage("Wrong answer.", Color.RED);
-            return;
-        }
-        if(!AuthenticationValidator.passwordValidation(newPass, view)){
-            return;
-        }
-        user.setPassword(getHash(newPass));
-
-        view.forgotSubmitButton.getLabel().setText("Show Security Question");
-        view.securityQuestionLabel.setText("Your Security Question");
-        view.securityQuestionLabel.setColor(Color.WHITE);
-        view.switchForm("login");
-
-        // مثال فراموشی رمز
-        view.setMessage("Password Changed Successfully.", Color.LIME);
-        System.out.println(">> FORGOT PASSWORD:");
-        System.out.println("Username: " + username);
-        System.out.println("Answer: " + answer);
-        System.out.println("New Password: " + newPass);
+        GameMessage<ForgotpassCred> message = new GameMessage<>("fp_request", new ForgotpassCred(username, answer, newPass));
+        String json = new Gson().toJson(message);
+        AppClient.getClient().send(json);
     }
 
     public String getSelectedGender() {
@@ -356,13 +297,6 @@ public class AuthenticationMenuController {
 
         datastore.save(user);
 
-    }
-    public void login(User user, boolean stayLoggedIn){
-        user.setStayLoggedIn(stayLoggedIn);
-        App.setCurrentUser(user);
-        App.setMenu(Menu.Main);
-        Menu.Main.resetMenu();
-//        Main.getMain().setScreen(App.getMenu().getScreen());
     }
     public String getHash(String pass) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
