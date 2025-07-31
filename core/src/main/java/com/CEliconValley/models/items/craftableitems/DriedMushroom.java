@@ -41,4 +41,10 @@ public class DriedMushroom implements Eatable, Item {
     public String getChar() {
         return "DM";
     }
+
+    @Override
+    public int getID() {
+
+        return 10408;
+    }
 }

@@ -35,4 +35,8 @@ public class Juice implements Item, Eatable {
     public String getChar() {
         return "Ju";
     }
+    public int getID() {
+
+        return 10810;
+    }
 }

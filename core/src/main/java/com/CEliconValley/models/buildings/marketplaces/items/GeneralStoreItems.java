@@ -1,13 +1,11 @@
 package com.CEliconValley.models.buildings.marketplaces.items;
 
+import com.CEliconValley.controllers.subgames.CookingController;
 import com.CEliconValley.models.foragings.Fertilizer;
 import com.CEliconValley.models.foragings.FertilizerType;
 import com.CEliconValley.models.foragings.Seed;
 import com.CEliconValley.models.foragings.SeedType;
-import com.CEliconValley.models.items.Backpack;
-import com.CEliconValley.models.items.CraftableItem;
-import com.CEliconValley.models.items.CraftingRecipe;
-import com.CEliconValley.models.items.Item;
+import com.CEliconValley.models.items.*;
 
 public enum GeneralStoreItems implements Item {
     // permanent
@@ -86,6 +84,9 @@ public enum GeneralStoreItems implements Item {
     private double price;
     private String ch;
     boolean isOffSeason = false;
+    private Item item;
+    private CookingRecipe cookingRecipe;
+    private Backpack backpack;
     GeneralStoreItems(Item item){
         this.name = item.getName();
         this.price = item.getPrice();
@@ -98,6 +99,7 @@ public enum GeneralStoreItems implements Item {
         this.ch = item.getChar();
         this.name = item.getName();
         this.price = price;
+        this.item = item;
     }
 
     GeneralStoreItems(CraftingRecipe recipe, double price) {
@@ -147,5 +149,15 @@ public enum GeneralStoreItems implements Item {
             }
         }
         return null;
+    }
+    public int getID() {
+        if(cookingRecipe != null){
+            return this.cookingRecipe.getId();
+        }
+        else if(item != null){
+            return this.item.getID();
+        }else{
+            return this.backpack.getID();
+        }
     }
 }

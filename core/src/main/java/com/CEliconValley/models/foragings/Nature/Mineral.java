@@ -44,4 +44,12 @@ public class Mineral implements Nature, Obstacle {
     public double getPrice() {
         return mineralType.getPrice();
     }
+    @Override
+    public int getID() {
+        int index = this.mineralType.ordinal();
+        int row = index / 5;
+        int col = index % 5;
+        return 7000 + row * 100 + col;
+    }
+
 }

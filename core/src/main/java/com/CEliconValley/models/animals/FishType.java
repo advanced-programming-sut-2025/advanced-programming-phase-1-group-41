@@ -43,6 +43,11 @@ public enum FishType implements Item, Eatable {
         return price;
     }
 
+    @Override
+    public int getID() {
+        return 0;
+    }
+
     public Season getSeason() {return season;}
 
 

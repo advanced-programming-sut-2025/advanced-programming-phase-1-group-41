@@ -19,6 +19,10 @@ public class ShippingBin implements Building, Item {
     public double getPrice() {
         return 1000;
     }
+    public int getID() {
+
+        return 30400;
+    }
 
     @Override
     public int getAnchorX() {

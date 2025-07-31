@@ -29,4 +29,18 @@ public class FishingRod implements Tool {
     public double getPrice() {
         return 0;
     }
+    public int getID() {
+        switch (this.getLevel()) {
+            case Training:
+                return 90500;
+            case Bamboo:
+                return 90501;
+            case FiberGlass:
+                return 90502;
+            case Iridium:
+                return 90503;
+
+        }
+        return -1;
+    }
 }

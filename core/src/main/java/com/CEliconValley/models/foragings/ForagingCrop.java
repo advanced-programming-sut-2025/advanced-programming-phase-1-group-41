@@ -63,4 +63,36 @@ public class ForagingCrop implements Foraging, Item {
     public int getTypeIndex() {
         return typeIndex;
     }
+    @Override
+    public int getID() {
+        switch (this.foragingCropType) {
+            case WildHorseradish -> { return 10610; }
+            case FiddleheadFern -> { return 10611; }
+            case Grape -> { return 10700; }
+            case RedMushroom -> { return 10701; }
+            case SpiceBerry -> { return 10702; }
+            case SweetPea -> { return 10703; }
+            case Blackberry -> { return 10704; }
+            case Chanterelle -> { return 10705; }
+            case Hazelnut -> { return 10706; }
+            case PurpleMushroom -> { return 10707; }
+            case WildPlum -> { return 10708; }
+            case Crocus -> { return 10709; }
+            case CrystalFruit -> { return 10710; }
+            case Holly -> { return 10711; }
+
+            case SnowYam -> { return 10800; }
+            case WinterRoot -> { return 10801; }
+            case CommonMushroom -> { return 10802; }
+            case Daffodil -> { return 10803; }
+            case Dandelion -> { return 10804; }
+            case Leek -> { return 10805; }
+            case Morel -> { return 10806; }
+            case SalmonBerry -> { return 10807; }
+            case SpringOnion -> { return 10808; }
+        }
+        throw new IllegalStateException("Unknown foragingType: " + this.foragingCropType);
+    }
+
+
 }

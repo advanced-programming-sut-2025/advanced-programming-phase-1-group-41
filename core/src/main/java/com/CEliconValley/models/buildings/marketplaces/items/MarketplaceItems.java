@@ -3,10 +3,10 @@ package com.CEliconValley.models.buildings.marketplaces.items;
 import com.CEliconValley.models.items.Item;
 
 public enum MarketplaceItems implements Item {
+    Jojacola("Jc","Jojacola", 75),
     Hay("Ha","Hay",50),
 
 
-    Jojacola("Jc","Jojacola", 75),
     Wheatflour("Wf","Wheatflour", 125),
     Sugar("Su","Sugar", 125),
     Rice("Ri","Rice", 250),
@@ -61,4 +61,19 @@ public enum MarketplaceItems implements Item {
         }
         return null;
     }
+    public int getID() {
+        switch (this) {
+            case Jojacola -> { return 11002; }
+            case Hay -> { return 11003; }
+            case Wheatflour -> { return 20304; }
+            case Sugar -> { return 20305; }
+            case Rice -> { return 10100; }
+            case Bouquet -> { return 20404; }
+            case WeddingRing -> { return 20403; }
+            case TroutSoup -> { return 10410; }
+        }
+        throw new IllegalStateException("Unknown item: " + this);
+    }
+
+
 }

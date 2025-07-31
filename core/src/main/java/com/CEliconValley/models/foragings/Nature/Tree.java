@@ -201,6 +201,11 @@ public class Tree implements Nature, Obstacle {
     public double getPrice() {
         return 0;
     }
+    public int getID() {
+
+        return -1;
+    }
+
 
 
     public int getWaterStreak() {

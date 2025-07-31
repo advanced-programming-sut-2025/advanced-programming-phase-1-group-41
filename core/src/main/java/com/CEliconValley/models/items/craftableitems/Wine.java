@@ -36,6 +36,10 @@ public class Wine implements Item, Eatable {
     public double getPrice() {
         return 3*fruit.getPrice();
     }
+    public int getID() {
+
+        return 11001;
+    }
 
     @Override
     public String getChar() {

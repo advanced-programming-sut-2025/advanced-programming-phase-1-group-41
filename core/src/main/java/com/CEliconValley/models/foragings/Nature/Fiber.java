@@ -17,4 +17,9 @@ public class Fiber implements Item {
     public String getChar() {
         return "Fi";
     }
+
+    public int getID() {
+
+        return 10409;
+    }
 }

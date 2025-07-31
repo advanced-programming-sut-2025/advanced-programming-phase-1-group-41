@@ -17,17 +17,20 @@ public enum RanchItems implements Item {
     private String name;
     private double price;
     private String ch;
+    private  Item item;
 
     RanchItems(Item item){
         this.name = item.getName();
         this.price = item.getPrice();
         this.ch = item.getChar();
+        this.item = item;
     }
 
     RanchItems(Item item, double price) {
         this.ch = item.getChar();
         this.name = item.getName();
         this.price = price;
+        this.item = item;
     }
 
     @Override
@@ -43,5 +46,9 @@ public enum RanchItems implements Item {
     @Override
     public double getPrice() {
         return this.price;
+    }
+    public int getID() {
+
+        return this.item.getID();
     }
 }

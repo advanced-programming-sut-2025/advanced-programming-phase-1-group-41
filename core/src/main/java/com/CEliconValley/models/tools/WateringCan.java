@@ -58,6 +58,22 @@ public class WateringCan implements Tool, LevelTool {
     public String getChar() {
         return "WC";
     }
+    @Override
+    public int getID() {
+        switch (this.getLevel()) {
+            case Default:
+                return 90400;
+            case Copper:
+                return 90401;
+            case Iron:
+                return 90402;
+            case Gold:
+                return 90403;
+            case Iridium:
+                return 90404;
+        }
+        return -1;
+    }
 
     @Override
     public double getPrice() {

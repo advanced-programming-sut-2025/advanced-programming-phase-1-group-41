@@ -43,4 +43,19 @@ public class Pickaxe implements Tool, LevelTool{
     public double getPrice() {
         return 0;
     }
+    public int getID() {
+        switch (this.getLevel()) {
+            case Default:
+                return 90200;
+            case Copper:
+                return 90201;
+            case Iron:
+                return 90202;
+            case Gold:
+                return 90203;
+            case Iridium:
+                return 90204;
+        }
+        return -1;
+    }
 }

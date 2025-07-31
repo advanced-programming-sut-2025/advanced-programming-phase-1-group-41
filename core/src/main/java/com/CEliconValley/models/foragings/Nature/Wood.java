@@ -17,4 +17,8 @@ public class Wood implements Item {
     public double getPrice() {
         return 0;
     }
+    public int getID() {
+
+        return 70303;
+    }
 }

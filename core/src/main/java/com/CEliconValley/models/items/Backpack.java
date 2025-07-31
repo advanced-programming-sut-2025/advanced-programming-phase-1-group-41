@@ -21,7 +21,7 @@ public enum Backpack {
     public String getName() {
         return name;
     }
-    
+
     public static Backpack parseBackpack(String backpack) {
         for (Backpack value : Backpack.values()) {
             if(value.getName().equalsIgnoreCase(backpack)){
@@ -29,5 +29,17 @@ public enum Backpack {
             }
         }
         return null;
+    }
+    public int getID() {
+        switch (this) {
+            case Default:
+                return 30303;
+            case  Large:
+                return 30304;
+            case Deluxe:
+                return 30305;
+
+        }
+        return -1;
     }
 }

@@ -17,4 +17,8 @@ public class MilkPale implements Tool{
     public String getChar() {
         return "MP";
     }
+    public int getID() {
+
+        return 90504;
+    }
 }

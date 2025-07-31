@@ -73,6 +73,7 @@ public enum JojamartItems implements Item {
     private String name;
     private double price;
     private String ch;
+    private Item item;
 
     JojamartItems(Item item){
         this.name = item.getName();
@@ -86,6 +87,7 @@ public enum JojamartItems implements Item {
         this.ch = item.getChar();
         this.name = item.getName();
         this.price = price;
+        this.item = item;
     }
 
     @Override
@@ -101,5 +103,9 @@ public enum JojamartItems implements Item {
     @Override
     public double getPrice() {
         return this.price;
+    }
+    public int getID() {
+
+        return this.item.getID();
     }
 }

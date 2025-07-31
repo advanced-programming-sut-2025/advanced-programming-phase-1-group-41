@@ -37,6 +37,10 @@ public enum NormalTools implements Tool {
     public double getPrice() {
         return item.getPrice();
     }
+    public int getID() {
+
+        return this.item.getID();
+    }
 
 
 }

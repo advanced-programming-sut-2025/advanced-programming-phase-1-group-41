@@ -90,6 +90,10 @@ public class Rock implements Nature, Obstacle {
     public double getPrice() {
         return 0;
     }
+    public int getID() {
+
+        return 70302;
+    }
 
     public int getVariant(){
         return variant;
