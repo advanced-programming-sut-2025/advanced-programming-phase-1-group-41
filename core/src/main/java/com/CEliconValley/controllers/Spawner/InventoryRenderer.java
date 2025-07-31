@@ -1,5 +1,6 @@
 package com.CEliconValley.controllers.Spawner;
 
+import com.CEliconValley.client.view.screen.FarmScreen;
 import com.CEliconValley.controllers.ItemManager;
 import com.CEliconValley.models.items.Inventory;
 import com.CEliconValley.models.items.Item;
@@ -8,12 +9,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import static com.CEliconValley.models.locations.FarmScreen.CELL_SIZE;
 
 public class InventoryRenderer {
     private final Inventory inventory;
 
-    private final int slotSize = CELL_SIZE*2/3;
+    private final int slotSize = FarmScreen.CELL_SIZE*2/3;
     private final int startX = 50;
     private final int startY = 400;
 
