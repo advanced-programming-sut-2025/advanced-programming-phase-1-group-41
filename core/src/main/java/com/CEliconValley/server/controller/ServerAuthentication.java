@@ -31,7 +31,7 @@ public class ServerAuthentication {
         if(!passHash.equals(user.getPassword())){
             return new ErrorMessage("login_request","Password does not match!");
         }
-        login(user, stayLoggedIn);
+        login(user, stayLoggedIn, conn);
         GameMessage<HandshakeData> msg = new GameMessage<>("handshake-data",
             new HandshakeData(null, App.lobbies, App.onlinePlayers));
         String json = new Gson().toJson(msg);
@@ -114,10 +114,11 @@ public class ServerAuthentication {
         return new SuccessMessage("register_request",new UserData(user).toJson());
     }
 
-    private static void login(User user, boolean stayLoggedIn){
+    private static void login(User user, boolean stayLoggedIn, WebSocket conn){
         user.setStayLoggedIn(stayLoggedIn);
         App.setCurrentUser(user);
         App.putOnlinePlayer(new OnlineData(user.getUsername(), false));
+        App.getServer().getOnlineConnections().put(conn, user);
     }
     public static String getHash(String pass) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");

@@ -41,41 +41,8 @@ public class GameServer extends WebSocketServer {
         Gson gson = new Gson();
         try{
             GameMessage<Object> genericMsg = gson.fromJson(message, new TypeToken<GameMessage<Object>>() {}.getType());
-            switch (genericMsg.type){
-                case "login_request" -> {
-                    GameMessage<LoginCred> loginMsg =
-                        gson.fromJson(message, new TypeToken<GameMessage<LoginCred>>() {}.getType());
-                    LoginCred creds = loginMsg.body;
-                    Request.login_req(creds, conn);
-                }
-                case "forgotpass_request" -> {
-                    GameMessage<String> msg = gson.fromJson(message, new TypeToken<GameMessage<String>>() {}.getType());
-                    Request.showForgotPassword(msg.body, conn);
-                }
-                case "fp_request" -> {
-                    GameMessage<ForgotpassCred> msg = gson.fromJson(message, new TypeToken<GameMessage<ForgotpassCred>>() {}.getType());
-                    Request.forgotPassword(msg.body, conn);
-                }
-                case "prereg_request" ->{
-                    GameMessage<PreRegisterCred> msg = gson.fromJson(message, new TypeToken<GameMessage<PreRegisterCred>>() {}.getType());
-                    Request.preRegister(msg.body, conn);
-                }
-                case "register_request" ->{
-                    GameMessage<RegisterCred> msg = gson.fromJson(message, new TypeToken<GameMessage<RegisterCred>>() {}.getType());
-                    Request.register(msg.body, conn);
-                }
-                case "profile_request" ->{
-                    GameMessage<ProfCred> msg = gson.fromJson(message, new TypeToken<GameMessage<ProfCred>>() {}.getType());
-                    Request.profile(msg.body, conn);
-                }
-                case "logout_request" -> {
-                    GameMessage<String> msg = gson.fromJson(message, new TypeToken<GameMessage<String>>() {}.getType());
-                    Request.logout(msg.body, conn);
-                }
-                default -> {
-                    System.out.println("invalid type: "+genericMsg.type);
-                }
-            }
+            ServerMessageRouter.route(genericMsg.type, message, conn, gson);
+            System.out.println(onlineConnections);
         } catch (Exception e) {
             System.out.println("ESmessage: "+message);
         }

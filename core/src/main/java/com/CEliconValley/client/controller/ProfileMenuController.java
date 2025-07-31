@@ -52,7 +52,6 @@ public class ProfileMenuController {
         });
 
 
-        //TODO Sepehr!
         view.deleteAccountButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

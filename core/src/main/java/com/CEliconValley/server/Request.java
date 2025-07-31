@@ -88,6 +88,7 @@ public class Request {
 
     public static void logout(String username ,WebSocket conn) {
         App.removeOnlinePlayer(username);
+        App.getServer().getOnlineConnections().remove(conn);
     }
 
 }
