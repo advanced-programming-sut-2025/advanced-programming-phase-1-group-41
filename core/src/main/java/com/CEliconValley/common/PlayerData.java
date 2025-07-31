@@ -1,22 +1,20 @@
 package com.CEliconValley.common;
 
-import com.CEliconValley.models.Friendship;
-import com.CEliconValley.models.Gift;
-import com.CEliconValley.models.Player;
-import com.CEliconValley.models.Trade;
+import com.CEliconValley.models.*;
+import com.CEliconValley.models.items.Buff;
 import com.CEliconValley.models.items.CookingRecipe;
 import com.CEliconValley.models.items.CraftingRecipe;
+import com.CEliconValley.models.items.Inventory;
 import com.CEliconValley.models.items.craftablemachines.Machine;
+import com.CEliconValley.models.skills.Skill;
+import com.CEliconValley.models.tools.Tool;
 import dev.morphia.annotations.Embedded;
-import dev.morphia.annotations.Transient;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Embedded
 public class PlayerData {
-    @Transient
-    private Player player;
 
     String username;
     double money;
@@ -45,8 +43,11 @@ public class PlayerData {
     ArrayList<TradeData> totalTradesListData;
     BuffData buffData;
 
+
+    public PlayerData() {
+    }
+
     public PlayerData(Player player) {
-        this.player = player;
         this.username = player.getUser().getUsername();
         this.money = player.getMoney();
         this.savings = player.getSavings();
@@ -64,9 +65,9 @@ public class PlayerData {
         this.isPlayerInVillage = player.isPlayerIsInVillage();
 
         this.skillLevels = new ArrayList<>();
-        fillSkillLevels();
+        fillSkillLevels(player);
         this.onGoingMachines = new ArrayList<>();
-        fillOngoingMachinesNames();
+        fillOngoingMachinesNames(player);
         this.inventoryData = new InventoryData(player.getInventory());
         this.friendshipsData = new ArrayList<>();
         for (Friendship friendship : player.getFriendships()) {
@@ -100,12 +101,8 @@ public class PlayerData {
     }
 
 
-    public Player extractPlayer(){
-        return null;
-    }
 
-
-    private void fillSkillLevels(){
+    private void fillSkillLevels(Player player){
         skillLevels.add(new ArrayList<>(List.of(
             player.getFarmingSkill().getLevel(), player.getFarmingSkill().getXp()
         )));
@@ -120,11 +117,148 @@ public class PlayerData {
         )));
     }
 
-    private void fillOngoingMachinesNames(){
+    private void fillOngoingMachinesNames(Player player){
         for (Machine onGoingMachine : player.getOnGoingMachines()) {
             this.onGoingMachines.add(new MachineData(onGoingMachine));
         }
     }
 
+    // friendships, gifts, trades
+    public Player getPlayer() {
+        User user = PlayerFinder.getUserByPlayerName(username);
+        Inventory inventory = inventoryData.getInventory();
+        Tool tool = currentToolName == null ? null : Finder.getToolByName(currentToolName);
+        Buff buff = buffData == null ? null : buffData.getBuff();
+        return new Player(cookingRecipes, craftingRecipes, buff, tool, depressionDaysLeft,
+                energy, energyUnlimited, farmId, getFarmingSkill(), getFishingSkill(),
+                getForagingSkill(), inFarmId, inventory, maxEnergy, getMiningSkill(),
+                money, getMachines(), isPlayerInVillage, savings, user, x, y);
+    }
 
+    public Skill getFarmingSkill() {
+        return new Skill(skillLevels.get(0).get(0), skillLevels.get(0).get(1));
+    }
+    public Skill getMiningSkill() {
+        return new Skill(skillLevels.get(1).get(0), skillLevels.get(1).get(1));
+    }
+    public Skill getForagingSkill() {
+        return new Skill(skillLevels.get(2).get(0), skillLevels.get(2).get(1));
+    }
+    public Skill getFishingSkill() {
+        return new Skill(skillLevels.get(3).get(0), skillLevels.get(3).get(1));
+    }
+
+    public ArrayList<Machine> getMachines(){
+        ArrayList<Machine> machines = new ArrayList<>();
+        if(onGoingMachines == null) return machines;
+        for (MachineData onGoingMachine : onGoingMachines) {
+            machines.add(onGoingMachine.getMachine());
+        }
+        return machines;
+    }
+
+
+    public BuffData getBuffData() {
+        return buffData;
+    }
+
+    public ArrayList<CookingRecipe> getCookingRecipes() {
+        return cookingRecipes;
+    }
+
+    public ArrayList<CraftingRecipe> getCraftingRecipes() {
+        return craftingRecipes;
+    }
+
+    public String getCurrentToolName() {
+        return currentToolName;
+    }
+
+    public int getDepressionDaysLeft() {
+        return depressionDaysLeft;
+    }
+
+    public double getEnergy() {
+        return energy;
+    }
+
+    public boolean isEnergyUnlimited() {
+        return energyUnlimited;
+    }
+
+    public int getFarmId() {
+        return farmId;
+    }
+
+    public ArrayList<FriendshipData> getFriendshipsData() {
+        return friendshipsData;
+    }
+
+    public int getInFarmId() {
+        return inFarmId;
+    }
+
+    public InventoryData getInventoryData() {
+        return inventoryData;
+    }
+
+    public boolean isPlayerInVillage() {
+        return isPlayerInVillage;
+    }
+
+    public int getMaxEnergy() {
+        return maxEnergy;
+    }
+
+    public double getMoney() {
+        return money;
+    }
+
+    public ArrayList<GiftData> getNewGiftsData() {
+        return newGiftsData;
+    }
+
+    public ArrayList<TradeData> getNewTradesListData() {
+        return newTradesListData;
+    }
+
+    public ArrayList<MachineData> getOnGoingMachines() {
+        return onGoingMachines;
+    }
+
+    public ArrayList<GiftData> getReceivedGiftsData() {
+        return receivedGiftsData;
+    }
+
+    public double getSavings() {
+        return savings;
+    }
+
+    public ArrayList<GiftData> getSendGiftsData() {
+        return sendGiftsData;
+    }
+
+    public ArrayList<ArrayList<Integer>> getSkillLevels() {
+        return skillLevels;
+    }
+
+    public ArrayList<TradeData> getTotalTradesListData() {
+        return totalTradesListData;
+    }
+
+    public ArrayList<TradeData> getTradesListData() {
+        return tradesListData;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }

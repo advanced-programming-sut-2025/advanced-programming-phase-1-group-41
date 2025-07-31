@@ -16,6 +16,9 @@ public class TradeData {
     boolean isDone;
     boolean isRejected;
 
+    public TradeData() {
+    }
+
     public TradeData(Trade trade) {
         fromName = trade.getFrom().getUser().getUsername();
         toName = trade.getTo().getUser().getUsername();
@@ -33,5 +36,41 @@ public class TradeData {
         return new Trade(
           from, to, isDone, isRejected, isRequest, item.getSlot(), paidInMoney, price, targetItem.getSlot()
         );
+    }
+
+    public String getFromName() {
+        return fromName;
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public boolean isRejected() {
+        return isRejected;
+    }
+
+    public boolean isRequest() {
+        return isRequest;
+    }
+
+    public SlotData getItem() {
+        return item;
+    }
+
+    public boolean isPaidInMoney() {
+        return paidInMoney;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public SlotData getTargetItem() {
+        return targetItem;
+    }
+
+    public String getToName() {
+        return toName;
     }
 }

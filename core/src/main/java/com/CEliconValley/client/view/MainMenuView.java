@@ -1,8 +1,8 @@
-package com.CEliconValley.views;
+package com.CEliconValley.client.view;
 
 import com.CEliconValley.GameAssetManager;
 import com.CEliconValley.Main;
-import com.CEliconValley.controllers.MainMenuController;
+import com.CEliconValley.client.controller.MainMenuController;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
@@ -12,9 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
-import java.security.NoSuchAlgorithmException;
-import java.util.Scanner;
 
 public class MainMenuView implements Screen {
 

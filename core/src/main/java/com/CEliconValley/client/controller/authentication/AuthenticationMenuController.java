@@ -1,30 +1,25 @@
-package com.CEliconValley.controllers.authentication;
+package com.CEliconValley.client.controller.authentication;
 
-import com.CEliconValley.Main;
+import com.CEliconValley.client.AppClient;
+import com.CEliconValley.common.messages.*;
 import com.CEliconValley.models.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.CEliconValley.views.AuthenticationMenuView;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import dev.morphia.Datastore;
-import dev.morphia.Morphia;
+import com.CEliconValley.client.view.AuthenticationMenuView;
+import com.google.gson.Gson;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.Base64;
 
 public class AuthenticationMenuController {
 
     private AuthenticationMenuView view;
     private String selectedGender = "male";
-    private String securityQuestion = "";
-    private String securityAnswer = "";
+    public String securityQuestion = "";
+    public String securityAnswer = "";
     private String password;
     private String username;
     private String nickname;
@@ -107,8 +102,11 @@ public class AuthenticationMenuController {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    handleLogin();
-                } catch (NoSuchAlgorithmException e) {
+                    LoginCred credentials = new LoginCred(view.loginUsername.getText(), view.loginPassword.getText());
+                    GameMessage<LoginCred> message = new GameMessage<>("login_request", credentials);
+                    String json = new Gson().toJson(message);
+                    AppClient.getClient().send(json);
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -163,14 +161,10 @@ public class AuthenticationMenuController {
                 if(selectedGender.equals("female")){
                     gender = Gender.Female;
                 }
-                try {
-                    register(gender);
-                } catch (NoSuchAlgorithmException e) {
-                    throw new RuntimeException(e);
-                }
-
-                view.switchForm("register");
-                view.setMessage("User Registered Successfully. ✅", Color.LIME);
+                GameMessage<RegisterCred> message = new GameMessage<>("register_request",
+                    new RegisterCred(username, password, email, nickname, gender, securityQuestion, securityAnswer));
+                String json = new Gson().toJson(message);
+                AppClient.getClient().send(json);
             }
         });
     }
@@ -181,124 +175,38 @@ public class AuthenticationMenuController {
         String confirm = view.regConfirmPassword.getText();
         nickname = view.regNickname.getText();
         email = view.regEmail.getText();
-
-        //Validations
         if (username.isEmpty() || password.isEmpty() || confirm.isEmpty() ||
             nickname.isEmpty() || email.isEmpty() || (!view.genderFemaleButton.isChecked() && !view.genderMaleButton.isChecked())) {
             view.setMessage("Please fill all fields.", Color.RED);
             return;
         }
-        if(AuthenticationValidator.usernameExists(username)){
-            view.setMessage("Username already exists!", Color.RED);
-            return;
-        }
-        if(!username.matches("^[a-zA-Z0-9-]{1,8}$")){
-            view.setMessage("Invalid username format!", Color.RED);
-            return;
-        }
-        if(!email.matches("^[a-zA-Z0-9][a-zA-Z0-9_-]*\\.?[a-zA-Z0-9_-]*[a-zA-Z0-9]@[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+$")){
-            view.setMessage("Invalid email format!", Color.RED);
-            return;
-        }
-        if(!AuthenticationValidator.passwordValidation(password, view)){
-            return;
-        }
-        if (!password.equals(confirm)) {
-            view.setMessage("Passwords do not match!", Color.RED);
-            return;
-        }
+        GameMessage<PreRegisterCred> message = new GameMessage<>("prereg_request",
+            new PreRegisterCred(username, password, confirm, nickname, email));
+        String json = new Gson().toJson(message);
+        AppClient.getClient().send(json);
 
-        view.setMessage("", Color.CLEAR);
-        view.switchForm("securityQuestion");
-
-        // اینجا می‌تونی کاربر رو بسازی یا بفرستی به سرور
-        System.out.println(">> REGISTER:");
-        System.out.println("Username: " + username);
-        System.out.println("Password: " + password);
-        System.out.println("Nickname: " + nickname);
-        System.out.println("Email: " + email);
-        System.out.println("Gender: " + selectedGender);
     }
 
-    private void handleLogin() throws NoSuchAlgorithmException {
-        String username = view.loginUsername.getText();
-        String password = view.loginPassword.getText();
-        boolean stayLoggedIn = view.stayLoggedInCheckbox.isChecked();
-
-        if (username.isEmpty() || password.isEmpty()) {
-            view.setMessage("Please enter username and password.", Color.RED);
-            return;
-        }
-        if(!AuthenticationValidator.usernameExists(username)){
-            view.setMessage("Username does not exist!", Color.RED);
-            return;
-        }
-        User user = Finder.getUserByUsername(username);
-        String passHash = getHash(password);
-        assert user != null;
-        if(!passHash.equals(user.getPassword())){
-            view.setMessage("Password does not match!", Color.RED);
-            return;
-        }
-        login(user, stayLoggedIn);
-
-        // مثال لاگین
-//        view.setMessage("Login attempted. (dummy logic)", Color.YELLOW);
-        emptyFields();
-        view.setMessage("", Color.WHITE);
-        System.out.println(">> LOGIN:");
-        System.out.println("Username: " + username);
-        System.out.println("Password: " + password);
-        System.out.println("Stay Logged In: " + stayLoggedIn);
-    }
 
     private void handleForgotPassword() throws NoSuchAlgorithmException {
         if(view.forgotSubmitButton.getLabel().getText().toString().equals("Show Security Question")){
             String username = view.forgotUsername.getText();
-            if(username.isEmpty()){
-                view.setMessage("Please fill username field.", Color.RED);
-                return;
+            try {
+                GameMessage<String> message = new GameMessage<>("forgotpass_request", username);
+                String json = new Gson().toJson(message);
+                AppClient.getClient().send(json);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-            if(!AuthenticationValidator.usernameExists(username)){
-                view.setMessage("Username does not exist!", Color.RED);
-                return;
-            }
-            view.forgotSubmitButton.getLabel().setText("Submit");
-            view.securityQuestionLabel.setText(Finder.getUserByUsername(username).getQuestion());
-            view.securityQuestionLabel.setColor(Color.YELLOW);
             return;
         }
 
         String username = view.forgotUsername.getText();
         String answer = view.forgotAnswer.getText();
         String newPass = view.newPassword.getText();
-
-        if (username.isEmpty() || answer.isEmpty() || newPass.isEmpty()) {
-            view.setMessage("Please fill all fields.", Color.RED);
-            return;
-        }
-        User user = Finder.getUserByUsername(username);
-        assert user != null;
-        if(!answer.equals(user.getAnswer())){
-            view.setMessage("Wrong answer.", Color.RED);
-            return;
-        }
-        if(!AuthenticationValidator.passwordValidation(newPass, view)){
-            return;
-        }
-        user.setPassword(getHash(newPass));
-
-        view.forgotSubmitButton.getLabel().setText("Show Security Question");
-        view.securityQuestionLabel.setText("Your Security Question");
-        view.securityQuestionLabel.setColor(Color.WHITE);
-        view.switchForm("login");
-
-        // مثال فراموشی رمز
-        view.setMessage("Password Changed Successfully.", Color.LIME);
-        System.out.println(">> FORGOT PASSWORD:");
-        System.out.println("Username: " + username);
-        System.out.println("Answer: " + answer);
-        System.out.println("New Password: " + newPass);
+        GameMessage<ForgotpassCred> message = new GameMessage<>("fp_request", new ForgotpassCred(username, answer, newPass));
+        String json = new Gson().toJson(message);
+        AppClient.getClient().send(json);
     }
 
     public String getSelectedGender() {
@@ -328,39 +236,6 @@ public class AuthenticationMenuController {
         view.regConfirmPassword.setText(password);
     }
 
-    private void register(Gender gender) throws NoSuchAlgorithmException {
-        password = getHash(password);
-        User user = new User(username, password, email, nickname, gender, securityQuestion, securityAnswer);
-        saveUser(user);
-        App.addUser(user);
-        securityAnswer = "";
-        securityQuestion = "";
-    }
-
-    private void saveUser(User user){
-        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
-        Datastore datastore = Morphia.createDatastore(mongoClient, "ProjectDB");
-
-        datastore.getMapper().map(TimeLine.class);
-        datastore.getMapper().map(Player.class);
-        datastore.getMapper().map(Game.class);
-        datastore.getMapper().map(User.class);
-
-        datastore.save(user);
-
-    }
-    private void login(User user, boolean stayLoggedIn){
-        user.setStayLoggedIn(stayLoggedIn);
-        App.setCurrentUser(user);
-        App.setMenu(Menu.Main);
-        Menu.Main.resetMenu();
-        Main.getMain().setScreen(App.getMenu().getScreen());
-    }
-    public String getHash(String pass) throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] hashBytes = digest.digest(pass.getBytes(StandardCharsets.UTF_8));
-        return Base64.getEncoder().encodeToString(hashBytes);
-    }
     public void emptyFields() {
         view.loginPassword.setText("");
         view.loginUsername.setText("");

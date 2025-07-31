@@ -27,6 +27,9 @@ public class AnimalData {
     String ownerName;
     int friendShip;
 
+    public AnimalData() {
+    }
+
     public AnimalData(Animal animal) {
         this.name = animal.getName();
         this.animalType = animal.getAnimalType();

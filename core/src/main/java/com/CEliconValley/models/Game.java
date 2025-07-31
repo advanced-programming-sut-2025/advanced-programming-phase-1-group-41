@@ -47,6 +47,25 @@ public class Game {
     public Game() {
     }
 
+
+    public Game(TimeLine time, Village village,
+                WeatherType weatherType, WeatherType tmrwWeatherType,
+                double roundEnergy, ArrayList<Farm> farms) {
+        this.time = time;
+        this.village = village;
+        this.weatherType = weatherType;
+        this.tmrwWeatherType = tmrwWeatherType;
+        this.roundEnergy = roundEnergy;
+        this.farms = new ArrayList<>(farms);
+    }
+
+
+    public void handmadePostLoad(Player currentPlayer, Player loader, ArrayList<Player> players) {
+        this.currentPlayer = currentPlayer;
+        this.loader = loader;
+        this.players = new ArrayList<>(players);
+    }
+
     public Game(ArrayList<Player> players, Player loader) {
         this.players = players;
         this.loader = loader;
@@ -58,7 +77,8 @@ public class Game {
 
         this.roundEnergy = 0;
         this._id = new ObjectId();
-
+        App.setGame(this);
+        this.village = new Village(false);
     }
 
     public void setFarms(){
@@ -104,7 +124,7 @@ public class Game {
             }
         }
         if(village == null) {
-            this.village = new Village();
+            this.village = new Village(false);
         }
     }
 

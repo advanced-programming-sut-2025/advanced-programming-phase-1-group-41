@@ -1,14 +1,12 @@
-package com.CEliconValley.models.locations;
+package com.CEliconValley.views.maps;
 
-import ch.qos.logback.core.joran.sanity.Pair;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.foragings.Nature.Grass;
+import com.CEliconValley.models.locations.Location;
 import dev.morphia.annotations.Transient;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 public class CottageMap implements Location {
 

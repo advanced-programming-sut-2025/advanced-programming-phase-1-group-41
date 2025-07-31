@@ -1,8 +1,9 @@
-package com.CEliconValley.views;
+package com.CEliconValley.client.view;
 
 import com.CEliconValley.FakeCheckbox;
 import com.CEliconValley.Main;
-import com.CEliconValley.controllers.authentication.AuthenticationMenuController;
+import com.CEliconValley.client.AppClient;
+import com.CEliconValley.client.controller.authentication.AuthenticationMenuController;
 import com.CEliconValley.models.App;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
@@ -23,7 +24,7 @@ import java.util.Scanner;
 
 public class AuthenticationMenuView implements Screen, AppMenu {
 
-    private final AuthenticationMenuController controller;
+    public final AuthenticationMenuController controller;
     private Stage stage;
     private final Image background = new Image(new Texture(GameAssetManager.getGameAssetManager().CEliconValleyBackground));
 
@@ -189,7 +190,7 @@ public class AuthenticationMenuView implements Screen, AppMenu {
         // Security Form Layout
         securityQuestionForm.clear();
         int i = 1;
-        for(String securityQuestion : App.questions){
+        for(String securityQuestion : AppClient.questions){
             TextButton button = new TextButton(securityQuestion, GameAssetManager.getGameAssetManager().getSkin());
             securityQuestions.add(button);
             if(i++ % 2 == 0){

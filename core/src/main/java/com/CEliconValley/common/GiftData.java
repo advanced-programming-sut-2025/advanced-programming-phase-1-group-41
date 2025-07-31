@@ -10,6 +10,10 @@ public class GiftData {
     SlotData slotData;
     String toName;
 
+
+    public GiftData() {
+    }
+
     public GiftData(Gift gift) {
         this.fromName = gift.getFrom().getUser().getUsername();
         this.slotData = new SlotData(gift.getSlot());
@@ -18,5 +22,17 @@ public class GiftData {
 
     public Gift getGift(Player from, Player to){
         return new Gift(from, to, slotData.getSlot());
+    }
+
+    public String getFromName() {
+        return fromName;
+    }
+
+    public SlotData getSlotData() {
+        return slotData;
+    }
+
+    public String getToName() {
+        return toName;
     }
 }

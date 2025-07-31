@@ -11,11 +11,23 @@ import java.util.ArrayList;
 public class MarketPlaceData {
     ArrayList<SlotData> itemsForSaleData;
     String name;
+
+    public MarketPlaceData() {
+    }
+
     public MarketPlaceData(Marketplace marketplace) {
         this.name = marketplace.getName();
         itemsForSaleData = new ArrayList<>();
         for (Slot slot : marketplace.getItemsForSale()) {
             itemsForSaleData.add(new SlotData(slot));
         }
+    }
+
+    public ArrayList<SlotData> getItemsForSaleData() {
+        return itemsForSaleData;
+    }
+
+    public String getName() {
+        return name;
     }
 }

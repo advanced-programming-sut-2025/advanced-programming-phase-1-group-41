@@ -20,6 +20,9 @@ public class TreeData {
     int x;
     int y;
 
+    public TreeData() {
+    }
+
     public TreeData(Tree tree) {
         this.hitPoints = tree.getHitPoints();
         this.treeTypeInt = tree.getTreeType().ordinal();
@@ -40,5 +43,57 @@ public class TreeData {
         return new Tree(y, x , waterStreak, typeIndex, TreeType.values()[treeTypeInt],
             isWateredToday, isThundered, isProtected, isFertilizedToday, isAttacked, hitPoints,
             currentStageLevel, currentStage);
+    }
+
+    public int getCurrentStage() {
+        return currentStage;
+    }
+
+    public int getCurrentStageLevel() {
+        return currentStageLevel;
+    }
+
+    public int getHitPoints() {
+        return hitPoints;
+    }
+
+    public boolean isAttacked() {
+        return isAttacked;
+    }
+
+    public boolean isFertilizedToday() {
+        return isFertilizedToday;
+    }
+
+    public boolean isProtected() {
+        return isProtected;
+    }
+
+    public boolean isThundered() {
+        return isThundered;
+    }
+
+    public boolean isWateredToday() {
+        return isWateredToday;
+    }
+
+    public int getTreeTypeInt() {
+        return treeTypeInt;
+    }
+
+    public int getTypeIndex() {
+        return typeIndex;
+    }
+
+    public int getWaterStreak() {
+        return waterStreak;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }

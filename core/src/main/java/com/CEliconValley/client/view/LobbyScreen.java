@@ -1,11 +1,12 @@
-package com.CEliconValley.views;
+package com.CEliconValley.client.view;
 
 import com.CEliconValley.GameAssetManager;
 import com.CEliconValley.Main;
 import com.CEliconValley.controllers.LobbyController;
-import com.CEliconValley.controllers.MainMenuController;
 import com.CEliconValley.models.App;
+import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Player;
+import com.CEliconValley.models.User;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
@@ -17,14 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
-public class Lobby implements Screen {
+public class LobbyScreen implements Screen {
     private String name;
     private String ID;
     private boolean isPrivate;
@@ -55,15 +53,16 @@ public class Lobby implements Screen {
 //        mainTable = new Table();
 //    }
 
-    public Lobby(LobbyController controller, String name,boolean isPrivate, boolean isVisible, String password) {
+    public LobbyScreen(LobbyController controller, String name, boolean isPrivate, boolean isVisible, String password) {
         this.name = name;
         this.isPrivate = isPrivate;
         this.isVisible = isVisible;
         this.password = password;
         this.controller=controller;
         players=new ArrayList<>();
-        players.add(new Player(App.getCurrentUser()));
-
+        User user = Finder.getUserByUsername("user1");
+        players.add(new Player(App.getCurrentUser() == null ? user:App.getCurrentUser()));
+        System.out.println(players.get(0).getUser().getUsername());
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
 
         label1=new Label("PLAYER1", skin);
@@ -104,10 +103,10 @@ public class Lobby implements Screen {
     private String giveID() {
             int number;
             number = MathUtils.random(10000, 99999);
-            if(!App.lobbies.isEmpty()) {
-                for (Lobby lobby : App.lobbies) {
+            if(!App.lobbiesScreen.isEmpty()) {
+                for (LobbyScreen lobbyScreen : App.lobbiesScreen) {
                     String theID = String.valueOf(number);
-                    if (lobby.getID().equals(theID)) {
+                    if (lobbyScreen.getID().equals(theID)) {
                         return giveID();
                     }
                 }

@@ -1,14 +1,15 @@
-package com.CEliconValley.models.locations;
+package com.CEliconValley.views.maps;
 
 
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.foragings.Nature.Grass;
+import com.CEliconValley.models.locations.Location;
 import dev.morphia.annotations.Transient;
 
 import java.util.ArrayList;
 
-    public class GreenhouseMap implements  Location {
+    public class GreenhouseMap implements Location {
 
         @Transient
         private final ArrayList<Cell> cells = new ArrayList<>();

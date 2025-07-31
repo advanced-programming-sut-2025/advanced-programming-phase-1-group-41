@@ -1,23 +1,15 @@
 package com.CEliconValley.controllers.Spawner;
 
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Player;
-import com.CEliconValley.models.foragings.ForagingTree;
 import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.foragings.Nature.Lake;
-import com.CEliconValley.models.foragings.Nature.Tree;
-import com.CEliconValley.models.foragings.Nature.TreeType;
 import com.CEliconValley.models.locations.Farm;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.DoubleToIntFunction;
-
-import static com.CEliconValley.models.locations.FarmScreen.CELL_SIZE;
+import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class WaterSpawner {
     private final Farm farm;

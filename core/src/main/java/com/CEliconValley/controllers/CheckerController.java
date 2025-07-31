@@ -1,5 +1,6 @@
 package com.CEliconValley.controllers;
 
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Menu;
 
@@ -10,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class CheckerController {
     public static boolean checkCommand(String input) {
-        String currentMenuName = App.getMenu().getMenuName();
+        String currentMenuName = AppClient.getMenu().getMenuName();
 
 //        if (input.matches("^menu exit$")) {
 //            System.out.println("Exiting the menu .");

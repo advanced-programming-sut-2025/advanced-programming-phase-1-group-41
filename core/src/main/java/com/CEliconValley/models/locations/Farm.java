@@ -30,39 +30,56 @@ import static com.CEliconValley.models.App.MaxLength;
 public class Farm implements Location {
 
     private FarmType farmType;
-    @Transient
-    private final FarmBuilder farmBuilder;
-    @Transient
+    private FarmBuilder farmBuilder;
     private ArrayList<Cell> cells = new ArrayList<>();
     private int id;
-    @Transient
-    private final ArrayList<Building> buildings = new ArrayList<>();
-    @Transient
-    private final ArrayList<Foraging> foragings = new ArrayList<>();
-    @Transient
-    private final ArrayList<Lake> lakes = new ArrayList<>();
-    @Transient
-    private final ArrayList<Bush> bushes = new ArrayList<>();
-    @Transient
-    private final ArrayList<Barn> barns = new ArrayList<>();
-    @Transient
-    private final ArrayList<Coop> coops = new ArrayList<>();
-    @Transient
-    private final ArrayList<Crop> crops = new ArrayList<>();
-    @Transient
-    private final ArrayList<Tree> trees = new ArrayList<>();
-    private final int rockCount;
-    private final int foragingTreeCount;
-    private final int plantCount;
-    private final int foragingCropCount;
-    @Transient
-    private final ArrayList<Cell> transferCells = new ArrayList<>();
-    @Transient
-    private final ArrayList<Cell> startPoints = new ArrayList<>();
-    @Transient
+    private ArrayList<Building> buildings = new ArrayList<>();
+    private ArrayList<Foraging> foragings = new ArrayList<>();
+    private ArrayList<Lake> lakes = new ArrayList<>();
+    private ArrayList<Bush> bushes = new ArrayList<>();
+    private ArrayList<Barn> barns = new ArrayList<>();
+    private ArrayList<Coop> coops = new ArrayList<>();
+    private ArrayList<Crop> crops = new ArrayList<>();
+    private ArrayList<Tree> trees = new ArrayList<>();
+    private int rockCount;
+    private int foragingTreeCount;
+    private int plantCount;
+    private int foragingCropCount;
+    private ArrayList<Cell> transferCells = new ArrayList<>();
+    private ArrayList<Cell> startPoints = new ArrayList<>();
     private Mine mine;
-    @Transient
-    private final Greenhouse greenhouse;
+    private Greenhouse greenhouse;
+
+    public Farm(int id, FarmType farmType, int rockCount, int foragingTreeCount,
+                int plantCount, int foragingCropCount,
+                int greenhouseX, int greenhouseY,
+                int cottageX,
+                int mineLengthX, int mineLengthY) {
+        farmBuilder = new FarmBuilder(this);
+        this.id = id;
+        this.farmType = farmType;
+        this.rockCount = rockCount;
+        this.foragingTreeCount = foragingTreeCount;
+        this.plantCount = plantCount;
+        this.foragingCropCount = foragingCropCount;
+
+        for(int i=0;i<MaxLength;i++){
+            for(int j=0;j<MaxHeight;j++){
+                Grass grass = new Grass();
+                setSand(i, j, grass);
+                cells.add(new Cell(grass, j, i));
+            }
+        }
+
+        greenhouse = new Greenhouse(greenhouseX, greenhouseY, this);
+        buildings.add(greenhouse);
+        buildings.add(new Cottage(cottageX, 4,this));
+        mine = new Mine(mineLengthX,mineLengthY,this);
+
+        setSpecialCells();
+
+        //TODO Add other buildings that player builds + add bushes, lakes, ground cells, rocks, etc.
+    }
 
     public Farm(int id) {
         farmBuilder = new FarmBuilder(this);
@@ -91,7 +108,8 @@ public class Farm implements Location {
         buildings.add(new Cottage(30 + rand.nextInt(4), MaxHeight-4,this));
         creatNewCoop(30,MaxHeight-14,CoopType.Normal);
         creatNewBarn(30,MaxHeight-34,BarnType.Normal);
-        mine = new Mine(3,3,this);
+        mine = new Mine(7 + rand.nextInt(7), 7 + rand.nextInt(6),this);
+
 
         int lakeCount = farmType.LakeCoefficient;
         int bushCount = 1 + rand.nextInt(farmType.treeCoefficient/2 + 1);
@@ -224,13 +242,15 @@ public class Farm implements Location {
 //                Objects.requireNonNull(Finder.findPlayerByFarm(this)).setY(cell.getY());
             }
         }
+
+
     }
 
     private void setSand(int i, int j, Grass grass){
         int dx = i - MaxLength / 2;
         int dy = j - MaxHeight / 2;
         if(id == 1 && (((j >= MaxHeight - 5 || i >= MaxLength - 5) && (dx * dx + dy * dy >= (MaxLength / 2 + 10) * (MaxHeight / 2 + 10)))
-                || (j >= MaxHeight - 2 || i >= MaxLength - 2) || ((j == MaxHeight - 6 || j == MaxHeight - 7) && i == 0))) {
+            || (j >= MaxHeight - 2 || i >= MaxLength - 2) || ((j == MaxHeight - 6 || j == MaxHeight - 7) && i == 0))) {
             grass.setSand(true);
             if(j <= 5){
                 if((j != 5 && j != 4) || i != MaxLength - 1){
@@ -238,7 +258,7 @@ public class Farm implements Location {
                 }
             }
         } else if(id == 2 && (((i >= MaxLength - 5 || j <= 6) && (dx * dx + dy * dy >= (MaxHeight / 2 + 10) * (MaxLength / 2 + 10)))
-                || (i >= MaxLength - 2 || j <= 1) || ((i == MaxLength - 6 || j == MaxLength - 7) && j == MaxHeight - 1))) {
+            || (i >= MaxLength - 2 || j <= 1) || ((i == MaxLength - 6 || j == MaxLength - 7) && j == MaxHeight - 1))) {
             grass.setSand(true);
             if(i <= 5){
                 if((i != 5 && i != 4) || j != 0){
@@ -246,7 +266,7 @@ public class Farm implements Location {
                 }
             }
         } else if(id == 3 && (((j >= MaxHeight - 5 || i <= 6) && (dx * dx + dy * dy >= (MaxLength / 2 + 10) * (MaxHeight / 2 + 10)))
-                || (j >= MaxHeight - 2 || i <= 1) || ((j == MaxHeight - 6 || j == MaxHeight - 7) && i == MaxLength - 1))) {
+            || (j >= MaxHeight - 2 || i <= 1) || ((j == MaxHeight - 6 || j == MaxHeight - 7) && i == MaxLength - 1))) {
             grass.setSand(true);
             if(j <= 5){
                 if((j != 5 && j != 4) || i != 0){
@@ -254,12 +274,59 @@ public class Farm implements Location {
                 }
             }
         } else if(id == 4 && (((i <= 4 || j <= 4) && (dx * dx + dy * dy >= (MaxHeight / 2 + 10) * (MaxLength / 2 + 10)))
-                || (i <= 1 || j <= 1) || ((i == 5 || i == 6) && j == MaxHeight - 1))) {
+            || (i <= 1 || j <= 1) || ((i == 5 || i == 6) && j == MaxHeight - 1))) {
             grass.setSand(true);
             if(i >= MaxLength - 6){
                 if((i != MaxLength - 6 && i != MaxLength - 5) || j != 0){
                     grass.setSand(false);
                 }
+            }
+        }
+    }
+    private void setSpecialCells(){
+        if(this.getId()==1){
+            for(Cell cell : cells){
+                if(cell.getX()==59&&cell.getY()>=73||cell.getY()==74&&cell.getX()>=58){
+                    Grass grass = new Grass();
+                    grass.setSand(true);
+                    cell.setObjectMap(grass);
+                    transferCells.add(cell);
+                }
+            }
+        }else if(this.getId()==2){
+            for(Cell cell : cells){
+                if(cell.getX()==0&&cell.getY()>=73||cell.getY()==74&&cell.getX()<=1){
+                    Grass grass = new Grass();
+                    grass.setSand(true);
+                    cell.setObjectMap(grass);
+                    transferCells.add(cell);
+                }
+            }
+        }else if(this.getId()==3){
+            for(Cell cell : cells){
+                if(cell.getX()==59&&cell.getY()<=1||cell.getY()==0&&cell.getX()>=58){
+                    Grass grass = new Grass();
+                    grass.setSand(true);
+                    cell.setObjectMap(grass);
+                    transferCells.add(cell);
+                }
+            }
+        } else if(this.getId()==4){
+            for(Cell cell : cells){
+                if(cell.getX()==0&&cell.getY()<=1||cell.getY()==0&&cell.getX()<=1){
+                    Grass grass = new Grass();
+                    grass.setSand(true);
+                    cell.setObjectMap(grass);
+                    transferCells.add(cell);
+                }
+            }
+        }
+        for(Cell cell : cells){
+            if(cell.getY()>2&&getCell(cell.getX(),cell.getY()-1).getObjectMap() instanceof Door&&getCell(cell.getX(),cell.getY()-2).getObjectMap() instanceof Cottage){
+                cell.setObjectMap(new Grass());
+                startPoints.add(cell);
+//                Objects.requireNonNull(Finder.findPlayerByFarm(this)).setX(cell.getX());
+//                Objects.requireNonNull(Finder.findPlayerByFarm(this)).setY(cell.getY());
             }
         }
     }
@@ -538,4 +605,69 @@ public class Farm implements Location {
     public ArrayList<Cell> getTransferCells() {
         return transferCells;
     }
+
+    public void setBarns(ArrayList<Barn> barns) {
+        this.barns = barns;
+    }
+
+    public void setBuildings(ArrayList<Building> buildings) {
+        this.buildings = buildings;
+    }
+
+    public void setBushes(ArrayList<Bush> bushes) {
+        this.bushes = bushes;
+    }
+
+    public void setCoops(ArrayList<Coop> coops) {
+        this.coops = coops;
+    }
+
+    public void setCrops(ArrayList<Crop> crops) {
+        this.crops = crops;
+    }
+
+    public void setFarmBuilder(FarmBuilder farmBuilder) {
+        this.farmBuilder = farmBuilder;
+    }
+
+    public void setForagingCropCount(int foragingCropCount) {
+        this.foragingCropCount = foragingCropCount;
+    }
+
+    public void setForagings(ArrayList<Foraging> foragings) {
+        this.foragings = foragings;
+    }
+
+    public void setForagingTreeCount(int foragingTreeCount) {
+        this.foragingTreeCount = foragingTreeCount;
+    }
+
+    public void setGreenhouse(Greenhouse greenhouse) {
+        this.greenhouse = greenhouse;
+    }
+
+    public void setLakes(ArrayList<Lake> lakes) {
+        this.lakes = lakes;
+    }
+
+    public void setPlantCount(int plantCount) {
+        this.plantCount = plantCount;
+    }
+
+    public void setRockCount(int rockCount) {
+        this.rockCount = rockCount;
+    }
+
+    public void setStartPoints(ArrayList<Cell> startPoints) {
+        this.startPoints = startPoints;
+    }
+
+    public void setTransferCells(ArrayList<Cell> transferCells) {
+        this.transferCells = transferCells;
+    }
+
+    public void setTrees(ArrayList<Tree> trees) {
+        this.trees = trees;
+    }
+
 }

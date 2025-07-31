@@ -24,6 +24,9 @@ public class CropData {
     int x;
     int y;
 
+    public CropData() {
+    }
+
     public CropData (Crop crop) {
         this.cropTypeInt = crop.getCropType().ordinal();
         this.stages = new ArrayList<>(crop.getStages());
@@ -45,5 +48,61 @@ public class CropData {
         return new Crop(canRegrow, CropType.values()[cropTypeInt], currentStage,
             currentStageLevel, isFertilizedToday, isGiantCrop, isProtected, isWateredToday,
             regrowthTime, stages, typeIndex, waterStreak, x, y);
+    }
+
+    public boolean isCanRegrow() {
+        return canRegrow;
+    }
+
+    public int getCropTypeInt() {
+        return cropTypeInt;
+    }
+
+    public int getCurrentStage() {
+        return currentStage;
+    }
+
+    public int getCurrentStageLevel() {
+        return currentStageLevel;
+    }
+
+    public boolean isFertilizedToday() {
+        return isFertilizedToday;
+    }
+
+    public boolean isGiantCrop() {
+        return isGiantCrop;
+    }
+
+    public boolean isProtected() {
+        return isProtected;
+    }
+
+    public boolean isWateredToday() {
+        return isWateredToday;
+    }
+
+    public int getRegrowthTime() {
+        return regrowthTime;
+    }
+
+    public ArrayList<Integer> getStages() {
+        return stages;
+    }
+
+    public int getTypeIndex() {
+        return typeIndex;
+    }
+
+    public int getWaterStreak() {
+        return waterStreak;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }

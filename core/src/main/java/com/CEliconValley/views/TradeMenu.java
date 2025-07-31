@@ -1,5 +1,6 @@
 package com.CEliconValley.views;
 
+import com.CEliconValley.client.view.AppMenu;
 import com.CEliconValley.controllers.CheckerController;
 import com.CEliconValley.controllers.TradeMenuController;
 import com.CEliconValley.views.commands.TradeCommands;

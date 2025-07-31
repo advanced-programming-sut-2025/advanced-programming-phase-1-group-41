@@ -25,6 +25,10 @@ public class FriendshipData {
     boolean gaveFlower;
     boolean areMarried ;
     String proposerName ;
+
+    public FriendshipData() {
+    }
+
     public FriendshipData(Friendship friendship) {
         this.player1Name = friendship.getPlayer1().getUser().getUsername();
         this.player2Name = friendship.getPlayer2().getUser().getUsername();
@@ -56,5 +60,65 @@ public class FriendshipData {
             hadRejectedTradeToday, hadInteractionToday, hadHugToday, gaveFlower, friendshipXp,
             fsl, areMarried
         );
+    }
+
+    public boolean isAreMarried() {
+        return areMarried;
+    }
+
+    public int getFriendshipLevelInt() {
+        return friendshipLevelInt;
+    }
+
+    public int getFriendshipXp() {
+        return friendshipXp;
+    }
+
+    public boolean isGaveFlower() {
+        return gaveFlower;
+    }
+
+    public boolean isHadHugToday() {
+        return hadHugToday;
+    }
+
+    public boolean isHadInteractionToday() {
+        return hadInteractionToday;
+    }
+
+    public boolean isHadRejectedTradeToday() {
+        return hadRejectedTradeToday;
+    }
+
+    public boolean isHadTalkingToday() {
+        return hadTalkingToday;
+    }
+
+    public boolean isHadTradeToday() {
+        return hadTradeToday;
+    }
+
+    public int getLastReadMessage() {
+        return lastReadMessage;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public String getPlayer1Name() {
+        return player1Name;
+    }
+
+    public String getPlayer2Name() {
+        return player2Name;
+    }
+
+    public String getProposerName() {
+        return proposerName;
+    }
+
+    public ArrayList<ArrayList<String>> getTalks() {
+        return talks;
     }
 }

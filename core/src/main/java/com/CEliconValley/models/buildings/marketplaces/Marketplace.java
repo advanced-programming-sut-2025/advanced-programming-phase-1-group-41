@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public abstract class Marketplace implements Building {
     protected NPC owner;
-    protected final ArrayList<Slot> itemsForSale;
+    protected ArrayList<Slot> itemsForSale;
 
 
 
@@ -45,5 +45,9 @@ public abstract class Marketplace implements Building {
             }
         }
         return null;
+    }
+
+    public void setItemsForSale(ArrayList<Slot> itemsForSale) {
+        this.itemsForSale = itemsForSale;
     }
 }

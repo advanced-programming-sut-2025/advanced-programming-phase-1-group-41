@@ -1,5 +1,6 @@
 package com.CEliconValley;
 
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.database.UserDB;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Menu;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game {
+
     private static Main main;
     private static SpriteBatch batch;
     private static Stage stage;
@@ -37,10 +39,10 @@ public class Main extends Game {
         image = new Texture(GameAssetManager.getGameAssetManager().CEliconValleyBackground);
         background = new Image(image);
         Graphics.DisplayMode displayMode = Gdx.graphics.getDisplayMode();
-        Gdx.graphics.setFullscreenMode(displayMode);
+//        Gdx.graphics.setFullscreenMode(displayMode);
         background.setSize(stage.getWidth(), stage.getHeight());
         stage.addActor(background);
-        main.setScreen(App.getMenu().getScreen());
+        main.setScreen(AppClient.getMenu().getScreen());
 //        main.setScreen(new StartMenuView(new StartMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
 //        main.setScreen(new AuthenticationMenuView(new AuthenticationMenuController()));
     }
@@ -57,10 +59,11 @@ public class Main extends Game {
         questions.add("What is name of the city you're living in?");
         questions.add("What is your best friend's name?");
         questions.add("What is your body count?");
-        App.setQuestions(questions);
+        AppClient.setQuestions(questions);
         CookingRecipe.updateRecipe();
         UserDB.connect();
-        App.setMenu(Menu.Authentication);
+        App.setupConnections();
+        AppClient.setMenu(Menu.Authentication);
     }
 
     @Override
