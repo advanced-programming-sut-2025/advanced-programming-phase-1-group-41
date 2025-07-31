@@ -1,7 +1,10 @@
 package com.CEliconValley.server;
 
+import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.server.handlers.AuthRequestHandler;
+import com.CEliconValley.server.handlers.GameHandler;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.java_websocket.WebSocket;
 
 
@@ -11,6 +14,9 @@ public class ServerMessageRouter {
             case "login_request", "forgotpass_request", "fp_request",
                  "prereg_request", "register_request", "profile_request" ,
                  "logout_request" -> AuthRequestHandler.handle(type, rawJson, conn, gson);
+            case "game-popup" -> {
+                GameHandler.handle(type, rawJson, conn, gson);
+            }
             default -> System.out.println("Unknown type: " + type);
         }
     }
