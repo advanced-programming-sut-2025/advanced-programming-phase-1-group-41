@@ -18,7 +18,7 @@ public enum Menu {
     Game(new GameMenu(),"GameMenu"),
     Trade(new TradeMenu(),"TradeMenu"),
 //    Lobby(new Lobby(new LobbyController()),"Lobby")
-    Lobby(new Lobby(new LobbyController(),"Test",false,true,"TestPass"),"Lobby"),
+    Lobby(new LobbyScreen(new LobbyController(),"Test",false,true,"TestPass"),"Lobby"),
     ;
 
 

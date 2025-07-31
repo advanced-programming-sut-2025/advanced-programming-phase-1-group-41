@@ -1,21 +1,21 @@
 package com.CEliconValley.client;
 
+import com.CEliconValley.common.AppData;
 import com.CEliconValley.common.GameData;
+import com.CEliconValley.common.HandshakeData;
 import com.CEliconValley.common.messages.*;
-import com.CEliconValley.models.Game;
-import com.CEliconValley.models.Result;
-import com.CEliconValley.models.locations.Farm;
+import com.CEliconValley.models.Lobby;
 import com.badlogic.gdx.Gdx;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import net.bytebuddy.description.method.MethodDescription;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
+import java.util.HashSet;
 
 public class GameClient extends WebSocketClient {
 
@@ -78,6 +78,37 @@ public class GameClient extends WebSocketClient {
                         AppClient.setGameData(gameDataMessage.body);
                     });
                     System.out.println("Cmessage: updated gamedata");
+                }
+                case "new-lobby" -> {
+                    GameMessage<Lobby> msg = gson.fromJson(message, new TypeToken<GameMessage<Lobby>>() {}.getType());
+                    Gdx.app.postRunnable(() -> {
+                        AppClient.getLobbies().add(msg.body);
+                    });
+                    System.out.println("Cmessage: updated lobby");
+                }
+                case "delete-lobby" -> {
+                    GameMessage<Lobby> msg = gson.fromJson(message, new TypeToken<GameMessage<Lobby>>() {}.getType());
+                    // maybe check if need to iterate annd remove
+                    AppClient.getLobbies().remove(msg.body);
+                    System.out.println("Cmessage: updated lobby");
+                }
+                case "handshake-data" -> {
+                    GameMessage<HandshakeData> msg = gson.fromJson(message, new TypeToken<GameMessage<HandshakeData>>() {}.getType());
+                    Gdx.app.postRunnable(() -> {
+                        AppClient.setLobbies(
+                            new HashSet<>(msg.body.getCurrentLobbies())
+                        );
+                        AppClient.setGames(null);
+                        AppClient.setOnlinePlayers(new HashSet<>(msg.body.getOnlinePlayers()));
+                    });
+                    System.out.println("Cmessage: "+message);
+                }
+                case "app-data" -> {
+                    GameMessage<AppData> msg = gson.fromJson(message, new TypeToken<GameMessage<AppData>>() {}.getType());
+                    Gdx.app.postRunnable(() -> {
+                        AppClient.setOnlinePlayers(new HashSet<>(msg.body.onlinePlayers));
+                    });
+                    System.out.println("Cmessage: "+message);
                 }
             }
         } catch (Exception e) {

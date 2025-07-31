@@ -7,7 +7,7 @@ import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.client.view.screen.FarmScreen;
-import com.CEliconValley.client.view.Lobby;
+import com.CEliconValley.client.view.LobbyScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -16,9 +16,9 @@ import com.google.gson.Gson;
 
 public class LobbyController {
 
-    private Lobby view;
+    private LobbyScreen view;
 
-    public void setView(Lobby view) {
+    public void setView(LobbyScreen view) {
         this.view = view;
     }
 

@@ -2,11 +2,13 @@ package com.CEliconValley.client.controller;
 
 import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
+import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.database.UserDB;
 import com.CEliconValley.models.*;
 import com.CEliconValley.client.view.MainMenuView;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.google.gson.Gson;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import dev.morphia.Datastore;
@@ -45,6 +47,10 @@ public class MainMenuController {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 App.setCurrentUser(null);
+                GameMessage<String> msg = new GameMessage<>("logout_request",
+                    AppClient.getUserData().getUsername());
+                String json = new Gson().toJson(msg);
+                AppClient.getClient().send(json);
                 AppClient.logout();
                 AppClient.setMenu(Menu.Authentication);
                 Menu.Authentication.resetMenu();

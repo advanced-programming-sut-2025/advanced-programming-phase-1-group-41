@@ -22,7 +22,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 
-public class Lobby implements Screen {
+public class LobbyScreen implements Screen {
     private String name;
     private String ID;
     private boolean isPrivate;
@@ -53,7 +53,7 @@ public class Lobby implements Screen {
 //        mainTable = new Table();
 //    }
 
-    public Lobby(LobbyController controller, String name,boolean isPrivate, boolean isVisible, String password) {
+    public LobbyScreen(LobbyController controller, String name, boolean isPrivate, boolean isVisible, String password) {
         this.name = name;
         this.isPrivate = isPrivate;
         this.isVisible = isVisible;
@@ -103,10 +103,10 @@ public class Lobby implements Screen {
     private String giveID() {
             int number;
             number = MathUtils.random(10000, 99999);
-            if(!App.lobbies.isEmpty()) {
-                for (Lobby lobby : App.lobbies) {
+            if(!App.lobbiesScreen.isEmpty()) {
+                for (LobbyScreen lobbyScreen : App.lobbiesScreen) {
                     String theID = String.valueOf(number);
-                    if (lobby.getID().equals(theID)) {
+                    if (lobbyScreen.getID().equals(theID)) {
                         return giveID();
                     }
                 }

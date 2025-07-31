@@ -1,6 +1,7 @@
 package com.CEliconValley.server;
 
 import com.CEliconValley.common.messages.*;
+import com.CEliconValley.models.App;
 import com.CEliconValley.server.controller.ServerAuthentication;
 import com.CEliconValley.server.controller.ServerProfile;
 import com.google.gson.Gson;
@@ -11,7 +12,7 @@ public class Request {
     static Gson gson = new Gson();
     public static void login_req(LoginCred creds, WebSocket conn) {
         try{
-            GameMessage<Message> response = new GameMessage<>("login_response",ServerAuthentication.handleLogin(creds));
+            GameMessage<Message> response = new GameMessage<>("login_response",ServerAuthentication.handleLogin(creds, conn));
             String json = gson.toJson(response);
             conn.send(json);
         } catch (Exception e){
@@ -83,6 +84,10 @@ public class Request {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public static void logout(String username ,WebSocket conn) {
+        App.removeOnlinePlayer(username);
     }
 
 }

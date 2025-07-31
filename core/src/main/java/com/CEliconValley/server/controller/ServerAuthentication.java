@@ -1,9 +1,13 @@
 package com.CEliconValley.server.controller;
 
+import com.CEliconValley.common.HandshakeData;
+import com.CEliconValley.common.OnlineData;
 import com.CEliconValley.common.UserData;
 import com.CEliconValley.common.messages.*;
 import com.CEliconValley.database.UserDB;
 import com.CEliconValley.models.*;
+import com.google.gson.Gson;
+import org.java_websocket.WebSocket;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -11,7 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 public class ServerAuthentication {
-    public static Message handleLogin(LoginCred creds) throws NoSuchAlgorithmException {
+    public static Message handleLogin(LoginCred creds, WebSocket conn) throws NoSuchAlgorithmException {
         String username = creds.username;
         String password = creds.password;
         boolean stayLoggedIn = false;
@@ -28,6 +32,10 @@ public class ServerAuthentication {
             return new ErrorMessage("login_request","Password does not match!");
         }
         login(user, stayLoggedIn);
+        GameMessage<HandshakeData> msg = new GameMessage<>("handshake-data",
+            new HandshakeData(null, App.lobbies, App.onlinePlayers));
+        String json = new Gson().toJson(msg);
+        conn.send(json);
         return new SuccessMessage("login_request",new UserData(user).toJson());
     }
     public static Message showForgotPassword(String username) {
@@ -109,6 +117,7 @@ public class ServerAuthentication {
     private static void login(User user, boolean stayLoggedIn){
         user.setStayLoggedIn(stayLoggedIn);
         App.setCurrentUser(user);
+        App.putOnlinePlayer(new OnlineData(user.getUsername(), false));
     }
     public static String getHash(String pass) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");

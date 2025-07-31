@@ -1,6 +1,9 @@
 package com.CEliconValley.server;
 
+import com.CEliconValley.common.OnlineData;
 import com.CEliconValley.common.messages.*;
+import com.CEliconValley.models.App;
+import com.CEliconValley.models.User;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.java_websocket.WebSocket;
@@ -8,12 +11,13 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
 import java.net.InetSocketAddress;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class GameServer extends WebSocketServer {
     public static final int PORT = 8080;
-    private final Set<WebSocket> connections = new HashSet<>();
+
+    private final Set<WebSocket> connections = Collections.synchronizedSet(new HashSet<>());
+    private final Map<WebSocket, User> onlineConnections = new HashMap<>();
     public GameServer() {
         super(new InetSocketAddress(PORT));
     }
@@ -27,6 +31,8 @@ public class GameServer extends WebSocketServer {
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         connections.remove(conn);
+        App.removeOnlinePlayer(onlineConnections.get(conn).getUsername());
+        onlineConnections.remove(conn);
         System.out.println("Closed connection: " + conn.getRemoteSocketAddress());
     }
 
@@ -62,6 +68,10 @@ public class GameServer extends WebSocketServer {
                     GameMessage<ProfCred> msg = gson.fromJson(message, new TypeToken<GameMessage<ProfCred>>() {}.getType());
                     Request.profile(msg.body, conn);
                 }
+                case "logout_request" -> {
+                    GameMessage<String> msg = gson.fromJson(message, new TypeToken<GameMessage<String>>() {}.getType());
+                    Request.logout(msg.body, conn);
+                }
                 default -> {
                     System.out.println("invalid type: "+genericMsg.type);
                 }
@@ -86,5 +96,9 @@ public class GameServer extends WebSocketServer {
         GameServer server = new GameServer();
         server.start();
         System.out.println("GameServer started on port " + PORT);
+    }
+
+    public Map<WebSocket, User> getOnlineConnections() {
+        return onlineConnections;
     }
 }

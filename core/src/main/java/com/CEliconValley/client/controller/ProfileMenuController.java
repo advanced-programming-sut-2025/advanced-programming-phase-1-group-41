@@ -57,6 +57,10 @@ public class ProfileMenuController {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 change("delete",":)");
+                GameMessage<String> msg = new GameMessage<>("logout_request",
+                    AppClient.getUserData().getUsername());
+                String json = new Gson().toJson(msg);
+                AppClient.getClient().send(json);
             }
         });
 
