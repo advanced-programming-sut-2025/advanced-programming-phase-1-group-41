@@ -28,6 +28,10 @@ public class SmokedFish implements Item, Eatable {
     public double getPrice() {
         return 2*fish.getPrice();
     }
+    public int getID() {
+
+        return 50400;
+    }
 
     @Override
     public String getChar() {

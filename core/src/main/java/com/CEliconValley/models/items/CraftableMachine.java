@@ -69,4 +69,35 @@ public enum CraftableMachine implements Item{
         }
         return null;
     }
+    public int getID() {
+        return switch (this) {
+            case CherryBomb -> 30000;
+            case Bomb -> 30001;
+            case MegaBomb -> 30002;
+            case Sprinkler -> 30003;
+            case QualitySprinkler -> 30004;
+            case IridiumSprinkler -> 30005;
+
+            case CharcoalKiln -> 30100;
+            case Furnace -> 30101;
+            case Scarecrow -> 30102;
+            case DeluxeScarecrow -> 30103;
+            case BeeHouse -> 30104;
+            case CheesePress -> 30105;
+
+            case Keg -> 30200;
+            case Loom -> 30201;
+            case MayonnaiseMachine -> 30202;
+            case OilMaker -> 30203;
+            case PreservesJar -> 30204;
+            case Dehydrator -> 30205;
+
+            case GrassStarter -> 30300;
+            case FishSmoker -> 30301;
+            case MysticTreeSeed -> 30302;
+
+            default -> throw new IllegalStateException("Unknown item: " + this);
+        };
+    }
+
 }

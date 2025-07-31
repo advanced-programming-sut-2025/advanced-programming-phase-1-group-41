@@ -42,4 +42,10 @@ public class DriedFruit implements Item, Eatable {
     public String getChar() {
         return "DF";
     }
+
+    @Override
+    public int getID() {
+
+        return 10407;
+    }
 }

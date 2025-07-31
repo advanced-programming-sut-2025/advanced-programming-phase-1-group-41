@@ -38,6 +38,21 @@ public class TrashCan implements Tool, LevelTool {
         }
         return null;
     }
+    public int getID() {
+        switch (this.getLevel()) {
+            case Default:
+                return 90000;
+            case Copper:
+                return 90001;
+            case Iron:
+                return 90002;
+            case Gold:
+                return 90003;
+            case Iridium:
+                return 90004;
+        }
+        return -1;
+    }
 
     @Override
     public double getPrice() {

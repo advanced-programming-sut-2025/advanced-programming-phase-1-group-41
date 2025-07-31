@@ -22,17 +22,20 @@ public enum FishShopItems implements Item {
     private String name;
     private double price;
     private String ch;
+    private Item item;
 
     FishShopItems(Item item){
         this.name = item.getName();
         this.price = item.getPrice();
         this.ch = item.getChar();
+        this.item = item;
     }
 
     FishShopItems(Item item, double price) {
         this.ch = item.getChar();
         this.name = item.getName();
         this.price = price;
+        this.item = item;
     }
 
     FishShopItems(CraftingRecipe recipe, double price) {
@@ -63,5 +66,9 @@ public enum FishShopItems implements Item {
             }
         }
         return null;
+    }
+    public int getID() {
+
+        return this.item.getID();
     }
 }

@@ -177,4 +177,35 @@ public enum CookingRecipe {
         }
         return null;
     }
+    public int getId() {
+        switch (this) {
+            case FriedEgg: return 10411;
+            case BakedFish: return 10500;
+            case Salad: return 10501;
+            case Omelet: return 10502;
+            case PumpkinPie: return 10503;
+            case Spaghetti: return 10504;
+            case Pizza: return 10505;
+            case Tortilla: return 10506;
+            case MakiRoll: return 10507;
+            case TripleShotExspresso: return 10508;
+            case Cookie: return 10509;
+            case HashBrown: return 10510;
+            case Pancake: return 10511;
+
+            case FruitSalad: return 10600;
+            case RedPlate: return 10601;
+            case Bread: return 10602;
+            case SalmonDinner: return 10603;
+            case VegetableMedly: return 10604;
+            case FarmerLunch: return 10605;
+            case SurvivalBurger: return 10606;
+            case DishOSea: return 10607;
+            case SeaformPuddin: return 10608;
+            case MinerTreat: return 10609;
+
+            default: throw new IllegalArgumentException("Unknown recipe: " + this);
+        }
+    }
+
 }

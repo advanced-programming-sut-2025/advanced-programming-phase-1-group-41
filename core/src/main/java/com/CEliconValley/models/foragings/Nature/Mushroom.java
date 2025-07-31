@@ -53,6 +53,19 @@ public enum Mushroom implements Item, Eatable {
         }
         return null;
     }
+    @Override
+    public int getID() {
+        switch (this.foragingCropType) {
+
+            case RedMushroom -> { return 10701; }
+
+            case PurpleMushroom -> { return 10707; }
+
+            case CommonMushroom -> { return 10802; }
+
+        }
+        throw new IllegalStateException("Unknown foragingType: " + this.foragingCropType);
+    }
 
     @Override
     public double getEnergy() {

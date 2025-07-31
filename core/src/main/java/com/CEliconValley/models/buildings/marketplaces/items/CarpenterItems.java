@@ -20,6 +20,7 @@ public enum CarpenterItems implements Item{
     private String name;
     private double price;
     private String ch;
+    private Item item;
 
     CarpenterItems(Item item){
         this.name = item.getName();
@@ -31,6 +32,7 @@ public enum CarpenterItems implements Item{
         this.ch = item.getChar();
         this.name = item.getName();
         this.price = price;
+        this.item = item;
     }
 
     @Override
@@ -46,5 +48,9 @@ public enum CarpenterItems implements Item{
     @Override
     public double getPrice() {
         return this.price;
+    }
+    public int getID() {
+
+        return this.item.getID();
     }
 }

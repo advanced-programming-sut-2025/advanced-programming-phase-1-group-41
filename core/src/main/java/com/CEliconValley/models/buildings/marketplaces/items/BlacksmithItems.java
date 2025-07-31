@@ -14,6 +14,7 @@ public enum BlacksmithItems implements Item {
     private String name;
     private double price;
     private String ch;
+    private Item item;
 
     BlacksmithItems(String ch, String name, double price) {
         this.ch = ch;
@@ -26,6 +27,7 @@ public enum BlacksmithItems implements Item {
         this.ch = item.getChar();
         this.name = item.getName();
         this.price = price;
+        this.item = item;
     }
 
     @Override
@@ -41,5 +43,9 @@ public enum BlacksmithItems implements Item {
     @Override
     public double getPrice() {
         return this.price;
+    }
+    public int getID() {
+
+        return this.item.getID();
     }
 }

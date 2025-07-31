@@ -31,4 +31,21 @@ public class Axe implements Tool, LevelTool{
     public double getPrice() {
         return 0;
     }
+
+    @Override
+    public int getID() {
+        switch (this.getLevel()) {
+            case Default:
+                return 90300;
+            case Copper:
+                return 90301;
+            case Iron:
+                return 90302;
+            case Gold:
+                return 90303;
+            case Iridium:
+                return 90304;
+        }
+        return -1;
+    }
 }

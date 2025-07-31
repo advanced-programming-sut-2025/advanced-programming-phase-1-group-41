@@ -10,6 +10,10 @@ public class Shear implements Tool {
     public double getPrice() {
         return 0;
     }
+    public int getID() {
+
+        return 90600;
+    }
 
     @Override
     public String getChar() {

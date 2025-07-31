@@ -35,6 +35,7 @@ public class FarmScreen implements Screen {
     private final GroundSpawner groundSpawner;
     private final CropSpawner cropSpawner;
     private final Hero hero;
+    private final InventoryRenderer inventoryRenderer;
     private boolean onRepeat=true;
     private boolean didHit=false;
 
@@ -88,6 +89,7 @@ public class FarmScreen implements Screen {
         groundSpawner=new GroundSpawner(this.farm);
         cropSpawner=new CropSpawner(this.farm);
         hero=new Hero(this.farm);
+        inventoryRenderer = new InventoryRenderer(player.getInventory());
 
 
         batch = new SpriteBatch();
@@ -251,6 +253,7 @@ public class FarmScreen implements Screen {
 //                hit(playerDirection, playerX, playerY);
 //                didHit = false;
 //            }
+            inventoryRenderer.render(batch,camera);
 
 
 
