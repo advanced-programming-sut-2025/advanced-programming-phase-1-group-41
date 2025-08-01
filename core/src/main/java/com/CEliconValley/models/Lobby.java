@@ -1,6 +1,6 @@
 package com.CEliconValley.models;
 
-import com.CEliconValley.client.view.LobbyScreen;
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.messages.GameMessage;
 import com.badlogic.gdx.math.MathUtils;
 import com.google.gson.Gson;
@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class Lobby {
     private String lobbyName;
@@ -17,22 +16,24 @@ public class Lobby {
     private String password;
     private Set<String> playerNames;
     private String admin;
-    private boolean visible;
+    private boolean isVisible;
     long lastTimeJoined;
 
     public Lobby() {
     }
 
-    public Lobby(String lobbyName, String password, String admin) {
+    public Lobby(String lobbyName, String password, String admin, boolean isVisible) {
         makeLobby(lobbyName, admin);
         this.isPrivate = true;
         this.password = password;
+        this.isVisible = isVisible;
     }
 
-    public Lobby(String lobbyName, String admin){
+    public Lobby(String lobbyName, String admin, boolean isVisible){
         makeLobby(lobbyName, admin);
         this.isPrivate = false;
         this.password = null;
+        this.isVisible = isVisible;
     }
 
     private void makeLobby(String lobbyName, String admin){
@@ -40,6 +41,7 @@ public class Lobby {
         this.lobbyName = lobbyName;
         this.playerNames = Collections.synchronizedSet(new HashSet<>());
         this.admin = admin;
+        AppClient.getLobbies().add(this);
         App.lobbies.add(this);
         addPlayer(admin);
     }
@@ -77,11 +79,11 @@ public class Lobby {
     }
 
     public boolean isVisible() {
-        return visible;
+        return isVisible;
     }
 
     public void setVisible(boolean visible) {
-        this.visible = visible;
+        this.isVisible = visible;
         sendDetails();
     }
 

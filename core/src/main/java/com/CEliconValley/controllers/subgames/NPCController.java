@@ -9,6 +9,7 @@ import com.CEliconValley.models.items.Slot;
 import com.CEliconValley.models.npc.npcCharacters.NPC;
 import com.CEliconValley.models.npc.npcCharacters.Quest;
 import com.CEliconValley.models.tools.Tool;
+import com.CEliconValley.models.ui.TerminalColors;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -135,26 +136,26 @@ public class NPCController {
         Player player=App.getGame().getCurrentPlayer();
         for(NPC npc :App.getGame().getVillage().getNPCs()){
             int i=1;
-            System.out.println(Colors.foreColor(15)+npc.getName()+"`s quests :"+Colors.RESET);
+            System.out.println(TerminalColors.foreColor(15)+npc.getName()+"`s quests :"+ TerminalColors.RESET);
             for(Quest quest:npc.getQuests()){
                 if(quest.isLocked(player)){
-                    System.out.println(Colors.foreColor(124)+i+"-quest "+quest.getQuestName()+" is locked"+Colors.RESET);
+                    System.out.println(TerminalColors.foreColor(124)+i+"-quest "+quest.getQuestName()+" is locked"+ TerminalColors.RESET);
                 }else if(quest.isFinished(player)){
                     System.out.println(i+"-quest "+quest.getQuestName()+" is finished");
                 }
                 else{
-                    System.out.printf(Colors.foreColor(46)+i+"-quest "+quest.getQuestName()+" -> "+quest.getQuestPreTalk()+" | objective : deliver "+quest.getRequest().getQuantity()+" "+quest.getRequest().getItem().getName()+" to "+npc.getName()+Colors.RESET);
+                    System.out.printf(TerminalColors.foreColor(46)+i+"-quest "+quest.getQuestName()+" -> "+quest.getQuestPreTalk()+" | objective : deliver "+quest.getRequest().getQuantity()+" "+quest.getRequest().getItem().getName()+" to "+npc.getName()+ TerminalColors.RESET);
                     if(quest.getMoneyPrize()!=0.0){
-                        System.out.printf(Colors.foreColor(46)+" | reward : "+quest.getMoneyPrize()+" gold\n"+Colors.RESET);
+                        System.out.printf(TerminalColors.foreColor(46)+" | reward : "+quest.getMoneyPrize()+" gold\n"+ TerminalColors.RESET);
                     }
                     else if(quest.getFriendShip()!=0){
-                        System.out.printf(Colors.foreColor(46)+" | reward : "+quest.getFriendShip()+" points of friendship\n"+Colors.RESET);
+                        System.out.printf(TerminalColors.foreColor(46)+" | reward : "+quest.getFriendShip()+" points of friendship\n"+ TerminalColors.RESET);
                     }
                     else if(quest.getCookingRecipe()!=null){
-                        System.out.printf(Colors.foreColor(46)+" | reward : "+quest.getCookingRecipe().getName()+"\n"+Colors.RESET);
+                        System.out.printf(TerminalColors.foreColor(46)+" | reward : "+quest.getCookingRecipe().getName()+"\n"+ TerminalColors.RESET);
                     }
                     else{
-                        System.out.printf(Colors.foreColor(46)+" | reward : "+quest.getReward().getQuantity()+" "+quest.getReward().getItem().getName()+"\n"+Colors.RESET);
+                        System.out.printf(TerminalColors.foreColor(46)+" | reward : "+quest.getReward().getQuantity()+" "+quest.getReward().getItem().getName()+"\n"+ TerminalColors.RESET);
                     }
                 }
                 i++;

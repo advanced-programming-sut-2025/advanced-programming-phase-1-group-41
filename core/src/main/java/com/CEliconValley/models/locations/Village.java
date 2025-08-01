@@ -13,6 +13,7 @@ import com.CEliconValley.models.buildings.animalContainer.Coop;
 import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.foragings.Nature.Lake;
 import com.CEliconValley.models.npc.npcCharacters.NPC;
+import com.CEliconValley.models.ui.TerminalColors;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -329,20 +330,20 @@ public class Village implements Location{ ;
 
     }
     private void printStartSign(){
-        System.out.printf(Colors.colorize(15,33,"xx"));
+        System.out.printf(TerminalColors.colorize(15,33,"xx"));
     }
     private void showTransferCell(Cell cell){
          if(transferCells.get(0).equals(cell)){
-            System.out.printf(Colors.colorize(15,196,"↓↓"));
+            System.out.printf(TerminalColors.colorize(15,196,"↓↓"));
         }
         else if(transferCells.get(1).equals(cell)){
-            System.out.printf(Colors.colorize(15,196,"↙↙"));
+            System.out.printf(TerminalColors.colorize(15,196,"↙↙"));
         }
         else if(transferCells.get(2).equals(cell)){
-            System.out.printf(Colors.colorize(0,39,"⛴ "));
+            System.out.printf(TerminalColors.colorize(0,39,"⛴ "));
         }
         else if(transferCells.get(3).equals(cell)){
-            System.out.printf(Colors.colorize(15,196,"←←"));
+            System.out.printf(TerminalColors.colorize(15,196,"←←"));
         }
     }
 

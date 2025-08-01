@@ -1,7 +1,9 @@
 package com.CEliconValley.client.view;
 
-import com.CEliconValley.FakeCheckbox;
-import com.CEliconValley.GameAssetManager;
+import com.CEliconValley.models.Lobby;
+import com.CEliconValley.models.ui.CustomColors;
+import com.CEliconValley.models.ui.FakeCheckbox;
+import com.CEliconValley.models.ui.GameAssetManager;
 import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.controller.MainMenuController;
@@ -15,10 +17,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -38,11 +45,14 @@ public class MainMenuView implements Screen {
     private final Table formTable;
 
     // Join Lobby fields
+    private Label joinLobbyMessage;
     private TextField lobbyIdField;
+    private TextField lobbyPasswordField;
     private TextButton joinConfirmButton;
     private TextButton backButton;
 
     // New Lobby fields
+    private Label createLobbyMessage;
     private TextField lobbyNameField;
     private FakeCheckbox isVisibleCheckBox;
     private FakeCheckbox isPrivateCheckBox;
@@ -102,6 +112,7 @@ public class MainMenuView implements Screen {
         dataTable.setPosition(-Gdx.graphics.getWidth() / 4.5f, -Gdx.graphics.getHeight() / 20f);
 
         controller.setupListeners();
+
     }
 
     public void showJoinLobbyForm() {
@@ -109,15 +120,43 @@ public class MainMenuView implements Screen {
         formTable.clear();
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
 
+        joinLobbyMessage = new Label("", skin);
+        joinLobbyMessage.setColor(Color.RED);
+
+        Table lobbyListTable = new Table();
+        lobbyListTable.top().left();
+
+        for (Lobby lobby : AppClient.getLobbies()) {
+            if(lobby.isVisible()){
+                Label label = new Label(lobby.getLobbyName() + " : " + lobby.getLobbyID(), skin);
+                label.setColor(CustomColors.GAMEGREENCOLOR);
+                if(lobby.isPrivate()){
+                    label.setColor(Color.RED);
+                }
+                lobbyListTable.add(label).pad(5).left().row();
+            }
+        }
+
+        ScrollPane scrollPane = new ScrollPane(lobbyListTable, skin);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setScrollingDisabled(true, false);
+        scrollPane.setScrollbarsOnTop(true);
+
         lobbyIdField = new TextField("", skin);
         lobbyIdField.setMessageText("Enter Lobby ID");
+        lobbyPasswordField = new TextField("", skin);
+        lobbyPasswordField.setMessageText("Enter Lobby Password");
+
         joinConfirmButton = new TextButton("Join", skin);
         backButton = new TextButton("Back", skin);
 
         formTable.add(new Label("Join Lobby", skin, "title")).padBottom(20).row();
-        formTable.add(lobbyIdField).width(300).pad(10).row();
-        formTable.add(joinConfirmButton).width(200).pad(10).row();
-        formTable.add(backButton).width(200).pad(10).row();
+        formTable.add(joinLobbyMessage).width(400).pad(10).row();
+        formTable.add(scrollPane).width(400).height(200).pad(10).row(); //Scroll Pane
+        formTable.add(lobbyIdField).width(400).pad(10).row();
+        formTable.add(lobbyPasswordField).width(400).pad(10).row();
+        formTable.add(joinConfirmButton).width(300).pad(10).row();
+        formTable.add(backButton).width(300).pad(10).row();
 
         joinConfirmButton.addListener(new ClickListener() {
             @Override
@@ -135,10 +174,14 @@ public class MainMenuView implements Screen {
         });
     }
 
+
     public void showNewLobbyForm() {
         mainTable.setVisible(false);
         formTable.clear();
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+
+        createLobbyMessage = new Label("", skin);
+        createLobbyMessage.setColor(Color.RED);
 
         lobbyNameField = new TextField("", skin);
         lobbyNameField.setMessageText("Lobby Name");
@@ -148,8 +191,6 @@ public class MainMenuView implements Screen {
 
         passwordField = new TextField("", skin);
         passwordField.setMessageText("Password");
-        passwordField.setPasswordMode(true);
-        passwordField.setPasswordCharacter('*');
         passwordField.setVisible(false);
 
         isPrivateCheckBox.addListener(event -> {
@@ -161,18 +202,18 @@ public class MainMenuView implements Screen {
 
         backButton = new TextButton("Back", skin);
 
-        formTable.add(new Label("Create Lobby", skin, "title")).padBottom(20).row();
+        formTable.add(new Label("Create New Lobby", skin, "title")).padBottom(20).row();
+        formTable.add(createLobbyMessage).width(300).pad(20).row();
         formTable.add(lobbyNameField).width(300).pad(10).row();
         formTable.add(isVisibleCheckBox).pad(5).row();
         formTable.add(isPrivateCheckBox).pad(5).row();
         formTable.add(passwordField).width(300).pad(10).row();
-        formTable.add(createLobbyButton).width(250).pad(15).row();
-        formTable.add(backButton).width(250).pad(15).row();
+        formTable.add(createLobbyButton).width(300).pad(15).row();
+        formTable.add(backButton).width(300).pad(15).row();
 
         createLobbyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-//                controller.handleJoinLobby();
                 controller.handleNewLobby();
             }
         });
@@ -230,16 +271,18 @@ public class MainMenuView implements Screen {
         stage.dispose();
     }
 
-    // Getters برای کنترلر
     public Stage getStage() { return stage; }
     public TextButton getJoinLobbyButton() { return joinLobbyButton; }
     public TextButton getNewLobbyButton() { return newLobbyButton; }
     public TextButton getProfileButton() { return profileButton; }
     public TextButton getLogoutButton() { return logoutButton; }
 
+    public Label getJoinLobbyMessage(){return joinLobbyMessage;}
     public TextButton getJoinConfirmButton() { return joinConfirmButton; }
     public TextField getLobbyIdField() { return lobbyIdField; }
+    public TextField getLobbyPasswordField() { return lobbyPasswordField; }
 
+    public Label getCreateLobbyMessage(){return createLobbyMessage;}
     public TextField getLobbyNameField() { return lobbyNameField; }
     public FakeCheckbox getIsVisibleCheckBox() { return isVisibleCheckBox; }
     public FakeCheckbox getIsPrivateCheckBox() { return isPrivateCheckBox; }

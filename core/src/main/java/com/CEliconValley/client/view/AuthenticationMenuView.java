@@ -1,10 +1,9 @@
 package com.CEliconValley.client.view;
 
-import com.CEliconValley.FakeCheckbox;
+import com.CEliconValley.models.ui.FakeCheckbox;
 import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.controller.authentication.AuthenticationMenuController;
-import com.CEliconValley.models.App;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
@@ -16,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.CEliconValley.GameAssetManager;
+import com.CEliconValley.models.ui.GameAssetManager;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;

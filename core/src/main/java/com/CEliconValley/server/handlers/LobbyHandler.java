@@ -1,5 +1,6 @@
 package com.CEliconValley.server.handlers;
 
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.MakeLobbyInfo;
 import com.CEliconValley.models.Lobby;
@@ -13,11 +14,13 @@ public class LobbyHandler {
             case "make-lobby" -> {
                 GameMessage<MakeLobbyInfo> msg = gson.fromJson(message, new TypeToken<GameMessage<MakeLobbyInfo>>() {}.getType());
                 MakeLobbyInfo lobbyInfo = msg.body;
-                if(lobbyInfo.isPrivate){
-                    new Lobby(lobbyInfo.lobbyName, lobbyInfo.password, lobbyInfo.admin);
-                }else{
-                    new Lobby(lobbyInfo.lobbyName, lobbyInfo.admin);
-                }
+//                Lobby lobby;
+//                if(lobbyInfo.isPrivate){
+//                    lobby = new Lobby(lobbyInfo.lobbyName, lobbyInfo.admin, lobbyInfo.password, lobbyInfo.isVisible);
+//                }else{
+//                    lobby = new Lobby(lobbyInfo.lobbyName, lobbyInfo.admin, lobbyInfo.isVisible);
+//                }
+//                AppClient.setCurrentLobby(lobby);
             }
         }
     }

@@ -2,7 +2,7 @@ package com.CEliconValley.models.buildings.marketplaces;
 
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.buildings.Door;
@@ -21,7 +21,7 @@ public class Blacksmith extends Marketplace implements Building{
 
     @Override
     public String getChar() {
-        return Colors.colorize(0,160,"BS");
+        return TerminalColors.colorize(0,160,"BS");
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.CEliconValley.models.buildings;
 
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.foragings.Nature.Lake;
 import com.CEliconValley.models.items.Item;
@@ -12,7 +12,7 @@ public class Well implements Building, Item{
     @Override
     public String getChar() {
 //        return Colors.colorize(255,0,"🌑");
-        return Colors.colorize(247,234,"**");
+        return TerminalColors.colorize(247,234,"**");
     }
     private int x;
     private int y;

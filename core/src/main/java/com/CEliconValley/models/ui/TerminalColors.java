@@ -1,6 +1,6 @@
-package com.CEliconValley.models;
+package com.CEliconValley.models.ui;
 
-public class Colors {
+public class TerminalColors {
     public static String foreColor(int colorCode) {
         return "\u001B[38;5;" + colorCode + "m";
     }

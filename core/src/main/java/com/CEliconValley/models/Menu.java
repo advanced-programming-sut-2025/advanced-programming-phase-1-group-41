@@ -52,13 +52,13 @@ public enum Menu {
 
     public void resetMenu(){
         Gdx.app.postRunnable(() -> {
-            if(menu == Menu.Authentication.menu){
+            if(menu.equals(Menu.Authentication.menu)){
                 Menu.Authentication.menu = new AuthenticationMenuView(new AuthenticationMenuController());
-            } else if(menu == Menu.Profile.menu){
+            } else if(menu.equals(Menu.Profile.menu)){
                 Menu.Profile.menu = new ProfileMenuView(new ProfileMenuController());
-            } else if(menu == Menu.Main.menu) {
+            } else if(menu.equals(Menu.Main.menu)) {
                 Menu.Main.menu = new MainMenuView(new MainMenuController());
-            } if(menu == Menu.Lobby.menu){
+            } if(menu.equals(Menu.Lobby.menu)){
                 Menu.Lobby.menu = new LobbyScreen(new LobbyController());
             }
             if(menu == Menu.Main.menu || menu == Profile.menu || menu == Authentication.menu){

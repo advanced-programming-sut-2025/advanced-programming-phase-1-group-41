@@ -1,4 +1,4 @@
-package com.CEliconValley;
+package com.CEliconValley.models.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,17 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class GameAssetManager {
     private static GameAssetManager gameAssetManager;
+//    private final Skin skin = new Skin(Gdx.files.internal("skin2/NzSkin.json"));
     private final Skin skin = new Skin(Gdx.files.internal("skin/craftacular-ui.json"));
     ///Backgrounds
     public String CEliconValleyBackground = "backgrounds/CElicon_Valley.jpg";
-
-    public static GameAssetManager getGameAssetManager() {
-        if (gameAssetManager == null) {
-            gameAssetManager = new GameAssetManager();
-        }
-        return gameAssetManager;
-    }
-    public Skin getSkin() {return skin;}
     public Image getBackground(String name) {
         return new Image(new Texture(Gdx.files.internal("backgrounds/" + name)));
     }
@@ -29,4 +22,11 @@ public class GameAssetManager {
         return new TextureRegionDrawable(region);
     }
 
+    public static GameAssetManager getGameAssetManager() {
+        if (gameAssetManager == null) {
+            gameAssetManager = new GameAssetManager();
+        }
+        return gameAssetManager;
+    }
+    public Skin getSkin() {return skin;}
 }

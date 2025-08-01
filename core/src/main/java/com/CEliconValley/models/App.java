@@ -30,9 +30,8 @@ public class App {
     private static GameServer server;
     private static GameClient client;
 
-    public static ArrayList<LobbyScreen> addToLobbies(LobbyScreen lobbyScreen){
+    public static void addToLobbies(LobbyScreen lobbyScreen){
         lobbiesScreen.add(lobbyScreen);
-        return null;
     }
 
     public static void setupConnections(){

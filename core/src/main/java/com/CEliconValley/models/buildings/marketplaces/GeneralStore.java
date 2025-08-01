@@ -8,6 +8,7 @@ import com.CEliconValley.models.buildings.marketplaces.items.GeneralStoreItems;
 import com.CEliconValley.models.buildings.marketplaces.items.MarketplaceItems;
 import com.CEliconValley.models.items.Slot;
 import com.CEliconValley.models.locations.Village;
+import com.CEliconValley.models.ui.TerminalColors;
 
 import java.util.ArrayList;
 
@@ -23,7 +24,7 @@ public class GeneralStore extends Marketplace implements Building {
 
     @Override
     public String getChar() {
-        return Colors.colorize(0,105,"GS");
+        return TerminalColors.colorize(0,105,"GS");
     }
 
     @Override

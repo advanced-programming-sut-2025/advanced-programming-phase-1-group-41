@@ -1,21 +1,21 @@
 package com.CEliconValley.models.items.Products;
 
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 
 public enum ProductType {
-    ChickenEgg(50,"Egg",Colors.colorize(15,0,"oc") ),
-    BigChickenEgg(95,"BigChickenEgg",Colors.colorize(15,0,"OC")),
-    DuckEgg(95,"DuckEgg",Colors.colorize(64,0,"0d")),
-    DuckFeather(250,"DuckFeather",Colors.colorize(64,0,"~~")),
-    RabbitWool(340,"RabbitWool",Colors.colorize(15,0,"ǝR")),
-    RabbitFoot(565,"RabbitFoot",Colors.colorize(15,0,"/\\")),
-    DinoEgg(350,"DinoEgg",Colors.colorize(120,0,"0D")),
-    CowMilk(125,"CowMilk",Colors.colorize(15,0,"uc")),
-    BigCowMilk(190,"BigCowMilk",Colors.colorize(15,0,"UC")),
-    GoatMilk(225,"GoatMilk",Colors.colorize(192,0,"ug")),
-    BigGoatMilk(345,"BigGoatMilk",Colors.colorize(192,0,"UG")),
-    SheepWool(340,"SheepWool",Colors.colorize(15,0,"ǝS")),
-    PigTruffle(625,"PigTruffle",Colors.colorize(15,0,"db")),
+    ChickenEgg(50,"Egg", TerminalColors.colorize(15,0,"oc") ),
+    BigChickenEgg(95,"BigChickenEgg", TerminalColors.colorize(15,0,"OC")),
+    DuckEgg(95,"DuckEgg", TerminalColors.colorize(64,0,"0d")),
+    DuckFeather(250,"DuckFeather", TerminalColors.colorize(64,0,"~~")),
+    RabbitWool(340,"RabbitWool", TerminalColors.colorize(15,0,"ǝR")),
+    RabbitFoot(565,"RabbitFoot", TerminalColors.colorize(15,0,"/\\")),
+    DinoEgg(350,"DinoEgg", TerminalColors.colorize(120,0,"0D")),
+    CowMilk(125,"CowMilk", TerminalColors.colorize(15,0,"uc")),
+    BigCowMilk(190,"BigCowMilk", TerminalColors.colorize(15,0,"UC")),
+    GoatMilk(225,"GoatMilk", TerminalColors.colorize(192,0,"ug")),
+    BigGoatMilk(345,"BigGoatMilk", TerminalColors.colorize(192,0,"UG")),
+    SheepWool(340,"SheepWool", TerminalColors.colorize(15,0,"ǝS")),
+    PigTruffle(625,"PigTruffle", TerminalColors.colorize(15,0,"db")),
 
     ;
     private int price;

@@ -1,7 +1,7 @@
 package com.CEliconValley.models.foragings.Nature;
 
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.ObjectMap;
 import com.CEliconValley.models.locations.Farm;
@@ -18,7 +18,7 @@ public class Mine implements ObjectMap {
 
     @Override
     public String getChar() {
-        return Colors.colorize(233,237,"^.");
+        return TerminalColors.colorize(233,237,"^.");
     }
 
     @Override

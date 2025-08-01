@@ -2,6 +2,7 @@ package com.CEliconValley.controllers;
 
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.locations.Farm;
+import com.CEliconValley.models.ui.TerminalColors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,32 +108,32 @@ public class MapController {
 //                    } else {
 //                        color = 235;
 //                    }
-                    wholeChars.add(Colors.colorize(color,color,"LL"));
+                    wholeChars.add(TerminalColors.colorize(color,color,"LL"));
                 }else{
                     int color = (i - 25) / 6 + 17;
                     if(i >= 55){
                         color = 21 + ((i - 57) / 6 + 1) * 6;
                     }
-                    wholeChars.add(Colors.colorize(color,color,"LL"));
+                    wholeChars.add(TerminalColors.colorize(color,color,"LL"));
                 }
             }for(int j=0;j<60;j++) {
                 wholeChars.add(App.getGame().getFarms().get(1).getCell(j,i).getObjectMap().getChar());
             }
         }for(int i=0;i<65;i++){
             for(int j=0;j<60;j++){
-                wholeChars.add(Colors.colorize(39,39,"LL"));
+                wholeChars.add(TerminalColors.colorize(39,39,"LL"));
             }
             for(int j=0;j<95;j++){
                 wholeChars.add(App.getGame().getVillage().getCell(j,i).getObjectMap().getChar());
             }
             for(int j=0;j<60;j++){
-                wholeChars.add(Colors.colorize(39,39,"LL"));
+                wholeChars.add(TerminalColors.colorize(39,39,"LL"));
             }
         }for(int i=0;i<65;i++){
             for(int j=0;j<60;j++) {
                 wholeChars.add(App.getGame().getFarms().get(2).getCell(j, i).getObjectMap().getChar());
             }for(int j=0;j<95;j++){
-                wholeChars.add(Colors.colorize(39,39,"LL"));
+                wholeChars.add(TerminalColors.colorize(39,39,"LL"));
             }for(int j=0;j<60;j++) {
                 wholeChars.add(App.getGame().getFarms().get(3).getCell(j,i).getObjectMap().getChar());
             }

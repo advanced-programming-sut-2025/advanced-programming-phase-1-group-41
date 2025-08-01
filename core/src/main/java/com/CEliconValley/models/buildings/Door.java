@@ -1,16 +1,16 @@
 package com.CEliconValley.models.buildings;
 
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 
 public class Door implements Building {
     @Override
     public String getChar() {
         if(isClosed){
-            return Colors.colorize(196,0,"[]");
+            return TerminalColors.colorize(196,0,"[]");
         } else if(closesSoon) {
-            return Colors.colorize(208, 0, "||");
+            return TerminalColors.colorize(208, 0, "||");
         }
-        return Colors.colorize(82,0,"][");
+        return TerminalColors.colorize(82,0,"][");
     }
 
     @Override

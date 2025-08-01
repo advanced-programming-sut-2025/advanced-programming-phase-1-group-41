@@ -1,6 +1,6 @@
 package com.CEliconValley.client.view;
 
-import com.CEliconValley.GameAssetManager;
+import com.CEliconValley.models.ui.GameAssetManager;
 import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.controllers.LobbyController;
@@ -11,7 +11,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -22,7 +21,7 @@ import java.util.ArrayList;
 
 public class LobbyScreen implements Screen {
 
-    private final Lobby lobby;
+    private Lobby lobby;
 
     private float timer=0;
     private ArrayList<Player> players;
@@ -50,7 +49,6 @@ public class LobbyScreen implements Screen {
 //    }
 
     public LobbyScreen(LobbyController controller) {
-        lobby = AppClient.getCurrentLobby();
         this.controller=controller;
         players=new ArrayList<>();
         User user = Finder.getUserByUsername("user1");
@@ -62,10 +60,10 @@ public class LobbyScreen implements Screen {
     private void buildUI() {
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
 
-        label1=new Label("PLAYER1", skin);
-        label2=new Label("PLAYER2", skin);
-        label3=new Label("PLAYER3", skin);
-        label4=new Label("PLAYER4", skin);
+        label1 = new Label("PLAYER1", skin);
+        label2 = new Label("PLAYER2", skin);
+        label3 = new Label("PLAYER3", skin);
+        label4 = new Label("PLAYER4", skin);
 
         startGameButton = new TextButton("Start Game", skin);
         exitButton = new TextButton("Exit", skin);
@@ -85,6 +83,8 @@ public class LobbyScreen implements Screen {
         teamTable.add(label3).padLeft(550);
         teamTable.add(label4).padLeft(550).expandX().right();
 
+        lobby = AppClient.getCurrentLobby();
+
         nameText = new Label(lobby.getLobbyName(), skin);
         idText = new Label(lobby.getLobbyID(), skin);
         passText = new Label(lobby.getPassword(), skin);
@@ -100,7 +100,6 @@ public class LobbyScreen implements Screen {
         topContent.add(idText).width(300).pad(20).row();
         topContent.add(passText).width(300).pad(20).row();
         topContent.add(exitButton).width(300).pad(20).row();
-
 
         mainTable.top().add(topContent).expand().fill().row();
         mainTable.bottom().add(teamTable).bottom()

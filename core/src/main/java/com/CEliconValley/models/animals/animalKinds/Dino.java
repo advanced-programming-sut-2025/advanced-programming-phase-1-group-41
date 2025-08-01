@@ -1,6 +1,6 @@
 package com.CEliconValley.models.animals.animalKinds;
 
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Player;
 import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.animals.BarnOrCageSize;
@@ -38,6 +38,6 @@ public class Dino extends Animal {
 
     }
     public String getChar(){
-        return Colors.colorize(1,0,"🦕");
+        return TerminalColors.colorize(1,0,"🦕");
     }
 }

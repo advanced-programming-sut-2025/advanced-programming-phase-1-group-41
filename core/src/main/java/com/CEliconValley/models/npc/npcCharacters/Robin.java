@@ -1,6 +1,6 @@
 package com.CEliconValley.models.npc.npcCharacters;
 
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Occupation;
 import com.CEliconValley.models.buildings.marketplaces.Marketplace;
 import com.CEliconValley.models.npc.npchomes.NPCHome;
@@ -21,7 +21,7 @@ public class Robin extends NPC{
     }
     @Override
     public String getChar(){
-        return Colors.colorize(198,0,"웃 ");
+        return TerminalColors.colorize(198,0,"웃 ");
     }
 
     public Marketplace getMarketplace() {

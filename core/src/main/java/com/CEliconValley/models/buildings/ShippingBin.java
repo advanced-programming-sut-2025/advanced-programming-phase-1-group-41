@@ -1,13 +1,13 @@
 package com.CEliconValley.models.buildings;
 
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.items.Item;
 
 public class ShippingBin implements Building, Item {
 
     @Override
     public String getChar() {
-        return Colors.foreColor(52) + Colors.backColor(208) + "||" + Colors.RESET;
+        return TerminalColors.foreColor(52) + TerminalColors.backColor(208) + "||" + TerminalColors.RESET;
     }
 
     @Override

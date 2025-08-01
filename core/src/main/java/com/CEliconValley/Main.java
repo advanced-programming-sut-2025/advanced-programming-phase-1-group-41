@@ -5,6 +5,7 @@ import com.CEliconValley.database.UserDB;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Menu;
 import com.CEliconValley.models.items.CookingRecipe;
+import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -38,7 +39,7 @@ public class Main extends Game {
         image = new Texture(GameAssetManager.getGameAssetManager().CEliconValleyBackground);
         background = new Image(image);
         Graphics.DisplayMode displayMode = Gdx.graphics.getDisplayMode();
-//        Gdx.graphics.setFullscreenMode(displayMode);
+        Gdx.graphics.setFullscreenMode(displayMode);
         background.setSize(stage.getWidth(), stage.getHeight());
         stage.addActor(background);
         main.setScreen(AppClient.getMenu().getScreen());

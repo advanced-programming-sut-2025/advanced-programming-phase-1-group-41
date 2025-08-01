@@ -2,7 +2,7 @@ package com.CEliconValley.models.foragings;
 
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.locations.Farm;
@@ -16,7 +16,7 @@ public class ForagingCrop implements Foraging, Item {
 
     @Override
     public String getChar() {
-        return Colors.colorize(109,0,typeIndex / 10 + "" + typeIndex % 10);
+        return TerminalColors.colorize(109,0,typeIndex / 10 + "" + typeIndex % 10);
     }
 
     @Override

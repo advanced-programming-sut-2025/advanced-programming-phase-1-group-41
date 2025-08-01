@@ -4,6 +4,7 @@ import com.CEliconValley.models.*;
 
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.locations.Farm;
+import com.CEliconValley.models.ui.TerminalColors;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,9 +13,9 @@ public class Crop implements Item {
     @Override
     public String getChar() {
         if(isGiantCrop){
-            return Colors.colorize(53,21 + 6 * currentStage,typeIndex/10 + "" + typeIndex%10);
+            return TerminalColors.colorize(53,21 + 6 * currentStage,typeIndex/10 + "" + typeIndex%10);
         }
-        return Colors.colorize(53,58 + 6 * currentStage,typeIndex/10 + "" + typeIndex%10);
+        return TerminalColors.colorize(53,58 + 6 * currentStage,typeIndex/10 + "" + typeIndex%10);
     }
 
     @Override

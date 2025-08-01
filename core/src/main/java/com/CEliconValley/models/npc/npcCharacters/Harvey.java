@@ -1,6 +1,6 @@
 package com.CEliconValley.models.npc.npcCharacters;
 
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Occupation;
 import com.CEliconValley.models.npc.npchomes.NPCHome;
 import com.CEliconValley.models.items.Item;
@@ -17,7 +17,7 @@ public class Harvey extends NPC{
     }
     @Override
     public String getChar(){
-        return Colors.colorize(239,0,"웃 ");
+        return TerminalColors.colorize(239,0,"웃 ");
     }
 
     public NPCHome getHome() {

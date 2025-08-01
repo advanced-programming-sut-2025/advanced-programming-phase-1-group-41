@@ -1,6 +1,6 @@
 package com.CEliconValley.models.buildings;
 
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.ObjectMap;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Refrigerator implements ObjectMap {
     @Override
     public String getChar() {
-        return Colors.colorize(15,15,"[]");
+        return TerminalColors.colorize(15,15,"[]");
     }
 
     @Override

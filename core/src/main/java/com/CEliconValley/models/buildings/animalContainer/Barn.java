@@ -1,7 +1,7 @@
 package com.CEliconValley.models.buildings.animalContainer;
 
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.buildings.Building;
@@ -161,7 +161,7 @@ public class Barn implements Building {
 
     @Override
     public String getChar() {
-        return Colors.colorize(243,234,"bb");
+        return TerminalColors.colorize(243,234,"bb");
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.CEliconValley;
+package com.CEliconValley.models.ui;
 
 import com.badlogic.gdx.graphics.Color;
 

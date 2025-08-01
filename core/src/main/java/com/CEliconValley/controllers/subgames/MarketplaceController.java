@@ -14,6 +14,7 @@ import com.CEliconValley.models.buildings.animalContainer.BarnType;
 import com.CEliconValley.models.buildings.animalContainer.CoopType;
 import com.CEliconValley.models.foragings.Nature.Rock;
 import com.CEliconValley.models.foragings.Nature.Wood;
+import com.CEliconValley.models.ui.TerminalColors;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -53,10 +54,10 @@ public class MarketplaceController {
         for(Slot slot : mp.getItemsForSale()){
             if(slot.getQuantity() > 0){
                 if(slot.getQuantity()<=5){
-                    System.out.print(Colors.foreColor(202));
+                    System.out.print(TerminalColors.foreColor(202));
                 }
                 else{
-                    System.out.print(Colors.foreColor(46));
+                    System.out.print(TerminalColors.foreColor(46));
                 }
                 System.out.printf(
                         "%-40s -> %7d left | price: %6.0f%n",
@@ -65,10 +66,10 @@ public class MarketplaceController {
                         slot.getItem().getPrice()
                 );
             }else {
-                System.out.print(Colors.foreColor(124));
+                System.out.print(TerminalColors.foreColor(124));
                 System.out.printf("%-40s ->       SOLD OUT\n",slot.getItem().getName());
 
-            } System.out.print(Colors.RESET);
+            } System.out.print(TerminalColors.RESET);
         }
         return new Result(true,"");
     }
@@ -84,12 +85,12 @@ public class MarketplaceController {
         for(Slot slot : mp.getItemsForSale()){
             if(slot.getQuantity() > 0){
                 if(slot.getQuantity()<10){
-                    System.out.print(Colors.foreColor(202));
+                    System.out.print(TerminalColors.foreColor(202));
                 }else if(slot.getQuantity()<4){
-                    System.out.print(Colors.foreColor(124));
+                    System.out.print(TerminalColors.foreColor(124));
                 }
                 else{
-                    System.out.print(Colors.foreColor(46));
+                    System.out.print(TerminalColors.foreColor(46));
                 }
                 System.out.printf(
                         "%-40s -> %7d left | price: %6.0f%n",
@@ -97,7 +98,7 @@ public class MarketplaceController {
                         slot.getQuantity(),
                         slot.getItem().getPrice()
                 );
-                System.out.print(Colors.RESET);
+                System.out.print(TerminalColors.RESET);
             }
         }
 

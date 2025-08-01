@@ -1,7 +1,7 @@
 package com.CEliconValley.models.foragings;
 
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 
 import com.CEliconValley.models.foragings.Nature.Obstacle;
@@ -14,9 +14,9 @@ public class ForagingTree implements Foraging, Obstacle {
     @Override
     public String getChar() {
         if(isThundered){
-            return Colors.colorize(15,0,(typeIndex/10) + "" + typeIndex % 10);
+            return TerminalColors.colorize(15,0,(typeIndex/10) + "" + typeIndex % 10);
         }
-        return Colors.colorize(3,0,(typeIndex/10) + "" + typeIndex % 10);
+        return TerminalColors.colorize(3,0,(typeIndex/10) + "" + typeIndex % 10);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.CEliconValley.client.view;
 
-import com.CEliconValley.CustomColors;
-import com.CEliconValley.GameAssetManager;
+import com.CEliconValley.models.ui.CustomColors;
+import com.CEliconValley.models.ui.GameAssetManager;
 import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.UserData;

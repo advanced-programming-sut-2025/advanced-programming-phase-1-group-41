@@ -4,13 +4,13 @@ import com.CEliconValley.models.items.*;
 import com.CEliconValley.models.items.craftablemachines.Machine;
 import com.CEliconValley.models.skills.Skill;
 import com.CEliconValley.models.tools.Tool;
+import com.CEliconValley.models.ui.TerminalColors;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Objects;
 
 @Entity("players")
@@ -18,15 +18,15 @@ public class Player {
 
     public String getChar() {
         if(farmId == 1){
-            return Colors.colorize(0,199,":]");
+            return TerminalColors.colorize(0,199,":]");
         }
         if(farmId == 2){
-            return Colors.colorize(0,56,":]");
+            return TerminalColors.colorize(0,56,":]");
         }
         if(farmId == 3){
-            return Colors.colorize(0,226,":]");
+            return TerminalColors.colorize(0,226,":]");
         }
-        return Colors.colorize(0,40,":]");
+        return TerminalColors.colorize(0,40,":]");
     }
 
     @Id

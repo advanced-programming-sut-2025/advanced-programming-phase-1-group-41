@@ -1,7 +1,7 @@
 package com.CEliconValley.models.foragings.Nature;
 
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.ObjectMap;
 import com.CEliconValley.models.locations.Farm;
@@ -12,7 +12,7 @@ import java.util.Random;
 public class Lake implements ObjectMap, Obstacle {
     @Override
     public String getChar() {
-        return Colors.colorize(39,39,"LL");
+        return TerminalColors.colorize(39,39,"LL");
     }
     private static final int WIDTH = 15;
     private static final int HEIGHT = 15;

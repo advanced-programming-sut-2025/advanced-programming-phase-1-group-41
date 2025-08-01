@@ -1,7 +1,7 @@
 package com.CEliconValley.models.buildings;
 
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.locations.Farm;
@@ -12,7 +12,7 @@ import java.util.HashSet;
 public class Cottage implements Building {
     @Override
     public String getChar() {
-        return Colors.colorize(178,0,"..");
+        return TerminalColors.colorize(178,0,"..");
     }
     private int x;
     private int y;

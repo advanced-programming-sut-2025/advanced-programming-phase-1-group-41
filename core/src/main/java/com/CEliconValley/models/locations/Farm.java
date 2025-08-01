@@ -16,8 +16,7 @@ import com.CEliconValley.models.buildings.animalContainer.Barn;
 import com.CEliconValley.models.buildings.animalContainer.BarnType;
 import com.CEliconValley.models.buildings.animalContainer.Coop;
 import com.CEliconValley.models.buildings.animalContainer.CoopType;
-import com.badlogic.gdx.maps.Map;
-import dev.morphia.annotations.Transient;
+import com.CEliconValley.models.ui.TerminalColors;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -454,21 +453,21 @@ public class Farm implements Location {
 
     }
     private void printStartSign(){
-        System.out.printf(Colors.colorize(15,33,"xx"));
+        System.out.printf(TerminalColors.colorize(15,33,"xx"));
     }
 
     private void printFlashSign(){
         if(this.getId()==1){
-            System.out.printf(Colors.colorize(15,196,"↘↘"));
+            System.out.printf(TerminalColors.colorize(15,196,"↘↘"));
         }
         else if(this.getId()==2){
-            System.out.printf(Colors.colorize(15,196,"↙↙"));
+            System.out.printf(TerminalColors.colorize(15,196,"↙↙"));
         }
         else if(this.getId()==3){
-            System.out.printf(Colors.colorize(15,196,"↗↗"));
+            System.out.printf(TerminalColors.colorize(15,196,"↗↗"));
         }
         else if(this.getId()==4){
-            System.out.printf(Colors.colorize(15,196,"↖↖"));
+            System.out.printf(TerminalColors.colorize(15,196,"↖↖"));
         }
     }
     public ArrayList<Foraging> getForagings() {

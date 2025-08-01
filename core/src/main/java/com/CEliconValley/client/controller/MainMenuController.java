@@ -7,6 +7,7 @@ import com.CEliconValley.common.messages.MakeLobbyInfo;
 import com.CEliconValley.database.UserDB;
 import com.CEliconValley.models.*;
 import com.CEliconValley.client.view.MainMenuView;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.google.gson.Gson;
@@ -67,34 +68,75 @@ public class MainMenuController {
     }
 
     public void handleJoinLobby() {
-        AppClient.setMenu(Menu.Lobby);
-        Menu.Lobby.resetMenu();
-        Main.getMain().setScreen(AppClient.getMenu().getScreen());
-
         String id = view.getLobbyIdField().getText();
 
-        //TODO join lobby
+        if(id == null || id.isEmpty()) {
+            view.getJoinLobbyMessage().setText("Id field is empty!");
+            return;
+        }
+        for(Lobby lobby : AppClient.getLobbies()){
+            if(lobby.getLobbyID().equals(id) && lobby.isPrivate()){
+                if(lobby.getPassword().equals(view.getLobbyPasswordField().getText())){
+                    AppClient.setMenu(Menu.Lobby);
+                    Menu.Lobby.resetMenu();
+                    Main.getMain().setScreen(AppClient.getMenu().getScreen());
+                    AppClient.setCurrentLobby(lobby);
+                    lobby.addPlayer(AppClient.getUserData().getUsername());
+                } else{
+                    if(view.getLobbyPasswordField().getText().isEmpty()){
+                        view.getJoinLobbyMessage().setText("Private lobby, please enter the password.");
+                        return;
+                    }
+                    view.getJoinLobbyMessage().setText("Wrong password");
+                    return;
+                }
+            } else if(lobby.getLobbyID().equals(id)) {
+                AppClient.setMenu(Menu.Lobby);
+                Menu.Lobby.resetMenu();
+                Main.getMain().setScreen(AppClient.getMenu().getScreen());
+                AppClient.setCurrentLobby(lobby);
+                lobby.addPlayer(AppClient.getUserData().getUsername());
+            }
+        }
+        view.getJoinLobbyMessage().setText("No lobby found");
     }
 
     public void handleNewLobby() {
-        AppClient.setMenu(Menu.Lobby);
-        Menu.Lobby.resetMenu();
-        Main.getMain().setScreen(AppClient.getMenu().getScreen());
 
         String name = view.getLobbyNameField().getText();
+        if(name == null || name.isEmpty()) {
+            view.getCreateLobbyMessage().setText("Name field is empty!");
+            return;
+        }
+
         boolean isVisible = view.getIsVisibleCheckBox().isChecked();
         boolean isPrivate = view.getIsPrivateCheckBox().isChecked();
         String password = null;
+        Lobby lobby;
         if(isPrivate){
             password = view.getPasswordField().getText();
+            if(password == null || password.isEmpty()) {
+                view.getCreateLobbyMessage().setText("Password field is empty!");
+                return;
+            }
+            assert AppClient.getUserData() != null;
+            lobby = new Lobby(name, password, AppClient.getUserData().getUsername(), isVisible);
+        } else{
+            assert AppClient.getUserData() != null;
+            lobby = new Lobby(name, AppClient.getUserData().getUsername(), isVisible);
         }
+//        AppClient.getLobbies().add(lobby);
 
-
-        //TODO new lobby
+        assert AppClient.getUserData() != null;
         GameMessage<MakeLobbyInfo> msg = new GameMessage<>("make-lobby",
             new MakeLobbyInfo(isPrivate, isVisible, name, password, AppClient.getUserData().getUsername()));
         String json = new Gson().toJson(msg);
         AppClient.getClient().send(json);
+
+        AppClient.setCurrentLobby(lobby);
+        Menu.Lobby.resetMenu();
+        AppClient.setMenu(Menu.Lobby);
+        Main.getMain().setScreen(AppClient.getMenu().getScreen());
     }
 
     public void savePlayer(Player player) {

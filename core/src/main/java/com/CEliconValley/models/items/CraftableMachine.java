@@ -1,6 +1,6 @@
 package com.CEliconValley.models.items;
 
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 
 public enum CraftableMachine implements Item{
     CherryBomb("cb", "CherryBomb",50,CraftingRecipe.CherryBomb),
@@ -11,8 +11,8 @@ public enum CraftableMachine implements Item{
     IridiumSprinkler("is", "IridiumSprinkler", 0, CraftingRecipe.IridiumSprinkler),
     CharcoalKiln("ck", "CharcoalKiln", 0, CraftingRecipe.CharcoalKiln),
     Furnace("Fu", "Furnace", 0,CraftingRecipe.Furnace),
-    Scarecrow(Colors.colorize(160, 0, "!!"), "Scarecrow", 0, CraftingRecipe.ScareCrow),
-    DeluxeScarecrow(Colors.colorize(160, 0, "??"), "DeluxeScarecrow", 0, CraftingRecipe.DeluxeScareCrow),
+    Scarecrow(TerminalColors.colorize(160, 0, "!!"), "Scarecrow", 0, CraftingRecipe.ScareCrow),
+    DeluxeScarecrow(TerminalColors.colorize(160, 0, "??"), "DeluxeScarecrow", 0, CraftingRecipe.DeluxeScareCrow),
     BeeHouse("bh", "BeeHouse", 0, CraftingRecipe.BeeHouse),
     CheesePress("cp", "CheesePress", 0, CraftingRecipe.CheesePress),
     Keg("k", "Keg", 0, CraftingRecipe.Keg),
