@@ -7,8 +7,10 @@ import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.Player;
 import com.CEliconValley.models.buildings.*;
 import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
+import com.CEliconValley.models.buildings.animalContainer.Barn;
 import com.CEliconValley.models.foragings.ForagingTree;
 import com.CEliconValley.models.foragings.Nature.*;
+import com.CEliconValley.views.maps.BarnMap;
 import com.CEliconValley.views.maps.CottageMap;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.views.maps.GreenhouseMap;
@@ -231,10 +233,10 @@ public class FarmScreen implements Screen {
             int y = cell.getY() * CELL_SIZE;
 
             buildingSpawner.renderBuildings(batch,cell,passiveStateTime);
-            rockSpawner.renderRocks(batch,cell,passiveStateTime);
-            cropSpawner.renderCrops(batch,cell,passiveStateTime);
+//            rockSpawner.renderRocks(batch,cell,passiveStateTime);
+//            cropSpawner.renderCrops(batch,cell,passiveStateTime);
             waterSpawner.renderWater(batch,cell,passiveStateTime);
-            rockSpawner.renderBreakingEffectForCell(batch, cell, delta);
+//            rockSpawner.renderBreakingEffectForCell(batch, cell, delta);
             if(playerX == cell.getX() && playerY == cell.getY()){
 
                 TextureRegion currentFrame = currentAnimation.getKeyFrame(stateTime, onRepeat);
@@ -248,7 +250,7 @@ public class FarmScreen implements Screen {
 
                 batch.draw(currentFrame, renderX-CELL_SIZE/2f, renderY-CELL_SIZE/2, CELL_SIZE*2f, CELL_SIZE*2f);
             }
-            treeSpawner.renderTrees(batch,cell,passiveStateTime);
+//            treeSpawner.renderTrees(batch,cell,passiveStateTime);
 //            if (didHit) {
 //                hit(playerDirection, playerX, playerY);
 //                didHit = false;
@@ -278,6 +280,12 @@ public class FarmScreen implements Screen {
 
 
     private void handleInput() {
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            inventoryRenderer.shiftRight();
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            inventoryRenderer.shiftLeft();
+        }
         if (isActing||isMoving) return;
 
 
@@ -390,6 +398,9 @@ public class FarmScreen implements Screen {
                         ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new GreenHouseScreen(this, new GreenhouseMap(0, 0), player));
                     } else if (Finder.findCellByCoordinates(playerX + i, playerY + j, this.farm).getObjectMap() instanceof Cottage) {
                         ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new CottageScreen(this, new CottageMap(0, 0), player));
+                    }else if (Finder.findCellByCoordinates(playerX + i, playerY + j, this.farm).getObjectMap() instanceof Barn ) {
+                        Barn barn = (Barn) Finder.findCellByCoordinates(playerX + i, playerY + j, this.farm).getObjectMap();
+                        ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new BarnScreen(this, new BarnMap(0,0,barn.getBarnType()), player));
                     }
                 }
             }

@@ -2,6 +2,7 @@ package com.CEliconValley.models.items;
 
 import com.CEliconValley.models.animals.Fish;
 import com.CEliconValley.models.animals.FishType;
+import com.CEliconValley.models.buildings.Well;
 import com.CEliconValley.models.tools.*;
 
 import java.util.ArrayList;
@@ -34,6 +35,12 @@ public class Inventory {
         addToInventory(new Scythe(), 1);
         addToInventory(new Shear(), 1);
         addToInventory(new Fish(FishType.Angler),1);
+        addToInventory(new Well(),1);
+        addToInventory(new Fish(FishType.Squid),1);
+        addToInventory(new Fish(FishType.Glacierfish),1);
+
+
+
     }
 
     public void setDefaultBag() {

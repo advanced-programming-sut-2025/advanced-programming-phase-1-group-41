@@ -5,6 +5,7 @@ import com.CEliconValley.models.foragings.*;
 import com.CEliconValley.models.foragings.Nature.*;
 import com.CEliconValley.models.items.*;
 import com.CEliconValley.views.maps.CottageMap;
+import com.CEliconValley.views.maps.BarnMap;
 import com.CEliconValley.views.maps.GreenhouseMap;
 import org.bson.types.ObjectId;
 import com.CEliconValley.models.buildings.ShippingBin;
@@ -176,6 +177,14 @@ public class Finder {
         }
         return null;
     }
+    public static Cell findCellByCoordinatesBarn(int x, int y, BarnMap barn){
+        for(Cell cell : barn.getCells()){
+            if(cell.getX() == x && cell.getY() == y){
+                return cell;
+            }
+        }
+        return null;
+    }
 
     public static Farm findFarmByPlayer(Player player){
         for(Farm farm:App.getGame().getFarms()){
@@ -202,6 +211,7 @@ public class Finder {
         }
         return players;
     }
+
     public static Player findPlayerByUsername(String username){
         for(Player player : App.getGame().getPlayers()){
             if(player.getUser().getUsername().equals(username)){

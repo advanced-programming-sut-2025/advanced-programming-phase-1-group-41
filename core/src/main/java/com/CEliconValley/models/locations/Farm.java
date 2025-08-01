@@ -107,7 +107,7 @@ public class Farm implements Location {
         buildings.add(greenhouse);
         buildings.add(new Cottage(30 + rand.nextInt(4), MaxHeight-4,this));
         creatNewCoop(30,MaxHeight-14,CoopType.Normal);
-        creatNewBarn(30,MaxHeight-34,BarnType.Normal);
+        creatNewBarn(20,MaxHeight-4,BarnType.Normal);
         mine = new Mine(7 + rand.nextInt(7), 7 + rand.nextInt(6),this);
 
 

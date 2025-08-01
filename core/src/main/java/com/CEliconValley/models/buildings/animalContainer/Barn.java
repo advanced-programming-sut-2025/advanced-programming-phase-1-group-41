@@ -5,6 +5,7 @@ import com.CEliconValley.models.Colors;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.buildings.Building;
+import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.locations.Village;
@@ -51,6 +52,9 @@ public class Barn implements Building {
                 Cell cell = Finder.findCellByCoordinates(i, yWall, farm);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
+                if(i == x + 1 && yWall == y ){
+                    cell.setObjectMap(new Door());
+                }
             }
             yWall+=size;
         }
@@ -90,6 +94,9 @@ public class Barn implements Building {
                 Cell cell = Finder.findCellByCoordinates(i, yWall, farm);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
+                if(i == x + 1 && yWall == y ){
+                    cell.setObjectMap(new Door());
+                }
             }
             yWall+=size;
         }
@@ -115,6 +122,7 @@ public class Barn implements Building {
     public Barn(int x, int y, Village village) {
         this.x = x;
         this.y = y;
+        barnType=BarnType.Normal;
         int size = 3;
         int xWall;
         int yWall;

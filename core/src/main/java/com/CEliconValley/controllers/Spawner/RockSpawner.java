@@ -21,6 +21,7 @@ public class RockSpawner {
     private final GroundSpawner groundSpawner;
     private final Map<Cell, Float> breakingEffects = new HashMap<>();
     private final Map<Cell, Float> breakingBigRockEffects = new HashMap<>();
+    private final Map<Cell, TextureRegion> rockRenderCache = new HashMap<>();
 
     private TextureRegion[][] breakRockFrames;
     private TextureRegion[][] breakBigRockFrames;
@@ -63,15 +64,21 @@ public class RockSpawner {
         this.farm = farm;
 
     }
-    public boolean renderRocks(SpriteBatch batch,Cell cell,float passiveState) {
-        if (breakingEffects.containsKey(cell)||breakingBigRockEffects.containsKey(cell)) return false;
-        float x = cell.getX()*CELL_SIZE;
-        float y = cell.getY()*CELL_SIZE;
-        if (cell.getObjectMap() instanceof Rock) {
-            Rock rock = (Rock) cell.getObjectMap();
+    public boolean renderRocks(SpriteBatch batch, Cell cell, float passiveState) {
+        if (breakingEffects.containsKey(cell) || breakingBigRockEffects.containsKey(cell)) return false;
 
+        float x = cell.getX() * CELL_SIZE;
+        float y = cell.getY() * CELL_SIZE;
+
+        // اگر کش موجود بود، مستقیماً از آن استفاده کن
+        if (rockRenderCache.containsKey(cell)) {
+            batch.draw(rockRenderCache.get(cell), x, y);
+            return true;
+        }
+
+        if (cell.getObjectMap() instanceof Rock rock) {
             if (rock.getRockType() == RockType.BigRock) {
-                if(!waterSpawner.renderWater(batch,cell,passiveState)&&!groundSpawner.renderGround(batch,cell,passiveState)){
+                if (!waterSpawner.renderWater(batch, cell, passiveState) && !groundSpawner.renderGround(batch, cell, passiveState)) {
                     batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
                 }
 
@@ -81,36 +88,30 @@ public class RockSpawner {
                     int frameWidth = bigRockTexture.getWidth() / frameCount;
                     int frameHeight = bigRockTexture.getHeight();
 
-                    TextureRegion rockFrame = new TextureRegion(
-                        bigRockTexture,
-                        variant * frameWidth, 0,
-                        frameWidth, frameHeight
-                    );
+                    TextureRegion region = new TextureRegion(bigRockTexture, variant * frameWidth, 0, frameWidth, frameHeight);
+                    TextureRegion scaled = new TextureRegion(region); // کش معمولاً کپی نیاز داره
 
-                    batch.draw(rockFrame, x-CELL_SIZE*1, y, CELL_SIZE * 2, CELL_SIZE * 2);
+                    rockRenderCache.put(cell, scaled);
+                    batch.draw(scaled, x - CELL_SIZE, y, CELL_SIZE * 2, CELL_SIZE * 2);
                     return true;
                 }
-
             } else {
-
                 int variant = rock.getVariant();
                 int frameCount = 12;
                 int frameWidth = rockTexture.getWidth() / frameCount;
                 int frameHeight = rockTexture.getHeight();
 
-                TextureRegion rockFrame = new TextureRegion(
-                    rockTexture,
-                    variant * frameWidth, 0,
-                    frameWidth, frameHeight
-                );
+                TextureRegion region = new TextureRegion(rockTexture, variant * frameWidth, 0, frameWidth, frameHeight);
+                TextureRegion scaled = new TextureRegion(region);
 
-                batch.draw(rockFrame, x, y, CELL_SIZE, CELL_SIZE);
+                rockRenderCache.put(cell, scaled);
+                batch.draw(scaled, x, y, CELL_SIZE, CELL_SIZE);
                 return true;
             }
         }
         return false;
-
     }
+
     public boolean hitRock(Cell cell) {
         if (cell.getObjectMap() instanceof Rock rock) {
             if (rock.getRockType() == RockType.BigRock) {
@@ -128,6 +129,11 @@ public class RockSpawner {
                         Cell c = farm.getCell(anchorX , anchorY );
                         breakingBigRockEffects.put(c, 0f);
                     }).start();
+                    rockRenderCache.remove(cell);
+                    rockRenderCache.remove(Finder.findCellByCoordinates(cell.getX()-1,cell.getY(),farm));
+                    rockRenderCache.remove(Finder.findCellByCoordinates(cell.getX()-1,cell.getY()+1,farm));
+                    rockRenderCache.remove(Finder.findCellByCoordinates(cell.getX(),cell.getY()+1,farm));
+
                 }
             } else {
                 if (!breakingEffects.containsKey(cell)) {
@@ -139,6 +145,7 @@ public class RockSpawner {
                         }
                         breakingEffects.put(cell, 0f);
                     }).start();
+                    rockRenderCache.remove(cell);
                 }
             }
             return true;
