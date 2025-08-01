@@ -3,6 +3,7 @@ package com.CEliconValley.client.controller;
 import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.messages.GameMessage;
+import com.CEliconValley.common.messages.MakeLobbyInfo;
 import com.CEliconValley.database.UserDB;
 import com.CEliconValley.models.*;
 import com.CEliconValley.client.view.MainMenuView;
@@ -88,7 +89,12 @@ public class MainMenuController {
             password = view.getPasswordField().getText();
         }
 
+
         //TODO new lobby
+        GameMessage<MakeLobbyInfo> msg = new GameMessage<>("make-lobby",
+            new MakeLobbyInfo(isPrivate, isVisible, name, password, AppClient.getUserData().getUsername()));
+        String json = new Gson().toJson(msg);
+        AppClient.getClient().send(json);
     }
 
     public void savePlayer(Player player) {

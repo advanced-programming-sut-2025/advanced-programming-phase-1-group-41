@@ -84,6 +84,7 @@ public class GameClient extends WebSocketClient {
                     Gdx.app.postRunnable(() -> {
                         AppClient.getLobbies().add(msg.body);
                     });
+
                     System.out.println("Cmessage: updated lobby");
                 }
                 case "delete-lobby" -> {

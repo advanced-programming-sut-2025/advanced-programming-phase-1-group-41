@@ -9,8 +9,8 @@ public class GameHandler {
     public static void handle(String type, String message, WebSocket conn, Gson gson){
         switch (type) {
             case "game-popup" -> {
-                GameMessage<String> msg = gson.fromJson(message, new TypeToken<GameMessage<String>>() {}.getType());
-                // broadcast the msg.body to all of the players in the game
+                    GameMessage<String> msg = gson.fromJson(message, new TypeToken<GameMessage<String>>() {}.getType());
+                    // broadcast the msg.body to all of the players in the game
             }
         }
     }

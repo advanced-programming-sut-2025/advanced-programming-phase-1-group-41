@@ -122,7 +122,8 @@ public class MainMenuView implements Screen {
         joinConfirmButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                controller.handleNewLobby();
+//                controller.handleNewLobby();
+                controller.handleJoinLobby();
             }
         });
 
@@ -172,7 +173,8 @@ public class MainMenuView implements Screen {
         createLobbyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                controller.handleJoinLobby();
+//                controller.handleJoinLobby();
+                controller.handleNewLobby();
             }
         });
         backButton.addListener(new ClickListener() {
