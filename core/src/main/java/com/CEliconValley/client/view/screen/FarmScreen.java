@@ -56,7 +56,12 @@ public class FarmScreen implements Screen {
 
     private OrthographicCamera camera;
 
-    public static final int CELL_SIZE = 160;
+    public static final float VIRTUAL_WIDTH = 2400f;
+    public static final float VIRTUAL_HEIGHT = 1350f;
+    public static final int CELLS_IN_WIDTH = 15;
+    public static final int CELL_SIZE =  (int) VIRTUAL_WIDTH / CELLS_IN_WIDTH;
+
+//    public static final int CELL_SIZE = Gdx.graphics.getHeight()*144/1000;;
 
     private Animation<TextureRegion>[] walkAnimations;
     private Animation<TextureRegion>[] coastAnimations;
@@ -109,7 +114,8 @@ public class FarmScreen implements Screen {
 
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
 
         int FRAME_COLS;
         int FRAME_ROWS;
@@ -219,8 +225,8 @@ public class FarmScreen implements Screen {
         }
         visibleCells.sort(Comparator.comparingInt(Cell::getY).reversed());
         for(Cell cell:visibleCells) {
-            int x = cell.getX() * CELL_SIZE;
-            int y = cell.getY() * CELL_SIZE;
+            int x = (int) (cell.getX() * CELL_SIZE);
+            int y = (int) (cell.getY() * CELL_SIZE);
 //            batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
             batch.draw(groundCache.get(cell), x, y, CELL_SIZE, CELL_SIZE);
         }
@@ -229,8 +235,8 @@ public class FarmScreen implements Screen {
         for(Cell cell:visibleCells){
 
 
-            int x = cell.getX() * CELL_SIZE;
-            int y = cell.getY() * CELL_SIZE;
+            int x = (int) (cell.getX() * CELL_SIZE);
+            int y = (int) (cell.getY() * CELL_SIZE);
 
             buildingSpawner.renderBuildings(batch,cell,passiveStateTime);
 //            rockSpawner.renderRocks(batch,cell,passiveStateTime);

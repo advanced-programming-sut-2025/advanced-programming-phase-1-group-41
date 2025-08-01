@@ -28,6 +28,8 @@ import net.bytebuddy.pool.TypePool;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
+
 public class BarnScreen implements Screen {
     private final FarmScreen farmScreen;
     private final Hero hero;
@@ -41,7 +43,6 @@ public class BarnScreen implements Screen {
     private ArrayList<AnimalSprite> animalSprites;
 
     private final OrthographicCamera camera;
-    public static final int CELL_SIZE = 160;
 
     public BarnScreen(FarmScreen farmScreen, BarnMap barn, Player player) {
         this.hero = new Hero(barn);
@@ -340,7 +341,7 @@ public class BarnScreen implements Screen {
     }
 
     @Override public void resize(int width, int height) {
-        camera.setToOrtho(false, width, height);
+
     }
 
     @Override public void dispose() {

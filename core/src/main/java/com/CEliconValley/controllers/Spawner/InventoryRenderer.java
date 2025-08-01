@@ -4,17 +4,20 @@ import com.CEliconValley.controllers.ItemManager;
 import com.CEliconValley.models.items.Inventory;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
+
 
 public class InventoryRenderer {
     private final Inventory inventory;
 
-    private final int slotSize = 160;
-    private final int itemSize = 160*2/3;
+    private final int slotSize = CELL_SIZE;
+    private final int itemSize =slotSize*2/3;
     private int startPoint=0;
 
     public InventoryRenderer(Inventory inventory) {

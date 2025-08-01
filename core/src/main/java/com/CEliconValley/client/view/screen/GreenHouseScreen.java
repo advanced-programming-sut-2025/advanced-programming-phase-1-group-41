@@ -20,6 +20,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
+
 public class GreenHouseScreen implements Screen {
     private final FarmScreen farmScreen;
     private final Hero hero;
@@ -57,7 +59,6 @@ public class GreenHouseScreen implements Screen {
 
     private float stateTime = 0f;
 
-    public static final int CELL_SIZE = 160;
 
     public GreenHouseScreen(FarmScreen farmScreen,GreenhouseMap greenHouse, Player player) {
         hero=new Hero(greenHouse);
@@ -141,7 +142,7 @@ public class GreenHouseScreen implements Screen {
         }
         if (currentAnimation != null) {
             TextureRegion currentFrame = currentAnimation.getKeyFrame(stateTime, onRepeat);
-            batch.draw(currentFrame, renderX - CELL_SIZE / 2f, renderY - CELL_SIZE / 2, CELL_SIZE * 2f, CELL_SIZE * 2f);
+            batch.draw(currentFrame, renderX - CELL_SIZE / 2f, renderY - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
         }
         camera.position.set(renderX + CELL_SIZE / 2f, renderY + CELL_SIZE / 2f, 0);
         camera.update();
@@ -235,7 +236,7 @@ public class GreenHouseScreen implements Screen {
 
 
     @Override public void resize(int width, int height) {
-        camera.setToOrtho(false, width, height);
+
     }
 
     @Override public void dispose() {

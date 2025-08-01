@@ -22,6 +22,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
+
 public class CottageScreen implements Screen {
     private final FarmScreen farmScreen;
     private final Hero hero;
@@ -53,7 +55,6 @@ public class CottageScreen implements Screen {
 
     private final OrthographicCamera camera;
     private float stateTime = 0f;
-    public static final int CELL_SIZE = 160;
 
     public CottageScreen(FarmScreen farmScreen, CottageMap cottageMap, Player player) {
         this.hero = new Hero(cottageMap);
@@ -213,7 +214,7 @@ public class CottageScreen implements Screen {
     }
 
     @Override public void resize(int width, int height) {
-        camera.setToOrtho(false, width, height);
+
     }
 
     @Override public void dispose() {
