@@ -42,6 +42,10 @@ public class AnimalSprite {
                 columns=4;
                 rows=5;
             }
+            case "Pig" -> {
+                columns = 5;
+                rows = 5;
+            }
         }
     }
 

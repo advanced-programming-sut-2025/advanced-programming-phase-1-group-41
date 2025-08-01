@@ -8,6 +8,7 @@ import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.Player;
 import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.animals.animalKinds.Cow;
+import com.CEliconValley.models.animals.animalKinds.Pig;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.foragings.Nature.Lake;
@@ -25,6 +26,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import net.bytebuddy.pool.TypePool;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class BarnScreen implements Screen {
     private final FarmScreen farmScreen;
@@ -57,8 +59,11 @@ public class BarnScreen implements Screen {
         this.animalSprites = new ArrayList<>();
         this.animalSprites.add(new AnimalSprite(barn,
             new AnimalData(new Cow(null,"mamad")),
-            hero.playerX, hero.playerY + 3
+            hero.playerX, hero.playerY + 5
             ));
+//        this.animalSprites.add(new AnimalSprite(barn,new AnimalData(
+//            new Pig(null, "asghar")), hero.playerX+1, hero.playerY + 3
+//        ));
 
 
 //        this.background=TextureRegion.split(new Texture("game/Buildings/Screen/Barn_Screen.png"),);
