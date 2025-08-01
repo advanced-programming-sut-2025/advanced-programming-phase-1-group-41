@@ -21,6 +21,7 @@ public class AnimalSprite {
     public int targetY;
     public float renderX;
     public float renderY;
+    public float stateTime = 0f;
     public Animation<TextureRegion> currentAnimation;
 
     public AnimalSprite(Location location, AnimalData animalData, int X, int Y) {
