@@ -40,7 +40,7 @@ public class App {
         System.out.println("GameServer started on port " + GameServer.PORT);
         try {
             Thread.sleep(100);
-            String first = "ws://localhost:8080";
+            String first = "ws://localhost:6969";
             URI serverUri = new URI(first);
             client = new GameClient(serverUri);
             client.connect();

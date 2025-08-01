@@ -23,17 +23,17 @@ public class Lobby {
     }
 
     public Lobby(String lobbyName, String password, String admin, boolean isVisible) {
-        makeLobby(lobbyName, admin);
         this.isPrivate = true;
         this.password = password;
         this.isVisible = isVisible;
+        makeLobby(lobbyName, admin);
     }
 
     public Lobby(String lobbyName, String admin, boolean isVisible){
-        makeLobby(lobbyName, admin);
         this.isPrivate = false;
         this.password = null;
         this.isVisible = isVisible;
+        makeLobby(lobbyName, admin);
     }
 
     private void makeLobby(String lobbyName, String admin){

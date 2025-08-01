@@ -14,10 +14,10 @@ public class LobbyHandler {
             case "make-lobby" -> {
                 GameMessage<MakeLobbyInfo> msg = gson.fromJson(message, new TypeToken<GameMessage<MakeLobbyInfo>>() {}.getType());
                 MakeLobbyInfo lobbyInfo = msg.body;
-//                System.out.println("Lobby: " + msg);
+//                System.out.println("Lobby: " + msg.body);
                 Lobby lobby;
                 if(lobbyInfo.isPrivate){
-                    lobby = new Lobby(lobbyInfo.lobbyName, lobbyInfo.admin, lobbyInfo.password, lobbyInfo.isVisible);
+                    lobby = new Lobby(lobbyInfo.lobbyName, lobbyInfo.password, lobbyInfo.admin, lobbyInfo.isVisible);
                 }else{
                     lobby = new Lobby(lobbyInfo.lobbyName, lobbyInfo.admin, lobbyInfo.isVisible);
                 }

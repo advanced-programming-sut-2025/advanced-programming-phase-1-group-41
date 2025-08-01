@@ -29,4 +29,8 @@ public class GameAssetManager {
         return gameAssetManager;
     }
     public Skin getSkin() {return skin;}
+
+    public Texture getHeroTexture(String name) {
+        return new Texture(Gdx.files.internal("game/Hero/" + name));
+    }
 }

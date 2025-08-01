@@ -14,7 +14,7 @@ import java.net.InetSocketAddress;
 import java.util.*;
 
 public class GameServer extends WebSocketServer {
-    public static final int PORT = 8080;
+    public static final int PORT = 6969;
 
     private final Set<WebSocket> connections = Collections.synchronizedSet(new HashSet<>());
     private final Map<WebSocket, User> onlineConnections = new HashMap<>();

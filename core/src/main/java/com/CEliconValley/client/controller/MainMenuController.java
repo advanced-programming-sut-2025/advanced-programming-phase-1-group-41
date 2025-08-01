@@ -132,10 +132,6 @@ public class MainMenuController {
         String json = new Gson().toJson(msg);
         AppClient.getClient().send(json);
 
-//        AppClient.setCurrentLobby(lobby);
-        Menu.Lobby.resetMenu();
-        AppClient.setMenu(Menu.Lobby);
-        Main.getMain().setScreen(AppClient.getMenu().getScreen());
     }
 
     public void savePlayer(Player player) {

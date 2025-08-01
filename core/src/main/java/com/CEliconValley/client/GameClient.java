@@ -1,10 +1,12 @@
 package com.CEliconValley.client;
 
+import com.CEliconValley.Main;
 import com.CEliconValley.common.AppData;
 import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.HandshakeData;
 import com.CEliconValley.common.messages.*;
 import com.CEliconValley.models.Lobby;
+import com.CEliconValley.models.Menu;
 import com.badlogic.gdx.Gdx;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -25,7 +27,7 @@ public class GameClient extends WebSocketClient {
 
     public static void main(String[] args) {
         try {
-            String first = "ws://localhost:8080";
+            String first = "ws://localhost:6969";
             String second = "wss://5d92bdf5fa08.ngrok-free.app";
             URI serverUri = new URI(first);
             GameClient client = new GameClient(serverUri);
@@ -84,7 +86,10 @@ public class GameClient extends WebSocketClient {
                     Gdx.app.postRunnable(() -> {
                         AppClient.getLobbies().add(msg.body);
                         AppClient.setCurrentLobby(msg.body);
-                        System.out.println("Salammmmmmmmmmmmmmmmmmmm" + msg);
+
+                        Menu.Lobby.resetMenu();
+                        AppClient.setMenu(Menu.Lobby);
+                        Main.getMain().setScreen(AppClient.getMenu().getScreen());
                     });
 
                     System.out.println("Cmessage: updated lobby");
