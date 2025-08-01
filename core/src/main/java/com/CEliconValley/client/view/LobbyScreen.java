@@ -3,7 +3,7 @@ package com.CEliconValley.client.view;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
-import com.CEliconValley.controllers.LobbyController;
+import com.CEliconValley.client.controller.LobbyController;
 import com.CEliconValley.models.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
@@ -21,10 +21,9 @@ import java.util.ArrayList;
 
 public class LobbyScreen implements Screen {
 
-    private Lobby lobby;
+    public Lobby lobby;
 
     private float timer=0;
-    private ArrayList<Player> players;
     private final LobbyController controller;
     private Stage stage;
 
@@ -43,17 +42,8 @@ public class LobbyScreen implements Screen {
     private Table mainTable;
     private Table teamTable;
 
-//    public Lobby(LobbyController controller) {
-//        this.controller = controller;
-//        mainTable = new Table();
-//    }
-
     public LobbyScreen(LobbyController controller) {
         this.controller=controller;
-        players=new ArrayList<>();
-        User user = Finder.getUserByUsername("user1");
-        players.add(new Player(App.getCurrentUser() == null ? user:App.getCurrentUser()));
-        System.out.println(players.get(0).getUser().getUsername());
     }
 
 
@@ -90,7 +80,7 @@ public class LobbyScreen implements Screen {
         if(lobby.isPrivate()) {
             passText = new Label("Pass: " + lobby.getPassword(), skin);
         }
-        App.addToLobbies(this);
+
         controller.setView(this);
 
         mainTable.clear();
@@ -149,20 +139,20 @@ public class LobbyScreen implements Screen {
                 booleans.add(b);
                 booleans.add(c);
                 booleans.add(d);
-                for(int i=1;i<=players.size();i++) {
+                for(int i=1;i<=lobby.getPlayerNames().size();i++) {
                     booleans.set(i-1,true);
                 }
-                for(int i=players.size()+1;i<=4;i++) {
+                for(int i=lobby.getPlayerNames().size()+1;i<=4;i++) {
                     booleans.set(i-1,false);
                 }
                 setVisible(booleans.get(0),booleans.get(1),booleans.get(2),booleans.get(3));
-                String path = "skin/lobby/" + players.size() + ".png";
+                String path = "skin/lobby/" + lobby.getPlayerNames().size() + ".png";
                 Texture texture = new Texture(Gdx.files.internal(path));
                 TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(texture));
                 teamTable.setBackground(drawable);
             }
         }
-        if(players.size()>=1){
+        if(lobby.getPlayerNames().size()>=1){
             startGameButton.setVisible(true);
         }
 
@@ -212,9 +202,6 @@ public class LobbyScreen implements Screen {
         label2.setVisible(b);
         label3.setVisible(c);
         label4.setVisible(d);
-    }
-    public ArrayList<Player> getPlayers(){
-        return players;
     }
 
 

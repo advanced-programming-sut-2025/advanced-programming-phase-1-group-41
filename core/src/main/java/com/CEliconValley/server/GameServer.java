@@ -56,7 +56,7 @@ public class GameServer extends WebSocketServer {
 
     @Override
     public void onStart() {
-        System.out.println("starting server..");
+        System.out.println("server started ;)");
     }
 
     public static void main(String[] args) {

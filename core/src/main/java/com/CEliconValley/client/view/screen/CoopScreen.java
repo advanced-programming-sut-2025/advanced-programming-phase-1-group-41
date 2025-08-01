@@ -9,10 +9,7 @@ import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.Player;
-import com.CEliconValley.models.animals.animalKinds.Cow;
-import com.CEliconValley.models.animals.animalKinds.Goat;
-import com.CEliconValley.models.animals.animalKinds.Pig;
-import com.CEliconValley.models.animals.animalKinds.Sheep;
+import com.CEliconValley.models.animals.animalKinds.*;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.foragings.Nature.Lake;
@@ -59,10 +56,10 @@ public class CoopScreen implements Screen {
             }
         }
         this.animalSprites = new ArrayList<>();
-//        this.animalSprites.add(new AnimalSprite(coop,
-//            new AnimalData(new Cow(null,"mamad")),
-//            hero.playerX, hero.playerY + 2
-//        ));
+        this.animalSprites.add(new AnimalSprite(coop,
+            new AnimalData(new Chicken(null,"mamad")),
+            hero.playerX, hero.playerY + 2
+        ));
 //        this.animalSprites.add(new AnimalSprite(coop,
 //            new AnimalData(new Sheep(null,"asghar")),
 //            hero.playerX+3, hero.playerY + 4

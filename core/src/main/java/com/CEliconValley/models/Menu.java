@@ -2,7 +2,7 @@ package com.CEliconValley.models;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.view.*;
-import com.CEliconValley.controllers.LobbyController;
+import com.CEliconValley.client.controller.LobbyController;
 import com.CEliconValley.client.controller.MainMenuController;
 import com.CEliconValley.client.controller.ProfileMenuController;
 import com.CEliconValley.client.controller.authentication.AuthenticationMenuController;

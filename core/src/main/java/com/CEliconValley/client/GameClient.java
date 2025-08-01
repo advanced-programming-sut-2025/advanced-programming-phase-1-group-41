@@ -1,12 +1,13 @@
 package com.CEliconValley.client;
 
 import com.CEliconValley.Main;
+import com.CEliconValley.client.view.screen.FarmScreen;
 import com.CEliconValley.common.AppData;
 import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.HandshakeData;
 import com.CEliconValley.common.messages.*;
-import com.CEliconValley.models.Lobby;
-import com.CEliconValley.models.Menu;
+import com.CEliconValley.models.*;
+import com.CEliconValley.models.locations.Farm;
 import com.badlogic.gdx.Gdx;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -80,6 +81,16 @@ public class GameClient extends WebSocketClient {
                         AppClient.setGameData(gameDataMessage.body);
                     });
                     System.out.println("Cmessage: updated gamedata");
+                }
+                case "new-game" -> {
+                    GameMessage<GameData> gameDataMessage = gson.fromJson(message, new TypeToken<GameMessage<GameData>>() {}.getType());
+                    Gdx.app.postRunnable(() -> {
+                        AppClient.setMenu(Menu.Game);
+                        Menu.Game.resetMenu();
+                        AppClient.setGameData(gameDataMessage.body);
+                        ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new FarmScreen(new Farm(1),
+                            gameDataMessage.body.getPlayersData().get(0).getPlayer()));
+                    });
                 }
                 case "new-lobby" -> {
                     GameMessage<Lobby> msg = gson.fromJson(message, new TypeToken<GameMessage<Lobby>>() {}.getType());

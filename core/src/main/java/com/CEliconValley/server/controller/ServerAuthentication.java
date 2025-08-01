@@ -116,7 +116,6 @@ public class ServerAuthentication {
 
     private static void login(User user, boolean stayLoggedIn, WebSocket conn){
         user.setStayLoggedIn(stayLoggedIn);
-        App.setCurrentUser(user);
         App.putOnlinePlayer(new OnlineData(user.getUsername(), false));
         App.getServer().getOnlineConnections().put(conn, user);
     }

@@ -34,6 +34,26 @@ public class App {
         lobbiesScreen.add(lobbyScreen);
     }
 
+    public static void setupServer(){
+        server = new GameServer();
+        server.start();
+        System.out.println("GameServer started on port " + GameServer.PORT);
+    }
+    public static void setupClient(){
+        try {
+            Thread.sleep(100);
+            String first = "ws://localhost:6969";
+            URI serverUri = new URI(first);
+            client = new GameClient(serverUri);
+            client.connect();
+            Thread.sleep(1000);
+            client.send("hi");
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public static void setupConnections(){
         server = new GameServer();
         server.start();
@@ -109,5 +129,6 @@ public class App {
         String json = new Gson().toJson(msg);
         System.out.println("tryina send app-data");
         App.getServer().broadcast(json);
+        System.out.println("broadcasted");
     }
 }

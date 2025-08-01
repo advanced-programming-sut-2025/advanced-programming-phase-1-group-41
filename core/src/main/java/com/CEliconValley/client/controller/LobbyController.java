@@ -1,4 +1,4 @@
-package com.CEliconValley.controllers;
+package com.CEliconValley.client.controller;
 
 import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
@@ -35,22 +35,9 @@ public class LobbyController {
         view.getStartGameButton().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                AppClient.setMenu(Menu.Game);
-                Menu.Game.resetMenu();
-                App.setGame(new Game(view.getPlayers(),new Player(App.getCurrentUser())));
-//                Main.getMain().setScreen(AppClient.getMenu().getScreen());
-                ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new FarmScreen(new Farm(1),view.getPlayers().get(0)));
-                Gdx.app.postRunnable(() -> {
-                    Timer.schedule(new Timer.Task() {
-                        @Override
-                        public void run() {
-                            if(App.getGame() == null) return;
-                            GameMessage<GameData> gameMessage = new GameMessage<>("gamedata", new GameData(App.getGame()));
-                            Gson gson = new Gson();
-                            App.getServer().broadcast(gson.toJson(gameMessage));
-                        }
-                    }, 1, 1);
-                });
+                GameMessage<Lobby> msg = new GameMessage<Lobby>("new-game",view.lobby);
+                Gson gson = new Gson();
+                AppClient.getClient().send(gson.toJson(msg));
             }
         });
 

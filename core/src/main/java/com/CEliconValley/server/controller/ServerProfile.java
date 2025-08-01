@@ -57,7 +57,6 @@ public class ServerProfile {
         return new SuccessMessage("profile_request",new UserData(user).toJson());
     }
     public static Message delete(String username){
-        App.setCurrentUser(null);
         User user = Finder.getUserByUsername(username);
         App.getUsers().remove(user);
         UserDB.deleteUser(user);

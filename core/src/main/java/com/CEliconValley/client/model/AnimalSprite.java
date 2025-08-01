@@ -109,19 +109,30 @@ public class AnimalSprite {
         }else {
             switch (direction) {
                 case 1:
-                    animation[0] = animalActs[2][0];
-                    return new Animation<>(0.15f, animation);
+                    for(int i=0;i<animalActs[3].length;i++){
+                        wantedActs[i] = animalActs[3][i];
+                    }
+//                    animation[0] = animalActs[2][0];
+                    return new Animation<>(0.15f, wantedActs);
                 case 2:
-                    animation[0] = animalActs[1][0];
-                    return new Animation<>(0.15f, animation);
+//                    animation[0] = animalActs[1][0];
+                    for(int i=0;i<animalActs[3].length;i++){
+                        wantedActs[i] = animalActs[3][i];
+                    }
+//                    animation[0] = animalActs[2][0];
+                    return new Animation<>(0.15f, wantedActs);
+                case 3:
+                    for(int i=0;i<animalActs[3].length;i++){
+                        wantedActs[i] = animalActs[3][i];
+                    }
+//                    animation[0] = animalActs[2][0];
+                    return new Animation<>(0.15f, wantedActs);
                 case 4:
-                    TextureRegion baseFrame = new TextureRegion(animalActs[1][0]);
-                    baseFrame.flip(true, false);
-                    animation[0] = baseFrame;
-                    return new Animation<>(0.15f, animation);
-                default:
-                    animation[0] = animalActs[0][0];
-                    return new Animation<>(0.15f, animation);
+                    for(int i=0;i<animalActs[3].length;i++){
+                        wantedActs[i] = animalActs[3][i];
+                    }
+//                    animation[0] = animalActs[2][0];
+                    return new Animation<>(0.15f, wantedActs);
 
             }
         }

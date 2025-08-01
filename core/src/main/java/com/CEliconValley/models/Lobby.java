@@ -120,4 +120,12 @@ public class Lobby {
         sendDetails();
         return new Result(true, "player-removed");
     }
+
+    public String getAdmin() {
+        return admin;
+    }
+
+    public long getLastTimeJoined() {
+        return lastTimeJoined;
+    }
 }

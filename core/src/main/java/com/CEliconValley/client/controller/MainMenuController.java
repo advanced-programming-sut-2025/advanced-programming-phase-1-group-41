@@ -53,7 +53,6 @@ public class MainMenuController {
         view.getLogoutButton().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                App.setCurrentUser(null);
                 GameMessage<String> msg = new GameMessage<>("logout_request",
                     AppClient.getUserData().getUsername());
                 String json = new Gson().toJson(msg);
@@ -143,11 +142,12 @@ public class MainMenuController {
 
 
     public Result loadGameForReal(Matcher matcher){
-        User user = App.getCurrentUser();
-        if(user==null) return new Result(false, "you are guest dummy");
-        Game game = UserDB.loadGame(user.getUsername());
-        App.setGame(game);
-        AppClient.setMenu(Menu.Game);
-        return new Result(true,"Game loaded successfully");
+//        User user = App.getCurrentUser();
+//        if(user==null) return new Result(false, "you are guest dummy");
+//        Game game = UserDB.loadGame(user.getUsername());
+//        App.setGame(game);
+//        AppClient.setMenu(Menu.Game);
+//        return new Result(true,"Game loaded successfully");
+        return null;
     }
 }
