@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.CEliconValley.GameAssetManager;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -57,7 +58,7 @@ public class AuthenticationMenuView implements Screen, AppMenu {
     // Layout
     private final Table mainTable;
     private final Stack formStack;
-    private final Table registerForm, loginForm, forgotForm, securityQuestionForm;
+    public final Table registerForm, loginForm, forgotForm, securityQuestionForm;
 
     public AuthenticationMenuView(AuthenticationMenuController controller) {
         this.controller = controller;
@@ -215,7 +216,7 @@ public class AuthenticationMenuView implements Screen, AppMenu {
         mainTable.add(formStack).padTop(10);
 
         // Default: show register
-        switchForm("register");
+        switchForm("login");
 
         // Add listeners
         controller.setupListeners();
@@ -255,6 +256,12 @@ public class AuthenticationMenuView implements Screen, AppMenu {
             } else {
                 Graphics.DisplayMode displayMode = Gdx.graphics.getDisplayMode();
                 Gdx.graphics.setFullscreenMode(displayMode);
+            }
+        } else if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+            try {
+                controller.handleEnter();
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
             }
         }
 

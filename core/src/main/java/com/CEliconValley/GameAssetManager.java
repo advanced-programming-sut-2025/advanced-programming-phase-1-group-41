@@ -1,7 +1,12 @@
 package com.CEliconValley;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class GameAssetManager {
     private static GameAssetManager gameAssetManager;
@@ -16,5 +21,12 @@ public class GameAssetManager {
         return gameAssetManager;
     }
     public Skin getSkin() {return skin;}
+    public Image getBackground(String name) {
+        return new Image(new Texture(Gdx.files.internal("backgrounds/" + name)));
+    }
+    public Drawable getDrawableBackground(String name) {
+        TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal("backgrounds/" + name)));
+        return new TextureRegionDrawable(region);
+    }
 
 }

@@ -27,6 +27,7 @@ public class Hero {
     public float renderY;
     public boolean isMoving = false;
     public float stateTime = 0f;
+    public Animation<TextureRegion> currentAnimation;
 
 
     public Hero(Location location) {

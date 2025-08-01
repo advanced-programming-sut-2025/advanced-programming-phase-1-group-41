@@ -1,11 +1,15 @@
 package com.CEliconValley.client.model;
 
 import com.CEliconValley.common.AnimalData;
+import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.locations.Location;
+import com.CEliconValley.views.maps.BarnMap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+import java.util.Random;
 
 public class AnimalSprite {
     public Texture texture;
@@ -23,6 +27,10 @@ public class AnimalSprite {
     public float renderY;
     public float stateTime = 0f;
     public Animation<TextureRegion> currentAnimation;
+    public Location location;
+    public int randomX;
+    public int randomY;
+    public boolean randomSetter = false;
 
     public AnimalSprite(Location location, AnimalData animalData, int X, int Y) {
         this.texture = new Texture("game/Hero/NPC/"+animalData.getAnimalType()+".png");
@@ -34,6 +42,21 @@ public class AnimalSprite {
         this.y = Y;
         this.targetX = x;
         this.targetY = y;
+        this.location = location;
+        setRandomPoint();
+    }
+
+    public void setRandomPoint(){
+        if(location instanceof BarnMap barnMap){
+            Random random = new Random();
+            int randomIndex = random.nextInt(barnMap.getCells().size());
+            Cell cell = barnMap.getCells().get(randomIndex);
+            this.randomX = cell.getX();
+            this.randomY = cell.getY();
+        }
+    }
+    public boolean reachedDestination(){
+        return x == randomX && y == randomY;
     }
 
     private void setCR(){
@@ -42,9 +65,13 @@ public class AnimalSprite {
                 columns=4;
                 rows=5;
             }
-            case "Pig" -> {
-                columns = 5;
-                rows = 5;
+            case "Pig", "Goat", "Dino", "Rabbit" -> {
+                columns = 4;
+                rows = 6;
+            }
+            case "Chicken" -> {
+                columns=4;
+                rows=8;
             }
         }
     }

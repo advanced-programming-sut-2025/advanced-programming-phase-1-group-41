@@ -101,14 +101,7 @@ public class AuthenticationMenuController {
         view.loginSubmitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                try {
-                    LoginCred credentials = new LoginCred(view.loginUsername.getText(), view.loginPassword.getText());
-                    GameMessage<LoginCred> message = new GameMessage<>("login_request", credentials);
-                    String json = new Gson().toJson(message);
-                    AppClient.getClient().send(json);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+                handleLogin();
             }
         });
 
@@ -187,6 +180,17 @@ public class AuthenticationMenuController {
 
     }
 
+    private void handleLogin(){
+        try {
+            LoginCred credentials = new LoginCred(view.loginUsername.getText(), view.loginPassword.getText());
+            GameMessage<LoginCred> message = new GameMessage<>("login_request", credentials);
+            String json = new Gson().toJson(message);
+            AppClient.getClient().send(json);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     private void handleForgotPassword() throws NoSuchAlgorithmException {
         if(view.forgotSubmitButton.getLabel().getText().toString().equals("Show Security Question")){
@@ -247,5 +251,15 @@ public class AuthenticationMenuController {
         view.regNickname.setText("");
         view.regPassword.setText("");
         view.regConfirmPassword.setText("");
+    }
+
+    public void handleEnter() throws NoSuchAlgorithmException {
+        if(view.loginForm.isVisible()){
+            handleLogin();
+        } else if(view.forgotForm.isVisible()){
+            handleForgotPassword();
+        } else if(view.registerForm.isVisible()){
+            handleRegister();
+        }
     }
 }
