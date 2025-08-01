@@ -1,17 +1,24 @@
 package com.CEliconValley.client.view;
 
+import com.CEliconValley.CustomColors;
 import com.CEliconValley.GameAssetManager;
 import com.CEliconValley.Main;
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.controller.MainMenuController;
+import com.CEliconValley.common.OnlineData;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import java.util.Set;
 
 public class MainMenuView implements Screen {
 
@@ -25,6 +32,7 @@ public class MainMenuView implements Screen {
     public final TextButton logoutButton;
 
     private final Table mainTable;
+    private final Table dataTable;
 
     public MainMenuView(MainMenuController controller) {
         this.controller = controller;
@@ -38,6 +46,10 @@ public class MainMenuView implements Screen {
         mainTable.setFillParent(true);
         mainTable.center();
 
+        dataTable = new Table();
+        dataTable.setFillParent(true);
+        dataTable.right();
+
         controller.setView(this);
         buildUI();
     }
@@ -48,6 +60,16 @@ public class MainMenuView implements Screen {
         mainTable.add(startGameButton).width(300).pad(20).padTop(150).row();
         mainTable.add(profileButton).width(300).pad(20).row();
         mainTable.add(logoutButton).width(300).pad(20).row();
+
+//        dataTable.setBackground(GameAssetManager.getGameAssetManager().getDrawableBackground("Field1.png"));
+        Set<OnlineData> onlinePlayers = AppClient.getOnlinePlayers();
+        for(OnlineData onlineData : onlinePlayers) {
+            Label label = new Label(onlineData.username + " .~`", GameAssetManager.getGameAssetManager().getSkin());
+            label.setColor(Color.GOLD);
+            dataTable.add(label).width(300).pad(20).row();
+        }
+//        dataTable.pack();
+        dataTable.setPosition(- Gdx.graphics.getWidth() / 5f, Gdx.graphics.getHeight() / 25f);
 
         controller.setupListeners();
     }
@@ -60,8 +82,11 @@ public class MainMenuView implements Screen {
         background.setSize(stage.getWidth(), stage.getHeight());
         background.setPosition(0, 0);
 
+//        dataTable.setSize(stage.getWidth()/3, stage.getHeight()/3);
+
         stage.addActor(background);
         stage.addActor(mainTable);
+        stage.addActor(dataTable);
     }
 
     @Override
