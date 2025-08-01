@@ -41,9 +41,9 @@ public class CoopMap implements Location {
                 }
             }
             case Normal: {
-                for (int i = 6; i < 19; i++) {
-                    for (int j = 5; j < 13; j++) {
-                        if(i<=9&&j>=7&&j<=8)continue;
+                for (int i = 0; i < 8; i++) {
+                    for (int j = 0; j < 6; j++) {
+                        if(i>0&&j==0)continue;
                         Grass grass = new Grass();
                         Cell cell = new Cell(grass, offsetY + i, offsetX + j);
                         cells.add(cell);
@@ -54,7 +54,7 @@ public class CoopMap implements Location {
         }
 
         Door door = new Door();
-        cells.add(new Cell(door, offsetX + 14, offsetY + 4));
+        cells.add(new Cell(door, offsetX+1 , offsetY));
     }
 
     public ArrayList<Cell> getCells() {

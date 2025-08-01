@@ -84,17 +84,18 @@ public class CoopScreen implements Screen {
 //        this.background =
         Texture coopTexture = new Texture("game/Buildings/Screen/Coop_Screen.png");
 
-        int tileWidth = coopTexture.getWidth() / 2;
-        int tileHeight = coopTexture.getHeight();
+        int tileWidth = coopTexture.getWidth() ;
+        int tileHeight = coopTexture.getHeight()/3;
 
         TextureRegion[][] split = TextureRegion.split(coopTexture, tileWidth, tileHeight);
 
-        TextureRegion leftRegion = split[0][0];
-        TextureRegion rightRegion = split[0][1];
+        TextureRegion topRegion = split[0][0];
+        TextureRegion middleRegion = split[1][0];
+        TextureRegion bottomRegion = split[2][0];
         switch (coop.getCoopType()){
-            case Big -> background= leftRegion;
-            case Deluxe ->  background= leftRegion;
-            default -> background= rightRegion;
+            case Big -> background= middleRegion;
+            case Deluxe ->  background= bottomRegion;
+            default -> background= topRegion;
         }
 
 
@@ -214,7 +215,7 @@ public class CoopScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
-        batch.draw(background, CELL_SIZE / 2f, CELL_SIZE , CELL_SIZE * 24, CELL_SIZE * 16);
+        batch.draw(background, 0, -CELL_SIZE/3 , CELL_SIZE * 13, CELL_SIZE * 9);
 
         for (Cell cell : coop.getCells()) {
             int x = cell.getX() * CELL_SIZE;
