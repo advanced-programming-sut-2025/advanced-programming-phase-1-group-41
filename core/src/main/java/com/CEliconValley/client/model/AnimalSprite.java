@@ -65,9 +65,13 @@ public class AnimalSprite {
                 columns=4;
                 rows=5;
             }
-            case "Pig" -> {
-                columns = 5;
-                rows = 5;
+            case "Pig", "Goat", "Dino", "Rabbit" -> {
+                columns = 4;
+                rows = 6;
+            }
+            case "Chicken" -> {
+                columns=4;
+                rows=8;
             }
         }
     }

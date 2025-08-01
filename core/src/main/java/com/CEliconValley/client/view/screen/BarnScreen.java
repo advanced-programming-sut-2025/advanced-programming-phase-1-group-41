@@ -10,7 +10,9 @@ import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.Player;
 import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.animals.animalKinds.Cow;
+import com.CEliconValley.models.animals.animalKinds.Goat;
 import com.CEliconValley.models.animals.animalKinds.Pig;
+import com.CEliconValley.models.animals.animalKinds.Sheep;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.foragings.Nature.Lake;
@@ -67,8 +69,16 @@ public class BarnScreen implements Screen {
             hero.playerX, hero.playerY + 2
             ));
         this.animalSprites.add(new AnimalSprite(barn,
-            new AnimalData(new Cow(null,"asghar")),
+            new AnimalData(new Sheep(null,"asghar")),
             hero.playerX+3, hero.playerY + 4
+            ));
+        this.animalSprites.add(new AnimalSprite(barn,
+            new AnimalData(new Pig(null,"asghar")),
+            hero.playerX-2, hero.playerY + 3
+            ));
+        this.animalSprites.add(new AnimalSprite(barn,
+            new AnimalData(new Goat(null,"asghar")),
+            hero.playerX-4, hero.playerY + 1
             ));
 //        this.animalSprites.add(new AnimalSprite(barn,new AnimalData(
 //            new Pig(null, "asghar")), hero.playerX+1, hero.playerY + 3
