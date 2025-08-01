@@ -44,6 +44,7 @@ public class CoopMap implements Location {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 6; j++) {
                         if(i>0&&j==0)continue;
+                        if(i==0&&j==0)continue;
                         Grass grass = new Grass();
                         Cell cell = new Cell(grass, offsetY + i, offsetX + j);
                         cells.add(cell);
