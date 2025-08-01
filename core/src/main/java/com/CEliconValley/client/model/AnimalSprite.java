@@ -21,6 +21,7 @@ public class AnimalSprite {
     public int targetY;
     public float renderX;
     public float renderY;
+    public float stateTime = 0f;
     public Animation<TextureRegion> currentAnimation;
 
     public AnimalSprite(Location location, AnimalData animalData, int X, int Y) {
@@ -40,6 +41,10 @@ public class AnimalSprite {
             case "Cow", "Sheep" -> {
                 columns=4;
                 rows=5;
+            }
+            case "Pig" -> {
+                columns = 5;
+                rows = 5;
             }
         }
     }

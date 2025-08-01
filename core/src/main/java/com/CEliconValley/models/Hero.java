@@ -19,6 +19,16 @@ public class Hero {
     private Farm farm;
     private int currentDirection=3;
 
+    public int playerX;
+    public int playerY;
+    public int targetX;
+    public int targetY;
+    public float renderX;
+    public float renderY;
+    public boolean isMoving = false;
+    public float stateTime = 0f;
+
+
     public Hero(Location location) {
         playerTexture = new Texture("game/Hero/generalActs.png");
         toolsTexture_Front = new Texture("game/Hero/tools_Front.png");
@@ -29,7 +39,6 @@ public class Hero {
         toolsActs_Back = TextureRegion.split(toolsTexture_Back, toolsTexture_Back.getWidth()/5,toolsTexture_Back.getHeight()/15);
         toolsActs_Side= TextureRegion.split(toolsTexture_Side,toolsTexture_Side.getWidth()/5,toolsTexture_Side.getHeight()/15);
 //        this.farm =(Farm) location;
-
     }
 
     public Animation<TextureRegion> walk(boolean canWalk, int direction) {
