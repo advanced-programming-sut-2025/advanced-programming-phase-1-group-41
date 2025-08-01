@@ -1,5 +1,6 @@
 package com.CEliconValley.client.view.screen;
 
+import com.CEliconValley.client.view.screen.maps.CoopMap;
 import com.CEliconValley.controllers.Spawner.*;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
@@ -8,6 +9,7 @@ import com.CEliconValley.models.Player;
 import com.CEliconValley.models.buildings.*;
 import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
 import com.CEliconValley.models.buildings.animalContainer.Barn;
+import com.CEliconValley.models.buildings.animalContainer.Coop;
 import com.CEliconValley.models.foragings.ForagingTree;
 import com.CEliconValley.models.foragings.Nature.*;
 import com.CEliconValley.views.maps.BarnMap;
@@ -397,6 +399,8 @@ public class FarmScreen implements Screen {
                     }else if (Finder.findCellByCoordinates(hero.playerX + i, hero.playerY + j, this.farm).getObjectMap() instanceof Barn ) {
                         Barn barn = (Barn) Finder.findCellByCoordinates(hero.playerX + i, hero.playerY + j, this.farm).getObjectMap();
                         ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new BarnScreen(this, new BarnMap(0,0,barn.getBarnType()), player));
+                    }else if (Finder.findCellByCoordinates(hero.playerX + i, hero.playerY + j, this.farm).getObjectMap() instanceof Coop coop) {
+                        ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new CoopScreen(this, new CoopMap(0,0,coop.getCoopType()), player));
                     }
                 }
             }

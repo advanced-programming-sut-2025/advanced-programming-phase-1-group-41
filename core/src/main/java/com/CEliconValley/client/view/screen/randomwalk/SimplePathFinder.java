@@ -1,6 +1,7 @@
 package com.CEliconValley.client.view.screen.randomwalk;
 
 
+import com.CEliconValley.client.view.screen.maps.CoopMap;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
@@ -14,9 +15,12 @@ import java.util.*;
 
 public class SimplePathFinder {
     BarnMap barn;
-
+    CoopMap coop;
     public SimplePathFinder(BarnMap barn) {
         this.barn = barn;
+    }
+    public SimplePathFinder(CoopMap coopMap) {
+        this.coop = coopMap;
     }
 
     public Node findPath(int startX, int startY, int goalX, int goalY) {
@@ -62,17 +66,37 @@ public class SimplePathFinder {
     }
 
     private boolean canMoveTo(int x, int y) {
-        for (Cell cell : barn.getCells()) {
-            if (cell.getX() == x && cell.getY() == y) {
-                if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock || cell.getObjectMap() instanceof Wall) {
-                    return false;
+        if(barn == null){
+            for (Cell cell : coop.getCells()) {
+                if (cell.getX() == x && cell.getY() == y) {
+                    if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock || cell.getObjectMap() instanceof Wall) {
+                        return false;
+                    }
+                    return true;
                 }
-                return true;
             }
+            return false;
+        }else{
+            for (Cell cell : barn.getCells()) {
+                if (cell.getX() == x && cell.getY() == y) {
+                    if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock || cell.getObjectMap() instanceof Wall) {
+                        return false;
+                    }
+                    return true;
+                }
+            }
+            return false;
         }
-        return false;
     }
     private Cell getCell(int x, int y) {
+        if(barn == null){
+            for (Cell cell : coop.getCells()) {
+                if (cell.getX() == x && cell.getY() == y) {
+                    return cell;
+                }
+            }
+            return null;
+        }
         for (Cell cell : barn.getCells()) {
             if (cell.getX() == x && cell.getY() == y) {
                 return cell;

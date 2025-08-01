@@ -1,5 +1,6 @@
 package com.CEliconValley.models;
 
+import com.CEliconValley.client.view.screen.maps.CoopMap;
 import com.CEliconValley.models.buildings.marketplaces.items.*;
 import com.CEliconValley.models.foragings.*;
 import com.CEliconValley.models.foragings.Nature.*;
@@ -185,6 +186,16 @@ public class Finder {
         }
         return null;
     }
+
+    public static Cell findCellByCoordinatesCoop(int x, int y, CoopMap coopMap){
+        for(Cell cell : coopMap.getCells()){
+            if(cell.getX() == x && cell.getY() == y){
+                return cell;
+            }
+        }
+        return null;
+    }
+
 
     public static Farm findFarmByPlayer(Player player){
         for(Farm farm:App.getGame().getFarms()){
