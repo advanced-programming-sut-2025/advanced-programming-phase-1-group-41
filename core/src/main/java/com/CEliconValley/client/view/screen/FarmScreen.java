@@ -59,8 +59,8 @@ public class FarmScreen implements Screen {
     public static final float VIRTUAL_WIDTH = 2400f;
     public static final float VIRTUAL_HEIGHT = 1350f;
     public static final int CELLS_IN_WIDTH = 15;
-    public static final int CELL_SIZE =  (int) VIRTUAL_WIDTH / CELLS_IN_WIDTH;
-
+//    public static final int CELL_SIZE =  (int) VIRTUAL_WIDTH / CELLS_IN_WIDTH;
+    public static final int CELL_SIZE =  (int) ((Gdx.graphics.getWidth() / VIRTUAL_WIDTH) * 160);
 //    public static final int CELL_SIZE = Gdx.graphics.getHeight()*144/1000;;
 
     private Animation<TextureRegion>[] walkAnimations;
@@ -69,19 +69,9 @@ public class FarmScreen implements Screen {
     private float stateTime = 0f;
     private float passiveStateTime = 0f;
 
-    private int playerX;
-    private int playerY;
 
 
-    private float renderX;
-    private float renderY;
 
-    private int playerDirection = 0;
-
-    private boolean isActing = false;
-    private boolean isMoving = false;
-    private int targetX;
-    private int targetY;
 
     private static final float MOVE_SPEED = 600f;
 
@@ -148,17 +138,17 @@ public class FarmScreen implements Screen {
             Cell homeCell=Finder.findCellByCoordinates(cell.getX(),cell.getY()+2,this.farm);
             if(doorCell!=null&& doorCell.getObjectMap() instanceof Door){
                 if(homeCell!=null && homeCell.getObjectMap() instanceof Cottage){
-                    playerX = cell.getX();
-                    playerY = cell.getY();
+                    hero.playerX = cell.getX();
+                    hero.playerY = cell.getY();
                 }
             }
         }
 
-        renderX = playerX * CELL_SIZE;
-        renderY = playerY * CELL_SIZE;
+        hero.renderX = hero.playerX * CELL_SIZE;
+        hero.renderY = hero.playerY * CELL_SIZE;
 
-        targetX = playerX;
-        targetY = playerY;
+        hero.targetX = hero.playerX;
+        hero.targetY = hero.playerY;
 
     }
 
@@ -175,32 +165,32 @@ public class FarmScreen implements Screen {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        if (isMoving) {
-            float targetPixelX = targetX * CELL_SIZE;
-            float targetPixelY = targetY * CELL_SIZE;
+        if (hero.isMoving) {
+            float targetPixelX = hero.targetX * CELL_SIZE;
+            float targetPixelY = hero.targetY * CELL_SIZE;
 
             float moveAmount = MOVE_SPEED * delta;
 
-            if (renderX < targetPixelX) {
-                renderX += moveAmount;
-                if (renderX > targetPixelX) renderX = targetPixelX;
-            } else if (renderX > targetPixelX) {
-                renderX -= moveAmount;
-                if (renderX < targetPixelX) renderX = targetPixelX;
+            if (hero.renderX < targetPixelX) {
+                hero.renderX += moveAmount;
+                if (hero.renderX > targetPixelX) hero.renderX = targetPixelX;
+            } else if (hero.renderX > targetPixelX) {
+                hero.renderX -= moveAmount;
+                if (hero.renderX < targetPixelX) hero.renderX = targetPixelX;
             }
 
-            if (renderY < targetPixelY) {
-                renderY += moveAmount;
-                if (renderY > targetPixelY) renderY = targetPixelY;
-            } else if (renderY > targetPixelY) {
-                renderY -= moveAmount;
-                if (renderY < targetPixelY) renderY = targetPixelY;
+            if (hero.renderY < targetPixelY) {
+                hero.renderY += moveAmount;
+                if (hero.renderY > targetPixelY) hero.renderY = targetPixelY;
+            } else if (hero.renderY > targetPixelY) {
+                hero.renderY -= moveAmount;
+                if (hero.renderY < targetPixelY) hero.renderY = targetPixelY;
             }
 
-            if (renderX == targetPixelX && renderY == targetPixelY) {
-                playerX = targetX;
-                playerY = targetY;
-                isMoving = false;
+            if (hero.renderX == targetPixelX && hero.renderY == targetPixelY) {
+                hero.playerX = hero.targetX;
+                hero.playerY = hero.targetY;
+                hero.isMoving = false;
 //                stateTime = 0f;
             }
         }
@@ -243,22 +233,22 @@ public class FarmScreen implements Screen {
 //            cropSpawner.renderCrops(batch,cell,passiveStateTime);
             waterSpawner.renderWater(batch,cell,passiveStateTime);
 //            rockSpawner.renderBreakingEffectForCell(batch, cell, delta);
-            if(playerX == cell.getX() && playerY == cell.getY()){
+            if(hero.playerX == cell.getX() && hero.playerY == cell.getY()){
 
                 TextureRegion currentFrame = currentAnimation.getKeyFrame(stateTime, onRepeat);
 //                System.out.println("stateTime: " + stateTime + ", frameIndex: " + currentAnimation.getKeyFrameIndex(stateTime));
                 if (!onRepeat&&currentAnimation.isAnimationFinished(stateTime)) {
-                    currentAnimation = hero.walk(false, playerDirection);
-                    isActing=false;
+                    currentAnimation = hero.walk(false, hero.currentDirection);
+                    hero.isActing=false;
 
 
                 }
 
-                batch.draw(currentFrame, renderX-CELL_SIZE/2f, renderY-CELL_SIZE/2, CELL_SIZE*2f, CELL_SIZE*2f);
+                batch.draw(currentFrame, hero.renderX-CELL_SIZE/2f, hero.renderY-CELL_SIZE/2, CELL_SIZE*2f, CELL_SIZE*2f);
             }
 //            treeSpawner.renderTrees(batch,cell,passiveStateTime);
 //            if (didHit) {
-//                hit(playerDirection, playerX, playerY);
+//                hit(hero.currentDirection, hero.playerX, hero.playerY);
 //                didHit = false;
 //            }
             inventoryRenderer.render(batch,camera);
@@ -272,7 +262,7 @@ public class FarmScreen implements Screen {
         passiveStateTime+=delta;
 
 
-        camera.position.set(renderX + CELL_SIZE / 2f, renderY + CELL_SIZE / 2f, 0);
+        camera.position.set(hero.renderX + CELL_SIZE / 2f, hero.renderY + CELL_SIZE / 2f, 0);
         camera.update();
 
 
@@ -292,68 +282,68 @@ public class FarmScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             inventoryRenderer.shiftLeft();
         }
-        if (isActing||isMoving) return;
+        if (hero.isActing||hero.isMoving) return;
 
 
         boolean moved = false;
         onRepeat=true;
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-//            currentAnimation = hero.walk(canMoveTo(playerX, playerY+1),1);
-                playerDirection = 1;
-            if (canMoveTo(playerX, playerY + 1)) {
-                targetX = playerX;
-                targetY = playerY + 1;
+//            currentAnimation = hero.walk(canMoveTo(hero.playerX, hero.playerY+1),1);
+                hero.currentDirection = 1;
+            if (canMoveTo(hero.playerX, hero.playerY + 1)) {
+                hero.targetX = hero.playerX;
+                hero.targetY = hero.playerY + 1;
                 moved = true;
             }
-            currentAnimation = hero.walk(moved,playerDirection);
+            currentAnimation = hero.walk(moved,hero.currentDirection);
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-//            currentAnimation = hero.walk(canMoveTo(playerX, playerY-1),3);
-                playerDirection = 3;
+//            currentAnimation = hero.walk(canMoveTo(hero.playerX, hero.playerY-1),3);
+                hero.currentDirection = 3;
 
-            if (canMoveTo(playerX, playerY - 1)) {
-                targetX = playerX;
-                targetY = playerY - 1;
+            if (canMoveTo(hero.playerX, hero.playerY - 1)) {
+                hero.targetX = hero.playerX;
+                hero.targetY = hero.playerY - 1;
                 moved = true;
             }
-            currentAnimation = hero.walk(moved,playerDirection);
+            currentAnimation = hero.walk(moved,hero.currentDirection);
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-//            currentAnimation = hero.walk(canMoveTo(playerX-1, playerY),4);
-                playerDirection = 4;
-            if (canMoveTo(playerX - 1, playerY)) {
-                targetX = playerX - 1;
-                targetY = playerY;
+//            currentAnimation = hero.walk(canMoveTo(hero.playerX-1, hero.playerY),4);
+                hero.currentDirection = 4;
+            if (canMoveTo(hero.playerX - 1, hero.playerY)) {
+                hero.targetX = hero.playerX - 1;
+                hero.targetY = hero.playerY;
                 flip = true;
                 moved = true;
             }
-            currentAnimation = hero.walk(moved,playerDirection);
+            currentAnimation = hero.walk(moved,hero.currentDirection);
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-//            currentAnimation = hero.walk(canMoveTo(playerX+1, playerY),2);
-                playerDirection = 2;
+//            currentAnimation = hero.walk(canMoveTo(hero.playerX+1, hero.playerY),2);
+                hero.currentDirection = 2;
                 flip = false;
-            if (canMoveTo(playerX + 1, playerY)) {
-                targetX = playerX + 1;
-                targetY = playerY;
+            if (canMoveTo(hero.playerX + 1, hero.playerY)) {
+                hero.targetX = hero.playerX + 1;
+                hero.targetY = hero.playerY;
                 moved = true;
             }
-            currentAnimation = hero.walk(moved,playerDirection);
+            currentAnimation = hero.walk(moved,hero.currentDirection);
         } else if (Gdx.input.isKeyPressed(Input.Keys.E)) {
             onRepeat=false;
             currentAnimation = hero.useTool(3);
-            isActing=true;
+            hero.isActing=true;
             stateTime = 0;
             didHit=true;
-            hit(playerDirection,playerX,playerY);
+            hit(hero.currentDirection,hero.playerX,hero.playerY);
         } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             transfer();
         }
         else{
-            currentAnimation = hero.walk(false,playerDirection);
+            currentAnimation = hero.walk(false,hero.currentDirection);
         }
 
         if (moved) {
-            isMoving = true;
-//            currentAnimation = walkAnimations[playerDirection];
+            hero.isMoving = true;
+//            currentAnimation = walkAnimations[hero.currentDirection];
         }
     }
 
@@ -395,17 +385,17 @@ public class FarmScreen implements Screen {
         }
     }
     public void transfer(){
-        Cell cell=Finder.findCellByCoordinates(playerX,playerY,this.farm);
+        Cell cell=Finder.findCellByCoordinates(hero.playerX,hero.playerY,this.farm);
         if(cell.getObjectMap() instanceof Door) {
             for (int i = -1; i < 2; i++) {
                 for (int j = -1; j < 2; j++) {
-                    if (Finder.findCellByCoordinates(playerX + i, playerY + j, this.farm).getObjectMap() instanceof Greenhouse) {
+                    if (Finder.findCellByCoordinates(hero.playerX + i, hero.playerY + j, this.farm).getObjectMap() instanceof Greenhouse) {
 
                         ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new GreenHouseScreen(this, new GreenhouseMap(0, 0), player));
-                    } else if (Finder.findCellByCoordinates(playerX + i, playerY + j, this.farm).getObjectMap() instanceof Cottage) {
+                    } else if (Finder.findCellByCoordinates(hero.playerX + i, hero.playerY + j, this.farm).getObjectMap() instanceof Cottage) {
                         ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new CottageScreen(this, new CottageMap(0, 0), player));
-                    }else if (Finder.findCellByCoordinates(playerX + i, playerY + j, this.farm).getObjectMap() instanceof Barn ) {
-                        Barn barn = (Barn) Finder.findCellByCoordinates(playerX + i, playerY + j, this.farm).getObjectMap();
+                    }else if (Finder.findCellByCoordinates(hero.playerX + i, hero.playerY + j, this.farm).getObjectMap() instanceof Barn ) {
+                        Barn barn = (Barn) Finder.findCellByCoordinates(hero.playerX + i, hero.playerY + j, this.farm).getObjectMap();
                         ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new BarnScreen(this, new BarnMap(0,0,barn.getBarnType()), player));
                     }
                 }

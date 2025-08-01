@@ -17,7 +17,7 @@ public class Hero {
     private TextureRegion[][] toolsActs_Back;
     private TextureRegion[][] toolsActs_Side;
     private Farm farm;
-    private int currentDirection=3;
+    public int currentDirection=3;
 
     public int playerX;
     public int playerY;
@@ -26,6 +26,7 @@ public class Hero {
     public float renderX;
     public float renderY;
     public boolean isMoving = false;
+    public boolean isActing = false;
     public float stateTime = 0f;
     public Animation<TextureRegion> currentAnimation;
 

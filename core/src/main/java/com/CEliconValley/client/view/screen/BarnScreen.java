@@ -43,10 +43,7 @@ public class BarnScreen implements Screen {
     private final SpriteBatch batch;
     private final TextureRegion background;
     private final BarnMap barn;
-    private Animation<TextureRegion> currentAnimation;
-    private int playerDirection = 3;
-    private boolean isActing = false;
-    private boolean onRepeat = false;
+    private boolean onRepeat = true;
     private ArrayList<AnimalSprite> animalSprites;
 
     private final OrthographicCamera camera;
@@ -110,7 +107,7 @@ public class BarnScreen implements Screen {
         this.hero.targetY = hero.playerY;
         this.hero.renderX = hero.playerX * CELL_SIZE;
         this.hero.renderY = hero.playerY * CELL_SIZE;
-        this.hero.currentAnimation = hero.walk(false, playerDirection);
+        this.hero.currentAnimation = hero.walk(false, hero.currentDirection);
         for (AnimalSprite animalSprite : this.animalSprites) {
             animalSprite.currentAnimation = animalSprite.walk(false, animalSprite.currentDirection);
             animalSprite.renderX = animalSprite.x*CELL_SIZE;
@@ -128,11 +125,9 @@ public class BarnScreen implements Screen {
            if(animalSprite.reachedDestination() && !animalSprite.randomSetter){
                int delayTime = new Random().nextInt(1000,5000);
                animalSprite.randomSetter = true;
-               System.out.println("before inside of here!");
                new Timer().schedule(new TimerTask() {
                    @Override
                    public void run() {
-                       System.out.println("inside of here!");
                        animalSprite.setRandomPoint();
                        animalSprite.randomSetter = false;
                        this.cancel();
@@ -145,13 +140,6 @@ public class BarnScreen implements Screen {
            animalSprite.targetY = node.y;
            animalSprite.currentDirection = node.getDirection() != 0 ? node.getDirection() : animalSprite.currentDirection;
            animalSprite.isMoving = true;
-           animalSprite.walk(true, animalSprite.currentDirection);
-           System.out.println("target: "+animalSprite.targetX + " " + animalSprite.targetY);
-           System.out.println("current: "+animalSprite.x + " " + animalSprite.y);
-           System.out.println("random: "+animalSprite.randomX + " " + animalSprite.randomY);
-            System.out.println("direction: "+animalSprite.currentDirection);
-           System.out.println();
-
         }
     }
 
@@ -191,11 +179,11 @@ public class BarnScreen implements Screen {
         }
         animalSprites.forEach(animalSprite -> {
             if(animalSprite.isMoving){
-                float moveAmount = 600 * delta;
+                float moveAmount = 400 * delta;
 
                 float targetPixelX = animalSprite.targetX * CELL_SIZE;
                 float targetPixelY = animalSprite.targetY * CELL_SIZE;
-
+                animalSprite.currentAnimation = animalSprite.walk(true, animalSprite.currentDirection);
                 if (animalSprite.renderX < targetPixelX) {
                     animalSprite.renderX += moveAmount;
                     if (animalSprite.renderX > targetPixelX) animalSprite.renderX = targetPixelX;
@@ -203,6 +191,7 @@ public class BarnScreen implements Screen {
                     animalSprite.renderX -= moveAmount;
                     if (animalSprite.renderX < targetPixelX) animalSprite.renderX = targetPixelX;
                 }
+
 
                 if (animalSprite.renderY < targetPixelY) {
                     animalSprite.renderY += moveAmount;
@@ -217,6 +206,7 @@ public class BarnScreen implements Screen {
                     animalSprite.y = animalSprite.targetY;
                     // TODO need to change the animaldata as well perhaps
                     animalSprite.isMoving = false;
+                    animalSprite.currentAnimation = animalSprite.walk(false, animalSprite.currentDirection);
                 }
             }
         });
@@ -256,66 +246,66 @@ public class BarnScreen implements Screen {
     }
 
     private void handleInput() {
-        if (isActing||hero.isMoving) return;
+        if (hero.isActing||hero.isMoving) return;
 
         boolean moved = false;
         onRepeat=true;
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 //            hero.currentAnimation = hero.walk(canMoveTo(hero.playerX, hero.playerY+1),1);
-            playerDirection = 1;
+            hero.currentDirection = 1;
             if (canMoveTo(hero.playerX, hero.playerY + 1)) {
                 hero.targetX = hero.playerX;
                 hero.targetY = hero.playerY + 1;
                 moved = true;
             }
-            hero.currentAnimation = hero.walk(moved,playerDirection);
+            hero.currentAnimation = hero.walk(moved,hero.currentDirection);
 
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
 //            hero.currentAnimation = hero.walk(canMoveTo(hero.playerX, hero.playerY-1),3);
-            playerDirection = 3;
+            hero.currentDirection = 3;
 
             if (canMoveTo(hero.playerX, hero.playerY - 1)) {
                 hero.targetX = hero.playerX;
                 hero.targetY = hero.playerY - 1;
                 moved = true;
             }
-            hero.currentAnimation = hero.walk(moved,playerDirection);
+            hero.currentAnimation = hero.walk(moved,hero.currentDirection);
 
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 //            hero.currentAnimation = hero.walk(canMoveTo(hero.playerX-1, hero.playerY),4);
-            playerDirection = 4;
+            hero.currentDirection = 4;
             if (canMoveTo(hero.playerX - 1, hero.playerY)) {
                 hero.targetX = hero.playerX - 1;
                 hero.targetY = hero.playerY;
 //                flip = true;
                 moved = true;
             }
-            hero.currentAnimation = hero.walk(moved,playerDirection);
+            hero.currentAnimation = hero.walk(moved,hero.currentDirection);
 
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
 //            hero.currentAnimation = hero.walk(canMoveTo(hero.playerX+1, hero.playerY),2);
-            playerDirection = 2;
+            hero.currentDirection = 2;
 //            flip = false;
             if (canMoveTo(hero.playerX + 1, hero.playerY)) {
                 hero.targetX = hero.playerX + 1;
                 hero.targetY = hero.playerY;
                 moved = true;
             }
-            hero.currentAnimation = hero.walk(moved,playerDirection);
+            hero.currentAnimation = hero.walk(moved,hero.currentDirection);
 
         } else if (Gdx.input.isKeyPressed(Input.Keys.E)) {
             onRepeat=false;
             hero.currentAnimation = hero.useTool(3);
-            isActing=true;
+            hero.isActing=true;
             hero.stateTime = 0;
 //            didHit=true;
-//            hit(playerDirection,hero.playerX,hero.playerY);
+//            hit(hero.currentDirection,hero.playerX,hero.playerY);
         } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             transfer();
         }
         else{
-            hero.currentAnimation = hero.walk(false,playerDirection);
+            hero.currentAnimation = hero.walk(false,hero.currentDirection);
             animalSprites.forEach(animalSprite -> {
                 animalSprite.currentAnimation = animalSprite.walk(false, animalSprite.currentDirection);
             });
@@ -324,7 +314,7 @@ public class BarnScreen implements Screen {
         if (moved) {
             hero.isMoving = true;
 
-//            hero.currentAnimation = walkAnimations[playerDirection];
+//            hero.currentAnimation = walkAnimations[hero.currentDirection];
         }
 
 

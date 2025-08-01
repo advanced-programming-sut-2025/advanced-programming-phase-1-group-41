@@ -40,8 +40,8 @@ public class BuildingSpawner {
     }
 
     public boolean renderBuildings(SpriteBatch batch, Cell cell, float passiveState) {
-        float x = (float)(cell.getX() * 160);
-        float y = (float)(cell.getY() * 160);
+        float x = (float)(cell.getX() * CELL_SIZE);
+        float y = (float)(cell.getY() * CELL_SIZE);
         if (cell.getObjectMap() instanceof Building) {
             batch.draw(FarmScreen.grassTexture, x, y, CELL_SIZE, CELL_SIZE);
         }
