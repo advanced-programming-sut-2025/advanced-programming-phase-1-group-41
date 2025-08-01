@@ -5,6 +5,7 @@ import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.buildings.Building;
+import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.locations.Village;
@@ -51,6 +52,9 @@ public class Coop implements Building {
                 Cell cell = Finder.findCellByCoordinates(i, yWall, farm);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
+                if(i == x + 1 && yWall == y ){
+                    cell.setObjectMap(new Door());
+                }
             }
             yWall+=size;
         }
@@ -78,6 +82,8 @@ public class Coop implements Building {
         this.x = x;
         this.y = y;
         int size = 5 + coopType.getCapacity() / 4;
+        anchorX=x+size-1;
+        anchorY=y+1;
         int xWall;
         int yWall;
         this.coopType = coopType;
@@ -87,6 +93,9 @@ public class Coop implements Building {
                 Cell cell = Finder.findCellByCoordinates(i, yWall, farm);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
+                if(i == x + 1 && yWall == y ){
+                    cell.setObjectMap(new Door());
+                }
             }
             yWall+=size;
         }
@@ -168,7 +177,7 @@ public class Coop implements Building {
 
     @Override
     public int getAnchorX() {
-        return 0;
+        return anchorX;
     }
 
     @Override
@@ -178,6 +187,6 @@ public class Coop implements Building {
 
     @Override
     public int getAnchorY() {
-        return 0;
+        return anchorY;
     }
 }

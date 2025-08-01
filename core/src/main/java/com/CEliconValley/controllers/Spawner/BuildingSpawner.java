@@ -12,6 +12,7 @@ import com.CEliconValley.models.buildings.Cottage;
 import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
 import com.CEliconValley.models.buildings.GreenHouse.WaterTank;
 import com.CEliconValley.models.buildings.animalContainer.Barn;
+import com.CEliconValley.models.buildings.animalContainer.Coop;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.client.view.screen.FarmScreen;
 import com.badlogic.gdx.graphics.Texture;
@@ -84,7 +85,17 @@ public class BuildingSpawner {
                 batch.draw(FarmScreen.grassTexture, x, y, CELL_SIZE, CELL_SIZE);
                 batch.draw(barnFrame, x - CELL_SIZE*6, y, CELL_SIZE*7, CELL_SIZE*8);
             }
+        }else if (tmpCell != null && tmpCell.getObjectMap() instanceof Coop) {
+            Coop coop = (Coop) tmpCell.getObjectMap();
+            if (cell.getX() - 1 == coop.getAnchorX() && cell.getY() + 1 == coop.getAnchorY()) {
+                int frameWidth = this.coopTexture.getWidth();
+                int frameHeight = this.coopTexture.getHeight();
+                TextureRegion coopFrame = new TextureRegion(this.coopTexture, 0, 0, frameWidth, frameHeight);
+                batch.draw(FarmScreen.grassTexture, x, y, CELL_SIZE, CELL_SIZE);
+                batch.draw(coopFrame, x - CELL_SIZE * 6, y, CELL_SIZE * 7, CELL_SIZE * 8);
+            }
         }
+
 
         return false;
     }
