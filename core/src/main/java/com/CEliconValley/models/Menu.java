@@ -17,8 +17,7 @@ public enum Menu {
     Exit(new ExitMenu(),"ExitMenu"),
     Game(new GameMenu(),"GameMenu"),
     Trade(new TradeMenu(),"TradeMenu"),
-//    Lobby(new Lobby(new LobbyController()),"Lobby")
-    Lobby(new LobbyScreen(new LobbyController(),"Test",false,true,"TestPass"),"Lobby"),
+    Lobby(new LobbyScreen(new LobbyController()), "Lobby"),
     ;
 
 
@@ -59,6 +58,8 @@ public enum Menu {
                 Menu.Profile.menu = new ProfileMenuView(new ProfileMenuController());
             } else if(menu == Menu.Main.menu) {
                 Menu.Main.menu = new MainMenuView(new MainMenuController());
+            } if(menu == Menu.Lobby.menu){
+                Menu.Lobby.menu = new LobbyScreen(new LobbyController());
             }
             if(menu == Menu.Main.menu || menu == Profile.menu || menu == Authentication.menu){
                 com.CEliconValley.Main.getMain().setScreen(AppClient.getMenu().getScreen());

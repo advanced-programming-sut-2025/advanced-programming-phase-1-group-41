@@ -2,11 +2,9 @@ package com.CEliconValley.client.view;
 
 import com.CEliconValley.GameAssetManager;
 import com.CEliconValley.Main;
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.controllers.LobbyController;
-import com.CEliconValley.models.App;
-import com.CEliconValley.models.Finder;
-import com.CEliconValley.models.Player;
-import com.CEliconValley.models.User;
+import com.CEliconValley.models.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
@@ -23,11 +21,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import java.util.ArrayList;
 
 public class LobbyScreen implements Screen {
-    private String name;
-    private String ID;
-    private boolean isPrivate;
-    private boolean isVisible;
-    private String password;
+
+    private final Lobby lobby;
+
     private float timer=0;
     private ArrayList<Player> players;
     private final LobbyController controller;
@@ -45,24 +41,25 @@ public class LobbyScreen implements Screen {
     public TextButton startGameButton;
     public  TextButton exitButton;
 
-    private final Table mainTable;
-    private final Table teamTable;
+    private Table mainTable;
+    private Table teamTable;
 
 //    public Lobby(LobbyController controller) {
 //        this.controller = controller;
 //        mainTable = new Table();
 //    }
 
-    public LobbyScreen(LobbyController controller, String name, boolean isPrivate, boolean isVisible, String password) {
-        this.name = name;
-        this.isPrivate = isPrivate;
-        this.isVisible = isVisible;
-        this.password = password;
+    public LobbyScreen(LobbyController controller) {
+        lobby = AppClient.getCurrentLobby();
         this.controller=controller;
         players=new ArrayList<>();
         User user = Finder.getUserByUsername("user1");
         players.add(new Player(App.getCurrentUser() == null ? user:App.getCurrentUser()));
         System.out.println(players.get(0).getUser().getUsername());
+    }
+
+
+    private void buildUI() {
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
 
         label1=new Label("PLAYER1", skin);
@@ -88,34 +85,12 @@ public class LobbyScreen implements Screen {
         teamTable.add(label3).padLeft(550);
         teamTable.add(label4).padLeft(550).expandX().right();
 
-        nameText = new Label(name, skin);
-        ID=giveID();
-        idText = new Label(ID, skin);
-        passText = new Label(password, skin);
+        nameText = new Label(lobby.getLobbyName(), skin);
+        idText = new Label(lobby.getLobbyID(), skin);
+        passText = new Label(lobby.getPassword(), skin);
         App.addToLobbies(this);
         controller.setView(this);
-        buildUI();
-    }
-    public String getID(){
-        return ID;
-    }
 
-    private String giveID() {
-            int number;
-            number = MathUtils.random(10000, 99999);
-            if(!App.lobbiesScreen.isEmpty()) {
-                for (LobbyScreen lobbyScreen : App.lobbiesScreen) {
-                    String theID = String.valueOf(number);
-                    if (lobbyScreen.getID().equals(theID)) {
-                        return giveID();
-                    }
-                }
-            }
-            return String.valueOf(number);
-
-    }
-
-    private void buildUI() {
         mainTable.clear();
 
         Table topContent = new Table();
@@ -132,8 +107,6 @@ public class LobbyScreen implements Screen {
             .expand()
             .fill();
 
-
-
         controller.setupListeners();
     }
 
@@ -142,6 +115,8 @@ public class LobbyScreen implements Screen {
 
     @Override
     public void show() {
+        buildUI();
+
         stage = new Stage(new ScreenViewport(), Main.getBatch());
         Gdx.input.setInputProcessor(stage);
 
