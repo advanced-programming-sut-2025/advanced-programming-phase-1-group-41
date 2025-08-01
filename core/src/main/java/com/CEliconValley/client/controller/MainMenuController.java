@@ -25,12 +25,17 @@ public class MainMenuController {
     }
 
     public void setupListeners() {
-        view.getStartGameButton().addListener(new ClickListener() {
+        view.getJoinLobbyButton().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                AppClient.setMenu(Menu.Lobby);
-                Menu.Lobby.resetMenu();
-                Main.getMain().setScreen(AppClient.getMenu().getScreen());
+                view.showJoinLobbyForm();
+            }
+        });
+
+        view.getNewLobbyButton().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                view.showNewLobbyForm();
             }
         });
 
@@ -57,7 +62,35 @@ public class MainMenuController {
                 Main.getMain().setScreen(AppClient.getMenu().getScreen());
             }
         });
+
     }
+
+    public void handleJoinLobby() {
+        AppClient.setMenu(Menu.Lobby);
+        Menu.Lobby.resetMenu();
+        Main.getMain().setScreen(AppClient.getMenu().getScreen());
+
+        String id = view.getLobbyIdField().getText();
+
+        //TODO join lobby
+    }
+
+    public void handleNewLobby() {
+        AppClient.setMenu(Menu.Lobby);
+        Menu.Lobby.resetMenu();
+        Main.getMain().setScreen(AppClient.getMenu().getScreen());
+
+        String name = view.getLobbyNameField().getText();
+        boolean isVisible = view.getIsVisibleCheckBox().isChecked();
+        boolean isPrivate = view.getIsPrivateCheckBox().isChecked();
+        String password = null;
+        if(isPrivate){
+            password = view.getPasswordField().getText();
+        }
+
+        //TODO new lobby
+    }
+
     public void savePlayer(Player player) {
         MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
         Datastore datastore = Morphia.createDatastore(mongoClient, "ProjectDB");
