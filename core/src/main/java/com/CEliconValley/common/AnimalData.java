@@ -39,7 +39,7 @@ public class AnimalData {
         this.isPetToday = animal.isPetToday();
         this.isFedToday = animal.isFedToday();
         this.isHome = animal.isHome();
-        this.productName = animal.getProduct().getName();
+        this.productName = animal.getProduct() == null ? null : animal.getProduct().getName();
         this.daysUntilProduce = animal.getDaysUntilProduce();
         this.sizeNeededInt = animal.getSizeNeeded().ordinal();
         this.breedInt = animal.getBreed().ordinal();
@@ -101,5 +101,62 @@ public class AnimalData {
             }
         }
         return null;
+    }
+
+
+    public String getAnimalType() {
+        return animalType;
+    }
+
+    public int getBreedInt() {
+        return breedInt;
+    }
+
+    public int getBuyPrice() {
+        return buyPrice;
+    }
+
+    public int getDaysUntilProduce() {
+        return daysUntilProduce;
+    }
+
+    public int getFriendShip() {
+        return friendShip;
+    }
+
+    public boolean isFedToday() {
+        return isFedToday;
+    }
+
+    public boolean isHome() {
+        return isHome;
+    }
+
+    public boolean isPetToday() {
+        return isPetToday;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public int getSizeNeededInt() {
+        return sizeNeededInt;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }

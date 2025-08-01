@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import static com.CEliconValley.models.locations.FarmScreen.CELL_SIZE;
 
 public class InventoryRenderer {
     private final Inventory inventory;
