@@ -49,12 +49,12 @@ public class BuildingSpawner {
         Cell tmpCell = Finder.findCellByCoordinates(cell.getX() - 1, cell.getY() + 1, this.farm);
         if (tmpCell != null && tmpCell.getObjectMap() instanceof Cottage) {
             Cottage cottage = (Cottage)tmpCell.getObjectMap();
-            batch.draw(FarmScreen.grassTexture, x, y, 160.0F, 160.0F);
+            batch.draw(FarmScreen.grassTexture, x, y, CELL_SIZE, CELL_SIZE);
             if (cell.getX() - 1 == cottage.getAnchorX() && cell.getY() + 1 == cottage.getAnchorY()) {
                 int frameWidth = this.cottageTexture.getWidth();
                 int frameHeight = this.cottageTexture.getHeight();
                 TextureRegion cottageFrame = new TextureRegion(this.cottageTexture, 0, 0, frameWidth, frameHeight);
-                batch.draw(FarmScreen.grassTexture, x, y, 160.0F, 160.0F);
+                batch.draw(FarmScreen.grassTexture, x, y, CELL_SIZE, CELL_SIZE);
                 batch.draw(cottageFrame, x - CELL_SIZE*5, y, CELL_SIZE*6, CELL_SIZE*6);
             }
         } else if (tmpCell != null && tmpCell.getObjectMap() instanceof Greenhouse) {
