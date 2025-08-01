@@ -41,7 +41,6 @@ public class Lobby {
         this.lobbyName = lobbyName;
         this.playerNames = Collections.synchronizedSet(new HashSet<>());
         this.admin = admin;
-        AppClient.getLobbies().add(this);
         App.lobbies.add(this);
         addPlayer(admin);
     }
@@ -91,6 +90,7 @@ public class Lobby {
         GameMessage<Lobby> msg = new GameMessage<>("new-lobby", this);
         String json = new Gson().toJson(msg);
         App.getServer().broadcast(json);
+//        System.out.println("Server: " + msg);
     }
 
     public Result addPlayer(String playerName) {

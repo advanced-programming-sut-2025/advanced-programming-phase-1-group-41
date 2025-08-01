@@ -85,9 +85,11 @@ public class LobbyScreen implements Screen {
 
         lobby = AppClient.getCurrentLobby();
 
-        nameText = new Label(lobby.getLobbyName(), skin);
-        idText = new Label(lobby.getLobbyID(), skin);
-        passText = new Label(lobby.getPassword(), skin);
+        nameText = new Label("Name: " + lobby.getLobbyName(), skin);
+        idText = new Label("ID: " + lobby.getLobbyID(), skin);
+        if(lobby.getPassword() != null && !lobby.getPassword().isEmpty()) {
+            passText = new Label("Pass" + lobby.getPassword(), skin);
+        }
         App.addToLobbies(this);
         controller.setView(this);
 
@@ -98,7 +100,9 @@ public class LobbyScreen implements Screen {
         startGameButton.setVisible(false);
         topContent.add(nameText).width(300).pad(20).row();
         topContent.add(idText).width(300).pad(20).row();
-        topContent.add(passText).width(300).pad(20).row();
+        if(passText!=null) {
+            topContent.add(passText).width(300).pad(20).row();
+        }
         topContent.add(exitButton).width(300).pad(20).row();
 
         mainTable.top().add(topContent).expand().fill().row();

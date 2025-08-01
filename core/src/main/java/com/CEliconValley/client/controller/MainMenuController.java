@@ -120,20 +120,19 @@ public class MainMenuController {
                 return;
             }
             assert AppClient.getUserData() != null;
-            lobby = new Lobby(name, password, AppClient.getUserData().getUsername(), isVisible);
+//            lobby = new Lobby(name, password, AppClient.getUserData().getUsername(), isVisible);
         } else{
             assert AppClient.getUserData() != null;
-            lobby = new Lobby(name, AppClient.getUserData().getUsername(), isVisible);
+//            lobby = new Lobby(name, AppClient.getUserData().getUsername(), isVisible);
         }
 //        AppClient.getLobbies().add(lobby);
 
-        assert AppClient.getUserData() != null;
         GameMessage<MakeLobbyInfo> msg = new GameMessage<>("make-lobby",
             new MakeLobbyInfo(isPrivate, isVisible, name, password, AppClient.getUserData().getUsername()));
         String json = new Gson().toJson(msg);
         AppClient.getClient().send(json);
 
-        AppClient.setCurrentLobby(lobby);
+//        AppClient.setCurrentLobby(lobby);
         Menu.Lobby.resetMenu();
         AppClient.setMenu(Menu.Lobby);
         Main.getMain().setScreen(AppClient.getMenu().getScreen());

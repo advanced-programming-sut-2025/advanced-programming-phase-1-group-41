@@ -14,12 +14,13 @@ public class LobbyHandler {
             case "make-lobby" -> {
                 GameMessage<MakeLobbyInfo> msg = gson.fromJson(message, new TypeToken<GameMessage<MakeLobbyInfo>>() {}.getType());
                 MakeLobbyInfo lobbyInfo = msg.body;
-//                Lobby lobby;
-//                if(lobbyInfo.isPrivate){
-//                    lobby = new Lobby(lobbyInfo.lobbyName, lobbyInfo.admin, lobbyInfo.password, lobbyInfo.isVisible);
-//                }else{
-//                    lobby = new Lobby(lobbyInfo.lobbyName, lobbyInfo.admin, lobbyInfo.isVisible);
-//                }
+//                System.out.println("Lobby: " + msg);
+                Lobby lobby;
+                if(lobbyInfo.isPrivate){
+                    lobby = new Lobby(lobbyInfo.lobbyName, lobbyInfo.admin, lobbyInfo.password, lobbyInfo.isVisible);
+                }else{
+                    lobby = new Lobby(lobbyInfo.lobbyName, lobbyInfo.admin, lobbyInfo.isVisible);
+                }
 //                AppClient.setCurrentLobby(lobby);
             }
         }

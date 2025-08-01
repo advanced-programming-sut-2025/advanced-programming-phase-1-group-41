@@ -33,8 +33,8 @@ public class GameData {
         this.farmsData = new ArrayList<>();
         this.playersData = new ArrayList<>();
         this.roundEnergy = game.getRoundEnergy();
-        this.loaderName = game.getLoader().getUser().getUsername();
-        this.currentPlayerName = game.getCurrentPlayer().getUser().getUsername();
+        this.loaderName = game.getLoader().getUser() == null ? null : game.getLoader().getUser().getUsername();
+        this.currentPlayerName = game.getCurrentPlayer().getUser() == null ? null : game.getCurrentPlayer().getUser().getUsername();
         fillPlayers(game);
         fillFarms(game);
         this.villageData = new VillageData(game.getVillage());

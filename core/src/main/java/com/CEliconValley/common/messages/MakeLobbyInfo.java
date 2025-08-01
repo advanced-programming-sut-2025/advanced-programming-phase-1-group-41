@@ -14,4 +14,14 @@ public class MakeLobbyInfo {
         this.admin = admin;
     }
 
+    @Override
+    public String toString() {
+        return "MakeLobbyInfo{" +
+            "lobbyName='" + lobbyName + '\'' +
+            ", isVisible=" + isVisible +
+            ", isPrivate=" + isPrivate +
+            ", password='" + password + '\'' +
+            ", admin='" + admin + '\'' +
+            '}';
+    }
 }
