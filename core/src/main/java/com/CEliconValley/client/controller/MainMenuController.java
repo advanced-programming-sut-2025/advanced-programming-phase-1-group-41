@@ -3,6 +3,7 @@ package com.CEliconValley.client.controller;
 import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.messages.GameMessage;
+import com.CEliconValley.common.messages.JoinLobbyCred;
 import com.CEliconValley.common.messages.MakeLobbyInfo;
 import com.CEliconValley.database.UserDB;
 import com.CEliconValley.models.*;
@@ -73,31 +74,12 @@ public class MainMenuController {
             view.getJoinLobbyMessage().setText("Id field is empty!");
             return;
         }
-        for(Lobby lobby : AppClient.getLobbies()){
-            if(lobby.getLobbyID().equals(id) && lobby.isPrivate()){
-                if(lobby.getPassword().equals(view.getLobbyPasswordField().getText())){
-                    AppClient.setMenu(Menu.Lobby);
-                    Menu.Lobby.resetMenu();
-                    Main.getMain().setScreen(AppClient.getMenu().getScreen());
-                    AppClient.setCurrentLobby(lobby);
-                    lobby.addPlayer(AppClient.getUserData().getUsername());
-                } else{
-                    if(view.getLobbyPasswordField().getText().isEmpty()){
-                        view.getJoinLobbyMessage().setText("Private lobby, please enter the password.");
-                        return;
-                    }
-                    view.getJoinLobbyMessage().setText("Wrong password");
-                    return;
-                }
-            } else if(lobby.getLobbyID().equals(id)) {
-                AppClient.setMenu(Menu.Lobby);
-                Menu.Lobby.resetMenu();
-                Main.getMain().setScreen(AppClient.getMenu().getScreen());
-                AppClient.setCurrentLobby(lobby);
-                lobby.addPlayer(AppClient.getUserData().getUsername());
-            }
-        }
-        view.getJoinLobbyMessage().setText("No lobby found");
+        String username = AppClient.getUserData().getUsername();
+        String password = view.getLobbyPasswordField().getText();
+        GameMessage<JoinLobbyCred> msg = new GameMessage<>("join-lobby",
+            new JoinLobbyCred(id, username, password));
+        String json = new Gson().toJson(msg);
+        AppClient.getClient().send(json);
     }
 
     public void handleNewLobby() {

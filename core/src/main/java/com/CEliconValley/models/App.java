@@ -22,7 +22,6 @@ public class App {
     public final static ArrayList<User> users = new ArrayList<>();
     public final static ArrayList<Game> games = new ArrayList<>();
     public final static HashMap<ObjectId, User> userMap = new HashMap<>();
-    public static ArrayList<LobbyScreen> lobbiesScreen = new ArrayList<>();
     public static ArrayList<Lobby> lobbies = new ArrayList<>();
     public static Set<OnlineData> onlinePlayers = new HashSet<>();
     private static User currentUser;
@@ -30,9 +29,6 @@ public class App {
     private static GameServer server;
     private static GameClient client;
 
-    public static void addToLobbies(LobbyScreen lobbyScreen){
-        lobbiesScreen.add(lobbyScreen);
-    }
 
     public static void setupServer(){
         server = new GameServer();

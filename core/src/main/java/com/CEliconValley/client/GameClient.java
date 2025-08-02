@@ -1,6 +1,7 @@
 package com.CEliconValley.client;
 
 import com.CEliconValley.Main;
+import com.CEliconValley.client.view.MainMenuView;
 import com.CEliconValley.client.view.screen.FarmScreen;
 import com.CEliconValley.common.AppData;
 import com.CEliconValley.common.GameData;
@@ -52,87 +53,124 @@ public class GameClient extends WebSocketClient {
     @Override
     public void onMessage(String message) {
         Gson gson = new Gson();
-        try{
-            GameMessage<Object> genericMsg = gson.fromJson(message, new TypeToken<GameMessage<Object>>() {}.getType());
+        try {
+            GameMessage<Object> genericMsg = gson.fromJson(message, new TypeToken<GameMessage<Object>>() {
+            }.getType());
             JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
             JsonElement bodyElement = jsonObject.get("body");
             GameMessage<SuccessMessage> successMsg = null;
             GameMessage<ErrorMessage> errorMsg = null;
-            if(bodyElement.getAsJsonObject().has("success")) {
-                successMsg = gson.fromJson(message, new TypeToken<GameMessage<SuccessMessage>>() {}.getType());
+            if (bodyElement.getAsJsonObject().has("success")) {
+                successMsg = gson.fromJson(message, new TypeToken<GameMessage<SuccessMessage>>() {
+                }.getType());
+            } else if (bodyElement.getAsJsonObject().has("error")) {
+                errorMsg = gson.fromJson(message, new TypeToken<GameMessage<ErrorMessage>>() {
+                }.getType());
             }
-            else if(bodyElement.getAsJsonObject().has("error")) {
-                errorMsg = gson.fromJson(message, new TypeToken<GameMessage<ErrorMessage>>() {}.getType());
-            }
-            if(successMsg != null){
+            if (successMsg != null) {
                 Response.successResponse(successMsg.body);
-            }else if(errorMsg != null){
+            } else if (errorMsg != null) {
                 Response.errorResponse(errorMsg.body);
-            }
-            switch (genericMsg.type){
-                case "login_response", "forgotpass_response" ,
-                     "fp_response","profile_response" -> {
-                    System.out.println("Cmessage: "+message);
-                }
+            } else {
+                switch (genericMsg.type) {
+                    case "login_response", "forgotpass_response",
+                         "fp_response", "profile_response" -> {
+                        System.out.println("Cmessage: " + message);
+                    }
 
-                case "gamedata" -> {
-                    GameMessage<GameData> gameDataMessage = gson.fromJson(message, new TypeToken<GameMessage<GameData>>() {}.getType());
-                    Gdx.app.postRunnable(() -> {
-                        AppClient.setGameData(gameDataMessage.body);
-                    });
-                    System.out.println("Cmessage: updated gamedata");
-                }
-                case "new-game" -> {
-                    GameMessage<GameData> gameDataMessage = gson.fromJson(message, new TypeToken<GameMessage<GameData>>() {}.getType());
-                    Gdx.app.postRunnable(() -> {
-                        AppClient.setMenu(Menu.Game);
-                        Menu.Game.resetMenu();
-                        AppClient.setGameData(gameDataMessage.body);
-                        ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new FarmScreen(new Farm(1),
-                            gameDataMessage.body.getPlayersData().get(0).getPlayer()));
-                    });
-                }
-                case "new-lobby" -> {
-                    GameMessage<Lobby> msg = gson.fromJson(message, new TypeToken<GameMessage<Lobby>>() {}.getType());
-                    Gdx.app.postRunnable(() -> {
-                        AppClient.getLobbies().add(msg.body);
-                        AppClient.setCurrentLobby(msg.body);
+                    case "gamedata" -> {
+                        GameMessage<GameData> gameDataMessage = gson.fromJson(message, new TypeToken<GameMessage<GameData>>() {
+                        }.getType());
+                        Gdx.app.postRunnable(() -> {
+                            AppClient.setGameData(gameDataMessage.body);
+                        });
+                        System.out.println("Cmessage: updated gamedata");
+                    }
+                    case "new-game" -> {
+                        GameMessage<GameData> gameDataMessage = gson.fromJson(message, new TypeToken<GameMessage<GameData>>() {
+                        }.getType());
+                        Gdx.app.postRunnable(() -> {
+                            AppClient.setMenu(Menu.Game);
+                            Menu.Game.resetMenu();
+                            AppClient.setGameData(gameDataMessage.body);
+                            ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new FarmScreen(new Farm(1),
+                                gameDataMessage.body.getPlayersData().get(0).getPlayer()));
+                        });
+                    }
+                    case "new-lobby" -> {
+                        GameMessage<Lobby> msg = gson.fromJson(message, new TypeToken<GameMessage<Lobby>>() {
+                        }.getType());
+                        Gdx.app.postRunnable(() -> {
+                            AppClient.getLobbies().add(msg.body);
+                            if(AppClient.getMenu().getScreen() instanceof MainMenuView view){
+                                if(view.getJoinLobby()){
+                                    view.showJoinLobbyForm();
+                                }
+                            }
+                            System.out.println("updated lobbies in view");
+                        });
 
-                        Menu.Lobby.resetMenu();
-                        AppClient.setMenu(Menu.Lobby);
+                        System.out.println("Cmessage: updated lobby");
+                    }
+                    case "join-lobby" -> {
+                        GameMessage<Lobby> msg = gson.fromJson(message, new TypeToken<GameMessage<Lobby>>() {
+                        }.getType());
+                        Gdx.app.postRunnable(() -> {
+                            AppClient.getLobbies().add(msg.body);
+                            AppClient.setCurrentLobby(msg.body);
+                            Menu.Lobby.resetMenu();
+                            AppClient.setMenu(Menu.Lobby);
+                            Main.getMain().setScreen(AppClient.getMenu().getScreen());
+                        });
+                    }
+                    case "leave-lobby" -> {
+                        AppClient.setCurrentLobby(null);
+                        AppClient.setMenu(Menu.Main);
+                        Menu.Main.resetMenu();
                         Main.getMain().setScreen(AppClient.getMenu().getScreen());
-                    });
-
-                    System.out.println("Cmessage: updated lobby");
-                }
-                case "delete-lobby" -> {
-                    GameMessage<Lobby> msg = gson.fromJson(message, new TypeToken<GameMessage<Lobby>>() {}.getType());
-                    // maybe check if need to iterate annd remove
-                    AppClient.getLobbies().remove(msg.body);
-                    System.out.println("Cmessage: updated lobby");
-                }
-                case "handshake-data" -> {
-                    GameMessage<HandshakeData> msg = gson.fromJson(message, new TypeToken<GameMessage<HandshakeData>>() {}.getType());
-                    Gdx.app.postRunnable(() -> {
-                        AppClient.setLobbies(
-                            new HashSet<>(msg.body.getCurrentLobbies())
-                        );
-                        AppClient.setGames(null);
-                        AppClient.setOnlinePlayers(new HashSet<>(msg.body.getOnlinePlayers()));
-                    });
-                    System.out.println("Cmessage: "+message);
-                }
-                case "app-data" -> {
-                    GameMessage<AppData> msg = gson.fromJson(message, new TypeToken<GameMessage<AppData>>() {}.getType());
-                    Gdx.app.postRunnable(() -> {
-                        AppClient.setOnlinePlayers(new HashSet<>(msg.body.onlinePlayers));
-                    });
-                    System.out.println("Cmessage: "+message);
+                    }
+                    case "delete-lobby" -> {
+                        GameMessage<Lobby> msg = gson.fromJson(message, new TypeToken<GameMessage<Lobby>>() {
+                        }.getType());
+                        // maybe check if need to iterate annd remove
+                        Gdx.app.postRunnable(() -> {
+                            AppClient.getLobbies().remove(msg.body);
+                            if(AppClient.getMenu().getScreen() instanceof MainMenuView view){
+                                if(view.getJoinLobby()) {
+                                    view.showJoinLobbyForm();
+                                }
+                            }
+                        });
+                        System.out.println("Cmessage: updated lobby");
+                    }
+                    case "handshake-data" -> {
+                        GameMessage<HandshakeData> msg = gson.fromJson(message, new TypeToken<GameMessage<HandshakeData>>() {
+                        }.getType());
+                        Gdx.app.postRunnable(() -> {
+                            AppClient.setLobbies(
+                                new HashSet<>(msg.body.getCurrentLobbies())
+                            );
+                            AppClient.setGames(null);
+                            AppClient.setOnlinePlayers(new HashSet<>(msg.body.getOnlinePlayers()));
+                        });
+                        System.out.println("Cmessage: " + message);
+                    }
+                    case "app-data" -> {
+                        GameMessage<AppData> msg = gson.fromJson(message, new TypeToken<GameMessage<AppData>>() {
+                        }.getType());
+                        Gdx.app.postRunnable(() -> {
+                            AppClient.setOnlinePlayers(new HashSet<>(msg.body.onlinePlayers));
+                            if(AppClient.getMenu().getScreen() instanceof MainMenuView screen){
+                                screen.onlineplayersUpdate();
+                            }
+                        });
+                        System.out.println("Cmessage: " + message);
+                    }
                 }
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            System.out.println("CmessageE: "+message);
+            System.out.println("CmessageE: " + message);
         }
 //        try {
 //            GameData data = gson.fromJson(message, GameData.class);

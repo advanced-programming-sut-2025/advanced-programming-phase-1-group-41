@@ -19,7 +19,7 @@ public class AppClient {
     private static GameData gameData = null;
     public final static ArrayList<String> questions = new ArrayList<>();
     private static Set<Lobby> lobbies = new HashSet<>();
-    private static Lobby currentLobby = new Lobby();
+    private static Lobby currentLobby;
     private static Set<GameData> games = new HashSet<>();
     private static Set<OnlineData> onlinePlayers = new HashSet<>();
 

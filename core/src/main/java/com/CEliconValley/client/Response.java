@@ -1,5 +1,6 @@
 package com.CEliconValley.client;
 
+import com.CEliconValley.client.view.MainMenuView;
 import com.CEliconValley.common.UserData;
 import com.CEliconValley.common.messages.ErrorMessage;
 import com.CEliconValley.common.messages.SuccessMessage;
@@ -71,6 +72,10 @@ public class Response {
             case "profile_request" ->{
                 ProfileMenuView screen = (ProfileMenuView) AppClient.getMenu().getScreen();
                 screen.setMessage(message.error, Color.RED);
+            }
+            case "join-lobby" -> {
+                MainMenuView screen = (MainMenuView) AppClient.getMenu().getScreen();
+                screen.getJoinLobbyMessage().setText(message.error);
             }
         }
     }

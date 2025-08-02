@@ -18,7 +18,7 @@ public class ServerMessageRouter {
             case "game-popup", "new-game" -> {
                 GameHandler.handle(type, rawJson, conn, gson);
             }
-            case "make-lobby" -> {
+            case "make-lobby", "join-lobby", "leave-lobby" -> {
 //                System.out.println("In make-lobby");
                 LobbyHandler.handle(type, rawJson, conn, gson);
             }

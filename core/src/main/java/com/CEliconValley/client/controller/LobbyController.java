@@ -4,6 +4,7 @@ import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.messages.GameMessage;
+import com.CEliconValley.common.messages.LeaveLobbyCred;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.client.view.screen.FarmScreen;
@@ -44,9 +45,10 @@ public class LobbyController {
         view.getExitButton().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                AppClient.setMenu(Menu.Main);
-                Menu.Main.resetMenu();
-                Main.getMain().setScreen(AppClient.getMenu().getScreen());
+                GameMessage<LeaveLobbyCred> msg = new GameMessage<>("leave-lobby",
+                    new LeaveLobbyCred(view.lobby.getLobbyID(), AppClient.getUserData().getUsername()));
+                Gson gson = new Gson();
+                AppClient.getClient().send(gson.toJson(msg));
             }
         });
     }

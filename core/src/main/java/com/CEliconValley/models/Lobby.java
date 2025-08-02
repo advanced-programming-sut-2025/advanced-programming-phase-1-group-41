@@ -4,6 +4,7 @@ import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.messages.GameMessage;
 import com.badlogic.gdx.math.MathUtils;
 import com.google.gson.Gson;
+import org.java_websocket.WebSocket;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -22,27 +23,34 @@ public class Lobby {
     public Lobby() {
     }
 
-    public Lobby(String lobbyName, String password, String admin, boolean isVisible) {
+    public Lobby(String lobbyName, String password, String admin, boolean isVisible, WebSocket conn) {
         this.isPrivate = true;
         this.password = password;
         this.isVisible = isVisible;
-        makeLobby(lobbyName, admin);
+        makeLobby(lobbyName, admin, conn);
     }
 
-    public Lobby(String lobbyName, String admin, boolean isVisible){
+    public Lobby(String lobbyName, String admin, boolean isVisible, WebSocket conn){
         this.isPrivate = false;
         this.password = null;
         this.isVisible = isVisible;
-        makeLobby(lobbyName, admin);
+        makeLobby(lobbyName, admin, conn);
     }
 
-    private void makeLobby(String lobbyName, String admin){
+    private void makeLobby(String lobbyName, String admin, WebSocket conn){
         this.lobbyID = giveID();
         this.lobbyName = lobbyName;
         this.playerNames = Collections.synchronizedSet(new HashSet<>());
         this.admin = admin;
         App.lobbies.add(this);
         addPlayer(admin);
+        try{
+            Thread.sleep(500);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        GameMessage<Lobby> response = new GameMessage<>("join-lobby",this);
+        conn.send(new Gson().toJson(response));
     }
     private String giveID() {
         int number;

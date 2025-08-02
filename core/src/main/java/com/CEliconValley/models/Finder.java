@@ -239,4 +239,13 @@ public class Finder {
         }
         return null;
     }
+
+    public static Lobby getLobbyById(String id){
+        for (Lobby lobby : App.lobbies) {
+            if(lobby.getLobbyID().equals(id.trim())) {
+                return lobby;
+            }
+        }
+        return null;
+    }
 }

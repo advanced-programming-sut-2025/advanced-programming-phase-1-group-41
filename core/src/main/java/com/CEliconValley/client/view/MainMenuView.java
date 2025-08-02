@@ -50,6 +50,7 @@ public class MainMenuView implements Screen {
     private TextField lobbyPasswordField;
     private TextButton joinConfirmButton;
     private TextButton backButton;
+    private boolean joinLobby = false;
 
     // New Lobby fields
     private Label createLobbyMessage;
@@ -58,6 +59,10 @@ public class MainMenuView implements Screen {
     private FakeCheckbox isPrivateCheckBox;
     private TextField passwordField;
     private TextButton createLobbyButton;
+
+    ScrollPane scrollPane;
+
+    Table lobbyListTable;
 
     public MainMenuView(MainMenuController controller) {
         this.controller = controller;
@@ -84,18 +89,7 @@ public class MainMenuView implements Screen {
         buildUI();
     }
 
-    private void buildUI() {
-        mainTable.clear();
-        formTable.clear();
-
-        Table lobbyRow = new Table();
-        lobbyRow.add(newLobbyButton).padRight(10);
-        lobbyRow.add(joinLobbyButton).padRight(10);
-
-        mainTable.add(lobbyRow).width(450).pad(20).padTop(150).row();
-        mainTable.add(profileButton).width(300).pad(20).row();
-        mainTable.add(logoutButton).width(300).pad(20).row();
-
+    public void onlineplayersUpdate(){
         Set<OnlineData> onlinePlayers = AppClient.getOnlinePlayers();
         ArrayList<Color> colors = new ArrayList<>();
         colors.add(Color.GREEN);
@@ -111,19 +105,29 @@ public class MainMenuView implements Screen {
         }
         dataTable.setPosition(-Gdx.graphics.getWidth() / 4.5f, -Gdx.graphics.getHeight() / 20f);
 
+    }
+
+    private void buildUI() {
+        mainTable.clear();
+        formTable.clear();
+
+        Table lobbyRow = new Table();
+        lobbyRow.add(newLobbyButton).padRight(10);
+        lobbyRow.add(joinLobbyButton).padRight(10);
+
+        mainTable.add(lobbyRow).width(450).pad(20).padTop(150).row();
+        mainTable.add(profileButton).width(300).pad(20).row();
+        mainTable.add(logoutButton).width(300).pad(20).row();
+
+        onlineplayersUpdate();
+
         controller.setupListeners();
 
     }
 
-    public void showJoinLobbyForm() {
-        mainTable.setVisible(false);
-        formTable.clear();
+    public void updateLobbbies(){
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
-
-        joinLobbyMessage = new Label("", skin);
-        joinLobbyMessage.setColor(Color.RED);
-
-        Table lobbyListTable = new Table();
+        lobbyListTable = new Table();
         lobbyListTable.top().left();
 
         for (Lobby lobby : AppClient.getLobbies()) {
@@ -136,11 +140,23 @@ public class MainMenuView implements Screen {
                 lobbyListTable.add(label).pad(5).left().row();
             }
         }
-
-        ScrollPane scrollPane = new ScrollPane(lobbyListTable, skin);
+        scrollPane = new ScrollPane(lobbyListTable, skin);
         scrollPane.setFadeScrollBars(false);
         scrollPane.setScrollingDisabled(true, false);
         scrollPane.setScrollbarsOnTop(true);
+    }
+
+    public void showJoinLobbyForm() {
+        joinLobby = true;
+        mainTable.setVisible(false);
+        formTable.clear();
+        Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+
+        joinLobbyMessage = new Label("", skin);
+        joinLobbyMessage.setColor(Color.RED);
+
+        updateLobbbies();
+
 
         lobbyIdField = new TextField("", skin);
         lobbyIdField.setMessageText("Enter Lobby ID");
@@ -168,6 +184,7 @@ public class MainMenuView implements Screen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                joinLobby = false;
                 mainTable.setVisible(true);
                 formTable.clear();
             }
@@ -176,6 +193,7 @@ public class MainMenuView implements Screen {
 
 
     public void showNewLobbyForm() {
+        joinLobby = false;
         mainTable.setVisible(false);
         formTable.clear();
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
@@ -214,12 +232,14 @@ public class MainMenuView implements Screen {
         createLobbyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                joinLobby = false;
                 controller.handleNewLobby();
             }
         });
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                joinLobby = false;
                 mainTable.setVisible(true);
                 formTable.clear();
             }
@@ -289,4 +309,5 @@ public class MainMenuView implements Screen {
     public TextField getPasswordField() { return passwordField; }
     public TextButton getCreateLobbyButton() { return createLobbyButton; }
     public TextButton getBackButton() { return backButton; }
+    public boolean getJoinLobby(){return joinLobby;}
 }
