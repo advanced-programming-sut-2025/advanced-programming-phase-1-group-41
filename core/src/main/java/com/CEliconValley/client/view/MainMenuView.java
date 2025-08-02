@@ -147,8 +147,10 @@ public class MainMenuView implements Screen {
     }
 
     public void showJoinLobbyForm() {
+        System.out.println("tryina make the thing "+AppClient.getLobbies().size());
         joinLobby = true;
         mainTable.setVisible(false);
+
         formTable.clear();
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
 

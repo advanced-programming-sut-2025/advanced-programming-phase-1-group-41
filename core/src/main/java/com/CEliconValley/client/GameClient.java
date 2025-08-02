@@ -37,7 +37,6 @@ public class GameClient extends WebSocketClient {
             while (!client.isOpen()) {
                 Thread.sleep(50);
             }
-            client.send("sup");
             client.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,7 +46,6 @@ public class GameClient extends WebSocketClient {
     @Override
     public void onOpen(ServerHandshake handshakedata) {
         System.out.println("Connected to server!");
-        send("Hello from client!");
     }
 
     @Override
@@ -60,16 +58,22 @@ public class GameClient extends WebSocketClient {
             JsonElement bodyElement = jsonObject.get("body");
             GameMessage<SuccessMessage> successMsg = null;
             GameMessage<ErrorMessage> errorMsg = null;
-            if (bodyElement.getAsJsonObject().has("success")) {
-                successMsg = gson.fromJson(message, new TypeToken<GameMessage<SuccessMessage>>() {
-                }.getType());
-            } else if (bodyElement.getAsJsonObject().has("error")) {
-                errorMsg = gson.fromJson(message, new TypeToken<GameMessage<ErrorMessage>>() {
-                }.getType());
+            try{
+                if (bodyElement.getAsJsonObject().has("success")) {
+                    successMsg = gson.fromJson(message, new TypeToken<GameMessage<SuccessMessage>>() {
+                    }.getType());
+                } else if (bodyElement.getAsJsonObject().has("error")) {
+                    errorMsg = gson.fromJson(message, new TypeToken<GameMessage<ErrorMessage>>() {
+                    }.getType());
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
             if (successMsg != null) {
+                System.out.println("success is "+message);
                 Response.successResponse(successMsg.body);
             } else if (errorMsg != null) {
+                System.out.println("error is "+message);
                 Response.errorResponse(errorMsg.body);
             } else {
                 switch (genericMsg.type) {
@@ -107,6 +111,10 @@ public class GameClient extends WebSocketClient {
                                     view.showJoinLobbyForm();
                                 }
                             }
+                            if(AppClient.getCurrentLobby() != null && AppClient.getCurrentLobby().equals(msg.body)){
+                                AppClient.setCurrentLobby(msg.body);
+                                System.out.println("new number of players "+msg.body.getPlayerNames().size());
+                            }
                             System.out.println("updated lobbies in view");
                         });
 
@@ -122,17 +130,20 @@ public class GameClient extends WebSocketClient {
                             AppClient.setMenu(Menu.Lobby);
                             Main.getMain().setScreen(AppClient.getMenu().getScreen());
                         });
+                        System.out.println("CMessage "+message);
                     }
                     case "leave-lobby" -> {
-                        AppClient.setCurrentLobby(null);
-                        AppClient.setMenu(Menu.Main);
-                        Menu.Main.resetMenu();
-                        Main.getMain().setScreen(AppClient.getMenu().getScreen());
+                        Gdx.app.postRunnable(() -> {
+                            AppClient.setCurrentLobby(null);
+                            AppClient.setMenu(Menu.Main);
+                            Menu.Main.resetMenu();
+                            Main.getMain().setScreen(AppClient.getMenu().getScreen());
+                        });
+                        System.out.println("CMessage "+message);
                     }
                     case "delete-lobby" -> {
                         GameMessage<Lobby> msg = gson.fromJson(message, new TypeToken<GameMessage<Lobby>>() {
                         }.getType());
-                        // maybe check if need to iterate annd remove
                         Gdx.app.postRunnable(() -> {
                             AppClient.getLobbies().remove(msg.body);
                             if(AppClient.getMenu().getScreen() instanceof MainMenuView view){
@@ -141,7 +152,7 @@ public class GameClient extends WebSocketClient {
                                 }
                             }
                         });
-                        System.out.println("Cmessage: updated lobby");
+                        System.out.println("Cmessage: deleted lobby");
                     }
                     case "handshake-data" -> {
                         GameMessage<HandshakeData> msg = gson.fromJson(message, new TypeToken<GameMessage<HandshakeData>>() {
@@ -169,8 +180,9 @@ public class GameClient extends WebSocketClient {
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("----------------------------------");
             System.out.println("CmessageE: " + message);
+            System.out.println("----------------------------------");
         }
 //        try {
 //            GameData data = gson.fromJson(message, GameData.class);

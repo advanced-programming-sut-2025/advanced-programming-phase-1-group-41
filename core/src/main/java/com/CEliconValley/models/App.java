@@ -42,8 +42,6 @@ public class App {
             URI serverUri = new URI(first);
             client = new GameClient(serverUri);
             client.connect();
-            Thread.sleep(1000);
-            client.send("hi");
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } catch (URISyntaxException e) {
@@ -60,9 +58,6 @@ public class App {
             URI serverUri = new URI(first);
             client = new GameClient(serverUri);
             client.connect();
-            Thread.sleep(1000);
-            client.send("hi");
-            System.out.println("i sent hi!!!!!");
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } catch (URISyntaxException e) {
