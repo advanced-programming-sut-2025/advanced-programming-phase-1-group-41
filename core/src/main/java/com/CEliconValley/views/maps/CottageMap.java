@@ -28,7 +28,7 @@ public class CottageMap implements Location {
                 if(j==3&&i==8)continue;
                 if(i>=15&&i<=16&&j>=5&&j<=8)continue;
                 if(i!=9&&j>=8&&j<=10)continue;
-                if((i!=9&&(i<11||i>20))&&j==11)continue;
+                if((i!=9&&(i<11||i>20))&&j==11);
                 if(j>10&&i>=20)continue;
                 if(i==1&&j>=3&&j<=10)continue;
                 if(i==10&&j>=13)continue;
