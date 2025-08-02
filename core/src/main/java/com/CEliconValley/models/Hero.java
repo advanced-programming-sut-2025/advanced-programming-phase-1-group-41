@@ -2,6 +2,7 @@ package com.CEliconValley.models;
 
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.locations.Location;
+import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -32,10 +33,10 @@ public class Hero {
 
 
     public Hero(Location location) {
-        playerTexture = new Texture("game/Hero/generalActs.png");
-        toolsTexture_Front = new Texture("game/Hero/tools_Front.png");
-        toolsTexture_Back = new Texture("game/Hero/tools_Back.png");
-        toolsTexture_Side = new Texture("game/Hero/tools_Side.png");
+        playerTexture = GameAssetManager.getGameAssetManager().getHeroTexture("generalActs.png");
+        toolsTexture_Front = GameAssetManager.getGameAssetManager().getHeroTexture("tools_Front.png");
+        toolsTexture_Back = GameAssetManager.getGameAssetManager().getHeroTexture("tools_Back.png");
+        toolsTexture_Side = GameAssetManager.getGameAssetManager().getHeroTexture("tools_Side.png");
         playerActs = TextureRegion.split(playerTexture, playerTexture.getWidth() / 8, playerTexture.getHeight() / 11);
         toolsActs_Front = TextureRegion.split(toolsTexture_Front, toolsTexture_Front.getWidth()/5,toolsTexture_Front.getHeight()/15 );
         toolsActs_Back = TextureRegion.split(toolsTexture_Back, toolsTexture_Back.getWidth()/5,toolsTexture_Back.getHeight()/15);

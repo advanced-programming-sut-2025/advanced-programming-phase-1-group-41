@@ -40,10 +40,10 @@ public class Farm implements Location {
     private ArrayList<Coop> coops = new ArrayList<>();
     private ArrayList<Crop> crops = new ArrayList<>();
     private ArrayList<Tree> trees = new ArrayList<>();
-    private int rockCount;
-    private int foragingTreeCount;
-    private int plantCount;
-    private int foragingCropCount;
+    private final int rockCount;
+    private final int foragingTreeCount;
+    private final int plantCount;
+    private final int foragingCropCount;
     private ArrayList<Cell> transferCells = new ArrayList<>();
     private ArrayList<Cell> startPoints = new ArrayList<>();
     private Mine mine;
@@ -125,18 +125,18 @@ public class Farm implements Location {
         bushes.add(new Bush(20 + rand.nextInt(10), MaxHeight-(35 + rand.nextInt(10)), this));
         bushes.add(new Bush(25 + rand.nextInt(10), MaxHeight-(40 + rand.nextInt(10)), this));
 
-//        rockCount = (35 + rand.nextInt(10)) * farmType.rockCoefficient;
-//        foragingTreeCount = (35 + rand.nextInt(10)) * farmType.treeCoefficient;
-//        plantCount = (40 + rand.nextInt(10)) * farmType.treeCoefficient;
-//        foragingCropCount = (30 + rand.nextInt(5));
+        rockCount = (35 + rand.nextInt(10)) * farmType.rockCoefficient;
+        foragingTreeCount = (35 + rand.nextInt(10)) * farmType.treeCoefficient;
+        plantCount = (40 + rand.nextInt(10)) * farmType.treeCoefficient;
+        foragingCropCount = (30 + rand.nextInt(5));
 //        rockCount = (5 + rand.nextInt(10)) * farmType.rockCoefficient;
 //        foragingTreeCount = (5 + rand.nextInt(10)) * farmType.treeCoefficient;
 //        plantCount = (4 + rand.nextInt(10)) * farmType.treeCoefficient;
 //        foragingCropCount = (3 + rand.nextInt(5));
-        rockCount = 0;
-        foragingTreeCount = 0;
-        foragingCropCount = 0;
-        plantCount = 0;
+//        rockCount = 0;
+//        foragingTreeCount = 0;
+//        foragingCropCount = 0;
+//        plantCount = 0;
 
         for(int i = 0; i < rockCount ;i++){
             int y = rand.nextInt(MaxLength - 4) + 2;
@@ -629,16 +629,8 @@ public class Farm implements Location {
         this.farmBuilder = farmBuilder;
     }
 
-    public void setForagingCropCount(int foragingCropCount) {
-        this.foragingCropCount = foragingCropCount;
-    }
-
     public void setForagings(ArrayList<Foraging> foragings) {
         this.foragings = foragings;
-    }
-
-    public void setForagingTreeCount(int foragingTreeCount) {
-        this.foragingTreeCount = foragingTreeCount;
     }
 
     public void setGreenhouse(Greenhouse greenhouse) {
@@ -647,14 +639,6 @@ public class Farm implements Location {
 
     public void setLakes(ArrayList<Lake> lakes) {
         this.lakes = lakes;
-    }
-
-    public void setPlantCount(int plantCount) {
-        this.plantCount = plantCount;
-    }
-
-    public void setRockCount(int rockCount) {
-        this.rockCount = rockCount;
     }
 
     public void setStartPoints(ArrayList<Cell> startPoints) {
