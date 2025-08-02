@@ -60,10 +60,10 @@ public class CoopScreen implements Screen {
             new AnimalData(new Chicken(null,"mamad")),
             hero.playerX, hero.playerY + 2
         ));
-//        this.animalSprites.add(new AnimalSprite(coop,
-//            new AnimalData(new Sheep(null,"asghar")),
-//            hero.playerX+3, hero.playerY + 4
-//        ));
+        this.animalSprites.add(new AnimalSprite(coop,
+            new AnimalData(new Dino(null,"asghar")),
+            hero.playerX+3, hero.playerY + 4
+        ));
 //        this.animalSprites.add(new AnimalSprite(coop,
 //            new AnimalData(new Pig(null,"asghar")),
 //            hero.playerX-2, hero.playerY + 3

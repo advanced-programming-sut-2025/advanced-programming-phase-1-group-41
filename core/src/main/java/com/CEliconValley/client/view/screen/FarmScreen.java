@@ -52,7 +52,7 @@ public class FarmScreen implements Screen {
 
     private OrthographicCamera camera;
 
-    public static final float VIRTUAL_WIDTH = 2400f;
+    public static final float VIRTUAL_WIDTH = 3160f;
     public static final float VIRTUAL_HEIGHT = 1350f;
     public static final int CELLS_IN_WIDTH = 15;
 //    public static final int CELL_SIZE =  (int) VIRTUAL_WIDTH / CELLS_IN_WIDTH;
@@ -173,6 +173,7 @@ public class FarmScreen implements Screen {
             float moveAmount = MOVE_SPEED * delta;
 
             if (hero.renderX < targetPixelX) {
+//                hero.renderX = Math.min(hero.renderX + moveAmount, targetPixelX);
                 hero.renderX += moveAmount;
                 if (hero.renderX > targetPixelX) hero.renderX = targetPixelX;
             } else if (hero.renderX > targetPixelX) {
@@ -197,10 +198,10 @@ public class FarmScreen implements Screen {
         }
 
         batch.begin();
-        int minX = (int)((camera.position.x - camera.viewportWidth / 2) / CELL_SIZE) - 8;
-        int maxX = (int)((camera.position.x + camera.viewportWidth / 2) / CELL_SIZE) + 8;
-        int minY = (int)((camera.position.y - camera.viewportHeight / 2) / CELL_SIZE) - 8;
-        int maxY = (int)((camera.position.y + camera.viewportHeight / 2) / CELL_SIZE) + 8;
+        int minX = (int)((camera.position.x - camera.viewportWidth / 2) / CELL_SIZE) ;
+        int maxX = (int)((camera.position.x + camera.viewportWidth / 2) / CELL_SIZE) ;
+        int minY = (int)((camera.position.y - camera.viewportHeight / 2) / CELL_SIZE) ;
+        int maxY = (int)((camera.position.y + camera.viewportHeight / 2) / CELL_SIZE);
 
         visibleCells.clear();
 //        Gdx.app.postRunnable(() -> {
@@ -234,11 +235,11 @@ public class FarmScreen implements Screen {
             int x = (int) (cell.getX() * CELL_SIZE);
             int y = (int) (cell.getY() * CELL_SIZE);
 
-            buildingSpawner.renderBuildings(batch,cell,passiveStateTime);
-//            rockSpawner.renderRocks(batch,cell,passiveStateTime);
-//            cropSpawner.renderCrops(batch,cell,passiveStateTime);
+//            buildingSpawner.renderBuildings(batch,cell,passiveStateTime);
+            rockSpawner.renderRocks(batch,cell,passiveStateTime);
+            cropSpawner.renderCrops(batch,cell,passiveStateTime);
             waterSpawner.renderWater(batch,cell,passiveStateTime);
-//            rockSpawner.renderBreakingEffectForCell(batch, cell, delta);
+            rockSpawner.renderBreakingEffectForCell(batch, cell, delta);
             if(hero.playerX == cell.getX() && hero.playerY == cell.getY()){
 
                 TextureRegion currentFrame = currentAnimation.getKeyFrame(stateTime, onRepeat);
@@ -250,7 +251,7 @@ public class FarmScreen implements Screen {
 
                 }
 
-                batch.draw(currentFrame, hero.renderX-CELL_SIZE/2f, hero.renderY-CELL_SIZE/2, CELL_SIZE*2f, CELL_SIZE*2f);
+                batch.draw(currentFrame, hero.renderX-CELL_SIZE/2f, hero.renderY-CELL_SIZE/2f, CELL_SIZE*2f, CELL_SIZE*2f);
             }
 //            treeSpawner.renderTrees(batch,cell,passiveStateTime);
 //            if (didHit) {
