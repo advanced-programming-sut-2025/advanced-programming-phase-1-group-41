@@ -3,7 +3,7 @@ package com.CEliconValley.client.view;
 import com.CEliconValley.models.ui.FakeCheckbox;
 import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
-import com.CEliconValley.client.controller.authentication.AuthenticationMenuController;
+import com.CEliconValley.client.controller.AuthenticationMenuController;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;

@@ -1,4 +1,4 @@
-package com.CEliconValley.client.controller.authentication;
+package com.CEliconValley.client.controller;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.messages.*;

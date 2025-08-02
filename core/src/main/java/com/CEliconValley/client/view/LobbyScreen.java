@@ -152,7 +152,7 @@ public class LobbyScreen implements Screen {
                 teamTable.setBackground(drawable);
             }
         }
-        if(lobby.getPlayerNames().size()>=1){
+        if(!lobby.getPlayerNames().isEmpty()){
             startGameButton.setVisible(true);
         }
 
