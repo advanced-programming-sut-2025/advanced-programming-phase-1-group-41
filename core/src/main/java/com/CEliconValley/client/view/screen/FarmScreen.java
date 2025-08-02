@@ -40,21 +40,15 @@ public class FarmScreen implements Screen {
     private final CropSpawner cropSpawner;
     private final Hero hero;
     private final InventoryRenderer inventoryRenderer;
-    private boolean onRepeat=true;
-    private boolean didHit=false;
-
+    private boolean onRepeat = true;
+    private boolean didHit = false;
+    private final List<Cell> visibleCells = new ArrayList<>();
 
     Map<Cell, TextureRegion> groundCache;
-
-
-
-
 
     public final static Texture grassTexture =new Texture("game/general/tiles/grass.png");
     ;
     boolean flip = false;
-
-
 
     private OrthographicCamera camera;
 
@@ -71,11 +65,16 @@ public class FarmScreen implements Screen {
     private float stateTime = 0f;
     private float passiveStateTime = 0f;
 
+    private int prevMinX;
+    private int prevMaxX;
+    private int prevMinY;
+    private int prevMaxY;
 
 
 
 
-    private static final float MOVE_SPEED = 600f;
+
+    private static final float MOVE_SPEED = 300f;
 
     @SuppressWarnings("unchecked")
     public FarmScreen(Farm farm, Player player) {
@@ -203,19 +202,20 @@ public class FarmScreen implements Screen {
         int minY = (int)((camera.position.y - camera.viewportHeight / 2) / CELL_SIZE) - 8;
         int maxY = (int)((camera.position.y + camera.viewportHeight / 2) / CELL_SIZE) + 8;
 
-        List<Cell> visibleCells = new ArrayList<>();
+        visibleCells.clear();
+//        Gdx.app.postRunnable(() -> {
+            for (Cell cell : farm.getCells()) {
+                int cellX = cell.getX();
+                int cellY = cell.getY();
 
-        for (Cell cell : farm.getCells()) {
-            int cellX = cell.getX();
-            int cellY = cell.getY();
-
-            if (cellX < minX || cellX > maxX || cellY < minY || cellY > maxY) {
-                continue;
-
-
-            }visibleCells.add(cell);
-        }
-        visibleCells.sort(Comparator.comparingInt(Cell::getY).reversed());
+                if (cellX < minX || cellX > maxX || cellY < minY || cellY > maxY) {
+    //                visibleCells.remove(cell);
+                    continue;
+                }
+                visibleCells.add(cell);
+            }
+            visibleCells.sort(Comparator.comparingInt(Cell::getY).reversed());
+//        });
         for(Cell cell:visibleCells) {
             int x = (int) (cell.getX() * CELL_SIZE);
             int y = (int) (cell.getY() * CELL_SIZE);
@@ -223,6 +223,10 @@ public class FarmScreen implements Screen {
             batch.draw(groundCache.get(cell), x, y, CELL_SIZE, CELL_SIZE);
         }
 
+        prevMinX = minX;
+        prevMaxX = maxX;
+        prevMinY = minY;
+        prevMaxY = maxY;
         visibleCells.sort(Comparator.comparingInt(Cell::getY).reversed());
         for(Cell cell:visibleCells){
 

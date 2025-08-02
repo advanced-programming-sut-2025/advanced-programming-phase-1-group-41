@@ -7,6 +7,8 @@ import com.CEliconValley.models.Menu;
 import com.CEliconValley.models.items.CookingRecipe;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Cursor;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -39,7 +41,7 @@ public class Main extends Game {
         image = new Texture(GameAssetManager.getGameAssetManager().CEliconValleyBackground);
         background = new Image(image);
         Graphics.DisplayMode displayMode = Gdx.graphics.getDisplayMode();
-//        Gdx.graphics.setFullscreenMode(displayMode);
+        Gdx.graphics.setFullscreenMode(displayMode);
         background.setSize(stage.getWidth(), stage.getHeight());
         stage.addActor(background);
         main.setScreen(AppClient.getMenu().getScreen());
@@ -64,6 +66,13 @@ public class Main extends Game {
 //        UserDB.connect();
         App.setupClient();
         AppClient.setMenu(Menu.Authentication);
+        Pixmap newCursorPixmap = new Pixmap(Gdx.files.internal("Cursor.png"));
+        Pixmap scaledPixmap = new Pixmap(32, 32, newCursorPixmap.getFormat());scaledPixmap.drawPixmap(newCursorPixmap,
+            0, 0, newCursorPixmap.getWidth(), newCursorPixmap.getHeight(),        0, 0, 32, 32
+        );
+        Cursor newCursor = Gdx.graphics.newCursor(scaledPixmap, 0, 0);
+        newCursorPixmap.dispose();scaledPixmap.dispose();
+        Gdx.graphics.setCursor(newCursor);
     }
 
     @Override

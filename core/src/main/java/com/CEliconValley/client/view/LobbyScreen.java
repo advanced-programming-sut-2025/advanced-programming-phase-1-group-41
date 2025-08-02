@@ -37,7 +37,7 @@ public class LobbyScreen implements Screen {
     private Label label3;
     private Label label4;
     public TextButton startGameButton;
-    public  TextButton exitButton;
+    public TextButton exitButton;
 
     private Table mainTable;
     private Table teamTable;
