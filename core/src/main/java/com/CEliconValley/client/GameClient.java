@@ -1,6 +1,7 @@
 package com.CEliconValley.client;
 
 import com.CEliconValley.Main;
+import com.CEliconValley.client.view.LobbyScreen;
 import com.CEliconValley.client.view.MainMenuView;
 import com.CEliconValley.client.view.screen.FarmScreen;
 import com.CEliconValley.common.AppData;
@@ -114,6 +115,9 @@ public class GameClient extends WebSocketClient {
                             if(AppClient.getCurrentLobby() != null && AppClient.getCurrentLobby().equals(msg.body)){
                                 AppClient.setCurrentLobby(msg.body);
                                 System.out.println("new number of players "+msg.body.getPlayerNames().size());
+                                if(AppClient.getMenu().getScreen() instanceof LobbyScreen view){
+                                    view.show();
+                                }
                             }
                             System.out.println("updated lobbies in view");
                         });

@@ -48,6 +48,7 @@ public class LobbyScreen implements Screen {
     }
 
     public void updatePlayers(){
+        lobby = AppClient.getCurrentLobby();
         int i = 1;
         for(String playerName : lobby.getPlayerNames()) {
             if(i == 1){
@@ -62,7 +63,7 @@ public class LobbyScreen implements Screen {
             i++;
         }
     }
-    private void buildUI() {
+    public void buildUI() {
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
 
         label1 = new Label("PLAYER1", skin);

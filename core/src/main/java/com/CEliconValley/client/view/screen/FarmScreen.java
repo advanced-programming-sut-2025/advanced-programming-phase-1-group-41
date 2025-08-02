@@ -25,6 +25,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 
 import java.util.*;
 
@@ -52,7 +53,7 @@ public class FarmScreen implements Screen {
 
     private OrthographicCamera camera;
 
-    public static final float VIRTUAL_WIDTH = 3160f;
+    public static final float VIRTUAL_WIDTH = 3160f * 2 / 3;
     public static final float VIRTUAL_HEIGHT = 1350f;
     public static final int CELLS_IN_WIDTH = 15;
 //    public static final int CELL_SIZE =  (int) VIRTUAL_WIDTH / CELLS_IN_WIDTH;
@@ -74,7 +75,7 @@ public class FarmScreen implements Screen {
 
 
 
-    private static final float MOVE_SPEED = 300f;
+    private static final float MOVE_SPEED = 100f;
 
     @SuppressWarnings("unchecked")
     public FarmScreen(Farm farm, Player player) {
@@ -170,7 +171,7 @@ public class FarmScreen implements Screen {
             float targetPixelX = hero.targetX * CELL_SIZE;
             float targetPixelY = hero.targetY * CELL_SIZE;
 
-            float moveAmount = MOVE_SPEED * delta;
+            float moveAmount = (float) CELL_SIZE / 2;
 
             hero.renderX = approach(hero.renderX, targetPixelX, moveAmount);
             hero.renderY = approach(hero.renderY, targetPixelY, moveAmount);
@@ -221,7 +222,7 @@ public class FarmScreen implements Screen {
             int x = (int) (cell.getX() * CELL_SIZE);
             int y = (int) (cell.getY() * CELL_SIZE);
 
-//            buildingSpawner.renderBuildings(batch,cell,passiveStateTime);
+            buildingSpawner.renderBuildings(batch,cell,passiveStateTime);
             rockSpawner.renderRocks(batch,cell,passiveStateTime);
             cropSpawner.renderCrops(batch,cell,passiveStateTime);
             waterSpawner.renderWater(batch,cell,passiveStateTime);
@@ -253,6 +254,12 @@ public class FarmScreen implements Screen {
 
         stateTime += delta;
         passiveStateTime+=delta;
+
+        float halfViewportWidth = camera.viewportWidth * camera.zoom / 2;
+        float halfViewportHeight = camera.viewportHeight * camera.zoom / 2;
+
+//        camera.position.x = MathUtils.clamp(camera.position.x, halfViewportWidth, mapWidth - halfViewportWidth);
+//        camera.position.y = MathUtils.clamp(camera.position.y, halfViewportHeight, mapHeight - halfViewportHeight);
 
 
         camera.position.set(hero.renderX + CELL_SIZE / 2f, hero.renderY + CELL_SIZE / 2f, 0);
