@@ -25,7 +25,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -125,19 +124,25 @@ public class MainMenuView implements Screen {
 
     }
 
-    public void updateLobbbies(){
+    public void updateLobbies(){
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
         lobbyListTable = new Table();
         lobbyListTable.top().left();
 
         for (Lobby lobby : AppClient.getLobbies()) {
             if(lobby.isVisible()){
-                Label label = new Label(lobby.getLobbyName() + " : " + lobby.getLobbyID(), skin);
+                Label label = new Label(lobby.getLobbyName() + " : " + lobby.getLobbyID() + " - " + lobby.getPlayerNames().size(), skin);
                 label.setColor(CustomColors.GAMEGREENCOLOR);
                 if(lobby.isPrivate()){
                     label.setColor(Color.RED);
                 }
-                lobbyListTable.add(label).pad(5).left().row();
+                lobbyListTable.add(label).pad(10).left().row();
+                int i = 1;
+                for(String PlayerName : lobby.getPlayerNames()){
+                    Label label1 = new Label(i++ + ". " + PlayerName, skin);
+                    label1.setColor(Color.WHITE);
+                    lobbyListTable.add(label1).pad(5).left().row();
+                }
             }
         }
         scrollPane = new ScrollPane(lobbyListTable, skin);
@@ -157,8 +162,7 @@ public class MainMenuView implements Screen {
         joinLobbyMessage = new Label("", skin);
         joinLobbyMessage.setColor(Color.RED);
 
-        updateLobbbies();
-
+        updateLobbies();
 
         lobbyIdField = new TextField("", skin);
         lobbyIdField.setMessageText("Enter Lobby ID");
