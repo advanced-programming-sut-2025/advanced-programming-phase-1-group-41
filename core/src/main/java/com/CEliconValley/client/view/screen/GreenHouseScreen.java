@@ -1,9 +1,6 @@
 package com.CEliconValley.client.view.screen;
 
-import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Finder;
-import com.CEliconValley.models.Hero;
-import com.CEliconValley.models.Player;
+import com.CEliconValley.models.*;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.foragings.ForagingTree;
@@ -22,20 +19,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
-public class GreenHouseScreen implements Screen {
+public class GreenHouseScreen extends GameScreen implements Screen {
     private final FarmScreen farmScreen;
     private final Hero hero;
     private final SpriteBatch batch;
     private final Texture background;
     private final GreenhouseMap greenHouse;
     private final Player player;
-    private Animation<TextureRegion> currentAnimation;
-    private int playerDirection =3;
-    private boolean isActing = false;
-    private boolean onRepeat = false;
 
-    private int playerX;
-    private int playerY;
 
     int[][] directions = {
         {0, 1},
@@ -44,23 +35,18 @@ public class GreenHouseScreen implements Screen {
         {-1, 0},
     };
 
-    private float renderX;
-    private float renderY;
 
 
-    private boolean isMoving = false;
-    private int targetX;
-    private int targetY;
 
     //    private final TreeSpawner treeSpawner;
 //    private final RockSpawner rockSpawner;
 //    private final BuildingSpawner buildingSpawner;
     private final OrthographicCamera camera;
 
-    private float stateTime = 0f;
 
 
     public GreenHouseScreen(FarmScreen farmScreen,GreenhouseMap greenHouse, Player player) {
+        super(null);
         hero=new Hero(greenHouse);
         this.farmScreen=farmScreen;
         this.greenHouse = greenHouse;
@@ -70,16 +56,16 @@ public class GreenHouseScreen implements Screen {
         for(Cell cell : greenHouse.getCells()) {
             if(cell==null){continue;}
             if(cell.getObjectMap() instanceof Door) {
-                this.playerX = cell.getX();
-                this.playerY = cell.getY();
+                this.hero.playerX = cell.getX();
+                this.hero.playerY = cell.getY();
                 break;
             }
         }
-        this.targetX = playerX;
-        this.targetY = playerY;
-        this.renderX = playerX * CELL_SIZE;
-        this.renderY = playerY * CELL_SIZE;
-        this.currentAnimation = hero.walk(false, playerDirection);
+        this.hero.targetX = hero.playerX;
+        this.hero.targetY = hero.playerY;
+        this.hero.renderX = hero.playerX * CELL_SIZE;
+        this.hero.renderY = hero.playerY * CELL_SIZE;
+        this.hero.currentAnimation = hero.walk(false, hero.currentDirection);
 
 //        treeSpawner = new TreeSpawner(greenHouse);
 //        rockSpawner = new RockSpawner(greenHouse);
@@ -91,36 +77,13 @@ public class GreenHouseScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        handleInput();
-        if (isMoving) {
-            float moveAmount = 600 * delta;
-
-            float targetPixelX = targetX * CELL_SIZE;
-            float targetPixelY = targetY * CELL_SIZE;
-
-            if (renderX < targetPixelX) {
-                renderX += moveAmount;
-                if (renderX > targetPixelX) renderX = targetPixelX;
-            } else if (renderX > targetPixelX) {
-                renderX -= moveAmount;
-                if (renderX < targetPixelX) renderX = targetPixelX;
-            }
-
-            if (renderY < targetPixelY) {
-                renderY += moveAmount;
-                if (renderY > targetPixelY) renderY = targetPixelY;
-            } else if (renderY > targetPixelY) {
-                renderY -= moveAmount;
-                if (renderY < targetPixelY) renderY = targetPixelY;
-            }
-
-            if (renderX == targetPixelX && renderY == targetPixelY) {
-                playerX = targetX;
-                playerY = targetY;
-                isMoving = false;
+        Result result = Playeracts.handleInput(hero, greenHouse, stage, delta);
+        if(!result.success()){
+            if(result.message().equals("cheat")){
+                return;
             }
         }
-
+        Playeracts.approach(hero);
         Gdx.gl.glClearColor(0.8f, 0.9f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -132,103 +95,19 @@ public class GreenHouseScreen implements Screen {
 
         batch.draw(background, CELL_SIZE/2f, CELL_SIZE/2f,CELL_SIZE*19,CELL_SIZE*24);
 
-        for (Cell cell : greenHouse.getCells()) {
-            int x = cell.getX() * CELL_SIZE;
-            int y = cell.getY() * CELL_SIZE;
-//
-//            treeSpawner.renderTrees(batch, cell, stateTime);
-//            rockSpawner.renderRocks(batch, cell, stateTime);
-//            buildingSpawner.renderBuildings(batch, cell, stateTime);
+        if (hero.currentAnimation != null) {
+            TextureRegion currentFrame = hero.currentAnimation.getKeyFrame(hero.stateTime, onRepeat);
+            batch.draw(currentFrame, hero.renderX - CELL_SIZE / 2f, hero.renderY - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
         }
-        if (currentAnimation != null) {
-            TextureRegion currentFrame = currentAnimation.getKeyFrame(stateTime, onRepeat);
-            batch.draw(currentFrame, renderX - CELL_SIZE / 2f, renderY - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
-        }
-        camera.position.set(renderX + CELL_SIZE / 2f, renderY + CELL_SIZE / 2f, 0);
+        camera.position.set(hero.renderX + CELL_SIZE / 2f, hero.renderY + CELL_SIZE / 2f, 0);
         camera.update();
 
         batch.end();
-        stateTime += delta;
-    }
-    private void handleInput() {
-        if (isActing||isMoving) return;
-
-
-        boolean moved = false;
-        onRepeat=true;
-
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-//            currentAnimation = hero.walk(canMoveTo(playerX, playerY+1),1);
-            playerDirection = 1;
-            if (canMoveTo(playerX, playerY + 1)) {
-                targetX = playerX;
-                targetY = playerY + 1;
-                moved = true;
-            }
-            currentAnimation = hero.walk(moved,playerDirection);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-//            currentAnimation = hero.walk(canMoveTo(playerX, playerY-1),3);
-            playerDirection = 3;
-
-            if (canMoveTo(playerX, playerY - 1)) {
-                targetX = playerX;
-                targetY = playerY - 1;
-                moved = true;
-            }
-            currentAnimation = hero.walk(moved,playerDirection);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-//            currentAnimation = hero.walk(canMoveTo(playerX-1, playerY),4);
-            playerDirection = 4;
-            if (canMoveTo(playerX - 1, playerY)) {
-                targetX = playerX - 1;
-                targetY = playerY;
-//                flip = true;
-                moved = true;
-            }
-            currentAnimation = hero.walk(moved,playerDirection);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-//            currentAnimation = hero.walk(canMoveTo(playerX+1, playerY),2);
-            playerDirection = 2;
-//            flip = false;
-            if (canMoveTo(playerX + 1, playerY)) {
-                targetX = playerX + 1;
-                targetY = playerY;
-                moved = true;
-            }
-            currentAnimation = hero.walk(moved,playerDirection);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.E)) {
-            onRepeat=false;
-            currentAnimation = hero.useTool(3);
-            isActing=true;
-            stateTime = 0;
-//            didHit=true;
-//            hit(playerDirection,playerX,playerY);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            transfer();
-        }
-        else{
-            currentAnimation = hero.walk(false,playerDirection);
-        }
-
-        if (moved) {
-            isMoving = true;
-//            currentAnimation = walkAnimations[playerDirection];
-        }
+        hero.stateTime += delta;
     }
 
-    private boolean canMoveTo(int x, int y) {
-        for (Cell cell : greenHouse.getCells()) {
-            if (cell.getX() == x && cell.getY() == y) {
-                if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock ||cell.getObjectMap() instanceof Wall ||cell.getObjectMap() instanceof ForagingTree) {
-                    return false;
-                }
-                return true;
-            }
-        }
-        return false;
-    }
     public void transfer() {
-        Cell cell=Finder.findCellByCoordinatesGreenHouse(playerX,playerY,this.greenHouse);
+        Cell cell=Finder.findCellByCoordinatesGreenHouse(hero.playerX,hero.playerY,this.greenHouse);
         if (cell.getObjectMap() instanceof Door) {
             ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(farmScreen);
         }
@@ -244,7 +123,9 @@ public class GreenHouseScreen implements Screen {
         background.dispose();
     }
 
-    @Override public void show() {}
+    @Override public void show() {
+        Playeracts.setScreen(this);
+    }
     @Override public void hide() {}
     @Override public void pause() {}
     @Override public void resume() {}

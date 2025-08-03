@@ -14,6 +14,7 @@ import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.CEliconValley.views.maps.BarnMap;
 import com.CEliconValley.views.maps.CottageMap;
+import com.CEliconValley.views.maps.GreenhouseMap;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -43,6 +44,7 @@ public abstract class GameScreen implements Screen {
         cheatCodeField.setVisible(false);
         cheatCodeField.setWidth(600);
         cheatCodeField.setPosition(stage.getWidth()/2  - cheatCodeField.getWidth() / 2, stage.getHeight() / 2 - cheatCodeField.getHeight() / 2);
+        stage.addActor(cheatCodeField);
     }
 
 
@@ -69,6 +71,16 @@ public abstract class GameScreen implements Screen {
                 }
             }
             return false;
+        }
+        if(location instanceof GreenhouseMap greenHouseMap){
+            for (Cell cell : greenHouseMap.getCells()) {
+                if (cell.getX() == x && cell.getY() == y) {
+                    if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock ||cell.getObjectMap() instanceof Wall ||cell.getObjectMap() instanceof ForagingTree) {
+                        return false;
+                    }
+                    return true;
+                }
+            }
         }
         return false;
     }

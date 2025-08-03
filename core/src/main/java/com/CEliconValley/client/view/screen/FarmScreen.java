@@ -88,10 +88,6 @@ public class FarmScreen extends GameScreen implements Screen {
     public FarmScreen(Farm farm, Player player) {
         super(new InventoryRenderer(player.getInventory()));
 
-
-
-        stage.addActor(cheatCodeField);
-
         this.farm = farm;
         this.player = player;
         treeSpawner=new TreeSpawner(this.farm);

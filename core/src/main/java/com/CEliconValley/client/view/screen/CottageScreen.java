@@ -1,10 +1,7 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.Main;
-import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Finder;
-import com.CEliconValley.models.Hero;
-import com.CEliconValley.models.Player;
+import com.CEliconValley.models.*;
 //import com.CEliconValley.models.buildings.GreenHouse.Door;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.buildings.Wall;
@@ -74,7 +71,12 @@ public class CottageScreen extends GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Playeracts.handleInput(hero, cottageMap, stage, delta);
+        Result result = Playeracts.handleInput(hero, cottageMap, stage, delta);
+        if(!result.success()){
+            if(result.message().equals("cheat")){
+                return;
+            }
+        }
         Playeracts.approach(hero);
 
         Gdx.gl.glClearColor(0.8f, 0.9f, 1f, 1);
