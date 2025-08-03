@@ -130,12 +130,7 @@ public class GameClient extends WebSocketClient {
                             AppClient.getLobbies().add(msg.body);
                             if(AppClient.getMenu().getScreen() instanceof MainMenuView view){
                                 if(view.getJoinLobby()){
-                                    AppClient.getMenu().resetMenu();
-                                    MainMenuView vieww =(MainMenuView)(AppClient.getMenu().menu);
-                                    try{
-                                        Thread.sleep(50);
-                                    } catch (InterruptedException e) {}
-                                    vieww.showNewLobbyForm();
+                                    view.showJoinLobbyForm();
                                 }
                             }
                             if(AppClient.getCurrentLobby() != null && AppClient.getCurrentLobby().equals(msg.body)){
@@ -179,9 +174,7 @@ public class GameClient extends WebSocketClient {
                             AppClient.getLobbies().remove(msg.body);
                             if(AppClient.getMenu().getScreen() instanceof MainMenuView view){
                                 if(view.getJoinLobby()) {
-                                    AppClient.getMenu().resetMenu();
-                                    MainMenuView vieww =(MainMenuView)(AppClient.getMenu().menu);
-                                    vieww.showJoinLobbyForm();
+                                    view.showJoinLobbyForm();
                                 }
                             }
                         });
