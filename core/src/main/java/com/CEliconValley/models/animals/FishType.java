@@ -45,7 +45,9 @@ public enum FishType implements Item, Eatable {
 
     @Override
     public int getID() {
-        return 0;
+        Fish fish=new Fish(this);
+        return fish.getID();
+
     }
 
     public Season getSeason() {return season;}

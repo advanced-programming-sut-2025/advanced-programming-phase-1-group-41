@@ -40,6 +40,8 @@ import java.util.*;
 
 public class FarmScreen implements Screen {
     private final SpriteBatch batch;
+    private MenuBar menuBar;
+    private boolean isMenuOpen = false;
     private final Farm farm;
     private final Player player;
     private final TreeSpawner treeSpawner;
@@ -130,6 +132,10 @@ public class FarmScreen implements Screen {
         camera = new OrthographicCamera();
 //        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+        menuBar = new MenuBar();
+
+
+
 
         int FRAME_COLS;
         int FRAME_ROWS;
@@ -296,12 +302,16 @@ public class FarmScreen implements Screen {
 //                hit(hero.currentDirection, hero.playerX, hero.playerY);
 //                didHit = false;
 //            }
-            inventoryRenderer.render(batch,camera);
 
 
 
 
         }
+            if(isMenuOpen){
+                menuBar.render(batch,camera.viewportWidth/4,camera.viewportHeight/4);
+            }else {
+                inventoryRenderer.render(batch, camera);
+            }
 
         stateTime += delta;
         passiveStateTime+=delta;
@@ -331,6 +341,9 @@ public class FarmScreen implements Screen {
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
             handleCheatCode();
             return;
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.M)){
+            isMenuOpen=!isMenuOpen;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             inventoryRenderer.shiftRight();
