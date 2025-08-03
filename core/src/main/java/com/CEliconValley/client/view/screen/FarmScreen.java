@@ -1,6 +1,7 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.Main;
+import com.CEliconValley.client.controller.CheatCodeController;
 import com.CEliconValley.client.view.screen.maps.CoopMap;
 import com.CEliconValley.controllers.Spawner.*;
 import com.CEliconValley.models.Cell;
@@ -196,6 +197,7 @@ public class FarmScreen implements Screen {
                 System.out.println("Cheat code entered: " + code);
 
                 //TODO Cheat code handling
+                CheatCodeController.cheatCodeHandler(code);
 
                 cheatCodeField.setText("");
                 cheatCodeField.setVisible(false);
