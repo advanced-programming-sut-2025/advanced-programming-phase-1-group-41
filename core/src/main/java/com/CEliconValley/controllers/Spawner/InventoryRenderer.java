@@ -44,7 +44,7 @@ public class InventoryRenderer {
             else{
                 texture=ItemManager.getTexture(1);
             }
-            batch.setColor(new Color(1f, 1f, 1f, 0.035f));
+            batch.setColor(new Color(1f, 1f, 1f, 0.65f));
             batch.draw(texture, x, y, slotSize, slotSize);
             batch.setColor(new Color(1f, 1f, 1f, 1f));
             if (item != null) {

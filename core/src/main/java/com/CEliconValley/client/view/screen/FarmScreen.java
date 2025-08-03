@@ -55,7 +55,7 @@ public class FarmScreen implements Screen {
 
     private OrthographicCamera camera;
 
-    public static final float VIRTUAL_WIDTH = 3160f * 2 / 3;
+    public static final float VIRTUAL_WIDTH = 3160f ;
     public static final float VIRTUAL_HEIGHT = 1350f;
     public static final int CELLS_IN_WIDTH = 15;
 //    public static final int CELL_SIZE =  (int) VIRTUAL_WIDTH / CELLS_IN_WIDTH;
@@ -168,7 +168,7 @@ public class FarmScreen implements Screen {
             float targetPixelX = hero.targetX * CELL_SIZE;
             float targetPixelY = hero.targetY * CELL_SIZE;
 
-            float moveAmount = (float) CELL_SIZE / 2;
+            float moveAmount = (float) CELL_SIZE / 6;
 
             hero.renderX = approach(hero.renderX, targetPixelX, moveAmount);
             hero.renderY = approach(hero.renderY, targetPixelY, moveAmount);

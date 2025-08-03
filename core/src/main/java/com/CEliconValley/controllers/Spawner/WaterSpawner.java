@@ -72,20 +72,43 @@ public class WaterSpawner {
         float x = cell.getX() * CELL_SIZE;
         float y = cell.getY() * CELL_SIZE;
 
-        if (cell.getObjectMap() instanceof Lake) {
-
+        if (cell.getObjectMap() instanceof Lake lake) {
             TextureRegion waterFrame = waterAnimation.getKeyFrame(passiveStateTime, true);
             batch.draw(waterFrame, x, y, CELL_SIZE, CELL_SIZE);
+            if(lake.getInitialize()>-1) {
+                switch (lake.getInitialize()) {
+                    case 0, 2, 6, 8, 1, 3, 5, 7 -> {
+                        TextureRegion coastFrame = coastAnimations[lake.getInitialize()].getKeyFrame(passiveStateTime, true);
+                        batch.draw(coastFrame, x, y, CELL_SIZE, CELL_SIZE);
+                    }
+                    case 9 -> {
+                        batch.draw(animCornerSW.getKeyFrame(passiveStateTime, true), x, y, CELL_SIZE, CELL_SIZE);
+                    }
+                    case 10 -> {
+                        batch.draw(animCornerSE.getKeyFrame(passiveStateTime, true), x, y, CELL_SIZE, CELL_SIZE);
+                    }
+                    case 11 -> {
+                        batch.draw(animCornerNW.getKeyFrame(passiveStateTime, true), x, y, CELL_SIZE, CELL_SIZE);
+                    }
+                    case 12 -> {
+                        batch.draw(animCornerNE.getKeyFrame(passiveStateTime, true), x, y, CELL_SIZE, CELL_SIZE);
+                    }
+                }
+               return true;
+            }
+
 
 
             if (isCoast(cell)) {
-                int animIndex = getCoastAnimationIndex(cell.getX(), cell.getY());
+                int animIndex = getCoastAnimationIndex(lake,cell.getX(), cell.getY());
+                lake.setInitialize(animIndex);
+                System.out.println(animIndex);
                 TextureRegion frame = coastAnimations[animIndex].getKeyFrame(passiveStateTime, true);
                 batch.draw(frame, x, y, CELL_SIZE, CELL_SIZE);
             }
 
 
-            CornerType corner = getWaterCornerType(cell.getX(), cell.getY());
+            CornerType corner = getWaterCornerType(lake,cell.getX(), cell.getY());
             if (corner != CornerType.NONE) {
                 Animation<TextureRegion> cornerAnim = switch (corner) {
                     case SE -> animCornerSE;
@@ -157,21 +180,20 @@ public class WaterSpawner {
         int y = cell.getY();
         return !isWater(x,y)&&!isWater(x+1,y)&&!isWater(x,y+1)&&!isWater(x-1,y)&&!isWater(x,y-1)&&(isWater(x+1,y+1)||isWater(x+1,y-1)||isWater(x,y+1)||isWater(x-1,y+1)||isWater(x-1,y-1));
     }
-    private int getCoastAnimationIndex(int x, int y) {
+    private int getCoastAnimationIndex(Lake lake,int x, int y) {
         boolean hasLandRight = isLand(x+1, y);
         boolean hasLandLeft = isLand(x-1, y);
         boolean hasLandUp = isLand(x, y+1);
         boolean hasLandDown = isLand(x, y-1);
 
         if (hasLandRight && hasLandDown) return 0;
-        if (hasLandUp && hasLandLeft) return 8;
-        if (hasLandLeft && hasLandDown) return 2;
-        if (hasLandUp && hasLandRight) return 6;
-        if (hasLandDown) return 1;
-        if (hasLandRight) return 3;
-        if (hasLandLeft) return 5;
-        if (hasLandUp) return 7;
-
+        if (hasLandUp && hasLandLeft)return 8;
+        if (hasLandLeft && hasLandDown)return 2;
+        if (hasLandUp && hasLandRight)return 6;
+        if (hasLandDown)return 1;
+        if (hasLandRight)return 3;
+        if (hasLandLeft)return 5;
+        if (hasLandUp)return 7;
 
         return 4;
     }
@@ -179,7 +201,7 @@ public class WaterSpawner {
         NONE, SE, SW, NE, NW
     }
 
-    private CornerType getWaterCornerType(int x, int y) {
+    private CornerType getWaterCornerType(Lake lake,int x, int y) {
         Cell center = farm.getCell(x, y);
         if (center == null || !(center.getObjectMap() instanceof Lake)) return CornerType.NONE;
 
@@ -191,10 +213,10 @@ public class WaterSpawner {
         boolean w = isWater(x - 1, y);
         boolean sw = isLand(x - 1, y - 1);
 
-        if (n && e && ne) return CornerType.SW;
-        if (n && w && isLand(x - 1, y + 1)) return CornerType.SE;
-        if (s && e && isLand(x + 1, y - 1)) return CornerType.NW;
-        if (s && w && sw) return CornerType.NE;
+        if (n && e && ne) {lake.setInitialize(9);return CornerType.SW;}
+        if (n && w && isLand(x - 1, y + 1)) {lake.setInitialize(10);return CornerType.SE;}
+        if (s && e && isLand(x + 1, y - 1)) {lake.setInitialize(11);return CornerType.NW;}
+        if (s && w && sw) {lake.setInitialize(12);return CornerType.NE;}
 
         return CornerType.NONE;
     }

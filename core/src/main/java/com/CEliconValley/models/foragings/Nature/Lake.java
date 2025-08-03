@@ -38,7 +38,7 @@ public class Lake implements ObjectMap, Obstacle {
     public Lake(int x, int y, Farm farm, int Khordamet) {
         Cell cell = Finder.findCellByCoordinates(x, y, farm);
         if (cell != null) {
-            cell.setObjectMap(this);
+            cell.setObjectMap(new Lake());
         }
     }
     public Lake(int startX, int startY1, Village village) {
@@ -69,7 +69,7 @@ public class Lake implements ObjectMap, Obstacle {
                 if (map[x][y]) {
                     Cell cell = Finder.findCellByCoordinatesVillage(startX + x, (int) startY + y, village);
                     if (cell != null) {
-                        cell.setObjectMap(this);
+                        cell.setObjectMap(new Lake());
                     }
                 }
             }
@@ -94,7 +94,7 @@ public class Lake implements ObjectMap, Obstacle {
                 if (map[x][y]) {
                     Cell cell = Finder.findCellByCoordinates(startX + x, startY + y, farm);
                     if (cell != null) {
-                        cell.setObjectMap(this);
+                        cell.setObjectMap(new Lake());
                     }
                 }
             }
