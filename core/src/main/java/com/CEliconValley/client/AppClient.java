@@ -114,4 +114,11 @@ public class AppClient {
     public static Lobby getCurrentLobby() {return currentLobby;}
 
     public static void setCurrentLobby(Lobby lobby) {currentLobby = lobby;}
+
+    public static void addLobby(Lobby lobby){
+        if(lobbies.contains(lobby)){
+            lobbies.remove(lobby);
+        }
+        lobbies.add(lobby);
+    }
 }

@@ -127,7 +127,7 @@ public class GameClient extends WebSocketClient {
                         GameMessage<Lobby> msg = gson.fromJson(message, new TypeToken<GameMessage<Lobby>>() {
                         }.getType());
                         Gdx.app.postRunnable(() -> {
-                            AppClient.getLobbies().add(msg.body);
+                            AppClient.addLobby(msg.body);
                             if(AppClient.getMenu().getScreen() instanceof MainMenuView view){
                                 if(view.getJoinLobby()){
                                     view.showJoinLobbyForm();
