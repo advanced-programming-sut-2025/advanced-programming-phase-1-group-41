@@ -198,7 +198,7 @@ public class GameClient extends WebSocketClient {
                         Gdx.app.postRunnable(() -> {
                             AppClient.setOnlinePlayers(new HashSet<>(msg.body.onlinePlayers));
                             if(AppClient.getMenu().getScreen() instanceof MainMenuView screen){
-                                screen.onlineplayersUpdate();
+                                screen.onlinePlayersUpdate();
                             }
                         });
                         System.out.println("Cmessage: " + message);

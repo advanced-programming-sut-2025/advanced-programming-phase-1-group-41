@@ -40,7 +40,7 @@ public class MainMenuView implements Screen {
     public final TextButton logoutButton;
 
     private final Table mainTable;
-    private final Table dataTable;
+    private final Table playersDataTable;
     private final Table formTable;
 
     // Join Lobby fields
@@ -59,7 +59,8 @@ public class MainMenuView implements Screen {
     private TextField passwordField;
     private TextButton createLobbyButton;
 
-    ScrollPane scrollPane;
+    private ScrollPane lobbiesScrollPane;
+    private final ScrollPane playersScrollPane;
 
     Table lobbyListTable;
 
@@ -76,19 +77,26 @@ public class MainMenuView implements Screen {
         mainTable.setFillParent(true);
         mainTable.center();
 
-        dataTable = new Table();
-        dataTable.setFillParent(true);
-        dataTable.right();
+        playersDataTable = new Table();
+        playersDataTable.setFillParent(true);
+        playersDataTable.left();
 
         formTable = new Table();
         formTable.setFillParent(true);
         formTable.center();
 
+        playersScrollPane = new ScrollPane(playersDataTable, skin);
+        playersScrollPane.setFadeScrollBars(false);
+        playersScrollPane.setScrollingDisabled(true, false);
+        playersScrollPane.setScrollbarsOnTop(true);
+
+        playersScrollPane.setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
+
         controller.setView(this);
         buildUI();
     }
 
-    public void onlineplayersUpdate(){
+    public void onlinePlayersUpdate(){
         Set<OnlineData> onlinePlayers = AppClient.getOnlinePlayers();
         ArrayList<Color> colors = new ArrayList<>();
         colors.add(Color.GREEN);
@@ -96,31 +104,13 @@ public class MainMenuView implements Screen {
         colors.add(Color.RED);
         colors.add(Color.YELLOW);
         int i = 0;
-        dataTable.clear();
+        playersDataTable.clear();
         for (OnlineData onlineData : onlinePlayers) {
             Label label = new Label(onlineData.username + " .~`", GameAssetManager.getGameAssetManager().getSkin());
             label.setColor(colors.get(i++ % colors.size()));
-            dataTable.add(label).width(300).pad(20).row();
+            playersDataTable.add(label).width(300).pad(20).row();
         }
-        dataTable.setPosition(-Gdx.graphics.getWidth() / 4.5f, -Gdx.graphics.getHeight() / 20f);
-
-    }
-
-    private void buildUI() {
-        mainTable.clear();
-        formTable.clear();
-
-        Table lobbyRow = new Table();
-        lobbyRow.add(newLobbyButton).padRight(10);
-        lobbyRow.add(joinLobbyButton).padRight(10);
-
-        mainTable.add(lobbyRow).width(450).pad(20).padTop(150).row();
-        mainTable.add(profileButton).width(300).pad(20).row();
-        mainTable.add(logoutButton).width(300).pad(20).row();
-
-        onlineplayersUpdate();
-
-        controller.setupListeners();
+        playersDataTable.setPosition(-Gdx.graphics.getWidth() / 4.5f, -Gdx.graphics.getHeight() / 20f);
 
     }
 
@@ -145,10 +135,28 @@ public class MainMenuView implements Screen {
                 }
             }
         }
-        scrollPane = new ScrollPane(lobbyListTable, skin);
-        scrollPane.setFadeScrollBars(false);
-        scrollPane.setScrollingDisabled(true, false);
-        scrollPane.setScrollbarsOnTop(true);
+        lobbiesScrollPane = new ScrollPane(lobbyListTable, skin);
+        lobbiesScrollPane.setFadeScrollBars(false);
+        lobbiesScrollPane.setScrollingDisabled(true, false);
+        lobbiesScrollPane.setScrollbarsOnTop(true);
+    }
+
+    private void buildUI() {
+        mainTable.clear();
+        formTable.clear();
+
+        Table lobbyRow = new Table();
+        lobbyRow.add(newLobbyButton).padRight(10);
+        lobbyRow.add(joinLobbyButton).padRight(10);
+
+        mainTable.add(lobbyRow).width(450).pad(20).padTop(150).row();
+        mainTable.add(profileButton).width(300).pad(20).row();
+        mainTable.add(logoutButton).width(300).pad(20).row();
+
+        onlinePlayersUpdate();
+
+        controller.setupListeners();
+
     }
 
     public void showJoinLobbyForm() {
@@ -174,7 +182,7 @@ public class MainMenuView implements Screen {
 
         formTable.add(new Label("Join Lobby", skin, "title")).padBottom(20).row();
         formTable.add(joinLobbyMessage).width(400).pad(10).row();
-        formTable.add(scrollPane).width(400).height(200).pad(10).row(); //Scroll Pane
+        formTable.add(lobbiesScrollPane).width(400).height(200).pad(10).row(); //Scroll Pane
         formTable.add(lobbyIdField).width(400).pad(10).row();
         formTable.add(lobbyPasswordField).width(400).pad(10).row();
         formTable.add(joinConfirmButton).width(300).pad(10).row();
@@ -262,7 +270,7 @@ public class MainMenuView implements Screen {
 
         stage.addActor(background);
         stage.addActor(mainTable);
-        stage.addActor(dataTable);
+        stage.addActor(playersScrollPane);
         stage.addActor(formTable);
     }
 
