@@ -53,8 +53,6 @@ public class FarmScreen extends GameScreen implements Screen {
 
 
 
-    private final Stage stage;
-
     Map<Cell, TextureRegion> groundCache;
 
     public static Texture farmTexture =new Texture("game/Buildings/Screen/Farm_Screen.png");
@@ -89,14 +87,8 @@ public class FarmScreen extends GameScreen implements Screen {
     @SuppressWarnings("unchecked")
     public FarmScreen(Farm farm, Player player) {
         super(new InventoryRenderer(player.getInventory()));
-        stage = new Stage(new ScreenViewport(), Main.getBatch());
-        Gdx.input.setInputProcessor(stage);
 
-        cheatCodeField = new TextField("", GameAssetManager.getGameAssetManager().getSkin());
-        cheatCodeField.setMessageText("Enter cheat code");
-        cheatCodeField.setVisible(false);
-        cheatCodeField.setWidth(600);
-        cheatCodeField.setPosition(stage.getWidth()/2  - cheatCodeField.getWidth() / 2, stage.getHeight() / 2 - cheatCodeField.getHeight() / 2);
+
 
         stage.addActor(cheatCodeField);
 
@@ -351,6 +343,7 @@ public class FarmScreen extends GameScreen implements Screen {
 
     @Override public void show() {
         Playeracts.setScreen(this);
+        System.out.println("im here ;)");
     }
     @Override public void hide() {}
     @Override public void pause() {}

@@ -1,9 +1,11 @@
 package com.CEliconValley.client.view.screen;
 
+import com.CEliconValley.Main;
 import com.CEliconValley.controllers.Spawner.InventoryRenderer;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.buildings.Wall;
+import com.CEliconValley.models.foragings.ForagingTree;
 import com.CEliconValley.models.foragings.Nature.Lake;
 import com.CEliconValley.models.foragings.Nature.Obstacle;
 import com.CEliconValley.models.foragings.Nature.Rock;
@@ -11,6 +13,8 @@ import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.CEliconValley.views.maps.BarnMap;
+import com.CEliconValley.views.maps.CottageMap;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public abstract class GameScreen implements Screen {
     protected boolean onRepeat = true;
@@ -27,16 +32,37 @@ public abstract class GameScreen implements Screen {
     protected boolean cheatMode = false;
     protected Image overlay;
     protected TextField cheatCodeField;
+    protected Stage stage;
     public abstract void transfer();
     public GameScreen(InventoryRenderer inventoryRenderer) {
+        stage = new Stage(new ScreenViewport(), Main.getBatch());
+        Gdx.input.setInputProcessor(stage);
         this.inventoryRenderer = inventoryRenderer;
+        cheatCodeField = new TextField("", GameAssetManager.getGameAssetManager().getSkin());
+        cheatCodeField.setMessageText("Enter cheat code");
+        cheatCodeField.setVisible(false);
+        cheatCodeField.setWidth(600);
+        cheatCodeField.setPosition(stage.getWidth()/2  - cheatCodeField.getWidth() / 2, stage.getHeight() / 2 - cheatCodeField.getHeight() / 2);
     }
+
 
     public boolean canMoveTo(int x, int y, Location location) {
         if(location instanceof Farm farm){
             for (Cell cell : farm.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
                     if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock ||cell.getObjectMap() instanceof Wall ||cell.getObjectMap() instanceof Obstacle) {
+                        return false;
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+        if(location instanceof CottageMap cottageMap){
+            for (Cell cell : cottageMap.getCells()) {
+                if (cell.getX() == x && cell.getY() == y) {
+                    if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock
+                        || cell.getObjectMap() instanceof Wall || cell.getObjectMap() instanceof ForagingTree) {
                         return false;
                     }
                     return true;

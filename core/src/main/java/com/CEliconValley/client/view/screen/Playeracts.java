@@ -108,10 +108,14 @@ public class Playeracts {
             if(screen instanceof FarmScreen farmScreen){
                 farmScreen.hit(hero.currentDirection,hero.playerX,hero.playerY);
             }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            if(screen instanceof FarmScreen farmScreen){
-                farmScreen.transfer();
-            }
+        } else if (Gdx.input.isKeyPressed(Input.Keys.UP) &&
+        screen instanceof FarmScreen farmScreen) {
+            farmScreen.transfer();
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && !(
+            screen instanceof FarmScreen
+            )){
+            System.out.println(screen);
+            screen.transfer();
         }
 
         if (moved) {
@@ -153,6 +157,11 @@ public class Playeracts {
         } else {
             return Math.max(current - delta, target);
         }
+    }
+
+    public static void changeScreen(GameScreen screen){
+        ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(screen);
+//        screen.show();
     }
 
 
