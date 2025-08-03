@@ -1,5 +1,6 @@
 package com.CEliconValley.client.view.screen;
 
+import com.CEliconValley.Main;
 import com.CEliconValley.client.view.screen.maps.CoopMap;
 import com.CEliconValley.controllers.Spawner.*;
 import com.CEliconValley.models.Cell;
@@ -12,6 +13,7 @@ import com.CEliconValley.models.buildings.animalContainer.Barn;
 import com.CEliconValley.models.buildings.animalContainer.Coop;
 import com.CEliconValley.models.foragings.ForagingTree;
 import com.CEliconValley.models.foragings.Nature.*;
+import com.CEliconValley.models.ui.GameAssetManager;
 import com.CEliconValley.views.maps.BarnMap;
 import com.CEliconValley.views.maps.CottageMap;
 import com.CEliconValley.models.locations.Farm;
@@ -26,6 +28,12 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.math.MathUtils;
 
 import java.util.*;
@@ -45,6 +53,12 @@ public class FarmScreen implements Screen {
     private boolean onRepeat = true;
     private boolean didHit = false;
     private final List<Cell> visibleCells = new ArrayList<>();
+
+    private boolean cheatMode = false;
+    private Image overlay;
+
+    private final Stage stage;
+    private TextField cheatCodeField;
 
     Map<Cell, TextureRegion> groundCache;
 
@@ -81,6 +95,17 @@ public class FarmScreen implements Screen {
 
     @SuppressWarnings("unchecked")
     public FarmScreen(Farm farm, Player player) {
+        stage = new Stage(new ScreenViewport(), Main.getBatch());
+        Gdx.input.setInputProcessor(stage);
+
+        cheatCodeField = new TextField("", GameAssetManager.getGameAssetManager().getSkin());
+        cheatCodeField.setMessageText("Enter cheat code");
+        cheatCodeField.setVisible(false);
+        cheatCodeField.setWidth(600);
+        cheatCodeField.setPosition(stage.getWidth()/2  - cheatCodeField.getWidth() / 2, stage.getHeight() / 2 - cheatCodeField.getHeight() / 2);
+
+        stage.addActor(cheatCodeField);
+
         this.farm = farm;
         this.player = player;
         treeSpawner=new TreeSpawner(this.farm);
@@ -156,6 +181,33 @@ public class FarmScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if (cheatMode) {
+            stage.act(delta);
+            stage.draw();
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                String code = cheatCodeField.getText();
+                System.out.println("Cheat code entered: " + code);
+
+                //TODO Cheat code handling
+
+                cheatCodeField.setText("");
+                cheatCodeField.setVisible(false);
+                cheatMode = false;
+
+                overlay.addAction(Actions.sequence(
+                    Actions.fadeOut(0.5f),
+                    Actions.run(() -> overlay.remove())
+                ));
+
+                if (overlay != null) {
+                    overlay.remove();
+                    overlay = null;
+                }
+
+            }
+            return;
+        }
         handleInput();
 
         Gdx.gl.glClearColor(0.8f, 0.9f, 1f, 1);
@@ -268,13 +320,18 @@ public class FarmScreen implements Screen {
 
 
         batch.end();
+
+
+
     }
 
 
 
-
-
     private void handleInput() {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+            handleCheatCode();
+            return;
+        }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             inventoryRenderer.shiftRight();
         }
@@ -408,8 +465,27 @@ public class FarmScreen implements Screen {
         }
     }
 
+    private void handleCheatCode() {
+        cheatMode = true;
+        cheatCodeField.setVisible(true);
+        stage.setKeyboardFocus(cheatCodeField);
+        cheatCodeField.setText("");
+
+        overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
+            .getGameAssetManager()
+            .getBackgroundTexture("Field3.png"))));
+
+//        overlay.setColor(0, 0, 0, 0.5f);
+        overlay.setSize(stage.getWidth(), stage.getHeight());
+        overlay.setPosition(0, 0);
+
+        overlay.getColor().a = 0;
+        overlay.addAction(Actions.fadeIn(0.5f));
 
 
+        stage.addActor(overlay);
+        overlay.toBack();
+    }
 
 
     @Override
@@ -417,6 +493,7 @@ public class FarmScreen implements Screen {
 
             batch.dispose();
 
+//        grassTexture.dispose();
 
 
     }

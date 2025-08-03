@@ -1,5 +1,6 @@
 package com.CEliconValley.client.view;
 
+import com.CEliconValley.models.ui.CustomColors;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -39,9 +41,14 @@ public class LobbyScreen implements Screen {
     private Label label4;
     public TextButton startGameButton;
     public TextButton exitButton;
+    private TextButton mountainButton;
+    private TextButton swampButton;
+    private TextButton jungleButton;
+
 
     private Table mainTable;
     private Table teamTable;
+    private Table mapTable;
 
     private Texture teamBackgroundTexture;
     private Texture lobbyBackgorundTexture;
@@ -123,6 +130,28 @@ public class LobbyScreen implements Screen {
             .expand()
             .fill();
 
+        mapTable = new Table();
+        mapTable.center().padTop(50);
+
+        mountainButton = new TextButton("Mountain", skin);
+        swampButton = new TextButton("Swamp", skin);
+        jungleButton = new TextButton("Jungle", skin);
+
+        ButtonGroup<TextButton> mapGroup = new ButtonGroup<>(mountainButton, swampButton, jungleButton);
+        mapGroup.setMinCheckCount(1);
+        mapGroup.setMaxCheckCount(1);
+
+        mapTable.add(mountainButton).pad(10).width(200).row();
+        mapTable.add(swampButton).pad(10).width(200).row();
+        mapTable.add(jungleButton).pad(10).width(200);
+
+        mountainButton.setChecked(true);
+
+        updateMapButtonStyles();
+        mountainButton.addListener(event -> { if (mountainButton.isChecked()) updateMapButtonStyles(); return false; });
+        swampButton.addListener(event -> { if (swampButton.isChecked()) updateMapButtonStyles(); return false; });
+        jungleButton.addListener(event -> { if (jungleButton.isChecked()) updateMapButtonStyles(); return false; });
+
         controller.setupListeners();
     }
 
@@ -139,8 +168,10 @@ public class LobbyScreen implements Screen {
         background.setSize(stage.getWidth(), stage.getHeight());
         background.setPosition(0, 0);
 
+        mapTable.setPosition(stage.getWidth() / 1.5f, stage.getHeight() / 1.7f);
         stage.addActor(background);
         stage.addActor(mainTable);
+        stage.addActor(mapTable);
     }
 
 
@@ -232,6 +263,34 @@ public class LobbyScreen implements Screen {
         label3.setVisible(c);
         label4.setVisible(d);
     }
+
+    private void updateMapButtonStyles() {
+
+        if (mountainButton.isChecked()) {
+            mountainButton.setColor(CustomColors.MOUNTAIN_COLOR);
+            mountainButton.getLabel().setColor(Color.WHITE);
+        } else {
+            mountainButton.setColor(0.5f, 0.5f, 0.5f, 1f);
+            mountainButton.getLabel().setColor(CustomColors.MOUNTAIN_COLOR);
+        }
+
+        if (swampButton.isChecked()) {
+            swampButton.setColor(CustomColors.SWAMP_COLOR);
+            swampButton.getLabel().setColor(Color.WHITE);
+        } else {
+            swampButton.setColor(0.5f, 0.5f, 0.5f, 1f);
+            swampButton.getLabel().setColor(CustomColors.SWAMP_COLOR);
+        }
+
+        if (jungleButton.isChecked()) {
+            jungleButton.setColor(CustomColors.JUNGLE_COLOR);
+            jungleButton.getLabel().setColor(Color.WHITE);
+        } else {
+            jungleButton.setColor(0.5f, 0.5f, 0.5f, 1f);
+            jungleButton.getLabel().setColor(CustomColors.JUNGLE_COLOR);
+        }
+    }
+
 
 
 }
