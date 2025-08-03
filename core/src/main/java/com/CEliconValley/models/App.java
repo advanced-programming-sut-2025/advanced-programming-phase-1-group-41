@@ -103,9 +103,7 @@ public class App {
     }
 
     public static void putOnlinePlayer(OnlineData onlinePlayer){
-        if(onlinePlayers.contains(onlinePlayer)){
-            onlinePlayers.remove(onlinePlayer);
-        }
+        onlinePlayers.remove(onlinePlayer);
         onlinePlayers.add(onlinePlayer);
         sendData();
     }
@@ -120,9 +118,8 @@ public class App {
     public static void sendData(){
         GameMessage<AppData> msg = new GameMessage<>("app-data",new AppData(onlinePlayers));
         String json = new Gson().toJson(msg);
-        System.out.println("tryina send app-data");
         App.getServer().broadcast(json);
-        System.out.println("broadcasted");
+        System.out.println("broadcasted "+json);
     }
 
 
