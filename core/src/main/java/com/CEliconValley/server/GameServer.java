@@ -34,9 +34,17 @@ public class GameServer extends WebSocketServer {
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         connections.remove(conn);
         App.removeOnlinePlayer(onlineConnections.get(conn).getUsername());
-        for (Lobby lobby : App.lobbies) {
+        Iterator<Lobby> lobbyIterator = App.lobbies.iterator();
+        while (lobbyIterator.hasNext()) {
+            Lobby lobby = lobbyIterator.next();
             if(lobby.getPlayerNames().contains(onlineConnections.get(conn).getUsername())){
                 lobby.removePlayer(onlineConnections.get(conn).getUsername());
+            }
+            if(lobby.getPlayerNames().isEmpty()){
+                System.out.println("im here bitch");
+                App.lobbies.remove(lobby);
+                GameMessage<Lobby> response2 = new GameMessage<>("delete-lobby", lobby);
+                App.getServer().broadcast(new Gson().toJson(response2));
             }
         }
         onlineConnections.remove(conn);
