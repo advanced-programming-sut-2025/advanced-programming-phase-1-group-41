@@ -54,11 +54,16 @@ public enum FishType implements Item, Eatable {
 
 
     public static Item parseFish(String name) {
+        for (FishType value : FishType.values()) {
+            if(value.name().equals(name)){
+                return value;
+            }
+        }
         return switch(name){
             case "Salmon" -> Salmon;
             case "Sardine" -> Sardine;
             case "Shad" -> Shad;
-            case "BlueDiscus " -> BlueDiscus;
+            case "BlueDiscus" -> BlueDiscus;
             case "MidnightCarp" -> MidnightCarp;
             case "Squid" -> Squid;
             case "Tuna" -> Tuna;

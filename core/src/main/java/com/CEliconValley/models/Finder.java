@@ -1,6 +1,9 @@
 package com.CEliconValley.models;
 
 import com.CEliconValley.client.view.screen.maps.CoopMap;
+import com.CEliconValley.common.FarmData;
+import com.CEliconValley.common.GameData;
+import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.models.buildings.marketplaces.items.*;
 import com.CEliconValley.models.foragings.*;
 import com.CEliconValley.models.foragings.Nature.*;
@@ -244,6 +247,22 @@ public class Finder {
         for (Lobby lobby : App.lobbies) {
             if(lobby.getLobbyID().equals(id.trim())) {
                 return lobby;
+            }
+        }
+        return null;
+    }
+    public static FarmData getFarmDataById(GameData gameData, String username){
+        Integer id = null;
+        for (PlayerData playersDatum : gameData.getPlayersData()) {
+            if(playersDatum.getUsername().equals(username)){
+               id = playersDatum.getFarmId();
+            }
+        }
+        if(id != null){
+            for (FarmData farmsDatum : gameData.getFarmsData()) {
+                if(farmsDatum.getId() == id){
+                    return farmsDatum;
+                }
             }
         }
         return null;

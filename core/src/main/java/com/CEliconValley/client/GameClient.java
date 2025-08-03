@@ -109,8 +109,10 @@ public class GameClient extends WebSocketClient {
                             Menu.Game.resetMenu();
                             AppClient.setMenu(Menu.Game);
                             AppClient.setGameData(gameDataMessage.body);
-                            ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new FarmScreen(new Farm(1, FarmType.Jungle),
-                                gameDataMessage.body.getPlayersData().get(0).getPlayer()));
+                            Player player = gameDataMessage.body.getPlayersData().get(0).getPlayer();
+                            ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new FarmScreen(
+                                Finder.getFarmDataById(AppClient.getGameData(), AppClient.getUserData().getUsername()).getFarm(player),player
+                                ));
                         });
                     }
                     case "pre-start-request" -> {

@@ -241,4 +241,84 @@ public class FarmData {
             cell.setObjectMap(cd.getCrop());
         }
     }
+
+    public ArrayList<BarnData> getBarnsData() {
+        return barnsData;
+    }
+
+    public ArrayList<CellData> getCells() {
+        return cells;
+    }
+
+    public ArrayList<CoopData> getCoopsData() {
+        return coopsData;
+    }
+
+    public int getCottageX() {
+        return cottageX;
+    }
+
+    public ArrayList<CropData> getCropsData() {
+        return cropsData;
+    }
+
+    public int getFarmTypeInt() {
+        return farmTypeInt;
+    }
+
+    public int getForagingCropCount() {
+        return foragingCropCount;
+    }
+
+    public int getForagingTreeCount() {
+        return foragingTreeCount;
+    }
+
+    public int getGreenhouseX() {
+        return greenhouseX;
+    }
+
+    public int getGreenhouseY() {
+        return greenhouseY;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public boolean isGreenHouseUnlocked() {
+        return isGreenHouseUnlocked;
+    }
+
+    public int getMineLengthX() {
+        return mineLengthX;
+    }
+
+    public int getMineLengthY() {
+        return mineLengthY;
+    }
+
+    public int getPlantCount() {
+        return plantCount;
+    }
+
+    public RefrigeratorData getRefrigeratorData() {
+        return refrigeratorData;
+    }
+
+    public int getRockCount() {
+        return rockCount;
+    }
+
+    public ArrayList<CellData> getStartPoints() {
+        return startPoints;
+    }
+
+    public ArrayList<CellData> getTransferCells() {
+        return transferCells;
+    }
+
+    public ArrayList<TreeData> getTreesData() {
+        return treesData;
+    }
 }

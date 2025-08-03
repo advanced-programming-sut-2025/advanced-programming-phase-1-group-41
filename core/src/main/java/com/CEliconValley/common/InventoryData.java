@@ -3,6 +3,7 @@ package com.CEliconValley.common;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.items.Backpack;
 import com.CEliconValley.models.items.Inventory;
+import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
 import dev.morphia.annotations.Embedded;
 
@@ -33,7 +34,12 @@ public class InventoryData {
     public Inventory getInventory() {
         Inventory inventory = new Inventory(Backpack.values()[whichBackpack]);
         for (SlotData slot : slots) {
-            inventory.addToInventory(Finder.parseItem(slot.getItemName()), slot.getQuantity());
+            Item item = Finder.parseItem(slot.getItemName());
+            if(item == null){
+                System.out.println("b "+ slot.getItemName());
+                System.out.println(Finder.parseItem("BlueDiscus"));
+            }
+            inventory.addToInventory(item, slot.getQuantity());
         }
         return inventory;
     }
