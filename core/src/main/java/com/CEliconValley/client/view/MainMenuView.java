@@ -90,7 +90,9 @@ public class MainMenuView implements Screen {
         playersScrollPane.setScrollingDisabled(true, false);
         playersScrollPane.setScrollbarsOnTop(true);
 
-        playersScrollPane.setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
+        playersScrollPane.setWidth(300);
+        playersScrollPane.setHeight(300);
+        playersScrollPane.setPosition(Gdx.graphics.getWidth() / 1.3f, Gdx.graphics.getHeight() / 1.6f);
 
         controller.setView(this);
         buildUI();
@@ -105,6 +107,8 @@ public class MainMenuView implements Screen {
         colors.add(Color.YELLOW);
         int i = 0;
         playersDataTable.clear();
+        Label label1 = new Label("Online Players", GameAssetManager.getGameAssetManager().getSkin());
+        playersDataTable.add(label1).center().width(300).pad(20).row();
         for (OnlineData onlineData : onlinePlayers) {
             Label label = new Label(onlineData.username + " .~`", GameAssetManager.getGameAssetManager().getSkin());
             label.setColor(colors.get(i++ % colors.size()));
