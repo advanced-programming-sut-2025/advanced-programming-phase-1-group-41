@@ -1,6 +1,7 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.controller.CheatCodeController;
+import com.CEliconValley.client.model.AnimalSprite;
 import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.Result;
 import com.CEliconValley.models.locations.Location;
@@ -13,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
+import java.util.ArrayList;
 
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
@@ -164,6 +167,42 @@ public class Playeracts {
 //        screen.show();
     }
 
+    public static void animalApproach(ArrayList<AnimalSprite> animalSprites,
+                                      float delta){
+        animalSprites.forEach(animalSprite -> {
+            if(animalSprite.isMoving){
+                float moveAmount = 400 * delta;
 
+                float targetPixelX = animalSprite.targetX * CELL_SIZE;
+                float targetPixelY = animalSprite.targetY * CELL_SIZE;
+                animalSprite.currentAnimation = animalSprite.walk(true, animalSprite.currentDirection);
+                if (animalSprite.renderX < targetPixelX) {
+                    animalSprite.renderX += moveAmount;
+                    if (animalSprite.renderX > targetPixelX) animalSprite.renderX = targetPixelX;
+                } else if (animalSprite.renderX > targetPixelX) {
+                    animalSprite.renderX -= moveAmount;
+                    if (animalSprite.renderX < targetPixelX) animalSprite.renderX = targetPixelX;
+                }
+
+
+                if (animalSprite.renderY < targetPixelY) {
+                    animalSprite.renderY += moveAmount;
+                    if (animalSprite.renderY > targetPixelY) animalSprite.renderY = targetPixelY;
+                } else if (animalSprite.renderY > targetPixelY) {
+                    animalSprite.renderY -= moveAmount;
+                    if (animalSprite.renderY < targetPixelY) animalSprite.renderY = targetPixelY;
+                }
+
+                if (animalSprite.renderX == targetPixelX && animalSprite.renderY == targetPixelY) {
+                    animalSprite.x = animalSprite.targetX;
+                    animalSprite.y = animalSprite.targetY;
+                    // TODO need to change the animaldata as well perhaps
+                    animalSprite.isMoving = false;
+                    animalSprite.currentAnimation = animalSprite.walk(false, animalSprite.currentDirection);
+                }
+            }
+        });
+
+    }
 
 }

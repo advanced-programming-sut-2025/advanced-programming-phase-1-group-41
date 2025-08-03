@@ -204,7 +204,7 @@ public class FarmScreen extends GameScreen implements Screen {
 //        for(Cell cell:visibleCells) {
 //            int x = (int) (cell.getX() * CELL_SIZE);
 //            int y = (int) (cell.getY() * CELL_SIZE);
-////            batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
+//            batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
 //            batch.draw(groundCache.get(cell), x, y, CELL_SIZE, CELL_SIZE);
 //        }
 

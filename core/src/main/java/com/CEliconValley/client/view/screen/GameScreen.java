@@ -1,6 +1,7 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.Main;
+import com.CEliconValley.client.view.screen.maps.CoopMap;
 import com.CEliconValley.controllers.Spawner.InventoryRenderer;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Hero;
@@ -76,6 +77,16 @@ public abstract class GameScreen implements Screen {
             for (Cell cell : greenHouseMap.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
                     if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock ||cell.getObjectMap() instanceof Wall ||cell.getObjectMap() instanceof ForagingTree) {
+                        return false;
+                    }
+                    return true;
+                }
+            }
+        }
+        if(location instanceof CoopMap coopMap) {
+            for (Cell cell : coopMap.getCells()) {
+                if (cell.getX() == x && cell.getY() == y) {
+                    if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock || cell.getObjectMap() instanceof Wall) {
                         return false;
                     }
                     return true;
