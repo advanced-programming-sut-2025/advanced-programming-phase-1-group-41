@@ -4,10 +4,7 @@ import com.CEliconValley.Main;
 import com.CEliconValley.client.controller.CheatCodeController;
 import com.CEliconValley.client.view.screen.maps.CoopMap;
 import com.CEliconValley.controllers.Spawner.*;
-import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Finder;
-import com.CEliconValley.models.Hero;
-import com.CEliconValley.models.Player;
+import com.CEliconValley.models.*;
 import com.CEliconValley.models.buildings.*;
 import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
 import com.CEliconValley.models.buildings.animalContainer.Barn;
@@ -39,10 +36,9 @@ import com.badlogic.gdx.math.MathUtils;
 
 import java.util.*;
 
-public class FarmScreen implements Screen {
+public class FarmScreen extends GameScreen implements Screen {
     private final SpriteBatch batch;
     private MenuBar menuBar;
-    private boolean isMenuOpen = false;
     private final Farm farm;
     private final Player player;
     private final TreeSpawner treeSpawner;
@@ -52,23 +48,18 @@ public class FarmScreen implements Screen {
     private final GroundSpawner groundSpawner;
     private final CropSpawner cropSpawner;
     private final Hero hero;
-    private final InventoryRenderer inventoryRenderer;
-    private boolean onRepeat = true;
-    private boolean didHit = false;
+
     private final List<Cell> visibleCells = new ArrayList<>();
 
-    private boolean cheatMode = false;
-    private Image overlay;
+
 
     private final Stage stage;
-    private TextField cheatCodeField;
 
     Map<Cell, TextureRegion> groundCache;
 
     public static Texture farmTexture =new Texture("game/Buildings/Screen/Farm_Screen.png");
     public static Sprite farmSprite;
     ;
-    boolean flip = false;
 
     private OrthographicCamera camera;
 
@@ -81,7 +72,6 @@ public class FarmScreen implements Screen {
 
     private Animation<TextureRegion>[] walkAnimations;
     private Animation<TextureRegion>[] coastAnimations;
-    private Animation<TextureRegion> currentAnimation;
     private float stateTime = 0f;
     private float passiveStateTime = 0f;
 
@@ -98,6 +88,7 @@ public class FarmScreen implements Screen {
 
     @SuppressWarnings("unchecked")
     public FarmScreen(Farm farm, Player player) {
+        super(new InventoryRenderer(player.getInventory()));
         stage = new Stage(new ScreenViewport(), Main.getBatch());
         Gdx.input.setInputProcessor(stage);
 
@@ -118,7 +109,6 @@ public class FarmScreen implements Screen {
         groundSpawner=new GroundSpawner(this.farm);
         cropSpawner=new CropSpawner(this.farm);
         hero=new Hero(this.farm);
-        inventoryRenderer = new InventoryRenderer(player.getInventory());
 
 
         batch = new SpriteBatch();
@@ -163,7 +153,7 @@ public class FarmScreen implements Screen {
 
 
 
-        currentAnimation = walkAnimations[0];
+        hero.currentAnimation = walkAnimations[0];
         for(Cell cell: farm.getCells()) {
             Cell doorCell=Finder.findCellByCoordinates(cell.getX(),cell.getY()+1,this.farm);
             Cell homeCell=Finder.findCellByCoordinates(cell.getX(),cell.getY()+2,this.farm);
@@ -188,35 +178,12 @@ public class FarmScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        if (cheatMode) {
-            stage.act(delta);
-            stage.draw();
-
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                String code = cheatCodeField.getText();
-                System.out.println("Cheat code entered: " + code);
-
-                //TODO Cheat code handling
-                CheatCodeController.cheatCodeHandler(code);
-
-                cheatCodeField.setText("");
-                cheatCodeField.setVisible(false);
-                cheatMode = false;
-
-                overlay.addAction(Actions.sequence(
-                    Actions.fadeOut(0.5f),
-                    Actions.run(() -> overlay.remove())
-                ));
-
-                if (overlay != null) {
-                    overlay.remove();
-                    overlay = null;
-                }
-
+        Result result = Playeracts.handleInput(hero, farm, stage, delta);
+        if(!result.success()){
+            if(result.message().equals("cheat")){
+                return;
             }
-            return;
         }
-        handleInput();
 
         Gdx.gl.glClearColor(0.8f, 0.9f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -224,22 +191,7 @@ public class FarmScreen implements Screen {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        if (hero.isMoving) {
-            float targetPixelX = hero.targetX * CELL_SIZE;
-            float targetPixelY = hero.targetY * CELL_SIZE;
-
-            float moveAmount = (float) CELL_SIZE / 4;
-
-            hero.renderX = approach(hero.renderX, targetPixelX, moveAmount);
-            hero.renderY = approach(hero.renderY, targetPixelY, moveAmount);
-
-            if (hero.renderX == targetPixelX && hero.renderY == targetPixelY) {
-                hero.playerX = hero.targetX;
-                hero.playerY = hero.targetY;
-                hero.isMoving = false;
-//                stateTime = 0f;
-            }
-        }
+        Playeracts.approach(hero);
 
         batch.begin();
         int minX = (int)((camera.position.x - camera.viewportWidth / 2) / CELL_SIZE) - 8;
@@ -288,10 +240,10 @@ public class FarmScreen implements Screen {
             rockSpawner.renderBreakingEffectForCell(batch, cell, delta);
             if(hero.playerX == cell.getX() && hero.playerY == cell.getY()){
 
-                TextureRegion currentFrame = currentAnimation.getKeyFrame(stateTime, onRepeat);
+                TextureRegion currentFrame = hero.currentAnimation.getKeyFrame(stateTime, onRepeat);
 //                System.out.println("stateTime: " + stateTime + ", frameIndex: " + currentAnimation.getKeyFrameIndex(stateTime));
-                if (!onRepeat&&currentAnimation.isAnimationFinished(stateTime)) {
-                    currentAnimation = hero.walk(false, hero.currentDirection);
+                if (!onRepeat&&hero.currentAnimation.isAnimationFinished(stateTime)) {
+                    hero.currentAnimation = hero.walk(false, hero.currentDirection);
                     hero.isActing=false;
 
 
@@ -310,7 +262,6 @@ public class FarmScreen implements Screen {
 
         }
             if(isMenuOpen){
-
 //                menuBar.render(batch, menuX, menuY, menuWidth, menuHeight);
                 menuBar.render(batch,camera,player.getInventory());
             }else {
@@ -341,102 +292,6 @@ public class FarmScreen implements Screen {
 
 
 
-    private void handleInput() {
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-            handleCheatCode();
-            return;
-        }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.M)){
-            isMenuOpen=!isMenuOpen;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            inventoryRenderer.shiftRight();
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            inventoryRenderer.shiftLeft();
-        }
-        if (hero.isActing||hero.isMoving) return;
-
-
-        boolean moved = false;
-        onRepeat=true;
-
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                hero.currentDirection = 1;
-            if (canMoveTo(hero.playerX, hero.playerY + 1)) {
-                hero.targetX = hero.playerX;
-                hero.targetY = hero.playerY + 1;
-                moved = true;
-            }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                hero.currentDirection = 3;
-
-            if (canMoveTo(hero.playerX, hero.playerY - 1)) {
-                hero.targetX = hero.playerX;
-                hero.targetY = hero.playerY - 1;
-                moved = true;
-            }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                hero.currentDirection = 4;
-            if (canMoveTo(hero.playerX - 1, hero.playerY)) {
-                hero.targetX = hero.playerX - 1;
-                hero.targetY = hero.playerY;
-                flip = true;
-                moved = true;
-            }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                hero.currentDirection = 2;
-                flip = false;
-            if (canMoveTo(hero.playerX + 1, hero.playerY)) {
-                hero.targetX = hero.playerX + 1;
-                hero.targetY = hero.playerY;
-                moved = true;
-            }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.E)) {
-            onRepeat=false;
-            currentAnimation = hero.useTool(3);
-            hero.isActing=true;
-            stateTime = 0;
-            didHit=true;
-            hit(hero.currentDirection,hero.playerX,hero.playerY);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            transfer();
-        }
-
-        if (moved) {
-            hero.isMoving = true;
-            currentAnimation = hero.walk(true, hero.currentDirection);
-        } else if (!hero.isMoving) {
-            currentAnimation = hero.walk(false, hero.currentDirection);
-        }
-    }
-    private float approach(float current, float target, float delta) {
-//        if((hero.currentDirection == 1 || hero.currentDirection == 2) && target < current) {
-//            return current;
-//        } else if((hero.currentDirection == 3 || hero.currentDirection == 4) && target > current) {
-//            return current;
-//        }
-        if (current < target) {
-            return Math.min(current + delta, target);
-        } else {
-            return Math.max(current - delta, target);
-        }
-    }
-
-
-    private boolean canMoveTo(int x, int y) {
-        for (Cell cell : farm.getCells()) {
-            if (cell.getX() == x && cell.getY() == y) {
-                if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock||cell.getObjectMap() instanceof Wall||cell.getObjectMap() instanceof Obstacle) {
-                    return false;
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-
 
 
 
@@ -445,7 +300,7 @@ public class FarmScreen implements Screen {
     public void resize(int width, int height) {
         camera.setToOrtho(false, width, height);
     }
-    private void hit(int direction,int cellX,int cellY) {
+    public void hit(int direction,int cellX,int cellY) {
         switch (direction) {
             case 1:
                 rockSpawner.hitRock(Finder.findCellByCoordinates(cellX, cellY+1,this.farm));
@@ -482,27 +337,6 @@ public class FarmScreen implements Screen {
         }
     }
 
-    private void handleCheatCode() {
-        cheatMode = true;
-        cheatCodeField.setVisible(true);
-        stage.setKeyboardFocus(cheatCodeField);
-        cheatCodeField.setText("");
-
-        overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
-            .getGameAssetManager()
-            .getBackgroundTexture("Field3.png"))));
-
-//        overlay.setColor(0, 0, 0, 0.5f);
-        overlay.setSize(stage.getWidth(), stage.getHeight());
-        overlay.setPosition(0, 0);
-
-        overlay.getColor().a = 0;
-        overlay.addAction(Actions.fadeIn(0.5f));
-
-
-        stage.addActor(overlay);
-        overlay.toBack();
-    }
 
 
     @Override
@@ -515,8 +349,12 @@ public class FarmScreen implements Screen {
 
     }
 
-    @Override public void show() {}
+    @Override public void show() {
+        Playeracts.setScreen(this);
+    }
     @Override public void hide() {}
     @Override public void pause() {}
     @Override public void resume() {}
+
+
 }
