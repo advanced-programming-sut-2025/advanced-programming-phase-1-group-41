@@ -38,7 +38,8 @@ public class CottageMap implements Location {
             }
         }
         Door door = new Door();
-        cells.add(new Cell(door, offsetX + 9, offsetY + 3));
+        Cell cell = getCell(9, 3);
+        cell.setObjectMap(door);
     }
 
     public ArrayList<Cell> getCells() {

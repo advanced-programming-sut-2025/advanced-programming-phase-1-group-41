@@ -55,7 +55,8 @@ public class CoopMap implements Location {
         }
 
         Door door = new Door();
-        cells.add(new Cell(door, offsetX+1 , offsetY));
+        Cell cell = getCell(1,0);
+        cell.setObjectMap(door);
     }
 
     public ArrayList<Cell> getCells() {

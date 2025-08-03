@@ -168,7 +168,7 @@ public class FarmScreen implements Screen {
             float targetPixelX = hero.targetX * CELL_SIZE;
             float targetPixelY = hero.targetY * CELL_SIZE;
 
-            float moveAmount = (float) CELL_SIZE / 6;
+            float moveAmount = (float) CELL_SIZE / 4;
 
             hero.renderX = approach(hero.renderX, targetPixelX, moveAmount);
             hero.renderY = approach(hero.renderY, targetPixelY, moveAmount);
