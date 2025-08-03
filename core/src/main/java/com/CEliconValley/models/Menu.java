@@ -52,6 +52,12 @@ public enum Menu {
 
     public void resetMenu(){
         Gdx.app.postRunnable(() -> {
+            try{
+                AppClient.getMenu().getScreen().dispose();
+                System.out.println(this.menuName + " disposed");
+            } catch (Exception e){
+                System.out.println(e.getMessage());
+            }
             if(menu.equals(Menu.Authentication.menu)){
                 Menu.Authentication.menu = new AuthenticationMenuView(new AuthenticationMenuController());
             } else if(menu.equals(Menu.Profile.menu)){
@@ -61,7 +67,8 @@ public enum Menu {
             } if(menu.equals(Menu.Lobby.menu)){
                 Menu.Lobby.menu = new LobbyScreen(new LobbyController());
             }
-            if(menu == Menu.Main.menu || menu == Profile.menu || menu == Authentication.menu){
+            if(menu == Menu.Main.menu || menu == Profile.menu || menu == Authentication.menu
+            || menu == Lobby.menu){
                 com.CEliconValley.Main.getMain().setScreen(AppClient.getMenu().getScreen());
             }
         });

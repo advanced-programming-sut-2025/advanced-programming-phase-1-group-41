@@ -45,8 +45,8 @@ public class MainMenuController {
         view.getProfileButton().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                AppClient.setMenu(Menu.Profile);
                 Menu.Profile.resetMenu();
+                AppClient.setMenu(Menu.Profile);
                 Main.getMain().setScreen(AppClient.getMenu().getScreen());
             }
         });
@@ -59,8 +59,8 @@ public class MainMenuController {
                 String json = new Gson().toJson(msg);
                 AppClient.getClient().send(json);
                 AppClient.logout();
-                AppClient.setMenu(Menu.Authentication);
                 Menu.Authentication.resetMenu();
+                AppClient.setMenu(Menu.Authentication);
                 Main.getMain().setScreen(AppClient.getMenu().getScreen());
             }
         });

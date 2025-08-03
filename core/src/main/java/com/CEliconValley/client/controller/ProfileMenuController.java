@@ -66,6 +66,7 @@ public class ProfileMenuController {
         view.backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Menu.Main.resetMenu();
                 AppClient.setMenu(Menu.Main);
                 Main.getMain().setScreen(AppClient.getMenu().getScreen());
             }

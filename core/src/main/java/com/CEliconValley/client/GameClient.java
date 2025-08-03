@@ -95,8 +95,8 @@ public class GameClient extends WebSocketClient {
                         GameMessage<GameData> gameDataMessage = gson.fromJson(message, new TypeToken<GameMessage<GameData>>() {
                         }.getType());
                         Gdx.app.postRunnable(() -> {
-                            AppClient.setMenu(Menu.Game);
                             Menu.Game.resetMenu();
+                            AppClient.setMenu(Menu.Game);
                             AppClient.setGameData(gameDataMessage.body);
                             ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new FarmScreen(new Farm(1),
                                 gameDataMessage.body.getPlayersData().get(0).getPlayer()));
@@ -116,7 +116,7 @@ public class GameClient extends WebSocketClient {
                                 AppClient.setCurrentLobby(msg.body);
                                 System.out.println("new number of players "+msg.body.getPlayerNames().size());
                                 if(AppClient.getMenu().getScreen() instanceof LobbyScreen view){
-                                    view.show();
+                                    AppClient.getMenu().resetMenu();
                                 }
                             }
                             System.out.println("updated lobbies in view");
@@ -139,8 +139,8 @@ public class GameClient extends WebSocketClient {
                     case "leave-lobby" -> {
                         Gdx.app.postRunnable(() -> {
                             AppClient.setCurrentLobby(null);
-                            AppClient.setMenu(Menu.Main);
                             Menu.Main.resetMenu();
+                            AppClient.setMenu(Menu.Main);
                             Main.getMain().setScreen(AppClient.getMenu().getScreen());
                         });
                         System.out.println("CMessage "+message);

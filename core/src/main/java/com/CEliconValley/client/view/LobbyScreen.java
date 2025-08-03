@@ -43,6 +43,9 @@ public class LobbyScreen implements Screen {
     private Table mainTable;
     private Table teamTable;
 
+    private Texture teamBackgroundTexture;
+    private Texture lobbyBackgorundTexture;
+
     public LobbyScreen(LobbyController controller) {
         this.controller=controller;
     }
@@ -148,8 +151,11 @@ public class LobbyScreen implements Screen {
                 timer = 0f;
                 String path = "skin/lobby/4.png";
                 setVisible(true,true,true,true);
-                Texture texture = new Texture(Gdx.files.internal(path));
-                TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(texture));
+                if(lobbyBackgorundTexture != null) {
+                    lobbyBackgorundTexture.dispose();
+                }
+                lobbyBackgorundTexture = new Texture(Gdx.files.internal(path));
+                TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(lobbyBackgorundTexture));
                 teamTable.setBackground(drawable);
             } else {
                 Boolean a=false,b=false,c=false,d=false;
@@ -167,8 +173,11 @@ public class LobbyScreen implements Screen {
                 }
                 setVisible(booleans.get(0),booleans.get(1),booleans.get(2),booleans.get(3));
                 String path = "skin/lobby/" + lobby.getPlayerNames().size() + ".png";
-                Texture texture = new Texture(Gdx.files.internal(path));
-                TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(texture));
+                if(teamBackgroundTexture != null) {
+                    teamBackgroundTexture.dispose();
+                }
+                teamBackgroundTexture = new Texture(Gdx.files.internal(path));
+                TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(teamBackgroundTexture));
                 teamTable.setBackground(drawable);
             }
         }

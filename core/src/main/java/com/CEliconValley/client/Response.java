@@ -50,8 +50,8 @@ public class Response {
             case "profile_request" -> {
                 if(message.success.equals("delete")) {
                     Gdx.app.postRunnable(() -> {
-                        AppClient.setMenu(Menu.Authentication);
                         Menu.Authentication.resetMenu();
+                        AppClient.setMenu(Menu.Authentication);
                     });
                 }else{
                     ProfileMenuView screen = (ProfileMenuView) AppClient.getMenu().getScreen();

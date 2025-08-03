@@ -26,8 +26,8 @@ public class AppClient {
     public static void login(UserData ud) {
         userData = ud;
         loggedIn = true;
-        AppClient.setMenu(Menu.Main);
         Menu.Main.resetMenu();
+        AppClient.setMenu(Menu.Main);
     }
 
     public static void logout() {

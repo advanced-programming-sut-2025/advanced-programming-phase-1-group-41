@@ -26,7 +26,8 @@ public class AuthenticationMenuView implements Screen, AppMenu {
 
     public final AuthenticationMenuController controller;
     private Stage stage;
-    private final Image background = new Image(new Texture(GameAssetManager.getGameAssetManager().CEliconValleyBackground));
+    private final Texture backgroundTexture = new Texture(GameAssetManager.getGameAssetManager().CEliconValleyBackground);
+    private final Image background = new Image(backgroundTexture);
 
     // Navigation buttons
     private final TextButton registerTab, loginTab, forgotTab, exitTab;
@@ -281,6 +282,7 @@ public class AuthenticationMenuView implements Screen, AppMenu {
     @Override public void hide() {}
     @Override public void dispose() {
         stage.dispose();
+        backgroundTexture.dispose();
     }
 
     public Stage getStage() {

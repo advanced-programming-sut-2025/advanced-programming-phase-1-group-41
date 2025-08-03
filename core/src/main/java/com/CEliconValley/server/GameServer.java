@@ -3,6 +3,7 @@ package com.CEliconValley.server;
 import com.CEliconValley.common.OnlineData;
 import com.CEliconValley.common.messages.*;
 import com.CEliconValley.models.App;
+import com.CEliconValley.models.Lobby;
 import com.CEliconValley.models.User;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -19,7 +20,7 @@ public class GameServer extends WebSocketServer {
     private final Set<WebSocket> connections = Collections.synchronizedSet(new HashSet<>());
     private final Map<WebSocket, User> onlineConnections = new HashMap<>();
     public GameServer() {
-        super(new InetSocketAddress(PORT));
+        super(new InetSocketAddress("0.0.0.0",PORT));
     }
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
@@ -32,6 +33,11 @@ public class GameServer extends WebSocketServer {
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         connections.remove(conn);
         App.removeOnlinePlayer(onlineConnections.get(conn).getUsername());
+        for (Lobby lobby : App.lobbies) {
+            if(lobby.getPlayerNames().contains(onlineConnections.get(conn).getUsername())){
+                lobby.removePlayer(onlineConnections.get(conn).getUsername());
+            }
+        }
         onlineConnections.remove(conn);
         System.out.println("Closed connection: " + conn.getRemoteSocketAddress());
     }
