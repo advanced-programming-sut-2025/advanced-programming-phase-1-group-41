@@ -2,6 +2,7 @@ package com.CEliconValley.models;
 
 import com.CEliconValley.models.items.*;
 import com.CEliconValley.models.items.craftablemachines.Machine;
+import com.CEliconValley.models.locations.FarmType;
 import com.CEliconValley.models.skills.Skill;
 import com.CEliconValley.models.tools.Tool;
 import com.CEliconValley.models.ui.TerminalColors;
@@ -38,6 +39,7 @@ public class Player {
     private double savings;
     private int farmId;
     private int inFarmId;
+    private FarmType farmType;
     private int x;
     private int y;
     private double energy;
@@ -103,7 +105,7 @@ public class Player {
                   int maxEnergy, Skill miningSkill, double money,
                   ArrayList<Machine> onGoingMachines,
                   boolean playerIsInVillage,
-                  double savings, User user, int x, int y) {
+                  double savings, User user, int x, int y, FarmType farmType) {
         this.cookingRecipes = cookingRecipes;
         this.craftingRecipes = craftingRecipes;
         this.currentBuff = currentBuff;
@@ -112,6 +114,7 @@ public class Player {
         this.energy = energy;
         this.energyUnlimited = energyUnlimited;
         this.farmId = farmId;
+        this.farmType = farmType;
         this.farmingSkill = farmingSkill;
         this.fishingSkill = fishingSkill;
         this.foragingSkill = foragingSkill;
@@ -144,13 +147,15 @@ public class Player {
     public Player() {
     }
 
-    public Player(User user) {
+    public Player(User user, FarmType farmType, int farmId) {
         this.user = user;
         money = 0;
         savings = 0;
         x = 0;
         y = 0;
         energy = 200;
+        this.farmId = farmId;
+        this.farmType = farmType;
         this.inventory = new Inventory();
         this.energyUnlimited = false;
         this.currentTool = null;
@@ -506,6 +511,7 @@ public class Player {
         return maxEnergy;
     }
 
-
-
+    public FarmType getFarmType() {
+        return farmType;
+    }
 }

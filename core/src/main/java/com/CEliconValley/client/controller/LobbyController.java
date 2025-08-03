@@ -36,6 +36,7 @@ public class LobbyController {
         view.getStartGameButton().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                if(!view.canStart) return;
                 GameMessage<Lobby> msg = new GameMessage<Lobby>("new-game",view.lobby);
                 Gson gson = new Gson();
                 AppClient.getClient().send(gson.toJson(msg));

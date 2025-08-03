@@ -80,7 +80,7 @@ public class Farm implements Location {
         //TODO Add other buildings that player builds + add bushes, lakes, ground cells, rocks, etc.
     }
 
-    public Farm(int id) {
+    public Farm(int id, FarmType farmType) {
         farmBuilder = new FarmBuilder(this);
         this.id = id;
         Random rand = new Random();
@@ -101,7 +101,7 @@ public class Farm implements Location {
 
         }
 //        Objects.requireNonNull(Finder.findCellByCoordinates(20, 50, this)).setObjectMap(new Grass(20, 50, this));
-        farmType = FarmType.values()[rand.nextInt(FarmType.values().length)];
+        this.farmType = farmType;
         greenhouse = new Greenhouse(4,MaxHeight-24 - rand.nextInt(4),this);
         buildings.add(greenhouse);
         buildings.add(new Cottage(30 + rand.nextInt(4), MaxHeight-4,this));

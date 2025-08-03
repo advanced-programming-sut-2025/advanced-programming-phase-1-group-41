@@ -79,39 +79,15 @@ public class Game {
         this._id = new ObjectId();
         App.setGame(this);
         this.village = new Village(false);
-    }
-
-    public void setFarms(){
-        this.farms.add(new Farm(1));
-        this.farms.add(new Farm(2));
-        this.farms.add(new Farm(3));
-        this.farms.add(new Farm(4));
-    }
-
-    public void setPlayers(List<Player> players) {
-        this.players = new ArrayList<>(players); // Ensure it's explicitly an ArrayList
-        this.playersId = players.stream()
-                .map(Player::get_id)
-                .collect(Collectors.toCollection(ArrayList::new)); // Convert IDs safely to ArrayList
-    }
-
-    public void prepareForSaving() {
-        if (loader != null) loaderId = loader.get_id();
-        if (currentPlayer != null) currentPlayerId = currentPlayer.get_id();
-
-        playersId = players.stream()
-                .map(Player::get_id)
-                .collect(Collectors.toCollection(ArrayList::new));
+        for (int i = 0; i < this.players.size(); i++) {
+            this.farms.add(new Farm(i, players.get(i).getFarmType()));
+        }
     }
 
 
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
-
-//    public WeatherType getWeatherType() {
-//        return weatherType;
-//    }
 
     public void passTurn() {
         for (int i = 0; i < 4; i++) {

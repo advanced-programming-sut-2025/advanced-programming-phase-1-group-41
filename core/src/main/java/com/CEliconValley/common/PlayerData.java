@@ -6,6 +6,7 @@ import com.CEliconValley.models.items.CookingRecipe;
 import com.CEliconValley.models.items.CraftingRecipe;
 import com.CEliconValley.models.items.Inventory;
 import com.CEliconValley.models.items.craftablemachines.Machine;
+import com.CEliconValley.models.locations.FarmType;
 import com.CEliconValley.models.skills.Skill;
 import com.CEliconValley.models.tools.Tool;
 import dev.morphia.annotations.Embedded;
@@ -20,6 +21,7 @@ public class PlayerData {
     double money;
     double savings;
     int farmId;
+    FarmType farmType;
     int inFarmId;
     int x;
     int y;
@@ -52,6 +54,7 @@ public class PlayerData {
         this.money = player.getMoney();
         this.savings = player.getSavings();
         this.farmId = player.getFarmId();
+        this.farmType = player.getFarmType();
         this.inFarmId = player.getInFarmId();
         this.x = player.getX();
         this.y = player.getY();
@@ -132,7 +135,7 @@ public class PlayerData {
         return new Player(cookingRecipes, craftingRecipes, buff, tool, depressionDaysLeft,
                 energy, energyUnlimited, farmId, getFarmingSkill(), getFishingSkill(),
                 getForagingSkill(), inFarmId, inventory, maxEnergy, getMiningSkill(),
-                money, getMachines(), isPlayerInVillage, savings, user, x, y);
+                money, getMachines(), isPlayerInVillage, savings, user, x, y, farmType);
     }
 
     public Skill getFarmingSkill() {

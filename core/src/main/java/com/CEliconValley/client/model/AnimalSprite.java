@@ -1,5 +1,6 @@
 package com.CEliconValley.client.model;
 
+import com.CEliconValley.client.view.screen.maps.CoopMap;
 import com.CEliconValley.common.AnimalData;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Hero;
@@ -51,6 +52,13 @@ public class AnimalSprite {
             Random random = new Random();
             int randomIndex = random.nextInt(barnMap.getCells().size());
             Cell cell = barnMap.getCells().get(randomIndex);
+            this.randomX = cell.getX();
+            this.randomY = cell.getY();
+        }
+        if(location instanceof CoopMap coopMap){
+            Random random = new Random();
+            int randomIndex = random.nextInt(coopMap.getCells().size());
+            Cell cell = coopMap.getCells().get(randomIndex);
             this.randomX = cell.getX();
             this.randomY = cell.getY();
         }

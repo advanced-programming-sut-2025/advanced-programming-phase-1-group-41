@@ -1,5 +1,6 @@
 package com.CEliconValley.client.view;
 
+import com.CEliconValley.models.locations.FarmType;
 import com.CEliconValley.models.ui.CustomColors;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.CEliconValley.Main;
@@ -44,7 +45,7 @@ public class LobbyScreen implements Screen {
     private TextButton mountainButton;
     private TextButton swampButton;
     private TextButton jungleButton;
-
+    public boolean canStart = false;
 
     private Table mainTable;
     private Table teamTable;
@@ -71,6 +72,13 @@ public class LobbyScreen implements Screen {
                 label4.setText(playerName);
             }
             i++;
+        }
+        if(AppClient.getUserData().getUsername().equals(lobby.getAdmin())){
+            startGameButton.setColor(Color.GREEN);
+            canStart = true;
+        }else{
+            startGameButton.setColor(Color.RED);
+            canStart = false;
         }
     }
     public void buildUI() {
@@ -291,6 +299,16 @@ public class LobbyScreen implements Screen {
         }
     }
 
+    public FarmType getFarmType() {
+        if(mountainButton.isChecked()){
+            return FarmType.Mountain;
+        } else if(swampButton.isChecked()){
+            return FarmType.Swamp;
+        } else if(jungleButton.isChecked()){
+            return FarmType.Jungle;
+        }
+        return null;
+    }
 
 
 }

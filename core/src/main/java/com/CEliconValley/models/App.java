@@ -25,6 +25,7 @@ public class App {
     public static ArrayList<Lobby> lobbies = new ArrayList<>();
     public static Set<OnlineData> onlinePlayers = new HashSet<>();
     private static User currentUser;
+    private static PreGame preGame;
     private static Game game;
     private static GameServer server;
     private static GameClient client;
@@ -122,5 +123,14 @@ public class App {
         System.out.println("tryina send app-data");
         App.getServer().broadcast(json);
         System.out.println("broadcasted");
+    }
+
+
+    public static PreGame getPreGame() {
+        return preGame;
+    }
+
+    public static void setPreGame(PreGame preGame) {
+        App.preGame = preGame;
     }
 }

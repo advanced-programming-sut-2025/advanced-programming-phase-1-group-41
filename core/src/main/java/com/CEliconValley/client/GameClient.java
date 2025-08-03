@@ -10,6 +10,7 @@ import com.CEliconValley.common.HandshakeData;
 import com.CEliconValley.common.messages.*;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.locations.Farm;
+import com.CEliconValley.models.locations.FarmType;
 import com.badlogic.gdx.Gdx;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -108,9 +109,19 @@ public class GameClient extends WebSocketClient {
                             Menu.Game.resetMenu();
                             AppClient.setMenu(Menu.Game);
                             AppClient.setGameData(gameDataMessage.body);
-                            ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new FarmScreen(new Farm(1),
+                            ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new FarmScreen(new Farm(1, FarmType.Jungle),
                                 gameDataMessage.body.getPlayersData().get(0).getPlayer()));
                         });
+                    }
+                    case "pre-start-request" -> {
+                        GameMessage<PreStartRequest> gameMessage= gson.fromJson(message, new TypeToken<GameMessage<PreStartRequest>>() {}.getType());
+                        if(AppClient.getMenu().getScreen() instanceof LobbyScreen view){
+                            GameMessage<PreStartResponse> response = new GameMessage<>("pre-start-response",
+                                new PreStartResponse(AppClient.getUserData().getUsername(),
+                                    view.getFarmType()));
+                            AppClient.getClient().send(gson.toJson(response));
+                        }
+                        System.out.println("CMessage "+message);
                     }
                     case "new-lobby" -> {
                         GameMessage<Lobby> msg = gson.fromJson(message, new TypeToken<GameMessage<Lobby>>() {
@@ -119,6 +130,7 @@ public class GameClient extends WebSocketClient {
                             AppClient.getLobbies().add(msg.body);
                             if(AppClient.getMenu().getScreen() instanceof MainMenuView view){
                                 if(view.getJoinLobby()){
+                                    AppClient.getMenu().resetMenu();
                                     view.showJoinLobbyForm();
                                 }
                             }

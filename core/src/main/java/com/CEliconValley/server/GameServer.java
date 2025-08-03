@@ -1,10 +1,9 @@
 package com.CEliconValley.server;
 
-import com.CEliconValley.Main;
-import com.CEliconValley.common.OnlineData;
 import com.CEliconValley.common.messages.*;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Lobby;
+import com.CEliconValley.models.Player;
 import com.CEliconValley.models.User;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -14,6 +13,7 @@ import org.java_websocket.server.WebSocketServer;
 
 import java.net.InetSocketAddress;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameServer extends WebSocketServer {
     public static final int PORT = 6969;
@@ -75,5 +75,37 @@ public class GameServer extends WebSocketServer {
 
     public Map<WebSocket, User> getOnlineConnections() {
         return onlineConnections;
+    }
+
+    public void sendToUsername(String username,String message){
+        onlineConnections.forEach((k,v)->{
+            if(v.getUsername().equals(username)){
+                k.send(message);
+            }
+        });
+    }
+
+    public void sendToGroupByPlayers(ArrayList<Player> players, String message){
+        ArrayList<String> names = new ArrayList<>();
+        for (Player player : players) {
+            names.add(player.getUser().getUsername());
+        }
+        sendToGroup(names, message);
+    }
+
+    public void sendToGroup(ArrayList<String> names, String message) {
+        AtomicInteger checker = new AtomicInteger();
+        onlineConnections.forEach((k,v)->{
+            if(names.contains(v.getUsername())){
+                k.send(message);
+                checker.addAndGet(1);
+            }
+        });
+        if(checker.get() != names.size()){
+            System.out.println("smth went wrong");
+            System.out.println("checker is " + checker);
+            System.out.println("names size is " + names.size());
+        }
+
     }
 }

@@ -15,7 +15,7 @@ public class ServerMessageRouter {
             case "login_request", "forgotpass_request", "fp_request",
                  "prereg_request", "register_request", "profile_request" ,
                  "logout_request" -> AuthRequestHandler.handle(type, rawJson, conn, gson);
-            case "game-popup", "new-game" -> {
+            case "game-popup", "new-game", "pre-start-response" -> {
                 GameHandler.handle(type, rawJson, conn, gson);
             }
             case "make-lobby", "join-lobby", "leave-lobby" -> {

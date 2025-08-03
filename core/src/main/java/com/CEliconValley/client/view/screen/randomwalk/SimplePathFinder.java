@@ -25,8 +25,6 @@ public class SimplePathFinder {
     }
 
     public Node findPath(int startX, int startY, int goalX, int goalY) {
-        System.out.println("b"+barn);
-        System.out.println("c"+coop);
         PriorityQueue<Node> openSet = new PriorityQueue<>();
         HashSet<String> visited = new HashSet<>();
         openSet.add(new Node(startX, startY, 0, 0, null));
