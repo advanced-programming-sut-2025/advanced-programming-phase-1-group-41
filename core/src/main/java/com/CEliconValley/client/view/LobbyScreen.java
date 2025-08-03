@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -29,6 +30,7 @@ public class LobbyScreen implements Screen {
     private float timer=0;
     private final LobbyController controller;
     private Stage stage;
+    Image avatarImage;
 
     private final Image background = new Image(new Texture(GameAssetManager.getGameAssetManager().CEliconValleyBackground));
 
@@ -73,6 +75,7 @@ public class LobbyScreen implements Screen {
             }
             i++;
         }
+        assert AppClient.getUserData() != null;
         if(AppClient.getUserData().getUsername().equals(lobby.getAdmin())){
             startGameButton.setColor(Color.GREEN);
             canStart = true;
@@ -83,6 +86,11 @@ public class LobbyScreen implements Screen {
     }
     public void buildUI() {
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+
+        assert AppClient.getUserData() != null;
+        avatarImage = new Image(new Texture(AppClient.getUserData().getAvatarPath()));
+        avatarImage.setScaling(Scaling.fit);
+        avatarImage.setSize(200, 200);
 
         label1 = new Label("PLAYER1", skin);
         label2 = new Label("PLAYER2", skin);
@@ -102,10 +110,10 @@ public class LobbyScreen implements Screen {
         teamTable.defaults().expandX().fillX();
 
 
-        teamTable.add(label1).padLeft(500);
-        teamTable.add(label2).padLeft(600);
-        teamTable.add(label3).padLeft(550);
-        teamTable.add(label4).padLeft(550).expandX().right();
+        teamTable.add(label1).padLeft(220);
+        teamTable.add(label2).padLeft(200).padRight(50);
+        teamTable.add(label3).padLeft(200).padRight(50);
+        teamTable.add(label4).padLeft(-45).expandX().right();
 
         lobby = AppClient.getCurrentLobby();
 
@@ -177,9 +185,11 @@ public class LobbyScreen implements Screen {
         background.setPosition(0, 0);
 
         mapTable.setPosition(stage.getWidth() / 1.5f, stage.getHeight() / 1.7f);
+        avatarImage.setPosition(stage.getWidth() / 9f, stage.getHeight() / 2.1f);
         stage.addActor(background);
         stage.addActor(mainTable);
         stage.addActor(mapTable);
+        stage.addActor(avatarImage);
     }
 
 

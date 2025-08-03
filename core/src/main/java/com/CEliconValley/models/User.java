@@ -23,6 +23,7 @@ public class User {
     @Transient
     private Game currentGame;
     private ObjectId gameId;
+    private String avatarPath = "avatars/Sepehr.png";
 
     public User() {
     }
@@ -186,4 +187,7 @@ public class User {
     public void setGameId(ObjectId gameId) {
         this.gameId = gameId;
     }
+
+    public String getAvatarPath() {return avatarPath;}
+    public void setAvatarPath(String avatarPath) {this.avatarPath = avatarPath;}
 }

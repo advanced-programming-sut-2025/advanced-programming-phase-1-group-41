@@ -10,6 +10,7 @@ public class UserData {
     String email;
     String nickname;
     Gender gender;
+    String avatarPath;
     int age;
     int numberOfGames;
     int HighestScore;
@@ -21,6 +22,7 @@ public class UserData {
         this.password = user.getPassword();
         this.email = user.getEmail();
         this.nickname = user.getNickname();
+        this.avatarPath = user.getAvatarPath();
         this.gender = user.getGender();
         this.age = user.getAge();
         this.numberOfGames = user.getNumberOfGames();
@@ -73,6 +75,8 @@ public class UserData {
     public String getUsername() {
         return username;
     }
+
+    public String getAvatarPath() {return avatarPath;}
 
     public String toJson(){
         Gson gson = new Gson();

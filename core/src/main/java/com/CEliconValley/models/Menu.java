@@ -1,11 +1,8 @@
 package com.CEliconValley.models;
 
 import com.CEliconValley.client.AppClient;
+import com.CEliconValley.client.controller.*;
 import com.CEliconValley.client.view.*;
-import com.CEliconValley.client.controller.LobbyController;
-import com.CEliconValley.client.controller.MainMenuController;
-import com.CEliconValley.client.controller.ProfileMenuController;
-import com.CEliconValley.client.controller.AuthenticationMenuController;
 import com.CEliconValley.views.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -18,6 +15,7 @@ public enum Menu {
     Game(new GameMenu(),"GameMenu"),
     Trade(new TradeMenu(),"TradeMenu"),
     Lobby(new LobbyScreen(new LobbyController()), "Lobby"),
+    AvatarSelection(new AvatarSelectionView(new AvatarSelectionController()), "AvatarSelectionMenu"),
     ;
 
 
@@ -66,9 +64,11 @@ public enum Menu {
                 Menu.Main.menu = new MainMenuView(new MainMenuController());
             } if(menu.equals(Menu.Lobby.menu)){
                 Menu.Lobby.menu = new LobbyScreen(new LobbyController());
+            } if(menu.equals(Menu.AvatarSelection.menu)){
+                Menu.AvatarSelection.menu = new AvatarSelectionView(new AvatarSelectionController());
             }
             if(menu == Menu.Main.menu || menu == Profile.menu || menu == Authentication.menu
-            || menu == Lobby.menu){
+            || menu == Lobby.menu || menu == AvatarSelection.menu){
                 com.CEliconValley.Main.getMain().setScreen(AppClient.getMenu().getScreen());
             }
         });
