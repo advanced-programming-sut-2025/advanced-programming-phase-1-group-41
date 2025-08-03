@@ -4,10 +4,7 @@ import com.CEliconValley.client.model.AnimalSprite;
 import com.CEliconValley.client.view.screen.randomwalk.Node;
 import com.CEliconValley.client.view.screen.randomwalk.SimplePathFinder;
 import com.CEliconValley.common.AnimalData;
-import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Finder;
-import com.CEliconValley.models.Hero;
-import com.CEliconValley.models.Player;
+import com.CEliconValley.models.*;
 import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.animals.animalKinds.Cow;
 import com.CEliconValley.models.animals.animalKinds.Goat;
@@ -37,7 +34,7 @@ import java.util.TimerTask;
 
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
-public class BarnScreen implements Screen {
+public class BarnScreen extends GameScreen implements Screen {
     private final FarmScreen farmScreen;
     private final Hero hero;
     private final SpriteBatch batch;
@@ -49,6 +46,7 @@ public class BarnScreen implements Screen {
     private final OrthographicCamera camera;
 
     public BarnScreen(FarmScreen farmScreen, BarnMap barn, Player player) {
+        super(null);
         this.hero = new Hero(barn);
         this.farmScreen = farmScreen;
         this.barn = barn;
@@ -147,70 +145,15 @@ public class BarnScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        handleInput();
-        randomMovement();
-        if (hero.isMoving) {
-            float moveAmount = 600 * delta;
-
-            float targetPixelX = hero.targetX * CELL_SIZE;
-            float targetPixelY = hero.targetY * CELL_SIZE;
-
-            if (hero.renderX < targetPixelX) {
-                hero.renderX += moveAmount;
-                if (hero.renderX > targetPixelX) hero.renderX = targetPixelX;
-            } else if (hero.renderX > targetPixelX) {
-                hero.renderX -= moveAmount;
-                if (hero.renderX < targetPixelX) hero.renderX = targetPixelX;
-            }
-
-            if (hero.renderY < targetPixelY) {
-                hero.renderY += moveAmount;
-                if (hero.renderY > targetPixelY) hero.renderY = targetPixelY;
-            } else if (hero.renderY > targetPixelY) {
-                hero.renderY -= moveAmount;
-                if (hero.renderY < targetPixelY) hero.renderY = targetPixelY;
-            }
-
-            if (hero.renderX == targetPixelX && hero.renderY == targetPixelY) {
-                hero.playerX = hero.targetX;
-                hero.playerY = hero.targetY;
-                hero.isMoving = false;
+        Result result = Playeracts.handleInput(hero, barn, stage, delta);
+        if(!result.success()){
+            if(result.message().equals("cheat")){
+                return;
             }
         }
-        animalSprites.forEach(animalSprite -> {
-            if(animalSprite.isMoving){
-                float moveAmount = 400 * delta;
-
-                float targetPixelX = animalSprite.targetX * CELL_SIZE;
-                float targetPixelY = animalSprite.targetY * CELL_SIZE;
-                animalSprite.currentAnimation = animalSprite.walk(true, animalSprite.currentDirection);
-                if (animalSprite.renderX < targetPixelX) {
-                    animalSprite.renderX += moveAmount;
-                    if (animalSprite.renderX > targetPixelX) animalSprite.renderX = targetPixelX;
-                } else if (animalSprite.renderX > targetPixelX) {
-                    animalSprite.renderX -= moveAmount;
-                    if (animalSprite.renderX < targetPixelX) animalSprite.renderX = targetPixelX;
-                }
-
-
-                if (animalSprite.renderY < targetPixelY) {
-                    animalSprite.renderY += moveAmount;
-                    if (animalSprite.renderY > targetPixelY) animalSprite.renderY = targetPixelY;
-                } else if (animalSprite.renderY > targetPixelY) {
-                    animalSprite.renderY -= moveAmount;
-                    if (animalSprite.renderY < targetPixelY) animalSprite.renderY = targetPixelY;
-                }
-
-                if (animalSprite.renderX == targetPixelX && animalSprite.renderY == targetPixelY) {
-                    animalSprite.x = animalSprite.targetX;
-                    animalSprite.y = animalSprite.targetY;
-                    // TODO need to change the animaldata as well perhaps
-                    animalSprite.isMoving = false;
-                    animalSprite.currentAnimation = animalSprite.walk(false, animalSprite.currentDirection);
-                }
-            }
-        });
-
+        randomMovement();
+        Playeracts.approach(hero);
+        Playeracts.animalApproach(animalSprites,delta);
         Gdx.gl.glClearColor(0.8f, 0.9f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -245,92 +188,6 @@ public class BarnScreen implements Screen {
         });
     }
 
-    private void handleInput() {
-        if (hero.isActing||hero.isMoving) return;
-
-        boolean moved = false;
-        onRepeat=true;
-
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-//            hero.currentAnimation = hero.walk(canMoveTo(hero.playerX, hero.playerY+1),1);
-            hero.currentDirection = 1;
-            if (canMoveTo(hero.playerX, hero.playerY + 1)) {
-                hero.targetX = hero.playerX;
-                hero.targetY = hero.playerY + 1;
-                moved = true;
-            }
-            hero.currentAnimation = hero.walk(moved,hero.currentDirection);
-
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-//            hero.currentAnimation = hero.walk(canMoveTo(hero.playerX, hero.playerY-1),3);
-            hero.currentDirection = 3;
-
-            if (canMoveTo(hero.playerX, hero.playerY - 1)) {
-                hero.targetX = hero.playerX;
-                hero.targetY = hero.playerY - 1;
-                moved = true;
-            }
-            hero.currentAnimation = hero.walk(moved,hero.currentDirection);
-
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-//            hero.currentAnimation = hero.walk(canMoveTo(hero.playerX-1, hero.playerY),4);
-            hero.currentDirection = 4;
-            if (canMoveTo(hero.playerX - 1, hero.playerY)) {
-                hero.targetX = hero.playerX - 1;
-                hero.targetY = hero.playerY;
-//                flip = true;
-                moved = true;
-            }
-            hero.currentAnimation = hero.walk(moved,hero.currentDirection);
-
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-//            hero.currentAnimation = hero.walk(canMoveTo(hero.playerX+1, hero.playerY),2);
-            hero.currentDirection = 2;
-//            flip = false;
-            if (canMoveTo(hero.playerX + 1, hero.playerY)) {
-                hero.targetX = hero.playerX + 1;
-                hero.targetY = hero.playerY;
-                moved = true;
-            }
-            hero.currentAnimation = hero.walk(moved,hero.currentDirection);
-
-        } else if (Gdx.input.isKeyPressed(Input.Keys.E)) {
-            onRepeat=false;
-            hero.currentAnimation = hero.useTool(3);
-            hero.isActing=true;
-            hero.stateTime = 0;
-//            didHit=true;
-//            hit(hero.currentDirection,hero.playerX,hero.playerY);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            transfer();
-        }
-        else{
-            hero.currentAnimation = hero.walk(false,hero.currentDirection);
-            animalSprites.forEach(animalSprite -> {
-                animalSprite.currentAnimation = animalSprite.walk(false, animalSprite.currentDirection);
-            });
-        }
-
-        if (moved) {
-            hero.isMoving = true;
-
-//            hero.currentAnimation = walkAnimations[hero.currentDirection];
-        }
-
-
-    }
-
-    private boolean canMoveTo(int x, int y) {
-        for (Cell cell : barn.getCells()) {
-            if (cell.getX() == x && cell.getY() == y) {
-                if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock || cell.getObjectMap() instanceof Wall) {
-                    return false;
-                }
-                return true;
-            }
-        }
-        return false;
-    }
 
     public void transfer() {
         Cell cell = Finder.findCellByCoordinatesBarn(hero.playerX, hero.playerY, this.barn);
@@ -348,7 +205,9 @@ public class BarnScreen implements Screen {
 //        background.dispose();
     }
 
-    @Override public void show() {}
+    @Override public void show() {
+        Playeracts.setScreen(this);
+    }
     @Override public void hide() {}
     @Override public void pause() {}
     @Override public void resume() {}

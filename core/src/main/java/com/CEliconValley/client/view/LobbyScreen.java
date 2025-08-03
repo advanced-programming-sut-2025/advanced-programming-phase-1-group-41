@@ -87,7 +87,6 @@ public class LobbyScreen implements Screen {
     public void buildUI() {
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
 
-        assert AppClient.getUserData() != null;
         avatarImage = new Image(new Texture(AppClient.getUserData().getAvatarPath()));
         avatarImage.setScaling(Scaling.fit);
         avatarImage.setSize(200, 200);

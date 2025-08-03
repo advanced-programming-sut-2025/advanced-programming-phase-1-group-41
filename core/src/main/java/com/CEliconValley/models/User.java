@@ -23,9 +23,14 @@ public class User {
     @Transient
     private Game currentGame;
     private ObjectId gameId;
-    private String avatarPath = "avatars/Sepehr.png";
+    private String avatarPath;
 
     public User() {
+    }
+
+    @PostLoad
+    public void load(){
+        this.avatarPath = "avatars/Leo.png";
     }
 
     public User( String username, String password, String email, String nickname, Gender gender, String question, String answer) {
@@ -41,6 +46,7 @@ public class User {
         this.answer = answer;
         this.stayLoggedIn = false;
         _id = new ObjectId();
+        this.avatarPath = "avatars/Mohsen.png";
     }
 
     public void prepareForSaving() {

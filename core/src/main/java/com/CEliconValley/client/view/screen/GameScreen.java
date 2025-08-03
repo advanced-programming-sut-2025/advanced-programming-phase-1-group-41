@@ -93,6 +93,16 @@ public abstract class GameScreen implements Screen {
                 }
             }
         }
+        if(location instanceof BarnMap barnMap){
+            for (Cell cell : barnMap.getCells()) {
+                if (cell.getX() == x && cell.getY() == y) {
+                    if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock || cell.getObjectMap() instanceof Wall) {
+                        return false;
+                    }
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
