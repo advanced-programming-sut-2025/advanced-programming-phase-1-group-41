@@ -26,6 +26,10 @@ public class ServerAuthentication {
             return new ErrorMessage("login_request","Username does not exist!");
         }
         User user = Finder.getUserByUsername(username);
+        if(App.getServer().getOnlineConnections().containsValue(user)){
+            System.out.println("user "+username+" is already online.");
+            return new ErrorMessage("login_request","Username is already online.");
+        }
         String passHash = getHash(password);
         assert user != null;
         if(!passHash.equals(user.getPassword())){

@@ -99,7 +99,7 @@ public class Lobby {
         GameMessage<Lobby> msg = new GameMessage<>("new-lobby", this);
         String json = new Gson().toJson(msg);
         App.getServer().broadcast(json);
-//        System.out.println("Server: " + msg);
+        System.out.println("Server: " + msg);
     }
 
     public Result addPlayer(String playerName) {
@@ -149,5 +149,19 @@ public class Lobby {
     @Override
     public int hashCode() {
         return Objects.hashCode(lobbyID);
+    }
+
+    @Override
+    public String toString() {
+        return "Lobby{" +
+            "admin='" + admin + '\'' +
+            ", lobbyName='" + lobbyName + '\'' +
+            ", lobbyID='" + lobbyID + '\'' +
+            ", isPrivate=" + isPrivate +
+            ", password='" + password + '\'' +
+            ", playerNames=" + playerNames +
+            ", isVisible=" + isVisible +
+            ", lastTimeJoined=" + lastTimeJoined +
+            '}';
     }
 }

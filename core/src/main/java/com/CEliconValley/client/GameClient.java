@@ -44,6 +44,16 @@ public class GameClient extends WebSocketClient {
         }
     }
 
+    public void shutdown() {
+        try {
+            if (this.isOpen()) {
+                this.close(); // Gracefully close the connection
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onOpen(ServerHandshake handshakedata) {
         System.out.println("Connected to server!");
@@ -118,11 +128,12 @@ public class GameClient extends WebSocketClient {
                                 if(AppClient.getMenu().getScreen() instanceof LobbyScreen view){
                                     AppClient.getMenu().resetMenu();
                                 }
+                            }else{
+                                System.out.println(AppClient.getCurrentLobby());
                             }
-                            System.out.println("updated lobbies in view");
                         });
 
-                        System.out.println("Cmessage: updated lobby");
+                        System.out.println("Cmessage "+message);
                     }
                     case "join-lobby" -> {
                         GameMessage<Lobby> msg = gson.fromJson(message, new TypeToken<GameMessage<Lobby>>() {
@@ -204,6 +215,14 @@ public class GameClient extends WebSocketClient {
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
+        if(Main.getMain() != null){
+            Gdx.app.postRunnable(() -> {
+               Gdx.app.exit();
+            });
+            System.out.println("released the beast");
+        }else{
+            System.out.println("main is null");
+        }
         System.out.println("Connection closed: " + reason + " (Code: " + code + ")");
     }
 
