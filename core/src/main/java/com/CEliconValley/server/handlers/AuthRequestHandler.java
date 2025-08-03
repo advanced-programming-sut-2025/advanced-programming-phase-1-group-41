@@ -1,6 +1,11 @@
 package com.CEliconValley.server.handlers;
 
+import com.CEliconValley.common.UserData;
 import com.CEliconValley.common.messages.*;
+import com.CEliconValley.database.UserDB;
+import com.CEliconValley.models.App;
+import com.CEliconValley.models.User;
+import com.CEliconValley.server.GameServer;
 import com.CEliconValley.server.Request;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -39,6 +44,14 @@ public class AuthRequestHandler {
             case "logout_request" -> {
                 GameMessage<String> msg = gson.fromJson(message, new TypeToken<GameMessage<String>>() {}.getType());
                 Request.logout(msg.body, conn);
+            }
+            case "avatar-request" -> {
+                GameMessage<String> msg = gson.fromJson(message, new TypeToken<GameMessage<String>>() {}.getType());
+                User user = App.getServer().getOnlineConnections().get(conn);
+                user.setAvatarPath(msg.body);
+                UserDB.saveUser(user);
+                GameMessage<UserData> response = new GameMessage<>("avatar-response",new UserData(user));
+                conn.send(gson.toJson(response));
             }
         }
     }

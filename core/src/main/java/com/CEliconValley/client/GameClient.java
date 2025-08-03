@@ -3,10 +3,12 @@ package com.CEliconValley.client;
 import com.CEliconValley.Main;
 import com.CEliconValley.client.view.LobbyScreen;
 import com.CEliconValley.client.view.MainMenuView;
+import com.CEliconValley.client.view.ProfileMenuView;
 import com.CEliconValley.client.view.screen.FarmScreen;
 import com.CEliconValley.common.AppData;
 import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.HandshakeData;
+import com.CEliconValley.common.UserData;
 import com.CEliconValley.common.messages.*;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.locations.Farm;
@@ -204,6 +206,15 @@ public class GameClient extends WebSocketClient {
                             }
                         });
                         System.out.println("Cmessage: " + message);
+                    }
+                    case "avatar-response" -> {
+                        GameMessage<UserData> msg = gson.fromJson(message, new TypeToken<GameMessage<UserData>>() {}.getType());
+                        Gdx.app.postRunnable(() -> {
+                           AppClient.setUserData(msg.body);
+                           if(AppClient.getMenu().getScreen() instanceof ProfileMenuView view){
+                               Menu.Profile.resetMenu();
+                           }
+                        });
                     }
                 }
             }

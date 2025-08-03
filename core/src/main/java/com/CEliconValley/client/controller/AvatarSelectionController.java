@@ -2,6 +2,7 @@ package com.CEliconValley.client.controller;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.view.AvatarSelectionView;
+import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.google.gson.Gson;
 
 public class AvatarSelectionController {
     private ImageButton selectedButton = null;
@@ -50,8 +52,8 @@ public class AvatarSelectionController {
         String avatarPath = view.getAvatarPaths().get(index);
         view.showPreviewAvatar(avatarPath);
         view.setMessage("Avatar selected: " + avatarPath.substring(15, avatarPath.length() - 4));
-        // TODO Set AvatarPath
-//        AppClient.getUserData().setAvatarPath(avatarPath);
+        GameMessage<String> msg = new GameMessage<>("avatar-request",avatarPath);
+        AppClient.getClient().send(new Gson().toJson(msg));
     }
 
     private void handleBack() {
