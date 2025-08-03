@@ -108,7 +108,9 @@ public class Lobby {
         }
         playerNames.add(playerName);
         this.lastTimeJoined = System.currentTimeMillis();
-
+        try{
+            Thread.sleep(100);
+        } catch (Exception e){}
         sendDetails();
         // boolean isMoreThanFiveMinutes = (currentMillis - lastJoinedMillis) > 5 * 60 * 1000;
         // TODO to check weather it's been 5 mins! in render of gdx
@@ -127,6 +129,9 @@ public class Lobby {
                 return new Result(false,"empty");
             }
         }
+        try{
+            Thread.sleep(100);
+        } catch (Exception e){}
         sendDetails();
         return new Result(true, "player-removed");
     }
