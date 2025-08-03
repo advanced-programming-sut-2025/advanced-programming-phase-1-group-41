@@ -26,6 +26,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 
 import java.util.*;
 
@@ -54,7 +55,7 @@ public class FarmScreen implements Screen {
 
     private OrthographicCamera camera;
 
-    public static final float VIRTUAL_WIDTH = 3160f;
+    public static final float VIRTUAL_WIDTH = 3160f * 2 / 3;
     public static final float VIRTUAL_HEIGHT = 1350f;
     public static final int CELLS_IN_WIDTH = 15;
 //    public static final int CELL_SIZE =  (int) VIRTUAL_WIDTH / CELLS_IN_WIDTH;
@@ -76,7 +77,7 @@ public class FarmScreen implements Screen {
 
 
 
-    private static final float MOVE_SPEED = 2400;
+    private static final float MOVE_SPEED = 100f;
 
     @SuppressWarnings("unchecked")
     public FarmScreen(Farm farm, Player player) {
@@ -167,24 +168,10 @@ public class FarmScreen implements Screen {
             float targetPixelX = hero.targetX * CELL_SIZE;
             float targetPixelY = hero.targetY * CELL_SIZE;
 
-            float moveAmount = MOVE_SPEED * delta;
+            float moveAmount = (float) CELL_SIZE / 2;
 
-            if (hero.renderX < targetPixelX) {
-//                hero.renderX = Math.min(hero.renderX + moveAmount, targetPixelX);
-                hero.renderX += moveAmount;
-                if (hero.renderX > targetPixelX) hero.renderX = targetPixelX;
-            } else if (hero.renderX > targetPixelX) {
-                hero.renderX -= moveAmount;
-                if (hero.renderX < targetPixelX) hero.renderX = targetPixelX;
-            }
-
-            if (hero.renderY < targetPixelY) {
-                hero.renderY += moveAmount;
-                if (hero.renderY > targetPixelY) hero.renderY = targetPixelY;
-            } else if (hero.renderY > targetPixelY) {
-                hero.renderY -= moveAmount;
-                if (hero.renderY < targetPixelY) hero.renderY = targetPixelY;
-            }
+            hero.renderX = approach(hero.renderX, targetPixelX, moveAmount);
+            hero.renderY = approach(hero.renderY, targetPixelY, moveAmount);
 
             if (hero.renderX == targetPixelX && hero.renderY == targetPixelY) {
                 hero.playerX = hero.targetX;
@@ -195,10 +182,10 @@ public class FarmScreen implements Screen {
         }
 
         batch.begin();
-        int minX = (int)((camera.position.x - camera.viewportWidth / 2) / CELL_SIZE) ;
-        int maxX = (int)((camera.position.x + camera.viewportWidth / 2) / CELL_SIZE) ;
-        int minY = (int)((camera.position.y - camera.viewportHeight / 2) / CELL_SIZE) ;
-        int maxY = (int)((camera.position.y + camera.viewportHeight / 2) / CELL_SIZE);
+        int minX = (int)((camera.position.x - camera.viewportWidth / 2) / CELL_SIZE) - 8;
+        int maxX = (int)((camera.position.x + camera.viewportWidth / 2) / CELL_SIZE) + 8;
+        int minY = (int)((camera.position.y - camera.viewportHeight / 2) / CELL_SIZE) - 8;
+        int maxY = (int)((camera.position.y + camera.viewportHeight / 2) / CELL_SIZE) + 8;
 
         visibleCells.clear();
 //        Gdx.app.postRunnable(() -> {
@@ -267,6 +254,12 @@ public class FarmScreen implements Screen {
         stateTime += delta;
         passiveStateTime+=delta;
 
+        float halfViewportWidth = camera.viewportWidth * camera.zoom / 2;
+        float halfViewportHeight = camera.viewportHeight * camera.zoom / 2;
+
+//        camera.position.x = MathUtils.clamp(camera.position.x, halfViewportWidth, mapWidth - halfViewportWidth);
+//        camera.position.y = MathUtils.clamp(camera.position.y, halfViewportHeight, mapHeight - halfViewportHeight);
+
 
         camera.position.set(hero.renderX + CELL_SIZE / 2f, hero.renderY + CELL_SIZE / 2f, 0);
         camera.update();
@@ -295,16 +288,13 @@ public class FarmScreen implements Screen {
         onRepeat=true;
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-//            currentAnimation = hero.walk(canMoveTo(hero.playerX, hero.playerY+1),1);
                 hero.currentDirection = 1;
             if (canMoveTo(hero.playerX, hero.playerY + 1)) {
                 hero.targetX = hero.playerX;
                 hero.targetY = hero.playerY + 1;
                 moved = true;
             }
-            currentAnimation = hero.walk(moved,hero.currentDirection);
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-//            currentAnimation = hero.walk(canMoveTo(hero.playerX, hero.playerY-1),3);
                 hero.currentDirection = 3;
 
             if (canMoveTo(hero.playerX, hero.playerY - 1)) {
@@ -312,9 +302,7 @@ public class FarmScreen implements Screen {
                 hero.targetY = hero.playerY - 1;
                 moved = true;
             }
-            currentAnimation = hero.walk(moved,hero.currentDirection);
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-//            currentAnimation = hero.walk(canMoveTo(hero.playerX-1, hero.playerY),4);
                 hero.currentDirection = 4;
             if (canMoveTo(hero.playerX - 1, hero.playerY)) {
                 hero.targetX = hero.playerX - 1;
@@ -322,9 +310,7 @@ public class FarmScreen implements Screen {
                 flip = true;
                 moved = true;
             }
-            currentAnimation = hero.walk(moved,hero.currentDirection);
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-//            currentAnimation = hero.walk(canMoveTo(hero.playerX+1, hero.playerY),2);
                 hero.currentDirection = 2;
                 flip = false;
             if (canMoveTo(hero.playerX + 1, hero.playerY)) {
@@ -332,7 +318,6 @@ public class FarmScreen implements Screen {
                 hero.targetY = hero.playerY;
                 moved = true;
             }
-            currentAnimation = hero.walk(moved,hero.currentDirection);
         } else if (Gdx.input.isKeyPressed(Input.Keys.E)) {
             onRepeat=false;
             currentAnimation = hero.useTool(3);
@@ -343,15 +328,27 @@ public class FarmScreen implements Screen {
         } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             transfer();
         }
-        else{
-            currentAnimation = hero.walk(false,hero.currentDirection);
-        }
 
         if (moved) {
             hero.isMoving = true;
-//            currentAnimation = walkAnimations[hero.currentDirection];
+            currentAnimation = hero.walk(true, hero.currentDirection);
+        } else if (!hero.isMoving) {
+            currentAnimation = hero.walk(false, hero.currentDirection);
         }
     }
+    private float approach(float current, float target, float delta) {
+//        if((hero.currentDirection == 1 || hero.currentDirection == 2) && target < current) {
+//            return current;
+//        } else if((hero.currentDirection == 3 || hero.currentDirection == 4) && target > current) {
+//            return current;
+//        }
+        if (current < target) {
+            return Math.min(current + delta, target);
+        } else {
+            return Math.max(current - delta, target);
+        }
+    }
+
 
     private boolean canMoveTo(int x, int y) {
         for (Cell cell : farm.getCells()) {

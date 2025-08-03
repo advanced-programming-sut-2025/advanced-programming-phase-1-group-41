@@ -31,6 +31,7 @@ public class LobbyScreen implements Screen {
 
     public  Label idText;
     public  Label passText;
+    public  Label adminText;
     public  Label nameText;
     private Label label1;
     private Label label2;
@@ -46,8 +47,23 @@ public class LobbyScreen implements Screen {
         this.controller=controller;
     }
 
-
-    private void buildUI() {
+    public void updatePlayers(){
+        lobby = AppClient.getCurrentLobby();
+        int i = 1;
+        for(String playerName : lobby.getPlayerNames()) {
+            if(i == 1){
+                label1.setText(playerName);
+            } else if(i == 2){
+                label2.setText(playerName);
+            } else if(i == 3){
+                label3.setText(playerName);
+            } else if(i == 4){
+                label4.setText(playerName);
+            }
+            i++;
+        }
+    }
+    public void buildUI() {
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
 
         label1 = new Label("PLAYER1", skin);
@@ -75,6 +91,7 @@ public class LobbyScreen implements Screen {
 
         lobby = AppClient.getCurrentLobby();
 
+        adminText = new Label("Admin: " + lobby.getAdmin(), skin);
         nameText = new Label("Name: " + lobby.getLobbyName(), skin);
         idText = new Label("ID: " + lobby.getLobbyID(), skin);
         if(lobby.isPrivate()) {
@@ -85,9 +102,12 @@ public class LobbyScreen implements Screen {
 
         mainTable.clear();
 
+        updatePlayers();
+
         Table topContent = new Table();
         topContent.add(startGameButton).width(300).pad(20).padTop(150).row();
         startGameButton.setVisible(false);
+        topContent.add(adminText).width(300).pad(20).row();
         topContent.add(nameText).width(300).pad(20).row();
         topContent.add(idText).width(300).pad(20).row();
         if(lobby.isPrivate()) {
@@ -152,7 +172,7 @@ public class LobbyScreen implements Screen {
                 teamTable.setBackground(drawable);
             }
         }
-        if(lobby.getPlayerNames().size()>=1){
+        if(!lobby.getPlayerNames().isEmpty()){
             startGameButton.setVisible(true);
         }
 

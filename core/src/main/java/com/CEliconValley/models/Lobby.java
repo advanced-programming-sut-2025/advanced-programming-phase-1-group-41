@@ -8,6 +8,7 @@ import org.java_websocket.WebSocket;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class Lobby {
@@ -120,10 +121,11 @@ public class Lobby {
         }
         playerNames.remove(playerName);
         if(admin.equals(playerName)){
-            admin = playerNames.iterator().next();
-        }
-        if(admin == null){
-            return new Result(false,"empty");
+            try{
+                admin = playerNames.iterator().next();
+            } catch (Exception e){
+                return new Result(false,"empty");
+            }
         }
         sendDetails();
         return new Result(true, "player-removed");
@@ -135,5 +137,17 @@ public class Lobby {
 
     public long getLastTimeJoined() {
         return lastTimeJoined;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Lobby lobby = (Lobby) o;
+        return Objects.equals(lobbyID, lobby.lobbyID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(lobbyID);
     }
 }

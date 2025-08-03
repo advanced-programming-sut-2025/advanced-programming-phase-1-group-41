@@ -74,8 +74,12 @@ public class Response {
                 screen.setMessage(message.error, Color.RED);
             }
             case "join-lobby" -> {
-                MainMenuView screen = (MainMenuView) AppClient.getMenu().getScreen();
-                screen.getJoinLobbyMessage().setText(message.error);
+                Gdx.app.postRunnable(() -> {
+                    if(AppClient.getMenu().getScreen() instanceof  MainMenuView view) {
+                        view.getJoinLobbyMessage().setText(message.error);
+                        System.out.println("set the error " + message.error);
+                    }
+                });
             }
         }
     }

@@ -19,7 +19,7 @@ public class ServerMessageRouter {
                 GameHandler.handle(type, rawJson, conn, gson);
             }
             case "make-lobby", "join-lobby", "leave-lobby" -> {
-//                System.out.println("In make-lobby");
+                System.out.println(type);
                 LobbyHandler.handle(type, rawJson, conn, gson);
             }
             default -> System.out.println("Unknown type: " + type);

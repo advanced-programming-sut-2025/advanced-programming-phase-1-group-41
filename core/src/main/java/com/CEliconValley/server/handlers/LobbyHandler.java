@@ -2,8 +2,7 @@ package com.CEliconValley.server.handlers;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.messages.*;
-import com.CEliconValley.models.Finder;
-import com.CEliconValley.models.Lobby;
+import com.CEliconValley.models.*;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.java_websocket.WebSocket;
@@ -32,13 +31,16 @@ public class LobbyHandler {
                 JoinLobbyCred cred = msg.body;
                 Lobby lobby = Finder.getLobbyById(cred.id);
                 if (lobby == null) {
-                    GameMessage<ErrorMessage> response = new GameMessage<>("join-lobby", new ErrorMessage("404", "Lobby not found!"));
+                    GameMessage<ErrorMessage> response = new GameMessage<>("join-lobby", new ErrorMessage("join-lobby", "Lobby not found!"));
                     conn.send(gson.toJson(response));
+                    System.out.println("got null!");
+                    return;
                 }
                 if (lobby.isPrivate()) {
                     if (!lobby.getPassword().equals(cred.password)) {
-                        GameMessage<ErrorMessage> response = new GameMessage<>("join-lobby", new ErrorMessage("password-wrong", "Password is wrong!"));
+                        GameMessage<ErrorMessage> response = new GameMessage<>("join-lobby", new ErrorMessage("join-lobby", "Password is wrong!"));
                         conn.send(gson.toJson(response));
+                        return;
                     }
                 }
                 lobby.addPlayer(cred.username);
@@ -46,12 +48,35 @@ public class LobbyHandler {
                 conn.send(gson.toJson(response));
             }
             case "leave-lobby" -> {
+                System.out.println("Shere ;)");
                 GameMessage<LeaveLobbyCred> msg = gson.fromJson(message, new TypeToken<GameMessage<LeaveLobbyCred>>() {}.getType());
                 LeaveLobbyCred cred = msg.body;
                 Lobby lobby = Finder.getLobbyById(cred.id);
-                lobby.removePlayer(cred.username);
-                GameMessage<String> response = new GameMessage<>("leave-lobby",";)");
-                conn.send(gson.toJson(response));
+                if(lobby == null) {
+                    GameMessage<ErrorMessage> err = new GameMessage<>("leave-lobby",
+                        new ErrorMessage("leave-lobby", "404"));
+                    conn.send(gson.toJson(err));
+                    return;
+                }
+                Result result = lobby.removePlayer(cred.username);
+                if(result.success()){
+                    GameMessage<String> response = new GameMessage<>("leave-lobby",";)");
+                    conn.send(gson.toJson(response));
+                }
+                else if(!result.success()){
+                    if(result.message().equals("empty")) {
+                        GameMessage<String> response = new GameMessage<>("leave-lobby", ";)");
+                        conn.send(gson.toJson(response));
+                        try {
+                            Thread.sleep(500);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        App.lobbies.remove(lobby);
+                        GameMessage<Lobby> response2 = new GameMessage<>("delete-lobby", lobby);
+                        App.getServer().broadcast(gson.toJson(response2));
+                    }
+                }
             }
         }
     }

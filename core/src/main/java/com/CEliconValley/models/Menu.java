@@ -5,7 +5,7 @@ import com.CEliconValley.client.view.*;
 import com.CEliconValley.client.controller.LobbyController;
 import com.CEliconValley.client.controller.MainMenuController;
 import com.CEliconValley.client.controller.ProfileMenuController;
-import com.CEliconValley.client.controller.authentication.AuthenticationMenuController;
+import com.CEliconValley.client.controller.AuthenticationMenuController;
 import com.CEliconValley.views.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

@@ -49,6 +49,7 @@ public class LobbyController {
                     new LeaveLobbyCred(view.lobby.getLobbyID(), AppClient.getUserData().getUsername()));
                 Gson gson = new Gson();
                 AppClient.getClient().send(gson.toJson(msg));
+                System.out.println("C "+gson.toJson(msg));
             }
         });
     }

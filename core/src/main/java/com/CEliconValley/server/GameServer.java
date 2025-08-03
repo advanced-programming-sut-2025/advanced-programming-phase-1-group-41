@@ -45,6 +45,7 @@ public class GameServer extends WebSocketServer {
             System.out.println(onlineConnections);
         } catch (Exception e) {
             System.out.println("ESmessage: "+message);
+            e.printStackTrace();
         }
         System.out.println("Smessage: "+message);
     }

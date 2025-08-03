@@ -17,6 +17,9 @@ public class GameAssetManager {
     public Image getBackground(String name) {
         return new Image(new Texture(Gdx.files.internal("backgrounds/" + name)));
     }
+    public Texture getBackgroundTexture(String name) {
+        return new Texture(Gdx.files.internal("backgrounds/" + name));
+    }
     public Drawable getDrawableBackground(String name) {
         TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal("backgrounds/" + name)));
         return new TextureRegionDrawable(region);
