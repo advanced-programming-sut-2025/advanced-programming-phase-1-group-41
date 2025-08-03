@@ -7,9 +7,7 @@ import com.CEliconValley.models.App;
 import com.CEliconValley.models.Lobby;
 import com.CEliconValley.models.Menu;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class AppClient {
     private static GameClient client = null;
@@ -18,7 +16,7 @@ public class AppClient {
     private static Menu menu;
     private static GameData gameData = null;
     public final static ArrayList<String> questions = new ArrayList<>();
-    private static Set<Lobby> lobbies = new HashSet<>();
+    private static Set<Lobby> lobbies = Collections.synchronizedSet(new HashSet<>());
     private static Lobby currentLobby;
     private static Set<GameData> games = new HashSet<>();
     private static Set<OnlineData> onlinePlayers = new HashSet<>();
@@ -116,9 +114,7 @@ public class AppClient {
     public static void setCurrentLobby(Lobby lobby) {currentLobby = lobby;}
 
     public static void addLobby(Lobby lobby){
-        if(lobbies.contains(lobby)){
-            lobbies.remove(lobby);
-        }
+        lobbies.remove(lobby);
         lobbies.add(lobby);
     }
 }

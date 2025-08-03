@@ -150,7 +150,7 @@ public class GameClient extends WebSocketClient {
                         GameMessage<Lobby> msg = gson.fromJson(message, new TypeToken<GameMessage<Lobby>>() {
                         }.getType());
                         Gdx.app.postRunnable(() -> {
-                            AppClient.getLobbies().add(msg.body);
+                            AppClient.addLobby(msg.body);
                             AppClient.setCurrentLobby(msg.body);
                             Menu.Lobby.resetMenu();
                             AppClient.setMenu(Menu.Lobby);
