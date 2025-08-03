@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -46,7 +47,8 @@ public class FarmScreen implements Screen {
 
     Map<Cell, TextureRegion> groundCache;
 
-    public final static Texture grassTexture =new Texture("game/general/tiles/grass.png");
+    public static Texture farmTexture =new Texture("game/Buildings/Screen/Farm_Screen.png");
+    public static Sprite farmSprite;
     ;
     boolean flip = false;
 
@@ -74,7 +76,7 @@ public class FarmScreen implements Screen {
 
 
 
-    private static final float MOVE_SPEED = 300f;
+    private static final float MOVE_SPEED = 2400;
 
     @SuppressWarnings("unchecked")
     public FarmScreen(Farm farm, Player player) {
@@ -92,18 +94,13 @@ public class FarmScreen implements Screen {
 
         batch = new SpriteBatch();
         groundCache = new HashMap<>();
-        for(Cell cell : farm.getCells()) {
-            TextureRegion ground = new TextureRegion(grassTexture);
-            groundCache.put(cell, ground);
-        }
 
 
 
 
 
-
-
-
+        farmSprite = new Sprite(farmTexture);
+        farmSprite.setSize(CELL_SIZE, CELL_SIZE);
         camera = new OrthographicCamera();
 //        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
@@ -217,12 +214,14 @@ public class FarmScreen implements Screen {
             }
             visibleCells.sort(Comparator.comparingInt(Cell::getY).reversed());
 //        });
-        for(Cell cell:visibleCells) {
-            int x = (int) (cell.getX() * CELL_SIZE);
-            int y = (int) (cell.getY() * CELL_SIZE);
-//            batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
-            batch.draw(groundCache.get(cell), x, y, CELL_SIZE, CELL_SIZE);
-        }
+//        for(Cell cell:visibleCells) {
+//            int x = (int) (cell.getX() * CELL_SIZE);
+//            int y = (int) (cell.getY() * CELL_SIZE);
+////            batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
+//            batch.draw(groundCache.get(cell), x, y, CELL_SIZE, CELL_SIZE);
+//        }
+
+        batch.draw(farmTexture,0,0,farmSprite.getWidth()*2*75,farmSprite.getHeight()*2*60);
 
         prevMinX = minX;
         prevMaxX = maxX;
@@ -235,7 +234,7 @@ public class FarmScreen implements Screen {
             int x = (int) (cell.getX() * CELL_SIZE);
             int y = (int) (cell.getY() * CELL_SIZE);
 
-//            buildingSpawner.renderBuildings(batch,cell,passiveStateTime);
+            buildingSpawner.renderBuildings(batch,cell,passiveStateTime);
             rockSpawner.renderRocks(batch,cell,passiveStateTime);
             cropSpawner.renderCrops(batch,cell,passiveStateTime);
             waterSpawner.renderWater(batch,cell,passiveStateTime);
@@ -423,7 +422,6 @@ public class FarmScreen implements Screen {
 
 
 
-        grassTexture.dispose();
     }
 
     @Override public void show() {}

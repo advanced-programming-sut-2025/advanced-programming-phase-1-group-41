@@ -14,6 +14,7 @@ public class Lake implements ObjectMap, Obstacle {
     public String getChar() {
         return TerminalColors.colorize(39,39,"LL");
     }
+    private int initialize=-1;
     private static final int WIDTH = 15;
     private static final int HEIGHT = 15;
     private static final int ITERATIONS = 6;
@@ -129,5 +130,12 @@ public class Lake implements ObjectMap, Obstacle {
             }
         }
         return count;
+    }
+
+    public void setInitialize(int initialize) {
+        this.initialize = initialize;
+    }
+    public int getInitialize() {
+        return initialize;
     }
 }

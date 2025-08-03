@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
-import static com.CEliconValley.client.view.screen.FarmScreen.grassTexture;
 
 public class RockSpawner {
     private final Farm farm;
@@ -70,17 +69,17 @@ public class RockSpawner {
         float x = cell.getX() * CELL_SIZE;
         float y = cell.getY() * CELL_SIZE;
 
-        // اگر کش موجود بود، مستقیماً از آن استفاده کن
-        if (rockRenderCache.containsKey(cell)) {
-            batch.draw(rockRenderCache.get(cell), x, y);
-            return true;
-        }
+
+//        if (rockRenderCache.containsKey(cell)) {
+//            batch.draw(rockRenderCache.get(cell), x, y);
+//            return true;
+//        }
 
         if (cell.getObjectMap() instanceof Rock rock) {
             if (rock.getRockType() == RockType.BigRock) {
-                if (!waterSpawner.renderWater(batch, cell, passiveState) && !groundSpawner.renderGround(batch, cell, passiveState)) {
-                    batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
-                }
+//                if (!waterSpawner.renderWater(batch, cell, passiveState) && !groundSpawner.renderGround(batch, cell, passiveState)) {
+//                    batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
+//                }
 
                 if (cell.getX() == rock.getAnchorX() && cell.getY() == rock.getAnchorY()) {
                     int variant = rock.getVariant();
@@ -89,9 +88,9 @@ public class RockSpawner {
                     int frameHeight = bigRockTexture.getHeight();
 
                     TextureRegion region = new TextureRegion(bigRockTexture, variant * frameWidth, 0, frameWidth, frameHeight);
-                    TextureRegion scaled = new TextureRegion(region); // کش معمولاً کپی نیاز داره
+                    TextureRegion scaled = new TextureRegion(region);
 
-                    rockRenderCache.put(cell, scaled);
+//                    rockRenderCache.put(cell, scaled);
                     batch.draw(scaled, x - CELL_SIZE, y, CELL_SIZE * 2, CELL_SIZE * 2);
                     return true;
                 }
@@ -104,7 +103,7 @@ public class RockSpawner {
                 TextureRegion region = new TextureRegion(rockTexture, variant * frameWidth, 0, frameWidth, frameHeight);
                 TextureRegion scaled = new TextureRegion(region);
 
-                rockRenderCache.put(cell, scaled);
+//                rockRenderCache.put(cell, scaled);
                 batch.draw(scaled, x, y, CELL_SIZE, CELL_SIZE);
                 return true;
             }
@@ -129,10 +128,10 @@ public class RockSpawner {
                         Cell c = farm.getCell(anchorX , anchorY );
                         breakingBigRockEffects.put(c, 0f);
                     }).start();
-                    rockRenderCache.remove(cell);
-                    rockRenderCache.remove(Finder.findCellByCoordinates(cell.getX()-1,cell.getY(),farm));
-                    rockRenderCache.remove(Finder.findCellByCoordinates(cell.getX()-1,cell.getY()+1,farm));
-                    rockRenderCache.remove(Finder.findCellByCoordinates(cell.getX(),cell.getY()+1,farm));
+//                    rockRenderCache.remove(cell);
+//                    rockRenderCache.remove(Finder.findCellByCoordinates(cell.getX()-1,cell.getY(),farm));
+//                    rockRenderCache.remove(Finder.findCellByCoordinates(cell.getX()-1,cell.getY()+1,farm));
+//                    rockRenderCache.remove(Finder.findCellByCoordinates(cell.getX(),cell.getY()+1,farm));
 
                 }
             } else {
@@ -145,7 +144,7 @@ public class RockSpawner {
                         }
                         breakingEffects.put(cell, 0f);
                     }).start();
-                    rockRenderCache.remove(cell);
+//                    rockRenderCache.remove(cell);
                 }
             }
             return true;

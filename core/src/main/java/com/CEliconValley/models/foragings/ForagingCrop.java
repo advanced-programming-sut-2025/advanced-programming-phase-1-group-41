@@ -39,23 +39,23 @@ public class ForagingCrop implements Foraging, Item {
         this.typeIndex = typeIndex;
     }
 
-    public ForagingCrop(int x, int y, Farm farm) {
-        Random rand = new Random();
-        while (true){
-            int type = rand.nextInt(ForagingCropType.values().length);
-            typeIndex = type;
-            foragingCropType = ForagingCropType.values()[type];
-//            if(App.getGame() == null){
+//    public ForagingCrop(int x, int y, Farm farm) {
+//        Random rand = new Random();
+//        while (true){
+//            int type = rand.nextInt(ForagingCropType.values().length);
+//            typeIndex = type;
+//            foragingCropType = ForagingCropType.values()[type];
+////            if(App.getGame() == null){
+////                break;
+////            }
+//            if(foragingCropType.getGrowingSeason().equals(App.getGame().getTime().getSeason())){
 //                break;
 //            }
-            if(foragingCropType.getGrowingSeason().equals(App.getGame().getTime().getSeason())){
-                break;
-            }
-        }
-        Cell cell = Finder.findCellByCoordinates(x, y, farm);
-        assert cell != null;
-        cell.setObjectMap(this);
-    }
+//        }
+//        Cell cell = Finder.findCellByCoordinates(x, y, farm);
+//        assert cell != null;
+//        cell.setObjectMap(this);
+//    }
     public ForagingCropType getForagingCropType() {
         return foragingCropType;
     }

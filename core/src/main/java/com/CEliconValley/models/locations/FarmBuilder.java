@@ -61,7 +61,7 @@ public class FarmBuilder {
         plantCount = farm.getPlantCount() - plantCount - 5 + rand.nextInt(11);
         foragingCropCount = farm.getForagingCropCount() - foragingCropCount - 5 + rand.nextInt(11);
         //Change To Test
-        rockCount = 20;
+        rockCount = 110;
         foragingTreeCount = 20;
         plantCount = 20;
         foragingCropCount = 20;
@@ -92,15 +92,15 @@ public class FarmBuilder {
                 i--;
             }
         }
-        for(int i = 0; i < foragingCropCount ;i++){
-            int y = rand.nextInt(MaxLength - 4) + 2;
-            int x = rand.nextInt(MaxHeight - 4) + 2;
-            if(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, farm)).getObjectMap() instanceof Grass){
-                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, farm)).setObjectMap(new ForagingCrop(x, y, farm));
-            } else{
-                i--;
-            }
-        }
+//        for(int i = 0; i < foragingCropCount ;i++){
+//            int y = rand.nextInt(MaxLength - 4) + 2;
+//            int x = rand.nextInt(MaxHeight - 4) + 2;
+//            if(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, farm)).getObjectMap() instanceof Grass){
+//                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, farm)).setObjectMap(new ForagingCrop(x, y, farm));
+//            } else{
+//                i--;
+//            }
+//        }
         farm.getStartPoints().get(0).setObjectMap(new Grass());
         for(int i = 0; i < farm.getTransferCells().size(); i++){
             farm.getTransferCells().get(i).setObjectMap(new Grass());

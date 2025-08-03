@@ -68,44 +68,44 @@ public class WaterSpawner {
 
     }
 
-    public boolean renderWater(SpriteBatch batch,Cell cell,float passiveStateTime) {
+    public boolean renderWater(SpriteBatch batch, Cell cell, float passiveStateTime) {
         float x = cell.getX() * CELL_SIZE;
         float y = cell.getY() * CELL_SIZE;
+
         if (cell.getObjectMap() instanceof Lake) {
+
             TextureRegion waterFrame = waterAnimation.getKeyFrame(passiveStateTime, true);
             batch.draw(waterFrame, x, y, CELL_SIZE, CELL_SIZE);
-            return true;
 
-        } else if (isCoast(cell)) {
-            int animIndex = getCoastAnimationIndex(cell.getX(), cell.getY());
-            TextureRegion frame = coastAnimations[animIndex].getKeyFrame(passiveStateTime, true);
-            batch.draw(frame, x, y, CELL_SIZE, CELL_SIZE);
-            return true;
-        } else if(getWaterCornerType(cell.getX(),cell.getY())!=CornerType.NONE) {
-            CornerType corner = getWaterCornerType(cell.getX(), cell.getY());
-            switch (corner) {
-                case SE:
-                    batch.draw(animCornerSE.getKeyFrame(passiveStateTime, true), x, y, CELL_SIZE, CELL_SIZE);
-                    return true;
 
-                case SW:
-                    batch.draw(animCornerSW.getKeyFrame(passiveStateTime, true), x, y, CELL_SIZE, CELL_SIZE);
-                    return true;
-
-                case NE:
-                    batch.draw(animCornerNE.getKeyFrame(passiveStateTime, true), x, y, CELL_SIZE, CELL_SIZE);
-                    return true;
-
-                case NW:
-                    batch.draw(animCornerNW.getKeyFrame(passiveStateTime, true), x, y, CELL_SIZE, CELL_SIZE);
-                    return true;
-                default:
-                    break;
+            if (isCoast(cell)) {
+                int animIndex = getCoastAnimationIndex(cell.getX(), cell.getY());
+                TextureRegion frame = coastAnimations[animIndex].getKeyFrame(passiveStateTime, true);
+                batch.draw(frame, x, y, CELL_SIZE, CELL_SIZE);
             }
-        }
-        return false;
 
+
+            CornerType corner = getWaterCornerType(cell.getX(), cell.getY());
+            if (corner != CornerType.NONE) {
+                Animation<TextureRegion> cornerAnim = switch (corner) {
+                    case SE -> animCornerSE;
+                    case SW -> animCornerSW;
+                    case NE -> animCornerNE;
+                    case NW -> animCornerNW;
+                    default -> null;
+                };
+                if (cornerAnim != null) {
+                    batch.draw(cornerAnim.getKeyFrame(passiveStateTime, true), x, y, CELL_SIZE, CELL_SIZE);
+                }
+            }
+
+            return true;
+        }
+
+
+        return false;
     }
+
     private TextureRegion[] flipY(TextureRegion[] original) {
         TextureRegion[] flipped = new TextureRegion[original.length];
         for (int i = 0; i < original.length; i++) {
@@ -132,32 +132,47 @@ public class WaterSpawner {
         return flipped;
     }
     private boolean isCoast(Cell cell) {
-
         int x = cell.getX();
         int y = cell.getY();
-        return !isWater(x, y) && (isWater(x+1, y) || isWater(x-1, y) || isWater(x, y+1) || isWater(x, y-1));
+
+
+        if (!(cell.getObjectMap() instanceof Lake)) return false;
+
+
+        return isLand(x + 1, y) || isLand(x - 1, y) || isLand(x, y + 1) || isLand(x, y - 1);
     }
+
+    private boolean isLand(int x, int y) {
+        for (Cell cell : farm.getCells()) {
+            if (cell.getX() == x && cell.getY() == y) {
+                return !(cell.getObjectMap() instanceof Lake);
+            }
+        }
+        return false;
+    }
+
+
     public boolean isCorner(Cell cell) {
         int x = cell.getX();
         int y = cell.getY();
         return !isWater(x,y)&&!isWater(x+1,y)&&!isWater(x,y+1)&&!isWater(x-1,y)&&!isWater(x,y-1)&&(isWater(x+1,y+1)||isWater(x+1,y-1)||isWater(x,y+1)||isWater(x-1,y+1)||isWater(x-1,y-1));
     }
     private int getCoastAnimationIndex(int x, int y) {
-        boolean hasWaterRight = isWater(x+1, y);
-        boolean hasWaterLeft = isWater(x-1, y);
-        boolean hasWaterUp = isWater(x, y+1);
-        boolean hasWaterDown = isWater(x, y-1);
+        boolean hasLandRight = isLand(x+1, y);
+        boolean hasLandLeft = isLand(x-1, y);
+        boolean hasLandUp = isLand(x, y+1);
+        boolean hasLandDown = isLand(x, y-1);
 
-        if (hasWaterRight && hasWaterDown) return 8;
-        if (hasWaterUp && hasWaterLeft) return 0;
-        if (hasWaterLeft && hasWaterDown) return 6;
-        if (hasWaterUp && hasWaterRight) return 2;
-        if (hasWaterDown) return 7;
-        if (hasWaterRight) return 5;
-        if (hasWaterLeft) return 3;
-        if (hasWaterUp) return 1;
+        if (hasLandRight && hasLandDown) return 0;
+        if (hasLandUp && hasLandLeft) return 8;
+        if (hasLandLeft && hasLandDown) return 2;
+        if (hasLandUp && hasLandRight) return 6;
+        if (hasLandDown) return 1;
+        if (hasLandRight) return 3;
+        if (hasLandLeft) return 5;
+        if (hasLandUp) return 7;
 
-        if (!hasWaterRight && !hasWaterLeft && !hasWaterUp && !hasWaterDown) return 4;
+
         return 4;
     }
     private enum CornerType {
@@ -165,25 +180,26 @@ public class WaterSpawner {
     }
 
     private CornerType getWaterCornerType(int x, int y) {
-        if (!(farm.getCell(x, y).getObjectMap() instanceof Grass)) return CornerType.NONE;
+        Cell center = farm.getCell(x, y);
+        if (center == null || !(center.getObjectMap() instanceof Lake)) return CornerType.NONE;
 
-        boolean north = isWater(x, y + 1);
-        boolean south = isWater(x, y - 1);
-        boolean east = isWater(x + 1, y);
-        boolean west = isWater(x - 1, y);
+        boolean n = isWater(x, y + 1);
+        boolean e = isWater(x + 1, y);
+        boolean ne = isLand(x + 1, y + 1);
 
-        boolean nw = isWater(x - 1, y + 1);
-        boolean ne = isWater(x + 1, y + 1);
-        boolean sw = isWater(x - 1, y - 1);
-        boolean se = isWater(x + 1, y - 1);
+        boolean s = isWater(x, y - 1);
+        boolean w = isWater(x - 1, y);
+        boolean sw = isLand(x - 1, y - 1);
 
-        if (!east && !south && se) return CornerType.SE;
-        if (!west && !south && sw) return CornerType.SW;
-        if (!east && !north && ne) return CornerType.NE;
-        if (!west && !north && nw) return CornerType.NW;
+        if (n && e && ne) return CornerType.SW;
+        if (n && w && isLand(x - 1, y + 1)) return CornerType.SE;
+        if (s && e && isLand(x + 1, y - 1)) return CornerType.NW;
+        if (s && w && sw) return CornerType.NE;
 
         return CornerType.NONE;
     }
+
+
 
 
 

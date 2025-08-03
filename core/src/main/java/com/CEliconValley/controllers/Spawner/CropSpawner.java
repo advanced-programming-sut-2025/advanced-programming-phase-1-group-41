@@ -38,7 +38,7 @@ public class CropSpawner {
 
         TextureRegion[][] split = TextureRegion.split(cropTexture, frameWidth, frameHeight);
 
-        // محصولات اصلی (ردیف‌های 0 تا cropCount - 1)
+
         for (int row = 0; row < cropCount; row++) {
             CropType cropType = CropType.values()[row];
             List<Integer> stageList = cropType.getStages();

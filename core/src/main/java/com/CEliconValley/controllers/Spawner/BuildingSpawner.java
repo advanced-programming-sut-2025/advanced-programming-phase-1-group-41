@@ -44,18 +44,15 @@ public class BuildingSpawner {
         float x = (float)(cell.getX() * CELL_SIZE);
         float y = (float)(cell.getY() * CELL_SIZE);
         if (cell.getObjectMap() instanceof Building) {
-            batch.draw(FarmScreen.grassTexture, x, y, CELL_SIZE, CELL_SIZE);
         }
 
         Cell tmpCell = Finder.findCellByCoordinates(cell.getX() - 1, cell.getY() + 1, this.farm);
         if (tmpCell != null && tmpCell.getObjectMap() instanceof Cottage) {
             Cottage cottage = (Cottage)tmpCell.getObjectMap();
-            batch.draw(FarmScreen.grassTexture, x, y, CELL_SIZE, CELL_SIZE);
             if (cell.getX() - 1 == cottage.getAnchorX() && cell.getY() + 1 == cottage.getAnchorY()) {
                 int frameWidth = this.cottageTexture.getWidth();
                 int frameHeight = this.cottageTexture.getHeight();
                 TextureRegion cottageFrame = new TextureRegion(this.cottageTexture, 0, 0, frameWidth, frameHeight);
-                batch.draw(FarmScreen.grassTexture, x, y, CELL_SIZE, CELL_SIZE);
                 batch.draw(cottageFrame, x - CELL_SIZE*5, y, CELL_SIZE*6, CELL_SIZE*6);
             }
         } else if (tmpCell != null && tmpCell.getObjectMap() instanceof Greenhouse) {
@@ -64,7 +61,6 @@ public class BuildingSpawner {
                 int frameWidth = this.greenhouseTexture.getWidth();
                 int frameHeight = this.greenhouseTexture.getHeight();
                 TextureRegion greenHouseFrame = new TextureRegion(this.greenhouseTexture, 0, 0, frameWidth, frameHeight);
-                batch.draw(FarmScreen.grassTexture, x, y, CELL_SIZE, CELL_SIZE);
                 batch.draw(greenHouseFrame, x - CELL_SIZE*6, y, CELL_SIZE*7, CELL_SIZE*8);
             }
         }else if (tmpCell != null && tmpCell.getObjectMap() instanceof WaterTank) {
@@ -72,7 +68,6 @@ public class BuildingSpawner {
             int frameWidth = this.waterTankTexture.getWidth();
             int frameHeight = this.waterTankTexture.getHeight();
             TextureRegion waterTankFrame = new TextureRegion(this.waterTankTexture, 0, 0, frameWidth, frameHeight);
-            batch.draw(FarmScreen.grassTexture, x, y, CELL_SIZE, CELL_SIZE);
             batch.draw(waterTankFrame, x, y, CELL_SIZE, CELL_SIZE);
 
         }
@@ -82,7 +77,6 @@ public class BuildingSpawner {
                 int frameWidth = this.barnTexture.getWidth();
                 int frameHeight = this.barnTexture.getHeight();
                 TextureRegion barnFrame = new TextureRegion(this.barnTexture, 0, 0, frameWidth, frameHeight);
-                batch.draw(FarmScreen.grassTexture, x, y, CELL_SIZE, CELL_SIZE);
                 batch.draw(barnFrame, x - CELL_SIZE*6, y, CELL_SIZE*7, CELL_SIZE*8);
             }
         }else if (tmpCell != null && tmpCell.getObjectMap() instanceof Coop) {
@@ -91,7 +85,6 @@ public class BuildingSpawner {
                 int frameWidth = this.coopTexture.getWidth();
                 int frameHeight = this.coopTexture.getHeight();
                 TextureRegion coopFrame = new TextureRegion(this.coopTexture, 0, 0, frameWidth, frameHeight);
-                batch.draw(FarmScreen.grassTexture, x, y, CELL_SIZE, CELL_SIZE);
                 batch.draw(coopFrame, x - CELL_SIZE * 6, y, CELL_SIZE * 7, CELL_SIZE * 8);
             }
         }

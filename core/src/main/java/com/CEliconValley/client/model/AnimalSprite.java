@@ -61,13 +61,10 @@ public class AnimalSprite {
 
     private void setCR(){
         switch (this.animalData.getAnimalType()){
-            case "Cow", "Sheep" -> {
-                columns=4;
-                rows=5;
-            }
-            case "Pig", "Goat", "Dino", "Rabbit" -> {
+
+            case "Pig", "Goat", "Dino", "Rabbit","Cow", "Sheep" -> {
                 columns = 4;
-                rows = 6;
+                rows = 7;
             }
             case "Chicken" -> {
                 columns=4;
@@ -110,14 +107,14 @@ public class AnimalSprite {
             switch (direction) {
                 case 1:
                     for(int i=0;i<animalActs[3].length;i++){
-                        wantedActs[i] = animalActs[3][i];
+                        wantedActs[i] = animalActs[5][i];
                     }
 //                    animation[0] = animalActs[2][0];
                     return new Animation<>(0.15f, wantedActs);
                 case 2:
 //                    animation[0] = animalActs[1][0];
                     for(int i=0;i<animalActs[3].length;i++){
-                        wantedActs[i] = animalActs[3][i];
+                        wantedActs[i] = animalActs[4][i];
                     }
 //                    animation[0] = animalActs[2][0];
                     return new Animation<>(0.15f, wantedActs);
