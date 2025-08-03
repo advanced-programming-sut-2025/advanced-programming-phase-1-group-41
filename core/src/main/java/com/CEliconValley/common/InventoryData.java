@@ -27,6 +27,7 @@ public class InventoryData {
             slots.add(new SlotData(slot));
         }
         whichBackpack = inventory.getBackpack().ordinal();
+//        whichBackpack++;
     }
 
     public Inventory getInventory() {

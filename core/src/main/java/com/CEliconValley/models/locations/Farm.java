@@ -129,10 +129,10 @@ public class Farm implements Location {
         foragingTreeCount = (35 + rand.nextInt(10)) * farmType.treeCoefficient;
         plantCount = (40 + rand.nextInt(10)) * farmType.treeCoefficient;
         foragingCropCount = (30 + rand.nextInt(5));
-        rockCount = (5 + rand.nextInt(10)) * farmType.rockCoefficient;
-        foragingTreeCount = (5 + rand.nextInt(10)) * farmType.treeCoefficient;
-        plantCount = (4 + rand.nextInt(10)) * farmType.treeCoefficient;
-        foragingCropCount = (3 + rand.nextInt(5));
+//        rockCount = (5 + rand.nextInt(10)) * farmType.rockCoefficient;
+//        foragingTreeCount = (5 + rand.nextInt(10)) * farmType.treeCoefficient;
+//        plantCount = (4 + rand.nextInt(10)) * farmType.treeCoefficient;
+//        foragingCropCount = (3 + rand.nextInt(5));
 //        rockCount = 0;
 //        foragingTreeCount = 0;
 //        foragingCropCount = 0;
@@ -185,17 +185,17 @@ public class Farm implements Location {
 //                i--;
 //            }
 //        }
-//        for(int i = 0; i < 300 ;i++){
-//            int y = rand.nextInt(MaxLength - 4) + 4;
-//            int x = rand.nextInt(MaxHeight - 4) + 4;
-//            if(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap() instanceof Grass){
-//                Tree tree = new Tree(x, y, this, TreeType.values()[rand.nextInt(TreeType.values().length)]);
-//                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(tree);
-//                trees.add(tree);
-//            } else{
-//                i--;
-//            }
-//        }
+        for(int i = 0; i < foragingTreeCount ;i++){
+            int y = rand.nextInt(MaxLength - 4) + 4;
+            int x = rand.nextInt(MaxHeight - 4) + 4;
+            if(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap() instanceof Grass){
+                Tree tree = new Tree(x, y, this, TreeType.values()[rand.nextInt(TreeType.values().length)]);
+                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(tree);
+                trees.add(tree);
+            } else{
+                i--;
+            }
+        }
         if(this.getId()==1){
             for(Cell cell : cells){
                 if(cell.getX()==59&&cell.getY()>=73||cell.getY()==74&&cell.getX()>=58){

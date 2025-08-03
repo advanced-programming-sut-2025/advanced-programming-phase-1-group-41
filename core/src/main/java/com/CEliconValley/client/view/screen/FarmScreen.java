@@ -299,7 +299,7 @@ public class FarmScreen implements Screen {
 
                 batch.draw(currentFrame, hero.renderX-CELL_SIZE/2f, hero.renderY-CELL_SIZE/2f, CELL_SIZE*2f, CELL_SIZE*2f);
             }
-//            treeSpawner.renderTrees(batch,cell,passiveStateTime);
+            treeSpawner.renderTrees(batch,cell,passiveStateTime);
 //            if (didHit) {
 //                hit(hero.currentDirection, hero.playerX, hero.playerY);
 //                didHit = false;
@@ -310,7 +310,9 @@ public class FarmScreen implements Screen {
 
         }
             if(isMenuOpen){
-                menuBar.render(batch,camera.viewportWidth/4,camera.viewportHeight/4);
+
+//                menuBar.render(batch, menuX, menuY, menuWidth, menuHeight);
+                menuBar.render(batch,camera,player.getInventory());
             }else {
                 inventoryRenderer.render(batch, camera);
             }
@@ -425,7 +427,7 @@ public class FarmScreen implements Screen {
     private boolean canMoveTo(int x, int y) {
         for (Cell cell : farm.getCells()) {
             if (cell.getX() == x && cell.getY() == y) {
-                if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock||cell.getObjectMap() instanceof Wall||cell.getObjectMap() instanceof ForagingTree) {
+                if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock||cell.getObjectMap() instanceof Wall||cell.getObjectMap() instanceof Obstacle) {
                     return false;
                 }
                 return true;
