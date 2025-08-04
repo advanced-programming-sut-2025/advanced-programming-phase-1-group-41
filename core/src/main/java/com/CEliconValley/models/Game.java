@@ -1,5 +1,6 @@
 package com.CEliconValley.models;
 
+import com.badlogic.gdx.utils.Timer;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Transient;
@@ -9,6 +10,8 @@ import com.CEliconValley.models.locations.Village;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimerTask;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.stream.Collectors;
 
 @Entity("games")
@@ -41,6 +44,7 @@ public class Game {
         return village;
     }
 
+    public ScheduledExecutorService scheduler;
 
 
 

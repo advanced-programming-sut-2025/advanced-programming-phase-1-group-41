@@ -101,10 +101,12 @@ public class FarmBuilder {
 //                i--;
 //            }
 //        }
-        farm.getStartPoints().get(0).setObjectMap(new Grass());
-        for(int i = 0; i < farm.getTransferCells().size(); i++){
-            farm.getTransferCells().get(i).setObjectMap(new Grass());
-        }
+
+        // TODO important fix this!
+//        farm.getStartPoints().get(0).setObjectMap(new Grass());
+//        for(int i = 0; i < farm.getTransferCells().size(); i++){
+//            farm.getTransferCells().get(i).setObjectMap(new Grass());
+//        }
     }
     public void growCrops(){
         List<Crop> toRemove = new ArrayList<>();

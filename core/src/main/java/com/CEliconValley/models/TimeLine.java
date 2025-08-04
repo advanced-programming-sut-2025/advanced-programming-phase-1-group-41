@@ -64,6 +64,7 @@ public class TimeLine {
         hour++;
         if(hour >= 24){
             hour = 0;
+            System.out.println("advancing day");
             advanceOneDay();
         }
         MarketplaceController.updateHourly();
@@ -73,7 +74,8 @@ public class TimeLine {
     }
     public void advanceOneDay(){
         if(hour == 0){
-            goHome();
+            // TODO important fix this!
+//            goHome();
             for (Player player : App.getGame().getPlayers()) {
                 player.resetEnergy();
             }
@@ -179,5 +181,13 @@ public class TimeLine {
     }
 
 
-
+    @Override
+    public String toString() {
+        return "TimeLine{" +
+            "hour=" + hour +
+            ", day=" + day +
+            ", season=" + season +
+            ", year=" + year +
+            '}';
+    }
 }

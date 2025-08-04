@@ -5,11 +5,15 @@ import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.PreStartRequest;
 import com.CEliconValley.common.messages.PreStartResponse;
 import com.CEliconValley.models.*;
+import com.badlogic.gdx.utils.Timer;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.java_websocket.WebSocket;
 
 import java.util.ArrayList;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class GameHandler {
     public static void handle(String type, String message, WebSocket conn, Gson gson){
@@ -39,5 +43,16 @@ public class GameHandler {
         App.setGame(game);
         GameMessage<GameData> response = new GameMessage<>("new-game", new GameData(game));
         App.getServer().sendToGroupByPlayers(game.getPlayers(),new Gson().toJson(response));
+        game.scheduler = Executors.newSingleThreadScheduledExecutor();
+        game.scheduler.scheduleAtFixedRate(() -> {
+            try{
+                game.getTime().advanceOneHour();
+                GameMessage<GameData> msg = new GameMessage<>("game-data", new GameData(game));
+                App.getServer().sendToGroupByPlayers(game.getPlayers(),new Gson().toJson(msg));
+            } catch (Exception e){
+                e.printStackTrace();
+                System.out.println(e.getMessage());
+            }
+        }, 1, 1, TimeUnit.SECONDS);
     }
 }
