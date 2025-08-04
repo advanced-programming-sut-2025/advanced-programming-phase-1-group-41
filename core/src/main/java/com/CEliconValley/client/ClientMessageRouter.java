@@ -11,7 +11,7 @@ public class ClientMessageRouter {
             case "app-data", "avatar-response", "handshake-data" -> GeneralHandler.handle(type, rawJson, gson);
             case "new-lobby", "join-lobby", "leave-lobby",
                  "delete-lobby" -> ClientLobbyHandler.handle(type, rawJson, gson);
-            case "game-data", "new-game", "pre-start-request" -> ClientGameHandler.handle(type, rawJson, gson);
+            case "game-data", "new-game", "pre-start-request", "game-command" -> ClientGameHandler.handle(type, rawJson, gson);
         }
     }
 }

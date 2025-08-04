@@ -1,7 +1,10 @@
 package com.CEliconValley.client.view.screen;
 
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.controller.CheatCodeController;
 import com.CEliconValley.client.model.AnimalSprite;
+import com.CEliconValley.common.messages.GameCommand;
+import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.Result;
 import com.CEliconValley.models.locations.Location;
@@ -14,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -72,6 +76,15 @@ public class Playeracts {
         boolean moved = false;
         screen.onRepeat=true;
 
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.F)){
+            hero.currentDirection = 1;
+            if (screen.canMoveTo(hero.playerX, hero.playerY + 1, location)) {
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                    new GameCommand("walk up", AppClient.getUserData().getUsername()));
+                AppClient.getClient().send(new Gson().toJson(msg));
+            }
+        }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             hero.currentDirection = 1;
             if (screen.canMoveTo(hero.playerX, hero.playerY + 1, location)) {

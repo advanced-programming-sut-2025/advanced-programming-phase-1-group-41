@@ -17,7 +17,6 @@ import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class CottageScreen extends GameScreen implements Screen {
     private final FarmScreen farmScreen;
-    private final Hero hero;
     private final SpriteBatch batch;
     private final Texture background;
     private final CottageMap cottageMap;
@@ -36,7 +35,6 @@ public class CottageScreen extends GameScreen implements Screen {
     public CottageScreen(FarmScreen farmScreen, CottageMap cottageMap, Player player) {
         // give the correct inventory renderer
         super(null);
-        this.hero = new Hero();
         this.farmScreen = farmScreen;
         this.cottageMap = cottageMap;
         this.player = player;

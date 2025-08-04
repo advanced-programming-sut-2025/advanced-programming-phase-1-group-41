@@ -1,6 +1,7 @@
 package com.CEliconValley.server.handlers;
 
 import com.CEliconValley.common.GameData;
+import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.PreStartRequest;
 import com.CEliconValley.common.messages.PreStartResponse;
@@ -34,6 +35,19 @@ public class GameHandler {
             case "pre-start-response" -> {
                 GameMessage<PreStartResponse> msg = gson.fromJson(message, new TypeToken<GameMessage<PreStartResponse>>() {}.getType());
                 App.getPreGame().addPlayer(msg.body.username, msg.body.farmType);
+            }
+            case "game-command" -> {
+                System.out.println("received go up");
+                GameMessage<GameCommand> msg = gson.fromJson(message, new TypeToken<GameMessage<GameCommand>>() {}.getType());
+                Game game = App.getGame();
+                Player player = game.getPlayerByUsername(msg.body.playerName);
+                if(msg.body.command.equals("walk up")){
+                    System.out.println("moving up ;)");
+                    player.setY(player.getY() + 1);
+                    conn.send(new Gson().toJson(
+                        new GameMessage<>("game-command", new GameCommand("walk up", msg.body.playerName))
+                    ));
+                }
             }
         }
     }

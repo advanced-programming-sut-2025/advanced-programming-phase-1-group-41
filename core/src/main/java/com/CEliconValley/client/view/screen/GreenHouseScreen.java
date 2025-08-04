@@ -15,7 +15,6 @@ import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class GreenHouseScreen extends GameScreen implements Screen {
     private final FarmScreen farmScreen;
-    private final Hero hero;
     private final SpriteBatch batch;
     private final Texture background;
     private final GreenhouseMap greenHouse;
@@ -41,7 +40,6 @@ public class GreenHouseScreen extends GameScreen implements Screen {
 
     public GreenHouseScreen(FarmScreen farmScreen,GreenhouseMap greenHouse, Player player) {
         super(null);
-        hero=new Hero();
         this.farmScreen=farmScreen;
         this.greenHouse = greenHouse;
         this.player = player;

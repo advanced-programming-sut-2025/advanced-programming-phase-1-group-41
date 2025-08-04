@@ -3,7 +3,9 @@ package com.CEliconValley.client.controller.handlers;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.view.LobbyScreen;
 import com.CEliconValley.client.view.screen.FarmScreen;
+import com.CEliconValley.client.view.screen.GameScreen;
 import com.CEliconValley.common.GameData;
+import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.PreStartRequest;
 import com.CEliconValley.common.messages.PreStartResponse;
@@ -15,7 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class ClientGameHandler {
-    public static void handle(String type, String message, Gson gson){
+    public static void handle(String type, String message, Gson gson) {
         switch (type) {
             case "game-data" -> {
                 GameMessage<GameData> gameDataMessage = gson.fromJson(message, new TypeToken<GameMessage<GameData>>() {
@@ -23,8 +25,8 @@ public class ClientGameHandler {
                 Gdx.app.postRunnable(() -> {
                     AppClient.setGameData(gameDataMessage.body);
                 });
-                System.out.println("Cmessage: updated gamedata");
-                System.out.println("    time: "+gameDataMessage.body.getTime());
+//                System.out.println("Cmessage: updated gamedata");
+//                System.out.println("    time: " + gameDataMessage.body.getTime());
             }
             case "new-game" -> {
                 GameMessage<GameData> gameDataMessage = gson.fromJson(message, new TypeToken<GameMessage<GameData>>() {
@@ -35,19 +37,36 @@ public class ClientGameHandler {
                     AppClient.setGameData(gameDataMessage.body);
                     Player player = gameDataMessage.body.getPlayersData().get(0).getPlayer();
                     ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new FarmScreen(
-                        Finder.getFarmDataById(AppClient.getGameData(), AppClient.getUserData().getUsername()).getFarm(player),player
+                        Finder.getFarmDataById(AppClient.getGameData(), AppClient.getUserData().getUsername()).getFarm(player), player
                     ));
                 });
             }
             case "pre-start-request" -> {
-                GameMessage<PreStartRequest> gameMessage= gson.fromJson(message, new TypeToken<GameMessage<PreStartRequest>>() {}.getType());
-                if(AppClient.getMenu().getScreen() instanceof LobbyScreen view){
+                GameMessage<PreStartRequest> gameMessage = gson.fromJson(message, new TypeToken<GameMessage<PreStartRequest>>() {
+                }.getType());
+                if (AppClient.getMenu().getScreen() instanceof LobbyScreen view) {
                     GameMessage<PreStartResponse> response = new GameMessage<>("pre-start-response",
                         new PreStartResponse(AppClient.getUserData().getUsername(),
                             view.getFarmType()));
                     AppClient.getClient().send(gson.toJson(response));
                 }
-                System.out.println("CMessage "+message);
+                System.out.println("CMessage " + message);
+            }
+            case "game-command" -> {
+                GameMessage<GameCommand> gameMessage = gson.fromJson(message, new TypeToken<GameMessage<GameCommand>>() {
+                }.getType());
+                System.out.println("going to receive walk up");
+                if (((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof GameScreen view) {
+                    if (gameMessage.body.command.equals("walk up")) {
+                        System.out.println("received walk up");
+                        view.getHero().targetY = view.getHero().playerY + 1;
+                        view.getHero().targetX = view.getHero().playerX;
+                        view.getHero().isMoving = true;
+                        view.getHero().currentAnimation = view.getHero().walk(true, view.getHero().currentDirection);
+                    }
+                }
+
+
             }
         }
     }

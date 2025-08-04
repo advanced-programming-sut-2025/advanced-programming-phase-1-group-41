@@ -28,7 +28,6 @@ import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class BarnScreen extends GameScreen implements Screen {
     private final FarmScreen farmScreen;
-    private final Hero hero;
     private final SpriteBatch batch;
     private final TextureRegion background;
     private final BarnMap barn;
@@ -39,7 +38,6 @@ public class BarnScreen extends GameScreen implements Screen {
 
     public BarnScreen(FarmScreen farmScreen, BarnMap barn, Player player) {
         super(null);
-        this.hero = new Hero();
         this.farmScreen = farmScreen;
         this.barn = barn;
         this.batch = new SpriteBatch();

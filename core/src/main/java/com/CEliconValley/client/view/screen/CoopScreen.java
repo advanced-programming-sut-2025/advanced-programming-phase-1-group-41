@@ -25,7 +25,6 @@ import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class CoopScreen extends GameScreen implements Screen {
     private final FarmScreen farmScreen;
-    private final Hero hero;
     private final SpriteBatch batch;
     private final TextureRegion background;
     private final CoopMap coop;
@@ -35,7 +34,6 @@ public class CoopScreen extends GameScreen implements Screen {
 
     public CoopScreen(FarmScreen farmScreen, CoopMap coop, Player player) {
         super(null);
-        this.hero = new Hero();
         this.farmScreen = farmScreen;
         this.coop = coop;
         this.batch = new SpriteBatch();

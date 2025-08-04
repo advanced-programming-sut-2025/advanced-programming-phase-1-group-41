@@ -5,6 +5,7 @@ import com.CEliconValley.client.view.screen.maps.*;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.controllers.Spawner.InventoryRenderer;
 import com.CEliconValley.models.Cell;
+import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.foragings.ForagingTree;
 import com.CEliconValley.models.foragings.Nature.Lake;
@@ -33,6 +34,7 @@ public abstract class GameScreen implements Screen {
     protected TextField cheatCodeField;
     protected Stage stage;
     public abstract void transfer();
+    protected Hero hero;
     public GameScreen(InventoryRenderer inventoryRenderer) {
         stage = new Stage(new ScreenViewport(), Main.getBatch());
         Gdx.input.setInputProcessor(stage);
@@ -43,6 +45,7 @@ public abstract class GameScreen implements Screen {
         cheatCodeField.setWidth(600);
         cheatCodeField.setPosition(stage.getWidth()/2  - cheatCodeField.getWidth() / 2, stage.getHeight() / 2 - cheatCodeField.getHeight() / 2);
         stage.addActor(cheatCodeField);
+        this.hero = new Hero();
     }
 
 
@@ -52,6 +55,7 @@ public abstract class GameScreen implements Screen {
                 if (cd.getX() == x && cd.getY() == y) {
                     Cell cell = cd.extractData();
                     if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock ||cell.getObjectMap() instanceof Wall ||cell.getObjectMap() instanceof Obstacle) {
+                        System.out.println(cd.getObjectName());
                         return false;
                     }
                     return true;
@@ -127,5 +131,7 @@ public abstract class GameScreen implements Screen {
         overlay.toBack();
     }
 
-
+    public Hero getHero() {
+        return hero;
+    }
 }

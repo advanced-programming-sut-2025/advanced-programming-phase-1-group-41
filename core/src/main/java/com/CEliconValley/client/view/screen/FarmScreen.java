@@ -34,7 +34,6 @@ public class FarmScreen extends GameScreen implements Screen {
     private final BuildingSpawner buildingSpawner;
     private final GroundSpawner groundSpawner;
     private final CropSpawner cropSpawner;
-    private final Hero hero;
     private FarmMap farmMap;
 
     private final List<CellData> visibleCells = new ArrayList<>();
@@ -89,7 +88,6 @@ public class FarmScreen extends GameScreen implements Screen {
         buildingSpawner=new BuildingSpawner();
         groundSpawner=new GroundSpawner();
         cropSpawner=new CropSpawner();
-        hero=new Hero();
 
 
         batch = new SpriteBatch();
