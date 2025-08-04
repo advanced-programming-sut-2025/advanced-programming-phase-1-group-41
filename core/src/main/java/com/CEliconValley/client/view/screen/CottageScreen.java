@@ -1,26 +1,17 @@
 package com.CEliconValley.client.view.screen;
 
-import com.CEliconValley.Main;
 import com.CEliconValley.models.*;
 //import com.CEliconValley.models.buildings.GreenHouse.Door;
 import com.CEliconValley.models.buildings.Door;
-import com.CEliconValley.models.buildings.Wall;
-import com.CEliconValley.models.foragings.ForagingTree;
-import com.CEliconValley.models.foragings.Nature.Lake;
-import com.CEliconValley.models.foragings.Nature.Rock;
 //import com.CEliconValley.models.foragings.Nature.Wall;
-import com.CEliconValley.views.maps.CottageMap;
+import com.CEliconValley.client.view.screen.maps.CottageMap;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
@@ -45,7 +36,7 @@ public class CottageScreen extends GameScreen implements Screen {
     public CottageScreen(FarmScreen farmScreen, CottageMap cottageMap, Player player) {
         // give the correct inventory renderer
         super(null);
-        this.hero = new Hero(cottageMap);
+        this.hero = new Hero();
         this.farmScreen = farmScreen;
         this.cottageMap = cottageMap;
         this.player = player;

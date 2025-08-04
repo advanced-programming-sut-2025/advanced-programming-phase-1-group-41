@@ -26,7 +26,7 @@ import static com.CEliconValley.models.App.MaxHeight;
 import static com.CEliconValley.models.App.MaxLength;
 
 
-public class Farm implements Location {
+public class Farm {
 
     private FarmType farmType;
     private FarmBuilder farmBuilder;

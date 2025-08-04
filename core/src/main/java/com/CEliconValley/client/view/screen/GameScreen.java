@@ -1,10 +1,10 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.Main;
-import com.CEliconValley.client.view.screen.maps.CoopMap;
+import com.CEliconValley.client.view.screen.maps.*;
+import com.CEliconValley.common.CellData;
 import com.CEliconValley.controllers.Spawner.InventoryRenderer;
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.foragings.ForagingTree;
 import com.CEliconValley.models.foragings.Nature.Lake;
@@ -13,9 +13,6 @@ import com.CEliconValley.models.foragings.Nature.Rock;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.ui.GameAssetManager;
-import com.CEliconValley.views.maps.BarnMap;
-import com.CEliconValley.views.maps.CottageMap;
-import com.CEliconValley.views.maps.GreenhouseMap;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -50,9 +47,10 @@ public abstract class GameScreen implements Screen {
 
 
     public boolean canMoveTo(int x, int y, Location location) {
-        if(location instanceof Farm farm){
-            for (Cell cell : farm.getCells()) {
-                if (cell.getX() == x && cell.getY() == y) {
+        if(location instanceof FarmMap farmMap){
+            for (CellData cd : farmMap.farmData.getCells()) {
+                if (cd.getX() == x && cd.getY() == y) {
+                    Cell cell = cd.extractData();
                     if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock ||cell.getObjectMap() instanceof Wall ||cell.getObjectMap() instanceof Obstacle) {
                         return false;
                     }

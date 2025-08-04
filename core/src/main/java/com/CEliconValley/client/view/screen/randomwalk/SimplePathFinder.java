@@ -2,14 +2,11 @@ package com.CEliconValley.client.view.screen.randomwalk;
 
 
 import com.CEliconValley.client.view.screen.maps.CoopMap;
-import com.CEliconValley.models.App;
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.foragings.Nature.Lake;
-import com.CEliconValley.models.foragings.Nature.Obstacle;
 import com.CEliconValley.models.foragings.Nature.Rock;
-import com.CEliconValley.views.maps.BarnMap;
+import com.CEliconValley.client.view.screen.maps.BarnMap;
 
 import java.util.*;
 

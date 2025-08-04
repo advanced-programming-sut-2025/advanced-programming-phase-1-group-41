@@ -1,5 +1,7 @@
 package com.CEliconValley.controllers.Spawner;
 
+import com.CEliconValley.common.CellData;
+import com.CEliconValley.common.FarmData;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.foragings.CropType;
 import com.CEliconValley.models.foragings.ForagingCrop;
@@ -16,14 +18,12 @@ import java.util.Map;
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class CropSpawner {
-    private final Farm farm;
     private final Texture cropTexture = new Texture("game/Crops/crops.png");
 
     private final Map<CropType, TextureRegion[]> cropFramesMap = new HashMap<>();
     private final Map<ForagingCropType, TextureRegion> foragingCropFramesMap = new HashMap<>();
 
-    public CropSpawner(Farm farm) {
-        this.farm = farm;
+    public CropSpawner() {
         splitCropTexture();
     }
 
@@ -63,7 +63,7 @@ public class CropSpawner {
     }
 
 
-    public void renderCrops(SpriteBatch batch, Cell cell, float passiveState) {
+    public void renderCrops(SpriteBatch batch, CellData cellData, FarmData farmData) {
 //        if (cell.getObjectMap() instanceof Crop crop) {
 //            CropType type = crop.getCropType();
 //            int stageIndex = crop.getCurrentStage();
@@ -79,7 +79,8 @@ public class CropSpawner {
 //            }
 //        }
 //        else
-            if (cell.getObjectMap() instanceof ForagingCrop forage) {
+        Cell cell = cellData.extractData();
+        if (cell.getObjectMap() instanceof ForagingCrop forage) {
             ForagingCropType type = forage.getForagingCropType();
 
             TextureRegion frame = foragingCropFramesMap.get(type);

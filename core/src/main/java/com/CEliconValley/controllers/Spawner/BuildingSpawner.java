@@ -5,6 +5,8 @@
 
 package com.CEliconValley.controllers.Spawner;
 
+import com.CEliconValley.common.CellData;
+import com.CEliconValley.common.FarmData;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.buildings.Building;
@@ -22,7 +24,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class BuildingSpawner {
-    private final Farm farm;
     private final WaterSpawner waterSpawner;
     private final Texture cottageTexture = new Texture("game/cottage.png");
     private final Texture greenhouseTexture = new Texture("game/Buildings/GreenHouse.png");
@@ -35,18 +36,21 @@ public class BuildingSpawner {
     private final Texture deluxeCoopTexture = new Texture("game/Buildings/Deluxe_Coop.png");
 
 
-    public BuildingSpawner(Farm farm) {
-        this.waterSpawner = new WaterSpawner(farm);
-        this.farm = farm;
+    public BuildingSpawner() {
+        this.waterSpawner = new WaterSpawner();
     }
 
-    public boolean renderBuildings(SpriteBatch batch, Cell cell, float passiveState) {
+    public boolean renderBuildings(SpriteBatch batch, CellData cellData, FarmData farmData) {
+        Cell cell = cellData.extractData();
         float x = (float)(cell.getX() * CELL_SIZE);
         float y = (float)(cell.getY() * CELL_SIZE);
         if (cell.getObjectMap() instanceof Building) {
         }
 
-        Cell tmpCell = Finder.findCellByCoordinates(cell.getX() - 1, cell.getY() + 1, this.farm);
+//        Cell tmpCell = Finder.findCellByCoordinates(cell.getX() - 1, cell.getY() + 1, this.farm);
+        CellData tempcd = Finder.getcdByFarmData(cell.getX() - 1, cell.getY() + 1, farmData);
+        if(tempcd == null) return false;
+        Cell tmpCell = tempcd.extractData();
         if (tmpCell != null && tmpCell.getObjectMap() instanceof Cottage) {
             Cottage cottage = (Cottage)tmpCell.getObjectMap();
             if (cell.getX() - 1 == cottage.getAnchorX() && cell.getY() + 1 == cottage.getAnchorY()) {

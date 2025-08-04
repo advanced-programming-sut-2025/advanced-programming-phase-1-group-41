@@ -2,18 +2,12 @@ package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.buildings.Door;
-import com.CEliconValley.models.buildings.Wall;
-import com.CEliconValley.models.foragings.ForagingTree;
-import com.CEliconValley.models.foragings.Nature.Lake;
-import com.CEliconValley.models.foragings.Nature.Rock;
-import com.CEliconValley.views.maps.GreenhouseMap;
+import com.CEliconValley.client.view.screen.maps.GreenhouseMap;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -47,7 +41,7 @@ public class GreenHouseScreen extends GameScreen implements Screen {
 
     public GreenHouseScreen(FarmScreen farmScreen,GreenhouseMap greenHouse, Player player) {
         super(null);
-        hero=new Hero(greenHouse);
+        hero=new Hero();
         this.farmScreen=farmScreen;
         this.greenHouse = greenHouse;
         this.player = player;

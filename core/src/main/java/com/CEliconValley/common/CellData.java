@@ -4,6 +4,7 @@ import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.buildings.Bridge;
 import com.CEliconValley.models.buildings.GreenHouse.WaterTank;
+import com.CEliconValley.models.buildings.animalContainer.Barn;
 import com.CEliconValley.models.foragings.*;
 import com.CEliconValley.models.foragings.Nature.*;
 import com.CEliconValley.models.items.Item;
@@ -195,5 +196,26 @@ public class CellData {
             throw new IllegalArgumentException("Expected ArrayList but got " + value.getClass().getName());
         }
         return result;
+    }
+
+
+    public String getClassName() {
+        return className;
+    }
+
+    public HashMap<String, Object> getData() {
+        return data;
+    }
+
+    public String getObjectName() {
+        return objectName;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }

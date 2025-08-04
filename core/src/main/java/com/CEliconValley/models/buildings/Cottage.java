@@ -25,6 +25,9 @@ public class Cottage implements Building {
         return "Cottage";
     }
 
+    public Cottage() {
+    }
+
     public Cottage(int x, int y, Farm farm) {
         anchorX = x+4;
         anchorY = y+1;

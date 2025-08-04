@@ -1,4 +1,4 @@
-package com.CEliconValley.views.maps;
+package com.CEliconValley.client.view.screen.maps;
 
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.buildings.Door;

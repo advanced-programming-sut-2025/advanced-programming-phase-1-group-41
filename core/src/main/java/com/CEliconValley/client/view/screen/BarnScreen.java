@@ -5,27 +5,19 @@ import com.CEliconValley.client.view.screen.randomwalk.Node;
 import com.CEliconValley.client.view.screen.randomwalk.SimplePathFinder;
 import com.CEliconValley.common.AnimalData;
 import com.CEliconValley.models.*;
-import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.animals.animalKinds.Cow;
 import com.CEliconValley.models.animals.animalKinds.Goat;
 import com.CEliconValley.models.animals.animalKinds.Pig;
 import com.CEliconValley.models.animals.animalKinds.Sheep;
 import com.CEliconValley.models.buildings.Door;
-import com.CEliconValley.models.buildings.Wall;
-import com.CEliconValley.models.foragings.Nature.Lake;
-import com.CEliconValley.models.foragings.Nature.Rock;
-import com.CEliconValley.views.maps.BarnMap;
+import com.CEliconValley.client.view.screen.maps.BarnMap;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import net.bytebuddy.pool.TypePool;
-import org.bson.io.BsonOutput;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -47,7 +39,7 @@ public class BarnScreen extends GameScreen implements Screen {
 
     public BarnScreen(FarmScreen farmScreen, BarnMap barn, Player player) {
         super(null);
-        this.hero = new Hero(barn);
+        this.hero = new Hero();
         this.farmScreen = farmScreen;
         this.barn = barn;
         this.batch = new SpriteBatch();

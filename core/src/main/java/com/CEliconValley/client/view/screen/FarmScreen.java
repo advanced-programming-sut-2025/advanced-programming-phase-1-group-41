@@ -1,23 +1,17 @@
 package com.CEliconValley.client.view.screen;
 
-import com.CEliconValley.Main;
-import com.CEliconValley.client.controller.CheatCodeController;
-import com.CEliconValley.client.view.screen.maps.CoopMap;
+import com.CEliconValley.client.AppClient;
+import com.CEliconValley.client.view.screen.maps.*;
+import com.CEliconValley.common.CellData;
+import com.CEliconValley.common.FarmData;
 import com.CEliconValley.controllers.Spawner.*;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.buildings.*;
 import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
 import com.CEliconValley.models.buildings.animalContainer.Barn;
 import com.CEliconValley.models.buildings.animalContainer.Coop;
-import com.CEliconValley.models.foragings.ForagingTree;
-import com.CEliconValley.models.foragings.Nature.*;
-import com.CEliconValley.models.ui.GameAssetManager;
-import com.CEliconValley.views.maps.BarnMap;
-import com.CEliconValley.views.maps.CottageMap;
 import com.CEliconValley.models.locations.Farm;
-import com.CEliconValley.views.maps.GreenhouseMap;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -26,13 +20,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.math.MathUtils;
 
 import java.util.*;
 
@@ -48,8 +35,9 @@ public class FarmScreen extends GameScreen implements Screen {
     private final GroundSpawner groundSpawner;
     private final CropSpawner cropSpawner;
     private final Hero hero;
+    private FarmMap farmMap;
 
-    private final List<Cell> visibleCells = new ArrayList<>();
+    private final List<CellData> visibleCells = new ArrayList<>();
 
 
 
@@ -79,7 +67,12 @@ public class FarmScreen extends GameScreen implements Screen {
     private int prevMaxY;
 
 
-
+    public void updateFarmData(){
+        // maybe needs change?
+        Gdx.app.postRunnable(() -> {
+            this.farmMap = new FarmMap(Finder.getFarmDataById(AppClient.getGameData(), AppClient.getUserData().getUsername()));
+        });
+    }
 
 
     private static final float MOVE_SPEED = 100f;
@@ -87,16 +80,16 @@ public class FarmScreen extends GameScreen implements Screen {
     @SuppressWarnings("unchecked")
     public FarmScreen(Farm farm, Player player) {
         super(new InventoryRenderer(player.getInventory()));
-
+        this.farmMap = new FarmMap(Finder.getFarmDataById(AppClient.getGameData(), AppClient.getUserData().getUsername()));
         this.farm = farm;
         this.player = player;
-        treeSpawner=new TreeSpawner(this.farm);
-        waterSpawner=new WaterSpawner(this.farm);
-        rockSpawner=new RockSpawner(this.farm);
-        buildingSpawner=new BuildingSpawner(this.farm);
-        groundSpawner=new GroundSpawner(this.farm);
-        cropSpawner=new CropSpawner(this.farm);
-        hero=new Hero(this.farm);
+        treeSpawner=new TreeSpawner();
+        waterSpawner=new WaterSpawner();
+        rockSpawner=new RockSpawner();
+        buildingSpawner=new BuildingSpawner();
+        groundSpawner=new GroundSpawner();
+        cropSpawner=new CropSpawner();
+        hero=new Hero();
 
 
         batch = new SpriteBatch();
@@ -113,13 +106,8 @@ public class FarmScreen extends GameScreen implements Screen {
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         menuBar = new MenuBar();
 
-
-
-
         int FRAME_COLS;
         int FRAME_ROWS;
-
-
 
         Texture playerSheet = new Texture("game/general/character/heroWalk.png");
         FRAME_COLS = 6;
@@ -142,16 +130,27 @@ public class FarmScreen extends GameScreen implements Screen {
 
 
         hero.currentAnimation = walkAnimations[0];
-        for(Cell cell: farm.getCells()) {
-            Cell doorCell=Finder.findCellByCoordinates(cell.getX(),cell.getY()+1,this.farm);
-            Cell homeCell=Finder.findCellByCoordinates(cell.getX(),cell.getY()+2,this.farm);
-            if(doorCell!=null&& doorCell.getObjectMap() instanceof Door){
-                if(homeCell!=null && homeCell.getObjectMap() instanceof Cottage){
+        for (CellData cell : farmMap.farmData.getCells()) {
+            CellData doorCellData = Finder.getcdByFarmData(cell.getX(), cell.getY() + 1, farmMap.farmData);
+            CellData homeCellData = Finder.getcdByFarmData(cell.getX(), cell.getY() + 2, farmMap.farmData);
+            if(doorCellData!=null&& doorCellData.getObjectName().equals(new Door().getName())){
+                if(homeCellData!=null && homeCellData.getObjectName().equals(new Cottage().getName())){
+                    // TODO important send this data to server as well
                     hero.playerX = cell.getX();
                     hero.playerY = cell.getY();
                 }
             }
         }
+//        for(Cell cell: farm.getCells()) {
+//            Cell doorCell=Finder.findCellByCoordinates(cell.getX(),cell.getY()+1,this.farm);
+//            Cell homeCell=Finder.findCellByCoordinates(cell.getX(),cell.getY()+2,this.farm);
+//            if(doorCell!=null&& doorCell.getObjectMap() instanceof Door){
+//                if(homeCell!=null && homeCell.getObjectMap() instanceof Cottage){
+//                    hero.playerX = cell.getX();
+//                    hero.playerY = cell.getY();
+//                }
+//            }
+//        }
 
         hero.renderX = hero.playerX * CELL_SIZE;
         hero.renderY = hero.playerY * CELL_SIZE;
@@ -166,7 +165,7 @@ public class FarmScreen extends GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Result result = Playeracts.handleInput(hero, farm, stage, delta);
+        Result result = Playeracts.handleInput(hero, farmMap, stage, delta);
         if(!result.success()){
             if(result.message().equals("cheat")){
                 return;
@@ -189,7 +188,7 @@ public class FarmScreen extends GameScreen implements Screen {
 
         visibleCells.clear();
 //        Gdx.app.postRunnable(() -> {
-            for (Cell cell : farm.getCells()) {
+            for (CellData cell : farmMap.farmData.getCells()) {
                 int cellX = cell.getX();
                 int cellY = cell.getY();
 
@@ -199,7 +198,7 @@ public class FarmScreen extends GameScreen implements Screen {
                 }
                 visibleCells.add(cell);
             }
-            visibleCells.sort(Comparator.comparingInt(Cell::getY).reversed());
+            visibleCells.sort(Comparator.comparingInt(CellData::getY).reversed());
 //        });
 //        for(Cell cell:visibleCells) {
 //            int x = (int) (cell.getX() * CELL_SIZE);
@@ -214,19 +213,14 @@ public class FarmScreen extends GameScreen implements Screen {
         prevMaxX = maxX;
         prevMinY = minY;
         prevMaxY = maxY;
-        visibleCells.sort(Comparator.comparingInt(Cell::getY).reversed());
-        for(Cell cell:visibleCells){
-
-
-            int x = (int) (cell.getX() * CELL_SIZE);
-            int y = (int) (cell.getY() * CELL_SIZE);
-
-            buildingSpawner.renderBuildings(batch,cell,passiveStateTime);
-            rockSpawner.renderRocks(batch,cell,passiveStateTime);
-            cropSpawner.renderCrops(batch,cell,passiveStateTime);
-            waterSpawner.renderWater(batch,cell,passiveStateTime);
-            rockSpawner.renderBreakingEffectForCell(batch, cell, delta);
-            if(hero.playerX == cell.getX() && hero.playerY == cell.getY()){
+        visibleCells.sort(Comparator.comparingInt(CellData::getY).reversed());
+        for(CellData cellData:visibleCells){
+            buildingSpawner.renderBuildings(batch,cellData, farmMap.farmData);
+            rockSpawner.renderRocks(batch,cellData,passiveStateTime);
+            cropSpawner.renderCrops(batch,cellData,farmMap.farmData);
+            waterSpawner.renderWater(batch,cellData,passiveStateTime, farmMap.farmData);
+            rockSpawner.renderBreakingEffectForCell(batch, cellData, delta);
+            if(hero.playerX == cellData.getX() && hero.playerY == cellData.getY()){
 
                 TextureRegion currentFrame = hero.currentAnimation.getKeyFrame(stateTime, onRepeat);
 //                System.out.println("stateTime: " + stateTime + ", frameIndex: " + currentAnimation.getKeyFrameIndex(stateTime));
@@ -239,7 +233,7 @@ public class FarmScreen extends GameScreen implements Screen {
 
                 batch.draw(currentFrame, hero.renderX-CELL_SIZE/2f, hero.renderY-CELL_SIZE/2f, CELL_SIZE*2f, CELL_SIZE*2f);
             }
-            treeSpawner.renderTrees(batch,cell,passiveStateTime);
+            treeSpawner.renderTrees(batch,cellData,passiveStateTime);
 //            if (didHit) {
 //                hit(hero.currentDirection, hero.playerX, hero.playerY);
 //                didHit = false;
@@ -290,22 +284,26 @@ public class FarmScreen extends GameScreen implements Screen {
     }
     public void hit(int direction,int cellX,int cellY) {
         switch (direction) {
-            case 1:
-                rockSpawner.hitRock(Finder.findCellByCoordinates(cellX, cellY+1,this.farm));
-                return;
-            case 2:
-                rockSpawner.hitRock(Finder.findCellByCoordinates(cellX+1, cellY,this.farm));
-                return;
-            case 3:
-                rockSpawner.hitRock(Finder.findCellByCoordinates(cellX, cellY-1, this.farm));
-                return;
-            case 4:
-                rockSpawner.hitRock(Finder.findCellByCoordinates(cellX-1, cellY, this.farm));
-                return;
+            case 1 -> {
+                CellData cd = Finder.getcdByFarmData(cellX, cellY+1, farmMap.farmData);
+                rockSpawner.hitRock(cd, farmMap.farmData);
+            }
+            case 2 -> {
+                CellData cd = Finder.getcdByFarmData(cellX+1, cellY, farmMap.farmData);
+                rockSpawner.hitRock(cd, farmMap.farmData);
+            }
+            case 3 -> {
+                CellData cd = Finder.getcdByFarmData(cellX, cellY-1, farmMap.farmData);
+                rockSpawner.hitRock(cd, farmMap.farmData);
+            } case 4 -> {
+                CellData cd = Finder.getcdByFarmData(cellX-1, cellY, farmMap.farmData);
+                rockSpawner.hitRock(cd, farmMap.farmData);
+            }
         }
     }
     public void transfer(){
-        Cell cell=Finder.findCellByCoordinates(hero.playerX,hero.playerY,this.farm);
+        CellData cd = Finder.getcdByFarmData(hero.playerX, hero.playerY, farmMap.farmData);
+        Cell cell= cd.extractData();
         if(cell.getObjectMap() instanceof Door) {
             for (int i = -1; i < 2; i++) {
                 for (int j = -1; j < 2; j++) {

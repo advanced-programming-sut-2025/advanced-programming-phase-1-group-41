@@ -8,12 +8,7 @@ import com.CEliconValley.common.AnimalData;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.animals.animalKinds.*;
 import com.CEliconValley.models.buildings.Door;
-import com.CEliconValley.models.buildings.Wall;
-import com.CEliconValley.models.foragings.Nature.Lake;
-import com.CEliconValley.models.foragings.Nature.Rock;
-import com.CEliconValley.views.maps.BarnMap;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -40,7 +35,7 @@ public class CoopScreen extends GameScreen implements Screen {
 
     public CoopScreen(FarmScreen farmScreen, CoopMap coop, Player player) {
         super(null);
-        this.hero = new Hero(coop);
+        this.hero = new Hero();
         this.farmScreen = farmScreen;
         this.coop = coop;
         this.batch = new SpriteBatch();

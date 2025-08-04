@@ -1,6 +1,7 @@
 package com.CEliconValley.models;
 
 import com.CEliconValley.client.view.screen.maps.CoopMap;
+import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.FarmData;
 import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.PlayerData;
@@ -8,9 +9,9 @@ import com.CEliconValley.models.buildings.marketplaces.items.*;
 import com.CEliconValley.models.foragings.*;
 import com.CEliconValley.models.foragings.Nature.*;
 import com.CEliconValley.models.items.*;
-import com.CEliconValley.views.maps.CottageMap;
-import com.CEliconValley.views.maps.BarnMap;
-import com.CEliconValley.views.maps.GreenhouseMap;
+import com.CEliconValley.client.view.screen.maps.CottageMap;
+import com.CEliconValley.client.view.screen.maps.BarnMap;
+import com.CEliconValley.client.view.screen.maps.GreenhouseMap;
 import org.bson.types.ObjectId;
 import com.CEliconValley.models.buildings.ShippingBin;
 import com.CEliconValley.models.buildings.Well;
@@ -263,6 +264,15 @@ public class Finder {
                 if(farmsDatum.getId() == id){
                     return farmsDatum;
                 }
+            }
+        }
+        return null;
+    }
+
+    public static CellData getcdByFarmData(int x, int y, FarmData farmData){
+        for (CellData cell : farmData.getCells()) {
+            if(cell.getX() == x && cell.getY() == y){
+                return cell;
             }
         }
         return null;

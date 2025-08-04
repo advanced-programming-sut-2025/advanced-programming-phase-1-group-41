@@ -32,7 +32,7 @@ public class Hero {
     public Animation<TextureRegion> currentAnimation;
 
 
-    public Hero(Location location) {
+    public Hero() {
         playerTexture = GameAssetManager.getGameAssetManager().getHeroTexture("generalActs.png");
         toolsTexture_Front = GameAssetManager.getGameAssetManager().getHeroTexture("tools_Front.png");
         toolsTexture_Back = GameAssetManager.getGameAssetManager().getHeroTexture("tools_Back.png");

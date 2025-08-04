@@ -1,5 +1,6 @@
 package com.CEliconValley.controllers.Spawner;
 
+import com.CEliconValley.common.CellData;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.foragings.ForagingTree;
 import com.CEliconValley.models.foragings.Nature.Tree;
@@ -15,7 +16,6 @@ import java.util.Map;
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class TreeSpawner {
-    private final Farm farm;
     private final Texture treeTexture=new Texture("game/Trees/trees.png");
 
     private final Map<String, TextureRegion[]> treeFramesMap = new HashMap<>();
@@ -43,13 +43,11 @@ public class TreeSpawner {
             treeFramesMap.put(treeNames[row], frames);
         }
     }
-    public TreeSpawner(Farm farm) {
+    public TreeSpawner() {
         splitTreeTexture();
-        this.farm = farm;
-
     }
-    public void renderTrees(SpriteBatch batch,Cell cell,float passiveState){
-
+    public void renderTrees(SpriteBatch batch, CellData cellData, float passiveState){
+            Cell cell = cellData.extractData();
             if (cell.getObjectMap() instanceof ForagingTree) {
                 ForagingTree tree = (ForagingTree) cell.getObjectMap();
                 TreeType type = tree.getTreeType();
