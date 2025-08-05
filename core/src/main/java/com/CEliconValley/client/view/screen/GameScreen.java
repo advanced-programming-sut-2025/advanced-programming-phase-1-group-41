@@ -38,7 +38,7 @@ public abstract class GameScreen implements Screen {
     protected Stage stage;
     public abstract void transfer();
     protected Hero hero;
-    protected Texture hudTexture = new Texture(Gdx.files.internal("game/Clock.png"));
+    protected Texture hudTexture = new Texture(Gdx.files.internal("game/Clock/Clock.png"));
     protected Image hudImage;
     protected TimeScreen timeScreen;
 
@@ -54,13 +54,17 @@ public abstract class GameScreen implements Screen {
         cheatCodeField.setPosition(stage.getWidth()/2  - cheatCodeField.getWidth() / 2, stage.getHeight() / 2 - cheatCodeField.getHeight() / 2);
         stage.addActor(cheatCodeField);
         hudImage = new Image(new TextureRegion(hudTexture));
-        hudImage.setPosition(stage.getWidth() - hudImage.getWidth() - 10,
-            stage.getHeight() - hudImage.getHeight() - 10);
+        hudImage.setSize(hudImage.getWidth()*4, hudImage.getHeight()*4);
+        float posX = stage.getWidth() - hudImage.getWidth() - 10;
+        float posY = stage.getHeight() - hudImage.getHeight() - 10;
+        hudImage.setPosition(posX, posY);
         hudImage.setTouchable(Touchable.disabled);
-        timeScreen = new TimeScreen(GameAssetManager.getGameAssetManager().getSkin(), hudTexture);
-//        timeScreen.getHudTable().
-        stage.addActor(timeScreen.getHudTable());
         stage.addActor(hudImage);
+        timeScreen = new TimeScreen(GameAssetManager.getGameAssetManager().getSkin(), stage,
+            posX, posY, hudImage);
+//        timeScreen.getHudTable().
+        timeScreen.getHudTable().setPosition(stage.getWidth() / 40f, 0);
+        stage.addActor(timeScreen.getHudTable());
         this.hero = new Hero();
     }
 

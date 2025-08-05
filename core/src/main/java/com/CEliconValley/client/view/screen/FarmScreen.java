@@ -209,12 +209,12 @@ public class FarmScreen extends GameScreen implements Screen {
 
         batch.draw(farmTexture,0,0,farmSprite.getWidth()*2*75,farmSprite.getHeight()*2*60);
 
-        Texture grassTexture = GameAssetManager.getGameAssetManager().getTileTexture("grass.png");
-        Texture groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("ground.png");
-        Texture sandTexture = GameAssetManager.getGameAssetManager().getTileTexture("sand.png");
-        Texture thunderedTexture = GameAssetManager.getGameAssetManager().getTileTexture("thundered.png");
-        Texture farmlandTexture = GameAssetManager.getGameAssetManager().getTileTexture("farmland.png");
-        Texture bombedTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
+//        Texture grassTexture = GameAssetManager.getGameAssetManager().getTileTexture("grass.png");
+//        Texture groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("ground.png");
+//        Texture sandTexture = GameAssetManager.getGameAssetManager().getTileTexture("sand.png");
+//        Texture thunderedTexture = GameAssetManager.getGameAssetManager().getTileTexture("thundered.png");
+//        Texture farmlandTexture = GameAssetManager.getGameAssetManager().getTileTexture("farmland.png");
+//        Texture bombedTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
 //        for(CellData cell:visibleCells) {
 //            int x = (int) (cell.getX() * CELL_SIZE);
 //            int y = (int) (cell.getY() * CELL_SIZE);
