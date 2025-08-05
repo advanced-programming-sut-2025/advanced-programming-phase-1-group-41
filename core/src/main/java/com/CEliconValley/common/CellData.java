@@ -164,8 +164,7 @@ public class CellData {
         // TODO
         Item item = Finder.parseItem(this.objectName);
         if(item == null){
-
-//            System.out.println("null : "+this.objectName+" "+x+" "+y);
+            System.out.println("null : "+this.objectName+" "+x+" "+y);
         }
         return new Cell(item, x, y);
     }

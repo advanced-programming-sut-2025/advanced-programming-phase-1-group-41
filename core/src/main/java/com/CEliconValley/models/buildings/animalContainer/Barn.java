@@ -34,7 +34,10 @@ public class Barn implements Building {
         return barnType;
     }
 
-    public Barn(ArrayList<Animal> animals,int anchorX,
+    public Barn() {
+    }
+
+    public Barn(ArrayList<Animal> animals, int anchorX,
                 int anchorY, BarnType barnType, int capacity, int x, int y, Farm farm) {
         this.animals = new ArrayList<>(animals);
         this.anchorX = anchorX;

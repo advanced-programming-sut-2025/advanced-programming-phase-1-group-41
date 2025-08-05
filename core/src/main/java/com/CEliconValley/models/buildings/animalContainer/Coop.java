@@ -33,9 +33,11 @@ public class Coop implements Building {
         return capacity;
     }
 
+    public Coop() {
+    }
 
-    public Coop(ArrayList<Animal> animals,int anchorX, int anchorY,
-                CoopType coopType, int capacity,int x, int y, Farm farm) {
+    public Coop(ArrayList<Animal> animals, int anchorX, int anchorY,
+                CoopType coopType, int capacity, int x, int y, Farm farm) {
         this.animals = new ArrayList<>(animals);
         this.anchorX = anchorX;
         this.anchorY = anchorY;

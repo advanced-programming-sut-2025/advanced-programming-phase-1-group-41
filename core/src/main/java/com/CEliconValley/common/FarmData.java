@@ -44,6 +44,7 @@ public class FarmData {
     int greenhouseX;
     int greenhouseY;
     int cottageX;
+    int cottageY = 4;
     int mineLengthX;
     int mineLengthY;
 
@@ -320,5 +321,9 @@ public class FarmData {
 
     public ArrayList<TreeData> getTreesData() {
         return treesData;
+    }
+
+    public int getCottageY() {
+        return cottageY;
     }
 }

@@ -19,6 +19,10 @@ public class AbigailHome extends NPCHome implements Building {
     }
     private int x;
     private int y;
+
+    public AbigailHome() {
+    }
+
     public AbigailHome(int x, int y, Village village) {
         this.x = x;
         this.y = y;
