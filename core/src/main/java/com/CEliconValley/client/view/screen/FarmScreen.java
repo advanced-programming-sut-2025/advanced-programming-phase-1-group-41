@@ -79,6 +79,7 @@ public class FarmScreen extends GameScreen implements Screen {
     @SuppressWarnings("unchecked")
     public FarmScreen(Farm farm, Player player) {
         super(new InventoryRenderer(player.getInventory()));
+        this.menuBar=super.getMenuBar();
         this.farmMap = new FarmMap(Finder.getFarmDataById(AppClient.getGameData(), AppClient.getUserData().getUsername()));
         this.farm = farm;
         this.player = player;
@@ -102,7 +103,6 @@ public class FarmScreen extends GameScreen implements Screen {
         camera = new OrthographicCamera();
 //        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-        menuBar = new MenuBar();
 
         int FRAME_COLS;
         int FRAME_ROWS;

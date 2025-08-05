@@ -64,11 +64,26 @@ public class Playeracts {
         if(Gdx.input.isKeyJustPressed(Input.Keys.M)){
             screen.isMenuOpen=!screen.isMenuOpen;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            screen.inventoryRenderer.shiftRight();
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            screen.inventoryRenderer.shiftLeft();
+        if(screen.isMenuOpen){
+            if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+                screen.menuBar.goToPreviousTab();
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
+                screen.menuBar.goToNextTab();
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+                screen.menuBar.scrollUp();
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+                screen.menuBar.scrollDown();
+            }
+        }else {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+                screen.inventoryRenderer.shiftRight();
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
+                screen.inventoryRenderer.shiftLeft();
+            }
         }
         if (hero.isActing||hero.isMoving) return new Result(false,"act-move");
 

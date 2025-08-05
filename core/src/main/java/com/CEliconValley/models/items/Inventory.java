@@ -26,7 +26,7 @@ public class Inventory {
         lastGottenSumOfItemsPrice=0;
 
         setDefaultBag();
-        upgradeBackpack(Backpack.Large);
+        upgradeBackpack(Backpack.Deluxe);
 //        System.out.println("herllooooo:"+backpack.getSize());
 
 

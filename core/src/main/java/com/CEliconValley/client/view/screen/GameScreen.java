@@ -28,6 +28,7 @@ public abstract class GameScreen implements Screen {
     protected boolean onRepeat = true;
     protected boolean flip = false;
     protected boolean isMenuOpen = false;
+    protected MenuBar menuBar=new MenuBar();
     protected InventoryRenderer inventoryRenderer;
     protected boolean cheatMode = false;
     protected Image overlay;
@@ -133,5 +134,8 @@ public abstract class GameScreen implements Screen {
 
     public Hero getHero() {
         return hero;
+    }
+    public MenuBar getMenuBar() {
+        return menuBar;
     }
 }
