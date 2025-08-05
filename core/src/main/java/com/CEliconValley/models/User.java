@@ -30,10 +30,10 @@ public class User {
 
     @PostLoad
     public void load(){
-        this.avatarPath = "avatars/Leo.png";
+        this.avatarPath = "avatars/\u200E \u200ESepehr.png";
     }
 
-    public User( String username, String password, String email, String nickname, Gender gender, String question, String answer) {
+    public User(String username, String password, String email, String nickname, Gender gender, String question, String answer) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -46,7 +46,7 @@ public class User {
         this.answer = answer;
         this.stayLoggedIn = false;
         _id = new ObjectId();
-        this.avatarPath = "avatars/Mohsen.png";
+//        this.avatarPath = "avatars/\u200E \u200ESepehr.png";
     }
 
     public void prepareForSaving() {

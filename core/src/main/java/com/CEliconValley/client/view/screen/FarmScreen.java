@@ -10,7 +10,9 @@ import com.CEliconValley.models.buildings.*;
 import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
 import com.CEliconValley.models.buildings.animalContainer.Barn;
 import com.CEliconValley.models.buildings.animalContainer.Coop;
+import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.locations.Farm;
+import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -89,13 +91,8 @@ public class FarmScreen extends GameScreen implements Screen {
         groundSpawner=new GroundSpawner();
         cropSpawner=new CropSpawner();
 
-
         batch = new SpriteBatch();
         groundCache = new HashMap<>();
-
-
-
-
 
         farmSprite = new Sprite(farmTexture);
         farmSprite.setSize(CELL_SIZE, CELL_SIZE);
@@ -198,14 +195,37 @@ public class FarmScreen extends GameScreen implements Screen {
             }
             visibleCells.sort(Comparator.comparingInt(CellData::getY).reversed());
 //        });
-//        for(Cell cell:visibleCells) {
-//            int x = (int) (cell.getX() * CELL_SIZE);
-//            int y = (int) (cell.getY() * CELL_SIZE);
-//            batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
-//            batch.draw(groundCache.get(cell), x, y, CELL_SIZE, CELL_SIZE);
-//        }
 
         batch.draw(farmTexture,0,0,farmSprite.getWidth()*2*75,farmSprite.getHeight()*2*60);
+
+        Texture grassTexture = GameAssetManager.getGameAssetManager().getTileTexture("grass.png");
+        Texture groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("ground.png");
+        Texture sandTexture = GameAssetManager.getGameAssetManager().getTileTexture("sand.png");
+        Texture thunderedTexture = GameAssetManager.getGameAssetManager().getTileTexture("thundered.png");
+        Texture farmlandTexture = GameAssetManager.getGameAssetManager().getTileTexture("farmland.png");
+        Texture bombedTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
+//        for(CellData cell:visibleCells) {
+//            int x = (int) (cell.getX() * CELL_SIZE);
+//            int y = (int) (cell.getY() * CELL_SIZE);
+////            batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
+//            if(cell.getObjectName() instanceof Grass){
+//                Grass grass = (Grass) cell.getObjectMap();
+//                if(grass.isThundered()){
+//                    batch.draw(thunderedTexture,x,y, CELL_SIZE, CELL_SIZE);
+//                } else if(grass.isBombed()){
+//                    batch.draw(bombedTexture,x,y, CELL_SIZE, CELL_SIZE);
+//                } else if(grass.isFarmland()){
+//                    batch.draw(farmlandTexture,x,y, CELL_SIZE, CELL_SIZE);
+//                } else if(grass.isGround()){
+//                    batch.draw(groundTexture, x, y, CELL_SIZE, CELL_SIZE);
+//                } else if(grass.isSand()){
+//                    batch.draw(sandTexture, x, y, CELL_SIZE, CELL_SIZE);
+//                } else {
+//                }
+//            }
+////            batch.draw(groundCache.get(cell), x, y, CELL_SIZE, CELL_SIZE);
+//        }
+
 
         prevMinX = minX;
         prevMaxX = maxX;
