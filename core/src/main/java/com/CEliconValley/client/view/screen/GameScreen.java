@@ -6,6 +6,7 @@ import com.CEliconValley.client.view.screen.maps.*;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.controllers.Spawner.InventoryRenderer;
 import com.CEliconValley.models.Cell;
+import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.foragings.ForagingTree;
@@ -32,7 +33,6 @@ public abstract class GameScreen implements Screen {
     protected boolean onRepeat = true;
     protected boolean flip = false;
     protected boolean isMenuOpen = false;
-    protected MenuBar menuBar=new MenuBar();
     protected InventoryRenderer inventoryRenderer;
     protected boolean cheatMode = false;
     protected Image overlay;
@@ -40,6 +40,7 @@ public abstract class GameScreen implements Screen {
     protected Stage stage;
     public abstract void transfer();
     protected Hero hero;
+    protected MenuBar menuBar=new MenuBar();
     protected Texture hudTexture = new Texture(Gdx.files.internal("game/Clock/Clock.png"));
     protected Image hudImage;
     protected TimeScreen timeScreen;

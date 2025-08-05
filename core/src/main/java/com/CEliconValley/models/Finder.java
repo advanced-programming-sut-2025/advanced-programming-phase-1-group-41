@@ -1,5 +1,6 @@
 package com.CEliconValley.models;
 
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.view.screen.maps.CoopMap;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.FarmData;
@@ -235,6 +236,14 @@ public class Finder {
         }
         return null;
     }
+    public static PlayerData findPlayerDataByUsername(String username){
+        for(PlayerData player : AppClient.getGameData().getPlayersData()){
+            if(player.getPlayer().getUser()!=null&&player.getPlayer().getUser().getUsername().equals(username)){
+                return player;
+            }
+        }
+        return null;
+    }//todo , بالایی نال میده
     public static NPC parseNPC(String name){
         for(NPC npc:App.getGame().getVillage().getNPCs()){
             if(npc.getName().equalsIgnoreCase(name)){
