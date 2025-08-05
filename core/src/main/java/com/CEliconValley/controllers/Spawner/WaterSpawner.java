@@ -104,7 +104,7 @@ public class WaterSpawner {
             if (isCoast(cell, farmData)) {
                 int animIndex = getCoastAnimationIndex(cell.getX(), cell.getY(), farmData);
                 lake.setInitialize(animIndex);
-                System.out.println(animIndex);
+//                System.out.println(animIndex);
                 TextureRegion frame = coastAnimations[animIndex].getKeyFrame(passiveStateTime, true);
                 batch.draw(frame, x, y, CELL_SIZE, CELL_SIZE);
             }

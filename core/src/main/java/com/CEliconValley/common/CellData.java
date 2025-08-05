@@ -161,6 +161,8 @@ public class CellData {
         }
         if(this.objectName.equals(new WaterTank().getName())){
             return new Cell(new WaterTank(), x, y);
+        }if(this.objectName.equals(new Mine().getName())){
+            return new Cell(new Mine(), x, y);
         }
         Building building = Building.parseBuilding(this.objectName);
         if(building != null){
