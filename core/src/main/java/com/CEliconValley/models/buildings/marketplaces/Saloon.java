@@ -29,6 +29,10 @@ public class Saloon extends Marketplace implements Building {
     }
     private int x;
     private int y;
+
+    public Saloon() {
+    }
+
     public Saloon(int x, int y, Village village) {
         super(null);
         constructSaloon(x, y , village);

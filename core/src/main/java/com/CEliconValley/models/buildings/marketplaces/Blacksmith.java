@@ -30,6 +30,10 @@ public class Blacksmith extends Marketplace implements Building{
     }
     private int x;
     private int y;
+
+    public Blacksmith() {
+    }
+
     public Blacksmith(int x, int y, Village village, boolean load) {
 //        super(App.getGame().getVillage().getnpcByName("clint"));
         super(null);

@@ -33,6 +33,10 @@ public class GeneralStore extends Marketplace implements Building {
     }
     private int x;
     private int y;
+
+    public GeneralStore() {
+    }
+
     public GeneralStore(int x, int y, Village village, boolean load) {
         super(null);
         constructGeneralStore(x,y,village);

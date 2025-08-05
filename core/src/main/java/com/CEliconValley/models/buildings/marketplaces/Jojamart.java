@@ -33,6 +33,10 @@ public class Jojamart extends Marketplace implements Building {
     }
     private int x;
     private int y;
+
+    public Jojamart() {
+    }
+
     public Jojamart(int x, int y, Village village, boolean load) {
         super(null);
         constructJojamart(x,y,village);

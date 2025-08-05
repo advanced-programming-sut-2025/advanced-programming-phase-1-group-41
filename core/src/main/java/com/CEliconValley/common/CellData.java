@@ -3,6 +3,7 @@ package com.CEliconValley.common;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.buildings.Bridge;
+import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.buildings.GreenHouse.WaterTank;
 import com.CEliconValley.models.buildings.animalContainer.Barn;
 import com.CEliconValley.models.foragings.*;
@@ -160,6 +161,10 @@ public class CellData {
         }
         if(this.objectName.equals(new WaterTank().getName())){
             return new Cell(new WaterTank(), x, y);
+        }
+        Building building = Building.parseBuilding(this.objectName);
+        if(building != null){
+            return new Cell(building, x, y);
         }
         // TODO
         Item item = Finder.parseItem(this.objectName);

@@ -30,6 +30,10 @@ public class FishShop extends Marketplace implements Building {
     }
     private int x;
     private int y;
+
+    public FishShop() {
+    }
+
     public FishShop(int x, int y, Village village, boolean load) {
         super(null);
         constructFishShop(x, y, village, load);

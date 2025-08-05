@@ -20,6 +20,10 @@ public class HarveyHome extends NPCHome implements Building {
     }
     private int x;
     private int y;
+
+    public HarveyHome() {
+    }
+
     public HarveyHome(int x, int y, Village village) {
         this.x = x;
         this.y = y;

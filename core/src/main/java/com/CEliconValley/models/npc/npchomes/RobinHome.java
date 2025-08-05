@@ -20,6 +20,10 @@ public class RobinHome extends NPCHome implements Building {
     }
     private int x;
     private int y;
+
+    public RobinHome() {
+    }
+
     public RobinHome(int x, int y, Village village) {
         this.x = x;
         this.y = y;

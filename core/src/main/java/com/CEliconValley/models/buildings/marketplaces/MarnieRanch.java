@@ -31,6 +31,10 @@ public class MarnieRanch extends Marketplace implements Building {
     }
     private int x;
     private int y;
+
+    public MarnieRanch() {
+    }
+
     public MarnieRanch(int x, int y, Village village) {
         super(null);
         constructRanch(x, y, village);

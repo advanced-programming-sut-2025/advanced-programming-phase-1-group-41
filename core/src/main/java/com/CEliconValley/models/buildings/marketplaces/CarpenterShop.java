@@ -33,6 +33,10 @@ public class CarpenterShop extends Marketplace implements Building {
     }
     private int x;
     private int y;
+
+    public CarpenterShop() {
+    }
+
     public CarpenterShop(int x, int y, Village village) {
         super(null);
         constructCarpenterShop(x, y, village);

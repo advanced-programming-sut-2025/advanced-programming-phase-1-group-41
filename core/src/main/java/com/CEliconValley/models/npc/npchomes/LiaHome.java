@@ -20,6 +20,10 @@ public class LiaHome extends NPCHome implements Building {
     }
     private int x;
     private int y;
+
+    public LiaHome() {
+    }
+
     public LiaHome(int x, int y, Village village) {
         this.x = x;
         this.y = y;
