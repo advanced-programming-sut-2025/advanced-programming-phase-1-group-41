@@ -1,6 +1,7 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.Main;
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.view.screen.maps.*;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.controllers.Spawner.InventoryRenderer;
@@ -64,7 +65,7 @@ public abstract class GameScreen implements Screen {
             posX, posY, hudImage);
 //        timeScreen.getHudTable().
         timeScreen.getHudTable().setPosition(stage.getWidth() / 40f, 0);
-        stage.addActor(timeScreen.getHudTable());
+//        stage.addActor(timeScreen.getHudTable());
         this.hero = new Hero();
     }
 
@@ -163,5 +164,9 @@ public abstract class GameScreen implements Screen {
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
         hudImage.setPosition(stage.getWidth() - hudImage.getWidth(), stage.getHeight() - hudImage.getHeight());
+    }
+
+    public TimeScreen getTimeScreen() {
+        return timeScreen;
     }
 }

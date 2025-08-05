@@ -1,5 +1,6 @@
 package com.CEliconValley.client.view.screen;
 
+import com.CEliconValley.client.AppClient;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -27,6 +28,7 @@ public class TimeScreen {
         hudTable.setFillParent(true);
         hudTable.pad(10);
         pointerImage.setPosition(posX+hudImage.getWidth()/4,posY+hudImage.getHeight()*13/20);
+        pointerImage.setOrigin(pointerImage.getWidth() / 2f, 0f);
         stage.addActor(pointerImage);
         Texture texture = new Texture(Gdx.files.internal("game/Clock/WeatherSign.png"));
         this.textureRegion = TextureRegion.split(texture, texture.getWidth()/4, texture.getHeight()/3);
@@ -62,6 +64,11 @@ public class TimeScreen {
 //        goldRow.add(goldIcon).size(24).padRight(5);
         goldRow.add(goldLabel);
         hudTable.add(goldRow).right();
+        updatePointer(AppClient.getGameData().getTime().getHour());
+    }
+
+    public void updatePointer(int hour){
+        pointerImage.setRotation(180 - 180 * hour / 24);
     }
 
     public Table getHudTable() {

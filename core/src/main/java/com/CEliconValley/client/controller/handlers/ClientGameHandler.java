@@ -26,6 +26,7 @@ public class ClientGameHandler {
                 Gdx.app.postRunnable(() -> {
                     AppClient.setGameData(gameDataMessage.body);
                     if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof FarmScreen fs){
+                        fs.getTimeScreen().updatePointer(AppClient.getGameData().getTime().getHour());
                         fs.updateFarmData();
                         PlayerData pd = null;
                         for (PlayerData playersDatum : AppClient.getGameData().getPlayersData()) {
