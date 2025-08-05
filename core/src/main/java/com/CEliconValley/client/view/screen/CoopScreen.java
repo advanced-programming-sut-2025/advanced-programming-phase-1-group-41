@@ -40,19 +40,19 @@ public class CoopScreen extends GameScreen implements Screen {
         for (Cell cell : coop.getCells()) {
             if (cell == null) continue;
             if (cell.getObjectMap() instanceof Door) {
-                this.hero.playerX = cell.getX();
-                this.hero.playerY = cell.getY();
+                this.hero.playerX.set(cell.getX());
+                this.hero.playerY.set(cell.getY());
                 break;
             }
         }
         this.animalSprites = new ArrayList<>();
         this.animalSprites.add(new AnimalSprite(coop,
             new AnimalData(new Chicken(null,"mamad")),
-            hero.playerX, hero.playerY + 2
+            hero.playerX.get(), hero.playerY.get() + 2
         ));
         this.animalSprites.add(new AnimalSprite(coop,
             new AnimalData(new Dino(null,"asghar")),
-            hero.playerX+3, hero.playerY + 4
+            hero.playerX.get() +3, hero.playerY.get() + 4
         ));
 //        this.animalSprites.add(new AnimalSprite(coop,
 //            new AnimalData(new Pig(null,"asghar")),
@@ -87,10 +87,10 @@ public class CoopScreen extends GameScreen implements Screen {
 
 
 
-        this.hero.targetX = hero.playerX;
-        this.hero.targetY = hero.playerY;
-        this.hero.renderX = hero.playerX * CELL_SIZE;
-        this.hero.renderY = hero.playerY * CELL_SIZE;
+        this.hero.targetX.set(hero.playerX.get());
+        this.hero.targetY.set(hero.playerY.get());
+        this.hero.renderX = hero.playerX.get() * CELL_SIZE;
+        this.hero.renderY = hero.playerY.get() * CELL_SIZE;
         this.hero.currentAnimation = hero.walk(false, hero.currentDirection);
         for (AnimalSprite animalSprite : this.animalSprites) {
             animalSprite.currentAnimation = animalSprite.walk(false, animalSprite.currentDirection);
@@ -172,7 +172,7 @@ public class CoopScreen extends GameScreen implements Screen {
 
 
     public void transfer() {
-        Cell cell = Finder.findCellByCoordinatesCoop(hero.playerX, hero.playerY, this.coop);
+        Cell cell = Finder.findCellByCoordinatesCoop(hero.playerX.get(), hero.playerY.get(), this.coop);
         if (cell.getObjectMap() instanceof Door) {
             ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(farmScreen);
         }

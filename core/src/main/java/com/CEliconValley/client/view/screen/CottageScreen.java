@@ -43,15 +43,15 @@ public class CottageScreen extends GameScreen implements Screen {
         for (Cell cell : cottageMap.getCells()) {
             if (cell == null) continue;
             if (cell.getObjectMap() instanceof Door) {
-                this.hero.playerX = cell.getX();
-                this.hero.playerY = cell.getY();
+                this.hero.playerX.set(cell.getX());
+                this.hero.playerY.set(cell.getY());
                 break;
             }
         }
-        this.hero.targetX = hero.playerX;
-        this.hero.targetY = hero.playerY;
-        this.hero.renderX = hero.playerX * CELL_SIZE;
-        this.hero.renderY = hero.playerY * CELL_SIZE;
+        this.hero.targetX.set(hero.playerX.get());
+        this.hero.targetY.set(hero.playerY.get());
+        this.hero.renderX = hero.playerX.get() * CELL_SIZE;
+        this.hero.renderY = hero.playerY.get() * CELL_SIZE;
         this.hero.currentAnimation = hero.walk(false, hero.currentDirection);
 
         this.camera = new OrthographicCamera();
@@ -90,7 +90,7 @@ public class CottageScreen extends GameScreen implements Screen {
         hero.stateTime += delta;
     }
     public void transfer() {
-        Cell cell = Finder.findCellByCoordinatesCottage(hero.playerX, hero.playerY, cottageMap);
+        Cell cell = Finder.findCellByCoordinatesCottage(hero.playerX.get(), hero.playerY.get(), cottageMap);
         if (cell.getObjectMap() instanceof Door) {
             Playeracts.changeScreen(farmScreen);
         }

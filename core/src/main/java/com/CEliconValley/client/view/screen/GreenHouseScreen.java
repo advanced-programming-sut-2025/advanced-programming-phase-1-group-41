@@ -48,15 +48,15 @@ public class GreenHouseScreen extends GameScreen implements Screen {
         for(Cell cell : greenHouse.getCells()) {
             if(cell==null){continue;}
             if(cell.getObjectMap() instanceof Door) {
-                this.hero.playerX = cell.getX();
-                this.hero.playerY = cell.getY();
+                this.hero.playerX.set(cell.getX());
+                this.hero.playerY.set(cell.getY());
                 break;
             }
         }
-        this.hero.targetX = hero.playerX;
-        this.hero.targetY = hero.playerY;
-        this.hero.renderX = hero.playerX * CELL_SIZE;
-        this.hero.renderY = hero.playerY * CELL_SIZE;
+        this.hero.targetX.set(hero.playerX.get());
+        this.hero.targetY.set(hero.playerY.get());
+        this.hero.renderX = hero.playerX.get() * CELL_SIZE;
+        this.hero.renderY = hero.playerY.get() * CELL_SIZE;
         this.hero.currentAnimation = hero.walk(false, hero.currentDirection);
 
 //        treeSpawner = new TreeSpawner(greenHouse);
@@ -99,7 +99,7 @@ public class GreenHouseScreen extends GameScreen implements Screen {
     }
 
     public void transfer() {
-        Cell cell=Finder.findCellByCoordinatesGreenHouse(hero.playerX,hero.playerY,this.greenHouse);
+        Cell cell=Finder.findCellByCoordinatesGreenHouse(hero.playerX.get(), hero.playerY.get(),this.greenHouse);
         if (cell.getObjectMap() instanceof Door) {
             ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(farmScreen);
         }

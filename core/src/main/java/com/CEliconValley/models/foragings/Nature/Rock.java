@@ -35,10 +35,12 @@ public class Rock implements Nature, Obstacle {
     }
 
 
-    public Rock(int hitPoints, RockType rockType, int variant) {
+    public Rock(int hitPoints, RockType rockType, int variant, int anchorX, int anchorY) {
         this.hitPoints = hitPoints;
         this.rockType = rockType;
         this.variant = variant;
+        this.anchorX = anchorX;
+        this.anchorY = anchorY;
     }
 
 

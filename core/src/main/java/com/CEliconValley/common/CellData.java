@@ -81,6 +81,8 @@ public class CellData {
             data.put("hitPoints", r.getHitPoints());
             data.put("rockType", r.getRockType().ordinal());
             data.put("variant", r.getVariant());
+            data.put("anchorX", r.getAnchorX());
+            data.put("anchorY", r.getAnchorY());
         }
         else if(cell.getObjectMap() instanceof Grass grass){
             data.put("isFarmland", grass.isFarmland());
@@ -136,7 +138,7 @@ public class CellData {
             RockType rockType = RockType.values()[rockTypeInt];
             Rock r = new Rock(getInt(data.get("hitPoints")),
                     rockType,
-                    getInt(data.get("variant")));
+                    getInt(data.get("variant")), getInt(data.get("anchorX")), getInt(data.get("anchorY")));
             Cell newCell = new Cell(r, x, y);
             return newCell;
         }
