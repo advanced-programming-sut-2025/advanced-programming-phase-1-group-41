@@ -190,4 +190,18 @@ public class TimeLine {
             ", year=" + year +
             '}';
     }
+
+    public String convertDay(){
+        this.day %= 7;
+        return switch(this.day){
+            case 0 -> "Saturday";
+            case 1 -> "Sunday";
+            case 2 -> "Monday";
+            case 3 -> "Tuesday";
+            case 4 -> "Wednesday";
+            case 5 -> "Thursday";
+            case 6 -> "Friday";
+            default -> throw new IllegalStateException("Unexpected value: " + this.day);
+        };
+    }
 }

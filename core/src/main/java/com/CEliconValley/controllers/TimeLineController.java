@@ -35,7 +35,7 @@ public class TimeLineController {
         return new Result(true,"day:"+convertDay(tl.getDay()));
     }
 
-    private String convertDay(int dayNum){
+    public String convertDay(int dayNum){
         dayNum %= 7;
         return switch(dayNum){
             case 0 -> "Saturday";

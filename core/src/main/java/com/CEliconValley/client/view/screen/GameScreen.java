@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public abstract class GameScreen implements Screen {
@@ -58,14 +59,22 @@ public abstract class GameScreen implements Screen {
         hudImage.setSize(hudImage.getWidth()*4, hudImage.getHeight()*4);
         float posX = stage.getWidth() - hudImage.getWidth() - 10;
         float posY = stage.getHeight() - hudImage.getHeight() - 10;
-        hudImage.setPosition(posX, posY);
-        hudImage.setTouchable(Touchable.disabled);
         stage.addActor(hudImage);
         timeScreen = new TimeScreen(GameAssetManager.getGameAssetManager().getSkin(), stage,
             posX, posY, hudImage);
-//        timeScreen.getHudTable().
-        timeScreen.getHudTable().setPosition(stage.getWidth() / 40f, 0);
-//        stage.addActor(timeScreen.getHudTable());
+        hudImage.setTouchable(Touchable.disabled);
+        hudImage.setPosition(posX, posY);
+        timeScreen.dateLabel.setPosition(posX + 120, posY + 180);
+        timeScreen.timeLabel.setPosition(posX + 120, posY + 90);
+        timeScreen.goldLabel.setPosition(posX + 87.5f, posY + 10);
+        timeScreen.goldLabel.setAlignment(Align.right);
+        timeScreen.goldLabel.setFontScale(1.18f);
+        timeScreen.dateLabel.setFontScale(0.8f);
+        stage.addActor(timeScreen.dateLabel);
+        stage.addActor(timeScreen.timeLabel);
+        stage.addActor(timeScreen.goldLabel);
+        stage.addActor(timeScreen.getHudTable());
+        timeScreen.getHudTable().setPosition(0, -stage.getHeight() / 21f);
         this.hero = new Hero();
     }
 

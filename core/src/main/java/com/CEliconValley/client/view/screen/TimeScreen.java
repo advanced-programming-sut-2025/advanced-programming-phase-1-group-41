@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class TimeScreen {
     private Table hudTable;
+    public Table goldRow;
 
     public Label dateLabel;
     public Label timeLabel;
@@ -29,7 +30,6 @@ public class TimeScreen {
         hudTable.pad(10);
         pointerImage.setPosition(posX+hudImage.getWidth()/4,posY+hudImage.getHeight()*13/20);
         pointerImage.setOrigin(pointerImage.getWidth() / 2f, 0f);
-        stage.addActor(pointerImage);
         Texture texture = new Texture(Gdx.files.internal("game/Clock/WeatherSign.png"));
         this.textureRegion = TextureRegion.split(texture, texture.getWidth()/4, texture.getHeight()/3);
 
@@ -42,14 +42,15 @@ public class TimeScreen {
 //        Image goldIcon = new Image(goldRegion);
 
         // Labels
+        Label noneLabel = new Label("", skin);
         dateLabel = new Label("Mon. 1", skin);
         timeLabel = new Label("6:50 am", skin);
-        goldLabel = new Label("500", skin);
+        goldLabel = new Label("500000", skin);
         // Add to table
         dateLabel.setPosition(posX+hudImage.getWidth()*3/5,posY*hudImage.getHeight()*4/5);
-        hudTable.add(dateLabel).row();
-        hudTable.row();
-        hudTable.add(timeLabel).padBottom(5).right();
+//        hudTable.add(dateLabel).row();
+//        hudTable.add(noneLabel).row();
+//        hudTable.add(timeLabel).padBottom(5).right();
         float scale = (float) 19/100;
         float secondScale = (float) 7/100;
         float thirdScale = (float) 4/100;
@@ -59,19 +60,30 @@ public class TimeScreen {
         hudTable.add(seasonIcon).size(hudImage.getWidth()*scale,hudImage.getHeight()*scale)
                 .padTop(hudImage.getHeight()*thirdScale)
         .right().padRight(hudImage.getWidth()*secondScale);
-        hudTable.row();
-        Table goldRow = new Table();
+//        hudTable.row();
+//        goldRow = new Table();
 //        goldRow.add(goldIcon).size(24).padRight(5);
-        goldRow.add(goldLabel);
-        hudTable.add(goldRow).right();
-        updatePointer(AppClient.getGameData().getTime().getHour());
+//        goldRow.add(goldLabel);
+//        hudTable.add(goldRow).right();
+        stage.addActor(pointerImage);
+        updatePointer(AppClient.getGameData().getTime().getHour(),
+            AppClient.getGameData().getTime().convertDay(), AppClient.getGameData().getTime().getYear());
     }
 
-    public void updatePointer(int hour){
+    public void updatePointer(int hour, String day, int year) {
         pointerImage.setRotation(180 - 180 * hour / 24);
+        updateDataTime(day, year);
+        int number = hour == 12 ? 12 : hour % 12;
+        String follow = hour >= 12 ? "pm" : "am";
+        this.timeLabel.setText(number+" "+follow);
+    }
+
+    public void updateDataTime(String day, int year){
+        this.dateLabel.setText(day.substring(0,3)+" "+year);
     }
 
     public Table getHudTable() {
         return hudTable;
     }
+
 }
