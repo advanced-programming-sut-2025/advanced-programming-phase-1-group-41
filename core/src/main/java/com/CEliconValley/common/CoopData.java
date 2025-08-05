@@ -48,4 +48,16 @@ public class CoopData {
         }
         return animals;
     }
+
+    public int getAnchorX() {
+        return anchorX;
+    }
+
+    public int getAnchorY() {
+        return anchorY;
+    }
+
+    public int getCoopTypeInt() {
+        return coopTypeInt;
+    }
 }

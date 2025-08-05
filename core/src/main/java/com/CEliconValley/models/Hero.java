@@ -1,12 +1,13 @@
 package com.CEliconValley.models;
 
 import com.CEliconValley.models.locations.Farm;
-import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import net.bytebuddy.matcher.FailSafeMatcher;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Hero {
     private final Texture playerTexture;
@@ -20,14 +21,14 @@ public class Hero {
     private Farm farm;
     public int currentDirection=3;
 
-    public int playerX;
-    public int playerY;
-    public int targetX;
-    public int targetY;
+    public AtomicInteger playerX = new AtomicInteger();
+    public final AtomicInteger playerY = new AtomicInteger();
+    public final AtomicInteger targetX = new AtomicInteger();
+    public final AtomicInteger targetY = new AtomicInteger();
     public float renderX;
     public float renderY;
-    public boolean isMoving = false;
-    public boolean isActing = false;
+    public AtomicBoolean isMoving = new AtomicBoolean(false);
+    public final AtomicBoolean isActing = new AtomicBoolean(false);
     public float stateTime = 0f;
     public Animation<TextureRegion> currentAnimation;
 

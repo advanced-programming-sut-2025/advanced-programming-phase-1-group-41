@@ -41,12 +41,19 @@ public class GameHandler {
                 GameMessage<GameCommand> msg = gson.fromJson(message, new TypeToken<GameMessage<GameCommand>>() {}.getType());
                 Game game = App.getGame();
                 Player player = game.getPlayerByUsername(msg.body.playerName);
-                if(msg.body.command.equals("walk up")){
-                    System.out.println("moving up ;)");
-                    player.setY(player.getY() + 1);
-                    conn.send(new Gson().toJson(
-                        new GameMessage<>("game-command", new GameCommand("walk up", msg.body.playerName))
-                    ));
+                switch (msg.body.command){
+                    case "walk up" -> {
+                        player.setY(player.getY() + 1);
+                    }
+                    case "walk down" -> {
+                        player.setY(player.getY() - 1);
+                    }
+                    case "walk left" -> {
+                        player.setX(player.getX() - 1);
+                    }
+                    case "walk right" -> {
+                        player.setX(player.getX() + 1);
+                    }
                 }
             }
         }

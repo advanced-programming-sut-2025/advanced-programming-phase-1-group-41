@@ -33,7 +33,7 @@ public class MainMenuView implements Screen {
     private final MainMenuController controller;
     private Stage stage;
 
-    private final Image background = new Image(new Texture(GameAssetManager.getGameAssetManager().CEliconValleyBackground));
+    private final Image background = GameAssetManager.getGameAssetManager().getBackground("Mountain.jpg");
 
     public final TextButton newLobbyButton, joinLobbyButton;
     public final TextButton profileButton;

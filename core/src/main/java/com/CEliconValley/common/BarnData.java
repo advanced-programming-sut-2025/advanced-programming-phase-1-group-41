@@ -48,4 +48,14 @@ public class BarnData {
         }
         return animals;
     }
+
+    public int getBarnTypeInt() {
+        return barnTypeInt;
+    }
+    public int getAnchorX(){
+        return anchorX;
+    }
+    public int getAnchorY(){
+        return anchorY;
+    }
 }

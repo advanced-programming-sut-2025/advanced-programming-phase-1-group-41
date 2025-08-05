@@ -32,7 +32,7 @@ public class ProfileMenuView implements Screen, AppMenu {
     private final ProfileMenuController controller;
     private Stage stage;
 
-    private final Image background = new Image(new Texture(GameAssetManager.getGameAssetManager().CEliconValleyBackground));
+    private final Image background = GameAssetManager.getGameAssetManager().getBackground("Mountain.jpg");
 
     private final Label messageLabel;
 

@@ -151,8 +151,8 @@ public class Player {
         this.user = user;
         money = 0;
         savings = 0;
-        x = 0;
-        y = 0;
+        x = 35;
+        y = 55;
         energy = 200;
         this.farmId = farmId;
         this.farmType = farmType;

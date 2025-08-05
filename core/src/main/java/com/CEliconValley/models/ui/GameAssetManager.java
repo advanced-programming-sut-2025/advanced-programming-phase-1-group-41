@@ -20,6 +20,7 @@ public class GameAssetManager {
     public Texture getBackgroundTexture(String name) {
         return new Texture(Gdx.files.internal("backgrounds/" + name));
     }
+    public Texture getTileTexture(String name) {return new Texture(Gdx.files.internal("game/general/tiles/" + name));}
     public Drawable getDrawableBackground(String name) {
         TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal("backgrounds/" + name)));
         return new TextureRegionDrawable(region);

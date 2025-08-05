@@ -106,4 +106,7 @@ public class Cottage implements Building {
     public int getAnchorX(){
         return anchorX;
     }
+
+    public static int getCottageLength() {
+        return 5;}
 }

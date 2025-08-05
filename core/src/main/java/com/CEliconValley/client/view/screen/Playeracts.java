@@ -1,22 +1,16 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
-import com.CEliconValley.client.controller.CheatCodeController;
 import com.CEliconValley.client.model.AnimalSprite;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.Result;
 import com.CEliconValley.models.locations.Location;
-import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -85,59 +79,63 @@ public class Playeracts {
                 screen.inventoryRenderer.shiftLeft();
             }
         }
-        if (hero.isActing||hero.isMoving) return new Result(false,"act-move");
+        if (hero.isActing.get() ||hero.isMoving.get()) {
+//            System.out.println(hero.isActing+" "+hero.isMoving);
+            return new Result(false,"act-move");
+        }
+
+
+
 
 
         boolean moved = false;
         screen.onRepeat=true;
 
-
-        if(Gdx.input.isKeyJustPressed(Input.Keys.F)){
-            hero.currentDirection = 1;
-            if (screen.canMoveTo(hero.playerX, hero.playerY + 1, location)) {
-                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                    new GameCommand("walk up", AppClient.getUserData().getUsername()));
-                AppClient.getClient().send(new Gson().toJson(msg));
-            }
-        }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             hero.currentDirection = 1;
-            if (screen.canMoveTo(hero.playerX, hero.playerY + 1, location)) {
-                hero.targetX = hero.playerX;
-                hero.targetY = hero.playerY + 1;
+            if (screen.canMoveTo(hero.playerX.get(), hero.playerY.get() + 1, location)) {
+                hero.targetX.set(hero.playerX.get());
+                hero.targetY.set(hero.playerY.get() + 1);
                 moved = true;
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("walk up", AppClient.getUserData().getUsername()));
+                AppClient.getClient().send(new Gson().toJson(msg));
             }
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             hero.currentDirection = 3;
-
-            if (screen.canMoveTo(hero.playerX, hero.playerY - 1, location)) {
-                hero.targetX = hero.playerX;
-                hero.targetY = hero.playerY - 1;
+            if (screen.canMoveTo(hero.playerX.get(), hero.playerY.get() - 1, location)) {
+                hero.targetX.set(hero.playerX.get());
+                hero.targetY.set(hero.playerY.get() - 1);
                 moved = true;
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("walk down", AppClient.getUserData().getUsername()));
+                AppClient.getClient().send(new Gson().toJson(msg));
             }
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             hero.currentDirection = 4;
-            if (screen.canMoveTo(hero.playerX - 1, hero.playerY, location)) {
-                hero.targetX = hero.playerX - 1;
-                hero.targetY = hero.playerY;
+            if (screen.canMoveTo(hero.playerX.get() - 1, hero.playerY.get(), location)) {
+                hero.targetX.set(hero.playerX.get() - 1);
+                hero.targetY.set(hero.playerY.get());
                 screen.flip = true;
                 moved = true;
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("walk left", AppClient.getUserData().getUsername()));
+                AppClient.getClient().send(new Gson().toJson(msg));
             }
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             hero.currentDirection = 2;
             screen.flip = false;
-            if (screen.canMoveTo(hero.playerX + 1, hero.playerY, location)) {
-                hero.targetX = hero.playerX + 1;
-                hero.targetY = hero.playerY;
+            if (screen.canMoveTo(hero.playerX.get() + 1, hero.playerY.get(), location)) {
+                hero.targetX.set(hero.playerX.get() + 1);
+                hero.targetY.set(hero.playerY.get());
                 moved = true;
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("walk right", AppClient.getUserData().getUsername()));
+                AppClient.getClient().send(new Gson().toJson(msg));
             }
         } else if (Gdx.input.isKeyPressed(Input.Keys.E)) {
             screen.onRepeat=false;
             hero.currentAnimation = hero.useTool(3);
-            hero.isActing=true;
+            hero.isActing.set(true);
             hero.stateTime = 0;
             if(screen instanceof FarmScreen farmScreen){
-                farmScreen.hit(hero.currentDirection,hero.playerX,hero.playerY);
+                farmScreen.hit(hero.currentDirection, hero.playerX.get(), hero.playerY.get());
             }
         } else if (Gdx.input.isKeyPressed(Input.Keys.UP) &&
         screen instanceof FarmScreen farmScreen) {
@@ -150,28 +148,28 @@ public class Playeracts {
         }
 
         if (moved) {
-            hero.isMoving = true;
+            hero.isMoving.set(true);
             hero.currentAnimation = hero.walk(true, hero.currentDirection);
-        } else if (!hero.isMoving) {
+        } else if (!hero.isMoving.get()) {
             hero.currentAnimation = hero.walk(false, hero.currentDirection);
         }
         return new Result(true,";)");
     }
 
     public static void approach(Hero hero){
-        if (hero.isMoving) {
-            float targetPixelX = hero.targetX * CELL_SIZE;
-            float targetPixelY = hero.targetY * CELL_SIZE;
+        if (hero.isMoving.get()) {
+            float targetPixelX = hero.targetX.get() * CELL_SIZE;
+            float targetPixelY = hero.targetY.get() * CELL_SIZE;
 
-            float moveAmount = (float) CELL_SIZE / 4;
+            float moveAmount = (float) CELL_SIZE / 8;
 
             hero.renderX = approach(hero.renderX, targetPixelX, moveAmount);
             hero.renderY = approach(hero.renderY, targetPixelY, moveAmount);
 
             if (hero.renderX == targetPixelX && hero.renderY == targetPixelY) {
-                hero.playerX = hero.targetX;
-                hero.playerY = hero.targetY;
-                hero.isMoving = false;
+                hero.playerX.set(hero.targetX.get());
+                hero.playerY.set(hero.targetY.get());
+                hero.isMoving.set(false);
 //                stateTime = 0f;
             }
         }
