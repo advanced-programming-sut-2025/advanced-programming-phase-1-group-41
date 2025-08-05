@@ -23,10 +23,10 @@ public class Playeracts {
         Playeracts.screen = screen;
     }
     public static Result handleInput(Hero hero, Location location, Stage stage, float delta){
+
         if (screen.cheatMode) {
             stage.act(delta);
             stage.draw();
-
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
                 String code = screen.cheatCodeField.getText();
                 System.out.println("Cheat code entered: " + code);

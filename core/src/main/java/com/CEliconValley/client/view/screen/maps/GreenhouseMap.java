@@ -1,7 +1,10 @@
 package com.CEliconValley.client.view.screen.maps;
 
 
+import com.CEliconValley.client.AppClient;
+import com.CEliconValley.common.FarmData;
 import com.CEliconValley.models.Cell;
+import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.locations.Location;
@@ -19,7 +22,10 @@ import java.util.ArrayList;
         public GreenhouseMap(int offsetX, int offsetY) {
             this.offsetX = offsetX;
             this.offsetY = offsetY;
-
+            FarmData farmData = Finder.getFarmDataById(AppClient.getGameData(),
+                AppClient.getUserData().getUsername());
+            System.out.println("gx "+farmData.getGreenhouseX());
+            System.out.println("gy "+farmData.getGreenhouseY());
             for (int i = 1; i < 19; i++) {
                 for (int j = 2; j < 17; j++) {
                     Grass grass = new Grass();

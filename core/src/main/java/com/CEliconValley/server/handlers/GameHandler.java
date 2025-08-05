@@ -74,6 +74,6 @@ public class GameHandler {
                 e.printStackTrace();
                 System.out.println(e.getMessage());
             }
-        }, 1, 1, TimeUnit.SECONDS);
+        }, 5, 5, TimeUnit.SECONDS);
     }
 }

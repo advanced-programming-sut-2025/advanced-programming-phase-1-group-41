@@ -171,15 +171,15 @@ public class FarmScreen extends GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+
+        Gdx.gl.glClearColor(0.8f, 0.9f, 1f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Result result = Playeracts.handleInput(hero, farmMap, stage, delta);
         if(!result.success()){
             if(result.message().equals("cheat")){
                 return;
             }
         }
-
-        Gdx.gl.glClearColor(0.8f, 0.9f, 1f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
@@ -292,8 +292,8 @@ public class FarmScreen extends GameScreen implements Screen {
         camera.position.set(hero.renderX + CELL_SIZE / 2f, hero.renderY + CELL_SIZE / 2f, 0);
         camera.update();
 
-
-
+        stage.act(delta);
+        stage.draw();
 
         batch.end();
 

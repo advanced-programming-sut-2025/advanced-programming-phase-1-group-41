@@ -1,6 +1,7 @@
 package com.CEliconValley.client.view.screen.maps;
 
 import com.CEliconValley.models.Cell;
+import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.buildings.animalContainer.BarnType;
 import com.CEliconValley.models.foragings.Nature.Grass;

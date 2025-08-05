@@ -16,8 +16,10 @@ import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -36,6 +38,11 @@ public abstract class GameScreen implements Screen {
     protected Stage stage;
     public abstract void transfer();
     protected Hero hero;
+    protected Texture hudTexture = new Texture(Gdx.files.internal("game/Clock.png"));
+    protected Image hudImage;
+    protected TimeScreen timeScreen;
+
+
     public GameScreen(InventoryRenderer inventoryRenderer) {
         stage = new Stage(new ScreenViewport(), Main.getBatch());
         Gdx.input.setInputProcessor(stage);
@@ -46,6 +53,14 @@ public abstract class GameScreen implements Screen {
         cheatCodeField.setWidth(600);
         cheatCodeField.setPosition(stage.getWidth()/2  - cheatCodeField.getWidth() / 2, stage.getHeight() / 2 - cheatCodeField.getHeight() / 2);
         stage.addActor(cheatCodeField);
+        hudImage = new Image(new TextureRegion(hudTexture));
+        hudImage.setPosition(stage.getWidth() - hudImage.getWidth() - 10,
+            stage.getHeight() - hudImage.getHeight() - 10);
+        hudImage.setTouchable(Touchable.disabled);
+        timeScreen = new TimeScreen(GameAssetManager.getGameAssetManager().getSkin(), hudTexture);
+//        timeScreen.getHudTable().
+        stage.addActor(timeScreen.getHudTable());
+        stage.addActor(hudImage);
         this.hero = new Hero();
     }
 
@@ -137,5 +152,12 @@ public abstract class GameScreen implements Screen {
     }
     public MenuBar getMenuBar() {
         return menuBar;
+    }
+
+
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+        hudImage.setPosition(stage.getWidth() - hudImage.getWidth(), stage.getHeight() - hudImage.getHeight());
     }
 }
