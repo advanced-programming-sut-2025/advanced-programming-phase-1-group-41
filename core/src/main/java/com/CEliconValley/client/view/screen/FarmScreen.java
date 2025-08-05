@@ -92,6 +92,7 @@ public class FarmScreen extends GameScreen implements Screen {
     public FarmScreen(Farm farm, Player player) {
         super(new InventoryRenderer(player.getInventory()));
         this.menuBar=super.getMenuBar();
+        menuBar.setPlayer(player);
         otherHeroes = new ArrayList<>();
         this.farmMap = new FarmMap(Finder.getFarmDataById(AppClient.getGameData(), AppClient.getUserData().getUsername()));
         this.farm = farm;
@@ -274,7 +275,7 @@ public class FarmScreen extends GameScreen implements Screen {
         }
             if(isMenuOpen){
 //                menuBar.render(batch, menuX, menuY, menuWidth, menuHeight);
-                menuBar.render(batch,camera,player.getInventory());
+                menuBar.render(batch,camera);
             }else {
                 inventoryRenderer.render(batch, camera);
             }
