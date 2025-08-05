@@ -35,7 +35,10 @@ import java.util.ArrayList;
                 }
             }
             Door door = new Door();
-            cells.add(new Cell(door,offsetX + Greenhouse.getGreenhouseLength() / 2 + 1,offsetY + 2));
+            Cell cell = getCell(offsetX + Greenhouse.getGreenhouseLength() / 2 + 1, offsetY+1);
+            cell.setObjectMap(door);
+            cell = getCell(offsetX + Greenhouse.getGreenhouseLength() / 2 + 2, offsetY+1);
+            cell.setObjectMap(door);
         }
 
         public ArrayList<Cell> getCells() {

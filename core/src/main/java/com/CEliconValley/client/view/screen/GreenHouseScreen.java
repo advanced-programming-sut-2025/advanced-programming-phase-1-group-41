@@ -95,7 +95,8 @@ public class GreenHouseScreen extends GameScreen implements Screen {
         }
         camera.position.set(hero.renderX + CELL_SIZE / 2f, hero.renderY + CELL_SIZE / 2f, 0);
         camera.update();
-
+        stage.act(delta);
+        stage.draw();
         batch.end();
         hero.stateTime += delta;
     }
