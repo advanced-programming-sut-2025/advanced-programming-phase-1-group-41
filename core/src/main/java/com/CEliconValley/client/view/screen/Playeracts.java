@@ -163,6 +163,10 @@ public class Playeracts {
 
             float moveAmount = (float) CELL_SIZE / 8;
 
+            if(screen instanceof GreenHouseScreen){
+                moveAmount /= 2;
+            }
+
             hero.renderX = approach(hero.renderX, targetPixelX, moveAmount);
             hero.renderY = approach(hero.renderY, targetPixelY, moveAmount);
 

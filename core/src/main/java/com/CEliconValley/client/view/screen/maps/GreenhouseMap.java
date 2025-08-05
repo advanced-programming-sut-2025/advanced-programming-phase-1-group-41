@@ -6,6 +6,7 @@ import com.CEliconValley.common.FarmData;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.buildings.Door;
+import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
 import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.locations.Location;
 import dev.morphia.annotations.Transient;
@@ -26,15 +27,15 @@ import java.util.ArrayList;
                 AppClient.getUserData().getUsername());
             System.out.println("gx "+farmData.getGreenhouseX());
             System.out.println("gy "+farmData.getGreenhouseY());
-            for (int i = 1; i < 19; i++) {
-                for (int j = 2; j < 17; j++) {
+            for (int i = 1; i < Greenhouse.getGreenhouseHeight(); i++) {
+                for (int j = 1; j < Greenhouse.getGreenhouseLength() + 1; j++) {
                     Grass grass = new Grass();
                     Cell cell = new Cell(grass, offsetY + i, offsetX + j);
                     cells.add(cell);
                 }
             }
             Door door = new Door();
-            cells.add(new Cell(door,offsetX+10,offsetY+1));
+            cells.add(new Cell(door,offsetX + Greenhouse.getGreenhouseLength() / 2 + 1,offsetY + 2));
         }
 
         public ArrayList<Cell> getCells() {

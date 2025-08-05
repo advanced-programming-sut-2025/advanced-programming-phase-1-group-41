@@ -3,6 +3,7 @@ package com.CEliconValley.client.view.screen;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.client.view.screen.maps.GreenhouseMap;
+import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -65,6 +66,7 @@ public class GreenHouseScreen extends GameScreen implements Screen {
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.zoom /= 2;
     }
 
     @Override
@@ -85,11 +87,11 @@ public class GreenHouseScreen extends GameScreen implements Screen {
         batch.begin();
 
 
-        batch.draw(background, CELL_SIZE/2f, CELL_SIZE/2f,CELL_SIZE*19,CELL_SIZE*24);
+        batch.draw(background, CELL_SIZE/2f, CELL_SIZE/2f,CELL_SIZE* Greenhouse.getGreenhouseLength(),CELL_SIZE*Greenhouse.getGreenhouseHeight());
 
         if (hero.currentAnimation != null) {
             TextureRegion currentFrame = hero.currentAnimation.getKeyFrame(hero.stateTime, onRepeat);
-            batch.draw(currentFrame, hero.renderX - CELL_SIZE / 2f, hero.renderY - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
+            batch.draw(currentFrame, hero.renderX - CELL_SIZE / 2f, hero.renderY - CELL_SIZE / 2f, CELL_SIZE, CELL_SIZE);
         }
         camera.position.set(hero.renderX + CELL_SIZE / 2f, hero.renderY + CELL_SIZE / 2f, 0);
         camera.update();
