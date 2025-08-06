@@ -58,4 +58,20 @@ public class BarnData {
     public int getAnchorY(){
         return anchorY;
     }
+
+    public ArrayList<AnimalData> getAnimalsData() {
+        return animalsData;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }
