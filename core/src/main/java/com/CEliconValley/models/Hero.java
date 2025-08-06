@@ -4,6 +4,7 @@ import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -96,32 +97,32 @@ public class Hero {
         }
         return null;
     }
-    public Animation<TextureRegion> useTool(int stage){
+    public Animation<TextureRegion> useTool(int level){
         TextureRegion[] wantedActs=new TextureRegion[5];
 
         switch(currentDirection){
             case 1:
-                for(int i=0;i<toolsActs_Back[4+stage].length;i++){
-                    wantedActs[i] = toolsActs_Back[4+stage][i];
+                for(int i=0;i<toolsActs_Back[4+level].length;i++){
+                    wantedActs[i] = toolsActs_Back[4+level][i];
                 }
-                return new Animation<>(0.15f,wantedActs);
+                return new Animation<>(0.10f,wantedActs);
             case 2:
-                for(int i=0;i<toolsActs_Side[4+stage].length;i++){
-                    wantedActs[i] = toolsActs_Side[4+stage][i];
+                for(int i=0;i<toolsActs_Side[4+level].length;i++){
+                    wantedActs[i] = toolsActs_Side[4+level][i];
                 }
-                return new Animation<>(0.15f,wantedActs);
+                return new Animation<>(0.10f,wantedActs);
             case 3:
-                for(int i=0;i<toolsActs_Front[4+stage].length;i++){
-                    wantedActs[i] = toolsActs_Front[4+stage][i];
+                for(int i=0;i<toolsActs_Front[4+level].length;i++){
+                    wantedActs[i] = toolsActs_Front[4+level][i];
                 }
-                return new Animation<>(0.15f,wantedActs);
+                return new Animation<>(0.10f,wantedActs);
             case 4:
-                for (int i = 0; i <toolsActs_Side[4+stage].length; i++) {
-                    TextureRegion flippedFrame = new TextureRegion(toolsActs_Side[4+stage][i]);
+                for (int i = 0; i <toolsActs_Side[4+level].length; i++) {
+                    TextureRegion flippedFrame = new TextureRegion(toolsActs_Side[4+level][i]);
                     flippedFrame.flip(true, false);
                     wantedActs[i] = flippedFrame;
                 }
-                return new Animation<>(0.15f, wantedActs);
+                return new Animation<>(0.10f, wantedActs);
 
         }
         return null;

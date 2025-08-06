@@ -66,7 +66,6 @@ public class FarmScreen extends GameScreen implements Screen {
 
     private Animation<TextureRegion>[] walkAnimations;
     private Animation<TextureRegion>[] coastAnimations;
-    private float stateTime = 0f;
     private float passiveStateTime = 0f;
 
     private int prevMinX;
@@ -191,6 +190,8 @@ public class FarmScreen extends GameScreen implements Screen {
             }
         }
 
+        hero.stateTime += delta;
+
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
@@ -262,12 +263,14 @@ public class FarmScreen extends GameScreen implements Screen {
             rockSpawner.renderBreakingEffectForCell(batch, cellData, delta);
             if(hero.playerX.get() == cellData.getX() && hero.playerY.get() == cellData.getY()){
 
-                TextureRegion currentFrame = hero.currentAnimation.getKeyFrame(stateTime, onRepeat);
+                TextureRegion currentFrame = hero.currentAnimation.getKeyFrame(hero.stateTime, onRepeat);
 //                System.out.println("stateTime: " + stateTime + ", frameIndex: " + currentAnimation.getKeyFrameIndex(stateTime));
-                if (!onRepeat&&hero.currentAnimation.isAnimationFinished(stateTime)) {
+                if (!onRepeat&&hero.currentAnimation.isAnimationFinished(hero.stateTime)) {
+                    System.out.println("im here for a reason im not sure "+hero.stateTime);
                     hero.currentAnimation = hero.walk(false, hero.currentDirection);
+                    onRepeat = true;
                     hero.isActing.set(false);
-
+                    hero.stateTime = 0f;
 
                 }
 
@@ -297,7 +300,6 @@ public class FarmScreen extends GameScreen implements Screen {
                 inventoryRenderer.render(batch, camera);
             }
 
-        stateTime += delta;
         passiveStateTime+=delta;
 
         float halfViewportWidth = camera.viewportWidth * camera.zoom / 2;

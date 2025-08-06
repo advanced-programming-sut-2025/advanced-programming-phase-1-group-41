@@ -94,10 +94,10 @@ public class Playeracts {
 
 
         boolean moved = false;
-        screen.onRepeat=true;
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             hero.currentDirection = 1;
+            screen.onRepeat=true;
             if (screen.canMoveTo(hero.playerX.get(), hero.playerY.get() + 1, location)) {
                 hero.targetX.set(hero.playerX.get());
                 hero.targetY.set(hero.playerY.get() + 1);
@@ -105,8 +105,10 @@ public class Playeracts {
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("walk up", AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
             }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             hero.currentDirection = 3;
+            screen.onRepeat=true;
             if (screen.canMoveTo(hero.playerX.get(), hero.playerY.get() - 1, location)) {
                 hero.targetX.set(hero.playerX.get());
                 hero.targetY.set(hero.playerY.get() - 1);
@@ -114,8 +116,10 @@ public class Playeracts {
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("walk down", AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
             }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             hero.currentDirection = 4;
+            screen.onRepeat=true;
             if (screen.canMoveTo(hero.playerX.get() - 1, hero.playerY.get(), location)) {
                 hero.targetX.set(hero.playerX.get() - 1);
                 hero.targetY.set(hero.playerY.get());
@@ -124,9 +128,11 @@ public class Playeracts {
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("walk left", AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
             }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             hero.currentDirection = 2;
             screen.flip = false;
+            screen.onRepeat=true;
             if (screen.canMoveTo(hero.playerX.get() + 1, hero.playerY.get(), location)) {
                 hero.targetX.set(hero.playerX.get() + 1);
                 hero.targetY.set(hero.playerY.get());
@@ -134,7 +140,8 @@ public class Playeracts {
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("walk right", AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
             }
-        } else if (Gdx.input.isKeyJustPressed((Input.Keys.E))) {
+        }
+        else if (Gdx.input.isKeyJustPressed((Input.Keys.E))) {
             screen.onRepeat=false;
             hero.currentAnimation = hero.useTool(3);
             hero.isActing.set(true);
@@ -158,7 +165,7 @@ public class Playeracts {
         if (moved) {
             hero.isMoving.set(true);
             hero.currentAnimation = hero.walk(true, hero.currentDirection);
-        } else if (!hero.isMoving.get()) {
+        } else if (!hero.isMoving.get() && !hero.isActing.get()) {
             hero.currentAnimation = hero.walk(false, hero.currentDirection);
         }
         return new Result(true,";)");
