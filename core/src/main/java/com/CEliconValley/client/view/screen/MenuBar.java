@@ -6,6 +6,7 @@ import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.controllers.ItemManager;
+import com.CEliconValley.models.App;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Player;
 import com.CEliconValley.models.items.*;
@@ -20,9 +21,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.google.gson.Gson;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class MenuBar {
     private final Texture menuTexture;
@@ -228,13 +231,110 @@ public class MenuBar {
 
 
     private void renderStats(Batch batch) {
-        Texture combatSkill = GameAssetManager.getGameAssetManager().getSkillTexture("Combat_Skill_Icon.png");
-        Texture farmingSkill = GameAssetManager.getGameAssetManager().getSkillTexture("Farming_Skill_Icon.png");
-        Texture fishingSkill = GameAssetManager.getGameAssetManager().getSkillTexture("Fishing_Skill_Icon.png");
-        Texture foragingSkill = GameAssetManager.getGameAssetManager().getSkillTexture("Foraging_Skill_Icon.png");
-        Texture miningSkill = GameAssetManager.getGameAssetManager().getSkillTexture("Mining_Skill_Icon.png");
+        Texture farmingIcon = GameAssetManager.getGameAssetManager().getSkillTexture("Farming_Skill_Icon.png");
+        Texture fishingIcon = GameAssetManager.getGameAssetManager().getSkillTexture("Fishing_Skill_Icon.png");
+        Texture foragingIcon = GameAssetManager.getGameAssetManager().getSkillTexture("Foraging_Skill_Icon.png");
+        Texture miningIcon = GameAssetManager.getGameAssetManager().getSkillTexture("Mining_Skill_Icon.png");
 
+        Texture emptyPoint = GameAssetManager.getGameAssetManager().getSkillTexture("Empty_Point.png");
+        Texture grandEmptyPoint = GameAssetManager.getGameAssetManager().getSkillTexture("Grand_Empty_Point.png");
+        Texture achievedPoint = GameAssetManager.getGameAssetManager().getSkillTexture("Achieved_Point.png");
+        Texture grandAchievedPoint = GameAssetManager.getGameAssetManager().getSkillTexture("Grand_Achieved_Point.png");
+
+        Texture avatarTexture = GameAssetManager.getGameAssetManager().getAvatarTexture();
+
+        int farming = Finder.getpd().getFarmingSkill().getLevel();
+        int fishing = Finder.getpd().getFishingSkill().getLevel();
+        int foraging = Finder.getpd().getForagingSkill().getLevel();
+        int mining = Finder.getpd().getMiningSkill().getLevel();
+
+        String[] names = { "Farming", "Fishing", "Foraging", "Mining" };
+        Texture[] icons = { farmingIcon, fishingIcon, foragingIcon, miningIcon };
+        int[] levels = { farming, fishing, foraging, mining };
+        String[] tooltips = {
+            "Levels are gained by harvesting crops and caring for animals.\nEach level grants +1 hoe and watering can proficiency.",
+            "Fishing is increased by catching fish or using crab pots.\nEach level grants +1 fishing rod proficiency.",
+            "Foraging skill increases by collecting goods and chopping trees.\nEach level grants +1 axe proficiency.",
+            "Mining skill is increased by breaking rocks.\nEach level grants +1 pickaxe proficiency."
+        };
+
+        float screenWidth = camera.viewportWidth;
+        float screenHeight = camera.viewportHeight;
+
+        float x = startingX + screenWidth * 0.08f;
+        float y = startingY + screenHeight * 0.5f;
+
+        float rowSpacing = screenHeight * 0.10f;
+        float iconSize = screenHeight * 0.07f;
+        float pointSize = iconSize * 0.45f;
+        float spacingBetweenPoints = pointSize * 1.2f;
+
+        batch.draw(avatarTexture, x, startingY + screenHeight * 0.2f, iconSize * 3, iconSize * 3);
+
+        Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        camera.unproject(mousePos);
+
+        for (int i = 0; i < names.length; i++) {
+            float iconX = x + screenWidth * 0.17f;
+            float iconY = y - iconSize + 5;
+
+            font.getData().setScale(2f);
+            font.draw(batch, names[i], iconX, iconY - 5);
+            batch.draw(icons[i], iconX, iconY, iconSize, iconSize);
+
+            boolean hovered = mousePos.x >= iconX && mousePos.x <= iconX + iconSize &&
+                mousePos.y >= iconY && mousePos.y <= iconY + iconSize;
+
+            for (int j = 0; j < 5; j++) {
+                boolean isAchieved = j <= levels[i];
+                boolean isGrand = j == 4;
+                float px = iconX + iconSize + j * spacingBetweenPoints + 15;
+                float py = iconY + iconSize / 2f - pointSize / 2f;
+
+                Texture pointTexture = isGrand ?
+                    (isAchieved ? grandAchievedPoint : grandEmptyPoint) :
+                    (isAchieved ? achievedPoint : emptyPoint);
+
+                if (j == 4) {
+                    batch.draw(pointTexture, px, py, pointSize * 1.5f, pointSize);
+                } else {
+                    batch.draw(pointTexture, px, py, pointSize, pointSize);
+                }
+            }
+
+            String levelText = String.valueOf(levels[i] + 1);
+            GlyphLayout layout = new GlyphLayout(font, levelText);
+            float tx = x + screenWidth * 0.9f - layout.width;
+            float ty = y;
+            font.draw(batch, layout, tx, ty);
+
+            if (hovered) {
+                String tooltipText = tooltips[i];
+                GlyphLayout tooltipLayout = new GlyphLayout(font, tooltipText);
+
+                float tooltipWidth = tooltipLayout.width + 40;
+                float tooltipHeight = tooltipLayout.height + 30;
+
+                float tooltipX = iconX;
+                float tooltipY = iconY + iconSize + 20;
+
+                batch.end();
+                shapeRenderer.setProjectionMatrix(camera.combined);
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                shapeRenderer.setColor(0, 0, 0, 0.85f);
+                shapeRenderer.rect(tooltipX, tooltipY, tooltipWidth, tooltipHeight);
+                shapeRenderer.end();
+                batch.begin();
+
+                font.draw(batch, tooltipText, tooltipX + 20, tooltipY + tooltipHeight - 15);
+            }
+
+            y -= rowSpacing;
+        }
+
+        font.getData().setScale(1f);
     }
+
 
     private void renderRelations(Batch batch) {
 

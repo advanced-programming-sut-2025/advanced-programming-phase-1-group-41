@@ -40,7 +40,11 @@ public class CheatCodeController {
             System.out.println(weatherController.cheatChangeTmrwWeather(matcher));
         } else if ((matcher = StoreCommands.CheatAddDollars.getMatcher(input)) != null) {
             System.out.println(marketplaceController.cheatAddMoney(matcher, playerName));
-        }else{
+        }else if((matcher = GameMainCommands.EnergyUnlimited.getMatcher(input))!=null){
+            System.out.println(playerController.cheatEnergyUnlimited(matcher));
+        }else if((matcher = GameMainCommands.EnergySet.getMatcher(input))!=null){
+            System.out.println(playerController.cheatEnergySet(matcher));
+        } else{
             return false;
         }
         GameMessage<GameData> response = new GameMessage<>("game-data", new GameData(App.getGame()));
