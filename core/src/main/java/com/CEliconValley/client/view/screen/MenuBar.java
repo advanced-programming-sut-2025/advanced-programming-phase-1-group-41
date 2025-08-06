@@ -300,9 +300,6 @@ public class MenuBar {
                 }
             }
             currentX += width * 2.3f;
-
-
-            currentX += width + 55;
         }
 
     }

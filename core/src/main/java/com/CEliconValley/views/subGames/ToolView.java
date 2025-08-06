@@ -20,9 +20,9 @@ public class ToolView {
         if ((matcher = InventoryAndToolCommands.ToolsEquip.getMatcher(input)) != null) {
             System.out.println(controller.equipTool(matcher, playername));
         } else if ((matcher = InventoryAndToolCommands.ShowCurrentTools.getMatcher(input)) != null) {
-            System.out.println(controller.showCurrentTool(matcher));
+//            System.out.println(controller.showCurrentTool(matcher));
         } else if ((matcher = InventoryAndToolCommands.ShowAvailableTools.getMatcher(input)) != null) {
-            System.out.println(controller.showAvailableTools(matcher));
+//            System.out.println(controller.showAvailableTools(matcher));
         } else if ((matcher = InventoryAndToolCommands.UseTool.getMatcher(input)) != null) {
             System.out.println(controller.useTool(matcher, playername));
             GameMessage<FarmData> msg = new GameMessage<>("farm-data",

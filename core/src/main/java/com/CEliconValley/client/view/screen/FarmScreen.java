@@ -280,7 +280,9 @@ public class FarmScreen extends GameScreen implements Screen {
 
 
         }
-        snow.render(batch,camera);
+        if(AppClient.getGameData().getWeatherType().equals(WeatherType.Snowy)){
+            snow.render(batch,camera);
+        }
         if(AppClient.getGameData().getWeatherType().equals(WeatherType.Rainy)){
             rain.render(batch,camera);
         }
