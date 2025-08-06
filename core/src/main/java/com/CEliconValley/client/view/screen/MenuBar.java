@@ -1,7 +1,5 @@
 package com.CEliconValley.client.view.screen;
 
-import com.CEliconValley.common.InventoryData;
-import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.controllers.ItemManager;
 import com.CEliconValley.models.Player;
 import com.CEliconValley.models.items.*;
@@ -68,17 +66,22 @@ public class MenuBar {
     }
 
     public void render(Batch batch, OrthographicCamera camera ) {
+
+        float screenWidth = camera.viewportWidth;
+        float screenHeight = camera.viewportHeight;
+
         Inventory inventory=player.getInventory();
         this.camera = camera;
-        startingX = camera.position.x - camera.viewportWidth/2 + (camera.viewportWidth - tileWidth*2)/2;
-        startingY = camera.position.y - camera.viewportHeight/2 + (camera.viewportHeight - tileHeight*2)/2;
 
+        float menuWidth = screenWidth * 0.6f;
+        float menuHeight = screenHeight * 0.7f;
+        startingX = camera.position.x - menuWidth / 2f;
+        startingY = camera.position.y - menuHeight / 2f;
 
         int tabIndex = getTabIndex(currentTab);
         if (tabIndex >= 0 && tabIndex < tabTextures.length && tabTextures[tabIndex] != null) {
-            batch.draw(tabTextures[tabIndex], startingX, startingY, tileWidth*2, tileHeight*2);
+            batch.draw(tabTextures[tabIndex], startingX, startingY, menuWidth, menuHeight);
         }
-
 
         switch (currentTab) {
             case "Inventory":
@@ -100,17 +103,24 @@ public class MenuBar {
         }
         switch (currentTab){
             case "Crafting":
-                renderCraftings(batch);
+                renderCrafting(batch);
                 break;
         }
     }
 
 
     private void renderInventoryBar(Batch batch, OrthographicCamera camera, Inventory inventory) {
-        float firstItemX = (2 * tileWidth * 49) / 856f;
-        float firstItemY = (2 * tileHeight * 484) / 648f;
+        float screenWidth = camera.viewportWidth;
+        float screenHeight = camera.viewportHeight;
+
+        float firstItemX = screenWidth * 0.0370f;
+        float firstItemY = screenHeight * 0.5225f;
+
         int row = 0, startPoint = 0;
-        float slotSize = tileWidth * 56 * 2 / 856f;
+        float slotSize = screenWidth * 0.035f;
+
+        float spacingX = slotSize * 0.275f;
+        float spacingY = slotSize * 0.6f;
 
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mousePos);
@@ -125,11 +135,11 @@ public class MenuBar {
                 if (item != null) {
                     texture = ItemManager.getTexture(item);
                     if (texture != null) {
-                        float x = startingX + firstItemX + col * (slotSize + 16);
-                        float y = startingY + firstItemY - row * (slotSize + 47);
+                        float x = startingX + firstItemX + col * (slotSize + spacingX);
+                        float y = startingY + firstItemY - row * (slotSize + spacingY) * 0.9f;
 //                        batch.draw(texture, x, y, slotSize, slotSize);
-                        float originalWidth = texture.getRegionWidth();
-                        float originalHeight = texture.getRegionHeight();
+                        float originalWidth = texture.getRegionWidth() * 0.9f;
+                        float originalHeight = texture.getRegionHeight() * 0.9f;
 
                         float aspectRatio = originalWidth / originalHeight;
 
@@ -147,7 +157,6 @@ public class MenuBar {
                         float drawY = y + (slotSize - drawHeight) / 2f;
 
                         batch.draw(texture, drawX, drawY, drawWidth, drawHeight);
-
 
 
                         if (slot.getQuantity()>1) {
@@ -212,11 +221,14 @@ public class MenuBar {
 
     }
 
-    private void renderCraftings(Batch batch) {
-        float minX = 50;
-        float maxX = 1650;
-        float minY = 21;
-        float maxY = 272;
+    private void renderCrafting(Batch batch) {
+        float screenWidth = camera.viewportWidth;
+        float screenHeight = camera.viewportHeight;
+
+        float minX = 80;
+        float maxX = 1020;
+        float minY = 20;
+        float maxY = 200;
 
         float currentX = minX;
         float currentY = maxY;
@@ -229,16 +241,18 @@ public class MenuBar {
             if (texture == null) continue;
 
             if (currentX > maxX) {
-                currentX = minX;
-                currentY -= 192;
+                float width = screenWidth * 0.02f;
+                currentX = minX + width;
+                currentY -= 140;
 
                 if (currentY < minY) break;
             }
 
             float drawX = startingX + currentX;
             float drawY = startingY + currentY;
-            float width = 96;
-            float height = 192;
+            float width = screenWidth * 0.02f;
+            float height = width * 2f;
+
 
             if (!player.getCraftingRecipes().contains(machine.getRecipe())) {
                 batch.setColor(0.5f, 0.5f, 0.5f, 0.5f);
@@ -267,9 +281,6 @@ public class MenuBar {
                     }
                 }
             }
-
-
-
             currentX += width + 55;
         }
 

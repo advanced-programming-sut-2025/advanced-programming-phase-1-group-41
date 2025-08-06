@@ -4,6 +4,7 @@ import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.model.AnimalSprite;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
+import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.Result;
 import com.CEliconValley.models.locations.Location;
@@ -23,6 +24,7 @@ public class Playeracts {
         Playeracts.screen = screen;
     }
     public static Result handleInput(Hero hero, Location location, Stage stage, float delta){
+        screen.updateEnergy();
 
         if (screen.cheatMode) {
             stage.act(delta);
@@ -177,6 +179,8 @@ public class Playeracts {
                 hero.playerX.set(hero.targetX.get());
                 hero.playerY.set(hero.targetY.get());
                 hero.isMoving.set(false);
+                //TODO Lower Energy
+//                Finder.getpd().setEnergy(Finder.getpd().getEnergy() - 10);
 //                stateTime = 0f;
             }
         }

@@ -184,6 +184,9 @@ public class PlayerData {
     public double getEnergy() {
         return energy;
     }
+    public void setEnergy(double energy) {
+        this.energy = energy;
+    }
 
     public boolean isEnergyUnlimited() {
         return energyUnlimited;
