@@ -225,10 +225,10 @@ public class MenuBar {
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
 
-        float minX = 80;
-        float maxX = 1020;
-        float minY = 20;
-        float maxY = 200;
+        float minX = menuTexture.getWidth() / 25f;
+        float maxX = menuTexture.getWidth() / 2.5f;
+        float minY = menuTexture.getHeight() / 40f;
+        float maxY = menuTexture.getHeight() / 10f;
 
         float currentX = minX;
         float currentY = maxY;
@@ -243,7 +243,7 @@ public class MenuBar {
             if (currentX > maxX) {
                 float width = screenWidth * 0.02f;
                 currentX = minX + width;
-                currentY -= 140;
+                currentY -= menuTexture.getHeight() / 15f;
 
                 if (currentY < minY) break;
             }
@@ -281,7 +281,7 @@ public class MenuBar {
                     }
                 }
             }
-            currentX += width + 55;
+            currentX += width * 2.3f;
         }
 
     }
