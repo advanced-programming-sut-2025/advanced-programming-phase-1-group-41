@@ -1,8 +1,12 @@
 package com.CEliconValley.client.view.screen.maps;
 
 
+import com.CEliconValley.client.AppClient;
+import com.CEliconValley.common.FarmData;
 import com.CEliconValley.models.Cell;
+import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.buildings.Door;
+import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
 import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.locations.Location;
 import dev.morphia.annotations.Transient;
@@ -19,16 +23,22 @@ import java.util.ArrayList;
         public GreenhouseMap(int offsetX, int offsetY) {
             this.offsetX = offsetX;
             this.offsetY = offsetY;
-
-            for (int i = 1; i < 19; i++) {
-                for (int j = 2; j < 17; j++) {
+            FarmData farmData = Finder.getFarmDataById(AppClient.getGameData(),
+                AppClient.getUserData().getUsername());
+            System.out.println("gx "+farmData.getGreenhouseX());
+            System.out.println("gy "+farmData.getGreenhouseY());
+            for (int i = 1; i < Greenhouse.getGreenhouseHeight(); i++) {
+                for (int j = 1; j < Greenhouse.getGreenhouseLength() + 1; j++) {
                     Grass grass = new Grass();
                     Cell cell = new Cell(grass, offsetY + i, offsetX + j);
                     cells.add(cell);
                 }
             }
             Door door = new Door();
-            cells.add(new Cell(door,offsetX+10,offsetY+1));
+            Cell cell = getCell(offsetX + Greenhouse.getGreenhouseLength() / 2 + 1, offsetY+1);
+            cell.setObjectMap(door);
+            cell = getCell(offsetX + Greenhouse.getGreenhouseLength() / 2 + 2, offsetY+1);
+            cell.setObjectMap(door);
         }
 
         public ArrayList<Cell> getCells() {

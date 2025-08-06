@@ -23,10 +23,10 @@ public class Playeracts {
         Playeracts.screen = screen;
     }
     public static Result handleInput(Hero hero, Location location, Stage stage, float delta){
+
         if (screen.cheatMode) {
             stage.act(delta);
             stage.draw();
-
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
                 String code = screen.cheatCodeField.getText();
                 System.out.println("Cheat code entered: " + code);
@@ -161,7 +161,11 @@ public class Playeracts {
             float targetPixelX = hero.targetX.get() * CELL_SIZE;
             float targetPixelY = hero.targetY.get() * CELL_SIZE;
 
-            float moveAmount = (float) CELL_SIZE / 8;
+            float moveAmount = (float) CELL_SIZE / 12;
+
+            if(screen instanceof GreenHouseScreen){
+                moveAmount /= 2;
+            }
 
             hero.renderX = approach(hero.renderX, targetPixelX, moveAmount);
             hero.renderY = approach(hero.renderY, targetPixelY, moveAmount);

@@ -163,7 +163,10 @@ public class CoopScreen extends GameScreen implements Screen {
 
         camera.position.set(hero.renderX + CELL_SIZE / 2f, hero.renderY + CELL_SIZE / 2f, 0);
         camera.update();
+
         batch.end();
+        stage.act(delta);
+        stage.draw();
         hero.stateTime += delta;
         animalSprites.forEach(animalSprite -> {
             animalSprite.stateTime += delta;

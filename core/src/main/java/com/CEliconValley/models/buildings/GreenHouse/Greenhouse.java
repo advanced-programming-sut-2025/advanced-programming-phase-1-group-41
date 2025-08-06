@@ -141,4 +141,5 @@ public class Greenhouse implements Building {
     }
 
     public static int getGreenhouseLength() {return 6;}
+    public static int getGreenhouseHeight() {return 7;}
 }

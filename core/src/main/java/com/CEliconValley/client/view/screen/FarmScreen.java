@@ -92,6 +92,7 @@ public class FarmScreen extends GameScreen implements Screen {
     public FarmScreen(Farm farm, Player player) {
         super(new InventoryRenderer(player.getInventory()));
         this.menuBar=super.getMenuBar();
+        menuBar.setPlayer(player);
         otherHeroes = new ArrayList<>();
         this.farmMap = new FarmMap(Finder.getFarmDataById(AppClient.getGameData(), AppClient.getUserData().getUsername()));
         this.farm = farm;
@@ -171,15 +172,15 @@ public class FarmScreen extends GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+
+        Gdx.gl.glClearColor(0.8f, 0.9f, 1f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Result result = Playeracts.handleInput(hero, farmMap, stage, delta);
         if(!result.success()){
             if(result.message().equals("cheat")){
                 return;
             }
         }
-
-        Gdx.gl.glClearColor(0.8f, 0.9f, 1f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
@@ -209,12 +210,12 @@ public class FarmScreen extends GameScreen implements Screen {
 
         batch.draw(farmTexture,0,0,farmSprite.getWidth()*2*75,farmSprite.getHeight()*2*60);
 
-        Texture grassTexture = GameAssetManager.getGameAssetManager().getTileTexture("grass.png");
-        Texture groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("ground.png");
-        Texture sandTexture = GameAssetManager.getGameAssetManager().getTileTexture("sand.png");
-        Texture thunderedTexture = GameAssetManager.getGameAssetManager().getTileTexture("thundered.png");
-        Texture farmlandTexture = GameAssetManager.getGameAssetManager().getTileTexture("farmland.png");
-        Texture bombedTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
+//        Texture grassTexture = GameAssetManager.getGameAssetManager().getTileTexture("grass.png");
+//        Texture groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("ground.png");
+//        Texture sandTexture = GameAssetManager.getGameAssetManager().getTileTexture("sand.png");
+//        Texture thunderedTexture = GameAssetManager.getGameAssetManager().getTileTexture("thundered.png");
+//        Texture farmlandTexture = GameAssetManager.getGameAssetManager().getTileTexture("farmland.png");
+//        Texture bombedTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
 //        for(CellData cell:visibleCells) {
 //            int x = (int) (cell.getX() * CELL_SIZE);
 //            int y = (int) (cell.getY() * CELL_SIZE);
@@ -274,7 +275,7 @@ public class FarmScreen extends GameScreen implements Screen {
         }
             if(isMenuOpen){
 //                menuBar.render(batch, menuX, menuY, menuWidth, menuHeight);
-                menuBar.render(batch,camera,player.getInventory());
+                menuBar.render(batch,camera);
             }else {
                 inventoryRenderer.render(batch, camera);
             }
@@ -293,9 +294,9 @@ public class FarmScreen extends GameScreen implements Screen {
         camera.update();
 
 
-
-
         batch.end();
+        stage.act(delta);
+        stage.draw();
 
 
 
