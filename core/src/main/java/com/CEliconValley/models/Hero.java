@@ -102,23 +102,23 @@ public class Hero {
 
         switch(currentDirection){
             case 1:
-                for(int i=0;i<toolsActs_Back[4+level].length;i++){
-                    wantedActs[i] = toolsActs_Back[4+level][i];
+                for(int i=0;i<toolsActs_Back[level].length;i++){
+                    wantedActs[i] = toolsActs_Back[level][i];
                 }
                 return new Animation<>(0.10f,wantedActs);
             case 2:
-                for(int i=0;i<toolsActs_Side[4+level].length;i++){
-                    wantedActs[i] = toolsActs_Side[4+level][i];
+                for(int i=0;i<toolsActs_Side[level].length;i++){
+                    wantedActs[i] = toolsActs_Side[level][i];
                 }
                 return new Animation<>(0.10f,wantedActs);
             case 3:
-                for(int i=0;i<toolsActs_Front[4+level].length;i++){
-                    wantedActs[i] = toolsActs_Front[4+level][i];
+                for(int i=0;i<toolsActs_Front[level].length;i++){
+                    wantedActs[i] = toolsActs_Front[level][i];
                 }
                 return new Animation<>(0.10f,wantedActs);
             case 4:
-                for (int i = 0; i <toolsActs_Side[4+level].length; i++) {
-                    TextureRegion flippedFrame = new TextureRegion(toolsActs_Side[4+level][i]);
+                for (int i = 0; i <toolsActs_Side[level].length; i++) {
+                    TextureRegion flippedFrame = new TextureRegion(toolsActs_Side[level][i]);
                     flippedFrame.flip(true, false);
                     wantedActs[i] = flippedFrame;
                 }
