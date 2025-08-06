@@ -41,7 +41,7 @@ public class App {
             Thread.sleep(100);
             String first = "ws://localhost:6969";
             String second ="ws://192.168.43.131:6969";
-            URI serverUri = new URI(first);
+            URI serverUri = new URI(second);
             client = new GameClient(serverUri);
             client.connect();
         } catch (InterruptedException e) {
