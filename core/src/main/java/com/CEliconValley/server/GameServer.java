@@ -19,7 +19,7 @@ public class GameServer extends WebSocketServer {
     public static final int PORT = 6969;
 
     private final Set<WebSocket> connections = Collections.synchronizedSet(new HashSet<>());
-    private final Map<WebSocket, User> onlineConnections = new HashMap<>();
+    private final Map<WebSocket, User> onlineConnections = Collections.synchronizedMap(new HashMap<>());
     public GameServer() {
         super(new InetSocketAddress("0.0.0.0",PORT));
     }
