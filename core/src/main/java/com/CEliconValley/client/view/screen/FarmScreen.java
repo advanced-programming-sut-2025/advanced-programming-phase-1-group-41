@@ -277,7 +277,9 @@ public class FarmScreen extends GameScreen implements Screen {
 
 
         }
-        rain.render(batch,camera);
+        if(AppClient.getGameData().getWeatherType().equals(WeatherType.Rainy)){
+            rain.render(batch,camera);
+        }
         batch.setColor(Color.WHITE);
         if(isMenuOpen){
 //                menuBar.render(batch, menuX, menuY, menuWidth, menuHeight);
@@ -380,7 +382,7 @@ public class FarmScreen extends GameScreen implements Screen {
         }
     }
     private Color ApplyFog(Color color){
-        if(!AppClient.getGameData().getWeatherType().equals(WeatherType.Rainy)) {
+        if(AppClient.getGameData().getWeatherType().equals(WeatherType.Rainy)) {
             return new Color(color.r * 0.6f, color.g * 0.6f, color.b * 0.6f, color.a);
         }
         return color;

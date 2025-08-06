@@ -34,6 +34,7 @@ public class ClientGameHandler {
                             );
                         fs.getTimeScreen().updateWeatherAndSeason(AppClient.getGameData().getTime(), AppClient.getGameData().getWeatherType());
                         fs.updateFarmData();
+
                         PlayerData pd = null;
                         for (PlayerData playersDatum : AppClient.getGameData().getPlayersData()) {
                             if(playersDatum.getUsername().equals(AppClient.getUserData().getUsername())){
