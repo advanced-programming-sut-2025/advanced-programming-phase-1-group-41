@@ -38,8 +38,7 @@ public class GameMenu implements Screen {
             if(CheatCodeController.cheatCodeHandler(input, playerName)){
                 System.out.println("received a cheat code command for "+playerName);
                 System.out.println("    "+input);
-            }
-            if(TimeLineView.check(input)){
+            }else if(TimeLineView.check(input)){
 
             }else if(WeatherView.check(input)){
 
