@@ -10,6 +10,7 @@ import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Player;
 import com.CEliconValley.models.items.*;
 import com.CEliconValley.models.tools.Tool;
+import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -227,6 +228,11 @@ public class MenuBar {
 
 
     private void renderStats(Batch batch) {
+        Texture combatSkill = GameAssetManager.getGameAssetManager().getSkillTexture("Combat_Skill_Icon.png");
+        Texture farmingSkill = GameAssetManager.getGameAssetManager().getSkillTexture("Farming_Skill_Icon.png");
+        Texture fishingSkill = GameAssetManager.getGameAssetManager().getSkillTexture("Fishing_Skill_Icon.png");
+        Texture foragingSkill = GameAssetManager.getGameAssetManager().getSkillTexture("Foraging_Skill_Icon.png");
+        Texture miningSkill = GameAssetManager.getGameAssetManager().getSkillTexture("Mining_Skill_Icon.png");
 
     }
 
