@@ -15,6 +15,7 @@ import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.CEliconValley.views.subGames.Rain;
+import com.CEliconValley.views.subGames.Snow;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -31,6 +32,7 @@ import java.util.*;
 public class FarmScreen extends GameScreen implements Screen {
     private final SpriteBatch batch;
     private final Rain rain;
+    private final Snow snow;
     private MenuBar menuBar;
     private final Player player;
     private final TreeSpawner treeSpawner;
@@ -113,6 +115,7 @@ public class FarmScreen extends GameScreen implements Screen {
         farmSprite.setSize(CELL_SIZE, CELL_SIZE);
         camera = new OrthographicCamera();
         rain = new Rain();
+        snow = new Snow();
 //        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
 
@@ -213,33 +216,34 @@ public class FarmScreen extends GameScreen implements Screen {
 
         batch.draw(farmTexture,0,0,farmSprite.getWidth()*2*75,farmSprite.getHeight()*2*60);
 
-//        Texture grassTexture = GameAssetManager.getGameAssetManager().getTileTexture("grass.png");
-//        Texture groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("ground.png");
-//        Texture sandTexture = GameAssetManager.getGameAssetManager().getTileTexture("sand.png");
-//        Texture thunderedTexture = GameAssetManager.getGameAssetManager().getTileTexture("thundered.png");
-//        Texture farmlandTexture = GameAssetManager.getGameAssetManager().getTileTexture("farmland.png");
-//        Texture bombedTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
-//        for(CellData cell:visibleCells) {
-//            int x = (int) (cell.getX() * CELL_SIZE);
-//            int y = (int) (cell.getY() * CELL_SIZE);
-////            batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
-//            if(cell.getObjectName() instanceof Grass){
-//                Grass grass = (Grass) cell.getObjectMap();
-//                if(grass.isThundered()){
-//                    batch.draw(thunderedTexture,x,y, CELL_SIZE, CELL_SIZE);
-//                } else if(grass.isBombed()){
-//                    batch.draw(bombedTexture,x,y, CELL_SIZE, CELL_SIZE);
-//                } else if(grass.isFarmland()){
-//                    batch.draw(farmlandTexture,x,y, CELL_SIZE, CELL_SIZE);
-//                } else if(grass.isGround()){
-//                    batch.draw(groundTexture, x, y, CELL_SIZE, CELL_SIZE);
-//                } else if(grass.isSand()){
-//                    batch.draw(sandTexture, x, y, CELL_SIZE, CELL_SIZE);
-//                } else {
-//                }
-//            }
-////            batch.draw(groundCache.get(cell), x, y, CELL_SIZE, CELL_SIZE);
-//        }
+        Texture grassTexture = GameAssetManager.getGameAssetManager().getTileTexture("grass.png");
+        Texture groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("ground.png");
+        Texture sandTexture = GameAssetManager.getGameAssetManager().getTileTexture("sand.png");
+        Texture thunderedTexture = GameAssetManager.getGameAssetManager().getTileTexture("thundered.png");
+        Texture farmlandTexture = GameAssetManager.getGameAssetManager().getTileTexture("farmland.png");
+        Texture bombedTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
+        for(CellData cellDate:visibleCells) {
+            Cell cell = cellDate.extractData();
+            int x = (int) (cell.getX() * CELL_SIZE);
+            int y = (int) (cell.getY() * CELL_SIZE);
+//            batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
+            if(cell.getObjectMap() instanceof Grass){
+                Grass grass = (Grass) cell.getObjectMap();
+                if(grass.isThundered()){
+                    batch.draw(thunderedTexture,x,y, CELL_SIZE, CELL_SIZE);
+                } else if(grass.isBombed()){
+                    batch.draw(bombedTexture,x,y, CELL_SIZE, CELL_SIZE);
+                } else if(grass.isFarmland()){
+                    batch.draw(farmlandTexture,x,y, CELL_SIZE, CELL_SIZE);
+                } else if(grass.isGround()){
+                    batch.draw(groundTexture, x, y, CELL_SIZE, CELL_SIZE);
+                } else if(grass.isSand()){
+                    batch.draw(sandTexture, x, y, CELL_SIZE, CELL_SIZE);
+                } else {
+                }
+            }
+//            batch.draw(groundCache.get(cell), x, y, CELL_SIZE, CELL_SIZE);
+        }
 
 
         prevMinX = minX;
@@ -276,6 +280,7 @@ public class FarmScreen extends GameScreen implements Screen {
 
 
         }
+        snow.render(batch,camera);
         if(AppClient.getGameData().getWeatherType().equals(WeatherType.Rainy)){
             rain.render(batch,camera);
         }

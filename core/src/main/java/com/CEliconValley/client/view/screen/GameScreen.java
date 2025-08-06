@@ -29,6 +29,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.util.Objects;
+
 public abstract class GameScreen implements Screen {
     protected boolean onRepeat = true;
     protected boolean flip = false;
@@ -42,8 +44,12 @@ public abstract class GameScreen implements Screen {
     protected Hero hero;
     protected MenuBar menuBar=new MenuBar();
     protected Texture hudTexture = new Texture(Gdx.files.internal("game/Clock/Clock.png"));
-    protected Image hudImage;
+    protected Image hudImage, energyBarImage, energyGreenImage, energyRedImage, energyYellowImage;
     protected TimeScreen timeScreen;
+    protected Texture energyBarTexture = new Texture(Gdx.files.internal("game/EnergyBar/bar.png"));
+    protected Texture energyGreenTexture = new Texture(Gdx.files.internal("game/EnergyBar/green.png"));
+    protected Texture energyYellowTexture = new Texture(Gdx.files.internal("game/EnergyBar/yellow.png"));
+    protected Texture energyRedTexture = new Texture(Gdx.files.internal("game/EnergyBar/red.png"));
 
 
     public GameScreen(InventoryRenderer inventoryRenderer) {
@@ -58,6 +64,10 @@ public abstract class GameScreen implements Screen {
         stage.addActor(cheatCodeField);
         hudImage = new Image(new TextureRegion(hudTexture));
         hudImage.setSize(hudImage.getWidth()*4, hudImage.getHeight()*4);
+        energyBarImage = new Image(new TextureRegion(energyBarTexture));
+        energyGreenImage = new Image(new TextureRegion(energyGreenTexture));
+        energyYellowImage = new Image(new TextureRegion(energyYellowTexture));
+        energyRedImage = new Image(new TextureRegion(energyRedTexture));
         float posX = stage.getWidth() - hudImage.getWidth() - 10;
         float posY = stage.getHeight() - hudImage.getHeight() - 10;
         stage.addActor(hudImage);
@@ -68,6 +78,8 @@ public abstract class GameScreen implements Screen {
         timeScreen.dateLabel.setPosition(posX + 120, posY + 180);
         timeScreen.timeLabel.setPosition(posX + 120, posY + 90);
         timeScreen.goldLabel.setPosition(posX + 66.5f, posY + 10);
+        timeScreen.getHudTable().setPosition(0, -stage.getHeight() / 21f);
+        energyBarImage.setPosition(stage.getWidth() - energyBarImage.getWidth() * 2, energyBarImage.getHeight() * 1.5f);
         timeScreen.goldLabel.setAlignment(Align.left);
         timeScreen.goldLabel.setFontScale(1.18f);
         timeScreen.dateLabel.setFontScale(0.8f);
@@ -75,7 +87,7 @@ public abstract class GameScreen implements Screen {
         stage.addActor(timeScreen.timeLabel);
         stage.addActor(timeScreen.goldLabel);
         stage.addActor(timeScreen.getHudTable());
-        timeScreen.getHudTable().setPosition(0, -stage.getHeight() / 21f);
+        stage.addActor(energyBarImage);
         this.hero = new Hero();
     }
 
@@ -179,4 +191,33 @@ public abstract class GameScreen implements Screen {
     public TimeScreen getTimeScreen() {
         return timeScreen;
     }
+
+    public void updateEnergy() {
+        double energy = Objects.requireNonNull(Finder.getpd()).getEnergy();
+        float percentage = (float) (energy / 200.0);
+
+        energyGreenImage.remove();
+        energyYellowImage.remove();
+        energyRedImage.remove();
+
+        float barWidth = energyBarImage.getWidth();
+        float barHeight = energyBarImage.getHeight() * percentage * 0.75f;
+
+        Image currentImage;
+
+        if (energy <= 50) {
+            currentImage = energyRedImage;
+        } else if (energy <= 100) {
+            currentImage = energyYellowImage;
+        } else {
+            currentImage = energyGreenImage;
+        }
+
+        currentImage.setSize(barWidth / 2, barHeight);
+        currentImage.setPosition(stage.getWidth() - energyBarImage.getWidth() * 1.73f, energyBarImage.getHeight() * 1.53f);
+
+        stage.addActor(currentImage);
+        currentImage.toFront();
+    }
+
 }
