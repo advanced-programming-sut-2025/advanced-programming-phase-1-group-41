@@ -114,7 +114,8 @@ public class PlayerController {
         return new Result(true,App.getGame().getCurrentPlayer().getInventory().getEmptySlots()+" empty slots in your "+App.getGame().getCurrentPlayer().getInventory().getBackpack().name()+" backPack");
     }
 
-    public Result cheatAddItem(Matcher matcher){
+    public Result cheatAddItem(Matcher matcher, String playerName){
+        Player player = Finder.getPlayerByUsername(playerName);
         String itemName = matcher.group(1);
         String quantity = matcher.group(2);
 
@@ -128,7 +129,7 @@ public class PlayerController {
             return new Result(false, "invalid quantity");
         }
 
-        if(App.getGame().getCurrentPlayer().getInventory().addToInventory(item,itemQuantity)){
+        if(player.getInventory().addToInventory(item,itemQuantity)){
             return new Result(true, itemName+" added to the inventory");
         }
         return new Result(false, "inventory is full");

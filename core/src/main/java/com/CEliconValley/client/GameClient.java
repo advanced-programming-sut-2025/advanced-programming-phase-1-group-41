@@ -68,35 +68,42 @@ public class GameClient extends WebSocketClient {
         try {
             GameMessage<Object> genericMsg = gson.fromJson(message, new TypeToken<GameMessage<Object>>() {
             }.getType());
+            long now = System.currentTimeMillis();
+            long sent = genericMsg.timestamp;
+            System.out.println("    Latency: " + (now - sent) + "ms");
+//            JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+//            JsonElement bodyElement = jsonObject.get("body");
+//            GameMessage<SuccessMessage> successMsg = null;
+//            GameMessage<ErrorMessage> errorMsg = null;
+//            try{
+//                if (bodyElement.getAsJsonObject().has("success")) {
+//                    successMsg = gson.fromJson(message, new TypeToken<GameMessage<SuccessMessage>>() {
+//                    }.getType());
+//                } else if (bodyElement.getAsJsonObject().has("error")) {
+//                    errorMsg = gson.fromJson(message, new TypeToken<GameMessage<ErrorMessage>>() {
+//                    }.getType());
+//                }
+//            } catch (Exception e) {
+//                System.out.println(e.getMessage());
+//            }
+//            if (successMsg != null) {
+//                System.out.println("success is "+message);
+//                Response.successResponse(successMsg.body);
+//            } else if (errorMsg != null) {
+//                System.out.println("error is "+message);
+//                Response.errorResponse(errorMsg.body);
             JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
-            JsonElement bodyElement = jsonObject.get("body");
-            GameMessage<SuccessMessage> successMsg = null;
-            GameMessage<ErrorMessage> errorMsg = null;
-            try{
-                if (bodyElement.getAsJsonObject().has("success")) {
-                    successMsg = gson.fromJson(message, new TypeToken<GameMessage<SuccessMessage>>() {
-                    }.getType());
-                } else if (bodyElement.getAsJsonObject().has("error")) {
-                    errorMsg = gson.fromJson(message, new TypeToken<GameMessage<ErrorMessage>>() {
-                    }.getType());
-                }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            if (successMsg != null) {
-                System.out.println("success is "+message);
-                Response.successResponse(successMsg.body);
-            } else if (errorMsg != null) {
-                System.out.println("error is "+message);
-                Response.errorResponse(errorMsg.body);
+            JsonObject bodyObject = jsonObject.getAsJsonObject("body");
+            if (bodyObject.has("success")) {
+                SuccessMessage success = gson.fromJson(bodyObject, SuccessMessage.class);
+                System.out.println("Success: " + success.success);
+                Response.successResponse(success);
+            } else if (bodyObject.has("error")) {
+                ErrorMessage error = gson.fromJson(bodyObject, ErrorMessage.class);
+                System.out.println("Error: " + error.error);
+                Response.errorResponse(error);
             } else {
-                ClientMessageRouter.route(genericMsg.type, message, new Gson());
-                switch (genericMsg.type) {
-                    case "login_response", "forgotpass_response",
-                         "fp_response", "profile_response" -> {
-                        System.out.println("Cmessage: " + message);
-                    }
-                }
+                ClientMessageRouter.route(genericMsg.type, bodyObject, gson, genericMsg.timestamp, message);
             }
         } catch (Exception e) {
             System.out.println("----------------------------------");

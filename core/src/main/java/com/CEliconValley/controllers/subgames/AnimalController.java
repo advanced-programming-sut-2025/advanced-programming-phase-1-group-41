@@ -351,10 +351,11 @@ public class AnimalController {
         return new Result(false, name + " is not anywhere around you");
     }
 
-    public Result cheatSetFriendship(Matcher matcher) {
+    public Result cheatSetFriendship(Matcher matcher, String username) {
+        Player player = Finder.getPlayerByUsername(username);
         String name = matcher.group(1);
         String amount = matcher.group(2);
-        for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
+        for (Barn barn : Finder.getFarmByPlayer(player).getBarns()) {
             for (Animal animal : barn.getAnimals()) {
                 if (animal.getName().equals(name)) {
                     animal.increaseFriendShip(Integer.parseInt(amount) - animal.getFriendShip());
@@ -362,7 +363,7 @@ public class AnimalController {
                 }
             }
         }
-        for (Coop coop : App.getGame().getCurrentPlayerFarm().getCoops()) {
+        for (Coop coop : Finder.getFarmByPlayer(player).getCoops()) {
             for (Animal animal : coop.getAnimals()) {
                 if (animal.getName().equals(name)) {
                     animal.increaseFriendShip(Integer.parseInt(amount) - animal.getFriendShip());

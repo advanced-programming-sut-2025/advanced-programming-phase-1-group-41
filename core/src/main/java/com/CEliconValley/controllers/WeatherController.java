@@ -67,10 +67,11 @@ public class WeatherController {
 
     public void applyEfficiency(){}
 
-    public Result cheatStrikeThunder(Matcher matcher){
+    public Result cheatStrikeThunder(Matcher matcher, String playerName){
+        Player player = Finder.getPlayerByUsername(playerName);
+        Farm farm = Finder.getFarmByPlayer(player);
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
-        Farm farm = App.getGame().getCurrentPlayerFarm();
         Cell cell = Finder.findCellByCoordinates(x, y, farm);
         assert cell != null;
         if(cell.getObjectMap() instanceof Grass || cell.getObjectMap() instanceof Crop || cell.getObjectMap() instanceof ForagingCrop

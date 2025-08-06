@@ -19,7 +19,7 @@ public class PlayerView {
         }else if((matcher = GameMainCommands.EnergySet.getMatcher(input))!=null){
             System.out.println(controller.cheatEnergySet(matcher));
         }else if((matcher = GameMainCommands.CheatAddItem.getMatcher(input))!=null){
-            System.out.println(controller.cheatAddItem(matcher));
+//            System.out.println(controller.cheatAddItem(matcher));
         }else if((matcher = InventoryAndToolCommands.InventoryTrash.getMatcher(input))!=null){
             System.out.println(controller.inventoryTrash(matcher));;
         }else if((matcher = InventoryAndToolCommands.InventoryShow.getMatcher(input))!=null){

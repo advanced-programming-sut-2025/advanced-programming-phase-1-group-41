@@ -45,6 +45,7 @@ public class Game {
     }
 
     public ScheduledExecutorService scheduler;
+    public Thread commandThread;
 
 
 

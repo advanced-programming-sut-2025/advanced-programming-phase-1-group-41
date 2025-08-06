@@ -18,7 +18,7 @@ public class AnimalView {
         }else if((matcher = AnimalCommands.Pet.getMatcher(input))!=null){
             System.out.println(controller.pet(matcher));
         }else if((matcher = FriendShipCommands.CheatSetFriendship.getMatcher(input))!=null){
-            System.out.println(controller.cheatSetFriendship(matcher));
+//            System.out.println(controller.cheatSetFriendship(matcher));
         }else if((matcher = AnimalCommands.Animals.getMatcher(input))!=null){
             System.out.println(controller.animalsList(matcher));
         }else if((matcher = AnimalCommands.ShepherdAnimals.getMatcher(input))!=null){
