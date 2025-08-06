@@ -98,7 +98,7 @@ public abstract class GameScreen implements Screen {
                 if (cd.getX() == x && cd.getY() == y) {
                     Cell cell = cd.extractData();
                     if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock ||cell.getObjectMap() instanceof Wall ||cell.getObjectMap() instanceof Obstacle) {
-                        System.out.println(cd.getObjectName());
+                        System.out.println(cd.getObjectName()+" "+cell.getX()+" "+cell.getY());
                         return false;
                     }
                     return true;
@@ -220,4 +220,8 @@ public abstract class GameScreen implements Screen {
         currentImage.toFront();
     }
 
+
+    public InventoryRenderer getInventoryRenderer() {
+        return inventoryRenderer;
+    }
 }

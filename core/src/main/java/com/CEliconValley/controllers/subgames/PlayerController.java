@@ -66,8 +66,9 @@ public class PlayerController {
                 " energy is now unlimited");
     }
 
-    public Result showInventory(Matcher matcher){
-        ArrayList<Slot> inventory=App.getGame().getCurrentPlayer().getInventory().getSlots();
+    public Result showInventory(Matcher matcher, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        ArrayList<Slot> inventory=player.getInventory().getSlots();
         System.out.print(TerminalColors.backColor(243));
         System.out.printf("┏");
         for(int i=0;i<52;i++){

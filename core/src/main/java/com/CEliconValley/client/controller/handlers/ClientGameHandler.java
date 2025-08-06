@@ -3,6 +3,8 @@ package com.CEliconValley.client.controller.handlers;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.view.LobbyScreen;
 import com.CEliconValley.client.view.screen.FarmScreen;
+import com.CEliconValley.client.view.screen.GameScreen;
+import com.CEliconValley.common.FarmData;
 import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.*;
@@ -18,7 +20,46 @@ import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class ClientGameHandler {
     public static void handle(String type, JsonObject body, Gson gson, long timestamp) {
+        Gdx.app.postRunnable(() -> {
+            if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                .getScreen() instanceof FarmScreen fs){
+                fs.getInventoryRenderer().updateInventory();
+            }
+        });
         switch (type) {
+            case "player-data" -> {
+                PlayerData playerData = gson.fromJson(body, PlayerData.class);
+                Gdx.app.postRunnable(() -> {
+                    for (int i = 0; i < AppClient.getGameData().getPlayersData().size(); i++) {
+                        PlayerData pd = AppClient.getGameData().getPlayersData().get(i);
+                        if(pd.getUsername().equals(playerData.getUsername())) {
+                            AppClient.getGameData().getPlayersData().set(i, playerData);
+                            System.out.println("updating "+playerData.getUsername());
+                            break;
+                        }
+                    }
+                    });
+            }
+            case "farm-data" -> {
+                FarmData farmData = gson.fromJson(body, FarmData.class);
+                Gdx.app.postRunnable(() -> {
+                    for (int i = 0; i < AppClient.getGameData().getFarmsData().size(); i++) {
+                        FarmData fd = AppClient.getGameData().getFarmsData().get(i);
+                        if(fd.getId() == farmData.getId()){
+                            AppClient.getGameData().getFarmsData().set(i, farmData);
+                            System.out.println("updating farm "+i);
+                            break;
+                        }
+                    }
+                    if(Finder.getfd().getId() == farmData.getId()){
+                        if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                            .getScreen() instanceof FarmScreen fs){
+                            fs.updateFarmData();
+                            System.out.println("updated farmdata");
+                        }
+                    }
+                });
+            }
             case "game-data" -> {
                 long now = System.currentTimeMillis();
                 long sent = timestamp;
@@ -34,7 +75,6 @@ public class ClientGameHandler {
                             );
                         fs.getTimeScreen().updateWeatherAndSeason(AppClient.getGameData().getTime(), AppClient.getGameData().getWeatherType());
                         fs.updateFarmData();
-
                         PlayerData pd = null;
                         for (PlayerData playersDatum : AppClient.getGameData().getPlayersData()) {
                             if(playersDatum.getUsername().equals(AppClient.getUserData().getUsername())){
@@ -42,6 +82,7 @@ public class ClientGameHandler {
                                 break;
                             }
                         }
+                        System.out.println("current tool : "+pd.getCurrentToolName());
                         int clientX = fs.getHero().playerX.get();
                         int clientY = fs.getHero().playerY.get();
                         int serverX = pd.getX();
@@ -50,9 +91,9 @@ public class ClientGameHandler {
                         int dx = Math.abs(clientX - serverX);
                         int dy = Math.abs(clientY - serverY);
 
-                        if (dx > 1 || dy > 1) {
+                        if (dx > 0 || dy > 0) {
                             PosDiff posDiff = new PosDiff(AppClient.getUserData().getUsername(), clientX, clientY);
-                            AppClient.getClient().send(new Gson().toJson(new GameMessage<>("game-command", posDiff)));
+                            AppClient.getClient().send(new Gson().toJson(new GameMessage<>("pos-diff", posDiff)));
                             System.out.println("big difference:");
                             System.out.println("client: "+fs.getHero().playerX+" "+fs.getHero().playerY);
                             System.out.println("server: "+pd.getX()+" "+pd.getY());

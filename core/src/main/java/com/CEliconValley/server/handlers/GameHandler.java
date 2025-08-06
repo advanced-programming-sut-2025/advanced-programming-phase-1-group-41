@@ -1,6 +1,7 @@
 package com.CEliconValley.server.handlers;
 
 import com.CEliconValley.common.GameData;
+import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.*;
 import com.CEliconValley.models.*;
 import com.CEliconValley.client.view.GameMenu;
@@ -39,6 +40,15 @@ public class GameHandler {
                 GameMessage<GameCommand> msg = gson.fromJson(message, new TypeToken<GameMessage<GameCommand>>() {}.getType());
                 commandQueue.offer(msg.body);
             }
+            case "pos-diff" -> {
+                GameMessage<PosDiff> msg = gson.fromJson(message, new TypeToken<GameMessage<PosDiff>>() {}.getType());
+                Player player = Finder.getPlayerByUsername(msg.body.playername);
+                player.setX(msg.body.x);
+                player.setY(msg.body.y);
+                GameMessage<PlayerData> response = new GameMessage<>("player-data",
+                    new PlayerData(player));
+                App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(response));
+                }
         }
     }
 
@@ -105,6 +115,9 @@ public class GameHandler {
 
 
         gameView.check(command.command, command.playerName);
+
+        System.out.println("printing inventory: ");
+        gameView.check("inventory show", command.playerName);
 
         GameMessage<GameData> msg = new GameMessage<>("game-data", new GameData(game));
         App.getServer().sendToGroupByPlayers(game.getPlayers(), new Gson().toJson(msg));

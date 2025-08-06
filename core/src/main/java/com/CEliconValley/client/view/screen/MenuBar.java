@@ -1,8 +1,15 @@
 package com.CEliconValley.client.view.screen;
 
+import com.CEliconValley.client.AppClient;
+import com.CEliconValley.common.InventoryData;
+import com.CEliconValley.common.PlayerData;
+import com.CEliconValley.common.messages.GameCommand;
+import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.controllers.ItemManager;
+import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Player;
 import com.CEliconValley.models.items.*;
+import com.CEliconValley.models.tools.Tool;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -12,6 +19,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.google.gson.Gson;
 
 import java.util.Map;
 
@@ -31,9 +39,9 @@ public class MenuBar {
     private OrthographicCamera camera;
 
     private final String[] tabOrder = {
-            "Inventory", "Stats", "Relation",
-            "Map", "Crafting", "Artisan",
-            "Controll", "Cheat", null
+        "Inventory", "Stats", "Relation",
+        "Map", "Crafting", "Artisan",
+        "Controll", "Cheat", null
     };
 
     public MenuBar() {
@@ -61,16 +69,16 @@ public class MenuBar {
 
         currentTab = "Inventory";
     }
+
     public void setPlayer(Player player) {
         this.player = player;
     }
 
-    public void render(Batch batch, OrthographicCamera camera ) {
-
+    public void render(Batch batch, OrthographicCamera camera) {
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
 
-        Inventory inventory=player.getInventory();
+        Inventory inventory = Finder.getpd().getInventoryData().getInventory();
         this.camera = camera;
 
         float menuWidth = screenWidth * 0.6f;
@@ -101,7 +109,7 @@ public class MenuBar {
                 renderMap(batch);
                 break;
         }
-        switch (currentTab){
+        switch (currentTab) {
             case "Crafting":
                 renderCrafting(batch);
                 break;
@@ -125,7 +133,7 @@ public class MenuBar {
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mousePos);
 
-        for (int col = 0; row < 3;) {
+        for (int col = 0; row < 3; ) {
             int index = col + (startingRow + row) * 12;
             if (inventory.getBackpack().getSize() > index) {
                 Slot slot = inventory.getSlots().get(index);
@@ -162,8 +170,8 @@ public class MenuBar {
                         if (slot.getQuantity()>1) {
                             String amountText = String.valueOf(slot.getQuantity());
                             GlyphLayout layout = new GlyphLayout(font, amountText);
-                            float textX = x +100;
-                            float textY = y +8;
+                            float textX = x + 100;
+                            float textY = y + 8;
                             font.getData().setScale(2.5f);
                             font.draw(batch, layout, textX, textY);
                             font.getData().setScale(1f);
@@ -171,7 +179,17 @@ public class MenuBar {
 
 
                         if (mousePos.x >= x && mousePos.x <= x + slotSize &&
-                                mousePos.y >= y && mousePos.y <= y + slotSize) {
+                            mousePos.y >= y && mousePos.y <= y + slotSize) {
+                            if (Gdx.input.isButtonJustPressed(0)) {
+                                if (item instanceof Tool) {
+                                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                        new GameCommand("tools equip " + item.getName(),
+                                            AppClient.getUserData().getUsername())
+                                    );
+                                    AppClient.getClient().send(new Gson().toJson(msg));
+                                }
+                            }
+
 
                             String name = readableName(item.getName());
                             GlyphLayout layout = new GlyphLayout(font, name);
@@ -217,7 +235,7 @@ public class MenuBar {
     }
 
     private void renderMap(Batch batch) {
-        batch.draw(miniMapTexture, startingX, startingY, menuTexture.getWidth()/3f, menuTexture.getHeight()/3f);
+        batch.draw(miniMapTexture, startingX, startingY, menuTexture.getWidth() / 3f, menuTexture.getHeight() / 3f);
 
     }
 
@@ -262,7 +280,7 @@ public class MenuBar {
             batch.setColor(1, 1, 1, 1);
 
             boolean mouseOver = mousePos.x >= drawX && mousePos.x <= drawX + width &&
-                    mousePos.y >= drawY && mousePos.y <= drawY + height;
+                mousePos.y >= drawY && mousePos.y <= drawY + height;
 
             if (mouseOver && player.getCraftingRecipes().contains(machine.getRecipe())) {
                 drawTooltip(batch, machine, drawX, drawY);
@@ -282,9 +300,13 @@ public class MenuBar {
                 }
             }
             currentX += width * 2.3f;
+
+
+            currentX += width + 55;
         }
 
     }
+
     private boolean hasAllItems(CraftingRecipe recipe) {
         Map<Item, Integer> requiredItems = recipe.neededItems;
         Inventory inventory = player.getInventory();
@@ -292,7 +314,7 @@ public class MenuBar {
         for (Map.Entry<Item, Integer> entry : requiredItems.entrySet()) {
             Item item = entry.getKey();
             int Amount = entry.getValue();
-            if(!inventory.doHave(item, Amount)){
+            if (!inventory.doHave(item, Amount)) {
                 return false;
             }
         }
@@ -304,6 +326,7 @@ public class MenuBar {
     private String readableName(String camelCase) {
         return camelCase.replaceAll("([a-z])([A-Z])", "$1 $2");
     }
+
     private void drawTooltip(Batch batch, CraftableMachine machine, float drawX, float drawY) {
         CraftingRecipe recipe = machine.getRecipe();
         if (recipe == null) return;
@@ -347,9 +370,9 @@ public class MenuBar {
             if (icon != null) {
                 batch.draw(icon, x + padding, itemY, iconSize, iconSize);
             }
-            if(player.getInventory().doHave(item, amount)){
+            if (player.getInventory().doHave(item, amount)) {
                 font.setColor(0f, 0.5f, 1f, 1f);
-            }else{
+            } else {
                 font.setColor(1f, 0f, 0f, 1f);
             }
             font.draw(batch, "x" + amount, x + padding + iconSize + 10, itemY + iconSize / 2f + 5);
@@ -357,8 +380,6 @@ public class MenuBar {
             font.setColor(1f, 1f, 1f, 1f);
         }
     }
-
-
 
 
     public void dispose() {

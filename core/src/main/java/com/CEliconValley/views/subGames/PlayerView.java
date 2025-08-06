@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 
 public class PlayerView {
     static PlayerController controller = new PlayerController();
-    public static boolean check(String input){
+    public static boolean check(String input, String playername){
         Matcher matcher;
         if((matcher = GameMainCommands.EnergyShow.getMatcher(input))!=null){
             System.out.println(controller.showEnergy(matcher));
@@ -23,7 +23,7 @@ public class PlayerView {
         }else if((matcher = InventoryAndToolCommands.InventoryTrash.getMatcher(input))!=null){
             System.out.println(controller.inventoryTrash(matcher));;
         }else if((matcher = InventoryAndToolCommands.InventoryShow.getMatcher(input))!=null){
-            System.out.println(controller.showInventory(matcher));
+            System.out.println(controller.showInventory(matcher, playername));
         }else if((matcher = GameMainCommands.Fishing.getMatcher(input))!=null){
             System.out.println(controller.fishing(matcher));
         }else if((matcher = GameMainCommands.Eat.getMatcher(input))!=null){
