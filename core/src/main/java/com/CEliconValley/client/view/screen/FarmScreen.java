@@ -14,6 +14,7 @@ import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.CEliconValley.views.subGames.Rain;
+import com.CEliconValley.views.subGames.Snow;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -30,6 +31,7 @@ import java.util.*;
 public class FarmScreen extends GameScreen implements Screen {
     private final SpriteBatch batch;
     private final Rain rain;
+    private final Snow snow;
     private MenuBar menuBar;
     private final Farm farm;
     private final Player player;
@@ -114,6 +116,7 @@ public class FarmScreen extends GameScreen implements Screen {
         farmSprite.setSize(CELL_SIZE, CELL_SIZE);
         camera = new OrthographicCamera();
         rain = new Rain();
+        snow = new Snow();
 //        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
 
@@ -277,6 +280,7 @@ public class FarmScreen extends GameScreen implements Screen {
 
 
         }
+        snow.render(batch,camera);
         if(AppClient.getGameData().getWeatherType().equals(WeatherType.Rainy)){
             rain.render(batch,camera);
         }
