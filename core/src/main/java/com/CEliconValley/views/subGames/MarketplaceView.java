@@ -18,7 +18,7 @@ public class MarketplaceView {
         }else if ((matcher = StoreCommands.Sell.getMatcher(input)) != null) {
             System.out.println(controller.sellProduct(matcher));
         } else if ((matcher = StoreCommands.CheatAddDollars.getMatcher(input)) != null) {
-            System.out.println(controller.cheatAddMoney(matcher));
+//            System.out.println(controller.cheatAddMoney(matcher));
         } else{
             return false;
         }

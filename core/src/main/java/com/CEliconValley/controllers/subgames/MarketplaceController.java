@@ -351,9 +351,9 @@ public class MarketplaceController {
         return new Result(true, wantedQuantity+"x "+itemName+" purchased");
     }
 
-    public Result cheatAddMoney(Matcher matcher){
+    public Result cheatAddMoney(Matcher matcher, String playerName){
+        Player player = Finder.getPlayerByUsername(playerName);
         int delta = Integer.parseInt(matcher.group(1).trim());
-        Player player = App.getGame().getCurrentPlayer();
         player.incMoney(delta);
         return new Result(true,"new money is : "+player.getMoney());
     }

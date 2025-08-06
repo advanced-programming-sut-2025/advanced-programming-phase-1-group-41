@@ -3,6 +3,7 @@ package com.CEliconValley.client.view;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
+import com.CEliconValley.client.controller.CheatCodeController;
 import com.CEliconValley.controllers.CheckerController;
 import com.CEliconValley.controllers.GameMenuController;
 import com.CEliconValley.models.App;
@@ -11,19 +12,17 @@ import com.CEliconValley.views.subGames.*;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 
-public class GameMenu implements AppMenu, Screen {
+public class GameMenu implements Screen {
     GameMenuController controller = new GameMenuController();
-    @Override
-    public void check(Scanner scanner) {
-        String input = scanner.nextLine();
+    public void check(String input, String playerName) {
         Matcher matcher = null;
-        if(CheckerController.checkCommand(input)) {
-
-        }
-        else if((matcher=GameMainCommands.ExitGame.getMatcher(input))!=null){
+//        if(CheckerController.checkCommand(input)) {
+//
+//        }
+        if((matcher=GameMainCommands.ExitGame.getMatcher(input))!=null){
             System.out.println(controller.exitGame(matcher));
         }else if((matcher=GameMainCommands.DeleteGame.getMatcher(input))!=null){
-            System.out.println(controller.deleteGame(matcher, scanner));
+            System.out.println(controller.deleteGame(matcher));
         }else if((matcher=GameMainCommands.NextTurn.getMatcher(input))!=null){
             System.out.println(controller.nextTurn(matcher));
         } else if((matcher = GameMainCommands.StartTrade.getMatcher(input))!=null){
@@ -36,6 +35,10 @@ public class GameMenu implements AppMenu, Screen {
             System.out.println("you've used too much energy.. either exit or pass the turn");
         }
         else{
+            if(CheatCodeController.cheatCodeHandler(input, playerName)){
+                System.out.println("received a cheat code command for "+playerName);
+                System.out.println("    "+input);
+            }
             if(TimeLineView.check(input)){
 
             }else if(WeatherView.check(input)){
@@ -126,8 +129,4 @@ public class GameMenu implements AppMenu, Screen {
 
     }
 
-    @Override
-    public void setMessage(String message, Color color) {
-
-    }
 }

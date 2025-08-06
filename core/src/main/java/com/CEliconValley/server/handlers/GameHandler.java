@@ -1,10 +1,12 @@
 package com.CEliconValley.server.handlers;
 
+import com.CEliconValley.client.view.GameMenu;
 import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.PreStartRequest;
 import com.CEliconValley.common.messages.PreStartResponse;
+import com.CEliconValley.controllers.GameMenuController;
 import com.CEliconValley.models.*;
 import com.badlogic.gdx.utils.Timer;
 import com.google.gson.Gson;
@@ -17,6 +19,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class GameHandler {
+    static GameMenu gameView = new GameMenu();
     public static void handle(String type, String message, WebSocket conn, Gson gson){
         switch (type) {
             case "game-popup" -> {
@@ -44,17 +47,23 @@ public class GameHandler {
                 switch (msg.body.command){
                     case "walk up" -> {
                         player.setY(player.getY() + 1);
+                        return;
                     }
                     case "walk down" -> {
                         player.setY(player.getY() - 1);
+                        return;
                     }
                     case "walk left" -> {
                         player.setX(player.getX() - 1);
+                        return;
                     }
                     case "walk right" -> {
                         player.setX(player.getX() + 1);
+                        return;
                     }
                 }
+                gameView.check(msg.body.command, msg.body.playerName);
+
             }
         }
     }
@@ -74,6 +83,6 @@ public class GameHandler {
                 e.printStackTrace();
                 System.out.println(e.getMessage());
             }
-        }, 1, 1, TimeUnit.SECONDS);
+        }, 1, 10, TimeUnit.SECONDS);
     }
 }

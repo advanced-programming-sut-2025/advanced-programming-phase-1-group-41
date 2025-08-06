@@ -52,9 +52,9 @@ public class GameMenuController {
         return new Result(true,result.toString()) ;
     }
 
-    public Result deleteGame(Matcher matcher, Scanner scanner){
-        boolean success = GameMenu.handleDeleteGame(scanner);
-        if(success){
+    public Result deleteGame(Matcher matcher){
+//        boolean success = GameMenu.handleDeleteGame(scanner);
+        if(true){
             for (Player player : App.getGame().getPlayers()) {
                 player.getUser().setCurrentGame(null);
             }

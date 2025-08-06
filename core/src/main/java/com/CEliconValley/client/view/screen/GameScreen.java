@@ -67,8 +67,8 @@ public abstract class GameScreen implements Screen {
         hudImage.setPosition(posX, posY);
         timeScreen.dateLabel.setPosition(posX + 120, posY + 180);
         timeScreen.timeLabel.setPosition(posX + 120, posY + 90);
-        timeScreen.goldLabel.setPosition(posX + 87.5f, posY + 10);
-        timeScreen.goldLabel.setAlignment(Align.right);
+        timeScreen.goldLabel.setPosition(posX + 66.5f, posY + 10);
+        timeScreen.goldLabel.setAlignment(Align.left);
         timeScreen.goldLabel.setFontScale(1.18f);
         timeScreen.dateLabel.setFontScale(0.8f);
         stage.addActor(timeScreen.dateLabel);

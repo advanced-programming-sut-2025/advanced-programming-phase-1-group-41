@@ -27,8 +27,11 @@ public class ClientGameHandler {
                     AppClient.setGameData(gameDataMessage.body);
                     if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof FarmScreen fs){
                         fs.getTimeScreen().updatePointer(AppClient.getGameData().getTime().getHour(),
-                            AppClient.getGameData().getTime().convertDay(), AppClient.getGameData().getTime().getYear()
+                            AppClient.getGameData().getTime().convertDay()
+                            ,AppClient.getGameData().getTime().getYear(),
+                            Finder.getpd().getMoney()
                             );
+                        fs.getTimeScreen().updateWeatherAndSeason(AppClient.getGameData().getTime(), AppClient.getGameData().getWeatherType());
                         fs.updateFarmData();
                         PlayerData pd = null;
                         for (PlayerData playersDatum : AppClient.getGameData().getPlayersData()) {

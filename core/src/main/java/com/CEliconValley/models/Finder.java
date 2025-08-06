@@ -286,4 +286,28 @@ public class Finder {
         }
         return null;
     }
+    public static PlayerData getpd(){
+        for (PlayerData pd : AppClient.getGameData().getPlayersData()) {
+            if(pd.getUsername().equals(AppClient.getUserData().getUsername())){
+                return pd;
+            }
+        }
+        return null;
+    }
+    public static Player getPlayerByUsername(String username){
+        for(Player player : App.getGame().getPlayers()){
+            if(player.getUser().getUsername().equals(username)){
+                return player;
+            }
+        }
+        return null;
+    }
+    public static Farm getFarmByPlayer(Player player){
+        for (Farm farm : App.getGame().getFarms()) {
+            if(farm.getId() == player.getFarmId()){
+                return farm;
+            }
+        }
+        return null;
+    }
 }

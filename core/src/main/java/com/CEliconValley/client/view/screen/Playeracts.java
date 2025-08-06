@@ -32,6 +32,9 @@ public class Playeracts {
                 System.out.println("Cheat code entered: " + code);
 
                 //TODO Cheat code handling
+                GameMessage<GameCommand> cmnd = new GameMessage<>("game-command",
+                    new GameCommand(code, AppClient.getUserData().getUsername()));
+                AppClient.getClient().send(new Gson().toJson(cmnd));
 //                CheatCodeController.cheatCodeHandler(code);
 
                 screen.cheatCodeField.setText("");
