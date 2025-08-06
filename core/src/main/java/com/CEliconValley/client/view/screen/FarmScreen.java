@@ -13,8 +13,10 @@ import com.CEliconValley.models.buildings.animalContainer.Coop;
 import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.ui.GameAssetManager;
+import com.CEliconValley.views.subGames.Rain;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -27,6 +29,7 @@ import java.util.*;
 
 public class FarmScreen extends GameScreen implements Screen {
     private final SpriteBatch batch;
+    private final Rain rain;
     private MenuBar menuBar;
     private final Farm farm;
     private final Player player;
@@ -110,6 +113,7 @@ public class FarmScreen extends GameScreen implements Screen {
         farmSprite = new Sprite(farmTexture);
         farmSprite.setSize(CELL_SIZE, CELL_SIZE);
         camera = new OrthographicCamera();
+        rain = new Rain();
 //        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
 
@@ -172,7 +176,7 @@ public class FarmScreen extends GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
+        batch.setColor(ApplyFog(getTimeColor(AppClient.getGameData().getTime().getHour())));
         Gdx.gl.glClearColor(0.8f, 0.9f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Result result = Playeracts.handleInput(hero, farmMap, stage, delta);
@@ -273,7 +277,9 @@ public class FarmScreen extends GameScreen implements Screen {
 
 
         }
-            if(isMenuOpen){
+        rain.render(batch,camera);
+        batch.setColor(Color.WHITE);
+        if(isMenuOpen){
 //                menuBar.render(batch, menuX, menuY, menuWidth, menuHeight);
                 menuBar.render(batch,camera);
             }else {
@@ -352,6 +358,34 @@ public class FarmScreen extends GameScreen implements Screen {
             }
         }
     }
+    private Color getTimeColor(int hour) {
+        switch (hour) {
+
+            case 9: return new Color(1f, 1f, 1f, 1f);
+            case 10: return new Color(1f, 1f, 0.95f, 1f);
+            case 11: return new Color(1f, 0.98f, 0.9f, 1f);
+            case 12: return new Color(1f, 0.95f, 0.85f, 1f);
+            case 13: return new Color(1f, 0.95f, 0.8f, 1f);
+            case 14: return new Color(1f, 0.92f, 0.75f, 1f);
+            case 15: return new Color(0.95f, 0.9f, 0.7f, 1f);
+            case 16: return new Color(0.9f, 0.85f, 0.65f, 1f);
+            case 17: return new Color(0.85f, 0.8f, 0.6f, 1f);
+            case 18: return new Color(0.8f, 0.7f, 0.55f, 1f);
+            case 19: return new Color(0.6f, 0.6f, 0.75f, 1f);
+            case 20: return new Color(0.4f, 0.4f, 0.6f, 1f);
+            case 21: return new Color(0.3f, 0.3f, 0.5f, 1f);
+            case 22: return new Color(0.2f, 0.2f, 0.4f, 1f);
+            case 23: return new Color(0.15f, 0.15f, 0.3f, 1f);
+            default: return new Color(1f, 1f, 1f, 1f);
+        }
+    }
+    private Color ApplyFog(Color color){
+        if(!AppClient.getGameData().getWeatherType().equals(WeatherType.Rainy)) {
+            return new Color(color.r * 0.6f, color.g * 0.6f, color.b * 0.6f, color.a);
+        }
+        return color;
+    }
+
 
 
 
