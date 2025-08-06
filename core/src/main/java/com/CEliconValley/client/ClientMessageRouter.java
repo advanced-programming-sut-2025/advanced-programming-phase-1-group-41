@@ -19,7 +19,8 @@ public class ClientMessageRouter {
                 ClientLobbyHandler.handle(type, body, gson, timestamp);
                 System.out.println("Cmessage "+message);
             }
-            case "game-data", "new-game", "pre-start-request", "game-command" -> ClientGameHandler.handle(type, body, gson, timestamp);
+            case "game-data", "new-game", "pre-start-request", "game-command",
+                 "farm-data", "player-data" -> ClientGameHandler.handle(type, body, gson, timestamp);
         }
     }
 }

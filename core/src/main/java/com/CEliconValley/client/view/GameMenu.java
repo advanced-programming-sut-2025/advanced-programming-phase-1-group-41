@@ -44,9 +44,9 @@ public class GameMenu implements Screen {
 
             }else if(MapView.check(input)){
 
-            }else if(PlayerView.check(input)){
+            }else if(PlayerView.check(input, playerName)){
 
-            }else if(ToolView.check(input)){
+            }else if(ToolView.check(input, playerName)){
 
             }else if(FarmingView.check(input)){
 

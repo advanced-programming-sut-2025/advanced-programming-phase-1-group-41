@@ -60,4 +60,21 @@ public class CoopData {
     public int getCoopTypeInt() {
         return coopTypeInt;
     }
+
+    public ArrayList<AnimalData> getAnimalsData() {
+        return animalsData;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
 }

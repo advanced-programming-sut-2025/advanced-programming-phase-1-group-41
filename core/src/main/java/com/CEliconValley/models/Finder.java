@@ -261,6 +261,11 @@ public class Finder {
         }
         return null;
     }
+
+    public static FarmData getfd(){
+        return getFarmDataById(AppClient.getGameData(), AppClient.getUserData().getUsername());
+    }
+
     public static FarmData getFarmDataById(GameData gameData, String username){
         Integer id = null;
         for (PlayerData playersDatum : gameData.getPlayersData()) {

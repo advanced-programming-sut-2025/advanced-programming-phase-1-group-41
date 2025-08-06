@@ -1,6 +1,8 @@
 package com.CEliconValley.controllers.Spawner;
 
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.controllers.ItemManager;
+import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.items.Inventory;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
@@ -14,7 +16,15 @@ import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 
 public class InventoryRenderer {
-    private final Inventory inventory;
+    private Inventory inventory;
+
+
+    public void updateInventory() {
+        Inventory inventory = Finder.getpd().getInventoryData().getInventory();
+        Gdx.app.postRunnable(()-> {
+            this.inventory = inventory;
+        });
+    }
 
     private final int slotSize = CELL_SIZE;
     private final int itemSize =slotSize*2/3;

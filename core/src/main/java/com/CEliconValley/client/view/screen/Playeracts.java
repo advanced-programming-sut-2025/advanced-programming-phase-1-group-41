@@ -134,13 +134,16 @@ public class Playeracts {
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("walk right", AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
             }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+        } else if (Gdx.input.isKeyJustPressed((Input.Keys.E))) {
             screen.onRepeat=false;
             hero.currentAnimation = hero.useTool(3);
             hero.isActing.set(true);
             hero.stateTime = 0;
             if(screen instanceof FarmScreen farmScreen){
-                farmScreen.hit(hero.currentDirection, hero.playerX.get(), hero.playerY.get());
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                    new GameCommand("tools use -d "+hero.currentDirection, AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
+//                farmScreen.hit(hero.currentDirection, hero.playerX.get(), hero.playerY.get());
             }
         } else if (Gdx.input.isKeyPressed(Input.Keys.UP) &&
         screen instanceof FarmScreen farmScreen) {

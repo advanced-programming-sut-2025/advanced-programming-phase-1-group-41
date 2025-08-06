@@ -2,14 +2,15 @@ package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.view.screen.maps.*;
-import com.CEliconValley.common.CellData;
-import com.CEliconValley.common.PlayerData;
+import com.CEliconValley.common.*;
 import com.CEliconValley.controllers.Spawner.*;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.buildings.*;
 import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
 import com.CEliconValley.models.buildings.animalContainer.Barn;
+import com.CEliconValley.models.buildings.animalContainer.BarnType;
 import com.CEliconValley.models.buildings.animalContainer.Coop;
+import com.CEliconValley.models.buildings.animalContainer.CoopType;
 import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.ui.GameAssetManager;
@@ -35,7 +36,6 @@ public class FarmScreen extends GameScreen implements Screen {
     private final Snow snow;
     private final Thunder thunder;
     private MenuBar menuBar;
-    private final Farm farm;
     private final Player player;
     private final TreeSpawner treeSpawner;
     private final WaterSpawner waterSpawner;
@@ -102,7 +102,6 @@ public class FarmScreen extends GameScreen implements Screen {
         menuBar.setPlayer(player);
         otherHeroes = new ArrayList<>();
         this.farmMap = new FarmMap(Finder.getFarmDataById(AppClient.getGameData(), AppClient.getUserData().getUsername()));
-        this.farm = farm;
         this.player = player;
         treeSpawner=new TreeSpawner();
         waterSpawner=new WaterSpawner();
@@ -284,7 +283,9 @@ public class FarmScreen extends GameScreen implements Screen {
 
 
         }
-        snow.render(batch,camera);
+        if(AppClient.getGameData().getWeatherType().equals(WeatherType.Snowy)){
+            snow.render(batch,camera);
+        }
         if(AppClient.getGameData().getWeatherType().equals(WeatherType.Rainy)){
             rain.render(batch,camera);
         }
@@ -348,21 +349,23 @@ public class FarmScreen extends GameScreen implements Screen {
         }
     }
     public void transfer(){
+
         CellData cd = Finder.getcdByFarmData(hero.playerX.get(), hero.playerY.get(), farmMap.farmData);
         Cell cell= cd.extractData();
         if(cell.getObjectMap() instanceof Door) {
             for (int i = -1; i < 2; i++) {
                 for (int j = -1; j < 2; j++) {
-                    if (Finder.findCellByCoordinates(hero.playerX.get() + i, hero.playerY.get() + j, this.farm).getObjectMap() instanceof Greenhouse) {
-
+                    CellData around =Finder.getcdByFarmData(hero.playerX.get() + i, hero.playerY.get() + j, farmMap.farmData);
+                    if(around.getObjectName().equals(new Greenhouse().getName())){
                         ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new GreenHouseScreen(this, new GreenhouseMap(0, 0), player));
-                    } else if (Finder.findCellByCoordinates(hero.playerX.get() + i, hero.playerY.get() + j, this.farm).getObjectMap() instanceof Cottage) {
+                    }else if(around.getObjectName().equals(new Cottage().getName())){
                         ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new CottageScreen(this, new CottageMap(0, 0), player));
-                    }else if (Finder.findCellByCoordinates(hero.playerX.get() + i, hero.playerY.get() + j, this.farm).getObjectMap() instanceof Barn ) {
-                        Barn barn = (Barn) Finder.findCellByCoordinates(hero.playerX.get() + i, hero.playerY.get() + j, this.farm).getObjectMap();
-                        ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new BarnScreen(this, new BarnMap(0,0,barn.getBarnType()), player));
-                    }else if (Finder.findCellByCoordinates(hero.playerX.get() + i, hero.playerY.get() + j, this.farm).getObjectMap() instanceof Coop coop) {
-                        ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new CoopScreen(this, new CoopMap(0,0,coop.getCoopType()), player));
+                    }else if(around.getObjectName().equals(new Barn().getName())){
+                        ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new BarnScreen(this,
+                            new BarnMap(0,0, BarnType.values()[findBarnByDoor().getBarnTypeInt()]), player));
+                    }else if(around.getObjectName().equals(new Coop().getName())){
+                        ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new CoopScreen(this,
+                            new CoopMap(0,0, CoopType.values()[findCoopByDoor().getCoopTypeInt()]), player));
                     }
                 }
             }
@@ -417,5 +420,32 @@ public class FarmScreen extends GameScreen implements Screen {
     @Override public void pause() {}
     @Override public void resume() {}
 
+    private BarnData findBarnByDoor(){
+        FarmData fd = this.farmMap.farmData;
+        for (BarnData bd : fd.getBarnsData()) {
+            int dx = Math.abs(bd.getX() - hero.playerX.get());
+            int dy = Math.abs(bd.getY() - hero.playerY.get());
+            System.out.println("dx "+dx);
+            System.out.println("dy "+dy);
+            if(dx < 3 && dy < 3){
+                return bd;
+            }
+        }
+        return null;
+    }
+    private CoopData findCoopByDoor(){
+        FarmData fd = this.farmMap.farmData;
+        for (CoopData cd : fd.getCoopsData()) {
+            int dx = Math.abs(cd.getX() - hero.playerX.get());
+            int dy = Math.abs(cd.getY() - hero.playerY.get());
+            System.out.println("dx "+dx);
+            System.out.println("dy "+dy);
+            if(dx < 3 && dy < 3){
+                return cd;
+            }
+        }
+        return null;
+
+    }
 
 }
