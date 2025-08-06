@@ -10,41 +10,38 @@ import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.models.Menu;
 import com.badlogic.gdx.Gdx;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import org.java_websocket.WebSocket;
 
 import java.util.HashSet;
 
 public class GeneralHandler {
-    public static void handle(String type, String message, Gson gson){
+    public static void handle(String type, JsonObject body, Gson gson , long timestamp){
         switch (type) {
             case "handshake-data" -> {
-                GameMessage<HandshakeData> msg = gson.fromJson(message, new TypeToken<GameMessage<HandshakeData>>() {
-                }.getType());
+                HandshakeData handshakeData = gson.fromJson(body, HandshakeData.class);
                 Gdx.app.postRunnable(() -> {
                     AppClient.setLobbies(
-                        new HashSet<>(msg.body.getCurrentLobbies())
+                        new HashSet<>(handshakeData.getCurrentLobbies())
                     );
                     AppClient.setGames(null);
-                    AppClient.setOnlinePlayers(new HashSet<>(msg.body.getOnlinePlayers()));
+                    AppClient.setOnlinePlayers(new HashSet<>(handshakeData.getOnlinePlayers()));
                 });
-                System.out.println("Cmessage: " + message);
             }
             case "app-data" -> {
-                GameMessage<AppData> msg = gson.fromJson(message, new TypeToken<GameMessage<AppData>>() {
-                }.getType());
+                AppData appData = gson.fromJson(body, AppData.class);
                 Gdx.app.postRunnable(() -> {
-                    AppClient.setOnlinePlayers(new HashSet<>(msg.body.onlinePlayers));
+                    AppClient.setOnlinePlayers(new HashSet<>(appData.onlinePlayers));
                     if(AppClient.getMenu().getScreen() instanceof MainMenuView screen){
                         screen.onlinePlayersUpdate();
                     }
                 });
-                System.out.println("Cmessage: " + message);
             }
             case "avatar-response" -> {
-                GameMessage<UserData> msg = gson.fromJson(message, new TypeToken<GameMessage<UserData>>() {}.getType());
+                UserData userData = gson.fromJson(body, UserData.class);
                 Gdx.app.postRunnable(() -> {
-                    AppClient.setUserData(msg.body);
+                    AppClient.setUserData(userData);
                     if(AppClient.getMenu().getScreen() instanceof ProfileMenuView view){
                         Menu.Profile.resetMenu();
                     }
