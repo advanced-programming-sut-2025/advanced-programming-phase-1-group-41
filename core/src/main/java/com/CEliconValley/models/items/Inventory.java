@@ -241,6 +241,15 @@ public class Inventory {
         }
         return -2;
     }
+    public boolean doHave(Item item, int quantity){
+        for(Slot slot : slots){
+            if(slot.getItem() == null || slot.getQuantity() == 0) continue;
+            if(slot.getItem().getName().equals(item.getName())){
+                return slot.getQuantity() >= quantity;
+            }
+        }
+        return false;
+    }
 
 
     public boolean removeFromInventory(Item item) {
