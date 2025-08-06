@@ -15,6 +15,7 @@ import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.CEliconValley.views.subGames.Rain;
 import com.CEliconValley.views.subGames.Snow;
+import com.CEliconValley.views.subGames.Thunder;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -32,6 +33,7 @@ public class FarmScreen extends GameScreen implements Screen {
     private final SpriteBatch batch;
     private final Rain rain;
     private final Snow snow;
+    private final Thunder thunder;
     private MenuBar menuBar;
     private final Farm farm;
     private final Player player;
@@ -117,6 +119,7 @@ public class FarmScreen extends GameScreen implements Screen {
         camera = new OrthographicCamera();
         rain = new Rain();
         snow = new Snow();
+        thunder = new Thunder(0,0,0);
 //        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
 
