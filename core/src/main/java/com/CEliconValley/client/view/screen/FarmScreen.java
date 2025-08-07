@@ -62,6 +62,7 @@ public class FarmScreen extends GameScreen implements Screen {
     public static Sprite farmSprite;
     ;
 
+
     private OrthographicCamera camera;
 
     public static final float VIRTUAL_WIDTH = 3160f;
