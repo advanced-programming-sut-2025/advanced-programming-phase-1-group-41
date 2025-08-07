@@ -1,5 +1,6 @@
 package com.CEliconValley.models.ui;
 
+import com.CEliconValley.client.AppClient;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -26,6 +27,7 @@ public class GameAssetManager {
         TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal("backgrounds/" + name)));
         return new TextureRegionDrawable(region);
     }
+    public Texture getAvatarTexture(){return new Texture(AppClient.getUserData().getAvatarPath());}
 
     public static GameAssetManager getGameAssetManager() {
         if (gameAssetManager == null) {

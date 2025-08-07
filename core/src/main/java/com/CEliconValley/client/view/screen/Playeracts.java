@@ -7,13 +7,16 @@ import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Hero;
+import com.CEliconValley.models.Player;
 import com.CEliconValley.models.Result;
 import com.CEliconValley.models.locations.Location;
+import com.CEliconValley.models.tools.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.google.gson.Gson;
+import com.CEliconValley.models.tools.ToolLevel.*;
 
 import java.util.ArrayList;
 
@@ -21,10 +24,12 @@ import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class Playeracts {
     public static GameScreen screen;
-    public static void setScreen(GameScreen screen){
+
+    public static void setScreen(GameScreen screen) {
         Playeracts.screen = screen;
     }
-    public static Result handleInput(Hero hero, Location location, Stage stage, float delta){
+
+    public static Result handleInput(Hero hero, Location location, Stage stage, float delta) {
         screen.updateEnergy();
 
         if (screen.cheatMode) {
@@ -55,16 +60,16 @@ public class Playeracts {
                 }
 
             }
-            return new Result(false,"cheat");
+            return new Result(false, "cheat");
         }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             screen.handleCheatCode(stage);
-            return new Result(true,"cheat");
+            return new Result(true, "cheat");
         }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.M)){
-            screen.isMenuOpen=!screen.isMenuOpen;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+            screen.isMenuOpen = !screen.isMenuOpen;
         }
-        if(screen.isMenuOpen){
+        if (screen.isMenuOpen) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
                 screen.menuBar.goToPreviousTab();
             }
@@ -77,7 +82,7 @@ public class Playeracts {
             if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
                 screen.menuBar.scrollDown();
             }
-        }else {
+        } else {
             if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
                 screen.inventoryRenderer.shiftRight();
             }
@@ -85,20 +90,17 @@ public class Playeracts {
                 screen.inventoryRenderer.shiftLeft();
             }
         }
-        if (hero.isActing.get() ||hero.isMoving.get()) {
+        if (hero.isActing.get() || hero.isMoving.get()) {
 //            System.out.println(hero.isActing+" "+hero.isMoving);
-            return new Result(false,"act-move");
+            return new Result(false, "act-move");
         }
-
-
-
 
 
         boolean moved = false;
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             hero.currentDirection = 1;
-            screen.onRepeat=true;
+            screen.onRepeat = true;
             if (screen.canMoveTo(hero.playerX.get(), hero.playerY.get() + 1, location)) {
                 hero.targetX.set(hero.playerX.get());
                 hero.targetY.set(hero.playerY.get() + 1);
@@ -106,10 +108,9 @@ public class Playeracts {
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("walk up", AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
             }
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             hero.currentDirection = 3;
-            screen.onRepeat=true;
+            screen.onRepeat = true;
             if (screen.canMoveTo(hero.playerX.get(), hero.playerY.get() - 1, location)) {
                 hero.targetX.set(hero.playerX.get());
                 hero.targetY.set(hero.playerY.get() - 1);
@@ -117,10 +118,9 @@ public class Playeracts {
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("walk down", AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
             }
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             hero.currentDirection = 4;
-            screen.onRepeat=true;
+            screen.onRepeat = true;
             if (screen.canMoveTo(hero.playerX.get() - 1, hero.playerY.get(), location)) {
                 hero.targetX.set(hero.playerX.get() - 1);
                 hero.targetY.set(hero.playerY.get());
@@ -129,11 +129,10 @@ public class Playeracts {
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("walk left", AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
             }
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             hero.currentDirection = 2;
             screen.flip = false;
-            screen.onRepeat=true;
+            screen.onRepeat = true;
             if (screen.canMoveTo(hero.playerX.get() + 1, hero.playerY.get(), location)) {
                 hero.targetX.set(hero.playerX.get() + 1);
                 hero.targetY.set(hero.playerY.get());
@@ -149,20 +148,23 @@ public class Playeracts {
             }
             screen.onRepeat=false;
             hero.currentAnimation = hero.useTool(3);
+        } else if (Gdx.input.isKeyJustPressed((Input.Keys.E))) {
+            screen.onRepeat = false;
+            hero.currentAnimation = hero.useTool(getMainToolNumber());
             hero.isActing.set(true);
             hero.stateTime = 0;
-            if(screen instanceof FarmScreen farmScreen){
+            if (screen instanceof FarmScreen farmScreen) {
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                    new GameCommand("tools use -d "+hero.currentDirection, AppClient.getUserData().getUsername()));
-                    AppClient.getClient().send(new Gson().toJson(msg));
+                    new GameCommand("tools use -d " + hero.currentDirection, AppClient.getUserData().getUsername()));
+                AppClient.getClient().send(new Gson().toJson(msg));
 //                farmScreen.hit(hero.currentDirection, hero.playerX.get(), hero.playerY.get());
             }
         } else if (Gdx.input.isKeyPressed(Input.Keys.UP) &&
-        screen instanceof FarmScreen farmScreen) {
+            screen instanceof FarmScreen farmScreen) {
             farmScreen.transfer();
         } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && !(
             screen instanceof FarmScreen
-            )){
+        )) {
             System.out.println(screen);
             screen.transfer();
         }
@@ -173,17 +175,17 @@ public class Playeracts {
         } else if (!hero.isMoving.get() && !hero.isActing.get()) {
             hero.currentAnimation = hero.walk(false, hero.currentDirection);
         }
-        return new Result(true,";)");
+        return new Result(true, ";)");
     }
 
-    public static void approach(Hero hero){
+    public static void approach(Hero hero) {
         if (hero.isMoving.get()) {
             float targetPixelX = hero.targetX.get() * CELL_SIZE;
             float targetPixelY = hero.targetY.get() * CELL_SIZE;
 
             float moveAmount = (float) CELL_SIZE / 12;
 
-            if(screen instanceof GreenHouseScreen){
+            if (screen instanceof GreenHouseScreen) {
                 moveAmount /= 2;
             }
 
@@ -214,17 +216,16 @@ public class Playeracts {
         }
     }
 
-    public static void changeScreen(GameScreen screen){
+    public static void changeScreen(GameScreen screen) {
         ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(screen);
 //        screen.show();
     }
 
     public static void animalApproach(ArrayList<AnimalSprite> animalSprites,
-                                      float delta){
+                                      float delta) {
         animalSprites.forEach(animalSprite -> {
-            if(animalSprite.isMoving){
+            if (animalSprite.isMoving) {
                 float moveAmount = 400 * delta;
-
                 float targetPixelX = animalSprite.targetX * CELL_SIZE;
                 float targetPixelY = animalSprite.targetY * CELL_SIZE;
                 animalSprite.currentAnimation = animalSprite.walk(true, animalSprite.currentDirection);
@@ -255,6 +256,70 @@ public class Playeracts {
             }
         });
 
+    }
+
+    public static int getMainToolNumber() {
+        PlayerData pd = Finder.getpd();
+        if (pd.getCurrentToolName() == null) return -1;
+        if (BasicTool.parseBasicTool(pd.getCurrentToolName()) != null) {
+            if (pd.getCurrentToolName().equals(new Axe().getName())) {
+                switch (pd.getToolLevel()) {
+                    case Default -> {
+                        return 10;
+                    }
+                    case Copper -> {
+                        return 11;
+                    }
+                    case Iron -> {
+                        return 12;
+                    }
+                    case Gold -> {
+                        return 13;
+                    }
+                    case Iridium -> {
+                        return 14;
+                    }
+                }
+            } else if (pd.getCurrentToolName().equals(new Hoe().getName())) {
+                switch (pd.getToolLevel()) {
+                    case Default -> {
+                        return 0;
+                    }
+                    case Copper -> {
+                        return 1;
+                    }
+                    case Iron -> {
+                        return 2;
+                    }
+                    case Gold -> {
+                        return 3;
+                    }
+                    case Iridium -> {
+                        return 4;
+                    }
+                }
+            } else if (pd.getCurrentToolName().equals(new Pickaxe().getName())) {
+                switch (pd.getToolLevel()) {
+                    case Default -> {
+                        return 5;
+                    }
+                    case Copper -> {
+                        return 6;
+                    }
+                    case Iron -> {
+                        return 7;
+                    }
+                    case Gold -> {
+                        return 8;
+                    }
+                    case Iridium -> {
+                        return 9;
+                    }
+                }
+
+            }
+        }
+        return -1;
     }
 
 }

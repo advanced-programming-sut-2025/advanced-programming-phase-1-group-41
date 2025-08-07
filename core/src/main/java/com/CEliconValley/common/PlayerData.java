@@ -8,7 +8,9 @@ import com.CEliconValley.models.items.Inventory;
 import com.CEliconValley.models.items.craftablemachines.Machine;
 import com.CEliconValley.models.locations.FarmType;
 import com.CEliconValley.models.skills.Skill;
+import com.CEliconValley.models.tools.LevelTool;
 import com.CEliconValley.models.tools.Tool;
+import com.CEliconValley.models.tools.ToolLevel;
 import dev.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
@@ -44,6 +46,7 @@ public class PlayerData {
     ArrayList<TradeData> newTradesListData;
     ArrayList<TradeData> totalTradesListData;
     BuffData buffData;
+    ToolLevel toolLevel;
 
 
     public PlayerData() {
@@ -66,7 +69,12 @@ public class PlayerData {
         this.cookingRecipes = new ArrayList<>(player.getCookingRecipes());
         this.craftingRecipes = new ArrayList<>(player.getCraftingRecipes());
         this.isPlayerInVillage = player.isPlayerIsInVillage();
-
+        if(player.getCurrentTool() == null) this.currentToolName = null;
+        else{
+            if(player.getCurrentTool() instanceof LevelTool lt){
+                this.toolLevel = lt.getLevel();
+            }
+        }
         this.skillLevels = new ArrayList<>();
         fillSkillLevels(player);
         this.onGoingMachines = new ArrayList<>();
@@ -266,5 +274,13 @@ public class PlayerData {
 
     public int getY() {
         return y;
+    }
+
+    public FarmType getFarmType() {
+        return farmType;
+    }
+
+    public ToolLevel getToolLevel() {
+        return toolLevel;
     }
 }
