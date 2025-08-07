@@ -96,6 +96,12 @@ public class Playeracts {
             return new Result(false, "act-move");
         }
 
+        if(Finder.getpd().getEnergy() <= 0){
+            hero.currentAnimation = hero.generalAct(getSleepAct());
+            screen.onRepeat = true;
+            return new Result(false,"energy");
+        }
+
 
         boolean moved = false;
 
@@ -398,6 +404,18 @@ public class Playeracts {
             return tgp;
         }
         return null;
+    }
+
+    public static ArrayList<TGPoint> getSleepAct(){
+        ArrayList<TGPoint> tgp = new ArrayList();
+        tgp.add(new TGPoint(9,4));
+        tgp.add(new TGPoint(9,5));
+        tgp.add(new TGPoint(9,6));
+        tgp.add(new TGPoint(9,7));
+        tgp.add(new TGPoint(9,7));
+        tgp.add(new TGPoint(10,0));
+        tgp.add(new TGPoint(10,0));
+        return tgp;
     }
 
 }

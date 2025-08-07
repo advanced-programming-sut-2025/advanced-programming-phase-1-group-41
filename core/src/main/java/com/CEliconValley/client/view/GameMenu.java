@@ -28,12 +28,13 @@ public class GameMenu implements Screen {
         } else if((matcher = GameMainCommands.StartTrade.getMatcher(input))!=null){
             System.out.println(controller.startTrade(matcher));
         }
-        if(App.getGame().getCurrentPlayer().getEnergy() <= 0){//todo sepehr(exit game error mikhore)
-            System.out.println(App.getGame().getCurrentPlayer().getEnergy());
-            System.out.println("you've passed out.. either exit or pass the turn");
-        }else if(App.getGame().getRoundEnergy() > 50){
-            System.out.println("you've used too much energy.. either exit or pass the turn");
-        }
+//        if(App.getGame().getCurrentPlayer().getEnergy() <= 0){//todo sepehr(exit game error mikhore)
+//            System.out.println(App.getGame().getCurrentPlayer().getEnergy());
+//            System.out.println("you've passed out.. either exit or pass the turn");
+//        }
+//        else if(App.getGame().getRoundEnergy() > 50){
+//            System.out.println("you've used too much energy.. either exit or pass the turn");
+//        }
         else{
             if(CheatCodeController.cheatCodeHandler(input, playerName)){
                 System.out.println("received a cheat code command for "+playerName);

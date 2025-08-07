@@ -98,18 +98,34 @@ public class GameHandler {
         switch (command.command) {
             case "walk up" -> {
                 player.setY(player.getY() + 1);
+                player.decEnergy(0.2f);
+                GameMessage<PlayerData> response = new GameMessage<>("player-data",
+                    new PlayerData(player));
+                App.getServer().sendToGroupByPlayers(game.getPlayers(), new Gson().toJson(response));
                 return;
             }
             case "walk down" -> {
                 player.setY(player.getY() - 1);
+                player.decEnergy(0.2f);
+                GameMessage<PlayerData> response = new GameMessage<>("player-data",
+                    new PlayerData(player));
+                App.getServer().sendToGroupByPlayers(game.getPlayers(), new Gson().toJson(response));
                 return;
             }
             case "walk left" -> {
                 player.setX(player.getX() - 1);
+                player.decEnergy(0.2f);
+                GameMessage<PlayerData> response = new GameMessage<>("player-data",
+                    new PlayerData(player));
+                App.getServer().sendToGroupByPlayers(game.getPlayers(), new Gson().toJson(response));
                 return;
             }
             case "walk right" -> {
                 player.setX(player.getX() + 1);
+                player.decEnergy(0.2f);
+                GameMessage<PlayerData> response = new GameMessage<>("player-data",
+                    new PlayerData(player));
+                App.getServer().sendToGroupByPlayers(game.getPlayers(), new Gson().toJson(response));
                 return;
             }
         }

@@ -143,6 +143,15 @@ public class Hero {
         return null;
     }
 
+    public Animation<TextureRegion> generalAct(ArrayList<TGPoint> tgPoints){
+        TextureRegion[] wantedActs=new TextureRegion[tgPoints.size()];
+        for (int i = 0; i < tgPoints.size(); i++) {
+            TGPoint tgPoint = tgPoints.get(i);
+            wantedActs[i] = playerActs[tgPoint.row][tgPoint.col];
+        }
+        return new Animation<>(0.15f,wantedActs);
+    }
+
     public Animation<TextureRegion> useOtherTool(ArrayList<TGPoint> tgPoints){
         TextureRegion[] wantedActs=new TextureRegion[tgPoints.size()];
         switch(currentDirection){
