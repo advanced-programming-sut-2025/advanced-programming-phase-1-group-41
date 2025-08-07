@@ -1,5 +1,7 @@
 package com.CEliconValley.controllers;
 
+import com.CEliconValley.common.FarmData;
+import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.models.*;
 
 import com.CEliconValley.models.foragings.Crop;
@@ -107,6 +109,22 @@ public class WeatherController {
 
         App.getGame().setTmrwWeatherType(weatherType);
         return new Result(true,"tomorrow weather is: "+weatherType);
+    }
+    public void Strike(int x, int y, Farm farm){
+        Cell cell = Finder.findCellByCoordinates(x, y, farm);
+        assert cell != null;
+        if(cell.getObjectMap() instanceof Grass || cell.getObjectMap() instanceof Crop || cell.getObjectMap() instanceof ForagingCrop
+            || cell.getObjectMap() instanceof Plant || cell.getObjectMap() instanceof Bush){
+            Grass grass = new Grass();
+            grass.setThundered(true);
+            cell.setObjectMap(grass);
+        } else if(cell.getObjectMap() instanceof Tree || cell.getObjectMap() instanceof ForagingTree){
+            if(cell.getObjectMap() instanceof Tree){
+                ((Tree) cell.getObjectMap()).thunder();
+            } else {
+                ((ForagingTree) cell.getObjectMap()).thunder();
+            }
+        }
     }
 
 

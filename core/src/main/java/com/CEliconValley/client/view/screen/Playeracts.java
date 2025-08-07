@@ -2,6 +2,7 @@ package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.model.AnimalSprite;
+import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.models.Finder;
@@ -142,6 +143,10 @@ public class Playeracts {
             }
         }
         else if (Gdx.input.isKeyJustPressed((Input.Keys.E))) {
+            if(screen instanceof FarmScreen fs){
+                    fs.getThunder().strikeAt(hero.playerX.get(), hero.playerY.get());
+
+            }
             screen.onRepeat=false;
             hero.currentAnimation = hero.useTool(3);
             hero.isActing.set(true);

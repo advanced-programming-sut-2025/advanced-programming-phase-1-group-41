@@ -1,64 +1,108 @@
 package com.CEliconValley.views.subGames;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.CEliconValley.client.AppClient;
+import com.CEliconValley.controllers.WeatherController;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Array;
 
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class Thunder {
-
     private final Animation<TextureRegion> animation;
-    private float stateTime = 0f;
+    private final Array<Strike> activeStrikes = new Array<>();
+    private Texture sheet;
+    private float flashTimer = 0f;
 
-    private final float renderX;
-    private final float renderY;
+    private final float FLASH_DURATION = 0.1f;
 
-    public boolean isFinished() {
-        return animation.isAnimationFinished(stateTime);
-    }
-
-    public Thunder(int cellX, int cellY, float cameraHeight) {
+    public Thunder() {
+        sheet = new Texture(Gdx.files.internal("game/general/tiles/thunder.png"));
         int frameCols = 12;
-        Texture thunderTexture = new Texture("game/general/tiles/thunder.png");
-        int frameWidth = thunderTexture.getWidth() / frameCols;
-        int frameHeight = thunderTexture.getHeight();
+        int frameWidth = sheet.getWidth() / frameCols;
+        int frameHeight = sheet.getHeight();
 
-        TextureRegion[][] tmp = TextureRegion.split(thunderTexture, frameWidth, frameHeight);
+
         TextureRegion[] frames = new TextureRegion[frameCols];
+        TextureRegion[][] tmp = TextureRegion.split(sheet, frameWidth, frameHeight);
         for (int i = 0; i < frameCols; i++) {
             frames[i] = tmp[0][i];
         }
 
         animation = new Animation<>(0.03f, frames);
         animation.setPlayMode(Animation.PlayMode.NORMAL);
-
-        renderX = cellX * CELL_SIZE;
-        renderY = (cellY * CELL_SIZE) ;
     }
 
-    public void update(float delta) {
-        stateTime += delta;
+    public void strikeAt(int cellX, int cellY) {
+        float x = cellX * CELL_SIZE;
+        float y = cellY * CELL_SIZE;
+        activeStrikes.add(new Strike(x, y));
     }
 
     public void render(SpriteBatch batch, OrthographicCamera camera) {
-        if (isFinished()) return;
+        float delta = Gdx.graphics.getDeltaTime();
 
-        TextureRegion currentFrame = animation.getKeyFrame(stateTime);
-        float prevH = currentFrame.getRegionHeight();
-        currentFrame.setRegionHeight((int) camera.viewportHeight);
-        currentFrame.setRegionWidth((int) (currentFrame.getRegionWidth() * (currentFrame.getRegionHeight() / prevH)));
 
-        batch.draw(
-            currentFrame,
-            renderX,
-            renderY,
-            currentFrame.getRegionWidth(),
-            currentFrame.getRegionHeight()
-        );
+        for (int i = activeStrikes.size - 1; i >= 0; i--) {
+            Strike s = activeStrikes.get(i);
+            s.stateTime += delta;
+            if (animation.isAnimationFinished(s.stateTime)) {
+                activeStrikes.removeIndex(i);
+                flashTimer = FLASH_DURATION;
+            }
+        }
+
+
+        float thunderWidth = sheet.getWidth() / 12f;
+        float thunderHeight = sheet.getHeight();
+        thunderWidth = thunderWidth * camera.viewportHeight / thunderHeight;
+        thunderHeight = camera.viewportHeight;
+
+
+        for (Strike s : activeStrikes) {
+            TextureRegion frame = animation.getKeyFrame(s.stateTime);
+            batch.draw(frame, s.x +CELL_SIZE- (thunderWidth / 2), s.y, thunderWidth, thunderHeight);
+        }
+
+
+        if (flashTimer > 0f) {
+            flashTimer -= delta;
+            batch.setColor(1f, 1f, 1f, 0.8f);
+            batch.draw(getWhitePixel(),
+                camera.position.x - camera.viewportWidth / 2f,
+                camera.position.y - camera.viewportHeight / 2f,
+                camera.viewportWidth, camera.viewportHeight);
+            batch.setColor(1f, 1f, 1f, 1f);
+
+        }
     }
 
-    public static Thunder strikeAt(int cellX, int cellY, OrthographicCamera camera) {
-        return new Thunder(cellX, cellY, camera.viewportHeight);
+
+    private Texture getWhitePixel() {
+        if (whitePixel == null) {
+            Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+            pixmap.setColor(1, 1, 1, 1);
+            pixmap.fill();
+            whitePixel = new Texture(pixmap);
+            pixmap.dispose();
+        }
+        return whitePixel;
+    }
+
+    private static Texture whitePixel;
+
+    private static class Strike {
+        final float x, y;
+        float stateTime = 0f;
+
+        Strike(float x, float y) {
+            this.x = x;
+            this.y = y;
+        }
     }
 }

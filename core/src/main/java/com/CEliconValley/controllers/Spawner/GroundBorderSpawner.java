@@ -1,0 +1,192 @@
+package com.CEliconValley.controllers.Spawner;
+
+import com.CEliconValley.common.CellData;
+import com.CEliconValley.common.FarmData;
+import com.CEliconValley.models.Cell;
+import com.CEliconValley.models.Finder;
+import com.CEliconValley.models.foragings.Nature.Grass;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
+
+public class GroundBorderSpawner {
+
+    private final Texture groundTexture       = new Texture("game/general/tiles/ground_Spring.png");
+    private final Texture coastTexture        = new Texture("game/general/tiles/groundBorder_Spring.png");
+    private final Texture cornerTexture       = new Texture("game/general/tiles/groundCorner_Spring.png");
+
+    private final TextureRegion groundRegion;
+    private final TextureRegion[] coastRegions = new TextureRegion[9];
+    private final TextureRegion cornerSE, cornerNE, cornerNW, cornerSW;
+
+    public GroundBorderSpawner() {
+
+        groundRegion = new TextureRegion(groundTexture);
+
+
+        TextureRegion[][] coastTmp = TextureRegion.split(
+            coastTexture,
+            coastTexture.getWidth()  / 9,
+            coastTexture.getHeight()
+        );
+        for (int i = 0; i < 9; i++) {
+            coastRegions[i] = coastTmp[0][i];
+        }
+
+
+        TextureRegion[][] tmp = TextureRegion.split(cornerTexture, cornerTexture.getWidth(), cornerTexture.getHeight());
+        TextureRegion[] base = new TextureRegion[4];
+        base[0] = tmp[0][0];
+
+        cornerSE = base[0];
+        cornerNE = flipY(base[0]);
+        cornerNW = flipXY(base[0]);
+        cornerSW = flipX(base[0]);
+    }
+
+    public boolean renderGround(SpriteBatch batch, CellData cellData, FarmData farmData) {
+        int x = cellData.getX(), y = cellData.getY();
+        float drawX = x * CELL_SIZE, drawY = y * CELL_SIZE;
+
+//        if(cellData.getFakeGround()==1){
+//            batch.draw(groundRegion, drawX, drawY, CELL_SIZE, CELL_SIZE);
+//        }if(cellData.getFakeGround()==0){
+//            int count = 0;
+//
+//
+//            if (isGround(x + 1, y, farmData)) count++;
+//            if (isGround(x - 1, y, farmData)) count++;
+//            if (isGround(x, y + 1, farmData)) count++;
+//            if (isGround(x, y - 1, farmData)) count++;
+//
+//            if (count >= 3) {
+//                cellData.setFakeGround(1);
+//            } else {
+//                cellData.setFakeGround(-1);
+//            }
+//        }
+        Cell cell = cellData.extractData();
+        if (!(cell.getObjectMap() instanceof Grass grass) || !grass.isGround())
+            return false;
+
+
+        batch.draw(groundRegion, drawX, drawY, CELL_SIZE, CELL_SIZE);
+
+
+        if (grass.getInitialize() > -1) {
+            switch (grass.getInitialize()) {
+
+                case 0, 2, 6, 8, 1, 3, 5, 7 -> {
+                    batch.draw(coastRegions[grass.getInitialize()], drawX, drawY, CELL_SIZE, CELL_SIZE);
+                }
+
+                case 9  -> batch.draw(cornerSW, drawX, drawY, CELL_SIZE, CELL_SIZE);
+                case 10 -> batch.draw(cornerSE, drawX, drawY, CELL_SIZE, CELL_SIZE);
+                case 11 -> batch.draw(cornerNW, drawX, drawY, CELL_SIZE, CELL_SIZE);
+                case 12 -> batch.draw(cornerNE, drawX, drawY, CELL_SIZE, CELL_SIZE);
+            }
+            return true;
+        }
+
+
+        if (isCoast(cell, farmData)) {
+            int idx = getCoastIndex(x, y, farmData);
+            grass.setInitialize(idx);
+            batch.draw(coastRegions[idx], drawX, drawY, CELL_SIZE, CELL_SIZE);
+
+        } else {
+            CornerType corner = getGroundCornerType(x, y, farmData);
+            if (corner != CornerType.NONE) {
+                int code = switch (corner) {
+                    case SE -> 10;
+                    case SW -> 9;
+                    case NE -> 12;
+                    case NW -> 11;
+                    default -> -1;
+                };
+                grass.setInitialize(code);
+                switch (code) {
+                    case 9  -> batch.draw(cornerSW, drawX, drawY, CELL_SIZE, CELL_SIZE);
+                    case 10 -> batch.draw(cornerSE, drawX, drawY, CELL_SIZE, CELL_SIZE);
+                    case 11 -> batch.draw(cornerNW, drawX, drawY, CELL_SIZE, CELL_SIZE);
+                    case 12 -> batch.draw(cornerNE, drawX, drawY, CELL_SIZE, CELL_SIZE);
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private boolean isCoast(Cell cell, FarmData farmData) {
+        int x = cell.getX(), y = cell.getY();
+        if (!(cell.getObjectMap() instanceof Grass g) || !g.isGround()) return false;
+        return !isGround(x+1,y,farmData)
+            || !isGround(x-1,y,farmData)
+            || !isGround(x,y+1,farmData)
+            || !isGround(x,y-1,farmData);
+    }
+
+    private boolean isSimpleGrass(int x, int y, FarmData farmData) {
+        CellData cd = Finder.getcdByFarmData(x, y, farmData);
+        if (cd == null) return false;
+        Cell c = cd.extractData();
+        return c.getObjectMap() instanceof Grass g && !g.isGround();
+    }
+    private boolean isGround(int x, int y, FarmData farmData) {
+        CellData cd = Finder.getcdByFarmData(x, y, farmData);
+        if (cd == null) return false;
+        Cell c = cd.extractData();
+        return c.getObjectMap() instanceof Grass g && g.isGround();
+    }
+
+    private int getCoastIndex(int x, int y, FarmData farmData) {
+        boolean r = !isGround(x+1,y,farmData);
+        boolean l = !isGround(x-1,y,farmData);
+        boolean u = !isGround(x,y+1,farmData);
+        boolean d = !isGround(x,y-1,farmData);
+
+        if (r && d) return 0;
+        if (u && l) return 8;
+        if (l && d) return 2;
+        if (u && r) return 6;
+        if (d)      return 1;
+        if (r)      return 3;
+        if (l)      return 5;
+        if (u)      return 7;
+        return 4;
+    }
+
+    private CornerType getGroundCornerType(int x, int y, FarmData farmData) {
+        boolean n  = !isGround(x,   y+1, farmData) == false;
+        boolean s  = !isGround(x,   y-1, farmData) == false;
+        boolean e  = !isGround(x+1, y,   farmData) == false;
+        boolean w  = !isGround(x-1, y,   farmData) == false;
+        boolean ne = !isGround(x+1, y+1, farmData);
+        boolean nw = !isGround(x-1, y+1, farmData);
+        boolean se = !isGround(x+1, y-1, farmData);
+        boolean sw = !isGround(x-1, y-1, farmData);
+
+        if (n && e && ne) return CornerType.SW;
+        if (n && w && nw) return CornerType.SE;
+        if (s && e && se) return CornerType.NW;
+        if (s && w && sw) return CornerType.NE;
+        return CornerType.NONE;
+    }
+
+    private TextureRegion flipY(TextureRegion orig) {
+        TextureRegion f = new TextureRegion(orig); f.flip(false, true);
+        return f;
+    }
+    private TextureRegion flipX(TextureRegion orig) {
+        TextureRegion f = new TextureRegion(orig); f.flip(true, false);
+        return f;
+    }
+    private TextureRegion flipXY(TextureRegion orig) {
+        TextureRegion f = new TextureRegion(orig); f.flip(true, true);
+        return f;
+    }
+
+    private enum CornerType { SE, SW, NE, NW, NONE }
+}

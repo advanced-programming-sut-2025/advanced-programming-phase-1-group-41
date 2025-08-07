@@ -16,7 +16,7 @@ public class Rain {
     private final Texture rainTexture;
     private final Array<RainDrop> drops = new Array<>();
     private long lastSpawnTime = 0;
-    private final float spawnInterval = 0.002f;
+    private final float spawnInterval = 0.005f;
 
     private final TextureRegion[][] rainFrames;
 
@@ -27,20 +27,26 @@ public class Rain {
         this.rainFrames = TextureRegion.split(rainTexture, 8, 16);
     }
 
-    public void update(OrthographicCamera camera,float screenWidth, float screenHeight) {
-        if (TimeUtils.nanoTime() - lastSpawnTime > spawnInterval * 1_000_000_000) {
-            spawnDrop(camera,screenWidth, screenHeight);
-            lastSpawnTime = TimeUtils.nanoTime();
+    public void update(OrthographicCamera camera, float screenWidth, float screenHeight) {
+        float deltaTime = Gdx.graphics.getDeltaTime();
+        float intervalSec = spawnInterval;
+        long now = TimeUtils.nanoTime();
+
+
+        while ((now - lastSpawnTime) > intervalSec * 1_000_000_000L && drops.size <200) {
+            spawnDrop(camera, screenWidth, screenHeight);
+            lastSpawnTime += (long)(intervalSec * 1_000_000_000L);
         }
 
         for (int i = drops.size - 1; i >= 0; i--) {
             RainDrop drop = drops.get(i);
-            drop.update(Gdx.graphics.getDeltaTime());
+            drop.update(deltaTime);
             if (drop.isFinished()) {
                 drops.removeIndex(i);
             }
         }
     }
+
 
     public void render(SpriteBatch batch,OrthographicCamera camera) {
         update(camera,camera.position.x+camera.viewportWidth/2,camera.position.y+camera.viewportHeight/2);
@@ -62,7 +68,7 @@ public class Rain {
         splashAnim.setPlayMode(Animation.PlayMode.NORMAL);
 
         float x = MathUtils.random(camera.position.x-camera.viewportWidth/2,camera.position.x+camera.viewportWidth/2+160);
-        float y =camera.position.y+camera.viewportHeight/2+1;
+        float y =camera.position.y+camera.viewportHeight/2+1+ MathUtils.random(0,30);
 
         drops.add(new RainDrop(x, y, dropFrame, splashAnim));
     }

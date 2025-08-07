@@ -18,7 +18,7 @@ import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class RockSpawner {
     private final WaterSpawner waterSpawner;
-    private final GroundSpawner groundSpawner;
+    private final GroundBorderSpawner groundSpawner;
     private final Map<Cell, Float> breakingEffects = new HashMap<>();
     private final Map<Cell, Float> breakingBigRockEffects = new HashMap<>();
     private final Map<Cell, TextureRegion> rockRenderCache = new HashMap<>();
@@ -60,7 +60,7 @@ public class RockSpawner {
     public RockSpawner() {
         splitRockTexture();
         waterSpawner=new WaterSpawner();
-        groundSpawner=new GroundSpawner();
+        groundSpawner=new GroundBorderSpawner();
     }
     public boolean renderRocks(SpriteBatch batch, CellData cellData, float passiveState) {
         Cell cell = cellData.extractData();
@@ -77,9 +77,7 @@ public class RockSpawner {
 
         if (cell.getObjectMap() instanceof Rock rock) {
             if (rock.getRockType() == RockType.BigRock) {
-//                if (!waterSpawner.renderWater(batch, cell, passiveState) && !groundSpawner.renderGround(batch, cell, passiveState)) {
-//                    batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
-//                }
+
 
                 if (cell.getX() == rock.getAnchorX() && cell.getY() == rock.getAnchorY()) {
                     int variant = rock.getVariant();

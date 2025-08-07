@@ -20,7 +20,7 @@ public class GroundSpawner {
     private final TextureRegion[] grassBorders;
 
     public GroundSpawner() {
-        groundTexture = new Texture("game/general/tiles/ground.png");
+        groundTexture = new Texture("game/general/tiles/ground_Spring.png");
         grassBorderTexture = new Texture("game/general/tiles/grassBorder.png");
 
         grassBorders = new TextureRegion[9];

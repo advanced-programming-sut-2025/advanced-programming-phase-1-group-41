@@ -45,13 +45,14 @@ public class FarmScreen extends GameScreen implements Screen {
     private final CropSpawner cropSpawner;
     private FarmMap farmMap;
     private ArrayList<Hero> otherHeroes;
+    private GroundBorderSpawner groundBorderSpawner;
     private final List<CellData> visibleCells = new ArrayList<>();
 
 
 
     Map<Cell, TextureRegion> groundCache;
 
-    public static Texture farmTexture =new Texture("game/Buildings/Screen/Farm_Screen.png");
+    public static Texture farmTexture =new Texture("game/Buildings/Screen/Farm_Scree.png");
     public static Sprite farmSprite;
     ;
 
@@ -108,6 +109,7 @@ public class FarmScreen extends GameScreen implements Screen {
         buildingSpawner=new BuildingSpawner();
         groundSpawner=new GroundSpawner();
         cropSpawner=new CropSpawner();
+        groundBorderSpawner=new GroundBorderSpawner();
 
         batch = new SpriteBatch();
         groundCache = new HashMap<>();
@@ -117,7 +119,7 @@ public class FarmScreen extends GameScreen implements Screen {
         camera = new OrthographicCamera();
         rain = new Rain();
         snow = new Snow();
-        thunder = new Thunder(0,0,0);
+        thunder = new Thunder();
 //        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
 
@@ -187,7 +189,7 @@ public class FarmScreen extends GameScreen implements Screen {
         if(!result.success()){
             if(result.message().equals("cheat")){
                 return;
-            }
+        }
         }
 
         hero.stateTime += delta;
@@ -218,7 +220,7 @@ public class FarmScreen extends GameScreen implements Screen {
             visibleCells.sort(Comparator.comparingInt(CellData::getY).reversed());
 //        });
 
-        batch.draw(farmTexture,0,0,farmSprite.getWidth()*2*75,farmSprite.getHeight()*2*60);
+        batch.draw(farmTexture,0,0, (float) (CELL_SIZE* 60) , (float) (CELL_SIZE * 75) );
 
         Texture grassTexture = GameAssetManager.getGameAssetManager().getTileTexture("grass.png");
         Texture groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("ground.png");
@@ -256,6 +258,8 @@ public class FarmScreen extends GameScreen implements Screen {
         prevMaxY = maxY;
         visibleCells.sort(Comparator.comparingInt(CellData::getY).reversed());
         for(CellData cellData:visibleCells){
+
+            groundBorderSpawner.renderGround(batch,cellData,farmMap.farmData);
             buildingSpawner.renderBuildings(batch,cellData, farmMap.farmData);
             rockSpawner.renderRocks(batch,cellData,passiveStateTime);
             cropSpawner.renderCrops(batch,cellData,farmMap.farmData);
@@ -289,10 +293,11 @@ public class FarmScreen extends GameScreen implements Screen {
         if(AppClient.getGameData().getWeatherType().equals(WeatherType.Snowy)){
             snow.render(batch,camera);
         }
-        if(AppClient.getGameData().getWeatherType().equals(WeatherType.Rainy)){
+        if(!AppClient.getGameData().getWeatherType().equals(WeatherType.Rainy)){
             rain.render(batch,camera);
         }
         batch.setColor(Color.WHITE);
+        thunder.render(batch,camera);
         if(isMenuOpen){
 //                menuBar.render(batch, menuX, menuY, menuWidth, menuHeight);
                 menuBar.render(batch,camera);
@@ -449,5 +454,12 @@ public class FarmScreen extends GameScreen implements Screen {
         return null;
 
     }
+    public FarmMap getFarmMap() {
+        return farmMap;
+    }
+    public Thunder getThunder(){
+        return thunder;
+    }
+
 
 }

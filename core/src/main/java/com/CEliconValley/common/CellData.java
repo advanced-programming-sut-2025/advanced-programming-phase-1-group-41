@@ -23,6 +23,7 @@ public class CellData {
     String objectName;
     String className = null;
     HashMap<String, Object> data;
+    private int fakeGround=0;
 
     public CellData() {
     }
@@ -226,4 +227,12 @@ public class CellData {
     public int getY() {
         return y;
     }
+    public int getFakeGround(){
+        return fakeGround;
+    }
+
+    public void setFakeGround(int fakeGround) {
+        this.fakeGround = fakeGround;
+    }
+
 }

@@ -28,6 +28,16 @@ public class Grass implements ObjectMap {
 //            return Colors.colorize(2,0,"ww");
         }
     }
+    private int initialize = -1;
+
+    public int getInitialize() {
+        return initialize;
+    }
+
+    public void setInitialize(int initialize) {
+        this.initialize = initialize;
+    }
+
 
     @Override
     public String getName() {
