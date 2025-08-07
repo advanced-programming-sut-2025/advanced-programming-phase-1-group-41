@@ -301,4 +301,7 @@ public class Friendship {
     public boolean isHadTradeToday() {
         return hadTradeToday;
     }
+
+
+
 }

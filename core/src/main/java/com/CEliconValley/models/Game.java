@@ -3,6 +3,7 @@ package com.CEliconValley.models;
 import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
+import com.CEliconValley.models.npc.npcCharacters.NPC;
 import com.badlogic.gdx.utils.Timer;
 import com.google.gson.Gson;
 import dev.morphia.annotations.Entity;
@@ -13,6 +14,7 @@ import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.locations.Village;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
@@ -285,11 +287,21 @@ public class Game {
         howManyForVote++;
         if(howManyForVote == players.size()){
             // todo logic to remove player
+            Player player = Finder.getPlayerByUsername(whichToVote);
+            App.getGame().removePlayerFromGame(player);
             GameMessage<String> response = new GameMessage<>("game-command",
                 "terminate-vote");
             App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), new Gson().toJson(response));
             howManyForVote = 0;
             whichToVote = "";
+            GameMessage<String> exiter = new GameMessage<>("game-command","exit-game");
+            App.getServer().getOnlineConnections().forEach((k,v) -> {
+                if(v.equals(player.getUser())){
+                    k.send(new Gson().toJson(exiter));
+                }
+            });
+            GameMessage<GameData> msg = new GameMessage<>("game-data", new GameData(this));
+            App.getServer().sendToGroupByPlayers(getPlayers(), new Gson().toJson(msg));
         }else{
             GameMessage<GameCommand> response = new GameMessage<>("game-command",
                 new GameCommand("update-vote", ""+App.getGame().getHowManyForVote()));
@@ -304,5 +316,36 @@ public class Game {
 
     public void setWhichToVote(String whichToVote) {
         this.whichToVote = whichToVote;
+    }
+
+
+    public void removePlayerFromGame(Player player) {
+        this.players.remove(player);
+        if(this.loader.equals(player)){
+            this.loader = this.players.get(0);
+        }
+        for (Farm farm : this.farms) {
+            if(farm.getId() == player.getFarmId()){
+                removeFarmFromGame(farm);
+                break;
+            }
+        }
+        for (Player p : players) {
+            Iterator fi = p.getFriendships().iterator();
+            while (fi.hasNext()) {
+                Friendship f = (Friendship) fi.next();
+                if(f.getPlayer1().equals(player) || f.getPlayer2().equals(player)){
+                    fi.remove();
+                }
+            }
+        }
+        for (NPC npc : village.getNPCs()) {
+            npc.getFriendShip().remove(player);
+            npc.getIsTalkedToday().remove(player);
+            npc.getIsGiftedToday().remove(player);
+        }
+    }
+    public void removeFarmFromGame(Farm farm) {
+        this.farms.remove(farm);
     }
 }

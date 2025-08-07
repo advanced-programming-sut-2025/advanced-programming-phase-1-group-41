@@ -301,6 +301,9 @@ public abstract class GameScreen implements Screen {
         return stage;
     }
 
-
+    @Override
+    public void dispose() {
+        stage.dispose();
+    }
 }
 

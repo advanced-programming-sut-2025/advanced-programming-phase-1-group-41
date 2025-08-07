@@ -196,6 +196,15 @@ public class ClientGameHandler {
                         }
                         Playeracts.alrrSent = false;
                     }
+                }else if(command.equals("exit-game")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen() instanceof GameScreen screen){
+                        Gdx.app.postRunnable(()-> {
+                            screen.dispose();
+                            AppClient.setMenu(Menu.Main);
+                            AppClient.getMenu().resetMenu();
+                        });
+                    }
                 }
             }
         }
