@@ -28,6 +28,8 @@ public class CoopScreen extends GameScreen implements Screen {
     private final SpriteBatch batch;
     private final TextureRegion background;
     private final CoopMap coop;
+    private BarnOrCoopMenuBar coopMenuBar;
+    private boolean isCoopMenuOpen = false;
     private ArrayList<AnimalSprite> animalSprites;
 
     private final OrthographicCamera camera;
@@ -98,7 +100,6 @@ public class CoopScreen extends GameScreen implements Screen {
             animalSprite.renderY = animalSprite.y*CELL_SIZE;
         }
 
-
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
@@ -162,6 +163,10 @@ public class CoopScreen extends GameScreen implements Screen {
             }
         }
 
+        if(isCoopMenuOpen){
+            coopMenuBar.render(batch, camera);
+        }
+
         camera.position.set(hero.renderX + CELL_SIZE / 2f, hero.renderY + CELL_SIZE / 2f, 0);
         camera.update();
 
@@ -197,4 +202,12 @@ public class CoopScreen extends GameScreen implements Screen {
     @Override public void hide() {}
     @Override public void pause() {}
     @Override public void resume() {}
+
+    public boolean isCoopMenuOpen() {
+        return isCoopMenuOpen;
+    }
+
+    public void setCoopMenuOpen(boolean coopMenuOpen) {
+        isCoopMenuOpen = coopMenuOpen;
+    }
 }

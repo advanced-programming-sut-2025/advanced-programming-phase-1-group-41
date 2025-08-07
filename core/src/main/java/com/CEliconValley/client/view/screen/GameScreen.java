@@ -13,7 +13,6 @@ import com.CEliconValley.models.foragings.ForagingTree;
 import com.CEliconValley.models.foragings.Nature.Lake;
 import com.CEliconValley.models.foragings.Nature.Obstacle;
 import com.CEliconValley.models.foragings.Nature.Rock;
-import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
@@ -58,7 +57,8 @@ public abstract class GameScreen implements Screen {
     protected Stage stage;
     public abstract void transfer();
     protected Hero hero;
-    protected MenuBar menuBar=new MenuBar(this);
+    protected MenuBar menuBar = new MenuBar(this);
+    protected BarnOrCoopMenuBar barnOrCoopMenuBar = new BarnOrCoopMenuBar(this);
     protected Texture hudTexture = new Texture(Gdx.files.internal("game/Clock/Clock.png"));
     protected Image hudImage, energyBarImage, energyGreenImage, energyRedImage, energyYellowImage;
     protected TimeScreen timeScreen;
@@ -310,6 +310,9 @@ public abstract class GameScreen implements Screen {
     }
     public MenuBar getMenuBar() {
         return menuBar;
+    }
+    public BarnOrCoopMenuBar getBarnOrCoopMenuBar() {
+        return barnOrCoopMenuBar;
     }
 
 

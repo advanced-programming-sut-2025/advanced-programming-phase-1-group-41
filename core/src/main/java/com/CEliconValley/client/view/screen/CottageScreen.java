@@ -33,7 +33,7 @@ public class CottageScreen extends GameScreen implements Screen {
     private final OrthographicCamera camera;
 
     public CottageScreen(FarmScreen farmScreen, CottageMap cottageMap, Player player) {
-        // give the correct inventory renderer
+        // todo give the correct inventory renderer
         super(null);
         this.farmScreen = farmScreen;
         this.cottageMap = cottageMap;

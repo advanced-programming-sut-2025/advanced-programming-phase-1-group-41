@@ -6,6 +6,7 @@ import com.CEliconValley.common.FarmData;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.foragings.Nature.Grass;
+import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -28,24 +29,24 @@ public class GroundBorderSpawner {
     public GroundBorderSpawner() {
         switch (AppClient.getGameData().getTime().getSeason()){
             case Spring -> {
-                groundTexture = new Texture("game/general/tiles/ground_Spring.png");
-                coastTexture = new Texture("game/general/tiles/groundBorder_Spring.png");
-                cornerTexture = new Texture("game/general/tiles/groundCorner_Spring.png");
+                groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("ground_Spring.png");
+                coastTexture = GameAssetManager.getGameAssetManager().getTileTexture("groundBorder_Spring.png");
+                cornerTexture = GameAssetManager.getGameAssetManager().getTileTexture("groundCorner_Spring.png");
             }
             case Summer -> {
-                groundTexture = new Texture("game/general/tiles/ground_Summer.png");
-                coastTexture = new Texture("game/general/tiles/groundBorder_Summer.png");
-                cornerTexture = new Texture("game/general/tiles/groundCorner_Summer.png");
+                groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("ground_Summer.png");
+                coastTexture = GameAssetManager.getGameAssetManager().getTileTexture("groundBorder_Summer.png");
+                cornerTexture = GameAssetManager.getGameAssetManager().getTileTexture("groundCorner_Summer.png");
             }
             case Autumn ->  {
-                groundTexture = new Texture("game/general/tiles/ground_Autumn.png");
-                coastTexture = new Texture("game/general/tiles/groundBorder_Autumn.png");
-                cornerTexture = new Texture("game/general/tiles/groundCorner_Autumn.png");
+                groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("ground_Autumn.png");
+                coastTexture = GameAssetManager.getGameAssetManager().getTileTexture("groundBorder_Autumn.png");
+                cornerTexture = GameAssetManager.getGameAssetManager().getTileTexture("groundCorner_Autumn.png");
             }
             case Winter -> {
-                groundTexture = new Texture("game/general/tiles/ground_Winter.png");
-                coastTexture = new Texture("game/general/tiles/groundBorder_Winter.png");
-                cornerTexture = new Texture("game/general/tiles/groundCorner_Winter.png");
+                groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("ground_Winter.png");
+                coastTexture = GameAssetManager.getGameAssetManager().getTileTexture("groundBorder_Winter.png");
+                cornerTexture = GameAssetManager.getGameAssetManager().getTileTexture("groundCorner_Winter.png");
             }
         }
 
