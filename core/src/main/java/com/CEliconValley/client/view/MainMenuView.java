@@ -287,6 +287,12 @@ public class MainMenuView implements Screen {
                 Graphics.DisplayMode displayMode = Gdx.graphics.getDisplayMode();
                 Gdx.graphics.setFullscreenMode(displayMode);
             }
+        } else if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            if(joinLobby) {
+                controller.handleJoinLobby();
+            } else if(!mainTable.isVisible()) {
+                controller.handleNewLobby();
+            }
         }
 
         ScreenUtils.clear(0, 0, 0, 0);

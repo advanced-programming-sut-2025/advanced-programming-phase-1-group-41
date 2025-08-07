@@ -13,6 +13,8 @@ import com.CEliconValley.models.items.*;
 import com.CEliconValley.models.tools.Tool;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -20,16 +22,26 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.google.gson.Gson;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class MenuBar {
     private final Texture menuTexture;
     private final Texture miniMapTexture;
+    private final Texture characterTexture;
     private final TextureRegion[] tabTextures;
     private final int tileWidth;
     private final int tileHeight;
@@ -42,16 +54,25 @@ public class MenuBar {
     private String currentTab;
     private OrthographicCamera camera;
 
+    private Table cheatsTable;
+    private final ButtonGroup<TextButton> playerButtonGroup = new ButtonGroup<>();
+
+    private Rectangle[] playerButtons = new Rectangle[4];
+    private Rectangle saveButton = new Rectangle();
+    private Rectangle terminateButton = new Rectangle();
+    private int selectedIndex = -1;
+
     private final String[] tabOrder = {
         "Inventory", "Stats", "Relation",
         "Map", "Crafting", "Artisan",
-        "Controll", "Cheat", null
+        "Control", "Vote", null
     };
 
     public MenuBar() {
 
         menuTexture = new Texture("game/Buildings/Screen/Menu_Screen.png");
         miniMapTexture = new Texture("game/Buildings/Screen/map.png");
+        characterTexture = new Texture("game/Buildings/Screen/character.png");
 
         tileWidth = menuTexture.getWidth() / 3;
         tileHeight = menuTexture.getHeight() / 3;
@@ -99,9 +120,11 @@ public class MenuBar {
             case "Inventory":
             case "Crafting":
             case "Artisan":
-            case "Controll":
-            case "Cheat":
+            case "Control":
                 renderInventoryBar(batch, camera, inventory);
+                break;
+            case "Vote":
+                renderVote(batch);
                 break;
             case "Stats":
                 renderStats(batch);
@@ -230,7 +253,7 @@ public class MenuBar {
     }
 
 
-    private void renderStats(Batch batch) {
+    private void renderStats(@NotNull Batch batch) {
         Texture farmingIcon = GameAssetManager.getGameAssetManager().getSkillTexture("Farming_Skill_Icon.png");
         Texture fishingIcon = GameAssetManager.getGameAssetManager().getSkillTexture("Fishing_Skill_Icon.png");
         Texture foragingIcon = GameAssetManager.getGameAssetManager().getSkillTexture("Foraging_Skill_Icon.png");
@@ -341,8 +364,20 @@ public class MenuBar {
     }
 
     private void renderMap(Batch batch) {
-        batch.draw(miniMapTexture, startingX, startingY, menuTexture.getWidth() / 3f, menuTexture.getHeight() / 3f);
-
+        float screenWidth = camera.viewportWidth;
+        float screenHeight = camera.viewportHeight;
+        batch.draw(miniMapTexture, startingX + screenWidth / 80f, startingY + screenHeight / 60f, menuTexture.getWidth() / 2.32f, menuTexture.getHeight() / 3f);
+        int farmId = Finder.getpd().getFarmId();
+        float characterX = startingX + player.getX() * screenWidth / 240f, characterY = startingY + player.getY() * screenHeight / 240f;
+        if(farmId == 1){
+            characterX += screenWidth / 2;
+        } else if(farmId == 0){
+            characterY += screenHeight / 2;
+        } else if(farmId == 3){
+            characterX += screenWidth / 2;
+            characterY += screenHeight / 2;
+        }
+        batch.draw(characterTexture, characterX, characterY, characterTexture.getWidth(), characterTexture.getHeight());
     }
 
     private void renderCrafting(Batch batch) {
@@ -408,6 +443,140 @@ public class MenuBar {
             currentX += width * 2.3f;
         }
 
+    }
+
+    private void renderVote(@NotNull Batch batch) {
+        Texture nameTexture = GameAssetManager.getGameAssetManager().getBackgroundTexture("Player Name Background.png");
+        Texture buttonTexture = GameAssetManager.getGameAssetManager().getBackgroundTexture("AvatarBackground2.png");
+
+        float screenWidth = camera.viewportWidth;
+        float screenHeight = camera.viewportHeight;
+
+        float x = startingX + screenWidth * 0.025f;
+        float y = startingY + screenHeight * 0.2f;
+
+        float spacing = screenWidth * 0.14f;
+        float playerSize = screenHeight * 0.08f;
+
+        Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        camera.unproject(mousePos);
+
+        String currentName = AppClient.getUserData().getUsername();
+        List<PlayerData> players = AppClient.getGameData().getPlayersData();
+
+        for (PlayerData playerData : players) {
+            String name = playerData.getUsername();
+
+            float playerX = x;
+            float playerY = y - playerSize + 5;
+
+            batch.draw(nameTexture, playerX, playerY, playerSize * 3, playerSize);
+
+            font.getData().setScale(2f);
+            font.draw(batch, name, playerX + playerSize * 1.5f - name.length() * font.getScaleX() * 7.5f / 2f, playerY + playerSize / 1.5f);
+
+            boolean hovered = mousePos.x >= playerX && mousePos.x <= playerX + playerSize * 3f &&
+                mousePos.y >= playerY && mousePos.y <= playerY + playerSize;
+
+            boolean clicked = false;
+
+            if (hovered) {
+                if(Gdx.input.isKeyJustPressed(0)){
+                    clicked = true;
+                }
+                String warnText = "Vote " + name;
+                if (name.equals(currentName)) {
+                    warnText = "Voting Yourself?!!";
+                }
+                GlyphLayout tooltipLayout = new GlyphLayout(font, warnText);
+
+                float tooltipWidth = tooltipLayout.width + 40;
+                float tooltipHeight = tooltipLayout.height + 30;
+
+                float tooltipX = playerX + playerSize * 1.5f - tooltipWidth / 2f;
+                float tooltipY = playerY + playerSize + 20;
+
+                batch.end();
+                shapeRenderer.setProjectionMatrix(camera.combined);
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                shapeRenderer.setColor(0, 0, 0, 0.85f);
+                shapeRenderer.rect(tooltipX, tooltipY, tooltipWidth, tooltipHeight);
+                shapeRenderer.end();
+                batch.begin();
+
+                font.setColor(Color.RED);
+
+                font.draw(batch, warnText, tooltipX + 20, tooltipY + tooltipHeight - 15);
+
+                font.setColor(Color.WHITE);
+            }
+            if(clicked){
+                //TODO Sepehr Kick Vote
+            }
+
+            x += spacing;
+        }
+        x = startingX + screenWidth * 0.025f;
+        for (int i = 0; i < 2; i++) {
+            String text = "Force Terminate";
+            if(i == 1){ // TODO If CurrentName Only Admin! if not, break; in "if"
+                text = "Save Game";
+            }
+
+            float playerX = x;
+            float playerY = y - playerSize + 5 + screenHeight * 0.3f;
+
+            batch.draw(buttonTexture, playerX, playerY, playerSize * 4, playerSize);
+
+            font.getData().setScale(2f);
+            font.draw(batch, text, playerX + playerSize * 2f - text.length() * font.getScaleX() * 7.5f / 2f, playerY + playerSize / 1.5f);
+
+            boolean hovered = mousePos.x >= playerX && mousePos.x <= playerX + playerSize * 4f &&
+                mousePos.y >= playerY && mousePos.y <= playerY + playerSize;
+
+            boolean clicked = false;
+
+            if(hovered && Gdx.input.isKeyJustPressed(0)){
+                clicked = true;
+            }
+            if (hovered && i == 0) {
+
+                String warnText = "Vote For Force Terminate";
+
+                GlyphLayout tooltipLayout = new GlyphLayout(font, warnText);
+
+                float tooltipWidth = tooltipLayout.width + 40;
+                float tooltipHeight = tooltipLayout.height + 30;
+
+                float tooltipX = playerX + playerSize * 2f - tooltipWidth / 2f;
+                float tooltipY = playerY + playerSize + 20;
+
+                batch.end();
+                shapeRenderer.setProjectionMatrix(camera.combined);
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                shapeRenderer.setColor(0, 0, 0, 0.85f);
+                shapeRenderer.rect(tooltipX, tooltipY, tooltipWidth, tooltipHeight);
+                shapeRenderer.end();
+                batch.begin();
+
+                font.setColor(Color.RED);
+
+                font.draw(batch, warnText, tooltipX + 20, tooltipY + tooltipHeight - 15);
+
+                font.setColor(Color.WHITE);
+            }
+            if(clicked){
+                if(i == 0){
+                    //TODO Sepehr: Save
+                } else{
+                    //TODO Sepehr: Force Terminate
+                }
+            }
+
+            x += spacing * 2.5f;
+        }
+
+        font.getData().setScale(1f);
     }
 
     private boolean hasAllItems(CraftingRecipe recipe) {
