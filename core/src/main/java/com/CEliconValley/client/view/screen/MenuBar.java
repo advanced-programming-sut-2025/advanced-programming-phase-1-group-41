@@ -511,7 +511,7 @@ public class MenuBar {
 
                 font.setColor(Color.WHITE);
             }
-            if(clicked){
+            if(clicked && AppClient.getGameData().getPlayersData().size() > 1){
                 GameMessage<VoteMessage> msg = new GameMessage<>("new-vote",
                     new VoteMessage(name));
                 AppClient.getClient().send(new Gson().toJson(msg));
@@ -574,9 +574,11 @@ public class MenuBar {
             }
             if(clicked){
                 if(i == 0){
-                    //TODO Sepehr: Save
-                } else{
+                    GameMessage<String> msg = new GameMessage<>("new-ter", ";)");
+                    AppClient.getClient().send(new Gson().toJson(msg));
                     //TODO Sepehr: Force Terminate
+                } else{
+                    //TODO Sepehr: Save
                 }
             }
 

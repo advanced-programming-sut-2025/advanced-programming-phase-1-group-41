@@ -56,6 +56,7 @@ public class Game {
     public Thread commandThread;
     private int howManyInHome = 0;
     private int howManyForVote = 0;
+    private int howManyForTer = 0;
     private String whichToVote = "";
 
     public Game() {
@@ -307,6 +308,27 @@ public class Game {
                 new GameCommand("update-vote", ""+App.getGame().getHowManyForVote()));
             App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), new Gson().toJson(response));
 
+        }
+    }
+    public int getHowManyForTer() {
+        return howManyForTer;
+    }
+
+    public void setHowManyForTer(int howManyForTer) {
+        this.howManyForTer = howManyForTer;
+    }
+    public void incHowManyForTer(){
+        howManyForTer++;
+        if(howManyForTer == players.size()){
+            this.stopScheduler();
+            GameMessage<String> exiter = new GameMessage<>("game-command","exit-game");
+            App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), new Gson().toJson(exiter));
+            App.setGame(null);
+            App.setPreGame(null);
+        }else{
+            GameMessage<GameCommand> response = new GameMessage<>("game-command",
+                new GameCommand("update-ter", ""+App.getGame().getHowManyForTer()));
+            App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), new Gson().toJson(response));
         }
     }
 

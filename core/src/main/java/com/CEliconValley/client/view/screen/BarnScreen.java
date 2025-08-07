@@ -135,6 +135,7 @@ public class BarnScreen extends GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if(isGameFinished) return;
         Result result = Playeracts.handleInput(hero, barn, stage, delta);
         if(!result.success()){
             if(result.message().equals("cheat")){

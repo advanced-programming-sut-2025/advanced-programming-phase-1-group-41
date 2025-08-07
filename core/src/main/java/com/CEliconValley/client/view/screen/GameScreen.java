@@ -43,9 +43,18 @@ public abstract class GameScreen implements Screen {
     public boolean voteMode = false;
     public Image overlay;
     protected TextField cheatCodeField;
+
     public TextButton yesVoteButton, noVoteButton;
     public Label playerVoteLabel;
     public Label howManyVotedLabel;
+
+    public TextButton teryesButton, ternoButton;
+    public Label terLabel;
+    public Label terhowmanyLabel;
+    public boolean terMode = false;
+
+    public boolean isGameFinished = false;
+
     protected Stage stage;
     public abstract void transfer();
     protected Hero hero;
@@ -62,6 +71,11 @@ public abstract class GameScreen implements Screen {
     public void setTextForVoteLabel(String input){
         playerVoteLabel.setText(input);
         playerVoteLabel.setPosition(stage.getWidth() / 3 - playerVoteLabel.getWidth() / 2, stage.getHeight() * 5 / 6- playerVoteLabel.getHeight() / 2);
+    }
+
+    public void setTextForTerLabel(String input){
+        terLabel.setText(input);
+        terLabel.setPosition(Gdx.graphics.getWidth() / 3 - terLabel.getWidth(), stage.getHeight() * 5 / 6- terLabel.getHeight() / 2);
     }
 
     public void setupVoteUI(){
@@ -85,6 +99,28 @@ public abstract class GameScreen implements Screen {
         howManyVotedLabel.setPosition(Gdx.graphics.getWidth() / 2 - howManyVotedLabel.getWidth(), stage.getHeight() * 4 / 6- howManyVotedLabel.getHeight() / 2);
         howManyVotedLabel.setVisible(false);
         stage.addActor(howManyVotedLabel);
+
+        ternoButton = new TextButton("No", GameAssetManager.getGameAssetManager().getSkin());
+        ternoButton.setColor(Color.RED);
+        ternoButton.setVisible(false);
+        teryesButton = new TextButton("Yes", GameAssetManager.getGameAssetManager().getSkin());
+        teryesButton.setColor(Color.GREEN);
+        teryesButton.setVisible(false);
+        teryesButton.setPosition(stage.getWidth()* 3 / 4 - teryesButton.getWidth() / 2, stage.getHeight() / 2- teryesButton.getHeight() / 2);
+        ternoButton.setPosition(stage.getWidth()/4 - ternoButton.getWidth() / 2, stage.getHeight() / 2 - ternoButton.getHeight() / 2);
+        stage.addActor(ternoButton);
+        stage.addActor(teryesButton);
+        terLabel = new Label("Terminate Game", GameAssetManager.getGameAssetManager().getSkin());
+        terLabel.setVisible(false);
+        terLabel.setFontScale(2f);
+        terLabel.setPosition(Gdx.graphics.getWidth() / 2 - terLabel.getWidth(), stage.getHeight() * 5 / 6- terLabel.getHeight() / 2);
+        stage.addActor(terLabel);
+        terhowmanyLabel = new Label("Vote: 0 / "+AppClient.getGameData().getPlayersData().size(), GameAssetManager.getGameAssetManager().getSkin());
+        terhowmanyLabel.setFontScale(1.5f);
+        terhowmanyLabel.setPosition(Gdx.graphics.getWidth() / 2 - terhowmanyLabel.getWidth(), stage.getHeight() * 4 / 6- terhowmanyLabel.getHeight() / 2);
+        terhowmanyLabel.setVisible(false);
+        stage.addActor(terhowmanyLabel);
+
     }
 
 
@@ -220,12 +256,42 @@ public abstract class GameScreen implements Screen {
             yesVoteButton.setVisible(true);
             howManyVotedLabel.setVisible(true);
             setTextForVoteLabel("Vote for kicking out "+name);
+            howManyVotedLabel.setText("Vote: 0 / "+AppClient.getGameData().getPlayersData().size());
 
             overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
                 .getGameAssetManager()
                 .getBackgroundTexture("Field1.png"))));
 
     //        overlay.setColor(0, 0, 0, 0.5f);
+            overlay.setSize(stage.getWidth(), stage.getHeight());
+            overlay.setPosition(0, 0);
+
+            overlay.getColor().a = 0;
+            overlay.addAction(Actions.fadeIn(0.5f));
+
+
+            stage.addActor(overlay);
+            overlay.toBack();
+
+        });
+    }
+
+    public void handleTerminate(Stage stage) {
+        Gdx.app.postRunnable(() -> {
+            terMode = true;
+            terLabel.setVisible(true);
+            ternoButton.setVisible(true);
+            teryesButton.setVisible(true);
+            terhowmanyLabel.setVisible(true);
+            terhowmanyLabel.setText("Vote: 0 / "+AppClient.getGameData().getPlayersData().size());
+            setTextForTerLabel("Vote for terminating the game");
+
+
+            overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
+                .getGameAssetManager()
+                .getBackgroundTexture("Field1.png"))));
+
+            //        overlay.setColor(0, 0, 0, 0.5f);
             overlay.setSize(stage.getWidth(), stage.getHeight());
             overlay.setPosition(0, 0);
 

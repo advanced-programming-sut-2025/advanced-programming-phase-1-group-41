@@ -190,6 +190,7 @@ public class FarmScreen extends GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if(isGameFinished) return;
         String season = AppClient.getGameData().getTime().getSeason().name();
         if (!season.equals(currentSeason)) {
             currentSeason = season;

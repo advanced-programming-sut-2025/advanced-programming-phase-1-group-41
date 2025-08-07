@@ -70,6 +70,21 @@ public class GameHandler {
                     "terminate-vote");
                 App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(response));
             }
+            case "new-ter" -> {
+                App.getGame().setHowManyForVote(0);
+                App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(
+                    new GameMessage<>("game-command","new-ter")
+                ));
+            }
+            case "update-ter" -> {
+                App.getGame().incHowManyForTer();
+                }
+            case "terminate-ter" -> {
+                App.getGame().setHowManyForVote(0);
+                GameMessage<String> response = new GameMessage<>("game-command",
+                    "terminate-ter");
+                App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(response));
+            }
         }
     }
 

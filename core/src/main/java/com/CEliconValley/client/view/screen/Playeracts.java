@@ -93,6 +93,35 @@ public class Playeracts {
 
             return new Result(false, "cheat");
         }
+        if(screen.terMode){
+            stage.act(delta);
+            stage.draw();
+            screen.teryesButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if(alrrSent == false) {
+                        GameMessage<String> msg = new GameMessage<>("update-ter", ";)");
+                        AppClient.getClient().send(new Gson().toJson(msg));
+                    }
+                    alrrSent = true;
+                }
+            });
+
+            screen.ternoButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if(alrrSent == false){
+                        GameMessage<String> msg = new GameMessage<>("terminate-ter", ";)");
+                        AppClient.getClient().send(new Gson().toJson(msg));
+                    }
+                    alrrSent = true;
+                }
+            });
+
+            return new Result(false, "cheat");
+
+        }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             screen.handleCheatCode(stage);
             return new Result(true, "cheat");
