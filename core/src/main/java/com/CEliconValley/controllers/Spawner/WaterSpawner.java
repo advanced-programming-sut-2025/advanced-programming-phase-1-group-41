@@ -1,5 +1,6 @@
 package com.CEliconValley.controllers.Spawner;
 
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.FarmData;
 import com.CEliconValley.models.Cell;
@@ -16,14 +17,16 @@ import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class WaterSpawner {
     Texture waterTexture = new Texture("game/general/tiles/water.png");
-    Texture coastTexture = new Texture("game/general/tiles/coast.png");
-    Texture cornerTexture = new Texture("game/general/tiles/waterCorner.png");
+    Texture coastTexture = new Texture("game/general/tiles/coast_Spring.png");
+    Texture cornerTexture = new Texture("game/general/tiles/waterCorner_Spring.png");
     private Animation<TextureRegion> waterAnimation;
     Animation<TextureRegion> animCornerSE ;
     Animation<TextureRegion> animCornerNE ;
     Animation<TextureRegion> animCornerNW ;
     Animation<TextureRegion> animCornerSW ;
     private Animation<TextureRegion>[] coastAnimations;
+    private String currentSeason = "";
+
 
     public WaterSpawner() {
         splitWaterTexture();
@@ -70,6 +73,11 @@ public class WaterSpawner {
     }
 
     public boolean renderWater(SpriteBatch batch, CellData cellData, float passiveStateTime, FarmData farmData) {
+        String season = AppClient.getGameData().getTime().getSeason().name();
+        if (!season.equals(currentSeason)) {
+            currentSeason = season;
+            loadSeasonTextures(season);
+        }
 
         float x = cellData.getX() * CELL_SIZE;
         float y = cellData.getY() * CELL_SIZE;
@@ -234,6 +242,45 @@ public class WaterSpawner {
         if(cd == null) return false;
         return cd.getObjectName().equals(new Lake().getName());
     }
+    public void loadSeasonTextures(String season) {
+        if (coastTexture != null) coastTexture.dispose();
+        if (cornerTexture != null) cornerTexture.dispose();
+
+        coastTexture = new Texture("game/general/tiles/coast_" + season + ".png");
+        cornerTexture = new Texture("game/general/tiles/waterCorner_" + season + ".png");
+
+        splitSeasonalTextures();
+    }
+    private void splitSeasonalTextures() {
+        TextureRegion[][] tmp = TextureRegion.split(cornerTexture,
+            cornerTexture.getWidth() / 4,
+            cornerTexture.getHeight());
+
+        TextureRegion[] seFrames = new TextureRegion[4];
+        for (int i = 0; i < 4; i++) {
+            seFrames[i] = tmp[0][i];
+        }
+
+        animCornerSE = new Animation<>(0.15f, seFrames);
+        animCornerNE = new Animation<>(0.15f, flipY(seFrames));
+        animCornerNW = new Animation<>(0.15f, flipXY(seFrames));
+        animCornerSW = new Animation<>(0.15f, flipX(seFrames));
+
+        int FRAME_COLS = 9;
+        int FRAME_ROWS = 4;
+        tmp = TextureRegion.split(coastTexture, coastTexture.getWidth() / FRAME_COLS, coastTexture.getHeight() / FRAME_ROWS);
+
+        coastAnimations = new Animation[FRAME_COLS];
+        for (int i = 0; i < FRAME_COLS; i++) {
+            TextureRegion[] frames = new TextureRegion[FRAME_ROWS];
+            for (int j = 0; j < FRAME_ROWS; j++) {
+                frames[j] = new TextureRegion(tmp[j][i]);
+            }
+            coastAnimations[i] = new Animation<>(0.15f, frames);
+        }
+    }
+
+
 
 
 

@@ -1,5 +1,6 @@
 package com.CEliconValley.controllers.Spawner;
 
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.FarmData;
 import com.CEliconValley.models.Cell;
@@ -13,15 +14,40 @@ import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class GroundBorderSpawner {
 
-    private final Texture groundTexture       = new Texture("game/general/tiles/ground_Spring.png");
-    private final Texture coastTexture        = new Texture("game/general/tiles/groundBorder_Spring.png");
-    private final Texture cornerTexture       = new Texture("game/general/tiles/groundCorner_Spring.png");
+    private Texture groundTexture;
+    private Texture coastTexture;
+    private Texture cornerTexture;
+    private String currentSeason = "";
 
-    private final TextureRegion groundRegion;
-    private final TextureRegion[] coastRegions = new TextureRegion[9];
-    private final TextureRegion cornerSE, cornerNE, cornerNW, cornerSW;
+
+
+    private  TextureRegion groundRegion;
+    private  TextureRegion[] coastRegions = new TextureRegion[9];
+    private  TextureRegion cornerSE, cornerNE, cornerNW, cornerSW;
 
     public GroundBorderSpawner() {
+        switch (AppClient.getGameData().getTime().getSeason()){
+            case Spring -> {
+                groundTexture = new Texture("game/general/tiles/ground_Spring.png");
+                coastTexture = new Texture("game/general/tiles/groundBorder_Spring.png");
+                cornerTexture = new Texture("game/general/tiles/groundCorner_Spring.png");
+            }
+            case Summer -> {
+                groundTexture = new Texture("game/general/tiles/ground_Summer.png");
+                coastTexture = new Texture("game/general/tiles/groundBorder_Summer.png");
+                cornerTexture = new Texture("game/general/tiles/groundCorner_Summer.png");
+            }
+            case Autumn ->  {
+                groundTexture = new Texture("game/general/tiles/ground_Autumn.png");
+                coastTexture = new Texture("game/general/tiles/groundBorder_Autumn.png");
+                cornerTexture = new Texture("game/general/tiles/groundCorner_Autumn.png");
+            }
+            case Winter -> {
+                groundTexture = new Texture("game/general/tiles/ground_Winter.png");
+                coastTexture = new Texture("game/general/tiles/groundBorder_Winter.png");
+                cornerTexture = new Texture("game/general/tiles/groundCorner_Winter.png");
+            }
+        }
 
         groundRegion = new TextureRegion(groundTexture);
 
@@ -46,56 +72,39 @@ public class GroundBorderSpawner {
         cornerSW = flipX(base[0]);
     }
 
-    public boolean renderGround(SpriteBatch batch, CellData cellData, FarmData farmData) {
+    public void renderGround(SpriteBatch batch, CellData cellData, FarmData farmData) {
+
+
+        String season = AppClient.getGameData().getTime().getSeason().name();
+        if (!season.equals(currentSeason)) {
+            currentSeason = season;
+            loadSeasonTextures(season);
+        }
+
         int x = cellData.getX(), y = cellData.getY();
         float drawX = x * CELL_SIZE, drawY = y * CELL_SIZE;
 
-//        if(cellData.getFakeGround()==1){
-//            batch.draw(groundRegion, drawX, drawY, CELL_SIZE, CELL_SIZE);
-//        }if(cellData.getFakeGround()==0){
-//            int count = 0;
-//
-//
-//            if (isGround(x + 1, y, farmData)) count++;
-//            if (isGround(x - 1, y, farmData)) count++;
-//            if (isGround(x, y + 1, farmData)) count++;
-//            if (isGround(x, y - 1, farmData)) count++;
-//
-//            if (count >= 3) {
-//                cellData.setFakeGround(1);
-//            } else {
-//                cellData.setFakeGround(-1);
-//            }
-//        }
         Cell cell = cellData.extractData();
         if (!(cell.getObjectMap() instanceof Grass grass) || !grass.isGround())
-            return false;
-
+            return;
 
         batch.draw(groundRegion, drawX, drawY, CELL_SIZE, CELL_SIZE);
 
-
         if (grass.getInitialize() > -1) {
             switch (grass.getInitialize()) {
-
-                case 0, 2, 6, 8, 1, 3, 5, 7 -> {
-                    batch.draw(coastRegions[grass.getInitialize()], drawX, drawY, CELL_SIZE, CELL_SIZE);
-                }
-
+                case 0, 2, 6, 8, 1, 3, 5, 7 -> batch.draw(coastRegions[grass.getInitialize()], drawX, drawY, CELL_SIZE, CELL_SIZE);
                 case 9  -> batch.draw(cornerSW, drawX, drawY, CELL_SIZE, CELL_SIZE);
                 case 10 -> batch.draw(cornerSE, drawX, drawY, CELL_SIZE, CELL_SIZE);
                 case 11 -> batch.draw(cornerNW, drawX, drawY, CELL_SIZE, CELL_SIZE);
                 case 12 -> batch.draw(cornerNE, drawX, drawY, CELL_SIZE, CELL_SIZE);
             }
-            return true;
+            return;
         }
-
 
         if (isCoast(cell, farmData)) {
             int idx = getCoastIndex(x, y, farmData);
             grass.setInitialize(idx);
             batch.draw(coastRegions[idx], drawX, drawY, CELL_SIZE, CELL_SIZE);
-
         } else {
             CornerType corner = getGroundCornerType(x, y, farmData);
             if (corner != CornerType.NONE) {
@@ -115,9 +124,8 @@ public class GroundBorderSpawner {
                 }
             }
         }
-
-        return true;
     }
+
 
     private boolean isCoast(Cell cell, FarmData farmData) {
         int x = cell.getX(), y = cell.getY();
@@ -187,6 +195,40 @@ public class GroundBorderSpawner {
         TextureRegion f = new TextureRegion(orig); f.flip(true, true);
         return f;
     }
+    private void loadSeasonTextures(String season) {
+        disposeTextures();
+
+        groundTexture = new Texture("game/general/tiles/ground_" + season + ".png");
+        coastTexture = new Texture("game/general/tiles/groundBorder_" + season + ".png");
+        cornerTexture = new Texture("game/general/tiles/groundCorner_" + season + ".png");
+
+        groundRegion = new TextureRegion(groundTexture);
+
+        TextureRegion[][] coastTmp = TextureRegion.split(
+            coastTexture,
+            coastTexture.getWidth() / 9,
+            coastTexture.getHeight()
+        );
+        for (int i = 0; i < 9; i++) {
+            coastRegions[i] = coastTmp[0][i];
+        }
+
+        TextureRegion[][] tmp = TextureRegion.split(cornerTexture, cornerTexture.getWidth(), cornerTexture.getHeight());
+        TextureRegion base = tmp[0][0];
+
+        cornerSE = base;
+        cornerNE = flipY(base);
+        cornerNW = flipXY(base);
+        cornerSW = flipX(base);
+    }
+
+    private void disposeTextures() {
+        if (groundTexture != null) groundTexture.dispose();
+        if (coastTexture != null) coastTexture.dispose();
+        if (cornerTexture != null) cornerTexture.dispose();
+
+    }
+
 
     private enum CornerType { SE, SW, NE, NW, NONE }
 }

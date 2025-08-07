@@ -53,11 +53,12 @@ public class FarmScreen extends GameScreen implements Screen {
     private ArrayList<Hero> otherHeroes;
     private GroundBorderSpawner groundBorderSpawner;
     private final List<CellData> visibleCells = new ArrayList<>();
+    private String currentSeason = "";
 
 
     Map<Cell, TextureRegion> groundCache;
 
-    public static Texture farmTexture = new Texture("game/Buildings/Screen/Farm_Scree.png");
+    public static Texture farmTexture =new Texture("game/Buildings/Screen/Farm_Screen_Spring.png");
     public static Sprite farmSprite;
     ;
 
@@ -164,6 +165,8 @@ public class FarmScreen extends GameScreen implements Screen {
                 }
             }
         }
+        currentSeason = AppClient.getGameData().getTime().getSeason().name();
+        loadFarmBackground(currentSeason);
 //        for(Cell cell: farm.getCells()) {
 //            Cell doorCell=Finder.findCellByCoordinates(cell.getX(),cell.getY()+1,this.farm);
 //            Cell homeCell=Finder.findCellByCoordinates(cell.getX(),cell.getY()+2,this.farm);
@@ -186,6 +189,11 @@ public class FarmScreen extends GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        String season = AppClient.getGameData().getTime().getSeason().name();
+        if (!season.equals(currentSeason)) {
+            currentSeason = season;
+            loadFarmBackground(season);
+        }
         batch.setColor(ApplyFog(getTimeColor(AppClient.getGameData().getTime().getHour())));
         Gdx.gl.glClearColor(0.8f, 0.9f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -492,6 +500,15 @@ public class FarmScreen extends GameScreen implements Screen {
 
     public Thunder getThunder() {
         return thunder;
+    }
+    private void loadFarmBackground(String season) {
+
+        if (farmTexture != null) farmTexture.dispose();
+
+
+        farmTexture = new Texture("game/Buildings/Screen/Farm_Screen_" + season + ".png");
+        farmSprite = new Sprite(farmTexture);
+        farmSprite.setSize(CELL_SIZE, CELL_SIZE);
     }
 
     public void setDest(){
