@@ -102,6 +102,7 @@ public class FarmScreen extends GameScreen implements Screen {
         menuBar.setPlayer(player);
         otherHeroes = new ArrayList<>();
         this.farmMap = new FarmMap(Finder.getFarmDataById(AppClient.getGameData(), AppClient.getUserData().getUsername()));
+        System.out.println("this farm map "+this.farmMap.farmData.getId());
         this.player = player;
         treeSpawner=new TreeSpawner();
         waterSpawner=new WaterSpawner();

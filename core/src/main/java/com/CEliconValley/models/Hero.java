@@ -1,5 +1,6 @@
 package com.CEliconValley.models;
 
+import com.CEliconValley.common.messages.TGPoint;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.graphics.Texture;
@@ -7,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -19,6 +21,13 @@ public class Hero {
     private TextureRegion[][] toolsActs_Front;
     private TextureRegion[][] toolsActs_Back;
     private TextureRegion[][] toolsActs_Side;
+
+    private final Texture generalToolsTexture_Front;
+    private final Texture generalToolsTexture_Back;
+    private final Texture generalToolsTexture_Side;
+    private TextureRegion[][] otherToolsActs_Front;
+    private TextureRegion[][] otherToolsActs_Back;
+    private TextureRegion[][] otherToolsActs_Side;
     private Farm farm;
     public int currentDirection=3;
 
@@ -39,10 +48,16 @@ public class Hero {
         toolsTexture_Front = GameAssetManager.getGameAssetManager().getHeroTexture("tools_Front.png");
         toolsTexture_Back = GameAssetManager.getGameAssetManager().getHeroTexture("tools_Back.png");
         toolsTexture_Side = GameAssetManager.getGameAssetManager().getHeroTexture("tools_Side.png");
+        generalToolsTexture_Front = GameAssetManager.getGameAssetManager().getHeroTexture("generalTools_Front.png");
+        generalToolsTexture_Back = GameAssetManager.getGameAssetManager().getHeroTexture("generalTools_Back.png");
+        generalToolsTexture_Side = GameAssetManager.getGameAssetManager().getHeroTexture("generalTools_Side.png");
         playerActs = TextureRegion.split(playerTexture, playerTexture.getWidth() / 8, playerTexture.getHeight() / 11);
         toolsActs_Front = TextureRegion.split(toolsTexture_Front, toolsTexture_Front.getWidth()/5,toolsTexture_Front.getHeight()/15 );
         toolsActs_Back = TextureRegion.split(toolsTexture_Back, toolsTexture_Back.getWidth()/5,toolsTexture_Back.getHeight()/15);
         toolsActs_Side= TextureRegion.split(toolsTexture_Side,toolsTexture_Side.getWidth()/5,toolsTexture_Side.getHeight()/15);
+        otherToolsActs_Front = TextureRegion.split(generalToolsTexture_Front, generalToolsTexture_Front.getWidth()/6,generalToolsTexture_Front.getHeight()/8);
+        otherToolsActs_Back = TextureRegion.split(generalToolsTexture_Back, generalToolsTexture_Front.getWidth()/6,generalToolsTexture_Front.getHeight()/8);
+        otherToolsActs_Side = TextureRegion.split(generalToolsTexture_Side, generalToolsTexture_Front.getWidth()/6,generalToolsTexture_Front.getHeight()/8);
 //        this.farm =(Farm) location;
     }
 
@@ -119,6 +134,40 @@ public class Hero {
             case 4:
                 for (int i = 0; i <toolsActs_Side[level].length; i++) {
                     TextureRegion flippedFrame = new TextureRegion(toolsActs_Side[level][i]);
+                    flippedFrame.flip(true, false);
+                    wantedActs[i] = flippedFrame;
+                }
+                return new Animation<>(0.10f, wantedActs);
+
+        }
+        return null;
+    }
+
+    public Animation<TextureRegion> useOtherTool(ArrayList<TGPoint> tgPoints){
+        TextureRegion[] wantedActs=new TextureRegion[tgPoints.size()];
+        switch(currentDirection){
+            case 1:
+                for (int i = 0; i < tgPoints.size(); i++) {
+                    TGPoint tgPoint = tgPoints.get(i);
+                    wantedActs[i] = otherToolsActs_Back[tgPoint.row][tgPoint.col];
+                }
+                return new Animation<>(0.10f,wantedActs);
+            case 2:
+                for (int i = 0; i < tgPoints.size(); i++) {
+                    TGPoint tgPoint = tgPoints.get(i);
+                    wantedActs[i] = otherToolsActs_Side[tgPoint.row][tgPoint.col];
+                }
+                return new Animation<>(0.10f,wantedActs);
+            case 3:
+                for (int i = 0; i < tgPoints.size(); i++) {
+                    TGPoint tgPoint = tgPoints.get(i);
+                    wantedActs[i] = otherToolsActs_Front[tgPoint.row][tgPoint.col];
+                }
+                return new Animation<>(0.10f,wantedActs);
+            case 4:
+                for (int i = 0; i < tgPoints.size(); i++) {
+                    TGPoint tgPoint = tgPoints.get(i);
+                    TextureRegion flippedFrame = new TextureRegion(otherToolsActs_Side[tgPoint.row][tgPoint.col]);
                     flippedFrame.flip(true, false);
                     wantedActs[i] = flippedFrame;
                 }

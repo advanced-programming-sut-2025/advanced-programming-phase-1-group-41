@@ -5,6 +5,7 @@ import com.CEliconValley.client.model.AnimalSprite;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
+import com.CEliconValley.common.messages.TGPoint;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.Player;
@@ -141,16 +142,23 @@ public class Playeracts {
                 AppClient.getClient().send(new Gson().toJson(msg));
             }
         }
-        else if (Gdx.input.isKeyJustPressed((Input.Keys.E))) {
+        else if (Gdx.input.isKeyJustPressed((Input.Keys.R))) {
             if(screen instanceof FarmScreen fs){
                     fs.getThunder().strikeAt(hero.playerX.get(), hero.playerY.get());
-
             }
-            screen.onRepeat=false;
-            hero.currentAnimation = hero.useTool(3);
         } else if (Gdx.input.isKeyJustPressed((Input.Keys.E))) {
             screen.onRepeat = false;
-            hero.currentAnimation = hero.useTool(getMainToolNumber());
+            int pre = getMainToolNumber();
+            ArrayList<TGPoint> tgp = getOtherToolNumber();
+            if (pre == -1) {
+                if(tgp == null){
+                    hero.currentAnimation = hero.useTool(pre+1);
+                }else{
+                    hero.currentAnimation = hero.useOtherTool(tgp);
+                }
+            }else{
+                hero.currentAnimation = hero.useTool(pre);
+            }
             hero.isActing.set(true);
             hero.stateTime = 0;
             if (screen instanceof FarmScreen farmScreen) {
@@ -320,6 +328,76 @@ public class Playeracts {
             }
         }
         return -1;
+    }
+
+    public static ArrayList<TGPoint> getOtherToolNumber() {
+        ArrayList<TGPoint> tgp = new ArrayList();
+        PlayerData pd = Finder.getpd();
+        if (pd.getCurrentToolName() == null) return null;
+        if (BasicTool.parseBasicTool(pd.getCurrentToolName()) != null) {
+            if (pd.getCurrentToolName().equals(new WateringCan().getName())) {
+                switch (pd.getToolLevel()) {
+                    case Default -> {
+                        tgp.add(new TGPoint(0, 0));
+                        tgp.add(new TGPoint(0, 1));
+                        tgp.add(new TGPoint(0, 2));
+                        return tgp;
+                    }
+                    case Copper -> {
+                        tgp.add(new TGPoint(0, 3));
+                        tgp.add(new TGPoint(0, 4));
+                        tgp.add(new TGPoint(0, 5));
+                        return tgp;
+                    }
+                    case Iron -> {
+                        tgp.add(new TGPoint(1, 0));
+                        tgp.add(new TGPoint(1, 1));
+                        tgp.add(new TGPoint(1, 2));
+                        return tgp;
+                    }
+                    case Gold -> {
+                        tgp.add(new TGPoint(1, 3));
+                        tgp.add(new TGPoint(1, 4));
+                        tgp.add(new TGPoint(1, 5));
+                        return tgp;
+                    }
+                    case Iridium -> {
+                        tgp.add(new TGPoint(2, 0));
+                        tgp.add(new TGPoint(2, 1));
+                        tgp.add(new TGPoint(2, 2));
+                        return tgp;
+                    }
+                }
+            }
+        }
+        if(pd.getCurrentToolName().equals(new Scythe().getName())){
+            for (int i = 0; i < 6; i++) {
+                tgp.add(new TGPoint(3, i));
+            }
+            return tgp;
+        }
+        if(FishingRodLevel.parseFishingRodLevel(pd.getCurrentToolName()) != null){
+            int row = 4;
+            switch (FishingRodLevel.parseFishingRodLevel(pd.getCurrentToolName())){
+                case Training -> {
+                    row = 4;
+                }
+                case Bamboo -> {
+                    row = 5;
+                }
+                case FiberGlass -> {
+                    row = 6;
+                }
+                case Iridium -> {
+                    row = 7;
+                }
+            }
+            for (int i = 0; i < 5; i++) {
+                tgp.add(new TGPoint(row, i));
+            }
+            return tgp;
+        }
+        return null;
     }
 
 }

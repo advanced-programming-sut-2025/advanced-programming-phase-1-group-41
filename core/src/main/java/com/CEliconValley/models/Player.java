@@ -114,6 +114,7 @@ public class Player {
         this.energy = energy;
         this.energyUnlimited = energyUnlimited;
         this.farmId = farmId;
+        System.out.println("set farmid to "+farmId);
         this.farmType = farmType;
         this.farmingSkill = farmingSkill;
         this.fishingSkill = fishingSkill;

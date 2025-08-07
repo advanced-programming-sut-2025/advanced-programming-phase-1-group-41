@@ -54,6 +54,7 @@ public class GameHandler {
 
     public static void newGame() {
         Game game = new Game(App.getPreGame().getPlayers(), App.getPreGame().getAdmin());
+        System.out.println("game length is "+game.getPlayers().size());
         App.setGame(game);
 
         GameMessage<GameData> response = new GameMessage<>("new-game", new GameData(game));

@@ -111,10 +111,12 @@ public class ClientGameHandler {
                     Menu.Game.resetMenu();
                     AppClient.setMenu(Menu.Game);
                     AppClient.setGameData(gamedata);
-                    Player player = gamedata.getPlayersData().get(0).getPlayer();
+                    Player player = Finder.getpd().getPlayer();
+                    System.out.println("farid "+player.getFarmId());
                     ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new FarmScreen(
                         Finder.getFarmDataById(AppClient.getGameData(), AppClient.getUserData().getUsername()).getFarm(player), player
                     ));
+                    System.out.println("farmid "+Finder.getFarmDataById(AppClient.getGameData(), AppClient.getUserData().getUsername()).getId());
                 });
             }
             case "pre-start-request" -> {

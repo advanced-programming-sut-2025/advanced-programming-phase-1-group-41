@@ -72,7 +72,7 @@ public class Game {
     }
 
     public Game(ArrayList<Player> players, Player loader) {
-        this.players = players;
+        this.players = new ArrayList<>(players);
         this.loader = loader;
         this.weatherType = WeatherType.Sunny;
         this.tmrwWeatherType = WeatherType.Sunny;
@@ -86,6 +86,7 @@ public class Game {
         this.village = new Village(false);
         for (int i = 0; i < this.players.size(); i++) {
             this.farms.add(new Farm(i, players.get(i).getFarmType()));
+            players.get(i).setFarmId(i);
         }
     }
 
