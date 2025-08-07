@@ -93,17 +93,28 @@ public class GameClient extends WebSocketClient {
 //                System.out.println("error is "+message);
 //                Response.errorResponse(errorMsg.body);
             JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
-            JsonObject bodyObject = jsonObject.getAsJsonObject("body");
-            if (bodyObject.has("success")) {
-                SuccessMessage success = gson.fromJson(bodyObject, SuccessMessage.class);
-                System.out.println("Success: " + success.success);
-                Response.successResponse(success);
-            } else if (bodyObject.has("error")) {
-                ErrorMessage error = gson.fromJson(bodyObject, ErrorMessage.class);
-                System.out.println("Error: " + error.error);
-                Response.errorResponse(error);
-            } else {
-                ClientMessageRouter.route(genericMsg.type, bodyObject, gson, genericMsg.timestamp, message);
+            JsonElement bodyElement = jsonObject.get("body");
+            if (bodyElement == null || bodyElement.isJsonNull()) {
+                System.err.println("Missing or null 'body' field.");
+                return;
+            }
+
+            if (bodyElement.isJsonObject()) {
+                JsonObject bodyObject = bodyElement.getAsJsonObject();
+
+                if (bodyObject.has("success")) {
+                    SuccessMessage success = gson.fromJson(bodyObject, SuccessMessage.class);
+                    System.out.println("Success: " + success.success);
+                    Response.successResponse(success);
+                } else if (bodyObject.has("error")) {
+                    ErrorMessage error = gson.fromJson(bodyObject, ErrorMessage.class);
+                    System.out.println("Error: " + error.error);
+                    Response.errorResponse(error);
+                } else {
+                    ClientMessageRouter.route(genericMsg.type, bodyObject, gson, genericMsg.timestamp, message);
+                }
+            }else{
+                ClientMessageRouter.route(genericMsg.type, gson, genericMsg.timestamp, message);
             }
         } catch (Exception e) {
             System.out.println("----------------------------------");

@@ -75,17 +75,8 @@ public class GameHandler {
         });
         game.commandThread.start();
 
-        // Start game tick scheduler
-        game.scheduler = Executors.newSingleThreadScheduledExecutor();
-        game.scheduler.scheduleAtFixedRate(() -> {
-            try {
-                game.getTime().advanceOneHour();
-                GameMessage<GameData> msg = new GameMessage<>("game-data", new GameData(game));
-                App.getServer().sendToGroupByPlayers(game.getPlayers(), new Gson().toJson(msg));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }, 1, 10, TimeUnit.SECONDS);
+
+        game.startScheduler();
     }
 
     private static void processCommand(GameCommand command) {

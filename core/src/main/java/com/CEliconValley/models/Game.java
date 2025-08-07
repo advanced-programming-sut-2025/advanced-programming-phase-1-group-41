@@ -1,6 +1,9 @@
 package com.CEliconValley.models;
 
+import com.CEliconValley.common.GameData;
+import com.CEliconValley.common.messages.GameMessage;
 import com.badlogic.gdx.utils.Timer;
+import com.google.gson.Gson;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Transient;
@@ -11,7 +14,9 @@ import com.CEliconValley.models.locations.Village;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Entity("games")
@@ -79,7 +84,6 @@ public class Game {
         this.time = new TimeLine();
         this.currentPlayer = loader;//todo,not true
 //        this.map = new Map();
-
         this.roundEnergy = 0;
         this._id = new ObjectId();
         App.setGame(this);
@@ -230,6 +234,25 @@ public class Game {
             }
         }
         return null;
+    }
+
+    public void startScheduler() {
+        scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate(() -> {
+            try {
+                getTime().advanceOneHour();
+                GameMessage<GameData> msg = new GameMessage<>("game-data", new GameData(this));
+                App.getServer().sendToGroupByPlayers(getPlayers(), new Gson().toJson(msg));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, 1, 10, TimeUnit.SECONDS);
+    }
+
+    public void stopScheduler() {
+        if (scheduler != null && !scheduler.isShutdown()) {
+            scheduler.shutdownNow();
+        }
     }
 
 }

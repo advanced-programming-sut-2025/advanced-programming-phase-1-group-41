@@ -6,6 +6,7 @@ import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.locations.Farm;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 
@@ -39,6 +40,7 @@ public class Cottage implements Building {
         int xWall;
         int yWall;
         yWall = y;
+        ArrayList<Cell> startPoints = new ArrayList<>();
         while(yWall <= y + 5) {
             for (int i = x; i <= x + 5; i++) {
                 Cell cell = Finder.findCellByCoordinates(i, yWall, farm);
@@ -46,6 +48,8 @@ public class Cottage implements Building {
                 cell.setObjectMap(new Wall());
                 if(i == x + 3 && yWall == y ){
                     cell.setObjectMap(new Door());
+                    startPoints.add(cell);
+                    farm.setStartPoints(startPoints);
                 }
             }
             yWall+=5;

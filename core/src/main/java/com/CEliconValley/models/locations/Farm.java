@@ -196,7 +196,7 @@ public class Farm {
                 i--;
             }
         }
-        if(this.getId()==1){
+        if(this.getId()==0){
             for(Cell cell : cells){
                 if(cell.getX()==59&&cell.getY()>=73||cell.getY()==74&&cell.getX()>=58){
                     Grass grass = new Grass();
@@ -205,7 +205,7 @@ public class Farm {
                     transferCells.add(cell);
                 }
             }
-        }else if(this.getId()==2){
+        }else if(this.getId()==1){
             for(Cell cell : cells){
                 if(cell.getX()==0&&cell.getY()>=73||cell.getY()==74&&cell.getX()<=1){
                     Grass grass = new Grass();
@@ -214,7 +214,7 @@ public class Farm {
                     transferCells.add(cell);
                 }
             }
-        }else if(this.getId()==3){
+        }else if(this.getId()==2){
             for(Cell cell : cells){
                 if(cell.getX()==59&&cell.getY()<=1||cell.getY()==0&&cell.getX()>=58){
                     Grass grass = new Grass();
@@ -223,7 +223,7 @@ public class Farm {
                     transferCells.add(cell);
                 }
             }
-        } else if(this.getId()==4){
+        } else if(this.getId()==3){
             for(Cell cell : cells){
                 if(cell.getX()==0&&cell.getY()<=1||cell.getY()==0&&cell.getX()<=1){
                     Grass grass = new Grass();
@@ -232,15 +232,16 @@ public class Farm {
                     transferCells.add(cell);
                 }
             }
-        }//todo تو فاز یک ، ایگرگ از بالا به پایین زیاد میشد ولی تو گرافیک برعکسه این، ترنسفر سل ها باید عوض شن
-        for(Cell cell : cells){
-            if(cell.getY()>2&&getCell(cell.getX(),cell.getY()-1).getObjectMap() instanceof Door&&getCell(cell.getX(),cell.getY()-2).getObjectMap() instanceof Cottage){
-                cell.setObjectMap(new Grass());
-                startPoints.add(cell);
-//                Objects.requireNonNull(Finder.findPlayerByFarm(this)).setX(cell.getX());
-//                Objects.requireNonNull(Finder.findPlayerByFarm(this)).setY(cell.getY());
-            }
         }
+//        for(Cell cell : cells){
+//            if(cell.getY()>2&&getCell(cell.getX(),cell.getY()-1).getObjectMap() instanceof Door&&getCell(cell.getX(),cell.getY()-2).getObjectMap() instanceof Cottage){
+//                System.out.println("found a cell "+cell.getX()+" "+cell.getY()+" in "+id);
+//                cell.setObjectMap(new Grass());
+//                startPoints.add(cell);
+////                Objects.requireNonNull(Finder.findPlayerByFarm(this)).setX(cell.getX());
+////                Objects.requireNonNull(Finder.findPlayerByFarm(this)).setY(cell.getY());
+//            }
+//        }
 
 
     }

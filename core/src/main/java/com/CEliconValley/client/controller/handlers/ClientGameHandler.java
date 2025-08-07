@@ -4,6 +4,7 @@ import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.view.LobbyScreen;
 import com.CEliconValley.client.view.screen.FarmScreen;
 import com.CEliconValley.client.view.screen.GameScreen;
+import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.FarmData;
 import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.PlayerData;
@@ -126,6 +127,23 @@ public class ClientGameHandler {
                         new PreStartResponse(AppClient.getUserData().getUsername(),
                             view.getFarmType()));
                     AppClient.getClient().send(gson.toJson(response));
+                }
+            }
+
+        }
+    }
+
+    public static void handle(String type, String message , Gson gson, long timestamp){
+        switch (type){
+            case "game-command"-> {
+                GameMessage<String> gameMessage = gson.fromJson(message, new TypeToken<GameMessage<String>>() {}.getType());
+                String command = gameMessage.body;
+                if(command.equals("walk home")){
+                    CellData cd = Finder.getfd().getStartPoints().get(0);
+                    System.out.println("starting point is "+cd.getX()+" "+cd.getY());
+                    for (CellData transferCell : Finder.getfd().getTransferCells()) {
+                        System.out.println("  transfer cells "+transferCell.getX()+" "+transferCell.getY());
+                    }
                 }
             }
         }

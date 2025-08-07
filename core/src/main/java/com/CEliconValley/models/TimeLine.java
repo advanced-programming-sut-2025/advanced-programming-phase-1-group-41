@@ -1,7 +1,9 @@
 package com.CEliconValley.models;
 
+import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.controllers.subgames.*;
 import com.CEliconValley.models.buildings.marketplaces.Marketplace;
+import com.google.gson.Gson;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import org.bson.types.ObjectId;
@@ -75,7 +77,7 @@ public class TimeLine {
     public void advanceOneDay(){
         if(hour == 0){
             // TODO important fix this!
-//            goHome();
+            goHome();
             for (Player player : App.getGame().getPlayers()) {
                 player.resetEnergy();
             }
@@ -126,19 +128,22 @@ public class TimeLine {
     }
 
     public void goHome(){
-        for (Player player : App.getGame().getPlayers()) {
-            Farm farm = Finder.findFarmByPlayer(player);
-            MapController controller = new MapController();
-            Cell villageCell = App.getGame().getVillage().getTransferCells().get(0);
-            Cell playerCell = farm.getStartPoints().get(0);
-            if(player.isPlayerIsInVillage()){
-                Result preResult = controller.walk(null,villageCell.getX(),villageCell.getY());
-                if(!preResult.success()){
-                    System.out.println("you're stuck "+preResult);
-                }
-            }
-            System.out.println(controller.walk(null, playerCell.getX(),playerCell.getY()));
-        }
+//        for (Player player : App.getGame().getPlayers()) {
+//            Farm farm = Finder.findFarmByPlayer(player);
+//            MapController controller = new MapController();
+//            Cell villageCell = App.getGame().getVillage().getTransferCells().get(0);
+//            Cell playerCell = farm.getStartPoints().get(0);
+//            if(player.isPlayerIsInVillage()){
+//                Result preResult = controller.walk(null,villageCell.getX(),villageCell.getY());
+//                if(!preResult.success()){
+//                    System.out.println("you're stuck "+preResult);
+//                }
+//            }
+//            System.out.println(controller.walk(null, playerCell.getX(),playerCell.getY()));
+//        }
+        GameMessage<String> msg = new GameMessage<>("game-command", "walk home");
+//        App.getGame().stopScheduler();
+        App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), new Gson().toJson(msg));
     }
 
     public void predictTmrwWeather() {

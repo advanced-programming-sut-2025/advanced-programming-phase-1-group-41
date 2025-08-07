@@ -23,4 +23,12 @@ public class ClientMessageRouter {
                  "farm-data", "player-data" -> ClientGameHandler.handle(type, body, gson, timestamp);
         }
     }
+    public static void route(String type, Gson gson,
+                             long timestamp, String message){
+        switch (type) {
+            case "game-command" -> {
+                ClientGameHandler.handle(type, message, gson, timestamp);
+            }
+        }
+    }
 }
