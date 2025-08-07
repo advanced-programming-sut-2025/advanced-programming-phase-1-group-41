@@ -194,6 +194,8 @@ public class Playeracts {
             if(screen instanceof FarmScreen fs){
                     fs.getThunder().strikeAt(hero.playerX.get(), hero.playerY.get());
             }
+        }else if(Gdx.input.isKeyJustPressed((Input.Keys.TAB))) {
+            // TODO arad heivoon
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.Q)){
             System.out.println("you're at "+hero.playerX+" "+hero.playerY);

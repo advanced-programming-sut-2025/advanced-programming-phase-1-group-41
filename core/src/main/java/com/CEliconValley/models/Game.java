@@ -246,7 +246,7 @@ public class Game {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }, 1, 2, TimeUnit.SECONDS);
+        }, 10, 10, TimeUnit.SECONDS);
     }
 
     public void stopScheduler() {
