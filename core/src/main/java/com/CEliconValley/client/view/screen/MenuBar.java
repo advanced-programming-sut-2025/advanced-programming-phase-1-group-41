@@ -5,6 +5,7 @@ import com.CEliconValley.common.InventoryData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
+import com.CEliconValley.common.messages.VoteMessage;
 import com.CEliconValley.controllers.ItemManager;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Finder;
@@ -61,15 +62,15 @@ public class MenuBar {
     private Rectangle saveButton = new Rectangle();
     private Rectangle terminateButton = new Rectangle();
     private int selectedIndex = -1;
-
+    private GameScreen screen;
     private final String[] tabOrder = {
         "Inventory", "Stats", "Relation",
         "Map", "Crafting", "Artisan",
         "Control", "Vote", null
     };
 
-    public MenuBar() {
-
+    public MenuBar(GameScreen screen) {
+        this.screen = screen;
         menuTexture = new Texture("game/Buildings/Screen/Menu_Screen.png");
         miniMapTexture = new Texture("game/Buildings/Screen/map.png");
         characterTexture = new Texture("game/Buildings/Screen/character.png");
@@ -481,7 +482,7 @@ public class MenuBar {
             boolean clicked = false;
 
             if (hovered) {
-                if(Gdx.input.isKeyJustPressed(0)){
+                if(Gdx.input.isButtonJustPressed(0)){
                     clicked = true;
                 }
                 String warnText = "Vote " + name;
@@ -511,6 +512,9 @@ public class MenuBar {
                 font.setColor(Color.WHITE);
             }
             if(clicked){
+                GameMessage<VoteMessage> msg = new GameMessage<>("new-vote",
+                    new VoteMessage(name));
+                AppClient.getClient().send(new Gson().toJson(msg));
                 //TODO Sepehr Kick Vote
             }
 
@@ -539,7 +543,7 @@ public class MenuBar {
 
             boolean clicked = false;
 
-            if(hovered && Gdx.input.isKeyJustPressed(0)){
+            if(hovered && Gdx.input.isButtonJustPressed(0)){
                 clicked = true;
             }
             if (hovered && i == 0) {

@@ -30,7 +30,6 @@ public class App {
     private static GameServer server;
     private static GameClient client;
 
-
     public static void setupServer(){
         server = new GameServer();
         server.start();

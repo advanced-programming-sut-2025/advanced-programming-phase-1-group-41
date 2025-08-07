@@ -21,11 +21,13 @@ public class GameHandler {
     public static void handle(String type, String message, WebSocket conn, Gson gson) {
         switch (type) {
             case "game-popup" -> {
-                GameMessage<String> msg = gson.fromJson(message, new TypeToken<GameMessage<String>>() {}.getType());
+                GameMessage<String> msg = gson.fromJson(message, new TypeToken<GameMessage<String>>() {
+                }.getType());
                 // TODO: Broadcast popup to players in the game
             }
             case "new-game" -> {
-                GameMessage<Lobby> msg = gson.fromJson(message, new TypeToken<GameMessage<Lobby>>() {}.getType());
+                GameMessage<Lobby> msg = gson.fromJson(message, new TypeToken<GameMessage<Lobby>>() {
+                }.getType());
                 for (String playerName : msg.body.getPlayerNames()) {
                     GameMessage<PreStartRequest> request = new GameMessage<>("pre-start-request", new PreStartRequest());
                     App.getServer().sendToUsername(playerName, gson.toJson(request));
@@ -33,35 +35,54 @@ public class GameHandler {
                 App.setPreGame(new PreGame(msg.body.getPlayerNames().size(), msg.body.getAdmin()));
             }
             case "pre-start-response" -> {
-                GameMessage<PreStartResponse> msg = gson.fromJson(message, new TypeToken<GameMessage<PreStartResponse>>() {}.getType());
+                GameMessage<PreStartResponse> msg = gson.fromJson(message, new TypeToken<GameMessage<PreStartResponse>>() {
+                }.getType());
                 App.getPreGame().addPlayer(msg.body.username, msg.body.farmType);
             }
             case "game-command" -> {
-                GameMessage<GameCommand> msg = gson.fromJson(message, new TypeToken<GameMessage<GameCommand>>() {}.getType());
+                GameMessage<GameCommand> msg = gson.fromJson(message, new TypeToken<GameMessage<GameCommand>>() {
+                }.getType());
                 commandQueue.offer(msg.body);
             }
             case "pos-diff" -> {
-                GameMessage<PosDiff> msg = gson.fromJson(message, new TypeToken<GameMessage<PosDiff>>() {}.getType());
+                GameMessage<PosDiff> msg = gson.fromJson(message, new TypeToken<GameMessage<PosDiff>>() {
+                }.getType());
                 Player player = Finder.getPlayerByUsername(msg.body.playername);
                 player.setX(msg.body.x);
                 player.setY(msg.body.y);
                 GameMessage<PlayerData> response = new GameMessage<>("player-data",
                     new PlayerData(player));
                 App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(response));
+            }
+            case "new-vote" -> {
+                GameMessage<VoteMessage> msg = gson.fromJson(message, new TypeToken<GameMessage<VoteMessage>>(){}.getType());
+                App.getGame().setWhichToVote(msg.body.target);
+                App.getGame().setHowManyForVote(0);
+                App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(msg));
+            }
+            case "update-vote" -> {
+                App.getGame().incHowManyForVote();
                 }
+            case "terminate-vote" -> {
+                App.getGame().setHowManyForVote(0);
+                App.getGame().setWhichToVote("");
+                GameMessage<String> response = new GameMessage<>("game-command",
+                    "terminate-vote");
+                App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(response));
+            }
         }
     }
 
     public static void newGame() {
         Game game = new Game(App.getPreGame().getPlayers(), App.getPreGame().getAdmin());
-        System.out.println("game length is "+game.getPlayers().size());
+        System.out.println("game length is " + game.getPlayers().size());
         App.setGame(game);
 
         GameMessage<GameData> response = new GameMessage<>("new-game", new GameData(game));
         App.getServer().sendToGroupByPlayers(game.getPlayers(), new Gson().toJson(response));
 
         // Start command processor thread
-        game.commandThread =new Thread(() -> {
+        game.commandThread = new Thread(() -> {
             while (!Thread.currentThread().isInterrupted()) {
                 try {
                     GameCommand command = commandQueue.take();

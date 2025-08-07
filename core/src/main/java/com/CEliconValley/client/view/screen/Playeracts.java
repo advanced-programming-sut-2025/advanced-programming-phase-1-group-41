@@ -14,8 +14,10 @@ import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.tools.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 import com.google.gson.Gson;
 import com.CEliconValley.models.tools.ToolLevel.*;
@@ -28,6 +30,7 @@ import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 public class Playeracts {
     public static GameScreen screen;
     public static boolean alrSent = false;
+    public static boolean alrrSent = false;
     public static void setScreen(GameScreen screen) {
         Playeracts.screen = screen;
     }
@@ -66,29 +69,28 @@ public class Playeracts {
         if (screen.voteMode) {
             stage.act(delta);
             stage.draw();
-//            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-//                String code = screen.cheatCodeField.getText();
-//                System.out.println("Cheat code entered: " + code);
-//
-//                GameMessage<GameCommand> cmnd = new GameMessage<>("game-command",
-//                    new GameCommand(code, AppClient.getUserData().getUsername()));
-//                AppClient.getClient().send(new Gson().toJson(cmnd));
-//
-//                screen.cheatCodeField.setText("");
-//                screen.cheatCodeField.setVisible(false);
-//                screen.cheatMode = false;
-//
-//                screen.overlay.addAction(Actions.sequence(
-//                    Actions.fadeOut(0.5f),
-//                    Actions.run(() -> screen.overlay.remove())
-//                ));
-//
-//                if (screen.overlay != null) {
-//                    screen.overlay.remove();
-//                    screen.overlay = null;
-//                }
-//
-//            }
+            screen.yesVoteButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if(alrrSent == false) {
+                        GameMessage<String> msg = new GameMessage<>("update-vote", ";)");
+                        AppClient.getClient().send(new Gson().toJson(msg));
+                    }
+                    alrrSent = true;
+                }
+            });
+
+            screen.noVoteButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if(alrrSent == false){
+                        GameMessage<String> msg = new GameMessage<>("terminate-vote", ";)");
+                        AppClient.getClient().send(new Gson().toJson(msg));
+                    }
+                    alrrSent = true;
+                }
+            });
+
             return new Result(false, "cheat");
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {

@@ -18,6 +18,7 @@ import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -39,15 +40,16 @@ public abstract class GameScreen implements Screen {
     protected boolean isMenuOpen = false;
     protected InventoryRenderer inventoryRenderer;
     protected boolean cheatMode = false;
-    protected boolean voteMode = false;
-    protected Image overlay;
+    public boolean voteMode = false;
+    public Image overlay;
     protected TextField cheatCodeField;
-    protected TextButton yesVoteButton, noVoteButton;
-    protected Label playerVoteLabel;
+    public TextButton yesVoteButton, noVoteButton;
+    public Label playerVoteLabel;
+    public Label howManyVotedLabel;
     protected Stage stage;
     public abstract void transfer();
     protected Hero hero;
-    protected MenuBar menuBar=new MenuBar();
+    protected MenuBar menuBar=new MenuBar(this);
     protected Texture hudTexture = new Texture(Gdx.files.internal("game/Clock/Clock.png"));
     protected Image hudImage, energyBarImage, energyGreenImage, energyRedImage, energyYellowImage;
     protected TimeScreen timeScreen;
@@ -56,6 +58,34 @@ public abstract class GameScreen implements Screen {
     protected Texture energyYellowTexture = new Texture(Gdx.files.internal("game/EnergyBar/yellow.png"));
     protected Texture energyRedTexture = new Texture(Gdx.files.internal("game/EnergyBar/red.png"));
     protected boolean halt = false;
+
+    public void setTextForVoteLabel(String input){
+        playerVoteLabel.setText(input);
+        playerVoteLabel.setPosition(stage.getWidth() / 3 - playerVoteLabel.getWidth() / 2, stage.getHeight() * 5 / 6- playerVoteLabel.getHeight() / 2);
+    }
+
+    public void setupVoteUI(){
+        playerVoteLabel = new Label("Vote", GameAssetManager.getGameAssetManager().getSkin());
+        playerVoteLabel.setVisible(false);
+        playerVoteLabel.setFontScale(2f);
+        playerVoteLabel.setPosition(Gdx.graphics.getWidth() / 2 - playerVoteLabel.getWidth(), stage.getHeight() * 5 / 6- playerVoteLabel.getHeight() / 2);
+        stage.addActor(playerVoteLabel);
+        yesVoteButton = new TextButton("Yes", GameAssetManager.getGameAssetManager().getSkin());
+        yesVoteButton.setColor(Color.GREEN);
+        noVoteButton = new TextButton("No", GameAssetManager.getGameAssetManager().getSkin());
+        noVoteButton.setColor(Color.RED);
+        yesVoteButton.setPosition(stage.getWidth()* 3 / 4 - yesVoteButton.getWidth() / 2, stage.getHeight() / 2- yesVoteButton.getHeight() / 2);
+        noVoteButton.setPosition(stage.getWidth()/4 - noVoteButton.getWidth() / 2, stage.getHeight() / 2 - noVoteButton.getHeight() / 2);
+        yesVoteButton.setVisible(false);
+        noVoteButton.setVisible(false);
+        stage.addActor(yesVoteButton);
+        stage.addActor(noVoteButton);
+        howManyVotedLabel = new Label("Vote: 0 / "+AppClient.getGameData().getPlayersData().size(), GameAssetManager.getGameAssetManager().getSkin());
+        howManyVotedLabel.setFontScale(1.5f);
+        howManyVotedLabel.setPosition(Gdx.graphics.getWidth() / 2 - howManyVotedLabel.getWidth(), stage.getHeight() * 4 / 6- howManyVotedLabel.getHeight() / 2);
+        howManyVotedLabel.setVisible(false);
+        stage.addActor(howManyVotedLabel);
+    }
 
 
     public GameScreen(InventoryRenderer inventoryRenderer) {
@@ -67,6 +97,8 @@ public abstract class GameScreen implements Screen {
         cheatCodeField.setVisible(false);
         cheatCodeField.setWidth(600);
         cheatCodeField.setPosition(stage.getWidth()/2  - cheatCodeField.getWidth() / 2, stage.getHeight() / 2 - cheatCodeField.getHeight() / 2);
+        setupVoteUI();
+
         stage.addActor(cheatCodeField);
         hudImage = new Image(new TextureRegion(hudTexture));
         hudImage.setSize(hudImage.getWidth()*4, hudImage.getHeight()*4);
@@ -180,26 +212,31 @@ public abstract class GameScreen implements Screen {
         overlay.toBack();
     }
 
-    public void handleVote(Stage stage) {
-        voteMode = true;
-        cheatCodeField.setVisible(true);
-        stage.setKeyboardFocus(cheatCodeField);
-        cheatCodeField.setText("");
+    public void handleVote(Stage stage, String name) {
+        Gdx.app.postRunnable(() -> {
+            voteMode = true;
+            playerVoteLabel.setVisible(true);
+            noVoteButton.setVisible(true);
+            yesVoteButton.setVisible(true);
+            howManyVotedLabel.setVisible(true);
+            setTextForVoteLabel("Vote for kicking out "+name);
 
-        overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
-            .getGameAssetManager()
-            .getBackgroundTexture("Field1.png"))));
+            overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
+                .getGameAssetManager()
+                .getBackgroundTexture("Field1.png"))));
 
-//        overlay.setColor(0, 0, 0, 0.5f);
-        overlay.setSize(stage.getWidth(), stage.getHeight());
-        overlay.setPosition(0, 0);
+    //        overlay.setColor(0, 0, 0, 0.5f);
+            overlay.setSize(stage.getWidth(), stage.getHeight());
+            overlay.setPosition(0, 0);
 
-        overlay.getColor().a = 0;
-        overlay.addAction(Actions.fadeIn(0.5f));
+            overlay.getColor().a = 0;
+            overlay.addAction(Actions.fadeIn(0.5f));
 
 
-        stage.addActor(overlay);
-        overlay.toBack();
+            stage.addActor(overlay);
+            overlay.toBack();
+
+        });
     }
 
     public Hero getHero() {
@@ -259,4 +296,11 @@ public abstract class GameScreen implements Screen {
     public InventoryRenderer getInventoryRenderer() {
         return inventoryRenderer;
     }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+
 }
+

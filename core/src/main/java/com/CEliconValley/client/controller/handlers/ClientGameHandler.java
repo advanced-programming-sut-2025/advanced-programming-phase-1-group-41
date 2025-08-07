@@ -14,6 +14,7 @@ import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Menu;
 import com.CEliconValley.models.Player;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -128,6 +129,21 @@ public class ClientGameHandler {
                     AppClient.getClient().send(gson.toJson(response));
                 }
             }
+            case "new-vote" -> {
+                VoteMessage vote = gson.fromJson(body, VoteMessage.class);
+                if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof GameScreen screen){
+                    screen.handleVote(screen.getStage(), vote.target);
+                }
+            }
+            case "game-command" -> {
+                GameCommand gamecommand = gson.fromJson(body, GameCommand.class);
+                if(gamecommand.command.equals("update-vote")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof GameScreen screen){
+                        screen.howManyVotedLabel.setText("Vote: "+gamecommand.playerName+" / "+AppClient.getGameData().getPlayersData().size());
+                    }
+                }
+            }
+
 
         }
     }
@@ -159,6 +175,26 @@ public class ClientGameHandler {
                         System.out.println("setting it to false");
                         gs.setHalt(false);
                         Playeracts.alrSent = false;
+                    }
+                }else if(command.equals("terminate-vote")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen() instanceof GameScreen screen){
+                        screen.voteMode = false;
+                        screen.playerVoteLabel.setVisible(false);
+                        screen.noVoteButton.setVisible(false);
+                        screen.yesVoteButton.setVisible(false);
+                        screen.howManyVotedLabel.setVisible(false);
+                        screen.playerVoteLabel.setText("");
+                        screen.overlay.addAction(Actions.sequence(
+                            Actions.fadeOut(0.5f),
+                            Actions.run(() -> screen.overlay.remove())
+                        ));
+
+                        if (screen.overlay != null) {
+                            screen.overlay.remove();
+                            screen.overlay = null;
+                        }
+                        Playeracts.alrrSent = false;
                     }
                 }
             }

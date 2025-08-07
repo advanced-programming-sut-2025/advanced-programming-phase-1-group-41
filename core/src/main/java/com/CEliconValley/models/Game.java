@@ -1,6 +1,7 @@
 package com.CEliconValley.models;
 
 import com.CEliconValley.common.GameData;
+import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.badlogic.gdx.utils.Timer;
 import com.google.gson.Gson;
@@ -52,7 +53,8 @@ public class Game {
     public ScheduledExecutorService scheduler;
     public Thread commandThread;
     private int howManyInHome = 0;
-
+    private int howManyForVote = 0;
+    private String whichToVote = "";
 
     public Game() {
     }
@@ -270,5 +272,37 @@ public class Game {
             howManyInHome = 0;
             time.advanceOneDay();
         }
+    }
+
+    public int getHowManyForVote() {
+        return howManyForVote;
+    }
+
+    public void setHowManyForVote(int howManyForVote) {
+        this.howManyForVote = howManyForVote;
+    }
+    public void incHowManyForVote(){
+        howManyForVote++;
+        if(howManyForVote == players.size()){
+            // todo logic to remove player
+            GameMessage<String> response = new GameMessage<>("game-command",
+                "terminate-vote");
+            App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), new Gson().toJson(response));
+            howManyForVote = 0;
+            whichToVote = "";
+        }else{
+            GameMessage<GameCommand> response = new GameMessage<>("game-command",
+                new GameCommand("update-vote", ""+App.getGame().getHowManyForVote()));
+            App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), new Gson().toJson(response));
+
+        }
+    }
+
+    public String getWhichToVote() {
+        return whichToVote;
+    }
+
+    public void setWhichToVote(String whichToVote) {
+        this.whichToVote = whichToVote;
     }
 }
