@@ -1,5 +1,6 @@
 package com.CEliconValley.models;
 
+import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.controllers.subgames.*;
 import com.CEliconValley.models.buildings.marketplaces.Marketplace;
@@ -61,13 +62,17 @@ public class TimeLine {
         return year;
     }
 
-    public void advanceOneHour(){
+    public void advanceOneHour(boolean cheat){
         CraftingController.check();
         hour++;
         if(hour >= 24){
             hour = 0;
             System.out.println("advancing day");
-            preAdvanceOneDay();
+            if(!cheat){
+                preAdvanceOneDay();
+            }else{
+                advanceOneDay();
+            }
         }
         MarketplaceController.updateHourly();
         for(Player player : App.getGame().getPlayers()){
@@ -113,9 +118,12 @@ public class TimeLine {
         if(hour == 0){
 
             for (int i = 0; i < 9; i++) {
-                advanceOneHour();
+                advanceOneHour(true);
             }
         }
+        GameMessage<String> msg = new GameMessage<>("game-command", "new day");
+        App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(),
+            new Gson().toJson(msg));
     }
     public void advanceOneSeason(){
         Season[] seasons = Season.values();

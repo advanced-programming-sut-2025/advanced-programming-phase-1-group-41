@@ -4,6 +4,7 @@ import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.view.LobbyScreen;
 import com.CEliconValley.client.view.screen.FarmScreen;
 import com.CEliconValley.client.view.screen.GameScreen;
+import com.CEliconValley.client.view.screen.Playeracts;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.FarmData;
 import com.CEliconValley.common.GameData;
@@ -23,9 +24,12 @@ public class ClientGameHandler {
     public static void handle(String type, JsonObject body, Gson gson, long timestamp) {
         Gdx.app.postRunnable(() -> {
             if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
-                .getScreen() instanceof FarmScreen fs){
-                fs.getInventoryRenderer().updateInventory();
-            }
+                .getScreen()  instanceof GameScreen gs){
+                if(gs instanceof FarmScreen fs){
+                    fs.getInventoryRenderer().updateInventory();
+                }
+                updateTime(gs);
+                }
         });
         switch (type) {
             case "player-data" -> {
@@ -69,12 +73,7 @@ public class ClientGameHandler {
                 Gdx.app.postRunnable(() -> {
                     AppClient.setGameData(gamedata);
                     if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof FarmScreen fs){
-                        fs.getTimeScreen().updatePointer(AppClient.getGameData().getTime().getHour(),
-                            AppClient.getGameData().getTime().convertDay()
-                            ,AppClient.getGameData().getTime().getYear(),
-                            Finder.getpd().getMoney()
-                            );
-                        fs.getTimeScreen().updateWeatherAndSeason(AppClient.getGameData().getTime(), AppClient.getGameData().getWeatherType());
+                        updateTime(fs);
                         fs.updateFarmData();
                         PlayerData pd = null;
                         for (PlayerData playersDatum : AppClient.getGameData().getPlayersData()) {
@@ -144,8 +143,35 @@ public class ClientGameHandler {
                     for (CellData transferCell : Finder.getfd().getTransferCells()) {
                         System.out.println("  transfer cells "+transferCell.getX()+" "+transferCell.getY());
                     }
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen() instanceof GameScreen gs){
+                        if(gs instanceof FarmScreen fs){
+                            fs.setDest();
+                        }else{
+                            GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("at home", AppClient.getUserData().getUsername()));
+                            AppClient.getClient().send(new Gson().toJson(msg));
+                        }
+                        gs.setHalt(true);
+                    }
+                }else if(command.equals("new day")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen() instanceof GameScreen gs){
+                        System.out.println("setting it to false");
+                        gs.setHalt(false);
+                        Playeracts.alrSent = false;
+                    }
                 }
             }
         }
+    }
+
+
+    private static void updateTime(GameScreen gs){
+        gs.getTimeScreen().updatePointer(AppClient.getGameData().getTime().getHour(),
+            AppClient.getGameData().getTime().convertDay()
+            ,AppClient.getGameData().getTime().getYear(),
+            Finder.getpd().getMoney()
+        );
+        gs.getTimeScreen().updateWeatherAndSeason(AppClient.getGameData().getTime(), AppClient.getGameData().getWeatherType());
     }
 }

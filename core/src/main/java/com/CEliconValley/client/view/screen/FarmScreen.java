@@ -1,8 +1,13 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
+import com.CEliconValley.client.model.AnimalSprite;
 import com.CEliconValley.client.view.screen.maps.*;
+import com.CEliconValley.client.view.screen.randomwalk.Node;
+import com.CEliconValley.client.view.screen.randomwalk.SimplePathFinder;
 import com.CEliconValley.common.*;
+import com.CEliconValley.common.messages.GameCommand;
+import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.controllers.Spawner.*;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.buildings.*;
@@ -27,6 +32,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.google.gson.Gson;
 
 import java.util.*;
 
@@ -486,6 +492,48 @@ public class FarmScreen extends GameScreen implements Screen {
 
     public Thunder getThunder() {
         return thunder;
+    }
+
+    public void setDest(){
+        CellData startingPoint = Finder.getfd().getStartPoints().get(0);
+        hero.destX = startingPoint.getX();
+        hero.destY = startingPoint.getY();
+
+        SimplePathFinder spf = new SimplePathFinder(farmMap);
+        hero.movementQueue = spf.getPathQueue(hero.playerX.get(), hero.playerY.get(), hero.destX, hero.destY);
+
+
+    }
+
+    public void nextMovement() {
+        if (hero.reachedDestination()) {
+            GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("at home", AppClient.getUserData().getUsername()));
+            AppClient.getClient().send(new Gson().toJson(msg));
+            transfer();
+            hero.movementQueue.clear();
+            return;
+        }
+
+        if (hero.isMoving.get()) return;
+
+        Node nextNode = hero.movementQueue.poll();
+        if (nextNode != null) {
+            hero.targetX.set(nextNode.x);
+            hero.targetY.set(nextNode.y);
+            hero.currentDirection = nextNode.getDirection() != 0 ? nextNode.getDirection() : hero.currentDirection;
+            hero.isMoving.set(true);
+            hero.currentAnimation = hero.walk(true, hero.currentDirection);
+            onRepeat = true;
+            String command = "";
+            switch (hero.currentDirection){
+                case 1 -> command = "walk up";
+                case 2 -> command = "walk right";
+                case 3 -> command = "walk down";
+                case 4 -> command = "walk left";
+            }
+            GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand(command, AppClient.getUserData().getUsername()));
+            AppClient.getClient().send(new Gson().toJson(msg));
+        }
     }
 
 

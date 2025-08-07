@@ -77,7 +77,7 @@ public class GameMenuController {
                 App.getGame().setRoundEnergy(0);
                 printNewMessages(App.getGame().getCurrentPlayer());
                 if(i == 3){
-                    App.getGame().getTime().advanceOneHour();
+                    App.getGame().getTime().advanceOneHour(false);
                 }
                 break;
             }

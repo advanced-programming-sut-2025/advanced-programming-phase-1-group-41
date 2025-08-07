@@ -1,5 +1,6 @@
 package com.CEliconValley.models;
 
+import com.CEliconValley.client.view.screen.randomwalk.Node;
 import com.CEliconValley.common.messages.TGPoint;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.ui.GameAssetManager;
@@ -9,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -41,6 +44,15 @@ public class Hero {
     public final AtomicBoolean isActing = new AtomicBoolean(false);
     public float stateTime = 0f;
     public Animation<TextureRegion> currentAnimation;
+    public int destX;
+    public int destY;
+    public Queue<Node> movementQueue = new LinkedList<>();
+
+
+    public boolean reachedDestination(){
+        return playerX.get() == destX && playerY.get() == destY;
+    }
+
 
 
     public Hero() {
@@ -149,7 +161,7 @@ public class Hero {
             TGPoint tgPoint = tgPoints.get(i);
             wantedActs[i] = playerActs[tgPoint.row][tgPoint.col];
         }
-        return new Animation<>(0.15f,wantedActs);
+        return new Animation<>(0.10f,wantedActs);
     }
 
     public Animation<TextureRegion> useOtherTool(ArrayList<TGPoint> tgPoints){

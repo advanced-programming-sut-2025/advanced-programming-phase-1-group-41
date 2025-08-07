@@ -240,7 +240,7 @@ public class Game {
         scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(() -> {
             try {
-                getTime().advanceOneHour();
+                getTime().advanceOneHour(false);
                 GameMessage<GameData> msg = new GameMessage<>("game-data", new GameData(this));
                 App.getServer().sendToGroupByPlayers(getPlayers(), new Gson().toJson(msg));
             } catch (Exception e) {

@@ -16,16 +16,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.utils.Timer;
 import com.google.gson.Gson;
 import com.CEliconValley.models.tools.ToolLevel.*;
 
 import java.util.ArrayList;
+import java.util.TimerTask;
 
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class Playeracts {
     public static GameScreen screen;
-
+    public static boolean alrSent = false;
     public static void setScreen(GameScreen screen) {
         Playeracts.screen = screen;
     }
@@ -102,6 +104,20 @@ public class Playeracts {
             return new Result(false,"energy");
         }
 
+        if (Gdx.input.isKeyJustPressed((Input.Keys.X))) {
+            GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("at home", AppClient.getUserData().getUsername()));
+            AppClient.getClient().send(new Gson().toJson(msg));
+        }
+
+        if(screen.isHalt()){
+            if(screen instanceof FarmScreen fs){
+                fs.nextMovement();
+            }else{
+                // TODO handle village
+            }
+            return new Result(false,"halt");
+        }
+
 
         boolean moved = false;
 
@@ -152,9 +168,6 @@ public class Playeracts {
             if(screen instanceof FarmScreen fs){
                     fs.getThunder().strikeAt(hero.playerX.get(), hero.playerY.get());
             }
-        }else if (Gdx.input.isKeyJustPressed((Input.Keys.X))) {
-            GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("at home", AppClient.getUserData().getUsername()));
-            AppClient.getClient().send(new Gson().toJson(msg));
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.Q)){
             System.out.println("you're at "+hero.playerX+" "+hero.playerY);
@@ -200,6 +213,21 @@ public class Playeracts {
     }
 
     public static void approach(Hero hero) {
+        if(Finder.getpd().getEnergy() <= 0){
+            hero.currentAnimation = hero.generalAct(getSleepAct());
+            screen.onRepeat = true;
+            if(screen.isHalt() && !alrSent){
+                alrSent = true;
+                new Timer().schedule(new Timer.Task() {
+                    public void run() {
+                        GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("at home", AppClient.getUserData().getUsername()));
+                        AppClient.getClient().send(new Gson().toJson(msg));
+                        this.cancel();
+                    }
+                }, 5, 1);
+            }
+            return;
+        }
         if (hero.isMoving.get()) {
             float targetPixelX = hero.targetX.get() * CELL_SIZE;
             float targetPixelY = hero.targetY.get() * CELL_SIZE;

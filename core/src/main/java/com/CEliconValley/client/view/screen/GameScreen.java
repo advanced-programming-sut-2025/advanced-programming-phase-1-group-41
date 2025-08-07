@@ -50,6 +50,7 @@ public abstract class GameScreen implements Screen {
     protected Texture energyGreenTexture = new Texture(Gdx.files.internal("game/EnergyBar/green.png"));
     protected Texture energyYellowTexture = new Texture(Gdx.files.internal("game/EnergyBar/yellow.png"));
     protected Texture energyRedTexture = new Texture(Gdx.files.internal("game/EnergyBar/red.png"));
+    protected boolean halt = false;
 
 
     public GameScreen(InventoryRenderer inventoryRenderer) {
@@ -220,6 +221,13 @@ public abstract class GameScreen implements Screen {
         currentImage.toFront();
     }
 
+    public boolean isHalt() {
+        return halt;
+    }
+
+    public void setHalt(boolean halt) {
+        this.halt = halt;
+    }
 
     public InventoryRenderer getInventoryRenderer() {
         return inventoryRenderer;
