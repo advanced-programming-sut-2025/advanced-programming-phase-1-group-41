@@ -119,6 +119,9 @@ public class GameHandler {
                 App.getServer().sendToGroupByPlayers(game.getPlayers(), new Gson().toJson(response));
                 return;
             }
+            case "at home" -> {
+                App.getGame().incHowManyInHome();
+            }
         }
 
 

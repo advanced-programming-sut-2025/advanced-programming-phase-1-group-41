@@ -152,7 +152,11 @@ public class Playeracts {
             if(screen instanceof FarmScreen fs){
                     fs.getThunder().strikeAt(hero.playerX.get(), hero.playerY.get());
             }
-        }else if(Gdx.input.isKeyPressed(Input.Keys.Q)){
+        }else if (Gdx.input.isKeyJustPressed((Input.Keys.X))) {
+            GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("at home", AppClient.getUserData().getUsername()));
+            AppClient.getClient().send(new Gson().toJson(msg));
+        }
+        else if(Gdx.input.isKeyPressed(Input.Keys.Q)){
             System.out.println("you're at "+hero.playerX+" "+hero.playerY);
         }
         else if (Gdx.input.isKeyJustPressed((Input.Keys.E))) {

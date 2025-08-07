@@ -20,6 +20,7 @@ import java.util.List;
 public class PlayerData {
 
     String username;
+    String avatarPath;
     double money;
     double savings;
     int farmId;
@@ -54,6 +55,7 @@ public class PlayerData {
 
     public PlayerData(Player player) {
         this.username = player.getUser().getUsername();
+        this.avatarPath = player.getUser().getAvatarPath();
         this.money = player.getMoney();
         this.savings = player.getSavings();
         this.farmId = player.getFarmId();
@@ -284,5 +286,7 @@ public class PlayerData {
         return toolLevel;
     }
 
-
+    public String getAvatarPath() {
+        return avatarPath;
+    }
 }

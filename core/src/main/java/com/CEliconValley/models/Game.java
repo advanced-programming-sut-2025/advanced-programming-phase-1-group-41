@@ -51,7 +51,7 @@ public class Game {
 
     public ScheduledExecutorService scheduler;
     public Thread commandThread;
-
+    private int howManyInHome = 0;
 
 
     public Game() {
@@ -246,7 +246,7 @@ public class Game {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }, 1, 10, TimeUnit.SECONDS);
+        }, 1, 2, TimeUnit.SECONDS);
     }
 
     public void stopScheduler() {
@@ -255,4 +255,20 @@ public class Game {
         }
     }
 
+
+    public int getHowManyInHome() {
+        return howManyInHome;
+    }
+
+    public void setHowManyInHome(int howManyInHome) {
+        this.howManyInHome = howManyInHome;
+    }
+    public void incHowManyInHome(){
+        howManyInHome++;
+        if(howManyInHome == players.size()){
+            startScheduler();
+            howManyInHome = 0;
+            time.advanceOneDay();
+        }
+    }
 }

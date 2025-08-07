@@ -67,17 +67,18 @@ public class TimeLine {
         if(hour >= 24){
             hour = 0;
             System.out.println("advancing day");
-            advanceOneDay();
+            preAdvanceOneDay();
         }
         MarketplaceController.updateHourly();
         for(Player player : App.getGame().getPlayers()){
             player.updateHourly();
         }
     }
+    public void preAdvanceOneDay(){
+        goHome();
+    }
     public void advanceOneDay(){
         if(hour == 0){
-            // TODO important fix this!
-            goHome();
             for (Player player : App.getGame().getPlayers()) {
                 player.resetEnergy();
             }
@@ -128,21 +129,8 @@ public class TimeLine {
     }
 
     public void goHome(){
-//        for (Player player : App.getGame().getPlayers()) {
-//            Farm farm = Finder.findFarmByPlayer(player);
-//            MapController controller = new MapController();
-//            Cell villageCell = App.getGame().getVillage().getTransferCells().get(0);
-//            Cell playerCell = farm.getStartPoints().get(0);
-//            if(player.isPlayerIsInVillage()){
-//                Result preResult = controller.walk(null,villageCell.getX(),villageCell.getY());
-//                if(!preResult.success()){
-//                    System.out.println("you're stuck "+preResult);
-//                }
-//            }
-//            System.out.println(controller.walk(null, playerCell.getX(),playerCell.getY()));
-//        }
         GameMessage<String> msg = new GameMessage<>("game-command", "walk home");
-//        App.getGame().stopScheduler();
+        App.getGame().stopScheduler();
         App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), new Gson().toJson(msg));
     }
 
