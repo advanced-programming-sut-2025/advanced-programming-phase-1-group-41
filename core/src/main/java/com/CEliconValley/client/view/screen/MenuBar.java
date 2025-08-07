@@ -519,7 +519,10 @@ public class MenuBar {
         x = startingX + screenWidth * 0.025f;
         for (int i = 0; i < 2; i++) {
             String text = "Force Terminate";
-            if(i == 1){ // TODO If CurrentName Only Admin! if not, break; in "if"
+            if(i == 1) { // TODO If CurrentName Only Admin! if not, break;
+//                if(Admin){
+//                  break;
+//                }
                 text = "Save Game";
             }
 

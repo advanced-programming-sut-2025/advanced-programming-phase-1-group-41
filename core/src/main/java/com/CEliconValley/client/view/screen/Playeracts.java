@@ -42,11 +42,9 @@ public class Playeracts {
                 String code = screen.cheatCodeField.getText();
                 System.out.println("Cheat code entered: " + code);
 
-                //TODO Cheat code handling
                 GameMessage<GameCommand> cmnd = new GameMessage<>("game-command",
                     new GameCommand(code, AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(cmnd));
-//                CheatCodeController.cheatCodeHandler(code);
 
                 screen.cheatCodeField.setText("");
                 screen.cheatCodeField.setVisible(false);
@@ -63,6 +61,34 @@ public class Playeracts {
                 }
 
             }
+            return new Result(false, "cheat");
+        }
+        if (screen.voteMode) {
+            stage.act(delta);
+            stage.draw();
+//            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+//                String code = screen.cheatCodeField.getText();
+//                System.out.println("Cheat code entered: " + code);
+//
+//                GameMessage<GameCommand> cmnd = new GameMessage<>("game-command",
+//                    new GameCommand(code, AppClient.getUserData().getUsername()));
+//                AppClient.getClient().send(new Gson().toJson(cmnd));
+//
+//                screen.cheatCodeField.setText("");
+//                screen.cheatCodeField.setVisible(false);
+//                screen.cheatMode = false;
+//
+//                screen.overlay.addAction(Actions.sequence(
+//                    Actions.fadeOut(0.5f),
+//                    Actions.run(() -> screen.overlay.remove())
+//                ));
+//
+//                if (screen.overlay != null) {
+//                    screen.overlay.remove();
+//                    screen.overlay = null;
+//                }
+//
+//            }
             return new Result(false, "cheat");
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
