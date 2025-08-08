@@ -40,6 +40,12 @@ public class BarnScreen extends GameScreen implements Screen {
     private int id;
 
     public void updateAnimalSprites(BarnData barnData) {
+        if(animalSprites == null) {
+            animalSprites = new ArrayList<>();
+        }
+        if(barnData.getAnimalsData().size() == this.animalSprites.size()) {
+            return;
+        }
         this.animalSprites = new ArrayList<>();
         this.barnData = barnData;
         for (int i = 0; i < barnData.getAnimalsData().size(); i++) {

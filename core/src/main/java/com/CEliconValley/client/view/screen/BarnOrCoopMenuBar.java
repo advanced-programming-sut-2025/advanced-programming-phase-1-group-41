@@ -141,7 +141,6 @@ public class BarnOrCoopMenuBar {
                 font.setColor(Color.WHITE);
             }
             if (clicked  ) {
-                //TODO Nothing Ig
             }
 
             animalX += screenWidth / 5f;
@@ -192,11 +191,10 @@ public class BarnOrCoopMenuBar {
 
                 font.setColor(Color.WHITE);
             }
-            if (clicked  ) {
+            if (clicked) {
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command",
                     new GameCommand("pet -w inside -n "+name, AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
-                //TODO Pet
             }
 
             animalX += screenWidth / 12.5f;
@@ -249,7 +247,9 @@ public class BarnOrCoopMenuBar {
                 font.setColor(Color.WHITE);
             }
             if (clicked  ) {
-                //TODO Feed
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                    new GameCommand("feed hay -n "+name, AppClient.getUserData().getUsername()));
+                AppClient.getClient().send(new Gson().toJson(msg));
             }
 
             animalX += screenWidth / 12.5f;
@@ -270,8 +270,7 @@ public class BarnOrCoopMenuBar {
                 if (Gdx.input.isButtonJustPressed(0)) {
                     clicked = true;
                 }
-                //TODO Right Price?
-                int price = animalData.getBuyPrice();
+                double price = animalData.getBuyPrice()*(((double) animalData.getFriendShip() /1000)+0.3);
 
                 GlyphLayout tooltipLayout = new GlyphLayout(font,"Price: " + price);
 
@@ -296,31 +295,40 @@ public class BarnOrCoopMenuBar {
                 font.setColor(Color.WHITE);
             }
             if (clicked  ) {
-                //TODO Sell
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                    new GameCommand("sell animal -n "+name, AppClient.getUserData().getUsername()));
+                AppClient.getClient().send(new Gson().toJson(msg));
             }
 
             animalX += screenWidth / 12.5f;
+            boolean isReady = false;
+            String akir = animalData.getProductName();
+            if(akir != null){
+                isReady = true;
+            }
+            if(isReady){
+                font.setColor(Color.GREEN);
+            }else{
+                font.setColor(Color.RED);
+            }
             batch.draw(buttonTexture, animalX, animalY, (float) (animalSize * size), animalSize);
 
             font.getData().setScale(2f);
             font.draw(batch, "Collect", animalX + (float) size * animalSize / 2 - "Collect".length() * font.getScaleX() * 7.5f / 2f,
                 animalY + animalSize / 1.5f);
-
+            font.setColor(Color.WHITE);
             hovered = mousePos.x >= animalX && mousePos.x <= animalX + animalSize * 2f &&
                 mousePos.y >= animalY && mousePos.y <= animalY + animalSize;
 
             clicked = false;
-            // TODO Is Ready
-            boolean isReady = false;
 
             if (hovered) {
                 if (Gdx.input.isButtonJustPressed(0)) {
                     clicked = true;
                 }
                 String animalProduct = animalData.getProductName();
-                // TODO Nadarim Null e :/
                 if (animalProduct == null) {
-                    animalProduct = "Nmd :/";
+                    animalProduct = "come back in "+animalData.getDaysUntilProduce()+" days";
                 }
 
                 GlyphLayout tooltipLayout = new GlyphLayout(font, animalProduct);
@@ -339,18 +347,15 @@ public class BarnOrCoopMenuBar {
                 shapeRenderer.end();
                 batch.begin();
 
-                if(isReady){
-                    font.setColor(Color.GREEN);
-                } else{
-                    font.setColor(Color.RED);
-                }
 
                 font.draw(batch, animalProduct, animalSoundX + 20, animalSoundY + animalSoundHeight - 15);
 
                 font.setColor(Color.WHITE);
             }
             if (clicked  ) {
-                //TODO Collect Product
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                    new GameCommand("collect produce -n "+name, AppClient.getUserData().getUsername()));
+                AppClient.getClient().send(new Gson().toJson(msg));
             }
 
             animalX += screenWidth / 12.5f;

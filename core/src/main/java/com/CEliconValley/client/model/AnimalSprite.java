@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.Random;
 
+import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
+
 public class AnimalSprite {
     public Texture texture;
     public TextureRegion [][] animalActs;
@@ -42,6 +44,8 @@ public class AnimalSprite {
         this.y = Y;
         this.targetX = x;
         this.targetY = y;
+        this.renderX = this.x*CELL_SIZE;
+        this.renderY = this.y*CELL_SIZE;
         this.location = location;
         setRandomPoint();
     }

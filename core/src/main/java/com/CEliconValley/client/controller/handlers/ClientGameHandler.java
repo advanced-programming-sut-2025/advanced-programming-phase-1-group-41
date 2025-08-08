@@ -2,9 +2,7 @@ package com.CEliconValley.client.controller.handlers;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.view.LobbyScreen;
-import com.CEliconValley.client.view.screen.FarmScreen;
-import com.CEliconValley.client.view.screen.GameScreen;
-import com.CEliconValley.client.view.screen.Playeracts;
+import com.CEliconValley.client.view.screen.*;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.FarmData;
 import com.CEliconValley.common.GameData;
@@ -28,6 +26,11 @@ public class ClientGameHandler {
                 .getScreen()  instanceof GameScreen gs){
                 if(gs instanceof FarmScreen fs){
                     fs.getInventoryRenderer().updateInventory();
+                }
+                if (gs instanceof BarnScreen barnScreen) {
+                    barnScreen.updateAnimalSprites(Finder.getbdByid(barnScreen.getId()));
+                } else if (gs instanceof CoopScreen coopScreen) {
+                    coopScreen.updateAnimalSprites(Finder.getcdByid(coopScreen.getId()));
                 }
                 updateTime(gs);
                 }

@@ -37,12 +37,18 @@ public class CoopScreen extends GameScreen implements Screen {
     private final OrthographicCamera camera;
     private int id;
     public void updateAnimalSprites(CoopData coopData) {
+        if(animalSprites == null) {
+            animalSprites = new ArrayList<>();
+        }
+        if(coopData.getAnimalsData().size() == this.animalSprites.size()) {
+            return;
+        }
         this.animalSprites = new ArrayList<>();
         this.coopData = coopData;
         for (int i = 0; i < coopData.getAnimalsData().size(); i++) {
             AnimalData ad = coopData.getAnimalsData().get(i);
             animalSprites.add(new AnimalSprite(coop, ad,
-                hero.playerX.get()+ (3*i % 5), hero.playerY.get()+ (i % 7)));
+                hero.playerX.get()+ (3*i % 5), hero.playerY.get()- (i % 7)));
         }
     }
 
