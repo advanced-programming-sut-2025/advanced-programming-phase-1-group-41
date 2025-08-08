@@ -37,7 +37,7 @@ public class ServerAuthentication {
         }
         login(user, stayLoggedIn, conn);
         GameMessage<HandshakeData> msg = new GameMessage<>("handshake-data",
-            new HandshakeData(null, App.lobbies, App.onlinePlayers));
+            new HandshakeData(null, App.lobbies, App.onlinePlayers, App.getGameByUsername(username)));
         String json = new Gson().toJson(msg);
         conn.send(json);
         return new SuccessMessage("login_request",new UserData(user).toJson());

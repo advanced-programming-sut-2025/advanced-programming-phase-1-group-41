@@ -3,7 +3,9 @@ package com.CEliconValley.models;
 import com.CEliconValley.client.GameClient;
 import com.CEliconValley.client.view.LobbyScreen;
 import com.CEliconValley.common.AppData;
+import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.OnlineData;
+import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.server.GameServer;
 import com.google.gson.Gson;
@@ -20,8 +22,7 @@ public class App {
     public static int MaxLength = 75;
     public static int MaxHeight = 60;
     public final static ArrayList<User> users = new ArrayList<>();
-    public final static ArrayList<Game> games = new ArrayList<>();
-    public final static HashMap<ObjectId, User> userMap = new HashMap<>();
+    public final static ArrayList<GameData> gamesdata = new ArrayList<>();
     public static ArrayList<Lobby> lobbies = new ArrayList<>();
     public static Set<OnlineData> onlinePlayers = new HashSet<>();
     private static User currentUser;
@@ -115,6 +116,7 @@ public class App {
     }
 
     public static void sendData(){
+
         GameMessage<AppData> msg = new GameMessage<>("app-data",new AppData(onlinePlayers));
         String json = new Gson().toJson(msg);
         App.getServer().broadcast(json);
@@ -128,5 +130,36 @@ public class App {
 
     public static void setPreGame(PreGame preGame) {
         App.preGame = preGame;
+    }
+
+    public static ArrayList<String> getGameByUsername(String username){
+        ArrayList<String> gameNames = new ArrayList<>();
+        for (GameData gd : App.gamesdata) {
+            String namerr = gd.getLobby().getLobbyName()+" "+gd.getLobby().getLobbyID();
+            for (PlayerData pd : gd.getPlayersData()) {
+                if(pd.getUsername().equals(username)) {
+                    gameNames.add(namerr);
+                    break;
+                }
+            }
+        }
+        return gameNames;
+    }
+    public static GameData getGameDataByCustomName(String cn){
+        for (GameData gd : App.gamesdata) {
+            String namerr = gd.getLobby().getLobbyName()+" "+gd.getLobby().getLobbyID();
+            if(cn.equals(namerr)) {
+                return gd;
+            }
+        }
+        return null;
+    }
+    public static GameData getGameDataById(ObjectId id){
+        for (GameData gd : App.gamesdata) {
+            if(gd.get_id().equals(id)) {
+                return gd;
+            }
+        }
+        return null;
     }
 }

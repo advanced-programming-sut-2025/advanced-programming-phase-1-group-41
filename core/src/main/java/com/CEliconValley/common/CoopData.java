@@ -43,6 +43,9 @@ public class CoopData {
 
     private ArrayList<Animal> getAnimals(Player owner) {
         ArrayList<Animal> animals = new ArrayList<>();
+        if(this.animalsData == null){
+            return animals;
+        }
         for (AnimalData animalData : this.animalsData) {
             animals.add(animalData.getAnimal(owner));
         }

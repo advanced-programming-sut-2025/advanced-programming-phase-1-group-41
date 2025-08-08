@@ -647,6 +647,16 @@ public class MenuBar {
                     AppClient.getClient().send(new Gson().toJson(msg));
                     //TODO Sepehr: Force Terminate
                 } else{
+                    if(AppClient.getUserData().getUsername().equals(
+                        AppClient.getGameData().getLobby().getAdmin()
+                    )){
+                        GameMessage<String> msg = new GameMessage<>("save-game", ";)");
+                        AppClient.getClient().send(new Gson().toJson(msg));
+                    }else{
+                        System.out.println("you are not admin");
+                        System.out.println("  you: "+AppClient.getUserData().getUsername());
+                        System.out.println("  adming: "+AppClient.getGameData().getLobby().getAdmin());
+                    }
                     //TODO Sepehr: Save
                 }
             }
