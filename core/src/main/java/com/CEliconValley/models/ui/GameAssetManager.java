@@ -23,6 +23,7 @@ public class GameAssetManager {
     }
     public Texture getSkillTexture(String name) {return new Texture(Gdx.files.internal("game/inventory/skills/" + name));}
     public Texture getTileTexture(String name) {return new Texture(Gdx.files.internal("game/general/tiles/" + name));}
+    public Texture getScreenTexture(String name){return new Texture(Gdx.files.internal("game/Buildings/Screen/" + name));}
     public Drawable getDrawableBackground(String name) {
         TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal("backgrounds/" + name)));
         return new TextureRegionDrawable(region);

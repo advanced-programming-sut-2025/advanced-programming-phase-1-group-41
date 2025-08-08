@@ -32,6 +32,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.google.gson.Gson;
 
 import java.util.*;
@@ -58,7 +59,7 @@ public class FarmScreen extends GameScreen implements Screen {
 
     Map<Cell, TextureRegion> groundCache;
 
-    public static Texture farmTexture =new Texture("game/Buildings/Screen/Farm_Screen_Spring.png");
+    public static Texture farmTexture =GameAssetManager.getGameAssetManager().getScreenTexture("Farm_Screen_Spring.png");
     public static Sprite farmSprite;
     ;
 
@@ -75,11 +76,6 @@ public class FarmScreen extends GameScreen implements Screen {
     private Animation<TextureRegion>[] walkAnimations;
     private Animation<TextureRegion>[] coastAnimations;
     private float passiveStateTime = 0f;
-
-    private int prevMinX;
-    private int prevMaxX;
-    private int prevMinY;
-    private int prevMaxY;
 
 
     public void updateFarmData() {
@@ -256,7 +252,7 @@ public class FarmScreen extends GameScreen implements Screen {
                 } else if (grass.isFarmland()) {
                     batch.draw(farmlandTexture, x, y, CELL_SIZE, CELL_SIZE);
                 } else if (grass.isGround()) {
-                    batch.draw(groundTexture, x, y, CELL_SIZE, CELL_SIZE);
+//                    batch.draw(groundTexture, x, y, CELL_SIZE, CELL_SIZE);
                 } else if (grass.isSand()) {
                     batch.draw(sandTexture, x, y, CELL_SIZE, CELL_SIZE);
                 } else {
@@ -265,13 +261,15 @@ public class FarmScreen extends GameScreen implements Screen {
 //            batch.draw(groundCache.get(cell), x, y, CELL_SIZE, CELL_SIZE);
         }
 
-
-        prevMinX = minX;
-        prevMaxX = maxX;
-        prevMinY = minY;
-        prevMaxY = maxY;
         visibleCells.sort(Comparator.comparingInt(CellData::getY).reversed());
         for (CellData cellData : visibleCells) {
+            Cell cell = cellData.extractData();
+
+//            if(!(hero.isMoving.get() && ((hero.playerX.get() == cellData.getX() + 1 && hero.playerY.get() == cellData.getY())
+//                || (hero.playerX.get() == cellData.getX() - 1 && hero.playerY.get() == cellData.getY()))
+//                || (hero.playerX.get() == cellData.getX() && hero.playerY.get() == cellData.getY() + 1)
+//                || (hero.playerX.get() == cellData.getX() && hero.playerY.get() == cellData.getY() - 1))) {
+//            }
 
             groundBorderSpawner.renderGround(batch, cellData, farmMap.farmData);
             buildingSpawner.renderBuildings(batch, cellData, farmMap.farmData);
@@ -322,8 +320,8 @@ public class FarmScreen extends GameScreen implements Screen {
         float halfViewportWidth = camera.viewportWidth * camera.zoom / 2;
         float halfViewportHeight = camera.viewportHeight * camera.zoom / 2;
 
-//        camera.position.x = MathUtils.clamp(camera.position.x, halfViewportWidth, mapWidth - halfViewportWidth);
-//        camera.position.y = MathUtils.clamp(camera.position.y, halfViewportHeight, mapHeight - halfViewportHeight);
+        camera.position.x = MathUtils.clamp(camera.position.x, halfViewportWidth, farmTexture.getWidth() - halfViewportWidth);
+        camera.position.y = MathUtils.clamp(camera.position.y, halfViewportHeight, farmTexture.getHeight() - halfViewportHeight);
 
 
         camera.position.set(hero.renderX + CELL_SIZE / 2f, hero.renderY + CELL_SIZE / 2f, 0);
@@ -508,7 +506,7 @@ public class FarmScreen extends GameScreen implements Screen {
         if (farmTexture != null) farmTexture.dispose();
 
 
-        farmTexture = new Texture("game/Buildings/Screen/Farm_Screen_" + season + ".png");
+        farmTexture = GameAssetManager.getGameAssetManager().getScreenTexture("Farm_Screen_" + season + ".png");
         farmSprite = new Sprite(farmTexture);
         farmSprite.setSize(CELL_SIZE, CELL_SIZE);
     }

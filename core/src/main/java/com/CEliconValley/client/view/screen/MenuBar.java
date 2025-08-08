@@ -71,9 +71,9 @@ public class MenuBar {
 
     public MenuBar(GameScreen screen) {
         this.screen = screen;
-        menuTexture = new Texture("game/Buildings/Screen/Menu_Screen.png");
-        miniMapTexture = new Texture("game/Buildings/Screen/map.png");
-        characterTexture = new Texture("game/Buildings/Screen/character.png");
+        menuTexture = GameAssetManager.getGameAssetManager().getScreenTexture("Menu_Screen.png");
+        miniMapTexture = GameAssetManager.getGameAssetManager().getScreenTexture("map.png");
+        characterTexture = GameAssetManager.getGameAssetManager().getScreenTexture("character.png");
 
         tileWidth = menuTexture.getWidth() / 3;
         tileHeight = menuTexture.getHeight() / 3;
@@ -370,13 +370,18 @@ public class MenuBar {
         batch.draw(miniMapTexture, startingX + screenWidth / 80f, startingY + screenHeight / 60f, menuTexture.getWidth() / 2.32f, menuTexture.getHeight() / 3f);
         int farmId = Finder.getpd().getFarmId();
         float characterX = startingX + Finder.getpd().getX() * screenWidth / 350f, characterY = startingY + Finder.getpd().getY() * screenHeight / 420f;
+        if(Finder.getpd().isPlayerInVillage()){
+            characterX += screenWidth / 4f;
+            characterY += screenHeight / 4f;
+            batch.draw(characterTexture, characterX, characterY, characterTexture.getWidth() / 2f, characterTexture.getHeight() / 2f);
+        }
         if(farmId == 1){
             characterX += screenWidth / 2.5f;
+            characterY += screenHeight / 2.5f;
         } else if(farmId == 0){
             characterY += screenHeight / 2.5f;
         } else if(farmId == 3){
             characterX += screenWidth / 2.5f;
-            characterY += screenHeight / 2.5f;
         }
         //TODO If Village!
         batch.draw(characterTexture, characterX, characterY, characterTexture.getWidth() / 2f, characterTexture.getHeight() / 2f);

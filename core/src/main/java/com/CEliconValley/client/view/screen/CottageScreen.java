@@ -5,6 +5,7 @@ import com.CEliconValley.models.*;
 import com.CEliconValley.models.buildings.Door;
 //import com.CEliconValley.models.foragings.Nature.Wall;
 import com.CEliconValley.client.view.screen.maps.CottageMap;
+import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -39,7 +40,7 @@ public class CottageScreen extends GameScreen implements Screen {
         this.cottageMap = cottageMap;
         this.player = player;
         this.batch = new SpriteBatch();
-        this.background = new Texture("game/Buildings/Screen/Cottage_Screen.png");
+        this.background = GameAssetManager.getGameAssetManager().getScreenTexture("Cottage_Screen.png");
         for (Cell cell : cottageMap.getCells()) {
             if (cell == null) continue;
             if (cell.getObjectMap() instanceof Door) {

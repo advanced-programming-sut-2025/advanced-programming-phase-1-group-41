@@ -8,6 +8,7 @@ import com.CEliconValley.common.AnimalData;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.animals.animalKinds.*;
 import com.CEliconValley.models.buildings.Door;
+import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -69,9 +70,9 @@ public class CoopScreen extends GameScreen implements Screen {
 //        ));
 
 
-//        this.background=TextureRegion.split(new Texture("game/Buildings/Screen/Barn_Screen.png"),);
+//        this.background=TextureRegion.split(GameAssetManager.getGameAssetManager().getScreenTexture("Barn_Screen.png"),);
 //        this.background =
-        Texture coopTexture = new Texture("game/Buildings/Screen/Coop_Screen.png");
+        Texture coopTexture = GameAssetManager.getGameAssetManager().getScreenTexture("Coop_Screen.png");
 
         int tileWidth = coopTexture.getWidth() ;
         int tileHeight = coopTexture.getHeight()/3;
@@ -210,4 +211,6 @@ public class CoopScreen extends GameScreen implements Screen {
     public void setCoopMenuOpen(boolean coopMenuOpen) {
         isCoopMenuOpen = coopMenuOpen;
     }
+
+    public ArrayList<AnimalSprite> getAnimalSprites() {return animalSprites;}
 }

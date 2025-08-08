@@ -11,6 +11,7 @@ import com.CEliconValley.models.animals.animalKinds.Pig;
 import com.CEliconValley.models.animals.animalKinds.Sheep;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.client.view.screen.maps.BarnMap;
+import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -75,9 +76,9 @@ public class BarnScreen extends GameScreen implements Screen {
 //        ));
 
 
-//        this.background=TextureRegion.split(new Texture("game/Buildings/Screen/Barn_Screen.png"),);
+//        this.background=TextureRegion.split(GameAssetManager.getGameAssetManager().getScreenTexture("Barn_Screen.png"),);
 //        this.background =
-        Texture barnTexture = new Texture("game/Buildings/Screen/Barn_Screen.png");
+        Texture barnTexture = GameAssetManager.getGameAssetManager().getScreenTexture("Barn_Screen.png");
 
         int tileWidth = barnTexture.getWidth();
         int tileHeight = barnTexture.getHeight() / 3;
@@ -218,4 +219,6 @@ public class BarnScreen extends GameScreen implements Screen {
     public void setBarnMenuOpen(boolean barnMenuOpen) {
         isBarnMenuOpen = barnMenuOpen;
     }
+
+    public ArrayList<AnimalSprite> getAnimalSprites() {return animalSprites;}
 }

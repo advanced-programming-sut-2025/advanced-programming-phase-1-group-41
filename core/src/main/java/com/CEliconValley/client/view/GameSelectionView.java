@@ -31,6 +31,7 @@ public class GameSelectionView implements AppMenu, Screen {
     private final Image previewAvatar;
     private final Label messageLabel;
     private final TextButton backButton;
+    private final TextButton joinButton;
     private final Image background;
 
     private final GameSelectionController controller;
@@ -47,6 +48,7 @@ public class GameSelectionView implements AppMenu, Screen {
         messageLabel = new Label("", skin);
         messageLabel.setColor(Color.YELLOW);
         backButton = new TextButton("Back", skin);
+        joinButton = new TextButton("Join Lobby", skin);
 
         this.controller = controller;
 
@@ -102,7 +104,8 @@ public class GameSelectionView implements AppMenu, Screen {
         root.add(messageLabel).colspan(3).center();
         root.row().padTop(15);
 
-        root.add(backButton).colspan(3).center().width(200);
+        root.add(backButton).colspan(3).center().width(200).row();
+        root.add(joinButton).colspan(3).center().width(200).padTop(20);
     }
 
     @Override
