@@ -18,7 +18,8 @@ public class ServerMessageRouter {
             case "game-popup", "new-game", "pre-start-response",
                  "game-command", "pos-diff", "new-vote",
                  "update-vote", "terminate-vote",
-                 "new-ter" , "update-ter" , "terminate-ter" -> {
+                 "new-ter" , "update-ter" , "terminate-ter",
+                 "save-game", "load-game" -> {
                 GameHandler.handle(type, rawJson, conn, gson);
             }
             case "make-lobby", "join-lobby", "leave-lobby" -> {

@@ -59,6 +59,7 @@ public class LobbyHandler {
                     return;
                 }
                 Result result = lobby.removePlayer(cred.username);
+                System.out.println(result.success()+" result " + result);
                 if(result.success()){
                     GameMessage<String> response = new GameMessage<>("leave-lobby",";)");
                     conn.send(gson.toJson(response));
@@ -67,6 +68,7 @@ public class LobbyHandler {
                     if(result.message().equals("empty")) {
                         GameMessage<String> response = new GameMessage<>("leave-lobby", ";)");
                         conn.send(gson.toJson(response));
+                        System.out.println("sent "+gson.toJson(response));
                         try {
                             Thread.sleep(500);
                         } catch (Exception e) {

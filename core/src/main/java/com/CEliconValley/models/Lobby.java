@@ -19,7 +19,7 @@ public class Lobby {
     private String lobbyID;
     private boolean isPrivate;
     private String password;
-    private Set<String> playerNames;
+    private Set<String> playerNames = Collections.synchronizedSet(new HashSet<>());
     private String admin;
     private boolean isVisible;
     long lastTimeJoined;
@@ -28,29 +28,43 @@ public class Lobby {
     public Lobby() {
     }
 
-    public Lobby(String lobbyName, String password, String admin, boolean isVisible, WebSocket conn, boolean isLoad) {
+    public void postLoad(String id, ObjectId gameid, WebSocket conn) {
+        this.lobbyID = id;
+        this.gameid = gameid;
+        makeLobby(conn);
+    }
+
+
+    public Lobby(String lobbyName, String password, String admin,
+                 boolean isVisible, WebSocket conn, boolean isLoad) {
         this.isPrivate = true;
         this.password = password;
         this.isVisible = isVisible;
-        makeLobby(lobbyName, admin, conn);
         this.isLoad = isLoad;
+        this.lobbyID = giveID();
+        this.lobbyName = lobbyName;
+        this.admin = admin;
+        if(!isLoad) {
+            makeLobby(conn);
+        }
     }
 
     public Lobby(String lobbyName, String admin, boolean isVisible, WebSocket conn, boolean isLoad){
         this.isPrivate = false;
         this.password = null;
         this.isVisible = isVisible;
-        makeLobby(lobbyName, admin, conn);
         this.isLoad = isLoad;
-    }
-
-    private void makeLobby(String lobbyName, String admin, WebSocket conn){
         this.lobbyID = giveID();
         this.lobbyName = lobbyName;
-        this.playerNames = Collections.synchronizedSet(new HashSet<>());
         this.admin = admin;
+        if(!isLoad) {
+            makeLobby(conn);
+        }
+    }
+
+    private void makeLobby(WebSocket conn){
         App.lobbies.add(this);
-        addPlayer(admin);
+        addPlayer(this.admin);
         try{
             Thread.sleep(500);
         } catch (Exception e){
@@ -173,10 +187,55 @@ public class Lobby {
             ", playerNames=" + playerNames +
             ", isVisible=" + isVisible +
             ", lastTimeJoined=" + lastTimeJoined +
+            ", isLoad=" + isLoad +
+            ", gameid=" + gameid +
             '}';
     }
 
     public boolean isLoad() {
         return isLoad;
     }
+
+    public void setAdmin(String admin) {
+        this.admin = admin;
+    }
+
+    public ObjectId getGameid() {
+        return gameid;
+    }
+
+    public void setGameid(ObjectId gameid) {
+        this.gameid = gameid;
+    }
+
+    public void setLoad(boolean load) {
+        isLoad = load;
+    }
+
+    public void setPrivate(boolean aPrivate) {
+        isPrivate = aPrivate;
+    }
+
+    public void setLastTimeJoined(long lastTimeJoined) {
+        this.lastTimeJoined = lastTimeJoined;
+    }
+
+    public void setLobbyID(String lobbyID) {
+        this.lobbyID = lobbyID;
+    }
+
+    public void setLobbyName(String lobbyName) {
+        this.lobbyName = lobbyName;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setPlayerNames(Set<String> playerNames) {
+        this.playerNames = playerNames;
+    }
+
+
+
 }

@@ -1,7 +1,7 @@
 package com.CEliconValley.common.messages;
 
 public class GameMessage<T> {
-    public String type; // e.g., "login", "auth", "lobby_join", "game_data"
+    public String type;
     public T body;
     public long timestamp;
 

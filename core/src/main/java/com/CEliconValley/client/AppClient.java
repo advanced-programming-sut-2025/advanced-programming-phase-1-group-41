@@ -21,9 +21,8 @@ public class AppClient {
     public final static ArrayList<String> questions = new ArrayList<>();
     private static Set<Lobby> lobbies = Collections.synchronizedSet(new HashSet<>());
     private static Lobby currentLobby;
-    private static Set<GameData> games = new HashSet<>();
+    private static ArrayList<String> games = new ArrayList<>();
     private static Set<OnlineData> onlinePlayers = new HashSet<>();
-
     public static void login(UserData ud) {
         userData = ud;
         loggedIn = true;
@@ -96,11 +95,11 @@ public class AppClient {
         AppClient.client = client;
     }
 
-    public static Set<GameData> getGames() {
+    public static ArrayList<String> getGames() {
         return games;
     }
 
-    public static void setGames(Set<GameData> games) {
+    public static void setGames(ArrayList<String> games) {
         AppClient.games = games;
     }
 

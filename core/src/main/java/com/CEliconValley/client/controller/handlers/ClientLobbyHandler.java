@@ -46,14 +46,6 @@ public class ClientLobbyHandler {
                     Main.getMain().setScreen(AppClient.getMenu().getScreen());
                 });
             }
-            case "leave-lobby" -> {
-                Gdx.app.postRunnable(() -> {
-                    AppClient.setCurrentLobby(null);
-                    Menu.Main.resetMenu();
-                    AppClient.setMenu(Menu.Main);
-                    Main.getMain().setScreen(AppClient.getMenu().getScreen());
-                });
-            }
             case "delete-lobby" -> {
                 Lobby lobby = gson.fromJson(body, Lobby.class);
                 Gdx.app.postRunnable(() -> {
@@ -64,7 +56,23 @@ public class ClientLobbyHandler {
                         }
                     }
                 });
+                System.out.println("Cmessage: deleted lobby");
             }
         }
     }
+    public static void handle(String type, String msg, Gson gson, long timestamp){
+        switch (type) {
+            case "leave-lobby" -> {
+                System.out.println("trying to leave lobby");
+                Gdx.app.postRunnable(() -> {
+                    AppClient.setCurrentLobby(null);
+                    Menu.Main.resetMenu();
+                    AppClient.setMenu(Menu.Main);
+                    Main.getMain().setScreen(AppClient.getMenu().getScreen());
+                });
+            }
+        }
+    }
+
+
 }

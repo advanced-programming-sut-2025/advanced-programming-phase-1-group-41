@@ -3,8 +3,10 @@ package com.CEliconValley.server.handlers;
 import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.*;
+import com.CEliconValley.database.UserDB;
 import com.CEliconValley.models.*;
 import com.CEliconValley.client.view.GameMenu;
+import com.CEliconValley.server.GameServer;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.java_websocket.WebSocket;
@@ -30,8 +32,28 @@ public class GameHandler {
                 }.getType());
                 Lobby lobby = msg.body;
                 if(lobby.isLoad()){
+                    System.out.println("making game for "+lobby);
                     // for on games and their _ids and checkem up with current lobby_id
+                    GameData gd = App.getGameDataById(lobby.getGameid());
+                    if(gd == null){
+                        System.out.println("couldn't find game "+lobby);
+                        return;
+                    }
+                    for (PlayerData pd : gd.getPlayersData()) {
+                        if(!lobby.getPlayerNames().contains(pd.getUsername())){
+                            System.out.println(pd.getUsername()+" is not in lobby!");
+                            return;
+                        }
+                    }
+                    if(gd.getPlayersData().size() != lobby.getPlayerNames().size()){
+                        System.out.println("someone new is in lobby ;)");
+                        return;
+                    }
+                    Game game = gd.makeGame();
+                    loadGame(game);
+
                 }else{
+                    System.out.println("making game for "+lobby);
                     for (String playerName : lobby.getPlayerNames()) {
                         GameMessage<PreStartRequest> request = new GameMessage<>("pre-start-request", new PreStartRequest());
                         App.getServer().sendToUsername(playerName, gson.toJson(request));
@@ -90,7 +112,51 @@ public class GameHandler {
                     "terminate-ter");
                 App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(response));
             }
+            case "save-game" -> {
+                UserDB.saveGame(App.getGame());
+                GameMessage<String> exiter = new GameMessage<>("game-command","exit-game");
+                App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(exiter));
+            }
+            case "load-game" -> {
+                GameMessage<String> msg = gson.fromJson(message, new TypeToken<GameMessage<String>>(){}.getType());
+                GameData gd = App.getGameDataByCustomName(msg.body);
+                Lobby lobby = null;
+                Lobby before = gd.getLobby();
+                if(before.isPrivate()){
+                    lobby = new Lobby(before.getLobbyName(), before.getPassword(),
+                        App.getServer().getOnlineConnections().get(conn).getUsername(),
+                        before.isVisible(), conn, true
+                        );
+                }else{
+                    lobby = new Lobby(before.getLobbyName(),
+                        App.getServer().getOnlineConnections().get(conn).getUsername(),
+                    before.isVisible(), conn , true);
+                }
+                lobby.postLoad(gd.getLobby().getLobbyID(), gd.get_id(), conn);
+            }
         }
+    }
+
+    public static void loadGame(Game game){
+        App.setGame(game);
+        GameMessage<GameData> response = new GameMessage<>("new-game", new GameData(game));
+        App.getServer().sendToGroupByPlayers(game.getPlayers(), new Gson().toJson(response));
+        game.commandThread = new Thread(() -> {
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                    GameCommand command = commandQueue.take();
+                    processCommand(command);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        game.commandThread.start();
+
+
+        game.startScheduler();
     }
 
     public static void newGame() {

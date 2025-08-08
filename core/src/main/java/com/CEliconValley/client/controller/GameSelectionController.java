@@ -1,7 +1,6 @@
 package com.CEliconValley.client.controller;
 
 import com.CEliconValley.client.AppClient;
-import com.CEliconValley.client.view.AvatarSelectionView;
 import com.CEliconValley.client.view.GameSelectionView;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.models.ui.GameAssetManager;
@@ -9,12 +8,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.google.gson.Gson;
 
 public class GameSelectionController {
-    private ImageButton selectedButton = null;
+    private TextButton selectedButton = null;
     private GameSelectionView view;
 
     public void setView(GameSelectionView view) {
@@ -22,20 +22,19 @@ public class GameSelectionController {
     }
 
     public void setupListeners() {
-        for (int i = 0; i < view.getAvatarButtons().size; i++) {
+        for (int i = 0; i < view.getGameButtons().size; i++) {
             final int index = i;
-            final ImageButton button = view.getAvatarButtons().get(i);
-            view.getAvatarButtons().get(i).addListener(new ClickListener() {
+            final TextButton button = view.getGameButtons().get(i);
+            view.getGameButtons().get(i).addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    handleAvatarSelect(index);
-                    if (selectedButton != null) {
-                        selectedButton.setStyle(createDefaultStyle(view.getAvatarPaths().get(view.getAvatarButtons().indexOf(selectedButton, true))));
-                    }
-                    button.setStyle(createSelectedStyle(view.getAvatarPaths().get(index)));
+//                    if (selectedButton != null) {
+//                        selectedButton.setStyle(createDefaultStyle(view.getGames().get(view.getGameButtons().indexOf(selectedButton, true))));
+//                    }
+//                    button.setStyle(createSelectedStyle(view.getGames().get(index)));
                     selectedButton = button;
 
-                    handleAvatarSelect(index);
+                    handleGameSelect(index);
                 }
             });
         }
@@ -46,14 +45,30 @@ public class GameSelectionController {
                 handleBack();
             }
         });
+        view.getJoinButton().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                handleJoin();
+            }
+        });
     }
 
-    private void handleAvatarSelect(int index) {
-        String avatarPath = view.getAvatarPaths().get(index);
-        view.showPreviewAvatar(avatarPath);
-        view.setMessage("Game selected: " + avatarPath.substring(15, avatarPath.length() - 4));
-        GameMessage<String> msg = new GameMessage<>("avatar-request",avatarPath);
-        AppClient.getClient().send(new Gson().toJson(msg));
+
+    private void handleJoin(){
+        System.out.println(selectedButton == null ? "null" : selectedButton.getText());
+        if(selectedButton != null){
+            GameMessage<String> msg = new GameMessage<>("load-game", selectedButton.getText().toString());
+            AppClient.getClient().send(new Gson().toJson(msg));
+        }
+    }
+
+    private void handleGameSelect(int index) {
+        String selectedgame = view.getGames().get(index);
+        view.showPreviewGame();
+        view.setMessage("Game selected: " + selectedgame);
+
+//        GameMessage<String> msg = new GameMessage<>("avatar-request",avatarPath);
+//        AppClient.getClient().send(new Gson().toJson(msg));
     }
 
     private void handleBack() {
@@ -78,4 +93,7 @@ public class GameSelectionController {
         return style;
     }
 
+    public TextButton getSelectedButton() {
+        return selectedButton;
+    }
 }

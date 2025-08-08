@@ -14,6 +14,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import org.java_websocket.WebSocket;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class GeneralHandler {
@@ -25,8 +26,12 @@ public class GeneralHandler {
                     AppClient.setLobbies(
                         new HashSet<>(handshakeData.getCurrentLobbies())
                     );
-                    AppClient.setGames(null);
                     AppClient.setOnlinePlayers(new HashSet<>(handshakeData.getOnlinePlayers()));
+                    if(handshakeData.getGames() != null){
+                        AppClient.setGames(handshakeData.getGames());
+                    }else{
+                        AppClient.setGames(new ArrayList<>());
+                    }
                 });
             }
             case "app-data" -> {

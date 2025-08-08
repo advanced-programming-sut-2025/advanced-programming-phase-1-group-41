@@ -223,6 +223,9 @@ public class Player {
 
     public double getMoney() {
         double value = 0;
+        if(this.friendships == null){
+            this.friendships = new ArrayList<>();
+        }
         for (Friendship friendship : this.friendships) {
             if(friendship.isAreMarried()){
                 if(friendship.getPlayer1().getUser().getUsername().equals(App.getGame().getCurrentPlayer().getUser().getUsername())){

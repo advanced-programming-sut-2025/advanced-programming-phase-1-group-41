@@ -110,6 +110,9 @@ public class GameData {
 
     public ArrayList<Friendship> getFriendships(ArrayList<Player> players,ArrayList<FriendshipData> friendshipsData) {
         ArrayList<Friendship> friendships = new ArrayList<>();
+        if(friendshipsData == null){
+            return friendships;
+        }
         for (FriendshipData fd : friendshipsData) {
             Player player1 = PlayerFinder.getPlayerByName(players, fd.getPlayer1Name());
             Player player2 = PlayerFinder.getPlayerByName(players, fd.getPlayer2Name());
@@ -177,5 +180,9 @@ public class GameData {
 
     public WeatherType getWeatherType() {
         return weatherType;
+    }
+
+    public Lobby getLobby() {
+        return lobby;
     }
 }

@@ -43,6 +43,9 @@ public class BarnData {
 
     private ArrayList<Animal> getAnimals(Player owner){
         ArrayList<Animal> animals = new ArrayList<>();
+        if(animalsData == null){
+            return animals;
+        }
         for (AnimalData animalsDatum : animalsData) {
             animals.add(animalsDatum.getAnimal(owner));
         }
