@@ -13,6 +13,7 @@ import com.CEliconValley.models.Player;
 import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.items.*;
 import com.CEliconValley.models.tools.Tool;
+import com.CEliconValley.models.ui.CustomColors;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -145,7 +146,7 @@ public class BarnOrCoopMenuBar {
                 shapeRenderer.end();
                 batch.begin();
 
-                font.setColor(Color.RED);
+                font.setColor(CustomColors.SWAMP_COLOR);
 
                 font.draw(batch, animalSound, tooltipX + 20, tooltipY + tooltipHeight - 15);
 

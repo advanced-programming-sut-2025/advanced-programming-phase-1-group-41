@@ -43,6 +43,7 @@ public class MenuBar {
     private final Texture menuTexture;
     private final Texture miniMapTexture;
     private final Texture characterTexture;
+    private final Texture infoTexture;
     private final TextureRegion[] tabTextures;
     private final int tileWidth;
     private final int tileHeight;
@@ -74,6 +75,7 @@ public class MenuBar {
         menuTexture = GameAssetManager.getGameAssetManager().getScreenTexture("Menu_Screen.png");
         miniMapTexture = GameAssetManager.getGameAssetManager().getScreenTexture("map.png");
         characterTexture = GameAssetManager.getGameAssetManager().getScreenTexture("character.png");
+        infoTexture = GameAssetManager.getGameAssetManager().getBackgroundTexture("Info_Background1.png");
 
         tileWidth = menuTexture.getWidth() / 3;
         tileHeight = menuTexture.getHeight() / 3;
@@ -391,10 +393,10 @@ public class MenuBar {
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
 
-        float minX = menuTexture.getWidth() / 25f;
-        float maxX = menuTexture.getWidth() / 2.5f;
-        float minY = menuTexture.getHeight() / 40f;
-        float maxY = menuTexture.getHeight() / 10f;
+        float minX = screenWidth / 25f * 1.3f;
+        float maxX = screenWidth / 2.5f * 1.3f;
+        float minY = screenHeight / 40f * 1.7f;
+        float maxY = screenHeight / 10f * 1.7f;
 
         float currentX = minX;
         float currentY = maxY;
@@ -409,7 +411,7 @@ public class MenuBar {
             if (currentX > maxX) {
                 float width = screenWidth * 0.02f;
                 currentX = minX + width;
-                currentY -= menuTexture.getHeight() / 15f;
+                currentY -= screenHeight / 15f * 1.7f;
 
                 if (currentY < minY) break;
             }
@@ -640,10 +642,12 @@ public class MenuBar {
 
         batch.begin();
 
+        batch.draw(infoTexture, x - 2 * padding, y - 2 * padding,
+            infoTexture.getWidth(), infoTexture.getHeight() * recipe.getNeededItems().size() / 2f);
 
         String title = readableName(machine.name());
         GlyphLayout layout = new GlyphLayout(font, title);
-        font.draw(batch, layout, x + padding, y + height - padding);
+        font.draw(batch, layout, x + padding + width / 2 - layout.width / 2, y + height - 2 * padding);
 
 
         int i = 0;
