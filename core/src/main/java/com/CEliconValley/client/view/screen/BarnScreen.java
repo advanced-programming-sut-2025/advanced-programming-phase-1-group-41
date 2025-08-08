@@ -190,6 +190,7 @@ public class BarnScreen extends GameScreen implements Screen {
 
     public void transfer() {
         Cell cell = Finder.findCellByCoordinatesBarn(hero.playerX.get(), hero.playerY.get(), this.barn);
+        System.out.println("current cell "+cell.getObjectMap().getName()+" "+cell.getX()+" "+cell.getY());
         if (cell.getObjectMap() instanceof Door) {
             ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(farmScreen);
         }
