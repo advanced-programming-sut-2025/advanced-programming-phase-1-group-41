@@ -428,7 +428,7 @@ public class MenuBar {
                 mousePos.y >= drawY && mousePos.y <= drawY + height;
 
             if (mouseOver && player.getCraftingRecipes().contains(machine.getRecipe())) {
-                drawTooltip(batch, machine, drawX, drawY);
+                drawToolTip(batch, machine, drawX, drawY);
 
                 if (Gdx.input.justTouched()) {
                     if (hasAllItems(machine.getRecipe())) {
@@ -494,7 +494,7 @@ public class MenuBar {
                 mousePos.y >= drawY && mousePos.y <= drawY + height;
 
             if (mouseOver && unlocked) {
-                drawTooltip(batch, food, drawX, drawY);
+                drawCookingTip(batch, food, drawX, drawY);
 
                 if (Gdx.input.justTouched()) {
                     if (hasAllItems(recipe)) {
@@ -702,7 +702,7 @@ public class MenuBar {
         return camelCase.replaceAll("([a-z])([A-Z])", "$1 $2");
     }
 
-    private void drawTooltip(Batch batch, CraftableMachine machine, float drawX, float drawY) {
+    private void drawToolTip(Batch batch, CraftableMachine machine, float drawX, float drawY) {
         CraftingRecipe recipe = machine.getRecipe();
         if (recipe == null) return;
 
@@ -757,7 +757,7 @@ public class MenuBar {
             font.setColor(1f, 1f, 1f, 1f);
         }
     }
-    private void drawTooltip(Batch batch, Food food, float drawX, float drawY) {
+    private void drawCookingTip(Batch batch, Food food, float drawX, float drawY) {
         CookingRecipe recipe = food.getRecipe();
         if (recipe == null) return;
 
@@ -782,8 +782,13 @@ public class MenuBar {
 
         batch.begin();
 
-        batch.draw(infoTexture, x - 2 * padding, y - 2 * padding,
-            infoTexture.getWidth(), infoTexture.getHeight() * recipe.neededItems.size() / 2f);
+        if(recipe.neededItems.size() <= 1){
+            batch.draw(infoTexture, x - 2 * padding, y - 2 * padding,
+                infoTexture.getWidth(), infoTexture.getHeight());
+        }else{
+            batch.draw(infoTexture, x - 2 * padding, y - 2 * padding,
+                infoTexture.getWidth(), infoTexture.getHeight() * recipe.neededItems.size() / 2f);
+        }
 
         String title = readableName(food.getName());
         GlyphLayout layout = new GlyphLayout(font, title);

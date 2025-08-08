@@ -197,7 +197,7 @@ public class FarmScreen extends GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Result result = Playeracts.handleInput(hero, farmMap, stage, delta);
         if (!result.success()) {
-            if (result.message().equals("cheat")) {
+            if (result.message().equals("cheat") || result.message().equals("chat")) {
                 return;
             }
         }

@@ -8,6 +8,7 @@ import com.CEliconValley.controllers.Spawner.InventoryRenderer;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Hero;
+import com.CEliconValley.models.PlayerMessage;
 import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.foragings.ForagingTree;
 import com.CEliconValley.models.foragings.Nature.Grass;
@@ -15,6 +16,7 @@ import com.CEliconValley.models.foragings.Nature.Lake;
 import com.CEliconValley.models.foragings.Nature.Obstacle;
 import com.CEliconValley.models.foragings.Nature.Rock;
 import com.CEliconValley.models.locations.Location;
+import com.CEliconValley.models.ui.CustomColors;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -24,14 +26,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public abstract class GameScreen implements Screen {
@@ -41,12 +41,17 @@ public abstract class GameScreen implements Screen {
     protected InventoryRenderer inventoryRenderer;
     protected boolean cheatMode = false;
     public boolean voteMode = false;
+    public boolean chatMode = false;
     public Image overlay;
     protected TextField cheatCodeField;
 
     public TextButton yesVoteButton, noVoteButton;
     public Label playerVoteLabel;
     public Label howManyVotedLabel;
+
+    private TextField chatInput;
+    private ScrollPane chatScrollPane;
+    private Table chatTable;
 
     public TextButton teryesButton, ternoButton;
     public Label terLabel;
@@ -56,7 +61,8 @@ public abstract class GameScreen implements Screen {
     public boolean isGameFinished = false;
 
     protected Stage stage;
-    protected Stage chatstage;
+    protected Stage chatStage;
+
     public abstract void transfer();
     protected Hero hero;
     protected MenuBar menuBar = new MenuBar(this);
@@ -135,6 +141,7 @@ public abstract class GameScreen implements Screen {
 
     public GameScreen(InventoryRenderer inventoryRenderer) {
         stage = new Stage(new ScreenViewport(), Main.getBatch());
+        chatStage = new Stage(new ScreenViewport(), Main.getBatch());
         Gdx.input.setInputProcessor(stage);
         this.inventoryRenderer = inventoryRenderer;
         cheatCodeField = new TextField("", GameAssetManager.getGameAssetManager().getSkin());
@@ -172,6 +179,50 @@ public abstract class GameScreen implements Screen {
         stage.addActor(timeScreen.getHudTable());
         stage.addActor(energyBarImage);
         this.hero = new Hero();
+
+        Table root = new Table();
+        root.setFillParent(true);
+        chatTable = new Table();
+        // TODO: اضافه کردن پیام‌های چت به این table
+        chatTable.setFillParent(true);
+        ArrayList<PlayerMessage> messages = new ArrayList<>();
+        messages.add(new PlayerMessage("Arad", "Salam"));
+        messages.add(new PlayerMessage("Arad", "Khobi"));
+        messages.add(new PlayerMessage(AppClient.getUserData().getUsername(), "Mer30"));
+        messages.add(new PlayerMessage(AppClient.getUserData().getUsername(), "To Chetori?"));
+        messages.add(new PlayerMessage("Arad", "Fadat"));
+        for(PlayerMessage message : messages){
+            if(message.getSender().equals(AppClient.getUserData().getUsername())){
+                Label label = new Label(message.getMessage() + "-", GameAssetManager.getGameAssetManager().getSkin());
+                label.setWrap(true);
+                label.setAlignment(Align.right);
+                label.setColor(CustomColors.GAMEGREENCOLOR);
+                chatTable.add(label).width(380).right().padBottom(5).row();
+            } else{
+                Label label = new Label(message.getSender() + ": " + message.getMessage(), GameAssetManager.getGameAssetManager().getSkin());
+                label.setWrap(true);
+                label.setAlignment(Align.left);
+                chatTable.add(label).width(380).left().padBottom(5).row();
+            }
+        }
+
+        chatScrollPane = new ScrollPane(chatTable, GameAssetManager.getGameAssetManager().getSkin());
+        chatScrollPane.setFadeScrollBars(false);
+        chatScrollPane.setScrollingDisabled(true, false);
+
+        chatInput = new TextField("", GameAssetManager.getGameAssetManager().getSkin());
+        chatInput.setMessageText("Type a message...");
+        chatInput.setMaxLength(200);
+
+        Table container = new Table();
+        container.setFillParent(true);
+        container.bottom().left().pad(10);
+        container.add(chatScrollPane).width(400).height(400).row();
+        container.add(chatInput).width(400).height(60);
+
+        container.setPosition(stage.getWidth() / 2 - 200,
+            stage.getHeight() / 2 - 200);
+        chatStage.addActor(container);
     }
 
 
@@ -255,6 +306,29 @@ public abstract class GameScreen implements Screen {
         overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
             .getGameAssetManager()
             .getBackgroundTexture("Field3.png"))));
+
+//        overlay.setColor(0, 0, 0, 0.5f);
+        overlay.setSize(stage.getWidth(), stage.getHeight());
+        overlay.setPosition(0, 0);
+
+        overlay.getColor().a = 0;
+        overlay.addAction(Actions.fadeIn(0.5f));
+
+
+        stage.addActor(overlay);
+        overlay.toBack();
+    }
+
+    public void handleChatMode(Stage stage) {
+        chatMode = true;
+        chatInput.setVisible(true);
+        chatScrollPane.setVisible(true);
+        stage.setKeyboardFocus(chatInput);
+        chatInput.setText("");
+
+        overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
+            .getGameAssetManager()
+            .getBackgroundTexture("Chat_Background.png"))));
 
 //        overlay.setColor(0, 0, 0, 0.5f);
         overlay.setSize(stage.getWidth(), stage.getHeight());
@@ -424,6 +498,14 @@ public abstract class GameScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+    }
+
+    public Stage getChatStage() {
+        return chatStage;
+    }
+
+    public TextField getChatInput() {
+        return chatInput;
     }
 }
 

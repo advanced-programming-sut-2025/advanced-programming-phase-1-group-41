@@ -40,6 +40,7 @@ public class Playeracts {
     public static Result handleInput(Hero hero, Location location, Stage stage, float delta) {
         screen.updateEnergy();
 
+
         if (screen.cheatMode) {
             stage.act(delta);
             stage.draw();
@@ -67,6 +68,22 @@ public class Playeracts {
 
             }
             return new Result(false, "cheat");
+        }
+        if(screen.chatMode){
+            screen.chatStage.act(delta);
+            screen.chatStage.draw();
+            if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+                String message = screen.getChatInput().getText();
+                if (!message.isEmpty()) {
+                    // TODO: پردازش یا ارسال پیام چت
+                    System.out.println("Chat message: " + message);
+                }
+            } else if(Gdx.input.isKeyJustPressed(Input.Keys.T)) {
+                screen.chatMode = false;
+                screen.getChatInput().setVisible(false);
+                Gdx.input.setInputProcessor(screen.stage);
+            }
+            return new Result(false, "chat");
         }
         if (screen.voteMode) {
             stage.act(delta);
@@ -128,9 +145,17 @@ public class Playeracts {
             stage.draw();
             return new Result(false, "cheat");
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && !screen.chatMode) {
             screen.handleCheatCode(stage);
             return new Result(true, "cheat");
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.T) && !screen.cheatMode){
+            screen.handleChatMode(screen.chatStage);
+            screen.getChatInput().setDisabled(false);
+            screen.getChatInput().setFocusTraversal(true);
+            screen.getChatInput().setCursorPosition(0);
+            Gdx.input.setInputProcessor(screen.getChatStage());
+            return new Result(true, "chat");
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
