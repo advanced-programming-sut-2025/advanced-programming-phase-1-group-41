@@ -22,6 +22,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -229,9 +230,18 @@ public abstract class GameScreen implements Screen {
         timeScreen.goldLabel.setFontScale(1.18f);
         timeScreen.dateLabel.setFontScale(0.8f);
 
-        tagMessageLabel = new Label("salam", GameAssetManager.getGameAssetManager().getSkin());
-        tagMessageLabel.setPosition(stage.getWidth() / 2 - tagMessageLabel.getWidth() / 2, stage.getHeight() / 1.1f);
+        Texture labelTexture = GameAssetManager.getGameAssetManager().getBackgroundTexture("Info_Background1.png");
+        TextureRegionDrawable background = new TextureRegionDrawable(new TextureRegion(labelTexture));
+
+        Label.LabelStyle style = new Label.LabelStyle();
+        style.font = new BitmapFont();
+        style.font.getData().setScale(2f);
+        style.background = background;
+
+        tagMessageLabel = new Label("", style);
+        tagMessageLabel.setPosition(stage.getWidth() / 2 - tagMessageLabel.getWidth() / 2, stage.getHeight() / 1.2f);
         tagMessageLabel.setColor(CustomColors.SWAMP_COLOR);
+        tagMessageLabel.setVisible(false);
 
         stage.addActor(tagMessageLabel);
         stage.addActor(timeScreen.dateLabel);
