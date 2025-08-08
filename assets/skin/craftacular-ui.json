@@ -110,14 +110,22 @@ com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
-	default: {
-		background: scroll-bg
-		hScroll: scroll-horizontal
-		hScrollKnob: scroll-knob-horizontal
-		vScroll: scroll-vertical
-		vScrollKnob: scroll-knob-vertical
-	}
-}
+  default: {
+    background: scroll-bg,
+    hScroll: scroll-horizontal,
+    hScrollKnob: scroll-knob-horizontal,
+    vScroll: scroll-vertical,
+    vScrollKnob: scroll-knob-vertical
+  },
+  hiddenScroll: {
+    background: scroll-bg,
+    hScroll: scroll-horizontal,
+    hScrollKnob: scroll-knob-horizontal,
+    vScroll: null,
+    vScrollKnob: null
+  }
+
+},
 com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
 	default-horizontal: {
 		background: slider
@@ -157,4 +165,6 @@ com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 		titleFont: font
 	}
 }
+
+
 }

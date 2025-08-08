@@ -23,6 +23,7 @@ public class GameData {
     double roundEnergy;
     VillageData villageData;
     Lobby lobby;
+    ArrayList<PlayerMessage> playerMessages;
     public GameData() {
     }
 
@@ -40,6 +41,7 @@ public class GameData {
         fillFarms(game);
         this.villageData = new VillageData(game.getVillage());
         this.lobby = game.getLobby();
+        this.playerMessages = game.getPlayerMessages();
     }
 
     private void fillFarms(Game game) {
@@ -82,7 +84,7 @@ public class GameData {
         Village village = this.villageData.getVillage(players);
         ArrayList<Farm> farms = getFarms(players);
         Game game = new Game(this.time, village, this.weatherType, this.tmrwWeatherType,
-                this.roundEnergy, farms);
+                this.roundEnergy, farms, this.playerMessages);
         Player currentPlayer = PlayerFinder.getPlayerByName(players, currentPlayerName);
         Player loader = PlayerFinder.getPlayerByName(players, loaderName);
         game.handmadePostLoad(currentPlayer, loader, players);
@@ -184,5 +186,13 @@ public class GameData {
 
     public Lobby getLobby() {
         return lobby;
+    }
+
+    public ArrayList<PlayerMessage> getPlayerMessages() {
+        return playerMessages;
+    }
+
+    public void setPlayerMessages(ArrayList<PlayerMessage> playerMessages) {
+        this.playerMessages = playerMessages;
     }
 }

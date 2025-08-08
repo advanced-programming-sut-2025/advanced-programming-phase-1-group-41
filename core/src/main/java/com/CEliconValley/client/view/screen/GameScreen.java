@@ -23,11 +23,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -81,7 +83,7 @@ public abstract class GameScreen implements Screen {
     protected boolean halt = false;
     public boolean dcmode = false;
     public Label dcLabel;
-
+    Table chatTable;
 
     public void setTextForVoteLabel(String input){
         playerVoteLabel.setText(input);
@@ -142,19 +144,10 @@ public abstract class GameScreen implements Screen {
         stage.addActor(dcLabel);
     }
 
-    private void setupChatUI(){
-        Table root = new Table();
-        root.setFillParent(true);
-        Table chatTable = new Table();
-        // TODO: Add Message TO Table
-        chatTable.setFillParent(true);
-        ArrayList<PlayerMessage> messages = new ArrayList<>();
-        messages.add(new PlayerMessage("Arad", "Salam"));
-        messages.add(new PlayerMessage("Arad", "Khobi"));
-        messages.add(new PlayerMessage(AppClient.getUserData().getUsername(), "Mer30"));
-        messages.add(new PlayerMessage(AppClient.getUserData().getUsername(), "To Chetori?"));
-        messages.add(new PlayerMessage("Arad", "Fadat"));
-        for(PlayerMessage message : messages){
+    public void updateChat(){
+        chatTable.clear();
+        chatTable = new Table();
+        for(PlayerMessage message : AppClient.getGameData().getPlayerMessages()){
             if(message.getSender().equals(AppClient.getUserData().getUsername())){
                 Label label = new Label(message.getMessage() + "-", GameAssetManager.getGameAssetManager().getSkin());
                 label.setWrap(true);
@@ -168,8 +161,38 @@ public abstract class GameScreen implements Screen {
                 chatTable.add(label).width(380).left().padBottom(5).row();
             }
         }
+        chatTable.row();
+        chatTable.row().row();
+        chatTable.padBottom(20);
+        chatScrollPane.setActor(chatTable);
+        chatScrollPane.setFadeScrollBars(false);
+        chatScrollPane.setScrollingDisabled(true, false);
+        Gdx.app.postRunnable(() -> {
+            chatScrollPane.validate();
+            chatScrollPane.setScrollPercentY(1f);
+        });
 
-        chatScrollPane = new ScrollPane(chatTable, GameAssetManager.getGameAssetManager().getSkin());
+    }
+
+    private void setupChatUI(){
+        Table root = new Table();
+        chatTable = new Table();
+        chatTable.setFillParent(true);
+        for(PlayerMessage message : AppClient.getGameData().getPlayerMessages()){
+            if(message.getSender().equals(AppClient.getUserData().getUsername())){
+                Label label = new Label(message.getMessage() + "-", GameAssetManager.getGameAssetManager().getSkin());
+                label.setWrap(true);
+                label.setAlignment(Align.right);
+                label.setColor(CustomColors.GAMEGREENCOLOR);
+                chatTable.add(label).width(380).right().padBottom(5).row();
+            } else{
+                Label label = new Label(message.getSender() + ": " + message.getMessage(), GameAssetManager.getGameAssetManager().getSkin());
+                label.setWrap(true);
+                label.setAlignment(Align.left);
+                chatTable.add(label).width(380).left().padBottom(5).row();
+            }
+        }
+        chatScrollPane = new ScrollPane(chatTable, GameAssetManager.getGameAssetManager().getSkin(), "hiddenScroll");
         chatScrollPane.setFadeScrollBars(false);
         chatScrollPane.setScrollingDisabled(true, false);
 
@@ -181,7 +204,7 @@ public abstract class GameScreen implements Screen {
         container.setFillParent(true);
         container.bottom().left().pad(10);
         container.add(chatScrollPane).width(400).height(400).row();
-        container.add(chatInput).width(400).height(60);
+        container.add(chatInput).width(400).height(60).padTop(20);
 
         container.setPosition(stage.getWidth() / 2 - 200,
             stage.getHeight() / 2 - 200);
@@ -231,7 +254,11 @@ public abstract class GameScreen implements Screen {
         timeScreen.dateLabel.setFontScale(0.8f);
 
         Texture labelTexture = GameAssetManager.getGameAssetManager().getBackgroundTexture("Info_Background1.png");
-        TextureRegionDrawable background = new TextureRegionDrawable(new TextureRegion(labelTexture));
+//        TextureRegionDrawable background = new TextureRegionDrawable(new TextureRegion(labelTexture));
+
+        NinePatch ninePatch = new NinePatch(labelTexture, 40, 40, 0, 0);
+        NinePatchDrawable background = new NinePatchDrawable(ninePatch);
+
 
         Label.LabelStyle style = new Label.LabelStyle();
         style.font = new BitmapFont();
@@ -239,6 +266,8 @@ public abstract class GameScreen implements Screen {
         style.background = background;
 
         tagMessageLabel = new Label("", style);
+        // A space forces layout
+        tagMessageLabel.pack();
         tagMessageLabel.setPosition(stage.getWidth() / 2 - tagMessageLabel.getWidth() / 2, stage.getHeight() / 1.2f);
         tagMessageLabel.setColor(CustomColors.SWAMP_COLOR);
         tagMessageLabel.setVisible(false);
@@ -561,7 +590,8 @@ public abstract class GameScreen implements Screen {
     public void updateTagMessage(String message) {
         tagMessageLabel.setText(message);
         tagMessageLabel.setVisible(true);
-        tagMessageLabel.setPosition(stage.getWidth() / 2 - tagMessageLabel.getWidth(), tagMessageLabel.getHeight());
+        tagMessageLabel.setPosition(stage.getWidth() / 2 - tagMessageLabel.getWidth() / 2, stage.getHeight() / 1.2f);
+        tagMessageLabel.pack();
     }
     public void removeTagMessage(){
         tagMessageLabel.setText("");

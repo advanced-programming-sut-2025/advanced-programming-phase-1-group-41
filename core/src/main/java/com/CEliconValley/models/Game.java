@@ -42,6 +42,7 @@ public class Game {
     private WeatherType weatherType;
     private WeatherType tmrwWeatherType;
     private Lobby lobby;
+    private ArrayList<PlayerMessage> playerMessages;
 
     private double roundEnergy;
     @Transient
@@ -65,13 +66,14 @@ public class Game {
 
     public Game(TimeLine time, Village village,
                 WeatherType weatherType, WeatherType tmrwWeatherType,
-                double roundEnergy, ArrayList<Farm> farms) {
+                double roundEnergy, ArrayList<Farm> farms, ArrayList<PlayerMessage> playerMessages) {
         this.time = time;
         this.village = village;
         this.weatherType = weatherType;
         this.tmrwWeatherType = tmrwWeatherType;
         this.roundEnergy = roundEnergy;
         this.farms = new ArrayList<>(farms);
+        this.playerMessages = playerMessages;
     }
 
 
@@ -98,6 +100,8 @@ public class Game {
             players.get(i).setFarmId(i);
         }
         this.lobby = lobby;
+        this.playerMessages = new ArrayList<>();
+        this.playerMessages = new ArrayList<>();
     }
 
 
@@ -378,5 +382,9 @@ public class Game {
 
     public void setLobby(Lobby lobby) {
         this.lobby = lobby;
+    }
+
+    public ArrayList<PlayerMessage> getPlayerMessages() {
+        return playerMessages;
     }
 }

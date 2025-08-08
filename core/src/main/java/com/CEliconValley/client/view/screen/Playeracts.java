@@ -7,10 +7,7 @@ import com.CEliconValley.common.VillageData;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.TGPoint;
-import com.CEliconValley.models.Finder;
-import com.CEliconValley.models.Hero;
-import com.CEliconValley.models.Player;
-import com.CEliconValley.models.Result;
+import com.CEliconValley.models.*;
 import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.tools.*;
 import com.badlogic.gdx.Gdx;
@@ -76,9 +73,13 @@ public class Playeracts {
                 String message = screen.getChatInput().getText();
                 if (!message.isEmpty()) {
                     // TODO: Send Message
+                    GameMessage<PlayerMessage> msg = new GameMessage<>("player-message",
+                        new PlayerMessage(AppClient.getUserData().getUsername(), message));
+                    AppClient.getClient().send(new Gson().toJson(msg));
                     System.out.println("Chat message: " + message);
                 }
-            } else if(Gdx.input.isKeyJustPressed(Input.Keys.T)) {
+                screen.getChatInput().setText("");
+            } else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                 screen.chatMode = false;
                 screen.getChatInput().setVisible(false);
                 Gdx.input.setInputProcessor(screen.stage);

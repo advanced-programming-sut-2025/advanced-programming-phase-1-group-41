@@ -1,5 +1,9 @@
 package com.CEliconValley.models;
 
+
+import dev.morphia.annotations.Embedded;
+
+@Embedded
 public class PlayerMessage {
     private String message;
     private String sender;
@@ -10,6 +14,9 @@ public class PlayerMessage {
 
     public String getSender() {
         return sender;
+    }
+
+    public PlayerMessage() {
     }
 
     public PlayerMessage(String sender, String message) {

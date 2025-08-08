@@ -8,14 +8,18 @@ import com.CEliconValley.common.FarmData;
 import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.*;
+import com.CEliconValley.models.App;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Menu;
 import com.CEliconValley.models.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.utils.Timer;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+
+import java.util.TimerTask;
 
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
@@ -33,6 +37,7 @@ public class ClientGameHandler {
                     coopScreen.updateAnimalSprites(Finder.getcdByid(coopScreen.getId()));
                 }
                 updateTime(gs);
+                gs.updateChat();
                 }
         });
         switch (type) {
@@ -148,6 +153,14 @@ public class ClientGameHandler {
                     screen.handleVote(screen.getStage(), vote.target);
                 }
             }
+            case "message-cred" -> {
+                if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                    .getScreen()  instanceof GameScreen gs){
+                    MessageCred cred = gson.fromJson(body, MessageCred.class);
+                    AppClient.getGameData().setPlayerMessages(cred.playerMessages);
+                    gs.updateChat();
+                }
+            }
             case "game-command" -> {
                 GameCommand gamecommand = gson.fromJson(body, GameCommand.class);
                 System.out.println("received a command "+gamecommand.command);
@@ -177,6 +190,18 @@ public class ClientGameHandler {
                             screen.overlay.remove();
                             screen.overlay = null;
                         }
+                    }
+                }else if(gamecommand.command.equals("mention")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen() instanceof GameScreen screen){
+                        screen.updateTagMessage("you got mentioned!");
+                        new Timer().schedule(new Timer.Task() {
+
+                            @Override
+                            public void run() {
+                                screen.removeTagMessage();
+                            }
+                        }, 5);
                     }
                 }
             }
