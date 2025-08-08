@@ -50,6 +50,8 @@ public abstract class GameScreen implements Screen {
     public Label playerVoteLabel;
     public Label howManyVotedLabel;
 
+    public Label tagMessageLabel;
+
     private TextField chatInput;
     private ScrollPane chatScrollPane;
 
@@ -204,6 +206,7 @@ public abstract class GameScreen implements Screen {
         setupVoteUI();
 
         stage.addActor(cheatCodeField);
+
         hudImage = new Image(new TextureRegion(hudTexture));
         hudImage.setSize(hudImage.getWidth()*4, hudImage.getHeight()*4);
         energyBarImage = new Image(new TextureRegion(energyBarTexture));
@@ -225,6 +228,12 @@ public abstract class GameScreen implements Screen {
         timeScreen.goldLabel.setAlignment(Align.left);
         timeScreen.goldLabel.setFontScale(1.18f);
         timeScreen.dateLabel.setFontScale(0.8f);
+
+        tagMessageLabel = new Label("salam", GameAssetManager.getGameAssetManager().getSkin());
+        tagMessageLabel.setPosition(stage.getWidth() / 2 - tagMessageLabel.getWidth() / 2, stage.getHeight() / 1.1f);
+        tagMessageLabel.setColor(CustomColors.SWAMP_COLOR);
+
+        stage.addActor(tagMessageLabel);
         stage.addActor(timeScreen.dateLabel);
         stage.addActor(timeScreen.timeLabel);
         stage.addActor(timeScreen.goldLabel);
@@ -537,6 +546,16 @@ public abstract class GameScreen implements Screen {
 
     public TextField getChatInput() {
         return chatInput;
+    }
+
+    public void updateTagMessage(String message) {
+        tagMessageLabel.setText(message);
+        tagMessageLabel.setVisible(true);
+        tagMessageLabel.setPosition(stage.getWidth() / 2 - tagMessageLabel.getWidth(), tagMessageLabel.getHeight());
+    }
+    public void removeTagMessage(){
+        tagMessageLabel.setText("");
+        tagMessageLabel.setVisible(false);
     }
 }
 
