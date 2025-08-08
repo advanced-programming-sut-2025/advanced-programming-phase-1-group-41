@@ -27,11 +27,11 @@ public class AnimalView {
         }else if((matcher = AnimalCommands.ShepherdAnimals.getMatcher(input))!=null){
             System.out.println(controller.shepherdAnimals(matcher));
         }else if((matcher = AnimalCommands.SellAnimal.getMatcher(input))!=null){
-            System.out.println(controller.sellAnimal(matcher));
+            System.out.println(controller.sellAnimal(matcher, playername));
         }else if((matcher = AnimalCommands.FeedHay.getMatcher(input))!=null){
-            System.out.println(controller.feedHay(matcher));
+            System.out.println(controller.feedHay(matcher, playername));
         }else if((matcher = AnimalCommands.CollectProduce.getMatcher(input))!=null){
-            System.out.println(controller.collectProduct(matcher));
+            System.out.println(controller.collectProduct(matcher, playername));
         }else if((matcher = AnimalCommands.Produces.getMatcher(input))!=null){
             System.out.println(controller.producesList(matcher));
         }
