@@ -164,6 +164,14 @@ public class Finder {
         }
         return null;
     }
+    public static CellData findCellByCoordinatesVillage(int x, int y, VillageData village){
+        for(CellData cell : village.getCellsData()){
+            if(cell.getX() == x && cell.getY() == y){
+                return cell;
+            }
+        }
+        return null;
+    }
     public static Cell findCellByCoordinatesGreenHouse(int x, int y, GreenhouseMap greenhouse){
         for(Cell cell : greenhouse.getCells()){
             if(cell.getX() == x && cell.getY() == y){

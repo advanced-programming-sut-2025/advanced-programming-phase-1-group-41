@@ -134,6 +134,7 @@ public class Playeracts {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {
+            Finder.getpd().getPlayer().setPlayerIsInVillage(true);
             changeScreen(new VillageScreen(Objects.requireNonNull(Finder.getpd()).getPlayer()));
 
         }

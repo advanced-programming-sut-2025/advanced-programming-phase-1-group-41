@@ -6,6 +6,7 @@ import com.CEliconValley.common.FarmData;
 import com.CEliconValley.common.VillageData;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
+import com.CEliconValley.models.buildings.Bridge;
 import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
+import static com.CEliconValley.client.view.screen.Playeracts.screen;
 
 public class GroundBorderSpawner {
 
@@ -20,6 +22,7 @@ public class GroundBorderSpawner {
     private Texture coastTexture;
     private Texture cornerTexture;
     private String currentSeason = "";
+    private AreaType areaType;
 
 
 
@@ -53,33 +56,16 @@ public class GroundBorderSpawner {
 
         groundRegion = new TextureRegion(groundTexture);
 
-
-        TextureRegion[][] coastTmp = TextureRegion.split(
-            coastTexture,
-            coastTexture.getWidth()  / 9,
-            coastTexture.getHeight()
-        );
-        for (int i = 0; i < 9; i++) {
-            coastRegions[i] = coastTmp[0][i];
-        }
-
-
-        TextureRegion[][] tmp = TextureRegion.split(cornerTexture, cornerTexture.getWidth(), cornerTexture.getHeight());
-        TextureRegion[] base = new TextureRegion[4];
-        base[0] = tmp[0][0];
-
-        cornerSE = base[0];
-        cornerNE = flipY(base[0]);
-        cornerNW = flipXY(base[0]);
-        cornerSW = flipX(base[0]);
     }
 
     public void renderGround(SpriteBatch batch, CellData cellData, FarmData farmData) {
 
 
         String season = AppClient.getGameData().getTime().getSeason().name();
-        if (!season.equals(currentSeason)) {
+
+        if (!season.equals(currentSeason)||areaType!=AreaType.FARM) {
             currentSeason = season;
+            areaType = AreaType.FARM;
             loadSeasonTextures(season);
         }
 
@@ -188,8 +174,10 @@ public class GroundBorderSpawner {
 
 
         String season = AppClient.getGameData().getTime().getSeason().name();
-        if (!season.equals(currentSeason)) {
+
+        if (!season.equals(currentSeason)||areaType!=AreaType.VILLAGE) {
             currentSeason = season;
+            areaType = AreaType.VILLAGE;
             loadSeasonTextures(season);
         }
 
@@ -254,11 +242,15 @@ public class GroundBorderSpawner {
         Cell c = cd.extractData();
         return c.getObjectMap() instanceof Grass g && !g.isGround();
     }
-    private boolean isGround(int x, int y,VillageData villageData) {
+    private boolean isGround(int x, int y, VillageData villageData) {
         CellData cd = Finder.getcdByVillageData(x, y, villageData);
         if (cd == null) return false;
-        Cell c = cd.extractData();
-        return c.getObjectMap() instanceof Grass g && g.isGround();
+        Object obj = cd.extractData().getObjectMap();
+
+        if (obj instanceof Grass g && g.isGround()) return true;
+
+        if (obj instanceof Bridge) return true;
+        return false;
     }
 
     private int getCoastIndex(int x, int y,VillageData villageData) {
@@ -309,10 +301,16 @@ public class GroundBorderSpawner {
     }
     private void loadSeasonTextures(String season) {
         disposeTextures();
-
-        groundTexture = new Texture("game/general/tiles/ground_" + season + ".png");
-        coastTexture = new Texture("game/general/tiles/groundBorder_" + season + ".png");
-        cornerTexture = new Texture("game/general/tiles/groundCorner_" + season + ".png");
+        if(areaType==AreaType.VILLAGE){
+            groundTexture = new Texture("game/general/tiles/ground_Spring_Village.png");
+            coastTexture = new Texture("game/general/tiles/groundBorder_" + season + ".png");
+            cornerTexture = new Texture("game/general/tiles/groundCorner_" + season + ".png");
+        }
+        else if(areaType==AreaType.FARM) {
+            groundTexture = new Texture("game/general/tiles/ground_" + season + ".png");
+            coastTexture = new Texture("game/general/tiles/groundBorder_" + season + ".png");
+            cornerTexture = new Texture("game/general/tiles/groundCorner_" + season + ".png");
+        }
 
         groundRegion = new TextureRegion(groundTexture);
 
@@ -340,7 +338,6 @@ public class GroundBorderSpawner {
         if (cornerTexture != null) cornerTexture.dispose();
 
     }
-
-
+    private enum AreaType {FARM, VILLAGE, NONE}
     private enum CornerType { SE, SW, NE, NW, NONE }
 }
