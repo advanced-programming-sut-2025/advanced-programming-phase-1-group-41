@@ -18,10 +18,10 @@ public class LobbyHandler {
                 Lobby lobby;
                 if (lobbyInfo.isPrivate) {
                     lobby = new Lobby(lobbyInfo.lobbyName, lobbyInfo.password, lobbyInfo.admin, lobbyInfo.isVisible,
-                        conn);
+                        conn, false);
                 } else {
                     lobby = new Lobby(lobbyInfo.lobbyName, lobbyInfo.admin, lobbyInfo.isVisible,
-                        conn);
+                        conn, false);
                 }
 //                AppClient.setCurrentLobby(lobby);
             }

@@ -150,7 +150,7 @@ public class Playeracts {
             if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
                 screen.menuBar.scrollDown();
             }
-        } else {
+        } else if(screen instanceof FarmScreen){ //TODO Just For Now The Condition!!!
             if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
                 screen.inventoryRenderer.shiftRight();
             }
@@ -235,6 +235,11 @@ public class Playeracts {
             }
         }else if(Gdx.input.isKeyJustPressed((Input.Keys.TAB))) {
             // TODO arad heivoon
+            if(screen instanceof BarnScreen){
+                ((BarnScreen) screen).setBarnMenuOpen(!((BarnScreen) screen).isBarnMenuOpen());
+            } else if(screen instanceof CoopScreen){
+                ((CoopScreen) screen).setCoopMenuOpen(!((CoopScreen) screen).isCoopMenuOpen());
+            }
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.Q)){
             System.out.println("you're at "+hero.playerX+" "+hero.playerY);

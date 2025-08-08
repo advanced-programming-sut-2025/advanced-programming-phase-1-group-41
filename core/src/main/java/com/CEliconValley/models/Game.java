@@ -41,7 +41,7 @@ public class Game {
     private ArrayList<ObjectId> playersId;
     private WeatherType weatherType;
     private WeatherType tmrwWeatherType;
-
+    private Lobby lobby;
 
     private double roundEnergy;
     @Transient
@@ -81,7 +81,7 @@ public class Game {
         this.players = new ArrayList<>(players);
     }
 
-    public Game(ArrayList<Player> players, Player loader) {
+    public Game(ArrayList<Player> players, Player loader, Lobby lobby) {
         this.players = new ArrayList<>(players);
         this.loader = loader;
         this.weatherType = WeatherType.Sunny;
@@ -97,6 +97,7 @@ public class Game {
             this.farms.add(new Farm(i, players.get(i).getFarmType()));
             players.get(i).setFarmId(i);
         }
+        this.lobby = lobby;
     }
 
 
@@ -369,5 +370,13 @@ public class Game {
     }
     public void removeFarmFromGame(Farm farm) {
         this.farms.remove(farm);
+    }
+
+    public Lobby getLobby() {
+        return lobby;
+    }
+
+    public void setLobby(Lobby lobby) {
+        this.lobby = lobby;
     }
 }

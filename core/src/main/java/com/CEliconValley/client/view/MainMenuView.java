@@ -35,7 +35,7 @@ public class MainMenuView implements Screen {
 
     private final Image background = GameAssetManager.getGameAssetManager().getBackground("Mountain.jpg");
 
-    public final TextButton newLobbyButton, joinLobbyButton;
+    public final TextButton newLobbyButton, joinLobbyButton, selectGameButton;
     public final TextButton profileButton;
     public final TextButton logoutButton;
 
@@ -68,6 +68,7 @@ public class MainMenuView implements Screen {
         this.controller = controller;
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
 
+        selectGameButton = new TextButton("Select Game", skin);
         newLobbyButton = new TextButton("New Lobby", skin);
         joinLobbyButton = new TextButton("Join Lobby", skin);
         profileButton = new TextButton("Profile", skin);
@@ -154,6 +155,7 @@ public class MainMenuView implements Screen {
         lobbyRow.add(joinLobbyButton).padRight(10);
 
         mainTable.add(lobbyRow).width(450).pad(20).padTop(150).row();
+        mainTable.add(selectGameButton).width(300).pad(20).row();
         mainTable.add(profileButton).width(300).pad(20).row();
         mainTable.add(logoutButton).width(300).pad(20).row();
 
@@ -316,6 +318,7 @@ public class MainMenuView implements Screen {
     }
 
     public Stage getStage() { return stage; }
+    public TextButton getSelectGameButton() { return selectGameButton; }
     public TextButton getJoinLobbyButton() { return joinLobbyButton; }
     public TextButton getNewLobbyButton() { return newLobbyButton; }
     public TextButton getProfileButton() { return profileButton; }

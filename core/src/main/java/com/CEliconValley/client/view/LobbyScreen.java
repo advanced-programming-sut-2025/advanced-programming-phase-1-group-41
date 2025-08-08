@@ -42,6 +42,7 @@ public class LobbyScreen implements Screen {
     private Label label2;
     private Label label3;
     private Label label4;
+    public  Label isLoadLabel;
     public TextButton startGameButton;
     public TextButton exitButton;
     private TextButton mountainButton;
@@ -122,6 +123,10 @@ public class LobbyScreen implements Screen {
         if(lobby.isPrivate()) {
             passText = new Label("Pass: " + lobby.getPassword(), skin);
         }
+        if(lobby.isLoad()){
+            isLoadLabel = new Label("Game is Loaded!", skin);
+            isLoadLabel.setColor(CustomColors.GAMEGREENCOLOR);
+        }
 
         controller.setView(this);
 
@@ -132,6 +137,9 @@ public class LobbyScreen implements Screen {
         Table topContent = new Table();
         topContent.add(startGameButton).width(300).pad(20).padTop(150).row();
         startGameButton.setVisible(false);
+        if(lobby.isLoad()){
+            topContent.add(isLoadLabel).width(300).pad(20).row();
+        }
         topContent.add(adminText).width(300).pad(20).row();
         topContent.add(nameText).width(300).pad(20).row();
         topContent.add(idText).width(300).pad(20).row();

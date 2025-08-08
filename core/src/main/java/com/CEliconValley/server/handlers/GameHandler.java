@@ -28,11 +28,16 @@ public class GameHandler {
             case "new-game" -> {
                 GameMessage<Lobby> msg = gson.fromJson(message, new TypeToken<GameMessage<Lobby>>() {
                 }.getType());
-                for (String playerName : msg.body.getPlayerNames()) {
-                    GameMessage<PreStartRequest> request = new GameMessage<>("pre-start-request", new PreStartRequest());
-                    App.getServer().sendToUsername(playerName, gson.toJson(request));
+                Lobby lobby = msg.body;
+                if(lobby.isLoad()){
+                    // for on games and their _ids and checkem up with current lobby_id
+                }else{
+                    for (String playerName : lobby.getPlayerNames()) {
+                        GameMessage<PreStartRequest> request = new GameMessage<>("pre-start-request", new PreStartRequest());
+                        App.getServer().sendToUsername(playerName, gson.toJson(request));
+                    }
+                    App.setPreGame(new PreGame(lobby.getPlayerNames().size(), lobby.getAdmin(), lobby));
                 }
-                App.setPreGame(new PreGame(msg.body.getPlayerNames().size(), msg.body.getAdmin()));
             }
             case "pre-start-response" -> {
                 GameMessage<PreStartResponse> msg = gson.fromJson(message, new TypeToken<GameMessage<PreStartResponse>>() {
@@ -89,7 +94,7 @@ public class GameHandler {
     }
 
     public static void newGame() {
-        Game game = new Game(App.getPreGame().getPlayers(), App.getPreGame().getAdmin());
+        Game game = new Game(App.getPreGame().getPlayers(), App.getPreGame().getAdmin(), App.getPreGame().getLobby());
         System.out.println("game length is " + game.getPlayers().size());
         App.setGame(game);
 

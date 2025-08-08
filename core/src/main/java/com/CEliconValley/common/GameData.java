@@ -22,11 +22,12 @@ public class GameData {
     WeatherType tmrwWeatherType;
     double roundEnergy;
     VillageData villageData;
-
+    Lobby lobby;
     public GameData() {
     }
 
     public GameData(Game game) {
+        this._id = game.get_id();
         this.time = game.getTime();
         this.weatherType = game.getWeatherType();
         this.tmrwWeatherType = game.getTmrwWeatherType();
@@ -38,6 +39,7 @@ public class GameData {
         fillPlayers(game);
         fillFarms(game);
         this.villageData = new VillageData(game.getVillage());
+        this.lobby = game.getLobby();
     }
 
     private void fillFarms(Game game) {
@@ -85,6 +87,8 @@ public class GameData {
         Player loader = PlayerFinder.getPlayerByName(players, loaderName);
         game.handmadePostLoad(currentPlayer, loader, players);
         setUsersCurrentGame(game);
+        game.set_id(this._id);
+        game.setLobby(this.lobby);
         return game;
     }
 

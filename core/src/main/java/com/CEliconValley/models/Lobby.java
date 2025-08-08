@@ -4,6 +4,8 @@ import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.messages.GameMessage;
 import com.badlogic.gdx.math.MathUtils;
 import com.google.gson.Gson;
+import dev.morphia.annotations.Embedded;
+import org.bson.types.ObjectId;
 import org.java_websocket.WebSocket;
 
 import java.util.Collections;
@@ -11,6 +13,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@Embedded
 public class Lobby {
     private String lobbyName;
     private String lobbyID;
@@ -20,22 +23,25 @@ public class Lobby {
     private String admin;
     private boolean isVisible;
     long lastTimeJoined;
-
+    private boolean isLoad = false;
+    private ObjectId gameid;
     public Lobby() {
     }
 
-    public Lobby(String lobbyName, String password, String admin, boolean isVisible, WebSocket conn) {
+    public Lobby(String lobbyName, String password, String admin, boolean isVisible, WebSocket conn, boolean isLoad) {
         this.isPrivate = true;
         this.password = password;
         this.isVisible = isVisible;
         makeLobby(lobbyName, admin, conn);
+        this.isLoad = isLoad;
     }
 
-    public Lobby(String lobbyName, String admin, boolean isVisible, WebSocket conn){
+    public Lobby(String lobbyName, String admin, boolean isVisible, WebSocket conn, boolean isLoad){
         this.isPrivate = false;
         this.password = null;
         this.isVisible = isVisible;
         makeLobby(lobbyName, admin, conn);
+        this.isLoad = isLoad;
     }
 
     private void makeLobby(String lobbyName, String admin, WebSocket conn){
@@ -168,5 +174,9 @@ public class Lobby {
             ", isVisible=" + isVisible +
             ", lastTimeJoined=" + lastTimeJoined +
             '}';
+    }
+
+    public boolean isLoad() {
+        return isLoad;
     }
 }

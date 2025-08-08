@@ -31,6 +31,8 @@ public class BarnScreen extends GameScreen implements Screen {
     private final SpriteBatch batch;
     private final TextureRegion background;
     private final BarnMap barn;
+    private BarnOrCoopMenuBar barnMenuBar;
+    private boolean isBarnMenuOpen = false;
     private boolean onRepeat = true;
     private ArrayList<AnimalSprite> animalSprites;
 
@@ -38,6 +40,8 @@ public class BarnScreen extends GameScreen implements Screen {
 
     public BarnScreen(FarmScreen farmScreen, BarnMap barn, Player player) {
         super(null);
+        this.barnMenuBar = super.getBarnOrCoopMenuBar();
+        barnMenuBar.setPlayer(player);
         this.farmScreen = farmScreen;
         this.barn = barn;
         this.batch = new SpriteBatch();
@@ -89,8 +93,6 @@ public class BarnScreen extends GameScreen implements Screen {
             default -> background= topRegion;
         }
 
-
-
         this.hero.targetX.set(hero.playerX.get());
         this.hero.targetY.set(hero.playerY.get());
         this.hero.renderX = hero.playerX.get() * CELL_SIZE;
@@ -101,7 +103,6 @@ public class BarnScreen extends GameScreen implements Screen {
             animalSprite.renderX = animalSprite.x*CELL_SIZE;
             animalSprite.renderY = animalSprite.y*CELL_SIZE;
         }
-
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -170,6 +171,10 @@ public class BarnScreen extends GameScreen implements Screen {
             }
         }
 
+        if(isBarnMenuOpen){
+            barnMenuBar.render(batch, camera);
+        }
+
         camera.position.set(hero.renderX + CELL_SIZE / 2f, hero.renderY + CELL_SIZE / 2f, 0);
         camera.update();
 
@@ -205,4 +210,12 @@ public class BarnScreen extends GameScreen implements Screen {
     @Override public void hide() {}
     @Override public void pause() {}
     @Override public void resume() {}
+
+    public boolean isBarnMenuOpen() {
+        return isBarnMenuOpen;
+    }
+
+    public void setBarnMenuOpen(boolean barnMenuOpen) {
+        isBarnMenuOpen = barnMenuOpen;
+    }
 }
