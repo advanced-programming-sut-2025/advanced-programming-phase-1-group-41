@@ -1,20 +1,17 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
-import com.CEliconValley.common.InventoryData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.VoteMessage;
 import com.CEliconValley.controllers.ItemManager;
-import com.CEliconValley.models.App;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Player;
 import com.CEliconValley.models.items.*;
 import com.CEliconValley.models.tools.Tool;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -25,19 +22,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class MenuBar {
     private final Texture menuTexture;
@@ -66,7 +58,7 @@ public class MenuBar {
     private GameScreen screen;
     private final String[] tabOrder = {
         "Inventory", "Stats", "Relation",
-        "Map", "Crafting", "Artisan",
+        "Map", "Crafting", "Food",
         "Control", "Vote", null
     };
 
@@ -122,7 +114,7 @@ public class MenuBar {
         switch (currentTab) {
             case "Inventory":
             case "Crafting":
-            case "Artisan":
+            case "Food":
             case "Control":
                 renderInventoryBar(batch, camera, inventory);
                 break;
@@ -138,11 +130,14 @@ public class MenuBar {
             case "Map":
                 renderMap(batch);
                 break;
+
         }
         switch (currentTab) {
             case "Crafting":
                 renderCrafting(batch);
                 break;
+            case "Food":
+                renderCooking(batch);
         }
     }
 
@@ -453,6 +448,72 @@ public class MenuBar {
         }
 
     }
+    private void renderCooking(Batch batch) {
+        float screenWidth = camera.viewportWidth;
+        float screenHeight = camera.viewportHeight;
+
+        float minX = screenWidth / 25f * 1.3f;
+        float maxX = screenWidth / 2.5f * 1.3f;
+        float minY = screenHeight / 40f * 1.7f;
+        float maxY = screenHeight / 10f * 1.7f;
+
+        float currentX = minX;
+        float currentY = maxY;
+
+        Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        camera.unproject(mousePos);
+
+        for (Food food : Food.values()) {
+            TextureRegion texture = ItemManager.getTexture(food);
+            if (texture == null) continue;
+
+            if (currentX > maxX) {
+                float width = screenWidth * 0.02f;
+                currentX = minX + width;
+                currentY -= screenHeight / 15f * 1.7f;
+
+                if (currentY < minY) break;
+            }
+
+            float drawX = startingX + currentX;
+            float drawY = startingY + currentY;
+            float width = screenWidth * 0.03f;
+            float height = width ;
+
+            CookingRecipe recipe = food.getRecipe();
+            boolean unlocked = recipe != null && player.getCookingRecipes().contains(recipe);
+
+            if (!unlocked) {
+                batch.setColor(0.5f, 0.5f, 0.5f, 0.5f);
+            }
+
+            batch.draw(texture, drawX, drawY, width, height);
+            batch.setColor(1, 1, 1, 1);
+
+            boolean mouseOver = mousePos.x >= drawX && mousePos.x <= drawX + width &&
+                mousePos.y >= drawY && mousePos.y <= drawY + height;
+
+            if (mouseOver && unlocked) {
+                drawTooltip(batch, food, drawX, drawY);
+
+                if (Gdx.input.justTouched()) {
+                    if (hasAllItems(recipe)) {
+                        Map<Item, Integer> requiredItems = recipe.neededItems;
+                        Inventory inventory = player.getInventory();
+
+                        for (Map.Entry<Item, Integer> entry : requiredItems.entrySet()) {
+                            inventory.removeFromInventory(entry.getKey(), entry.getValue());
+                        }
+
+                        inventory.addToInventory(food, 1);
+                    }
+                }
+            }
+
+            currentX += width *1.33f;
+        }
+    }
+
 
     private void renderVote(@NotNull Batch batch) {
         Texture nameTexture = GameAssetManager.getGameAssetManager().getBackgroundTexture("Player Name Background.png");
@@ -610,6 +671,21 @@ public class MenuBar {
 
         return true;
     }
+    private boolean hasAllItems(CookingRecipe recipe) {
+        Map<Item, Integer> requiredItems = recipe.neededItems;
+        Inventory inventory = player.getInventory();
+
+        for (Map.Entry<Item, Integer> entry : requiredItems.entrySet()) {
+            Item item = entry.getKey();
+            int amount = entry.getValue();
+            if (!inventory.doHave(item, amount)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
 
     private String readableName(String camelCase) {
@@ -671,6 +747,62 @@ public class MenuBar {
             font.setColor(1f, 1f, 1f, 1f);
         }
     }
+    private void drawTooltip(Batch batch, Food food, float drawX, float drawY) {
+        CookingRecipe recipe = food.getRecipe();
+        if (recipe == null) return;
+
+        float width = 150;
+        float padding = 10;
+        float lineHeight = 40;
+        float iconSize = 32;
+
+        int itemCount = recipe.neededItems.size();
+        float height = padding * 2 + lineHeight + itemCount * lineHeight;
+
+        float x = drawX - width - 10;
+        float y = drawY + 192 - height;
+
+        batch.end();
+
+        shapeRenderer.setProjectionMatrix(camera.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(0f, 0f, 0f, 0.9f);
+        shapeRenderer.rect(x, y, width, height);
+        shapeRenderer.end();
+
+        batch.begin();
+
+        batch.draw(infoTexture, x - 2 * padding, y - 2 * padding,
+            infoTexture.getWidth(), infoTexture.getHeight() * recipe.neededItems.size() / 2f);
+
+        String title = readableName(food.getName());
+        GlyphLayout layout = new GlyphLayout(font, title);
+        font.draw(batch, layout, x + padding + width / 2 - layout.width / 2, y + height - 2 * padding);
+
+        int i = 0;
+        for (Map.Entry<Item, Integer> entry : recipe.neededItems.entrySet()) {
+            Item item = entry.getKey();
+            int amount = entry.getValue();
+            TextureRegion icon = ItemManager.getTexture(item);
+
+            float itemY = y + height - padding - lineHeight * (i + 2);
+
+            if (icon != null) {
+                batch.draw(icon, x + padding, itemY, iconSize, iconSize);
+            }
+
+            if (player.getInventory().doHave(item, amount)) {
+                font.setColor(0f, 0.5f, 1f, 1f);
+            } else {
+                font.setColor(1f, 0f, 0f, 1f);
+            }
+
+            font.draw(batch, "x" + amount, x + padding + iconSize + 10, itemY + iconSize / 2f + 5);
+            i++;
+            font.setColor(1f, 1f, 1f, 1f);
+        }
+    }
+
 
 
     public void dispose() {
