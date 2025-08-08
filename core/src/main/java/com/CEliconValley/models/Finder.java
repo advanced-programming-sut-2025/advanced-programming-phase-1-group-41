@@ -2,10 +2,7 @@ package com.CEliconValley.models;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.view.screen.maps.CoopMap;
-import com.CEliconValley.common.CellData;
-import com.CEliconValley.common.FarmData;
-import com.CEliconValley.common.GameData;
-import com.CEliconValley.common.PlayerData;
+import com.CEliconValley.common.*;
 import com.CEliconValley.models.buildings.marketplaces.items.*;
 import com.CEliconValley.models.foragings.*;
 import com.CEliconValley.models.foragings.Nature.*;
@@ -263,8 +260,10 @@ public class Finder {
     }
 
     public static FarmData getfd(){
+
         return getFarmDataById(AppClient.getGameData(), AppClient.getUserData().getUsername());
     }
+
 
     public static FarmData getFarmDataById(GameData gameData, String username){
         Integer id = null;
@@ -282,6 +281,7 @@ public class Finder {
         }
         return null;
     }
+
 
     public static CellData getcdByFarmData(int x, int y, FarmData farmData){
         for (CellData cell : farmData.getCells()) {
@@ -311,6 +311,15 @@ public class Finder {
         for (Farm farm : App.getGame().getFarms()) {
             if(farm.getId() == player.getFarmId()){
                 return farm;
+            }
+        }
+        return null;
+    }
+
+    public static CellData getcdByVillageData(int x, int y, VillageData villageData) {
+        for (CellData cell : villageData.getCellsData()) {
+            if(cell.getX() == x && cell.getY() == y){
+                return cell;
             }
         }
         return null;

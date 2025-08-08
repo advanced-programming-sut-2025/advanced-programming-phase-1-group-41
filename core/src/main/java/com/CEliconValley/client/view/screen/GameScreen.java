@@ -10,6 +10,7 @@ import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.foragings.ForagingTree;
+import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.foragings.Nature.Lake;
 import com.CEliconValley.models.foragings.Nature.Obstacle;
 import com.CEliconValley.models.foragings.Nature.Rock;
@@ -179,6 +180,17 @@ public abstract class GameScreen implements Screen {
                 }
             }
             return false;
+        }else if(location instanceof VillageMap villageMap){
+            for (CellData cd : villageMap.villageData.getCellsData()) {
+                if (cd.getX() == x && cd.getY() == y) {
+                    Cell cell = cd.extractData();
+                    if (cell.getObjectMap() instanceof Lake ||( cell.getObjectMap() instanceof Grass grass && !grass.isGround() )||cell.getObjectMap() instanceof Wall ||cell.getObjectMap() instanceof Obstacle) {
+                        System.out.println(cd.getObjectName()+" "+cell.getX()+" "+cell.getY());
+                        return false;
+                    }
+                    return true;
+                }
+            }
         }
         if(location instanceof CottageMap cottageMap){
             for (Cell cell : cottageMap.getCells()) {

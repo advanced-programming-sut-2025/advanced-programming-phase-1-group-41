@@ -54,7 +54,7 @@ public class VillageData {
 
     public Village getVillage(ArrayList<Player> players) {
         Village village = new Village(true);
-        // set the ground!
+
         for (int i = 0; i < village.getCells().size(); i++) {
             Cell cell = village.getCells().get(i);
             if(cell.getObjectMap() instanceof Building) continue;
@@ -66,7 +66,7 @@ public class VillageData {
                 cell.setObjectMap(objectMap);
             }
         }
-        // set stock!
+
         for (Building building : village.getBuildings()) {
             if(building instanceof Marketplace marketplace){
                 for (MarketPlaceData marketPlaceData : markplacesData) {
@@ -77,7 +77,7 @@ public class VillageData {
                 }
             }
         }
-        // set NPCs!
+
         for (NPC npc : village.getNPCs()) {
             for (NPCData npcData : NPCsData) {
                 if(npc.getName().equals(npc.getName())){
@@ -126,5 +126,9 @@ public class VillageData {
             itemsForSale.add(slotData.getSlot());
         });
         return itemsForSale;
+    }
+
+    public ArrayList<CellData> getCellsData() {
+        return cellsData;
     }
 }

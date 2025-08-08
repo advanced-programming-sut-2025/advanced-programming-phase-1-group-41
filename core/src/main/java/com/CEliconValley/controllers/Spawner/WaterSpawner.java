@@ -3,6 +3,7 @@ package com.CEliconValley.controllers.Spawner;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.FarmData;
+import com.CEliconValley.common.VillageData;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.foragings.Nature.Grass;
@@ -241,6 +242,148 @@ public class WaterSpawner {
         CellData cd = Finder.getcdByFarmData(x, y ,farmData);
         if(cd == null) return false;
         return cd.getObjectName().equals(new Lake().getName());
+    }
+    public boolean renderWater(SpriteBatch batch, CellData cellData, float passiveStateTime, VillageData villageData) {
+        String season = AppClient.getGameData().getTime().getSeason().name();
+        if (!season.equals(currentSeason)) {
+            currentSeason = season;
+            loadSeasonTextures(season);
+        }
+
+        float x = cellData.getX() * CELL_SIZE;
+        float y = cellData.getY() * CELL_SIZE;
+        Cell cell = cellData.extractData();
+        if (cell.getObjectMap() instanceof Lake lake) {
+            TextureRegion waterFrame = waterAnimation.getKeyFrame(passiveStateTime, true);
+            batch.draw(waterFrame, x, y, CELL_SIZE, CELL_SIZE);
+            if(lake.getInitialize()>-1) {
+                switch (lake.getInitialize()) {
+                    case 0, 2, 6, 8, 1, 3, 5, 7 -> {
+                        TextureRegion coastFrame = coastAnimations[lake.getInitialize()].getKeyFrame(passiveStateTime, true);
+                        batch.draw(coastFrame, x, y, CELL_SIZE, CELL_SIZE);
+                    }
+                    case 9 -> {
+                        batch.draw(animCornerSW.getKeyFrame(passiveStateTime, true), x, y, CELL_SIZE, CELL_SIZE);
+                    }
+                    case 10 -> {
+                        batch.draw(animCornerSE.getKeyFrame(passiveStateTime, true), x, y, CELL_SIZE, CELL_SIZE);
+                    }
+                    case 11 -> {
+                        batch.draw(animCornerNW.getKeyFrame(passiveStateTime, true), x, y, CELL_SIZE, CELL_SIZE);
+                    }
+                    case 12 -> {
+                        batch.draw(animCornerNE.getKeyFrame(passiveStateTime, true), x, y, CELL_SIZE, CELL_SIZE);
+                    }
+                }
+                return true;
+            }
+
+
+
+            if (isCoast(cell, villageData)) {
+                int animIndex = getCoastAnimationIndex(cell.getX(), cell.getY(), villageData);
+                lake.setInitialize(animIndex);
+//                System.out.println(animIndex);
+                TextureRegion frame = coastAnimations[animIndex].getKeyFrame(passiveStateTime, true);
+                batch.draw(frame, x, y, CELL_SIZE, CELL_SIZE);
+            }
+
+
+            CornerType corner = getWaterCornerType(lake,cell.getX(), cell.getY(), villageData);
+            if (corner != CornerType.NONE) {
+                Animation<TextureRegion> cornerAnim = switch (corner) {
+                    case SE -> animCornerSE;
+                    case SW -> animCornerSW;
+                    case NE -> animCornerNE;
+                    case NW -> animCornerNW;
+                    default -> null;
+                };
+                if (cornerAnim != null) {
+                    batch.draw(cornerAnim.getKeyFrame(passiveStateTime, true), x, y, CELL_SIZE, CELL_SIZE);
+                }
+            }
+
+            return true;
+        }
+
+
+        return false;
+    }
+    private int getCoastAnimationIndex(int x, int y, VillageData villageData) {
+        boolean hasLandRight = isLand(x+1, y, villageData);
+        boolean hasLandLeft = isLand(x-1, y, villageData);
+        boolean hasLandUp = isLand(x, y+1, villageData);
+        boolean hasLandDown = isLand(x, y-1, villageData);
+
+        if (hasLandRight && hasLandDown) return 0;
+        if (hasLandUp && hasLandLeft)return 8;
+        if (hasLandLeft && hasLandDown)return 2;
+        if (hasLandUp && hasLandRight)return 6;
+        if (hasLandDown)return 1;
+        if (hasLandRight)return 3;
+        if (hasLandLeft)return 5;
+        if (hasLandUp)return 7;
+
+        return 4;
+    }
+
+
+    private CornerType getWaterCornerType(Lake lake,int x, int y, VillageData villageData) {
+        CellData centerData = Finder.getcdByVillageData(x, y, villageData);
+        if (centerData == null || !(centerData.getObjectName().equals(new Lake().getName()))) return CornerType.NONE;
+
+        boolean n = isWater(x, y + 1, villageData);
+        boolean e = isWater(x + 1, y, villageData);
+        boolean ne = isLand(x + 1, y + 1, villageData);
+
+        boolean s = isWater(x, y - 1, villageData);
+        boolean w = isWater(x - 1, y, villageData);
+        boolean sw = isLand(x - 1, y - 1, villageData);
+
+        if (n && e && ne) {lake.setInitialize(9);return CornerType.SW;}
+        if (n && w && isLand(x - 1, y + 1, villageData)) {lake.setInitialize(10);return CornerType.SE;}
+        if (s && e && isLand(x + 1, y - 1, villageData)) {lake.setInitialize(11);return CornerType.NW;}
+        if (s && w && sw) {lake.setInitialize(12);return CornerType.NE;}
+
+        return CornerType.NONE;
+    }
+
+
+
+
+
+    private boolean isWater(int x, int y, VillageData villageData) {
+        // maybe check for more than just lake in here!
+        CellData cd = Finder.getcdByVillageData(x, y ,villageData);
+        if(cd == null) return false;
+        return cd.getObjectName().equals(new Lake().getName());
+    }
+    private boolean isCoast(Cell cell, VillageData villageData) {
+        int x = cell.getX();
+        int y = cell.getY();
+
+
+        if (!(cell.getObjectMap() instanceof Lake)) return false;
+
+
+        return isLand(x + 1, y, villageData) || isLand(x - 1, y, villageData) ||
+            isLand(x, y + 1, villageData) || isLand(x, y - 1, villageData);
+    }
+
+
+    private boolean isLand(int x, int y, VillageData villageData) {
+        CellData cd = Finder.getcdByVillageData(x, y , villageData);
+        if(cd == null) return false;
+        return ! cd.getObjectName().equals(new Lake().getName());
+    }
+
+
+    public boolean isCorner(CellData cellData, VillageData villageData) {
+        int x = cellData.getX();
+        int y = cellData.getY();
+        return !isWater(x,y, villageData)&&!isWater(x+1,y, villageData)&&!isWater(x,y+1, villageData)&&!isWater(x-1,y, villageData)&&!isWater(x,y-1, villageData)&&
+            (isWater(x+1,y+1, villageData)||isWater(x+1,y-1, villageData)||isWater(x,y+1, villageData)||
+                isWater(x-1,y+1, villageData)||isWater(x-1,y-1, villageData));
     }
     public void loadSeasonTextures(String season) {
         if (coastTexture != null) coastTexture.dispose();

@@ -3,6 +3,7 @@ package com.CEliconValley.client.view.screen;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.model.AnimalSprite;
 import com.CEliconValley.common.PlayerData;
+import com.CEliconValley.common.VillageData;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.TGPoint;
@@ -23,6 +24,7 @@ import com.google.gson.Gson;
 import com.CEliconValley.models.tools.ToolLevel.*;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.TimerTask;
 
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
@@ -126,8 +128,14 @@ public class Playeracts {
             screen.handleCheatCode(stage);
             return new Result(true, "cheat");
         }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
             screen.isMenuOpen = !screen.isMenuOpen;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {
+            changeScreen(new VillageScreen(Objects.requireNonNull(Finder.getpd()).getPlayer()));
+
         }
         if (screen.isMenuOpen) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
@@ -169,8 +177,8 @@ public class Playeracts {
         if(screen.isHalt()){
             if(screen instanceof FarmScreen fs){
                 fs.nextMovement();
-            }else{
-                // TODO handle village
+            }else if(screen instanceof VillageScreen vs){
+                vs.nextMovement();
             }
             return new Result(false,"halt");
         }
