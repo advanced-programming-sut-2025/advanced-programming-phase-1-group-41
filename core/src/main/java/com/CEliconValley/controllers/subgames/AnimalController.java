@@ -291,10 +291,12 @@ public class AnimalController {
         return null;
     }
 
-    public Result pet(Matcher matcher) {
+    public Result petOutside(Matcher matcher, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
         String name = matcher.group(1);
         Animal theAnimal = null;
-        for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
+        for (Barn barn : farm.getBarns()) {
             for (Animal animal : barn.getAnimals()) {
                 if (animal.getName().equals(name)) {
                     theAnimal = animal;
@@ -302,7 +304,7 @@ public class AnimalController {
                 }
             }
         }
-        for (Coop coop : App.getGame().getCurrentPlayerFarm().getCoops()) {
+        for (Coop coop : farm.getCoops()) {
             for (Animal animal : coop.getAnimals()) {
                 if (animal.getName().equals(name)) {
                     theAnimal = animal;
@@ -313,42 +315,54 @@ public class AnimalController {
         if (theAnimal == null) {
             return new Result(false, name + " is not one of your pets");
         }
-        for (int i = -2; i <= 2; i++) {
-            for (int j = -2; j <= 2; j++) {
-                int x = App.getGame().getCurrentPlayer().getX() + i;
-                int y = App.getGame().getCurrentPlayer().getY() + j;
-                Cell cell = App.getGame().getCurrentPlayerFarm().getCell(x, y);
-                if (cell == null) {
-                    continue;
-                }
-                ObjectMap objectMap = cell.getObjectMap();
-                if (theAnimal.getX() == x && theAnimal.getY() == y) {
-                    if(theAnimal.isPetToday()){
-                        return new Result(true, "you pet " + name + " again");
-                    }
-                    theAnimal.increaseFriendShip(15);
-                    theAnimal.setPetToday(true);
-                    return new Result(true, "you pet " + name + ", now it loves you more");
-                } else if (objectMap instanceof Barn) {
-                    for (Animal animal : ((Barn) objectMap).getAnimals()) {
-                        if (animal.getName().equals(name)) {
-                            animal.increaseFriendShip(15);
-                            animal.setPetToday(true);
-                            return new Result(true, "you pet " + name + " in its barn, now it loves you more");
-                        }
-                    }
-                } else if (objectMap instanceof Coop) {
-                    for (Animal animal : ((Coop) objectMap).getAnimals()) {
-                        if (animal.getName().equals(name)) {
-                            animal.increaseFriendShip(15);
-                            animal.setPetToday(true);
-                            return new Result(true, "you pet " + name + " in its coop, now it loves you more");
-                        }
-                    }
+        if(theAnimal.isPetToday()){
+            return new Result(true, "you pet " + name + " again");
+        }
+        theAnimal.increaseFriendShip(15);
+        theAnimal.setPetToday(true);
+        return new Result(true, "you pet " + name + ", now it loves you more");
+
+
+    }
+
+    public Result petInside(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
+        String name = matcher.group(1);
+        Animal theAnimal = null;
+        for (Barn barn : farm.getBarns()) {
+            for (Animal animal : barn.getAnimals()) {
+                System.out.println("checking for "+ animal.getName());
+                if (animal.getName().equals(name)) {
+                    theAnimal = animal;
+                    break;
                 }
             }
         }
-        return new Result(false, name + " is not anywhere around you");
+        for (Coop coop : farm.getCoops()) {
+            for (Animal animal : coop.getAnimals()) {
+                if (animal.getName().equals(name)) {
+                    theAnimal = animal;
+                    break;
+                }
+            }
+        }
+        if (theAnimal == null) {
+            return new Result(false, name + " is not one of your pets");
+        }
+        if(theAnimal.isPetToday()){
+            return new Result(false,"already pet");
+        }
+        if(theAnimal.getBreed() == Breed.Barn){
+            theAnimal.increaseFriendShip(15);
+            theAnimal.setPetToday(true);
+            return new Result(true, "you pet " + name + " in its barn, now it loves you more");
+        }else{
+            theAnimal.increaseFriendShip(15);
+            theAnimal.setPetToday(true);
+            return new Result(true, "you pet " + name + " in its coop, now it loves you more");
+        }
+
     }
 
     public Result cheatSetFriendship(Matcher matcher, String username) {

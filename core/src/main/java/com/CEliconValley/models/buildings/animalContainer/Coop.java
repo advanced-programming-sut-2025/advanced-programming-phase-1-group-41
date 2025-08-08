@@ -20,7 +20,7 @@ public class Coop implements Building {
     private int anchorY;
     private CoopType coopType;
     private int capacity;
-
+    private int id;
     public int getX() {
         return x;
     }
@@ -37,7 +37,7 @@ public class Coop implements Building {
     }
 
     public Coop(ArrayList<Animal> animals, int anchorX, int anchorY,
-                CoopType coopType, int capacity, int x, int y, Farm farm) {
+                CoopType coopType, int capacity, int x, int y, Farm farm, int id) {
         this.animals = new ArrayList<>(animals);
         this.anchorX = anchorX;
         this.anchorY = anchorY;
@@ -78,6 +78,7 @@ public class Coop implements Building {
                 cell.setObjectMap(this);
             }
         }
+        this.id = id;
     }
     public Coop(int x, int y, Farm farm, CoopType coopType) {
         this.capacity = coopType.getCapacity();
@@ -119,6 +120,7 @@ public class Coop implements Building {
                 cell.setObjectMap(this);
             }
         }
+        this.id = farm.getCoops() == null ? 0 : farm.getCoops().size();
     }
     public Coop(int x, int y, Village village) {
         this.x = x;
@@ -190,5 +192,9 @@ public class Coop implements Building {
     @Override
     public int getAnchorY() {
         return anchorY;
+    }
+
+    public int getId() {
+        return id;
     }
 }

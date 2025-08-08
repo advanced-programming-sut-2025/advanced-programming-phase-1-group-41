@@ -3,6 +3,9 @@ package com.CEliconValley.client.view.screen;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.model.AnimalSprite;
 import com.CEliconValley.common.AnimalData;
+import com.CEliconValley.common.messages.GameCommand;
+import com.CEliconValley.common.messages.GameMessage;
+import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Player;
 import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.ui.CustomColors;
@@ -18,6 +21,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -38,9 +42,9 @@ public class BarnOrCoopMenuBar {
     private float startingX;
     private float startingY;
     private String currentTab;
+    ArrayList<AnimalData> animalsData = null;
     private OrthographicCamera camera;
 
-    private ArrayList<AnimalSprite> animalSprites;
     private GameScreen screen;
 
     public BarnOrCoopMenuBar(GameScreen screen) {
@@ -58,13 +62,12 @@ public class BarnOrCoopMenuBar {
     }
 
     public void render(Batch batch, OrthographicCamera camera) {
-
-        if (screen instanceof BarnScreen) {
-            animalSprites = ((BarnScreen) screen).getAnimalSprites();
-        } else if (screen instanceof CoopScreen) {
-            animalSprites = ((CoopScreen) screen).getAnimalSprites();
+        if (screen instanceof BarnScreen barnScreen) {
+            animalsData = Finder.getbdByid(barnScreen.getId()).getAnimalsData();
+        } else if (screen instanceof CoopScreen coopScreen) {
+            animalsData = Finder.getcdByid(coopScreen.getId()).getAnimalsData();
         } else {
-            animalSprites = new ArrayList<>();
+            animalsData = new ArrayList<>();
         }
 
         float screenWidth = camera.viewportWidth;
@@ -87,9 +90,9 @@ public class BarnOrCoopMenuBar {
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mousePos);
 
-        int endIndex = Math.min(selectedIndex + visibleAnimalsCount, animalSprites.size());
+        int endIndex = Math.min(selectedIndex + visibleAnimalsCount, animalsData.size());
         for (int i = selectedIndex; i < endIndex; i++) {
-            AnimalData animalData = animalSprites.get(i).animalData;
+            AnimalData animalData = animalsData.get(i);
             String name = animalData.getName();
             String type = animalData.getAnimalType();
 
@@ -137,7 +140,7 @@ public class BarnOrCoopMenuBar {
 
                 font.setColor(Color.WHITE);
             }
-            if (clicked && AppClient.getGameData().getPlayersData().size() > 1) {
+            if (clicked  ) {
                 //TODO Nothing Ig
             }
 
@@ -189,7 +192,10 @@ public class BarnOrCoopMenuBar {
 
                 font.setColor(Color.WHITE);
             }
-            if (clicked && AppClient.getGameData().getPlayersData().size() > 1) {
+            if (clicked  ) {
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                    new GameCommand("pet -w inside -n "+name, AppClient.getUserData().getUsername()));
+                AppClient.getClient().send(new Gson().toJson(msg));
                 //TODO Pet
             }
 
@@ -242,7 +248,7 @@ public class BarnOrCoopMenuBar {
 
                 font.setColor(Color.WHITE);
             }
-            if (clicked && AppClient.getGameData().getPlayersData().size() > 1) {
+            if (clicked  ) {
                 //TODO Feed
             }
 
@@ -289,7 +295,7 @@ public class BarnOrCoopMenuBar {
 
                 font.setColor(Color.WHITE);
             }
-            if (clicked && AppClient.getGameData().getPlayersData().size() > 1) {
+            if (clicked  ) {
                 //TODO Sell
             }
 
@@ -343,7 +349,7 @@ public class BarnOrCoopMenuBar {
 
                 font.setColor(Color.WHITE);
             }
-            if (clicked && AppClient.getGameData().getPlayersData().size() > 1) {
+            if (clicked  ) {
                 //TODO Collect Product
             }
 
@@ -369,7 +375,7 @@ public class BarnOrCoopMenuBar {
     }
 
     public void scrollUp() {
-        if (selectedIndex < animalSprites.size() - visibleAnimalsCount)
+        if (selectedIndex < animalsData.size() - visibleAnimalsCount)
             selectedIndex++;
     }
 }
