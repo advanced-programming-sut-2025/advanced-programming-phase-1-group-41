@@ -166,7 +166,7 @@ public class Coop implements Building {
 
     @Override
     public String getName() {
-        return "Barn";
+        return "Coop";
     }
 
     public ArrayList<Animal> getAnimals() {

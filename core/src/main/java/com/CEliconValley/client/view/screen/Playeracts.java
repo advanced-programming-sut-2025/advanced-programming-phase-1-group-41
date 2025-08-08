@@ -279,10 +279,13 @@ public class Playeracts {
                 AppClient.getClient().send(new Gson().toJson(msg));
 //                farmScreen.hit(hero.currentDirection, hero.playerX.get(), hero.playerY.get());
             }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)  &&
+        } else if (
+            (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_RIGHT) ||
+                Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) &&
             screen instanceof FarmScreen farmScreen) {
             farmScreen.transfer();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && !(
+        } else if ((Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_RIGHT) ||
+            Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT))  && !(
             screen instanceof FarmScreen
         )) {
             System.out.println(screen);
