@@ -378,10 +378,13 @@ public class FarmScreen extends GameScreen implements Screen {
                             ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new GreenHouseScreen(this, new GreenhouseMap(0, 0), player));
                         } else if (around.getObjectName().equals(new Barn().getName())) {
                             ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new BarnScreen(this,
-                                new BarnMap(0, 0, BarnType.values()[findBarnByDoor().getBarnTypeInt()]), player));
+                                new BarnMap(0, 0, BarnType.values()[findBarnByDoor().getBarnTypeInt()]), player,
+                                findBarnByDoor()));
                         } else if (around.getObjectName().equals(new Coop().getName())) {
                             ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new CoopScreen(this,
-                                new CoopMap(0, 0, CoopType.values()[findCoopByDoor().getCoopTypeInt()]), player));
+                                new CoopMap(0, 0, CoopType.values()[findCoopByDoor().getCoopTypeInt()]), player,
+                                findCoopByDoor()
+                                ));
                         }
                     }
                 }

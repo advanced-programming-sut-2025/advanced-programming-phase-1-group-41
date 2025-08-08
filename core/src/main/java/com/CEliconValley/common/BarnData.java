@@ -18,7 +18,7 @@ public class BarnData {
     int anchorY;
     int barnTypeInt;
     int capacity;
-
+    int id;
     public BarnData() {
     }
 
@@ -33,12 +33,13 @@ public class BarnData {
         this.anchorY = barn.getAnchorY();
         this.barnTypeInt = barn.getBarnType().ordinal();
         this.capacity = barn.getCapacity();
+        this.id = barn.getId();
     }
 
 
     public Barn getBarn(Player owner, Farm farm) {
         return new Barn(getAnimals(owner),this.anchorX, this.anchorY, BarnType.values()[this.barnTypeInt],
-            this.capacity, this.x, this.y, farm);
+            this.capacity, this.x, this.y, farm, id);
     }
 
     private ArrayList<Animal> getAnimals(Player owner){
@@ -76,5 +77,9 @@ public class BarnData {
 
     public int getY() {
         return y;
+    }
+
+    public int getId() {
+        return id;
     }
 }

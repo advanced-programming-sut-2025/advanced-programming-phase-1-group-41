@@ -1,6 +1,7 @@
 package com.CEliconValley.models.locations;
 
 import com.CEliconValley.models.*;
+import com.CEliconValley.models.animals.animalKinds.*;
 import com.CEliconValley.models.foragings.Crop;
 import com.CEliconValley.models.foragings.Foraging;
 import com.CEliconValley.models.foragings.ForagingCrop;
@@ -340,11 +341,32 @@ public class Farm {
     }
 
     public void creatNewBarn(int x, int y, BarnType barnType){
-        barns.add(new Barn(x, y, this, barnType));
+        Barn barn = new Barn(x, y, this, barnType);
+        Player player = null;
+        for (Player p : App.getGame().getPlayers()) {
+            if(p.getFarmId() == id){
+                player = p;
+                break;
+            }
+        }
+        barn.addAnimal(new Pig(player, "asghar"));
+        barn.addAnimal(new Cow(player, "akbar"));
+        barn.addAnimal(new Sheep(player, "sakineh"));
+        barn.addAnimal(new Goat(player, "asadollah"));
+        barns.add(barn);
     }
 
     public void creatNewCoop(int x,int y,CoopType coopType){
-        coops.add(new Coop(x, y, this, coopType));
+        Coop coop = new Coop(x, y, this, coopType);
+        Player player = null;
+        for (Player p : App.getGame().getPlayers()) {
+            if(p.getFarmId() == id){
+                player = p;
+                break;
+            }
+        }
+        coop.addAnimal(new Chicken(player,"abolfazl"));
+        coops.add(coop);
     }
 
     public ArrayList<Cell> getCells() {

@@ -7,6 +7,7 @@ import com.CEliconValley.client.controller.CheatCodeController;
 import com.CEliconValley.controllers.CheckerController;
 import com.CEliconValley.controllers.GameMenuController;
 import com.CEliconValley.models.App;
+import com.CEliconValley.models.Result;
 import com.CEliconValley.views.commands.gameCommands.GameMainCommands;
 import com.CEliconValley.views.subGames.*;
 import com.badlogic.gdx.Screen;
@@ -53,7 +54,7 @@ public class GameMenu implements Screen {
 
             }else if(CookingView.check(input)){
 
-            }else if(AnimalView.check(input)){
+            }else if(AnimalView.check(input, playerName)){
 
             }else if(CraftingView.check(input)){
 
@@ -65,7 +66,7 @@ public class GameMenu implements Screen {
 
             }
             else{
-//                System.out.println("Invalid command");
+                System.out.println(new Result(false,"Invalid command"));
             }
         }
 

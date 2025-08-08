@@ -235,8 +235,8 @@ public class GameHandler {
 
         gameView.check(command.command, command.playerName);
 
-        System.out.println("printing inventory: ");
-        gameView.check("inventory show", command.playerName);
+//        System.out.println("printing inventory: ");
+//        gameView.check("inventory show", command.playerName);
 
         GameMessage<GameData> msg = new GameMessage<>("game-data", new GameData(game));
         App.getServer().sendToGroupByPlayers(game.getPlayers(), new Gson().toJson(msg));
