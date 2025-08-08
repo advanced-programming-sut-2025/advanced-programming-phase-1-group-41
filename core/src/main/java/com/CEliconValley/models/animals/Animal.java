@@ -187,7 +187,7 @@ public abstract class Animal {
     public static String getAnimalSound(String animalType){
         if(animalType.equalsIgnoreCase("chicken")) return  "Jick Jick";
         if(animalType.equalsIgnoreCase("cow")) return  "MOO00ooo...";
-        if(animalType.equalsIgnoreCase("dino")) return  "Kiramo Bokhor";
+        if(animalType.equalsIgnoreCase("dino")) return  "RRAAWWwww";
         if(animalType.equalsIgnoreCase("duck")) return  "Quack Quack";
         if(animalType.equalsIgnoreCase("goat")) return  "Maaaa";
         if(animalType.equalsIgnoreCase("pig")) return  "Oink Oink!";

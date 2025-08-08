@@ -65,7 +65,7 @@ public class MenuBar {
     public MenuBar(GameScreen screen) {
         this.screen = screen;
         menuTexture = GameAssetManager.getGameAssetManager().getScreenTexture("Menu_Screen.png");
-        miniMapTexture = GameAssetManager.getGameAssetManager().getScreenTexture("map.png");
+        miniMapTexture = GameAssetManager.getGameAssetManager().getScreenTexture("map.jpg");
         characterTexture = GameAssetManager.getGameAssetManager().getScreenTexture("character.png");
         infoTexture = GameAssetManager.getGameAssetManager().getBackgroundTexture("Info_Background1.png");
 

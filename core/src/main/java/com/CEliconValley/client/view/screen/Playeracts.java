@@ -162,6 +162,15 @@ public class Playeracts {
             if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
                 screen.inventoryRenderer.shiftLeft();
             }
+        } else if(screen instanceof BarnScreen || screen instanceof CoopScreen){
+            if((screen instanceof BarnScreen && ((BarnScreen) screen).isBarnMenuOpen())
+                || (screen instanceof CoopScreen && ((CoopScreen) screen).isCoopMenuOpen())){
+                if (Gdx.input.isKeyJustPressed(Input.Keys.UP)){
+                    screen.barnOrCoopMenuBar.scrollUp();
+                } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)){
+                    screen.barnOrCoopMenuBar.scrollDown();
+                }
+            }
         }
         if (hero.isActing.get() || hero.isMoving.get()) {
 //            System.out.println(hero.isActing+" "+hero.isMoving);
@@ -270,7 +279,7 @@ public class Playeracts {
                 AppClient.getClient().send(new Gson().toJson(msg));
 //                farmScreen.hit(hero.currentDirection, hero.playerX.get(), hero.playerY.get());
             }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.UP) &&
+        } else if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)  &&
             screen instanceof FarmScreen farmScreen) {
             farmScreen.transfer();
         } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && !(
