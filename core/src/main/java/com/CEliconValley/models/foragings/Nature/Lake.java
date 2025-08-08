@@ -9,7 +9,7 @@ import com.CEliconValley.models.locations.Village;
 
 import java.util.Random;
 
-public class Lake implements ObjectMap, Obstacle {
+public class Lake implements ObjectMap, Obstacle,WaterTile {
     @Override
     public String getChar() {
         return TerminalColors.colorize(39,39,"LL");

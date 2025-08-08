@@ -6,8 +6,10 @@ import com.CEliconValley.common.FarmData;
 import com.CEliconValley.common.VillageData;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
+import com.CEliconValley.models.buildings.Bridge;
 import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.foragings.Nature.Lake;
+import com.CEliconValley.models.foragings.Nature.WaterTile;
 import com.CEliconValley.models.locations.Farm;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -18,6 +20,8 @@ import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class WaterSpawner {
     Texture waterTexture = new Texture("game/general/tiles/water.png");
+    Texture bridgeTexture = new Texture("game/general/tiles/bridge.png");
+    Texture edgeBridgeTexture = new Texture("game/general/tiles/edgeBridge.png");
     Texture coastTexture = new Texture("game/general/tiles/coast_Spring.png");
     Texture cornerTexture = new Texture("game/general/tiles/waterCorner_Spring.png");
     private Animation<TextureRegion> waterAnimation;
@@ -253,13 +257,13 @@ public class WaterSpawner {
         float x = cellData.getX() * CELL_SIZE;
         float y = cellData.getY() * CELL_SIZE;
         Cell cell = cellData.extractData();
-        if (cell.getObjectMap() instanceof Lake lake) {
+        if (cell.getObjectMap() instanceof WaterTile tile) {
             TextureRegion waterFrame = waterAnimation.getKeyFrame(passiveStateTime, true);
             batch.draw(waterFrame, x, y, CELL_SIZE, CELL_SIZE);
-            if(lake.getInitialize()>-1) {
-                switch (lake.getInitialize()) {
+            if(tile.getInitialize()>-1) {
+                switch (tile.getInitialize()) {
                     case 0, 2, 6, 8, 1, 3, 5, 7 -> {
-                        TextureRegion coastFrame = coastAnimations[lake.getInitialize()].getKeyFrame(passiveStateTime, true);
+                        TextureRegion coastFrame = coastAnimations[tile.getInitialize()].getKeyFrame(passiveStateTime, true);
                         batch.draw(coastFrame, x, y, CELL_SIZE, CELL_SIZE);
                     }
                     case 9 -> {
@@ -282,14 +286,14 @@ public class WaterSpawner {
 
             if (isCoast(cell, villageData)) {
                 int animIndex = getCoastAnimationIndex(cell.getX(), cell.getY(), villageData);
-                lake.setInitialize(animIndex);
+                tile.setInitialize(animIndex);
 //                System.out.println(animIndex);
                 TextureRegion frame = coastAnimations[animIndex].getKeyFrame(passiveStateTime, true);
                 batch.draw(frame, x, y, CELL_SIZE, CELL_SIZE);
             }
 
 
-            CornerType corner = getWaterCornerType(lake,cell.getX(), cell.getY(), villageData);
+            CornerType corner = getWaterCornerType(tile,cell.getX(), cell.getY(), villageData);
             if (corner != CornerType.NONE) {
                 Animation<TextureRegion> cornerAnim = switch (corner) {
                     case SE -> animCornerSE;
@@ -300,6 +304,23 @@ public class WaterSpawner {
                 };
                 if (cornerAnim != null) {
                     batch.draw(cornerAnim.getKeyFrame(passiveStateTime, true), x, y, CELL_SIZE, CELL_SIZE);
+                }
+            }
+            if(tile instanceof Bridge bridge) {
+                if(bridge.getType()==-1){
+                    CellData cd =Finder.findCellByCoordinatesVillage(cellData.getX(), cellData.getY()-1, villageData);
+                    if(cd!=null&&cd.getObjectName().equals(new Bridge().getName())) {
+                        bridge.setType(1);
+                    }else if(cd!=null){
+                        bridge.setType(2);
+                    }
+                }
+                if(bridge.getType()==1){
+                    batch.draw(bridgeTexture, cellData.getX()*CELL_SIZE, cellData.getY()*CELL_SIZE, CELL_SIZE, CELL_SIZE);
+
+                }else if(bridge.getType()==2){
+
+                    batch.draw(edgeBridgeTexture, cellData.getX()*CELL_SIZE, cellData.getY()*CELL_SIZE-12, CELL_SIZE, CELL_SIZE+12);
                 }
             }
 
@@ -328,10 +349,13 @@ public class WaterSpawner {
     }
 
 
-    private CornerType getWaterCornerType(Lake lake,int x, int y, VillageData villageData) {
-        CellData centerData = Finder.getcdByVillageData(x, y, villageData);
-        if (centerData == null || !(centerData.getObjectName().equals(new Lake().getName()))) return CornerType.NONE;
-
+    private CornerType getWaterCornerType(WaterTile tile,int x, int y, VillageData villageData) {
+        CellData center = Finder.getcdByVillageData(x, y, villageData);
+        if (center == null) return CornerType.NONE;
+        String name = center.getObjectName();
+        boolean isLake  = name.equals(new Lake().getName());
+        boolean isBridge = name.equals(new Bridge().getName());
+        if (!isLake && !isBridge) return CornerType.NONE;
         boolean n = isWater(x, y + 1, villageData);
         boolean e = isWater(x + 1, y, villageData);
         boolean ne = isLand(x + 1, y + 1, villageData);
@@ -340,10 +364,10 @@ public class WaterSpawner {
         boolean w = isWater(x - 1, y, villageData);
         boolean sw = isLand(x - 1, y - 1, villageData);
 
-        if (n && e && ne) {lake.setInitialize(9);return CornerType.SW;}
-        if (n && w && isLand(x - 1, y + 1, villageData)) {lake.setInitialize(10);return CornerType.SE;}
-        if (s && e && isLand(x + 1, y - 1, villageData)) {lake.setInitialize(11);return CornerType.NW;}
-        if (s && w && sw) {lake.setInitialize(12);return CornerType.NE;}
+        if (n && e && ne) {tile.setInitialize(9);return CornerType.SW;}
+        if (n && w && isLand(x - 1, y + 1, villageData)) {tile.setInitialize(10);return CornerType.SE;}
+        if (s && e && isLand(x + 1, y - 1, villageData)) {tile.setInitialize(11);return CornerType.NW;}
+        if (s && w && sw) {tile.setInitialize(12);return CornerType.NE;}
 
         return CornerType.NONE;
     }
@@ -351,19 +375,30 @@ public class WaterSpawner {
 
 
 
-
     private boolean isWater(int x, int y, VillageData villageData) {
-        // maybe check for more than just lake in here!
-        CellData cd = Finder.getcdByVillageData(x, y ,villageData);
-        if(cd == null) return false;
-        return cd.getObjectName().equals(new Lake().getName());
+        CellData cd = Finder.getcdByVillageData(x, y, villageData);
+        if (cd == null) return false;
+
+        String obj = cd.getObjectName();
+        return obj.equals(new Lake().getName())
+            || obj.equals(new Bridge().getName());
+    }
+
+
+    private boolean isLand(int x, int y, VillageData villageData) {
+        CellData cd = Finder.getcdByVillageData(x, y, villageData);
+        if (cd == null) return false;
+        String obj = cd.getObjectName();
+
+        return !obj.equals(new Lake().getName())
+            && !obj.equals(new Bridge().getName());
     }
     private boolean isCoast(Cell cell, VillageData villageData) {
         int x = cell.getX();
         int y = cell.getY();
 
 
-        if (!(cell.getObjectMap() instanceof Lake)) return false;
+        if (!(cell.getObjectMap() instanceof WaterTile)) return false;
 
 
         return isLand(x + 1, y, villageData) || isLand(x - 1, y, villageData) ||
@@ -371,11 +406,6 @@ public class WaterSpawner {
     }
 
 
-    private boolean isLand(int x, int y, VillageData villageData) {
-        CellData cd = Finder.getcdByVillageData(x, y , villageData);
-        if(cd == null) return false;
-        return ! cd.getObjectName().equals(new Lake().getName());
-    }
 
 
     public boolean isCorner(CellData cellData, VillageData villageData) {

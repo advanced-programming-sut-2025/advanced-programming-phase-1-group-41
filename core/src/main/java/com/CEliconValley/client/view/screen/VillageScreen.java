@@ -123,6 +123,7 @@ public class VillageScreen extends GameScreen implements Screen {
         hero.renderY = 32*CELL_SIZE;
         hero.playerX.set(47);
         hero.playerY.set(32);
+        setDest();
 
         hero.targetX.set(hero.playerX.get());
         hero.targetY.set(hero.playerY.get());
@@ -167,7 +168,7 @@ public class VillageScreen extends GameScreen implements Screen {
         batch.draw(villageTexture, 0, 0, CELL_SIZE * 60, CELL_SIZE * 75);
 
         Texture grassTexture = GameAssetManager.getGameAssetManager().getTileTexture("grass.png");
-        Texture groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("Village_Tile.png");
+//        Texture groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("Village_Tile.png");
         Texture sandTexture = GameAssetManager.getGameAssetManager().getTileTexture("sand.png");
         Texture thunderedTexture = GameAssetManager.getGameAssetManager().getTileTexture("thundered.png");
         Texture farmlandTexture = GameAssetManager.getGameAssetManager().getTileTexture("farmland.png");
@@ -184,7 +185,7 @@ public class VillageScreen extends GameScreen implements Screen {
                 } else if (grass.isFarmland()) {
                     batch.draw(farmlandTexture, x, y, CELL_SIZE, CELL_SIZE);
                 } else if (grass.isGround()) {
-                    batch.draw(groundTexture, x, y, CELL_SIZE, CELL_SIZE);
+//                    batch.draw(groundTexture, x, y, CELL_SIZE, CELL_SIZE);
                 } else if (grass.isSand()) {
                     batch.draw(sandTexture, x, y, CELL_SIZE, CELL_SIZE);
                 }
