@@ -42,6 +42,7 @@ public abstract class GameScreen implements Screen {
     protected boolean cheatMode = false;
     public boolean voteMode = false;
     public boolean chatMode = false;
+    public boolean scoreboardMode = false;
     public Image overlay;
     protected TextField cheatCodeField;
 
@@ -51,7 +52,6 @@ public abstract class GameScreen implements Screen {
 
     private TextField chatInput;
     private ScrollPane chatScrollPane;
-    private Table chatTable;
 
     public TextButton teryesButton, ternoButton;
     public Label terLabel;
@@ -62,6 +62,7 @@ public abstract class GameScreen implements Screen {
 
     protected Stage stage;
     protected Stage chatStage;
+    protected Stage scoreboardStage;
 
     public abstract void transfer();
     protected Hero hero;
@@ -89,7 +90,7 @@ public abstract class GameScreen implements Screen {
         terLabel.setPosition(Gdx.graphics.getWidth() / 3 - terLabel.getWidth(), stage.getHeight() * 5 / 6- terLabel.getHeight() / 2);
     }
 
-    public void setupVoteUI(){
+    private void setupVoteUI(){
         playerVoteLabel = new Label("Vote", GameAssetManager.getGameAssetManager().getSkin());
         playerVoteLabel.setVisible(false);
         playerVoteLabel.setFontScale(2f);
@@ -138,52 +139,11 @@ public abstract class GameScreen implements Screen {
         stage.addActor(dcLabel);
     }
 
-
-    public GameScreen(InventoryRenderer inventoryRenderer) {
-        stage = new Stage(new ScreenViewport(), Main.getBatch());
-        chatStage = new Stage(new ScreenViewport(), Main.getBatch());
-        Gdx.input.setInputProcessor(stage);
-        this.inventoryRenderer = inventoryRenderer;
-        cheatCodeField = new TextField("", GameAssetManager.getGameAssetManager().getSkin());
-        cheatCodeField.setMessageText("Enter cheat code");
-        cheatCodeField.setVisible(false);
-        cheatCodeField.setWidth(600);
-        cheatCodeField.setPosition(stage.getWidth()/2  - cheatCodeField.getWidth() / 2, stage.getHeight() / 2 - cheatCodeField.getHeight() / 2);
-        setupVoteUI();
-
-        stage.addActor(cheatCodeField);
-        hudImage = new Image(new TextureRegion(hudTexture));
-        hudImage.setSize(hudImage.getWidth()*4, hudImage.getHeight()*4);
-        energyBarImage = new Image(new TextureRegion(energyBarTexture));
-        energyGreenImage = new Image(new TextureRegion(energyGreenTexture));
-        energyYellowImage = new Image(new TextureRegion(energyYellowTexture));
-        energyRedImage = new Image(new TextureRegion(energyRedTexture));
-        float posX = stage.getWidth() - hudImage.getWidth() - 10;
-        float posY = stage.getHeight() - hudImage.getHeight() - 10;
-        stage.addActor(hudImage);
-        timeScreen = new TimeScreen(GameAssetManager.getGameAssetManager().getSkin(), stage,
-            posX, posY, hudImage);
-        hudImage.setTouchable(Touchable.disabled);
-        hudImage.setPosition(posX, posY);
-        timeScreen.dateLabel.setPosition(posX + 120, posY + 180);
-        timeScreen.timeLabel.setPosition(posX + 120, posY + 90);
-        timeScreen.goldLabel.setPosition(posX + 66.5f, posY + 10);
-        timeScreen.getHudTable().setPosition(0, -stage.getHeight() / 21f);
-        energyBarImage.setPosition(stage.getWidth() - energyBarImage.getWidth() * 2, energyBarImage.getHeight() * 1.5f);
-        timeScreen.goldLabel.setAlignment(Align.left);
-        timeScreen.goldLabel.setFontScale(1.18f);
-        timeScreen.dateLabel.setFontScale(0.8f);
-        stage.addActor(timeScreen.dateLabel);
-        stage.addActor(timeScreen.timeLabel);
-        stage.addActor(timeScreen.goldLabel);
-        stage.addActor(timeScreen.getHudTable());
-        stage.addActor(energyBarImage);
-        this.hero = new Hero();
-
+    private void setupChatUI(){
         Table root = new Table();
         root.setFillParent(true);
-        chatTable = new Table();
-        // TODO: اضافه کردن پیام‌های چت به این table
+        Table chatTable = new Table();
+        // TODO: Add Message TO Table
         chatTable.setFillParent(true);
         ArrayList<PlayerMessage> messages = new ArrayList<>();
         messages.add(new PlayerMessage("Arad", "Salam"));
@@ -223,6 +183,57 @@ public abstract class GameScreen implements Screen {
         container.setPosition(stage.getWidth() / 2 - 200,
             stage.getHeight() / 2 - 200);
         chatStage.addActor(container);
+    }
+
+    private void setupScoreboardUI(){
+
+    }
+
+
+    public GameScreen(InventoryRenderer inventoryRenderer) {
+        stage = new Stage(new ScreenViewport(), Main.getBatch());
+        chatStage = new Stage(new ScreenViewport(), Main.getBatch());
+        scoreboardStage = new Stage(new ScreenViewport(), Main.getBatch());
+        Gdx.input.setInputProcessor(stage);
+        this.inventoryRenderer = inventoryRenderer;
+        cheatCodeField = new TextField("", GameAssetManager.getGameAssetManager().getSkin());
+        cheatCodeField.setMessageText("Enter cheat code");
+        cheatCodeField.setVisible(false);
+        cheatCodeField.setWidth(600);
+        cheatCodeField.setPosition(stage.getWidth()/2  - cheatCodeField.getWidth() / 2, stage.getHeight() / 2 - cheatCodeField.getHeight() / 2);
+        setupVoteUI();
+
+        stage.addActor(cheatCodeField);
+        hudImage = new Image(new TextureRegion(hudTexture));
+        hudImage.setSize(hudImage.getWidth()*4, hudImage.getHeight()*4);
+        energyBarImage = new Image(new TextureRegion(energyBarTexture));
+        energyGreenImage = new Image(new TextureRegion(energyGreenTexture));
+        energyYellowImage = new Image(new TextureRegion(energyYellowTexture));
+        energyRedImage = new Image(new TextureRegion(energyRedTexture));
+        float posX = stage.getWidth() - hudImage.getWidth() - 10;
+        float posY = stage.getHeight() - hudImage.getHeight() - 10;
+        stage.addActor(hudImage);
+        timeScreen = new TimeScreen(GameAssetManager.getGameAssetManager().getSkin(), stage,
+            posX, posY, hudImage);
+        hudImage.setTouchable(Touchable.disabled);
+        hudImage.setPosition(posX, posY);
+        timeScreen.dateLabel.setPosition(posX + 120, posY + 180);
+        timeScreen.timeLabel.setPosition(posX + 120, posY + 90);
+        timeScreen.goldLabel.setPosition(posX + 66.5f, posY + 10);
+        timeScreen.getHudTable().setPosition(0, -stage.getHeight() / 21f);
+        energyBarImage.setPosition(stage.getWidth() - energyBarImage.getWidth() * 2, energyBarImage.getHeight() * 1.5f);
+        timeScreen.goldLabel.setAlignment(Align.left);
+        timeScreen.goldLabel.setFontScale(1.18f);
+        timeScreen.dateLabel.setFontScale(0.8f);
+        stage.addActor(timeScreen.dateLabel);
+        stage.addActor(timeScreen.timeLabel);
+        stage.addActor(timeScreen.goldLabel);
+        stage.addActor(timeScreen.getHudTable());
+        stage.addActor(energyBarImage);
+        this.hero = new Hero();
+
+        setupChatUI();
+        setupScoreboardUI();
     }
 
 
@@ -326,11 +337,31 @@ public abstract class GameScreen implements Screen {
         stage.setKeyboardFocus(chatInput);
         chatInput.setText("");
 
+        Gdx.input.setInputProcessor(stage);
+
         overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
             .getGameAssetManager()
             .getBackgroundTexture("Chat_Background.png"))));
 
-//        overlay.setColor(0, 0, 0, 0.5f);
+        overlay.setSize(stage.getWidth(), stage.getHeight());
+        overlay.setPosition(0, 0);
+
+        overlay.getColor().a = 0;
+        overlay.addAction(Actions.fadeIn(0.5f));
+
+
+        stage.addActor(overlay);
+        overlay.toBack();
+    }
+
+    public void handleScoreboard(Stage stage) {
+        scoreboardMode = true;
+        Gdx.input.setInputProcessor(stage);
+
+        overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
+            .getGameAssetManager()
+            .getBackgroundTexture("Chat_Background.png"))));
+
         overlay.setSize(stage.getWidth(), stage.getHeight());
         overlay.setPosition(0, 0);
 

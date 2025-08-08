@@ -75,7 +75,7 @@ public class Playeracts {
             if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
                 String message = screen.getChatInput().getText();
                 if (!message.isEmpty()) {
-                    // TODO: پردازش یا ارسال پیام چت
+                    // TODO: Send Message
                     System.out.println("Chat message: " + message);
                 }
             } else if(Gdx.input.isKeyJustPressed(Input.Keys.T)) {
@@ -84,6 +84,15 @@ public class Playeracts {
                 Gdx.input.setInputProcessor(screen.stage);
             }
             return new Result(false, "chat");
+        }
+        if(screen.scoreboardMode){
+            screen.scoreboardStage.act(delta);
+            screen.scoreboardStage.draw();
+            if(Gdx.input.isKeyJustPressed(Input.Keys.CAPS_LOCK)){
+                screen.scoreboardMode = false;
+                Gdx.input.setInputProcessor(screen.stage);
+            }
+            return new Result(false, "scoreboard");
         }
         if (screen.voteMode) {
             stage.act(delta);
@@ -154,8 +163,11 @@ public class Playeracts {
             screen.getChatInput().setDisabled(false);
             screen.getChatInput().setFocusTraversal(true);
             screen.getChatInput().setCursorPosition(0);
-            Gdx.input.setInputProcessor(screen.getChatStage());
             return new Result(true, "chat");
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT)){
+            screen.handleScoreboard(screen.scoreboardStage);
+            return new Result(true, "scoreboard");
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
@@ -273,7 +285,6 @@ public class Playeracts {
                     fs.getThunder().strikeAt(hero.playerX.get(), hero.playerY.get());
             }
         }else if(Gdx.input.isKeyJustPressed((Input.Keys.TAB))) {
-            // TODO arad heivoon
             if(screen instanceof BarnScreen){
                 ((BarnScreen) screen).setBarnMenuOpen(!((BarnScreen) screen).isBarnMenuOpen());
             } else if(screen instanceof CoopScreen){
