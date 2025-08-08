@@ -56,6 +56,7 @@ public abstract class GameScreen implements Screen {
     public boolean isGameFinished = false;
 
     protected Stage stage;
+    protected Stage chatstage;
     public abstract void transfer();
     protected Hero hero;
     protected MenuBar menuBar = new MenuBar(this);

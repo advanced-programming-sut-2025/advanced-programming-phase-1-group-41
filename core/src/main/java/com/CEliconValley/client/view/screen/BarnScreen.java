@@ -72,6 +72,10 @@ public class BarnScreen extends GameScreen implements Screen {
             new AnimalData(new Dino(null,"abolfazl")),
             hero.playerX.get() -5, hero.playerY.get() + 2
             ));
+        this.animalSprites.add(new AnimalSprite(barn,
+            new AnimalData(new Chicken(null,"abolfazl")),
+            hero.playerX.get() - 3, hero.playerY.get() + 3
+            ));
 //        this.animalSprites.add(new AnimalSprite(barn,new AnimalData(
 //            new Pig(null, "asghar")), hero.playerX+1, hero.playerY + 3
 //        ));

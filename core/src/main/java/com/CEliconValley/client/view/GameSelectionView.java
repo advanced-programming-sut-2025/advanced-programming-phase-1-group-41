@@ -96,8 +96,8 @@ public class GameSelectionView implements AppMenu, Screen {
         root.add(messageLabel).colspan(3).center();
         root.row().padTop(15);
 
-        root.add(backButton).colspan(3).center().width(200).row();
-        root.add(joinButton).colspan(3).center().width(200).padTop(20);
+        root.add(backButton).colspan(3).center().width(300).row();
+        root.add(joinButton).colspan(3).center().width(300).padTop(20);
     }
 
     @Override

@@ -37,6 +37,8 @@ public class CoopScreen extends GameScreen implements Screen {
 
     public CoopScreen(FarmScreen farmScreen, CoopMap coop, Player player) {
         super(null);
+        this.coopMenuBar = super.getBarnOrCoopMenuBar();
+        coopMenuBar.setPlayer(player);
         this.farmScreen = farmScreen;
         this.coop = coop;
         this.batch = new SpriteBatch();
