@@ -5,10 +5,7 @@ import com.CEliconValley.client.view.screen.randomwalk.Node;
 import com.CEliconValley.client.view.screen.randomwalk.SimplePathFinder;
 import com.CEliconValley.common.AnimalData;
 import com.CEliconValley.models.*;
-import com.CEliconValley.models.animals.animalKinds.Cow;
-import com.CEliconValley.models.animals.animalKinds.Goat;
-import com.CEliconValley.models.animals.animalKinds.Pig;
-import com.CEliconValley.models.animals.animalKinds.Sheep;
+import com.CEliconValley.models.animals.animalKinds.*;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.client.view.screen.maps.BarnMap;
 import com.CEliconValley.models.ui.GameAssetManager;
@@ -64,12 +61,16 @@ public class BarnScreen extends GameScreen implements Screen {
             hero.playerX.get() +3, hero.playerY.get() + 4
             ));
         this.animalSprites.add(new AnimalSprite(barn,
-            new AnimalData(new Pig(null,"asghar")),
+            new AnimalData(new Pig(null,"jafar")),
             hero.playerX.get() -2, hero.playerY.get() + 3
             ));
         this.animalSprites.add(new AnimalSprite(barn,
-            new AnimalData(new Goat(null,"asghar")),
+            new AnimalData(new Goat(null,"abbas")),
             hero.playerX.get() -4, hero.playerY.get() + 1
+            ));
+        this.animalSprites.add(new AnimalSprite(barn,
+            new AnimalData(new Dino(null,"abolfazl")),
+            hero.playerX.get() -5, hero.playerY.get() + 2
             ));
 //        this.animalSprites.add(new AnimalSprite(barn,new AnimalData(
 //            new Pig(null, "asghar")), hero.playerX+1, hero.playerY + 3

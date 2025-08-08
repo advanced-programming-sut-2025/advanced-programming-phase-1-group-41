@@ -10,6 +10,7 @@ import com.CEliconValley.common.messages.VoteMessage;
 import com.CEliconValley.controllers.ItemManager;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Player;
+import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.items.*;
 import com.CEliconValley.models.tools.Tool;
 import com.CEliconValley.models.ui.GameAssetManager;
@@ -40,7 +41,12 @@ public class BarnOrCoopMenuBar {
     private final int tileWidth;
     private final int tileHeight;
 
+    private float scrollOffset = 0f;
+    private float maxScroll = 500f; // بسته به تعداد حیوانات، اینو بعداً حساب کن
+    private float scrollAmount = 10f;
+
     private Player player;
+
     BitmapFont font = new BitmapFont();
     ShapeRenderer shapeRenderer = new ShapeRenderer();
     private int startingRow = 0;
@@ -49,8 +55,7 @@ public class BarnOrCoopMenuBar {
     private String currentTab;
     private OrthographicCamera camera;
 
-    private final ArrayList<AnimalSprite> animalSprites;
-
+    private ArrayList<AnimalSprite> animalSprites;
     private GameScreen screen;
 
     public BarnOrCoopMenuBar(GameScreen screen) {
@@ -58,18 +63,8 @@ public class BarnOrCoopMenuBar {
         menuTexture = GameAssetManager.getGameAssetManager().getScreenTexture("CoopOrBarnMenu_Screen.png");
         animalTexture = GameAssetManager.getGameAssetManager().getBackgroundTexture("LabelBg1.png");
 
-        if(screen instanceof BarnScreen) {
-            System.out.println("salam dash");
-            animalSprites = ((BarnScreen) screen).getAnimalSprites();
-        } else if(screen instanceof CoopScreen) {
-            animalSprites = ((CoopScreen) screen).getAnimalSprites();
-        } else {
-            animalSprites = new ArrayList<>();
-        }
-
         tileWidth = menuTexture.getWidth() / 3;
         tileHeight = menuTexture.getHeight() / 3;
-
     }
 
     public void setPlayer(Player player) {
@@ -77,9 +72,19 @@ public class BarnOrCoopMenuBar {
     }
 
     public void render(Batch batch, OrthographicCamera camera) {
+        scrollOffset += scrollAmount * 10f;
+        scrollOffset = Math.max(0, Math.min(scrollOffset, maxScroll));
+
+        if(screen instanceof BarnScreen) {
+            animalSprites = ((BarnScreen) screen).getAnimalSprites();
+        } else if(screen instanceof CoopScreen) {
+            animalSprites = ((CoopScreen) screen).getAnimalSprites();
+        } else {
+            animalSprites = new ArrayList<>();
+        }
+
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
-
         this.camera = camera;
 
         float menuWidth = screenWidth * 0.6f;
@@ -90,7 +95,7 @@ public class BarnOrCoopMenuBar {
         batch.draw(menuTexture, startingX, startingY, menuWidth, menuHeight);
 
         float x = startingX + screenWidth * 0.025f;
-        float y = startingY + screenHeight * 0.2f;
+        float y = startingY + screenHeight * 0.7f;
 
         float spacing = screenWidth * 0.14f;
         float animalSize = screenHeight * 0.08f;
@@ -100,7 +105,6 @@ public class BarnOrCoopMenuBar {
 
         for (AnimalSprite animalSprite : animalSprites) {
             AnimalData animalData = animalSprite.animalData;
-
             String name = animalData.getName();
             String type = animalData.getAnimalType();
 
@@ -111,7 +115,8 @@ public class BarnOrCoopMenuBar {
 
             String animalName = name + " (" + type + ")";
             font.getData().setScale(2f);
-            font.draw(batch, animalName, animalX + animalSize * 1.5f - animalName.length() * font.getScaleX() * 7.5f / 2f, animalY + animalSize / 1.5f);
+            font.draw(batch, animalName, animalX + animalSize * 1.5f - animalName.length() * font.getScaleX() * 7.5f / 2f,
+                animalY + animalSize / 1.5f);
 
             boolean hovered = mousePos.x >= animalX && mousePos.x <= animalX + animalSize * 3f &&
                 mousePos.y >= animalY && mousePos.y <= animalY + animalSize;
@@ -122,9 +127,9 @@ public class BarnOrCoopMenuBar {
                 if(Gdx.input.isButtonJustPressed(0)){
                     clicked = true;
                 }
-                String warnText = "Vote " + name;
+                String animalSound = Animal.getAnimalSound(animalData.getAnimalType());
 
-                GlyphLayout tooltipLayout = new GlyphLayout(font, warnText);
+                GlyphLayout tooltipLayout = new GlyphLayout(font, animalSound);
 
                 float tooltipWidth = tooltipLayout.width + 40;
                 float tooltipHeight = tooltipLayout.height + 30;
@@ -142,21 +147,21 @@ public class BarnOrCoopMenuBar {
 
                 font.setColor(Color.RED);
 
-                font.draw(batch, warnText, tooltipX + 20, tooltipY + tooltipHeight - 15);
+                font.draw(batch, animalSound, tooltipX + 20, tooltipY + tooltipHeight - 15);
 
                 font.setColor(Color.WHITE);
             }
             if(clicked && AppClient.getGameData().getPlayersData().size() > 1){
-                GameMessage<VoteMessage> msg = new GameMessage<>("new-vote",
-                    new VoteMessage(name));
-                AppClient.getClient().send(new Gson().toJson(msg));
-                //TODO Sepehr Kick Vote
+                //TODO
             }
 
-            x += spacing;
+            y += spacing;
         }
 
         font.getData().setScale(1f);
+
+        spacing = screenHeight * 0.1f;
+        maxScroll = Math.max(0, animalSprites.size() * spacing - screenHeight * 0.7f);
     }
 
     private String readableName(String camelCase) {
