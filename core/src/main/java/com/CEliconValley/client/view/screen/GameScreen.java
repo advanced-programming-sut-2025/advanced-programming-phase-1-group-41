@@ -68,6 +68,9 @@ public abstract class GameScreen implements Screen {
     protected Texture energyYellowTexture = new Texture(Gdx.files.internal("game/EnergyBar/yellow.png"));
     protected Texture energyRedTexture = new Texture(Gdx.files.internal("game/EnergyBar/red.png"));
     protected boolean halt = false;
+    public boolean dcmode = false;
+    public Label dcLabel;
+
 
     public void setTextForVoteLabel(String input){
         playerVoteLabel.setText(input);
@@ -121,7 +124,11 @@ public abstract class GameScreen implements Screen {
         terhowmanyLabel.setPosition(Gdx.graphics.getWidth() / 2 - terhowmanyLabel.getWidth(), stage.getHeight() * 4 / 6- terhowmanyLabel.getHeight() / 2);
         terhowmanyLabel.setVisible(false);
         stage.addActor(terhowmanyLabel);
-
+        dcLabel = new Label("oops someone got dced...", GameAssetManager.getGameAssetManager().getSkin());
+        dcLabel.setFontScale(2f);
+        dcLabel.setPosition(Gdx.graphics.getWidth() / 2 - dcLabel.getWidth(), stage.getHeight() * 5 / 6- dcLabel.getHeight() / 2);
+        dcLabel.setVisible(false);
+        stage.addActor(dcLabel);
     }
 
 
@@ -317,6 +324,29 @@ public abstract class GameScreen implements Screen {
         });
     }
 
+    public void handledc(Stage stage) {
+        Gdx.app.postRunnable(() -> {
+            dcmode = true;
+            dcLabel.setVisible(true);
+
+            overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
+                .getGameAssetManager()
+                .getBackgroundTexture("Field1.png"))));
+
+            //        overlay.setColor(0, 0, 0, 0.5f);
+            overlay.setSize(stage.getWidth(), stage.getHeight());
+            overlay.setPosition(0, 0);
+
+            overlay.getColor().a = 0;
+            overlay.addAction(Actions.fadeIn(0.5f));
+
+
+            stage.addActor(overlay);
+            overlay.toBack();
+
+        });
+    }
+
     public Hero getHero() {
         return hero;
     }
@@ -380,6 +410,14 @@ public abstract class GameScreen implements Screen {
 
     public Stage getStage() {
         return stage;
+    }
+
+    public boolean isDcmode() {
+        return dcmode;
+    }
+
+    public void setDcmode(boolean dcmode) {
+        this.dcmode = dcmode;
     }
 
     @Override

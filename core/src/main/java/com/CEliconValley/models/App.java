@@ -1,11 +1,13 @@
 package com.CEliconValley.models;
 
 import com.CEliconValley.client.GameClient;
+import com.CEliconValley.client.view.screen.Playeracts;
 import com.CEliconValley.common.AppData;
 import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.OnlineData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.GameMessage;
+import com.CEliconValley.database.UserDB;
 import com.CEliconValley.server.GameServer;
 import com.CEliconValley.server.handlers.LobbyHandler;
 import com.google.gson.Gson;
@@ -29,6 +31,8 @@ public class App {
     private static Game game;
     private static GameServer server;
     private static GameClient client;
+    private static Set<DCguy> dcguys = new HashSet<>();
+    public static long dcTimestamp = System.currentTimeMillis();
     private static Thread backgroundWorker = new Thread(() -> {
         while (true) {
             try {
@@ -50,6 +54,25 @@ public class App {
                             attempts++;
                         }
                         System.out.println("after size "+lobby.getPlayerNames().size());
+                    }
+                }
+
+
+                if(!dcguys.isEmpty() && App.getGame() != null){
+                    System.out.println("not empty "+ (System.currentTimeMillis() - dcTimestamp) / 1000);
+                    if(System.currentTimeMillis() - dcTimestamp > 60_000 * 2){
+                        // handle save and quit for all
+                        UserDB.saveGame(App.getGame());
+                        GameMessage<String> exiter = new GameMessage<>("game-command","exit-game");
+                        ArrayList<Player> senders = new ArrayList<>();
+                        for (Player player : App.getGame().getPlayers()) {
+                            if(containsDC(player.getUser()) == null){
+                                senders.add(player);
+                            }
+                        }
+                        App.getServer().sendToGroupByPlayers(senders, new Gson().toJson(exiter));
+                        dcguys.clear();
+                        App.setGame(null);
                     }
                 }
                 Thread.sleep(5000);
@@ -192,6 +215,19 @@ public class App {
         for (GameData gd : App.gamesdata) {
             if(gd.get_id().equals(id)) {
                 return gd;
+            }
+        }
+        return null;
+    }
+
+    public static Set<DCguy> getDcguys() {
+        return dcguys;
+    }
+
+    public static DCguy containsDC(User user){
+        for (DCguy dcguy : dcguys) {
+            if(dcguy.getUser().getUsername().equals(user.getUsername())) {
+                return dcguy;
             }
         }
         return null;

@@ -123,7 +123,11 @@ public class Playeracts {
             return new Result(false, "cheat");
 
         }
-
+        if(screen.dcmode){
+            stage.act(delta);
+            stage.draw();
+            return new Result(false, "cheat");
+        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             screen.handleCheatCode(stage);
             return new Result(true, "cheat");

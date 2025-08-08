@@ -147,6 +147,7 @@ public class ClientGameHandler {
             }
             case "game-command" -> {
                 GameCommand gamecommand = gson.fromJson(body, GameCommand.class);
+                System.out.println("received a command "+gamecommand.command);
                 if(gamecommand.command.equals("update-vote")){
                     if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof GameScreen screen){
                         screen.howManyVotedLabel.setText("Vote: "+gamecommand.playerName+" / "+AppClient.getGameData().getPlayersData().size());
@@ -154,6 +155,25 @@ public class ClientGameHandler {
                 }else if(gamecommand.command.equals("update-ter")){
                     if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof GameScreen screen){
                         screen.terhowmanyLabel.setText("Vote: "+gamecommand.playerName+" / "+AppClient.getGameData().getPlayersData().size());
+                    }
+                }else if(gamecommand.command.equals("dc-game")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof GameScreen screen){
+                        screen.handledc(screen.getStage());
+                    }
+                }else if(gamecommand.command.equals("resume-game")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen() instanceof GameScreen screen){
+                        screen.setDcmode(false);
+                        screen.dcLabel.setVisible(false);
+                        screen.overlay.addAction(Actions.sequence(
+                            Actions.fadeOut(0.5f),
+                            Actions.run(() -> screen.overlay.remove())
+                        ));
+
+                        if (screen.overlay != null) {
+                            screen.overlay.remove();
+                            screen.overlay = null;
+                        }
                     }
                 }
             }

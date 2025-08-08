@@ -116,6 +116,7 @@ public class GameHandler {
                 UserDB.saveGame(App.getGame());
                 GameMessage<String> exiter = new GameMessage<>("game-command","exit-game");
                 App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(exiter));
+                App.setGame(null);
             }
             case "load-game" -> {
                 GameMessage<String> msg = gson.fromJson(message, new TypeToken<GameMessage<String>>(){}.getType());
