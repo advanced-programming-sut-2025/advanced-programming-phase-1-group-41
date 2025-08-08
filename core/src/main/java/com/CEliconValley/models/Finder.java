@@ -156,6 +156,7 @@ public class Finder {
         }
         return null;
     }
+
     public static Cell findCellByCoordinatesVillage(int x, int y, Village village){
         for(Cell cell : village.getCells()){
             if(cell.getX() == x && cell.getY() == y){

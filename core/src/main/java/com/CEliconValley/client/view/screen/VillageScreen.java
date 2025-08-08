@@ -91,9 +91,9 @@ public class VillageScreen extends GameScreen implements Screen {
         villageSprite = new Sprite(villageTexture);
         villageSprite.setSize(CELL_SIZE, CELL_SIZE);
         camera = new OrthographicCamera();
-        rain = new Rain();
-        snow = new Snow();
         thunder = new Thunder();
+        snow = new Snow();
+        rain = new Rain(thunder);
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
 
 
@@ -191,13 +191,13 @@ public class VillageScreen extends GameScreen implements Screen {
                 }
             }
         }
-
-        for (CellData cellData : visibleCells) {
+        visibleCells.sort(Comparator.comparingInt(CellData::getY).reversed());
+        for (CellData cellData : visibleCells){
             groundBorderSpawner.renderGround(batch, cellData, villageMap.villageData);
-//            buildingSpawner.renderBuildings(batch, cellData, villageMap.villageData);
-//            rockSpawner.renderRocks(batch, cellData, passiveStateTime);
-//            cropSpawner.renderCrops(batch, cellData, villageMap.villageData);
             waterSpawner.renderWater(batch, cellData, passiveStateTime, villageMap.villageData);
+        }
+        for (CellData cellData : visibleCells) {
+
 //            rockSpawner.renderBreakingEffectForCell(batch, cellData, delta);
 //            treeSpawner.renderTrees(batch, cellData, passiveStateTime);
 
@@ -211,10 +211,12 @@ public class VillageScreen extends GameScreen implements Screen {
                 }
                 batch.draw(frame, hero.renderX - CELL_SIZE / 2f, hero.renderY - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
             }
+            buildingSpawner.renderBuildings(batch, cellData, villageMap.villageData);
         }
 
         if (AppClient.getGameData().getWeatherType().equals(WeatherType.Snowy)) snow.render(batch, camera);
-        if (AppClient.getGameData().getWeatherType().equals(WeatherType.Rainy)) rain.render(batch, camera);
+        if (AppClient.getGameData().getWeatherType().equals(WeatherType.Rainy)) rain.render(batch, camera,200,false);
+        if (AppClient.getGameData().getWeatherType().equals(WeatherType.Stormy)) rain.render(batch, camera,500,true);
         thunder.render(batch, camera);
 
         if (isMenuOpen) menuBar.render(batch, camera);

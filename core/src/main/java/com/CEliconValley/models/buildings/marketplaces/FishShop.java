@@ -30,6 +30,8 @@ public class FishShop extends Marketplace implements Building {
     }
     private int x;
     private int y;
+    private int anchorX;
+    private int anchorY;
 
     public FishShop() {
     }
@@ -53,12 +55,15 @@ public class FishShop extends Marketplace implements Building {
         this.y = y;
         int xWall;
         int yWall;
+        anchorY=y+1;
+        anchorX=x+4;
         yWall = y;
         while(yWall<=y+5) {
             for (int i = x; i <= x + 5; i++) {
                 Cell cell = Finder.findCellByCoordinatesVillage(i, yWall,village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
+
             }
             yWall+=5;
         }
@@ -126,11 +131,11 @@ public class FishShop extends Marketplace implements Building {
 
     @Override
     public int getAnchorX() {
-        return 0;
+        return anchorX;
     }
 
     @Override
     public int getAnchorY() {
-        return 0;
+        return anchorY;
     }
 }

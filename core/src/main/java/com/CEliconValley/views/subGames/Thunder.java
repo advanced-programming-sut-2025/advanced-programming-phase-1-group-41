@@ -79,6 +79,7 @@ public class Thunder {
                 camera.viewportWidth, camera.viewportHeight);
             batch.setColor(1f, 1f, 1f, 1f);
 
+
         }
     }
 

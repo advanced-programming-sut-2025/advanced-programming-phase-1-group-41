@@ -17,23 +17,28 @@ public class Rain {
     private final Array<RainDrop> drops = new Array<>();
     private long lastSpawnTime = 0;
     private final float spawnInterval = 0.005f;
+    Thunder thunder;
+    private long lastThunderTime = 0;
+    private float nextThunderInterval = getRandomThunderInterval();
+    private float getRandomThunderInterval() {
+        return MathUtils.random(10f, 20f);
+    }
 
     private final TextureRegion[][] rainFrames;
 
-    public Rain() {
-
+    public Rain(Thunder thunder) {
+        this.thunder = thunder;
         this.rainTexture = new Texture("game/general/tiles/rain.png");
-
         this.rainFrames = TextureRegion.split(rainTexture, 8, 16);
     }
 
-    public void update(OrthographicCamera camera, float screenWidth, float screenHeight) {
+    public void update(OrthographicCamera camera, float screenWidth, float screenHeight,int rainForce,boolean withThunder) {
         float deltaTime = Gdx.graphics.getDeltaTime();
         float intervalSec = spawnInterval;
         long now = TimeUtils.nanoTime();
 
 
-        while ((now - lastSpawnTime) > intervalSec * 1_000_000_000L && drops.size <200) {
+        while ((now - lastSpawnTime) > intervalSec * 1_000_000_000L && drops.size <rainForce) {
             spawnDrop(camera, screenWidth, screenHeight);
             lastSpawnTime += (long)(intervalSec * 1_000_000_000L);
         }
@@ -45,11 +50,16 @@ public class Rain {
                 drops.removeIndex(i);
             }
         }
+        if (withThunder&&(now - lastThunderTime) > nextThunderInterval * 1_000_000_000L) {
+            thunder.strikeAt(MathUtils.random(0,60),MathUtils.random(0,75));
+            lastThunderTime = now;
+            nextThunderInterval = getRandomThunderInterval();
+        }
     }
 
 
-    public void render(SpriteBatch batch,OrthographicCamera camera) {
-        update(camera,camera.position.x+camera.viewportWidth/2,camera.position.y+camera.viewportHeight/2);
+    public void render(SpriteBatch batch,OrthographicCamera camera,int rainForce,boolean withThunder) {
+        update(camera,camera.position.x+camera.viewportWidth/2,camera.position.y+camera.viewportHeight/2,rainForce,withThunder);
         for (RainDrop drop : drops) {
             drop.render(batch);
         }

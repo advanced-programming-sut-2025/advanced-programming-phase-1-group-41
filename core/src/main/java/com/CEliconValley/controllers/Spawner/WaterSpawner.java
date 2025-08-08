@@ -22,6 +22,7 @@ public class WaterSpawner {
     Texture waterTexture = new Texture("game/general/tiles/water.png");
     Texture bridgeTexture = new Texture("game/general/tiles/bridge.png");
     Texture edgeBridgeTexture = new Texture("game/general/tiles/edgeBridge.png");
+    Texture topBridgeTexture = new Texture("game/general/tiles/topBridge.png");
     Texture coastTexture = new Texture("game/general/tiles/coast_Spring.png");
     Texture cornerTexture = new Texture("game/general/tiles/waterCorner_Spring.png");
     private Animation<TextureRegion> waterAnimation;
@@ -309,10 +310,14 @@ public class WaterSpawner {
             if(tile instanceof Bridge bridge) {
                 if(bridge.getType()==-1){
                     CellData cd =Finder.findCellByCoordinatesVillage(cellData.getX(), cellData.getY()-1, villageData);
-                    if(cd!=null&&cd.getObjectName().equals(new Bridge().getName())) {
-                        bridge.setType(1);
-                    }else if(cd!=null){
+                    CellData cdUp=Finder.findCellByCoordinatesVillage(cellData.getX(), cellData.getY()+1, villageData);
+                    if(cd!=null&&!cd.getObjectName().equals(new Bridge().getName())) {
                         bridge.setType(2);
+                    }else if(cdUp==null||cdUp!=null&&!cdUp.getObjectName().equals(new Bridge().getName())) {
+                        bridge.setType(3);
+                    }
+                        else{
+                        bridge.setType(1);
                     }
                 }
                 if(bridge.getType()==1){
@@ -321,6 +326,8 @@ public class WaterSpawner {
                 }else if(bridge.getType()==2){
 
                     batch.draw(edgeBridgeTexture, cellData.getX()*CELL_SIZE, cellData.getY()*CELL_SIZE-12, CELL_SIZE, CELL_SIZE+12);
+                }else if(bridge.getType()==3){
+                    batch.draw(topBridgeTexture, cellData.getX()*CELL_SIZE, cellData.getY()*CELL_SIZE, CELL_SIZE, CELL_SIZE);
                 }
             }
 

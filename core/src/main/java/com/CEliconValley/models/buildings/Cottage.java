@@ -41,7 +41,7 @@ public class Cottage implements Building {
         int yWall;
         yWall = y;
         ArrayList<Cell> startPoints = new ArrayList<>();
-        while(yWall <= y + 5) {
+        while(yWall <= y + 3) {
             for (int i = x; i <= x + 5; i++) {
                 Cell cell = Finder.findCellByCoordinates(i, yWall, farm);
                 assert cell != null;
@@ -52,11 +52,11 @@ public class Cottage implements Building {
                     farm.setStartPoints(startPoints);
                 }
             }
-            yWall+=5;
+            yWall+=3;
         }
         xWall = x;
         while(xWall<=x+5) {
-            for (int j = y + 1; j <= y + 5; j++) {
+            for (int j = y + 1; j <= y + 3; j++) {
                 Cell cell = Finder.findCellByCoordinates(xWall, j, farm);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
@@ -66,7 +66,7 @@ public class Cottage implements Building {
         x++;
         y++;
         int xLength=4;
-        int yLength=4;
+        int yLength=2;
         for(int i = x; i < xLength + x; i++) {
             for(int j = y; j < yLength + y; j++) {
                 Cell cell=Finder.findCellByCoordinates(i, j, farm);

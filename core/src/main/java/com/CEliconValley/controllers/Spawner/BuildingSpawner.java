@@ -5,20 +5,19 @@
 
 package com.CEliconValley.controllers.Spawner;
 
-import com.CEliconValley.common.BarnData;
-import com.CEliconValley.common.CellData;
-import com.CEliconValley.common.CoopData;
-import com.CEliconValley.common.FarmData;
+import com.CEliconValley.common.*;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.buildings.Cottage;
 import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
 import com.CEliconValley.models.buildings.GreenHouse.WaterTank;
+import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.buildings.animalContainer.Barn;
 import com.CEliconValley.models.buildings.animalContainer.BarnType;
 import com.CEliconValley.models.buildings.animalContainer.Coop;
 import com.CEliconValley.models.buildings.animalContainer.CoopType;
+import com.CEliconValley.models.buildings.marketplaces.FishShop;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.client.view.screen.FarmScreen;
 import com.badlogic.gdx.graphics.Texture;
@@ -38,6 +37,7 @@ public class BuildingSpawner {
     private final Texture coopTexture = new Texture("game/Buildings/Coop.png");
     private final Texture bigCoopTexture = new Texture("game/Buildings/Big_Coop.png");
     private final Texture deluxeCoopTexture = new Texture("game/Buildings/Deluxe_Coop.png");
+    private final Texture fishShopTexture = new Texture("game/Buildings/FishShop.png");
 
 
     public BuildingSpawner() {
@@ -154,4 +154,42 @@ public class BuildingSpawner {
 
         return false;
     }
+    public boolean renderBuildings(SpriteBatch batch, CellData cellData, VillageData villageData) {
+        Cell cell = cellData.extractData();
+        float x = (float)(cell.getX() * CELL_SIZE);
+        float y = (float)(cell.getY() * CELL_SIZE);
+        if (cell.getObjectMap() instanceof Building) {
+        }
+
+//        Cell tmpCell = Finder.findCellByCoordinates(cell.getX() - 1, cell.getY() + 1, this.farm);
+        CellData tempcd = Finder.getcdByVillageData(cell.getX() - 1, cell.getY() + 1, villageData);
+        if(tempcd == null) return false;
+        Cell tmpCell = tempcd.extractData();
+        if(tmpCell.getObjectMap() instanceof FishShop fishShop && fishShop.getAnchorX()==tmpCell.getX() && fishShop.getAnchorY()==tmpCell.getY()) {
+            int frameWidth = this.cottageTexture.getWidth();
+            int frameHeight = this.cottageTexture.getHeight() / 4;
+            TextureRegion cottageFrame = new TextureRegion(this.cottageTexture, 0, 0, frameWidth, frameHeight);
+            batch.draw(cottageFrame, x - CELL_SIZE * 5, y, CELL_SIZE * 6, CELL_SIZE * 6);
+            return true;
+//        } else if(cellData.getX() == villageData.getGreenhouseX() + Greenhouse.getGreenhouseLength() && cellData.getY() == villageData.getGreenhouseY()) {
+//            int frameWidth = this.greenhouseTexture.getWidth();
+//            int frameHeight = this.greenhouseTexture.getHeight();
+//            TextureRegion greenHouseFrame = new TextureRegion(this.greenhouseTexture, 0, 0, frameWidth, frameHeight);
+//            batch.draw(greenHouseFrame, x - CELL_SIZE*6, y, CELL_SIZE*7, CELL_SIZE*8);
+//            return true;
+////
+//        }else if (tmpCell != null && tmpCell.getObjectMap() instanceof WaterTank) {
+//            WaterTank waterTank = (WaterTank)tmpCell.getObjectMap();
+//            int frameWidth = this.waterTankTexture.getWidth();
+//            int frameHeight = this.waterTankTexture.getHeight();
+//            TextureRegion waterTankFrame = new TextureRegion(this.waterTankTexture, 0, 0, frameWidth, frameHeight);
+//            batch.draw(waterTankFrame, x, y, CELL_SIZE, CELL_SIZE);
+//            return true;
+//        }
+        }
+
+
+        return false;
+    }
 }
+

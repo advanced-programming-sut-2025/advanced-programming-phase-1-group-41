@@ -93,6 +93,7 @@ public class WeatherController {
         return new Result(true,"Thundered " + cell.getObjectMap().getName() + " at " + x + ", " + y + " successfully!.");
     }
 
+
     public Result cheatChangeTmrwWeather(Matcher matcher){
         String raw = matcher.group(1).trim();
         if(raw.isEmpty()){

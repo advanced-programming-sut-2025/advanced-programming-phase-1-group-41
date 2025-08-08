@@ -122,9 +122,9 @@ public class FarmScreen extends GameScreen implements Screen {
         farmSprite = new Sprite(farmTexture);
         farmSprite.setSize(CELL_SIZE, CELL_SIZE);
         camera = new OrthographicCamera();
-        rain = new Rain();
-        snow = new Snow();
         thunder = new Thunder();
+        snow = new Snow();
+        rain = new Rain(thunder);
 //        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
 
@@ -262,6 +262,9 @@ public class FarmScreen extends GameScreen implements Screen {
         }
 
         visibleCells.sort(Comparator.comparingInt(CellData::getY).reversed());
+        for (CellData cellData : visibleCells){
+            groundBorderSpawner.renderGround(batch, cellData, farmMap.farmData);
+        }
         for (CellData cellData : visibleCells) {
             Cell cell = cellData.extractData();
 
@@ -271,7 +274,7 @@ public class FarmScreen extends GameScreen implements Screen {
 //                || (hero.playerX.get() == cellData.getX() && hero.playerY.get() == cellData.getY() - 1))) {
 //            }
 
-            groundBorderSpawner.renderGround(batch, cellData, farmMap.farmData);
+
             buildingSpawner.renderBuildings(batch, cellData, farmMap.farmData);
             rockSpawner.renderRocks(batch, cellData, passiveStateTime);
             cropSpawner.renderCrops(batch, cellData, farmMap.farmData);
@@ -304,7 +307,9 @@ public class FarmScreen extends GameScreen implements Screen {
             snow.render(batch, camera);
         }
         if (AppClient.getGameData().getWeatherType().equals(WeatherType.Rainy)) {
-            rain.render(batch, camera);
+            rain.render(batch, camera,200,false);
+        }if (AppClient.getGameData().getWeatherType().equals(WeatherType.Stormy)) {
+            rain.render(batch, camera,500,true);
         }
         batch.setColor(Color.WHITE);
         thunder.render(batch, camera);
@@ -432,6 +437,12 @@ public class FarmScreen extends GameScreen implements Screen {
     private Color ApplyFog(Color color) {
         if (AppClient.getGameData().getWeatherType().equals(WeatherType.Rainy)) {
             return new Color(color.r * 0.6f, color.g * 0.6f, color.b * 0.6f, color.a);
+        }
+        if (AppClient.getGameData().getWeatherType().equals(WeatherType.Snowy)) {
+            return new Color(color.r * 0.8f, color.g * 0.8f, color.b * 0.8f, color.a);
+        }
+        if (AppClient.getGameData().getWeatherType().equals(WeatherType.Stormy)) {
+            return new Color(color.r * 0.4f, color.g * 0.4f, color.b * 0.4f, color.a);
         }
         return color;
     }
