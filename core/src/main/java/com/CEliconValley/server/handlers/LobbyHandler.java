@@ -52,33 +52,37 @@ public class LobbyHandler {
                 GameMessage<LeaveLobbyCred> msg = gson.fromJson(message, new TypeToken<GameMessage<LeaveLobbyCred>>() {}.getType());
                 LeaveLobbyCred cred = msg.body;
                 Lobby lobby = Finder.getLobbyById(cred.id);
-                if(lobby == null) {
-                    GameMessage<ErrorMessage> err = new GameMessage<>("leave-lobby",
-                        new ErrorMessage("leave-lobby", "404"));
-                    conn.send(gson.toJson(err));
-                    return;
+                handleLeaveLobby(lobby, conn, gson, cred.username);
+            }
+        }
+    }
+
+    public static void handleLeaveLobby(Lobby lobby, WebSocket conn, Gson gson, String username){
+        if(lobby == null) {
+            GameMessage<ErrorMessage> err = new GameMessage<>("leave-lobby",
+                new ErrorMessage("leave-lobby", "404"));
+            conn.send(gson.toJson(err));
+            return;
+        }
+        Result result = lobby.removePlayer(username);
+        System.out.println(result.success()+" result " + result);
+        if(result.success()){
+            GameMessage<String> response = new GameMessage<>("leave-lobby",";)");
+            conn.send(gson.toJson(response));
+        }
+        else if(!result.success()){
+            if(result.message().equals("empty")) {
+                GameMessage<String> response = new GameMessage<>("leave-lobby", ";)");
+                conn.send(gson.toJson(response));
+                System.out.println("sent "+gson.toJson(response));
+                try {
+                    Thread.sleep(500);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                Result result = lobby.removePlayer(cred.username);
-                System.out.println(result.success()+" result " + result);
-                if(result.success()){
-                    GameMessage<String> response = new GameMessage<>("leave-lobby",";)");
-                    conn.send(gson.toJson(response));
-                }
-                else if(!result.success()){
-                    if(result.message().equals("empty")) {
-                        GameMessage<String> response = new GameMessage<>("leave-lobby", ";)");
-                        conn.send(gson.toJson(response));
-                        System.out.println("sent "+gson.toJson(response));
-                        try {
-                            Thread.sleep(500);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        App.lobbies.remove(lobby);
-                        GameMessage<Lobby> response2 = new GameMessage<>("delete-lobby", lobby);
-                        App.getServer().broadcast(gson.toJson(response2));
-                    }
-                }
+                App.lobbies.remove(lobby);
+                GameMessage<Lobby> response2 = new GameMessage<>("delete-lobby", lobby);
+                App.getServer().broadcast(gson.toJson(response2));
             }
         }
     }

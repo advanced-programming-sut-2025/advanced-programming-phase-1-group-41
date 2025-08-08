@@ -1,22 +1,21 @@
 package com.CEliconValley.models;
 
 import com.CEliconValley.client.GameClient;
-import com.CEliconValley.client.view.LobbyScreen;
 import com.CEliconValley.common.AppData;
 import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.OnlineData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.server.GameServer;
+import com.CEliconValley.server.handlers.LobbyHandler;
 import com.google.gson.Gson;
 import org.bson.types.ObjectId;
+import org.java_websocket.WebSocket;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class App {
     public static int MaxLength = 75;
@@ -30,10 +29,45 @@ public class App {
     private static Game game;
     private static GameServer server;
     private static GameClient client;
+    private static Thread backgroundWorker = new Thread(() -> {
+        while (true) {
+            try {
+                for (Lobby lobby : lobbies) {
+                    if(System.currentTimeMillis() - lobby.lastTimeJoined > 60_000 * 5){
+                        System.out.println(lobby.getLobbyName()+" is going to be deleted?");
+                        System.out.println("current size "+lobby.getPlayerNames().size());
+                        int maxAttempts = lobby.getPlayerNames().size();
+                        int attempts = 0;
+                        while(lobby.getPlayerNames().size() > 0 && attempts < maxAttempts){
+                            String playerName = lobby.getPlayerNames().iterator().next();
+                            AtomicReference<WebSocket> conn = new AtomicReference<>();
+                            App.getServer().getOnlineConnections().forEach((k,v) -> {
+                                if(v.getUsername().equals(playerName)){
+                                    conn.set(k);
+                                }
+                            });
+                            LobbyHandler.handleLeaveLobby(lobby, conn.get(), new Gson(), playerName);
+                            attempts++;
+                        }
+                        System.out.println("after size "+lobby.getPlayerNames().size());
+                    }
+                }
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                System.out.println("Thread interrupted, shutting down.");
+                break;
+            }
+        }
+    });
+
+    static {
+        backgroundWorker.setDaemon(true);
+    }
 
     public static void setupServer(){
         server = new GameServer();
         server.start();
+        backgroundWorker.start();
         System.out.println("GameServer started on port " + GameServer.PORT);
     }
     public static void setupClient(){
