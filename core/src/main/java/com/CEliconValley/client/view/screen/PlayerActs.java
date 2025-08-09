@@ -38,6 +38,12 @@ public class PlayerActs {
     public static Result handleInput(Hero hero, Location location, Stage stage, float delta) {
         screen.updateEnergy();
 
+        if(screen instanceof CottageScreen && ((CottageScreen) screen).isRefrigeratorOpen){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+                ((CottageScreen) screen).isRefrigeratorOpen = !((CottageScreen) screen).isRefrigeratorOpen;
+            }
+            return new Result(true, "refrigerator opened");
+        }
 
         if (screen.cheatMode) {
             stage.act(delta);
@@ -173,9 +179,13 @@ public class PlayerActs {
             screen.handleScoreboard(screen.scoreboardStage);
             return new Result(true, "scoreboard");
         }
-
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && screen instanceof CottageScreen && !screen.isMenuOpen){
+            ((CottageScreen) screen).isRefrigeratorOpen = !((CottageScreen) screen).isRefrigeratorOpen;
+            return new Result(true, "refrigerator");
+        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
             screen.isMenuOpen = !screen.isMenuOpen;
+            return new Result(true, "menu");
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {
@@ -196,7 +206,7 @@ public class PlayerActs {
             if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
                 screen.menuBar.scrollDown();
             }
-        } else if((screen instanceof FarmScreen) || screen instanceof CottageScreen){ //TODO Just For Now The Condition!!!
+        }else if((screen instanceof FarmScreen) || screen instanceof CottageScreen){ //TODO Just For Now The Condition!!!
             if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
                 screen.inventoryRenderer.shiftRight();
             }

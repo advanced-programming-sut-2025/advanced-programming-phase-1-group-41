@@ -24,6 +24,10 @@ public class CottageScreen extends GameScreen implements Screen {
     private final CottageMap cottageMap;
     private final Player player;
 
+
+    protected RefrigeratorBar refrigeratorBar = new RefrigeratorBar(this);
+    public boolean isRefrigeratorOpen = false;
+
     int[][] directions = {
         {0, 1},
         {1, 0},
@@ -89,7 +93,9 @@ public class CottageScreen extends GameScreen implements Screen {
         if (isMenuOpen) {
 //                menuBar.render(batch, menuX, menuY, menuWidth, menuHeight);
             menuBar.render(batch, camera);
-        } else {
+        } else if(isRefrigeratorOpen){
+            refrigeratorBar.render(batch, camera);
+        }else {
             inventoryRenderer.render(batch, camera);
         }
         camera.position.set(hero.renderX + CELL_SIZE / 2f, hero.renderY + CELL_SIZE / 2f, 0);
