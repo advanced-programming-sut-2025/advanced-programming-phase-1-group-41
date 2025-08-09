@@ -223,6 +223,9 @@ public abstract class GameScreen implements Screen {
 
     public void updateScoreboard(){
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+        if(scoreboardInfoTable == null){
+            return;
+        }
         scoreboardInfoTable.clear();
         scoreboardInfoTable.add(sortButtonsTable).colspan(4).padBottom(20).row();
 

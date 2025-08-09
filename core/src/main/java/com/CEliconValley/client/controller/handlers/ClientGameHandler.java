@@ -87,7 +87,7 @@ public class ClientGameHandler {
                     AppClient.setGameData(gamedata);
                     if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
                         .getScreen() instanceof GameScreen gs){
-//                        gs.updateScoreboard();
+                        gs.updateScoreboard();
                     }
                     if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof FarmScreen fs){
                         if(fs.isGameFinished) return;
