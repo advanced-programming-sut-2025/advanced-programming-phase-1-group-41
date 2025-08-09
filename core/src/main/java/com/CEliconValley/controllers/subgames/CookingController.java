@@ -38,12 +38,12 @@ public class CookingController {
         return false;
     }
 
-    private Result pickFromRef(Item item) {
+    private Result pickFromRef(Item item, Player player, Farm farm) {
         Slot slot = refrigerator.getSlotByItem(item);
         if(slot == null){
             return new Result(false, "Slot not found");
         }
-        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
+        Inventory inventory = player.getInventory();
         if(inventory.getEmptySlots() <= 0){
             return new Result(false, "Inventory is full");
         }
@@ -52,8 +52,8 @@ public class CookingController {
         return new Result(true, "removed from ref :D");
     }
 
-    private Result putInRef(Item item){
-        Slot slot = App.getGame().getCurrentPlayer().getInventory().getSlotByItem(item);
+    private Result putInRef(Item item, Player player, Farm farm) {
+        Slot slot = player.getInventory().getSlotByItem(item);
         int q = slot.getQuantity();
         if(slot==null){
             return new Result(false,"Slot not found");
@@ -62,12 +62,14 @@ public class CookingController {
             return new Result(false,"Refrigerator is full");
         }
         refrigerator.addToRef(slot.getItem(), slot.getQuantity());
-        App.getGame().getCurrentPlayer().getInventory().removeFromInventory(slot.getItem(), slot.getQuantity());
+        player.getInventory().removeFromInventory(slot.getItem(), slot.getQuantity());
 
         return new Result(true,slot.getItem().getName()+" "+q);
     }
 
-    public Result cookingRef(Matcher matcher) {
+    public Result cookingRef(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
 //        if(!inHome()){
 //            return new Result(false, "You're not in a home");
 //        }
@@ -78,9 +80,9 @@ public class CookingController {
             return new Result(false,"Item not found");
         }
         if(pickput.equals("put")){
-            return this.putInRef(item);
+            return this.putInRef(item, player, farm);
         }else{
-            return this.pickFromRef(item);
+            return this.pickFromRef(item, player, farm);
         }
     }
     public Result showRef(Matcher matcher){

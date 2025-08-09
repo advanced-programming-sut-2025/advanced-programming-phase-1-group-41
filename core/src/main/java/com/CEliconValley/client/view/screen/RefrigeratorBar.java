@@ -7,11 +7,11 @@ import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.controllers.ItemManager;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Player;
+import com.CEliconValley.models.Result;
 import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.buildings.Refrigerator;
-import com.CEliconValley.models.items.Inventory;
-import com.CEliconValley.models.items.Item;
-import com.CEliconValley.models.items.Slot;
+import com.CEliconValley.models.foragings.FruitType;
+import com.CEliconValley.models.items.*;
 import com.CEliconValley.models.tools.Tool;
 import com.CEliconValley.models.ui.CustomColors;
 import com.CEliconValley.models.ui.GameAssetManager;
@@ -149,7 +149,13 @@ public class RefrigeratorBar {
 //                                    );
 //                                    AppClient.getClient().send(new Gson().toJson(msg));
 //                                }
-                                //TODO Select Food
+                                if(isFood(item)) {
+                                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                        new GameCommand("cooking refrigerator pick " + item.getName(),
+                                            AppClient.getUserData().getUsername())
+                                    );
+                                    AppClient.getClient().send(new Gson().toJson(msg));
+                                }
                             }
 
 
@@ -252,8 +258,12 @@ public class RefrigeratorBar {
                         if (mousePos.x >= x && mousePos.x <= x + slotSize &&
                             mousePos.y >= y && mousePos.y <= y + slotSize) {
                             if (Gdx.input.isButtonJustPressed(0)) {
-                                if (item instanceof Tool) {
-                                    // TODO Select Inventory
+                                if(isFood(item)) {
+                                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                        new GameCommand("cooking refrigerator put " + item.getName(),
+                                            AppClient.getUserData().getUsername())
+                                    );
+                                    AppClient.getClient().send(new Gson().toJson(msg));
                                 }
                             }
 
@@ -307,5 +317,25 @@ public class RefrigeratorBar {
     public void scrollUp() {
         if (selectedIndex < foodsData.size() - visibleAnimalsCount)
             selectedIndex++;
+    }
+
+    public boolean isFood(Item item){
+        Food food = Food.parseFood(item.getName());
+        FruitType fruitType = FruitType.parseFruitType(item.getName());
+        if(item instanceof CraftableItem ci){
+            if(!ci.isEatable()){
+                return false;
+            }
+        }else if(food == null && fruitType == null && !(item instanceof Eatable)){
+            return false;
+        }
+        if(food != null){
+            return true;
+        }else if(fruitType != null){
+            return true;
+        }else if(item instanceof CraftableItem ci){
+            return true;
+        }
+        return false;
     }
 }

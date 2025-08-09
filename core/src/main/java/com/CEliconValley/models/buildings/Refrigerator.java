@@ -22,14 +22,14 @@ public class Refrigerator implements ObjectMap {
 
     public Refrigerator(ArrayList<Slot> slots) {
         this.slots = slots;
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 20; i++) {
             this.slots.add(new Slot(null, 0));
         }
     }
 
     public Refrigerator() {
         this.slots = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 20; i++) {
             this.slots.add(new Slot(null,0));
         }
         addToRef(Food.parseFood("FriedEgg"), 2);

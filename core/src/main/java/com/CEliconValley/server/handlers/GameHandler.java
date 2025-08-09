@@ -258,7 +258,7 @@ public class GameHandler {
 
 
         gameView.check(command.command, command.playerName);
-        gameView.check("print map", command.playerName);
+//        gameView.check("print map", command.playerName);
 //        System.out.println("printing inventory: ");
 //        gameView.check("inventory show", command.playerName);
 

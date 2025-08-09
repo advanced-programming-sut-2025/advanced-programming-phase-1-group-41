@@ -166,8 +166,10 @@ public abstract class GameScreen implements Screen {
                 chatTable.add(label).width(380).right().padBottom(5).row();
             } else{
                 Label label = new Label(message.getSender() + ": " + message.getMessage(), GameAssetManager.getGameAssetManager().getSkin());
-                label.setWrap(true);
                 label.setAlignment(Align.left);
+                if(label.getText().toString().matches(".+@"+AppClient.getUserData().getUsername()+".+")){
+                    label.setColor(Color.BLUE);
+                }
                 chatTable.add(label).width(380).left().padBottom(5).row();
             }
         }
