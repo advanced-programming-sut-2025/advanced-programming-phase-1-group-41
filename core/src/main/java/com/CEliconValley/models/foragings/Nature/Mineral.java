@@ -49,7 +49,10 @@ public class Mineral implements Nature, Obstacle {
         int index = this.mineralType.ordinal();
         int row = index / 5;
         int col = index % 5;
-        return 7000 + row * 100 + col;
+        if(mineralType==MineralType.CopperOre){
+            System.out.println(70000 + row * 100 + col);
+        }
+        return 70000 + row * 100 + col;
     }
 
 }
