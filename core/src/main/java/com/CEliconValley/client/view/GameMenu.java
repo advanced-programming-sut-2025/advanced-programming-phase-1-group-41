@@ -52,7 +52,7 @@ public class GameMenu implements Screen {
 
             }else if(FarmingView.check(input)){
 
-            }else if(CookingView.check(input)){
+            }else if(CookingView.check(input, playerName)){
 
             }else if(AnimalView.check(input, playerName)){
 

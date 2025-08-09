@@ -503,7 +503,7 @@ public class MenuBar {
             float height = width ;
 
             CookingRecipe recipe = food.getRecipe();
-            boolean unlocked = recipe != null && player.getCookingRecipes().contains(recipe);
+            boolean unlocked = recipe != null && Finder.getpd().getCookingRecipes().contains(recipe);
 
             if (!unlocked) {
                 batch.setColor(0.5f, 0.5f, 0.5f, 0.5f);
@@ -518,17 +518,20 @@ public class MenuBar {
             if (mouseOver && unlocked) {
                 drawCookingTip(batch, food, drawX, drawY);
 
-                if (Gdx.input.justTouched()) {
-                    if (hasAllItems(recipe)) {
-                        Map<Item, Integer> requiredItems = recipe.neededItems;
-                        Inventory inventory = player.getInventory();
-
-                        for (Map.Entry<Item, Integer> entry : requiredItems.entrySet()) {
-                            inventory.removeFromInventory(entry.getKey(), entry.getValue());
-                        }
-
-                        inventory.addToInventory(food, 1);
-                    }
+                if (Gdx.input.isButtonJustPressed(0)) {
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand("cooking prepare "+food, AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
+//                    if (hasAllItems(recipe)) {
+//                        Map<Item, Integer> requiredItems = recipe.neededItems;
+//                        Inventory inventory = player.getInventory();
+//
+//                        for (Map.Entry<Item, Integer> entry : requiredItems.entrySet()) {
+//                            inventory.removeFromInventory(entry.getKey(), entry.getValue());
+//                        }
+//
+//                        inventory.addToInventory(food, 1);
+//                    }
                 }
             }
 
@@ -841,7 +844,7 @@ public class MenuBar {
                 batch.draw(icon, x + padding, itemY, iconSize, iconSize);
             }
 
-            if (player.getInventory().doHave(item, amount)) {
+            if (hasInInventory(item, amount)) {
                 font.setColor(0f, 0.5f, 1f, 1f);
             } else {
                 font.setColor(1f, 0f, 0f, 1f);
