@@ -12,6 +12,7 @@ import com.CEliconValley.models.buildings.Cottage;
 import com.CEliconValley.models.buildings.Well;
 import com.CEliconValley.models.items.Products.Product;
 import com.CEliconValley.models.items.Products.ProductType;
+import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.tools.Tool;
 
 import java.util.ArrayList;
@@ -22,10 +23,10 @@ public class CraftingController {
     int x;
     int y;
 
-    private boolean inHome() {
-        int x = App.getGame().getCurrentPlayer().getX();
-        int y = App.getGame().getCurrentPlayer().getY();
-        Cell cell = App.getGame().getCurrentPlayerFarm().getCell(x, y);
+    private boolean inHome(Player player, Farm farm) {
+        int x = player.getX();
+        int y = player.getY();
+        Cell cell = farm.getCell(x, y);
         if (cell == null) return false;
         if (cell.getObjectMap() instanceof Cottage) {
             return true;
@@ -175,9 +176,9 @@ public class CraftingController {
     }
 
     public Result showRecepies(Matcher matcher) {
-        if (!inHome()) {
-            return new Result(false, "You are not in a home");
-        }
+//        if (!inHome()) {
+//            return new Result(false, "You are not in a home");
+//        }
         StringBuilder message = new StringBuilder();
         message.append("Crafting recipes :\n");
         Player player = App.getGame().getCurrentPlayer();
@@ -192,8 +193,10 @@ public class CraftingController {
         return null;
     }
 
-    public Result craftRecipe(Matcher matcher) {
-        if (!inHome()) {
+    public Result craftRecipe(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
+        if (!inHome(player, farm)) {
             return new Result(false, "You are not in a home");
         }
         String itemName = matcher.group(1).trim();
@@ -215,21 +218,21 @@ public class CraftingController {
                     return new Result(false, "you don't have the needed items");
                 }
 
-                if (App.getGame().getCurrentPlayer().getInventory().getEmptySlots() <= 0) {
+                if (player.getInventory().getEmptySlots() <= 0) {
                     return new Result(false, "you don't have enough empty slots");
                 }
 
-                removeItems(machine);
-                App.getGame().getCurrentPlayer().decEnergy(2);
-                App.getGame().getCurrentPlayer().getInventory().addToInventory(machine, 1);
+                removeItems(machine, player);
+                player.decEnergy(2);
+                player.getInventory().addToInventory(machine, 1);
                 return new Result(true, "You received a " + machine.getName());
             }
         }
         return new Result(false, "can't craft that item");
     }
 
-    private void removeItems(CraftableMachine machine) {
-        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
+    private void removeItems(CraftableMachine machine, Player player) {
+        Inventory inventory = player.getInventory();
         for (Item item : machine.getRecipe().neededItems.keySet()) {
             Slot invSlot = inventory.getSlotByItem(item);
             inventory.removeFromInventory(item, machine.getRecipe().neededItems.get(item));

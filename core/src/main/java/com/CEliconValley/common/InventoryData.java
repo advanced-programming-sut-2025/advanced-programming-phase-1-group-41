@@ -43,4 +43,12 @@ public class InventoryData {
         }
         return inventory;
     }
+
+    public ArrayList<SlotData> getSlots() {
+        return slots;
+    }
+
+    public int getWhichBackpack() {
+        return whichBackpack;
+    }
 }

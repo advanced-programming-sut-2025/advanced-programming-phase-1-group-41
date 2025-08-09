@@ -56,7 +56,7 @@ public class GameMenu implements Screen {
 
             }else if(AnimalView.check(input, playerName)){
 
-            }else if(CraftingView.check(input)){
+            }else if(CraftingView.check(input, playerName)){
 
             }else if(FriendshipView.check(input)){
 
