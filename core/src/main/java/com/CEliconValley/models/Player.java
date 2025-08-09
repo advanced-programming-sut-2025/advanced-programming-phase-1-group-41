@@ -79,6 +79,7 @@ public class Player {
     private ArrayList<Trade> totalTradesList = new ArrayList<>();
     @Transient
     private Buff currentBuff = null;
+    int questsFinsihed;
 //    private Farm farm;
 //    private ArrayList<Animal> animals;
 //    private ArrayList<Skill> skills;
@@ -105,7 +106,7 @@ public class Player {
                   int maxEnergy, Skill miningSkill, double money,
                   ArrayList<Machine> onGoingMachines,
                   boolean playerIsInVillage,
-                  double savings, User user, int x, int y, FarmType farmType) {
+                  double savings, User user, int x, int y, FarmType farmType, int questsFinsihed) {
         this.cookingRecipes = cookingRecipes;
         this.craftingRecipes = craftingRecipes;
         this.currentBuff = currentBuff;
@@ -130,6 +131,7 @@ public class Player {
         this.user = user;
         this.x = x;
         this.y = y;
+        this.questsFinsihed = questsFinsihed;
     }
 
     public void handmadePostLoad(ArrayList<Friendship> friendships,
@@ -193,6 +195,7 @@ public class Player {
 //        backpack = Backpack.Default;
 //        this.farm = null;
         _id = new ObjectId();
+        this.questsFinsihed = 0;
     }
 
     public void prepareForSaving() {
@@ -517,5 +520,17 @@ public class Player {
 
     public FarmType getFarmType() {
         return farmType;
+    }
+
+    public int getQuestsFinsihed() {
+        return questsFinsihed;
+    }
+
+    public void setQuestsFinsihed(int questsFinsihed) {
+        this.questsFinsihed = questsFinsihed;
+    }
+
+    public void incrementQuestsFinished(){
+        questsFinsihed++;
     }
 }

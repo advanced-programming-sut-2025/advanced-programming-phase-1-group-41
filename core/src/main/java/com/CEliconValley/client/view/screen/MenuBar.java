@@ -417,7 +417,7 @@ public class MenuBar {
             float height = width * 2f;
 
 
-            if (!player.getCraftingRecipes().contains(machine.getRecipe())) {
+            if (!Finder.getpd().getCraftingRecipes().contains(machine.getRecipe())) {
                 batch.setColor(0.5f, 0.5f, 0.5f, 0.5f);
             }
 
@@ -427,10 +427,12 @@ public class MenuBar {
             boolean mouseOver = mousePos.x >= drawX && mousePos.x <= drawX + width &&
                 mousePos.y >= drawY && mousePos.y <= drawY + height;
 
-            if (mouseOver && player.getCraftingRecipes().contains(machine.getRecipe())) {
+            if (mouseOver && Finder.getpd().getCraftingRecipes().contains(machine.getRecipe())) {
                 drawToolTip(batch, machine, drawX, drawY);
 
                 if (Gdx.input.justTouched()) {
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand("crafting craft "+machine, AppClient.getUserData().getUsername()));
                     if (hasAllItems(machine.getRecipe())) {
                         Map<Item, Integer> requiredItems = machine.getRecipe().neededItems;
                         Inventory inventory = player.getInventory();
