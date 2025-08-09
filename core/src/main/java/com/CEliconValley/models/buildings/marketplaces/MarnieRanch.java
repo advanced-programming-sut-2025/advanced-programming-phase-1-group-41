@@ -31,8 +31,12 @@ public class MarnieRanch extends Marketplace implements Building {
     }
     private int x;
     private int y;
+    private int anchorX;
+    private int anchorY;
 
     public MarnieRanch() {
+        anchorX=33;
+        anchorY = 10;
     }
 
     public MarnieRanch(int x, int y, Village village) {
@@ -62,30 +66,30 @@ public class MarnieRanch extends Marketplace implements Building {
         int xWall;
         int yWall;
         yWall = y;
-        while(yWall<=y+7) {
-            for (int i = x; i <= x + 10; i++) {
+        while(yWall<=y+3) {
+            for (int i = x; i <= x + 5; i++) {
                 Cell cell = Finder.findCellByCoordinatesVillage(i, yWall,village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
-                if(i == x + 5&&yWall==y+7){
+                if(i == x + 2&&yWall==y){
                     cell.setObjectMap(door);
                 }
             }
-            yWall+=7;
+            yWall+=3;
         }
         xWall = x;
-        while(xWall<=x+10) {
-            for (int j = y+1; j <= y+7; j++) {
+        while(xWall<=x+5) {
+            for (int j = y+1; j <= y+3; j++) {
                 Cell cell = Finder.findCellByCoordinatesVillage(xWall, j, village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
             }
-            xWall+=10;
+            xWall+=5;
         }
         x++;
         y++;
-        int xLength=9;
-        int yLength=6;
+        int xLength=4;
+        int yLength=2;
         for(int i=x; i<xLength+x; i++) {
             for(int j=y; j<yLength+y; j++) {
                 Cell cell=Finder.findCellByCoordinatesVillage(i, j, village);
@@ -155,11 +159,11 @@ public class MarnieRanch extends Marketplace implements Building {
 
     @Override
     public int getAnchorX() {
-        return 0;
+        return anchorX;
     }
 
     @Override
     public int getAnchorY() {
-        return 0;
+        return anchorY;
     }
 }

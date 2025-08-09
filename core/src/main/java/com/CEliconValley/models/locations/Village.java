@@ -84,15 +84,15 @@ public class Village implements Location{ ;
         transferCells.add(getCell(44,36));
         startPoints.add(getCell(47,32));
 
-        buildings.add(new Blacksmith(80,54,this, load));
-        buildings.add(new FishShop(22,0,this, load));
-        buildings.add(new GeneralStore(38,3,this, load));
+        buildings.add(new Blacksmith(82,55,this, load));//
+        buildings.add(new FishShop(22,3,this, load));//
+        buildings.add(new GeneralStore(38,15,this, load));//
         buildings.add(new Saloon(80,20,this));
-        buildings.add(new MarnieRanch(80,0,this));
-        buildings.add(new CarpenterShop(67,0,this));
-        buildings.add(new Barn(77,0,this));
-        buildings.add(new Coop(77,4,this));
-        buildings.add(new Jojamart(84,10,this, load));
+        buildings.add(new MarnieRanch(29,9,this));
+        buildings.add(new CarpenterShop(60,34,this));
+//        buildings.add(new Barn(77,0,this));
+//        buildings.add(new Coop(77,4,this));
+        buildings.add(new Jojamart(81,10,this, load));//
         buildings.add(new AbigailHome(9,43,this));
         buildings.add(new LiaHome(0,51,this));
         buildings.add(new SebastienHome(12,58,this));
@@ -113,15 +113,21 @@ public class Village implements Location{ ;
             makeGround(getCell(i,19));
             makeGround(getCell(i,18));
         }
-        for(int j=19;j<55;j++){
+        for(int j=19;j<62;j++){
             makeGround(getCell(89,j));
             makeGround(getCell(90,j));
+        }for(int i=90;i>65;i--){//todo
+            makeGround(getCell(i,61));
+            makeGround(getCell(i,62));
+        }for(int i=90;i>82;i--){
+            makeGround(getCell(i,53));
+            makeGround(getCell(i,54));
         }
-        makeGround(getCell(89,55));
-        makeGround(getCell(88,55));
-        makeGround(getCell(88,56));
-        makeGround(getCell(87,56));
-        makeGround(getCell(86,56));
+//        makeGround(getCell(89,55));
+//        makeGround(getCell(88,55));
+//        makeGround(getCell(88,56));
+//        makeGround(getCell(87,56));
+//        makeGround(getCell(86,56));
 
         for(int j=8;j<12;j++){
             makeGround(getCell(36,j));
@@ -200,13 +206,23 @@ public class Village implements Location{ ;
             makeGround(getCell(i,9));
             makeGround(getCell(i,8));
         }
+        for(int i=80;i<=88;i++){
+            makeGround(getCell(i,10));
+            makeGround(getCell(i,9));
+            makeGround(getCell(i,8));
+        }
         makeGround(getCell(80,10));
         makeGround(getCell(81,10));
         makeGround(getCell(82,10));
         makeGround(getCell(82,11));
         makeGround(getCell(83,11));
+        makeGrass(getCell(81,9));
         makeGround(getCell(20,2));
         makeGround(getCell(21,2));
+        makeGround(getCell(22,2));
+        makeGround(getCell(23,2));
+        makeGround(getCell(24,2));
+        makeGround(getCell(25,2));
         getCell(48, 31).setObjectMap(new ShippingBin());
 
     }

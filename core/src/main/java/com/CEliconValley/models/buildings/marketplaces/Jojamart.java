@@ -33,8 +33,12 @@ public class Jojamart extends Marketplace implements Building {
     }
     private int x;
     private int y;
+    private int anchorX;
+    private int anchorY;
 
     public Jojamart() {
+        anchorX=87;
+        anchorY = 16;
     }
 
     public Jojamart(int x, int y, Village village, boolean load) {
@@ -111,7 +115,7 @@ public class Jojamart extends Marketplace implements Building {
                 Cell cell = Finder.findCellByCoordinatesVillage(i, yWall,village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
-                if(i == x + 5&&yWall==y+7) {
+                if(i == x + 5&&yWall==y) {
                     cell.setObjectMap(door);
                 }
             }
@@ -206,11 +210,11 @@ public class Jojamart extends Marketplace implements Building {
 
     @Override
     public int getAnchorX() {
-        return 0;
+        return anchorX;
     }
 
     @Override
     public int getAnchorY() {
-        return 0;
+        return anchorY;
     }
 }

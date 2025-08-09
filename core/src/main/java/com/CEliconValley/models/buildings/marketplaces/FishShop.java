@@ -18,6 +18,8 @@ public class FishShop extends Marketplace implements Building {
 
     ArrayList<Slot> stock= new ArrayList<>();
     private final Door door = new Door();
+    private int anchorX;
+    private int anchorY;
 
     @Override
     public String getChar() {
@@ -30,10 +32,10 @@ public class FishShop extends Marketplace implements Building {
     }
     private int x;
     private int y;
-    private int anchorX;
-    private int anchorY;
 
     public FishShop() {
+        anchorX = 26;
+        anchorY = 4;
     }
 
     public FishShop(int x, int y, Village village, boolean load) {
@@ -48,6 +50,7 @@ public class FishShop extends Marketplace implements Building {
         stock.add(new Slot(FishShopItems.IridiumRod, 1));
 
         this.updateStock();
+
     }
 
     public void constructFishShop(int x , int y , Village village, boolean laod){
@@ -55,34 +58,34 @@ public class FishShop extends Marketplace implements Building {
         this.y = y;
         int xWall;
         int yWall;
-        anchorY=y+1;
-        anchorX=x+4;
+
         yWall = y;
-        while(yWall<=y+5) {
+        while(yWall<=y+2) {
             for (int i = x; i <= x + 5; i++) {
                 Cell cell = Finder.findCellByCoordinatesVillage(i, yWall,village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
+                if(yWall == y&&i==x+1){
+                    cell.setObjectMap(door);
+                }
 
             }
-            yWall+=5;
+            yWall+=2;
         }
         xWall = x;
         while(xWall<=x+5) {
-            for (int j = y+1; j <= y+5; j++) {
+            for (int j = y+1; j <= y+2; j++) {
                 Cell cell = Finder.findCellByCoordinatesVillage(xWall, j, village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
-                if(j == y + 2&&xWall==x){
-                    cell.setObjectMap(door);
-                }
+
             }
             xWall+=5;
         }
         x++;
         y++;
         int xLength=4;
-        int yLength=4;
+        int yLength=2;
         for(int i=x; i<xLength+x; i++) {
             for(int j=y; j<yLength+y; j++) {
                 Cell cell=Finder.findCellByCoordinatesVillage(i, j, village);

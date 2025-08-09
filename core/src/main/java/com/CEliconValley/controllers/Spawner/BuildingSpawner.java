@@ -5,6 +5,7 @@
 
 package com.CEliconValley.controllers.Spawner;
 
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.*;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
@@ -17,7 +18,7 @@ import com.CEliconValley.models.buildings.animalContainer.Barn;
 import com.CEliconValley.models.buildings.animalContainer.BarnType;
 import com.CEliconValley.models.buildings.animalContainer.Coop;
 import com.CEliconValley.models.buildings.animalContainer.CoopType;
-import com.CEliconValley.models.buildings.marketplaces.FishShop;
+import com.CEliconValley.models.buildings.marketplaces.*;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.client.view.screen.FarmScreen;
 import com.badlogic.gdx.graphics.Texture;
@@ -38,7 +39,12 @@ public class BuildingSpawner {
     private final Texture bigCoopTexture = new Texture("game/Buildings/Big_Coop.png");
     private final Texture deluxeCoopTexture = new Texture("game/Buildings/Deluxe_Coop.png");
     private final Texture fishShopTexture = new Texture("game/Buildings/FishShop.png");
-
+    private final Texture generalStoreTexture = new Texture("game/Buildings/GeneralStore.png");
+    private final Texture blacksmithTexture = new Texture("game/Buildings/Blacksmith.png");
+    private final Texture jojaMartTexture = new Texture("game/Buildings/Jojamart.png");
+    private final Texture marnieRanchTexture = new Texture("game/Buildings/MarnieRanch.png");
+    private final Texture carpenterShopTexture = new Texture("game/Buildings/CarpenterShop.png");
+    private final Texture saloonTexture = new Texture("game/Buildings/Saloon.png");
 
     public BuildingSpawner() {
         this.waterSpawner = new WaterSpawner();
@@ -165,31 +171,102 @@ public class BuildingSpawner {
         CellData tempcd = Finder.getcdByVillageData(cell.getX() - 1, cell.getY() + 1, villageData);
         if(tempcd == null) return false;
         Cell tmpCell = tempcd.extractData();
+
         if(tmpCell.getObjectMap() instanceof FishShop fishShop && fishShop.getAnchorX()==tmpCell.getX() && fishShop.getAnchorY()==tmpCell.getY()) {
-            int frameWidth = this.cottageTexture.getWidth();
-            int frameHeight = this.cottageTexture.getHeight() / 4;
-            TextureRegion cottageFrame = new TextureRegion(this.cottageTexture, 0, 0, frameWidth, frameHeight);
+            int frameWidth = this.fishShopTexture.getWidth();
+            int frameHeight = this.fishShopTexture.getHeight() / 4;
+            TextureRegion cottageFrame = new TextureRegion(this.fishShopTexture, 0, (int) getSeasonalTexture(fishShopTexture), frameWidth, frameHeight);
+            batch.draw(cottageFrame, x - CELL_SIZE * 5.5f, y, CELL_SIZE * 6, CELL_SIZE * 6);
+            return true;
+        }
+
+        if(tmpCell.getObjectMap() instanceof GeneralStore generalStore && generalStore.getAnchorX()==tmpCell.getX() && generalStore.getAnchorY()==tmpCell.getY()) {
+            int frameWidth = this.generalStoreTexture.getWidth();
+            int frameHeight = this.generalStoreTexture.getHeight() / 4;
+
+            TextureRegion cottageFrame = new TextureRegion(this.generalStoreTexture, 0,(int)getSeasonalTexture(generalStoreTexture), frameWidth, frameHeight);
+            batch.draw(cottageFrame, x - CELL_SIZE * 14, y-CELL_SIZE*2, CELL_SIZE * 11, CELL_SIZE * 9);
+            return true;
+
+        }
+
+        if(tmpCell.getObjectMap() instanceof Blacksmith  blackSmith && blackSmith.getAnchorX()==tmpCell.getX() && blackSmith.getAnchorY()==tmpCell.getY()) {
+            int frameWidth = this.blacksmithTexture.getWidth();
+            int frameHeight = this.blacksmithTexture.getHeight() / 4;
+
+            TextureRegion cottageFrame = new TextureRegion(this.blacksmithTexture, 0,(int)getSeasonalTexture(blacksmithTexture), frameWidth, frameHeight);
+            batch.draw(cottageFrame, x - CELL_SIZE * 5.5f, y, CELL_SIZE * 15, CELL_SIZE * 6);
+            return true;
+
+        }
+
+        if(tmpCell.getObjectMap() instanceof Jojamart jojaMart && jojaMart.getAnchorX()==tmpCell.getX() && jojaMart.getAnchorY()==tmpCell.getY()) {
+            int frameWidth = this.jojaMartTexture.getWidth();
+            int frameHeight = this.jojaMartTexture.getHeight() / 4;
+
+            TextureRegion cottageFrame = new TextureRegion(this.jojaMartTexture, 0,(int)getSeasonalTexture(jojaMartTexture), frameWidth, frameHeight);
+            batch.draw(cottageFrame, x - CELL_SIZE * 7, y-CELL_SIZE*6, CELL_SIZE * 11, CELL_SIZE * 8);
+            return true;
+
+        }
+
+        if(tmpCell.getObjectMap() instanceof MarnieRanch marnieRanch && marnieRanch.getAnchorX()==tmpCell.getX() && marnieRanch.getAnchorY()==tmpCell.getY()) {
+            int frameWidth = this.marnieRanchTexture.getWidth();
+            int frameHeight = this.marnieRanchTexture.getHeight() / 4;
+
+            TextureRegion cottageFrame = new TextureRegion(this.marnieRanchTexture, 0,(int)getSeasonalTexture(marnieRanchTexture), frameWidth, frameHeight);
             batch.draw(cottageFrame, x - CELL_SIZE * 5, y, CELL_SIZE * 6, CELL_SIZE * 6);
             return true;
-//        } else if(cellData.getX() == villageData.getGreenhouseX() + Greenhouse.getGreenhouseLength() && cellData.getY() == villageData.getGreenhouseY()) {
-//            int frameWidth = this.greenhouseTexture.getWidth();
-//            int frameHeight = this.greenhouseTexture.getHeight();
-//            TextureRegion greenHouseFrame = new TextureRegion(this.greenhouseTexture, 0, 0, frameWidth, frameHeight);
-//            batch.draw(greenHouseFrame, x - CELL_SIZE*6, y, CELL_SIZE*7, CELL_SIZE*8);
-//            return true;
-////
-//        }else if (tmpCell != null && tmpCell.getObjectMap() instanceof WaterTank) {
-//            WaterTank waterTank = (WaterTank)tmpCell.getObjectMap();
-//            int frameWidth = this.waterTankTexture.getWidth();
-//            int frameHeight = this.waterTankTexture.getHeight();
-//            TextureRegion waterTankFrame = new TextureRegion(this.waterTankTexture, 0, 0, frameWidth, frameHeight);
-//            batch.draw(waterTankFrame, x, y, CELL_SIZE, CELL_SIZE);
-//            return true;
-//        }
+
+        }
+        if(tmpCell.getObjectMap() instanceof Saloon saloon) {
+            System.out.println(saloon.getAnchorX() + " "+tmpCell.getX()+" " + saloon.getAnchorY()+"  "+tmpCell.getY());
+
+
+        if( saloon.getAnchorX()==tmpCell.getX() && saloon.getAnchorY()==tmpCell.getY()) {
+            int frameWidth = this.saloonTexture.getWidth();
+            int frameHeight = this.saloonTexture.getHeight()/4;
+            batch.draw(waterTankTexture, tmpCell.getX()*CELL_SIZE, tmpCell.getY()*CELL_SIZE, CELL_SIZE , CELL_SIZE );
+
+            TextureRegion cottageFrame = new TextureRegion(this.saloonTexture, 0,(int)getSeasonalTexture(saloonTexture), frameWidth, frameHeight);
+            batch.draw(cottageFrame, x - CELL_SIZE*5, y-CELL_SIZE/3f, CELL_SIZE *6, CELL_SIZE * 8);
+            return true;
+
+        }
+        }
+        if(tmpCell.getObjectMap() instanceof CarpenterShop carpenterShop) {
+            System.out.println(carpenterShop.getAnchorX() + " " + carpenterShop.getAnchorY()+" "+tempcd.getX()+" "+tempcd.getY());
+
+        }
+        if(tmpCell.getObjectMap() instanceof CarpenterShop carpenterShop && carpenterShop.getAnchorX()==tmpCell.getX() && carpenterShop.getAnchorY()==tmpCell.getY()) {
+            int frameWidth = this.carpenterShopTexture.getWidth();
+            int frameHeight = this.carpenterShopTexture.getHeight() / 4;
+
+            TextureRegion cottageFrame = new TextureRegion(this.carpenterShopTexture, 0,(int)getSeasonalTexture(carpenterShopTexture), frameWidth, frameHeight);
+            batch.draw(cottageFrame, x - CELL_SIZE * 10, y, CELL_SIZE *10, CELL_SIZE * 10);
+            return true;
+
         }
 
 
         return false;
+    }
+    private float getSeasonalTexture(Texture texture) {
+        switch (AppClient.getGameData().getTime().getSeason()){
+            case Spring -> {
+                return 0;
+            }
+            case Summer -> {
+                return texture.getHeight()/4f;
+            }
+            case Autumn -> {
+                return texture.getHeight()/4f*2;
+            }
+            case Winter -> {
+                return texture.getHeight()/4f*3;
+            }
+        }
+        return 0;
     }
 }
 

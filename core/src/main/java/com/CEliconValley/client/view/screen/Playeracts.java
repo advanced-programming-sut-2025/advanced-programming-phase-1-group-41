@@ -305,7 +305,7 @@ public class Playeracts {
             float targetPixelX = hero.targetX.get() * CELL_SIZE;
             float targetPixelY = hero.targetY.get() * CELL_SIZE;
 
-            float moveAmount = (float) CELL_SIZE / 12;
+            float moveAmount = (float) CELL_SIZE / 2;
 
             if (screen instanceof GreenHouseScreen) {
                 moveAmount /= 2;

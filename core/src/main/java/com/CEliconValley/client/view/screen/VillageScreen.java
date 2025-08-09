@@ -55,7 +55,7 @@ public class VillageScreen extends GameScreen implements Screen {
 
     Map<Cell, TextureRegion> groundCache;
 
-    public static Texture villageTexture = new Texture("game/Buildings/Screen/Farm_Screen_Spring.png");
+    public static Texture villageTexture = new Texture("game/Buildings/Screen/Village_Screen_Spring.png");
     public static Sprite villageSprite;
 
     private OrthographicCamera camera;
@@ -165,7 +165,7 @@ public class VillageScreen extends GameScreen implements Screen {
         }
         visibleCells.sort(Comparator.comparingInt(CellData::getY).reversed());
 
-        batch.draw(villageTexture, 0, 0, CELL_SIZE * 60, CELL_SIZE * 75);
+        batch.draw(villageTexture, 0, 0, CELL_SIZE * 95, CELL_SIZE * 65);
 
         Texture grassTexture = GameAssetManager.getGameAssetManager().getTileTexture("grass.png");
 //        Texture groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("Village_Tile.png");
@@ -270,7 +270,7 @@ public class VillageScreen extends GameScreen implements Screen {
 
     private void loadVillageBackground(String season) {
         if (villageTexture != null) villageTexture.dispose();
-        villageTexture = new Texture("game/Buildings/Screen/Farm_Screen_" + season + ".png");
+        villageTexture = new Texture("game/Buildings/Screen/Village_Screen_" + season + ".png");
         villageSprite = new Sprite(villageTexture);
         villageSprite.setSize(CELL_SIZE, CELL_SIZE);
     }
