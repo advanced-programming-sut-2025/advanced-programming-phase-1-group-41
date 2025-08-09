@@ -193,7 +193,7 @@ public class Playeracts {
             if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
                 screen.menuBar.scrollDown();
             }
-        } else if(screen instanceof FarmScreen){ //TODO Just For Now The Condition!!!
+        } else if((screen instanceof FarmScreen) || screen instanceof CottageScreen){ //TODO Just For Now The Condition!!!
             if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
                 screen.inventoryRenderer.shiftRight();
             }
