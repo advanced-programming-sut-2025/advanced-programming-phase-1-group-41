@@ -3,10 +3,12 @@ package com.CEliconValley.client.model;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.models.ui.GameAssetManager;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.kotcrab.vis.ui.widget.tabbedpane.Tab;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,37 +54,40 @@ public class StrategyScoreboard {
 
 
     private void update(Table scoreboardInfoTable, List<PlayerData> sortedPlayers) {
-        System.out.println("count "+sortedPlayers.size());
-        scoreboardInfoTable.clear();
-        Skin skin = GameAssetManager.getGameAssetManager().getSkin();
-        scoreboardInfoTable.add(new Label("kir mikham", skin));
+        Gdx.app.postRunnable(() -> {
+            System.out.println("count "+sortedPlayers.size());
+            Skin skin = GameAssetManager.getGameAssetManager().getSkin();
 
-        for (PlayerData player : sortedPlayers) {
-            double playerMoney = player.getMoney();
-            int playerMissions = player.getQuestsFinsihed();
-            double playerSkills = (player.getFarmingSkill().getLevel()
-                + player.getFishingSkill().getLevel()
-                + player.getForagingSkill().getLevel()
-                + player.getMiningSkill().getLevel()) / 4d;
+            for (PlayerData player : sortedPlayers) {
+                double playerMoney = player.getMoney();
+                int playerMissions = player.getQuestsFinsihed();
+                double playerSkills = (player.getFarmingSkill().getLevel()
+                    + player.getFishingSkill().getLevel()
+                    + player.getForagingSkill().getLevel()
+                    + player.getMiningSkill().getLevel()) / 4d;
 
-            Label nameLabel = new Label(player.getUsername(), skin);
-            assert AppClient.getUserData() != null;
-            Label moneyLabel = new Label(String.valueOf((int) Math.round(playerMoney)), skin);
-            Label missionsLabel = new Label(String.valueOf(playerMissions), skin);
-            Label skillsLabel = new Label(String.valueOf((int) Math.round(playerSkills)), skin);
-            if(player.getUsername().equals(AppClient.getUserData().getUsername())){
-                nameLabel.setText("-> " + player.getUsername());
-                nameLabel.setColor(Color.LIGHT_GRAY);
-                moneyLabel.setColor(Color.LIGHT_GRAY);
-                missionsLabel.setColor(Color.LIGHT_GRAY);
-                skillsLabel.setColor(Color.LIGHT_GRAY);
+                Label nameLabel = new Label(player.getUsername(), skin);
+                assert AppClient.getUserData() != null;
+                Label moneyLabel = new Label(String.valueOf((int) Math.round(playerMoney)), skin);
+                Label missionsLabel = new Label(String.valueOf(playerMissions), skin);
+                Label skillsLabel = new Label(String.valueOf((int) Math.round(playerSkills)), skin);
+                if(player.getUsername().equals(AppClient.getUserData().getUsername())){
+                    nameLabel.setText("-> " + player.getUsername());
+                    nameLabel.setColor(Color.LIGHT_GRAY);
+                    moneyLabel.setColor(Color.LIGHT_GRAY);
+                    missionsLabel.setColor(Color.LIGHT_GRAY);
+                    skillsLabel.setColor(Color.LIGHT_GRAY);
+                }
+                scoreboardInfoTable.add(nameLabel).pad(5);
+                scoreboardInfoTable.add(moneyLabel).pad(5);
+                scoreboardInfoTable.add(missionsLabel).pad(5);
+                scoreboardInfoTable.add(skillsLabel).pad(5);
+                scoreboardInfoTable.row();
+
+//                scoreboard.add(scoreboardInfoTable).colspan(4).padBottom(20).row();
+
             }
 
-            scoreboardInfoTable.add(nameLabel).pad(5);
-            scoreboardInfoTable.add(moneyLabel).pad(5);
-            scoreboardInfoTable.add(missionsLabel).pad(5);
-            scoreboardInfoTable.add(skillsLabel).pad(5);
-            scoreboardInfoTable.row();
-        }
+        });
     }
 }

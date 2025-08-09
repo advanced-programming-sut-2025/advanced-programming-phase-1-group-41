@@ -398,6 +398,16 @@ public class MenuBar {
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mousePos);
 
+        if(!(screen instanceof CottageScreen)){
+            font.getData().setScale(2f);
+            font.setColor(Color.RED);
+
+            GlyphLayout layout = new GlyphLayout(font, "You Should Go Home To Use This!");
+            font.draw(batch, layout,  startingX + screenWidth / 3.2f - layout.width / 2, startingY + maxY + screenHeight / 9f);
+            font.setColor(Color.WHITE);
+            font.getData().setScale(1f);
+        }
+
         for (CraftableMachine machine : CraftableMachine.values()) {
             TextureRegion texture = ItemManager.getTexture(machine);
             if (texture == null) continue;
@@ -464,6 +474,16 @@ public class MenuBar {
 
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mousePos);
+
+        if(!(screen instanceof CottageScreen)){
+            font.getData().setScale(2f);
+            font.setColor(Color.RED);
+
+            GlyphLayout layout = new GlyphLayout(font, "You Should Go Home To Use This!");
+            font.draw(batch, layout,  startingX + screenWidth / 3.2f - layout.width / 2, startingY + maxY + screenHeight / 9f);
+            font.setColor(Color.WHITE);
+            font.getData().setScale(1f);
+        }
 
         for (Food food : Food.values()) {
             TextureRegion texture = ItemManager.getTexture(food);

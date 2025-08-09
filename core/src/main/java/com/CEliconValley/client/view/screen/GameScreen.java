@@ -67,7 +67,6 @@ public abstract class GameScreen implements Screen {
     public Label terhowmanyLabel;
     public boolean terMode = false;
 
-    private Table scoreboardTable;
     private Table scoreboardInfoTable;
 
     public boolean isGameFinished = false;
@@ -91,6 +90,7 @@ public abstract class GameScreen implements Screen {
     public boolean dcmode = false;
     public Label dcLabel;
     Table chatTable;
+    Table sortButtonsTable;
 
     StrategyScoreboard ss = new StrategyScoreboard();
 
@@ -222,8 +222,19 @@ public abstract class GameScreen implements Screen {
     }
 
     public void updateScoreboard(){
+        Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+        scoreboardInfoTable.clear();
+        scoreboardInfoTable.add(sortButtonsTable).colspan(4).padBottom(20).row();
+
+        scoreboardInfoTable.add(new Label("Player", skin)).pad(10);
+        scoreboardInfoTable.add(new Label("Money", skin)).pad(10);
+        scoreboardInfoTable.add(new Label("Missions", skin)).pad(10);
+        scoreboardInfoTable.add(new Label("Skills", skin)).pad(10);
+        scoreboardInfoTable.row();
+
         ss.updateScoreboard(scoreboardInfoTable);
-        scoreboardTable.add(scoreboardInfoTable);
+
+
     }
 
     private void setupScoreboardUI(){
@@ -233,11 +244,9 @@ public abstract class GameScreen implements Screen {
         scoreboardInfoTable = new Table();
         scoreboardInfoTable.setFillParent(true);
 
-        scoreboardTable = new Table(skin);
-        scoreboardTable.setFillParent(true);
-        scoreboardTable.center().top().padTop(100);
+        scoreboardInfoTable.center().top().padTop(300);
 
-        Table sortButtonsTable = new Table();
+        sortButtonsTable = new Table();
         TextButton sortMoneyBtn = new TextButton("Sort by Money", skin);
         sortMoneyBtn.addListener(new ClickListener() {
             @Override
@@ -266,18 +275,10 @@ public abstract class GameScreen implements Screen {
         sortButtonsTable.add(sortMissionsBtn).padRight(10);
         sortButtonsTable.add(sortSkillsBtn);
 
-        scoreboardTable.add(sortButtonsTable).colspan(4).padBottom(20).row();
-
-        scoreboardTable.add(new Label("Player", skin)).pad(10);
-        scoreboardTable.add(new Label("Money", skin)).pad(10);
-        scoreboardTable.add(new Label("Missions", skin)).pad(10);
-        scoreboardTable.add(new Label("Skills", skin)).pad(10);
-        scoreboardTable.row();
 
 
         updateScoreboard();
-        scoreboardTable.padTop(200);
-        scoreboardStage.addActor(scoreboardTable);
+        scoreboardStage.addActor(scoreboardInfoTable);
     }
 
 
