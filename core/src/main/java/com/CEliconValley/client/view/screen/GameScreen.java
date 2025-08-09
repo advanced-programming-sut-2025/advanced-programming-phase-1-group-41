@@ -255,6 +255,7 @@ public abstract class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 ss.setStrategyScore(0);
+                updateScoreboard();
             }
         });
 
@@ -263,6 +264,7 @@ public abstract class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 ss.setStrategyScore(1);
+                updateScoreboard();
             }
         });
 
@@ -271,6 +273,7 @@ public abstract class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 ss.setStrategyScore(2);
+                updateScoreboard();
             }
         });
 
