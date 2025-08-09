@@ -179,7 +179,7 @@ public class PlayerController {
 
     }
 
-    public Result eat(Matcher matcher){
+    public Result eat(Matcher matcher, String playername){
         String itemName = matcher.group(1).trim();
         Food food = Food.parseFood(itemName);
         FruitType fruitType = FruitType.parseFruitType(itemName);
@@ -192,33 +192,38 @@ public class PlayerController {
             return new Result(false, "Invalid item");
         }
         if(food != null){
-            return eatFood(itemName);
+            return eatFood(itemName, playername);
         }else if(fruitType != null){
-            return eatFruit(itemName);
+            return eatFruit(itemName, playername);
         }else if(item instanceof CraftableItem ci){
-            return eatCraftable(ci);
+            return eatCraftable(ci, playername);
         }
-        Slot e = App.getGame().getCurrentPlayer().getInventory().getSlotByItem(item);
+        Player player = Finder.getPlayerByUsername(playername);
+        Slot e = player.getInventory().getSlotByItem(item);
         if(e.getItem() instanceof Eatable eatable){
             return eatEatable(eatable);
         }
         return new Result(false, "Invalid item");
     }
 
-    private Result eatCraftable(CraftableItem item){
-        App.getGame().getCurrentPlayer().incEnergy(item.getEnergy());
+    private Result eatCraftable(CraftableItem item, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
+        player.incEnergy(item.getEnergy());
         double value = item.getEnergy();
-        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
+        Inventory inventory = player.getInventory();
         inventory.removeFromInventory(item, 1);
         return new Result (true, "you got "+value+" energy");
     }
 
-    private Result eatFruit(String fruitName){
+    private Result eatFruit(String fruitName, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
         FruitType fruitType = FruitType.parseFruitType(fruitName);
         if(fruitType==null){
             return new Result(false,"invalid fruit");
         }
-        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
+        Inventory inventory = player.getInventory();
         Slot slot = inventory.getSlotByItem(new Fruit(fruitType));
         if(slot==null || slot.getQuantity()==0){
             return new Result(false,"you don't have the fruit "+fruitName);
@@ -226,19 +231,21 @@ public class PlayerController {
         if(!fruitType.isEatable()){
             return new Result(false,"fruit "+fruitName+" is not eatable");
         }
-        App.getGame().getCurrentPlayer().incEnergy(fruitType.getEnergy());
+        player.incEnergy(fruitType.getEnergy());
         double value = fruitType.getEnergy();
         inventory.removeFromInventory(new Fruit(fruitType), 1);
         return new Result (true, "you got "+value+" energy");
     }
 
-    private Result eatFood(String foodName){
+    private Result eatFood(String foodName, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
         Food wantedFood = Food.parseFood(foodName);
         if(wantedFood == null){
             return new Result(false, "Invalid food");
         }
 
-        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
+        Inventory inventory = player.getInventory();
         Slot slot = inventory.getSlotByItem(wantedFood);
         if(slot==null){
             return new Result(false,"you don't have this food");
@@ -246,17 +253,17 @@ public class PlayerController {
         if(slot.getItem() instanceof Food){
             if(((Food) slot.getItem()).getBuff() != null){
                 Buff buff = ((Food) slot.getItem()).getBuff();
-                Buff playerBuff = App.getGame().getCurrentPlayer().getBuff();
+                Buff playerBuff = player.getBuff();
                 if(playerBuff != null){
-                    App.getGame().getCurrentPlayer().setMaxEnergy(200);
+                    player.setMaxEnergy(200);
                 }
-                App.getGame().getCurrentPlayer().setBuff(new Buff(buff.getBuffTime(), buff.getBuffAmount(), buff.getBuffType()));
+                player.setBuff(new Buff(buff.getBuffTime(), buff.getBuffAmount(), buff.getBuffType()));
                 if(buff.getBuffType().equals(BuffType.MaxEnergy)){
-                    App.getGame().getCurrentPlayer().setMaxEnergy(200 + buff.getBuffAmount());
+                    player.setMaxEnergy(200 + buff.getBuffAmount());
                 }
             }
         }
-        App.getGame().getCurrentPlayer().incEnergy(wantedFood.getEnergy());
+        player.incEnergy(wantedFood.getEnergy());
         double value  = wantedFood.getEnergy();
         inventory.removeFromInventory(wantedFood, 1);
         return new Result(true, value+

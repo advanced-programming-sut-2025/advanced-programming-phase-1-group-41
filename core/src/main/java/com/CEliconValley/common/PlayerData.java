@@ -48,6 +48,7 @@ public class PlayerData {
     ArrayList<TradeData> totalTradesListData;
     BuffData buffData;
     ToolLevel toolLevel;
+    int questsFinsihed;
 
 
     public PlayerData() {
@@ -71,6 +72,7 @@ public class PlayerData {
         this.cookingRecipes = new ArrayList<>(player.getCookingRecipes());
         this.craftingRecipes = new ArrayList<>(player.getCraftingRecipes());
         this.isPlayerInVillage = player.isPlayerIsInVillage();
+        this.questsFinsihed = player.getQuestsFinsihed();
         if(player.getCurrentTool() == null) this.currentToolName = null;
         else{
             if(player.getCurrentTool() instanceof LevelTool lt){
@@ -145,7 +147,7 @@ public class PlayerData {
         return new Player(cookingRecipes, craftingRecipes, buff, tool, depressionDaysLeft,
                 energy, energyUnlimited, farmId, getFarmingSkill(), getFishingSkill(),
                 getForagingSkill(), inFarmId, inventory, maxEnergy, getMiningSkill(),
-                money, getMachines(), isPlayerInVillage, savings, user, x, y, farmType);
+                money, getMachines(), isPlayerInVillage, savings, user, x, y, farmType, questsFinsihed);
     }
 
     public Skill getFarmingSkill() {
@@ -288,5 +290,16 @@ public class PlayerData {
 
     public String getAvatarPath() {
         return avatarPath;
+    }
+
+    public int getQuestsFinsihed() {
+        return questsFinsihed;
+    }
+
+    public Double getPlayerSkills(){
+        return (this.getFarmingSkill().getLevel()
+            + this.getFishingSkill().getLevel()
+            + this.getForagingSkill().getLevel()
+            + this.getMiningSkill().getLevel()) / 4d;
     }
 }

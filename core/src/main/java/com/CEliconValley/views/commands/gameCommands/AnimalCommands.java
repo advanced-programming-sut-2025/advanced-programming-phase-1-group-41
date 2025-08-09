@@ -6,7 +6,8 @@ import java.util.regex.Matcher;
 
 public enum AnimalCommands implements Command {
     BuyAnimal("\\s*buy\\s+animal\\s+-a\\s+(?<animal>.*)\\s+-n\\s+(?<name>.*)\\s*"),
-    Pet("\\s*pet\\s+-n\\s+(?<name>.*)\\s*"),
+    PetInside("\\s*pet\\s+-w\\s+inside\\s+-n\\s+(?<name>.*)\\s*"),
+    PetOutside("\\s*pet\\s+-w\\s+outside\\s+-n\\s+(?<name>.*)\\s*"),
     Animals("\\s*animals\\s*"),
     ShepherdAnimals("\\s*shepherd\\s+animals\\s+-n\\s+(?<animalName>\\S+)\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*"),
     FeedHay("\\s*feed\\s+hay\\s+-n\\s+(?<animalName>.*)\\s*"),

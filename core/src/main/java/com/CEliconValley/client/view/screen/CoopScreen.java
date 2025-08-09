@@ -5,8 +5,8 @@ import com.CEliconValley.client.view.screen.maps.CoopMap;
 import com.CEliconValley.client.view.screen.randomwalk.Node;
 import com.CEliconValley.client.view.screen.randomwalk.SimplePathFinder;
 import com.CEliconValley.common.AnimalData;
+import com.CEliconValley.common.CoopData;
 import com.CEliconValley.models.*;
-import com.CEliconValley.models.animals.animalKinds.*;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
@@ -32,13 +32,32 @@ public class CoopScreen extends GameScreen implements Screen {
     private BarnOrCoopMenuBar coopMenuBar;
     private boolean isCoopMenuOpen = false;
     private ArrayList<AnimalSprite> animalSprites;
-
+    private CoopData coopData;
     private final OrthographicCamera camera;
+    private int id;
+    public void updateAnimalSprites(CoopData coopData) {
+        if(animalSprites == null) {
+            animalSprites = new ArrayList<>();
+        }
+        if(coopData.getAnimalsData().size() == this.animalSprites.size()) {
+            return;
+        }
+        this.animalSprites = new ArrayList<>();
+        this.coopData = coopData;
+        for (int i = 0; i < coopData.getAnimalsData().size(); i++) {
+            AnimalData ad = coopData.getAnimalsData().get(i);
+            animalSprites.add(new AnimalSprite(coop, ad,
+                hero.playerX.get()+ (3*i % 5), hero.playerY.get()- (i % 7)));
+        }
+    }
 
-    public CoopScreen(FarmScreen farmScreen, CoopMap coop, Player player) {
+    public CoopScreen(FarmScreen farmScreen, CoopMap coop, Player player, CoopData coopData) {
         super(null);
+        this.coopMenuBar = super.getBarnOrCoopMenuBar();
+        coopMenuBar.setPlayer(player);
         this.farmScreen = farmScreen;
         this.coop = coop;
+        this.coopData = coopData;
         this.batch = new SpriteBatch();
         for (Cell cell : coop.getCells()) {
             if (cell == null) continue;
@@ -48,15 +67,8 @@ public class CoopScreen extends GameScreen implements Screen {
                 break;
             }
         }
-        this.animalSprites = new ArrayList<>();
-        this.animalSprites.add(new AnimalSprite(coop,
-            new AnimalData(new Chicken(null,"mamad")),
-            hero.playerX.get(), hero.playerY.get() + 2
-        ));
-        this.animalSprites.add(new AnimalSprite(coop,
-            new AnimalData(new Dino(null,"asghar")),
-            hero.playerX.get() +3, hero.playerY.get() + 4
-        ));
+        updateAnimalSprites(coopData);
+        this.id = coopData.getId();
 //        this.animalSprites.add(new AnimalSprite(coop,
 //            new AnimalData(new Pig(null,"asghar")),
 //            hero.playerX-2, hero.playerY + 3
@@ -134,15 +146,15 @@ public class CoopScreen extends GameScreen implements Screen {
     @Override
     public void render(float delta) {
         if(isGameFinished) return;
-        Result result = Playeracts.handleInput(hero, coop, stage, delta);
+        Result result = PlayerActs.handleInput(hero, coop, stage, delta);
         if(!result.success()){
             if(result.message().equals("cheat")){
                 return;
             }
         }
-        Playeracts.approach(hero);
+        PlayerActs.approach(hero);
         randomMovement();
-        Playeracts.animalApproach(animalSprites,delta);
+        PlayerActs.animalApproach(animalSprites,delta);
         Gdx.gl.glClearColor(0.8f, 0.9f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -198,7 +210,7 @@ public class CoopScreen extends GameScreen implements Screen {
     }
 
     @Override public void show() {
-        Playeracts.setScreen(this);
+        PlayerActs.setScreen(this);
     }
     @Override public void hide() {}
     @Override public void pause() {}
@@ -213,4 +225,8 @@ public class CoopScreen extends GameScreen implements Screen {
     }
 
     public ArrayList<AnimalSprite> getAnimalSprites() {return animalSprites;}
+
+    public int getId() {
+        return id;
+    }
 }

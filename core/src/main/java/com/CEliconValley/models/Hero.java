@@ -197,9 +197,78 @@ public class Hero {
         }
         return null;
     }
+
+    public Animation<TextureRegion> eat(){
+        ArrayList<TGPoint> tgPoints = getEatTG();
+        TextureRegion[] wantedActs=new TextureRegion[tgPoints.size()];
+        switch(currentDirection){
+            case 1:
+                for (int i = 0; i < tgPoints.size(); i++) {
+                    TGPoint tgPoint = tgPoints.get(i);
+                    wantedActs[i] = playerActs[tgPoint.row][tgPoint.col];
+                }
+                return new Animation<>(0.15f,wantedActs);
+            case 2:
+                for (int i = 0; i < tgPoints.size(); i++) {
+                    TGPoint tgPoint = tgPoints.get(i);
+                    wantedActs[i] = playerActs[tgPoint.row][tgPoint.col];
+                }
+                return new Animation<>(0.15f,wantedActs);
+            case 3:
+                for (int i = 0; i < tgPoints.size(); i++) {
+                    TGPoint tgPoint = tgPoints.get(i);
+                    wantedActs[i] = playerActs[tgPoint.row][tgPoint.col];
+                }
+                return new Animation<>(0.15f,wantedActs);
+            case 4:
+                for (int i = 0; i < tgPoints.size(); i++) {
+                    TGPoint tgPoint = tgPoints.get(i);
+                    TextureRegion flippedFrame = new TextureRegion(playerActs[tgPoint.row][tgPoint.col]);
+                    flippedFrame.flip(true, false);
+                    wantedActs[i] = flippedFrame;
+                }
+                return new Animation<>(0.15f, wantedActs);
+
+        }
+        return null;
+    }
     public Farm getFarm() {
         return farm;
     }
+
+
+    private ArrayList<TGPoint> getEatTG(){
+        ArrayList<TGPoint> tgp = new ArrayList();
+        tgp.add(new TGPoint(5,4));
+        tgp.add(new TGPoint(5,5));
+        tgp.add(new TGPoint(5,6));
+        tgp.add(new TGPoint(5,7));
+        tgp.add(new TGPoint(6,0));
+        tgp.add(new TGPoint(6,1));
+        tgp.add(new TGPoint(6,2));
+        tgp.add(new TGPoint(6,3));
+
+
+        tgp.add(new TGPoint(4,4));
+        tgp.add(new TGPoint(4,5));
+        tgp.add(new TGPoint(4,4));
+        tgp.add(new TGPoint(4,5));
+
+        tgp.add(new TGPoint(4,6));
+        tgp.add(new TGPoint(4,7));
+        tgp.add(new TGPoint(5,0));
+        tgp.add(new TGPoint(5,1));
+        tgp.add(new TGPoint(5,2));
+        tgp.add(new TGPoint(5,3));
+        tgp.add(new TGPoint(4,6));
+        tgp.add(new TGPoint(4,7));
+        tgp.add(new TGPoint(5,0));
+        tgp.add(new TGPoint(5,1));
+        tgp.add(new TGPoint(5,2));
+        tgp.add(new TGPoint(5,3));
+        return tgp;
+    }
+
 
 
 }

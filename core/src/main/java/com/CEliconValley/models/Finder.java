@@ -333,4 +333,22 @@ public class Finder {
         }
         return null;
     }
+    public static BarnData getbdByid(int id){
+        FarmData farmData = getfd();
+        for (BarnData bd : farmData.getBarnsData()) {
+            if(bd.getId() == id){
+                return bd;
+            }
+        }
+        return null;
+    }
+    public static CoopData getcdByid(int id){
+        FarmData farmData = getfd();
+        for (CoopData cd : farmData.getCoopsData()) {
+            if(cd.getId() == id){
+                return cd;
+            }
+        }
+        return null;
+    }
 }

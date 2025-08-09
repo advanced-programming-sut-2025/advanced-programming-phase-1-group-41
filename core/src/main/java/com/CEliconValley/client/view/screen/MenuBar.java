@@ -2,6 +2,7 @@ package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.PlayerData;
+import com.CEliconValley.common.SlotData;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.VoteMessage;
@@ -14,10 +15,7 @@ import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -25,6 +23,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 
@@ -65,7 +64,7 @@ public class MenuBar {
     public MenuBar(GameScreen screen) {
         this.screen = screen;
         menuTexture = GameAssetManager.getGameAssetManager().getScreenTexture("Menu_Screen.png");
-        miniMapTexture = GameAssetManager.getGameAssetManager().getScreenTexture("map.png");
+        miniMapTexture = GameAssetManager.getGameAssetManager().getScreenTexture("map.jpg");
         characterTexture = GameAssetManager.getGameAssetManager().getScreenTexture("character.png");
         infoTexture = GameAssetManager.getGameAssetManager().getBackgroundTexture("Info_Background1.png");
 
@@ -193,11 +192,11 @@ public class MenuBar {
 
 
                         if (slot.getQuantity()>1) {
+                            font.getData().setScale(2.5f);
                             String amountText = String.valueOf(slot.getQuantity());
                             GlyphLayout layout = new GlyphLayout(font, amountText);
-                            float textX = x + 100;
-                            float textY = y + 8;
-                            font.getData().setScale(2.5f);
+                            float textX = drawX + slotSize * 3 / 4f;
+                            float textY = drawY + layout.height / 3f;
                             font.draw(batch, layout, textX, textY);
                             font.getData().setScale(1f);
                         }
@@ -212,6 +211,17 @@ public class MenuBar {
                                             AppClient.getUserData().getUsername())
                                     );
                                     AppClient.getClient().send(new Gson().toJson(msg));
+                                }else if(Food.parseFood(item.getName()) != null){
+                                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                        new GameCommand("eat " + item.getName(),
+                                            AppClient.getUserData().getUsername())
+                                    );
+                                    AppClient.getClient().send(new Gson().toJson(msg));
+                                    screen.isMenuOpen = !screen.isMenuOpen;
+                                    screen.onRepeat = false;
+                                    screen.hero.currentAnimation = screen.hero.eat();
+                                    screen.hero.isActing.set(true);
+                                    screen.hero.stateTime = 0;
                                 }
                             }
 
@@ -399,6 +409,16 @@ public class MenuBar {
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mousePos);
 
+        if(!(screen instanceof CottageScreen)){
+            font.getData().setScale(2f);
+            font.setColor(Color.RED);
+
+            GlyphLayout layout = new GlyphLayout(font, "You Should Go Home To Use This!");
+            font.draw(batch, layout,  startingX + screenWidth / 3.2f - layout.width / 2, startingY + maxY + screenHeight / 9f);
+            font.setColor(Color.WHITE);
+            font.getData().setScale(1f);
+        }
+
         for (CraftableMachine machine : CraftableMachine.values()) {
             TextureRegion texture = ItemManager.getTexture(machine);
             if (texture == null) continue;
@@ -417,7 +437,7 @@ public class MenuBar {
             float height = width * 2f;
 
 
-            if (!player.getCraftingRecipes().contains(machine.getRecipe())) {
+            if (!Finder.getpd().getCraftingRecipes().contains(machine.getRecipe())) {
                 batch.setColor(0.5f, 0.5f, 0.5f, 0.5f);
             }
 
@@ -427,21 +447,24 @@ public class MenuBar {
             boolean mouseOver = mousePos.x >= drawX && mousePos.x <= drawX + width &&
                 mousePos.y >= drawY && mousePos.y <= drawY + height;
 
-            if (mouseOver && player.getCraftingRecipes().contains(machine.getRecipe())) {
-                drawTooltip(batch, machine, drawX, drawY);
+            if (mouseOver && Finder.getpd().getCraftingRecipes().contains(machine.getRecipe())) {
+                drawToolTip(batch, machine, drawX, drawY);
 
                 if (Gdx.input.justTouched()) {
-                    if (hasAllItems(machine.getRecipe())) {
-                        Map<Item, Integer> requiredItems = machine.getRecipe().neededItems;
-                        Inventory inventory = player.getInventory();
-                        for (Map.Entry<Item, Integer> entry : requiredItems.entrySet()) {
-                            Item item = entry.getKey();
-                            int Amount = entry.getValue();
-                            inventory.removeFromInventory(item, Amount);
-                        }
-                        inventory.addToInventory(machine, 1);
-
-                    }
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand("crafting craft "+machine, AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
+//                    if (hasAllItems(machine.getRecipe())) {
+//                        Map<Item, Integer> requiredItems = machine.getRecipe().neededItems;
+//                        Inventory inventory = player.getInventory();
+//                        for (Map.Entry<Item, Integer> entry : requiredItems.entrySet()) {
+//                            Item item = entry.getKey();
+//                            int Amount = entry.getValue();
+//                            inventory.removeFromInventory(item, Amount);
+//                        }
+//                        inventory.addToInventory(machine, 1);
+//
+//                    }
                 }
             }
             currentX += width * 2.3f;
@@ -463,6 +486,16 @@ public class MenuBar {
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mousePos);
 
+        if(!(screen instanceof CottageScreen)){
+            font.getData().setScale(2f);
+            font.setColor(Color.RED);
+
+            GlyphLayout layout = new GlyphLayout(font, "You Should Go Home To Use This!");
+            font.draw(batch, layout,  startingX + screenWidth / 3.2f - layout.width / 2, startingY + maxY + screenHeight / 9f);
+            font.setColor(Color.WHITE);
+            font.getData().setScale(1f);
+        }
+
         for (Food food : Food.values()) {
             TextureRegion texture = ItemManager.getTexture(food);
             if (texture == null) continue;
@@ -481,7 +514,7 @@ public class MenuBar {
             float height = width ;
 
             CookingRecipe recipe = food.getRecipe();
-            boolean unlocked = recipe != null && player.getCookingRecipes().contains(recipe);
+            boolean unlocked = recipe != null && Finder.getpd().getCookingRecipes().contains(recipe);
 
             if (!unlocked) {
                 batch.setColor(0.5f, 0.5f, 0.5f, 0.5f);
@@ -494,19 +527,22 @@ public class MenuBar {
                 mousePos.y >= drawY && mousePos.y <= drawY + height;
 
             if (mouseOver && unlocked) {
-                drawTooltip(batch, food, drawX, drawY);
+                drawCookingTip(batch, food, drawX, drawY);
 
-                if (Gdx.input.justTouched()) {
-                    if (hasAllItems(recipe)) {
-                        Map<Item, Integer> requiredItems = recipe.neededItems;
-                        Inventory inventory = player.getInventory();
-
-                        for (Map.Entry<Item, Integer> entry : requiredItems.entrySet()) {
-                            inventory.removeFromInventory(entry.getKey(), entry.getValue());
-                        }
-
-                        inventory.addToInventory(food, 1);
-                    }
+                if (Gdx.input.isButtonJustPressed(0)) {
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand("cooking prepare "+food, AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
+//                    if (hasAllItems(recipe)) {
+//                        Map<Item, Integer> requiredItems = recipe.neededItems;
+//                        Inventory inventory = player.getInventory();
+//
+//                        for (Map.Entry<Item, Integer> entry : requiredItems.entrySet()) {
+//                            inventory.removeFromInventory(entry.getKey(), entry.getValue());
+//                        }
+//
+//                        inventory.addToInventory(food, 1);
+//                    }
                 }
             }
 
@@ -702,7 +738,7 @@ public class MenuBar {
         return camelCase.replaceAll("([a-z])([A-Z])", "$1 $2");
     }
 
-    private void drawTooltip(Batch batch, CraftableMachine machine, float drawX, float drawY) {
+    private void drawToolTip(Batch batch, CraftableMachine machine, float drawX, float drawY) {
         CraftingRecipe recipe = machine.getRecipe();
         if (recipe == null) return;
 
@@ -727,13 +763,14 @@ public class MenuBar {
         shapeRenderer.end();
 
         batch.begin();
-
-        batch.draw(infoTexture, x - 2 * padding, y - 2 * padding,
-            infoTexture.getWidth(), infoTexture.getHeight() * recipe.getNeededItems().size() / 2f);
-
         String title = readableName(machine.name());
+        font.getData().setScale(2f);
         GlyphLayout layout = new GlyphLayout(font, title);
-        font.draw(batch, layout, x + padding + width / 2 - layout.width / 2, y + height - 2 * padding);
+        batch.draw(infoTexture,x-2*padding, y - 2 * padding,
+            Math.max(infoTexture.getWidth(), layout.width + 40), infoTexture.getHeight() * recipe.getNeededItems().size() / 2f);
+
+        font.draw(batch, layout, x  + Math.max(infoTexture.getWidth(), layout.width + 40) / 2 - layout.width / 2 - padding * 2, y + height - 2 * padding);
+        font.getData().setScale(1f);
 
 
         int i = 0;
@@ -747,7 +784,7 @@ public class MenuBar {
             if (icon != null) {
                 batch.draw(icon, x + padding, itemY, iconSize, iconSize);
             }
-            if (player.getInventory().doHave(item, amount)) {
+            if (hasInInventory(item, amount)) {
                 font.setColor(0f, 0.5f, 1f, 1f);
             } else {
                 font.setColor(1f, 0f, 0f, 1f);
@@ -757,7 +794,19 @@ public class MenuBar {
             font.setColor(1f, 1f, 1f, 1f);
         }
     }
-    private void drawTooltip(Batch batch, Food food, float drawX, float drawY) {
+
+    private boolean hasInInventory(Item item, int quantity) {
+        PlayerData pd = Finder.getpd();
+        for(SlotData slot : pd.getInventoryData().getSlots()){
+            if(slot.getItemName() == null || slot.getQuantity() == 0) continue;
+            if(slot.getItemName().equals(item.getName())){
+                return slot.getQuantity() >= quantity;
+            }
+        }
+        return false;
+    }
+
+    private void drawCookingTip(Batch batch, Food food, float drawX, float drawY) {
         CookingRecipe recipe = food.getRecipe();
         if (recipe == null) return;
 
@@ -782,8 +831,13 @@ public class MenuBar {
 
         batch.begin();
 
-        batch.draw(infoTexture, x - 2 * padding, y - 2 * padding,
-            infoTexture.getWidth(), infoTexture.getHeight() * recipe.neededItems.size() / 2f);
+        if(recipe.neededItems.size() <= 1){
+            batch.draw(infoTexture, x - 2 * padding, y - 2 * padding,
+                infoTexture.getWidth(), infoTexture.getHeight());
+        }else{
+            batch.draw(infoTexture, x - 2 * padding, y - 2 * padding,
+                infoTexture.getWidth(), infoTexture.getHeight() * recipe.neededItems.size() / 2f);
+        }
 
         String title = readableName(food.getName());
         GlyphLayout layout = new GlyphLayout(font, title);
@@ -801,7 +855,7 @@ public class MenuBar {
                 batch.draw(icon, x + padding, itemY, iconSize, iconSize);
             }
 
-            if (player.getInventory().doHave(item, amount)) {
+            if (hasInInventory(item, amount)) {
                 font.setColor(0f, 0.5f, 1f, 1f);
             } else {
                 font.setColor(1f, 0f, 0f, 1f);

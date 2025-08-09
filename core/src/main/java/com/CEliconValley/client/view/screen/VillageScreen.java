@@ -1,24 +1,14 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
-import com.CEliconValley.client.model.AnimalSprite;
-import com.CEliconValley.client.view.screen.maps.CottageMap;
 import com.CEliconValley.client.view.screen.maps.VillageMap;
 import com.CEliconValley.client.view.screen.randomwalk.Node;
-import com.CEliconValley.client.view.screen.randomwalk.SimplePathFinder;
 import com.CEliconValley.common.*;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.controllers.Spawner.*;
 import com.CEliconValley.models.*;
-import com.CEliconValley.models.buildings.*;
-import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
-import com.CEliconValley.models.buildings.animalContainer.Barn;
-import com.CEliconValley.models.buildings.animalContainer.BarnType;
-import com.CEliconValley.models.buildings.animalContainer.Coop;
-import com.CEliconValley.models.buildings.animalContainer.CoopType;
 import com.CEliconValley.models.foragings.Nature.Grass;
-import com.CEliconValley.models.locations.Village;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.CEliconValley.views.subGames.Rain;
 import com.CEliconValley.views.subGames.Snow;
@@ -141,14 +131,14 @@ public class VillageScreen extends GameScreen implements Screen {
         Gdx.gl.glClearColor(0.8f, 0.9f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        Result result = Playeracts.handleInput(hero, villageMap, stage, delta);
+        Result result = PlayerActs.handleInput(hero, villageMap, stage, delta);
         if (!result.success() && result.message().equals("cheat")) return;
         hero.stateTime += delta;
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        Playeracts.approach(hero);
+        PlayerActs.approach(hero);
 
         batch.begin();
         int minX = (int) ((camera.position.x - camera.viewportWidth / 2) / CELL_SIZE) - 8;
@@ -313,7 +303,7 @@ public class VillageScreen extends GameScreen implements Screen {
         batch.dispose();
         villageTexture.dispose();
     }
-    @Override public void show() { Playeracts.setScreen(this); }
+    @Override public void show() { PlayerActs.setScreen(this); }
     @Override public void hide() { }
     @Override public void pause() { }
     @Override public void resume() { }

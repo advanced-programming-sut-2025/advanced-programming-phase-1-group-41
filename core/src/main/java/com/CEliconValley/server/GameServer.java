@@ -1,10 +1,7 @@
 package com.CEliconValley.server;
 
 import com.CEliconValley.common.messages.*;
-import com.CEliconValley.models.App;
-import com.CEliconValley.models.Lobby;
-import com.CEliconValley.models.Player;
-import com.CEliconValley.models.User;
+import com.CEliconValley.models.*;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.java_websocket.WebSocket;
@@ -47,6 +44,26 @@ public class GameServer extends WebSocketServer {
                 App.getServer().broadcast(new Gson().toJson(response2));
             }
         }
+
+
+        for (Player player : App.getGame().getPlayers()) {
+            if(player.getUser().getUsername().equals(onlineConnections.get(conn).getUsername())){
+                App.getDcguys().add(new DCguy(App.getGame().get_id(), player.getUser()));
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                    new GameCommand("dc-game", ":)"));
+                ArrayList<String> names = new ArrayList<>();
+                for (Player p : App.getGame().getPlayers()) {
+                    if(!p.getUser().getUsername().equals(player.getUser().getUsername())){
+                        names.add(p.getUser().getUsername());
+                    }
+                }
+                sendToGroup(names, new Gson().toJson(msg));
+                System.out.println(player.getUser().getUsername()+" from inside the game got out :(");
+                App.getGame().stopScheduler();
+                App.dcTimestamp = System.currentTimeMillis();
+            }
+        }
+
         onlineConnections.remove(conn);
         System.out.println("Closed connection: " + conn.getRemoteSocketAddress());
     }

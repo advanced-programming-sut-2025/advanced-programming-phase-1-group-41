@@ -1,5 +1,6 @@
 package com.CEliconValley.client.view.screen;
 
+import com.CEliconValley.controllers.Spawner.InventoryRenderer;
 import com.CEliconValley.models.*;
 //import com.CEliconValley.models.buildings.GreenHouse.Door;
 import com.CEliconValley.models.buildings.Door;
@@ -34,8 +35,9 @@ public class CottageScreen extends GameScreen implements Screen {
     private final OrthographicCamera camera;
 
     public CottageScreen(FarmScreen farmScreen, CottageMap cottageMap, Player player) {
-        // todo give the correct inventory renderer
-        super(null);
+        super(new InventoryRenderer(player.getInventory()));
+        this.menuBar = super.getMenuBar();
+        menuBar.setPlayer(player);
         this.farmScreen = farmScreen;
         this.cottageMap = cottageMap;
         this.player = player;
@@ -62,13 +64,13 @@ public class CottageScreen extends GameScreen implements Screen {
     @Override
     public void render(float delta) {
         if(isGameFinished) return;
-        Result result = Playeracts.handleInput(hero, cottageMap, stage, delta);
+        Result result = PlayerActs.handleInput(hero, cottageMap, stage, delta);
         if(!result.success()){
             if(result.message().equals("cheat")){
                 return;
             }
         }
-        Playeracts.approach(hero);
+        PlayerActs.approach(hero);
 
         Gdx.gl.glClearColor(0.8f, 0.9f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -84,7 +86,12 @@ public class CottageScreen extends GameScreen implements Screen {
             TextureRegion currentFrame = hero.currentAnimation.getKeyFrame(hero.stateTime, onRepeat);
             batch.draw(currentFrame, hero.renderX - CELL_SIZE, hero.renderY - CELL_SIZE, CELL_SIZE * 2f, CELL_SIZE * 2f);
         }
-
+        if (isMenuOpen) {
+//                menuBar.render(batch, menuX, menuY, menuWidth, menuHeight);
+            menuBar.render(batch, camera);
+        } else {
+            inventoryRenderer.render(batch, camera);
+        }
         camera.position.set(hero.renderX + CELL_SIZE / 2f, hero.renderY + CELL_SIZE / 2f, 0);
         camera.update();
         batch.end();
@@ -95,7 +102,7 @@ public class CottageScreen extends GameScreen implements Screen {
     public void transfer() {
         Cell cell = Finder.findCellByCoordinatesCottage(hero.playerX.get(), hero.playerY.get(), cottageMap);
         if (cell.getObjectMap() instanceof Door) {
-            Playeracts.changeScreen(farmScreen);
+            PlayerActs.changeScreen(farmScreen);
         }
     }
 
@@ -109,7 +116,7 @@ public class CottageScreen extends GameScreen implements Screen {
     }
 
     @Override public void show() {
-        Playeracts.setScreen(this);
+        PlayerActs.setScreen(this);
     }
     @Override public void hide() {}
     @Override public void pause() {}

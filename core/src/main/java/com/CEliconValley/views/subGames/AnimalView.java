@@ -9,26 +9,29 @@ import java.util.regex.Matcher;
 
 public class AnimalView {
     static AnimalController controller =  new AnimalController();
-    public static boolean check(String input){
+    public static boolean check(String input, String playername){
         Matcher matcher;
         if((matcher = GameMainCommands.Build.getMatcher(input))!=null){
             System.out.println(controller.build(matcher));
         }else if((matcher = AnimalCommands.BuyAnimal.getMatcher(input))!=null){
             System.out.println(controller.buyAnimal(matcher));
-        }else if((matcher = AnimalCommands.Pet.getMatcher(input))!=null){
-            System.out.println(controller.pet(matcher));
-        }else if((matcher = FriendShipCommands.CheatSetFriendship.getMatcher(input))!=null){
+        }else if((matcher = AnimalCommands.PetInside.getMatcher(input))!=null){
+            System.out.println(controller.petInside(matcher, playername));
+        }else if((matcher = AnimalCommands.PetOutside.getMatcher(input))!=null){
+            System.out.println(controller.petOutside(matcher, playername));
+        }
+        else if((matcher = FriendShipCommands.CheatSetFriendship.getMatcher(input))!=null){
 //            System.out.println(controller.cheatSetFriendship(matcher));
         }else if((matcher = AnimalCommands.Animals.getMatcher(input))!=null){
             System.out.println(controller.animalsList(matcher));
         }else if((matcher = AnimalCommands.ShepherdAnimals.getMatcher(input))!=null){
             System.out.println(controller.shepherdAnimals(matcher));
         }else if((matcher = AnimalCommands.SellAnimal.getMatcher(input))!=null){
-            System.out.println(controller.sellAnimal(matcher));
+            System.out.println(controller.sellAnimal(matcher, playername));
         }else if((matcher = AnimalCommands.FeedHay.getMatcher(input))!=null){
-            System.out.println(controller.feedHay(matcher));
+            System.out.println(controller.feedHay(matcher, playername));
         }else if((matcher = AnimalCommands.CollectProduce.getMatcher(input))!=null){
-            System.out.println(controller.collectProduct(matcher));
+            System.out.println(controller.collectProduct(matcher, playername));
         }else if((matcher = AnimalCommands.Produces.getMatcher(input))!=null){
             System.out.println(controller.producesList(matcher));
         }

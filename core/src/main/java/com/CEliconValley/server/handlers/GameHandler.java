@@ -6,15 +6,13 @@ import com.CEliconValley.common.messages.*;
 import com.CEliconValley.database.UserDB;
 import com.CEliconValley.models.*;
 import com.CEliconValley.client.view.GameMenu;
-import com.CEliconValley.server.GameServer;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.java_websocket.WebSocket;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class GameHandler {
     private static final BlockingQueue<GameCommand> commandQueue = new LinkedBlockingQueue<>();
@@ -116,6 +114,7 @@ public class GameHandler {
                 UserDB.saveGame(App.getGame());
                 GameMessage<String> exiter = new GameMessage<>("game-command","exit-game");
                 App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(exiter));
+                App.setGame(null);
             }
             case "load-game" -> {
                 GameMessage<String> msg = gson.fromJson(message, new TypeToken<GameMessage<String>>(){}.getType());
@@ -134,8 +133,34 @@ public class GameHandler {
                 }
                 lobby.postLoad(gd.getLobby().getLobbyID(), gd.get_id(), conn);
             }
+            case "player-message" -> {
+                GameMessage<PlayerMessage> playerMsg = gson.fromJson(message, new TypeToken<GameMessage<PlayerMessage>>() {}.getType());
+                App.getGame().getPlayerMessages().add(playerMsg.body);
+                GameMessage<MessageCred> msg = new GameMessage<>("message-cred",
+                    new MessageCred(App.getGame().getPlayerMessages()));
+                App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), new Gson().toJson(msg));
+                Player mention = isMentioned(playerMsg.body.getMessage());
+                if(mention != null){
+                    System.out.println(new Result(true, "mentioned "+mention));
+                    GameMessage<GameCommand> mmsg = new GameMessage<>("game-command",
+                        new GameCommand("mention",playerMsg.body.getMessage()));
+                    AtomicReference<WebSocket> mentionconn = new AtomicReference<>();
+                    App.getServer().getOnlineConnections().forEach((k,v) -> {
+                        if(v.getUsername().equalsIgnoreCase(mention.getUser().getUsername())){
+                            mentionconn.set(k);
+                        }
+                    });
+                    if(mentionconn.get() != null){
+                        mentionconn.get().send(gson.toJson(mmsg));
+                    }
+                }else{
+                    System.out.println(new Result(false, "no match found"));
+                }
+            }
         }
     }
+
+
 
     public static void loadGame(Game game){
         App.setGame(game);
@@ -234,10 +259,25 @@ public class GameHandler {
 
         gameView.check(command.command, command.playerName);
 
-        System.out.println("printing inventory: ");
-        gameView.check("inventory show", command.playerName);
+//        System.out.println("printing inventory: ");
+//        gameView.check("inventory show", command.playerName);
 
         GameMessage<GameData> msg = new GameMessage<>("game-data", new GameData(game));
         App.getServer().sendToGroupByPlayers(game.getPlayers(), new Gson().toJson(msg));
+    }
+
+    private static Player isMentioned(String message){
+        for (String sub : message.split("\\s+")) {
+            System.out.println("checking for {"+sub+"}");
+            if(sub.startsWith("@")){
+                System.out.println("  ["+sub+"]");
+                for (Player player : App.getGame().getPlayers()) {
+                    if(sub.substring(1,sub.length()).equalsIgnoreCase(player.getUser().getUsername())){
+                        return player;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

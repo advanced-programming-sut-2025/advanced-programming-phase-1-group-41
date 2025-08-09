@@ -1,7 +1,6 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
-import com.CEliconValley.client.model.AnimalSprite;
 import com.CEliconValley.client.view.screen.maps.*;
 import com.CEliconValley.client.view.screen.randomwalk.Node;
 import com.CEliconValley.client.view.screen.randomwalk.SimplePathFinder;
@@ -195,9 +194,11 @@ public class FarmScreen extends GameScreen implements Screen {
         batch.setColor(ApplyFog(getTimeColor(AppClient.getGameData().getTime().getHour())));
         Gdx.gl.glClearColor(0.8f, 0.9f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Result result = Playeracts.handleInput(hero, farmMap, stage, delta);
+        Result result = PlayerActs.handleInput(hero, farmMap, stage, delta);
         if (!result.success()) {
-            if (result.message().equals("cheat")) {
+            if (result.message().equals("cheat") ||
+                result.message().equals("chat") ||
+                result.message().equals("scoreboard")) {
                 return;
             }
         }
@@ -207,7 +208,7 @@ public class FarmScreen extends GameScreen implements Screen {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        Playeracts.approach(hero);
+        PlayerActs.approach(hero);
 
         batch.begin();
         int minX = (int) ((camera.position.x - camera.viewportWidth / 2) / CELL_SIZE) - 8;
@@ -383,10 +384,13 @@ public class FarmScreen extends GameScreen implements Screen {
                             ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new GreenHouseScreen(this, new GreenhouseMap(0, 0), player));
                         } else if (around.getObjectName().equals(new Barn().getName())) {
                             ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new BarnScreen(this,
-                                new BarnMap(0, 0, BarnType.values()[findBarnByDoor().getBarnTypeInt()]), player));
+                                new BarnMap(0, 0, BarnType.values()[findBarnByDoor().getBarnTypeInt()]), player,
+                                findBarnByDoor()));
                         } else if (around.getObjectName().equals(new Coop().getName())) {
                             ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new CoopScreen(this,
-                                new CoopMap(0, 0, CoopType.values()[findCoopByDoor().getCoopTypeInt()]), player));
+                                new CoopMap(0, 0, CoopType.values()[findCoopByDoor().getCoopTypeInt()]), player,
+                                findCoopByDoor()
+                                ));
                         }
                     }
                 }
@@ -460,7 +464,7 @@ public class FarmScreen extends GameScreen implements Screen {
 
     @Override
     public void show() {
-        Playeracts.setScreen(this);
+        PlayerActs.setScreen(this);
         System.out.println("im here ;)");
     }
 

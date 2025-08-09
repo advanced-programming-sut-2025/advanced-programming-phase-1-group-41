@@ -2,9 +2,7 @@ package com.CEliconValley.client.controller.handlers;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.view.LobbyScreen;
-import com.CEliconValley.client.view.screen.FarmScreen;
-import com.CEliconValley.client.view.screen.GameScreen;
-import com.CEliconValley.client.view.screen.Playeracts;
+import com.CEliconValley.client.view.screen.*;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.FarmData;
 import com.CEliconValley.common.GameData;
@@ -15,11 +13,10 @@ import com.CEliconValley.models.Menu;
 import com.CEliconValley.models.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.utils.Timer;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-
-import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class ClientGameHandler {
     public static void handle(String type, JsonObject body, Gson gson, long timestamp) {
@@ -29,7 +26,13 @@ public class ClientGameHandler {
                 if(gs instanceof FarmScreen fs){
                     fs.getInventoryRenderer().updateInventory();
                 }
+                if (gs instanceof BarnScreen barnScreen) {
+                    barnScreen.updateAnimalSprites(Finder.getbdByid(barnScreen.getId()));
+                } else if (gs instanceof CoopScreen coopScreen) {
+                    coopScreen.updateAnimalSprites(Finder.getcdByid(coopScreen.getId()));
+                }
                 updateTime(gs);
+                gs.updateChat();
                 }
         });
         switch (type) {
@@ -82,6 +85,10 @@ public class ClientGameHandler {
                 GameData gamedata = gson.fromJson(body, GameData.class);
                 Gdx.app.postRunnable(() -> {
                     AppClient.setGameData(gamedata);
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen() instanceof GameScreen gs){
+                        gs.updateScoreboard();
+                    }
                     if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof FarmScreen fs){
                         if(fs.isGameFinished) return;
                         updateTime(fs);
@@ -145,8 +152,17 @@ public class ClientGameHandler {
                     screen.handleVote(screen.getStage(), vote.target);
                 }
             }
+            case "message-cred" -> {
+                if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                    .getScreen()  instanceof GameScreen gs){
+                    MessageCred cred = gson.fromJson(body, MessageCred.class);
+                    AppClient.getGameData().setPlayerMessages(cred.playerMessages);
+                    gs.updateChat();
+                }
+            }
             case "game-command" -> {
                 GameCommand gamecommand = gson.fromJson(body, GameCommand.class);
+                System.out.println("received a command "+gamecommand.command);
                 if(gamecommand.command.equals("update-vote")){
                     if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof GameScreen screen){
                         screen.howManyVotedLabel.setText("Vote: "+gamecommand.playerName+" / "+AppClient.getGameData().getPlayersData().size());
@@ -154,6 +170,37 @@ public class ClientGameHandler {
                 }else if(gamecommand.command.equals("update-ter")){
                     if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof GameScreen screen){
                         screen.terhowmanyLabel.setText("Vote: "+gamecommand.playerName+" / "+AppClient.getGameData().getPlayersData().size());
+                    }
+                }else if(gamecommand.command.equals("dc-game")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof GameScreen screen){
+                        screen.handledc(screen.getStage());
+                    }
+                }else if(gamecommand.command.equals("resume-game")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen() instanceof GameScreen screen){
+                        screen.setDcmode(false);
+                        screen.dcLabel.setVisible(false);
+                        screen.overlay.addAction(Actions.sequence(
+                            Actions.fadeOut(0.5f),
+                            Actions.run(() -> screen.overlay.remove())
+                        ));
+
+                        if (screen.overlay != null) {
+                            screen.overlay.remove();
+                            screen.overlay = null;
+                        }
+                    }
+                }else if(gamecommand.command.equals("mention")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen() instanceof GameScreen screen){
+                        screen.updateTagMessage("you got mentioned!");
+                        new Timer().schedule(new Timer.Task() {
+
+                            @Override
+                            public void run() {
+                                screen.removeTagMessage();
+                            }
+                        }, 5);
                     }
                 }
             }
@@ -188,7 +235,7 @@ public class ClientGameHandler {
                         .getScreen() instanceof GameScreen gs){
                         System.out.println("setting it to false");
                         gs.setHalt(false);
-                        Playeracts.alrSent = false;
+                        PlayerActs.alrSent = false;
                     }
                 }else if(command.equals("terminate-vote")){
                     if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
@@ -207,12 +254,12 @@ public class ClientGameHandler {
                             screen.overlay.remove();
                             screen.overlay = null;
                         }
-                        Playeracts.alrrSent = false;
+                        PlayerActs.alrrSent = false;
                     }
                 }else if(command.equals("exit-game")){
                     if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
                         .getScreen() instanceof GameScreen screen){
-                        Playeracts.alrrSent = false;
+                        PlayerActs.alrrSent = false;
                         AppClient.endGame(screen);
                     }
                 }else if(command.equals("new-ter")){
@@ -236,7 +283,7 @@ public class ClientGameHandler {
                             screen.overlay.remove();
                             screen.overlay = null;
                         }
-                        Playeracts.alrrSent = false;
+                        PlayerActs.alrrSent = false;
                     }
                 }
             }

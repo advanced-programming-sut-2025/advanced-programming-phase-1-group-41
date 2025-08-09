@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 
 public class CookingView {
     static CookingController controller =  new CookingController();
-    public static boolean check(String input){
+    public static boolean check(String input, String playername){
         Matcher matcher;
         if((matcher = GameMainCommands.CookingShowRecipes.getMatcher(input))!=null){
             System.out.println(controller.showRecepies(matcher));;
@@ -16,7 +16,7 @@ public class CookingView {
         }else if((matcher = GameMainCommands.ShowRefrigerator.getMatcher(input))!=null){
             System.out.println(controller.showRef(matcher));;
         }else if((matcher = GameMainCommands.CookingPrepare.getMatcher(input))!=null){
-            System.out.println(controller.prepareFood(matcher));;
+            System.out.println(controller.prepareFood(matcher, playername));;
         }
         else{
             return false;

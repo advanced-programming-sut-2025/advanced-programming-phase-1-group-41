@@ -18,7 +18,7 @@ public class CoopData {
     int anchorY;
     int coopTypeInt;
     int capacity;
-
+    int id;
     public CoopData() {
     }
 
@@ -33,12 +33,13 @@ public class CoopData {
         this.anchorY = coop.getAnchorY();
         this.coopTypeInt = coop.getCoopType().ordinal();
         this.capacity = coop.getCapacity();
+        this.id = coop.getId();
     }
 
 
     public Coop getCoop(Player owner, Farm farm) {
         return new Coop(getAnimals(owner),this.anchorX, this.anchorY, CoopType.values()[this.coopTypeInt],
-            this.capacity, this.x, this.y, farm);
+            this.capacity, this.x, this.y, farm, id);
     }
 
     private ArrayList<Animal> getAnimals(Player owner) {
@@ -80,4 +81,8 @@ public class CoopData {
         return y;
     }
 
+
+    public int getId() {
+        return id;
+    }
 }

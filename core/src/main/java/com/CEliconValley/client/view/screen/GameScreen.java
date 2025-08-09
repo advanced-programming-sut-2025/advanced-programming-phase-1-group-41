@@ -2,12 +2,15 @@ package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
+import com.CEliconValley.client.model.StrategyScoreboard;
 import com.CEliconValley.client.view.screen.maps.*;
 import com.CEliconValley.common.CellData;
+import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.controllers.Spawner.InventoryRenderer;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Hero;
+import com.CEliconValley.models.PlayerMessage;
 import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.foragings.ForagingTree;
 import com.CEliconValley.models.foragings.Nature.Grass;
@@ -15,23 +18,27 @@ import com.CEliconValley.models.foragings.Nature.Lake;
 import com.CEliconValley.models.foragings.Nature.Obstacle;
 import com.CEliconValley.models.foragings.Nature.Rock;
 import com.CEliconValley.models.locations.Location;
+import com.CEliconValley.models.ui.CustomColors;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public abstract class GameScreen implements Screen {
@@ -41,6 +48,8 @@ public abstract class GameScreen implements Screen {
     protected InventoryRenderer inventoryRenderer;
     protected boolean cheatMode = false;
     public boolean voteMode = false;
+    public boolean chatMode = false;
+    public boolean scoreboardMode = false;
     public Image overlay;
     protected TextField cheatCodeField;
 
@@ -48,14 +57,24 @@ public abstract class GameScreen implements Screen {
     public Label playerVoteLabel;
     public Label howManyVotedLabel;
 
+    public Label tagMessageLabel;
+
+    private TextField chatInput;
+    private ScrollPane chatScrollPane;
+
     public TextButton teryesButton, ternoButton;
     public Label terLabel;
     public Label terhowmanyLabel;
     public boolean terMode = false;
 
+    private Table scoreboardInfoTable;
+
     public boolean isGameFinished = false;
 
     protected Stage stage;
+    protected Stage chatStage;
+    protected Stage scoreboardStage;
+
     public abstract void transfer();
     protected Hero hero;
     protected MenuBar menuBar = new MenuBar(this);
@@ -68,6 +87,12 @@ public abstract class GameScreen implements Screen {
     protected Texture energyYellowTexture = new Texture(Gdx.files.internal("game/EnergyBar/yellow.png"));
     protected Texture energyRedTexture = new Texture(Gdx.files.internal("game/EnergyBar/red.png"));
     protected boolean halt = false;
+    public boolean dcmode = false;
+    public Label dcLabel;
+    Table chatTable;
+    Table sortButtonsTable;
+
+    StrategyScoreboard ss = new StrategyScoreboard();
 
     public void setTextForVoteLabel(String input){
         playerVoteLabel.setText(input);
@@ -76,14 +101,14 @@ public abstract class GameScreen implements Screen {
 
     public void setTextForTerLabel(String input){
         terLabel.setText(input);
-        terLabel.setPosition(Gdx.graphics.getWidth() / 3 - terLabel.getWidth(), stage.getHeight() * 5 / 6- terLabel.getHeight() / 2);
+        terLabel.setPosition(Gdx.graphics.getWidth() / 3f - terLabel.getWidth(), stage.getHeight() * 5 / 6- terLabel.getHeight() / 2);
     }
 
-    public void setupVoteUI(){
+    private void setupVoteUI(){
         playerVoteLabel = new Label("Vote", GameAssetManager.getGameAssetManager().getSkin());
         playerVoteLabel.setVisible(false);
         playerVoteLabel.setFontScale(2f);
-        playerVoteLabel.setPosition(Gdx.graphics.getWidth() / 2 - playerVoteLabel.getWidth(), stage.getHeight() * 5 / 6- playerVoteLabel.getHeight() / 2);
+        playerVoteLabel.setPosition(Gdx.graphics.getWidth() / 2f - playerVoteLabel.getWidth(), stage.getHeight() * 5 / 6- playerVoteLabel.getHeight() / 2);
         stage.addActor(playerVoteLabel);
         yesVoteButton = new TextButton("Yes", GameAssetManager.getGameAssetManager().getSkin());
         yesVoteButton.setColor(Color.GREEN);
@@ -97,7 +122,7 @@ public abstract class GameScreen implements Screen {
         stage.addActor(noVoteButton);
         howManyVotedLabel = new Label("Vote: 0 / "+AppClient.getGameData().getPlayersData().size(), GameAssetManager.getGameAssetManager().getSkin());
         howManyVotedLabel.setFontScale(1.5f);
-        howManyVotedLabel.setPosition(Gdx.graphics.getWidth() / 2 - howManyVotedLabel.getWidth(), stage.getHeight() * 4 / 6- howManyVotedLabel.getHeight() / 2);
+        howManyVotedLabel.setPosition(Gdx.graphics.getWidth() / 2f - howManyVotedLabel.getWidth(), stage.getHeight() * 4 / 6- howManyVotedLabel.getHeight() / 2);
         howManyVotedLabel.setVisible(false);
         stage.addActor(howManyVotedLabel);
 
@@ -114,19 +139,159 @@ public abstract class GameScreen implements Screen {
         terLabel = new Label("Terminate Game", GameAssetManager.getGameAssetManager().getSkin());
         terLabel.setVisible(false);
         terLabel.setFontScale(2f);
-        terLabel.setPosition(Gdx.graphics.getWidth() / 2 - terLabel.getWidth(), stage.getHeight() * 5 / 6- terLabel.getHeight() / 2);
+        terLabel.setPosition(Gdx.graphics.getWidth() / 2f - terLabel.getWidth(), stage.getHeight() * 5 / 6- terLabel.getHeight() / 2);
         stage.addActor(terLabel);
         terhowmanyLabel = new Label("Vote: 0 / "+AppClient.getGameData().getPlayersData().size(), GameAssetManager.getGameAssetManager().getSkin());
         terhowmanyLabel.setFontScale(1.5f);
-        terhowmanyLabel.setPosition(Gdx.graphics.getWidth() / 2 - terhowmanyLabel.getWidth(), stage.getHeight() * 4 / 6- terhowmanyLabel.getHeight() / 2);
+        terhowmanyLabel.setPosition(Gdx.graphics.getWidth() / 2f - terhowmanyLabel.getWidth(), stage.getHeight() * 4 / 6- terhowmanyLabel.getHeight() / 2);
         terhowmanyLabel.setVisible(false);
         stage.addActor(terhowmanyLabel);
+        dcLabel = new Label("oops someone got dced...", GameAssetManager.getGameAssetManager().getSkin());
+        dcLabel.setFontScale(2f);
+        dcLabel.setPosition(Gdx.graphics.getWidth() / 2f - dcLabel.getWidth(), stage.getHeight() * 5 / 6- dcLabel.getHeight() / 2);
+        dcLabel.setVisible(false);
+        stage.addActor(dcLabel);
+    }
 
+    public void updateChat(){
+        chatTable.clear();
+        chatTable = new Table();
+        for(PlayerMessage message : AppClient.getGameData().getPlayerMessages()){
+            assert AppClient.getUserData() != null;
+            if(message.getSender().equals(AppClient.getUserData().getUsername())){
+                Label label = new Label(message.getMessage() + "-", GameAssetManager.getGameAssetManager().getSkin());
+                label.setWrap(true);
+                label.setAlignment(Align.right);
+                label.setColor(CustomColors.GAMEGREENCOLOR);
+                chatTable.add(label).width(380).right().padBottom(5).row();
+            } else{
+                Label label = new Label(message.getSender() + ": " + message.getMessage(), GameAssetManager.getGameAssetManager().getSkin());
+                label.setWrap(true);
+                label.setAlignment(Align.left);
+                chatTable.add(label).width(380).left().padBottom(5).row();
+            }
+        }
+        chatTable.row();
+        chatTable.row().row();
+        chatTable.padBottom(20);
+        chatScrollPane.setActor(chatTable);
+        chatScrollPane.setFadeScrollBars(false);
+        chatScrollPane.setScrollingDisabled(true, false);
+        Gdx.app.postRunnable(() -> {
+            chatScrollPane.validate();
+            chatScrollPane.setScrollPercentY(1f);
+        });
+
+    }
+
+    private void setupChatUI(){
+        chatTable = new Table();
+        chatTable.setFillParent(true);
+        for(PlayerMessage message : AppClient.getGameData().getPlayerMessages()){
+            assert AppClient.getUserData() != null;
+            if(message.getSender().equals(AppClient.getUserData().getUsername())){
+                Label label = new Label(message.getMessage() + "-", GameAssetManager.getGameAssetManager().getSkin());
+                label.setWrap(true);
+                label.setAlignment(Align.right);
+                label.setColor(CustomColors.GAMEGREENCOLOR);
+                chatTable.add(label).width(380).right().padBottom(5).row();
+            } else{
+                Label label = new Label(message.getSender() + ": " + message.getMessage(), GameAssetManager.getGameAssetManager().getSkin());
+                label.setWrap(true);
+                label.setAlignment(Align.left);
+                chatTable.add(label).width(380).left().padBottom(5).row();
+            }
+        }
+        chatScrollPane = new ScrollPane(chatTable, GameAssetManager.getGameAssetManager().getSkin(), "hiddenScroll");
+        chatScrollPane.setFadeScrollBars(false);
+        chatScrollPane.setScrollingDisabled(true, false);
+
+        chatInput = new TextField("", GameAssetManager.getGameAssetManager().getSkin());
+        chatInput.setMessageText("Type a message...");
+        chatInput.setMaxLength(200);
+
+        Table container = new Table();
+        container.setFillParent(true);
+        container.bottom().left().pad(10);
+        container.add(chatScrollPane).width(400).height(400).row();
+        container.add(chatInput).width(400).height(60).padTop(20);
+
+        container.setPosition(stage.getWidth() / 2 - 200,
+            stage.getHeight() / 2 - 200);
+        chatStage.addActor(container);
+    }
+
+    public void updateScoreboard(){
+        Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+        if(scoreboardInfoTable == null){
+            return;
+        }
+        scoreboardInfoTable.clear();
+        scoreboardInfoTable.add(sortButtonsTable).colspan(4).padBottom(20).row();
+
+        scoreboardInfoTable.add(new Label("Player", skin)).pad(10);
+        scoreboardInfoTable.add(new Label("Money", skin)).pad(10);
+        scoreboardInfoTable.add(new Label("Missions", skin)).pad(10);
+        scoreboardInfoTable.add(new Label("Skills", skin)).pad(10);
+        scoreboardInfoTable.row();
+
+        ss.updateScoreboard(scoreboardInfoTable);
+
+
+    }
+
+    private void setupScoreboardUI(){
+
+        Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+
+        scoreboardInfoTable = new Table();
+        scoreboardInfoTable.setFillParent(true);
+
+        scoreboardInfoTable.center().top().padTop(300);
+
+        sortButtonsTable = new Table();
+        TextButton sortMoneyBtn = new TextButton("Sort by Money", skin);
+        sortMoneyBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ss.setStrategyScore(0);
+                updateScoreboard();
+            }
+        });
+
+        TextButton sortMissionsBtn = new TextButton("Sort by Missions", skin);
+        sortMissionsBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ss.setStrategyScore(1);
+                updateScoreboard();
+            }
+        });
+
+        TextButton sortSkillsBtn = new TextButton("Sort by Skills", skin);
+        sortSkillsBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ss.setStrategyScore(2);
+                updateScoreboard();
+            }
+        });
+
+        sortButtonsTable.add(sortMoneyBtn).padRight(10);
+        sortButtonsTable.add(sortMissionsBtn).padRight(10);
+        sortButtonsTable.add(sortSkillsBtn);
+
+
+
+        updateScoreboard();
+        scoreboardStage.addActor(scoreboardInfoTable);
     }
 
 
     public GameScreen(InventoryRenderer inventoryRenderer) {
         stage = new Stage(new ScreenViewport(), Main.getBatch());
+        chatStage = new Stage(new ScreenViewport(), Main.getBatch());
+        scoreboardStage = new Stage(new ScreenViewport(), Main.getBatch());
         Gdx.input.setInputProcessor(stage);
         this.inventoryRenderer = inventoryRenderer;
         cheatCodeField = new TextField("", GameAssetManager.getGameAssetManager().getSkin());
@@ -137,6 +302,7 @@ public abstract class GameScreen implements Screen {
         setupVoteUI();
 
         stage.addActor(cheatCodeField);
+
         hudImage = new Image(new TextureRegion(hudTexture));
         hudImage.setSize(hudImage.getWidth()*4, hudImage.getHeight()*4);
         energyBarImage = new Image(new TextureRegion(energyBarTexture));
@@ -158,12 +324,36 @@ public abstract class GameScreen implements Screen {
         timeScreen.goldLabel.setAlignment(Align.left);
         timeScreen.goldLabel.setFontScale(1.18f);
         timeScreen.dateLabel.setFontScale(0.8f);
+
+        Texture labelTexture = GameAssetManager.getGameAssetManager().getBackgroundTexture("Info_Background1.png");
+//        TextureRegionDrawable background = new TextureRegionDrawable(new TextureRegion(labelTexture));
+
+        NinePatch ninePatch = new NinePatch(labelTexture, 40, 40, 0, 0);
+        NinePatchDrawable background = new NinePatchDrawable(ninePatch);
+
+
+        Label.LabelStyle style = new Label.LabelStyle();
+        style.font = new BitmapFont();
+        style.font.getData().setScale(2f);
+        style.background = background;
+
+        tagMessageLabel = new Label("", style);
+        // A space forces layout
+        tagMessageLabel.pack();
+        tagMessageLabel.setPosition(stage.getWidth() / 2 - tagMessageLabel.getWidth() / 2, stage.getHeight() / 1.2f);
+        tagMessageLabel.setColor(CustomColors.SWAMP_COLOR);
+        tagMessageLabel.setVisible(false);
+
+        stage.addActor(tagMessageLabel);
         stage.addActor(timeScreen.dateLabel);
         stage.addActor(timeScreen.timeLabel);
         stage.addActor(timeScreen.goldLabel);
         stage.addActor(timeScreen.getHudTable());
         stage.addActor(energyBarImage);
         this.hero = new Hero();
+
+        setupChatUI();
+        setupScoreboardUI();
     }
 
 
@@ -184,7 +374,8 @@ public abstract class GameScreen implements Screen {
             for (CellData cd : villageMap.villageData.getCellsData()) {
                 if (cd.getX() == x && cd.getY() == y) {
                     Cell cell = cd.extractData();
-                    if (cell.getObjectMap() instanceof Lake ||( cell.getObjectMap() instanceof Grass grass && !grass.isGround() )||cell.getObjectMap() instanceof Wall ||cell.getObjectMap() instanceof Obstacle) {
+                    if (cell.getObjectMap() instanceof Lake ||( cell.getObjectMap() instanceof Grass grass && !grass.isGround() )
+                        ||cell.getObjectMap() instanceof Wall ||cell.getObjectMap() instanceof Obstacle) {
                         System.out.println(cd.getObjectName()+" "+cell.getX()+" "+cell.getY());
                         return false;
                     }
@@ -195,11 +386,8 @@ public abstract class GameScreen implements Screen {
         if(location instanceof CottageMap cottageMap){
             for (Cell cell : cottageMap.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
-                    if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock
-                        || cell.getObjectMap() instanceof Wall || cell.getObjectMap() instanceof ForagingTree) {
-                        return false;
-                    }
-                    return true;
+                    return !(cell.getObjectMap() instanceof Lake) && !(cell.getObjectMap() instanceof Rock)
+                        && !(cell.getObjectMap() instanceof Wall) && !(cell.getObjectMap() instanceof ForagingTree);
                 }
             }
             return false;
@@ -207,30 +395,21 @@ public abstract class GameScreen implements Screen {
         if(location instanceof GreenhouseMap greenHouseMap){
             for (Cell cell : greenHouseMap.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
-                    if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock ||cell.getObjectMap() instanceof Wall ||cell.getObjectMap() instanceof ForagingTree) {
-                        return false;
-                    }
-                    return true;
+                    return !(cell.getObjectMap() instanceof Lake) && !(cell.getObjectMap() instanceof Rock) && !(cell.getObjectMap() instanceof Wall) && !(cell.getObjectMap() instanceof ForagingTree);
                 }
             }
         }
         if(location instanceof CoopMap coopMap) {
             for (Cell cell : coopMap.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
-                    if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock || cell.getObjectMap() instanceof Wall) {
-                        return false;
-                    }
-                    return true;
+                    return !(cell.getObjectMap() instanceof Lake) && !(cell.getObjectMap() instanceof Rock) && !(cell.getObjectMap() instanceof Wall);
                 }
             }
         }
         if(location instanceof BarnMap barnMap){
             for (Cell cell : barnMap.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
-                    if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock || cell.getObjectMap() instanceof Wall) {
-                        return false;
-                    }
-                    return true;
+                    return !(cell.getObjectMap() instanceof Lake) && !(cell.getObjectMap() instanceof Rock) && !(cell.getObjectMap() instanceof Wall);
                 }
             }
         }
@@ -259,6 +438,48 @@ public abstract class GameScreen implements Screen {
         stage.addActor(overlay);
         overlay.toBack();
     }
+
+    public void handleChatMode(Stage stage) {
+        chatMode = true;
+        chatInput.setVisible(true);
+        chatScrollPane.setVisible(true);
+        stage.setKeyboardFocus(chatInput);
+        chatInput.setText("");
+
+        Gdx.input.setInputProcessor(stage);
+
+        overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
+            .getGameAssetManager()
+            .getBackgroundTexture("Chat_Background.png"))));
+
+        overlay.setSize(stage.getWidth(), stage.getHeight());
+        overlay.setPosition(0, 0);
+
+        overlay.getColor().a = 0;
+        overlay.addAction(Actions.fadeIn(0.5f));
+
+
+        stage.addActor(overlay);
+        overlay.toBack();
+    }
+
+    public void handleScoreboard(Stage stage) {
+        scoreboardMode = true;
+        Gdx.input.setInputProcessor(stage);
+
+        overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
+            .getGameAssetManager()
+            .getBackgroundTexture("Scoreboard_Background.png"))));
+
+        overlay.setSize(stage.getWidth(), stage.getHeight());
+        overlay.setPosition(0, 0);
+        overlay.getColor().a = 0;
+        overlay.addAction(Actions.fadeIn(0.5f));
+        stage.addActor(overlay);
+        updateScoreboard();
+        overlay.toBack();
+    }
+
 
     public void handleVote(Stage stage, String name) {
         Gdx.app.postRunnable(() -> {
@@ -298,6 +519,29 @@ public abstract class GameScreen implements Screen {
             terhowmanyLabel.setText("Vote: 0 / "+AppClient.getGameData().getPlayersData().size());
             setTextForTerLabel("Vote for terminating the game");
 
+
+            overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
+                .getGameAssetManager()
+                .getBackgroundTexture("Field1.png"))));
+
+            //        overlay.setColor(0, 0, 0, 0.5f);
+            overlay.setSize(stage.getWidth(), stage.getHeight());
+            overlay.setPosition(0, 0);
+
+            overlay.getColor().a = 0;
+            overlay.addAction(Actions.fadeIn(0.5f));
+
+
+            stage.addActor(overlay);
+            overlay.toBack();
+
+        });
+    }
+
+    public void handledc(Stage stage) {
+        Gdx.app.postRunnable(() -> {
+            dcmode = true;
+            dcLabel.setVisible(true);
 
             overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
                 .getGameAssetManager()
@@ -382,9 +626,36 @@ public abstract class GameScreen implements Screen {
         return stage;
     }
 
+    public boolean isDcmode() {
+        return dcmode;
+    }
+
+    public void setDcmode(boolean dcmode) {
+        this.dcmode = dcmode;
+    }
+
     @Override
     public void dispose() {
         stage.dispose();
+    }
+
+    public Stage getChatStage() {
+        return chatStage;
+    }
+
+    public TextField getChatInput() {
+        return chatInput;
+    }
+
+    public void updateTagMessage(String message) {
+        tagMessageLabel.setText(message);
+        tagMessageLabel.setVisible(true);
+        tagMessageLabel.setPosition(stage.getWidth() / 2 - tagMessageLabel.getWidth() / 2, stage.getHeight() / 1.2f);
+        tagMessageLabel.pack();
+    }
+    public void removeTagMessage(){
+        tagMessageLabel.setText("");
+        tagMessageLabel.setVisible(false);
     }
 }
 

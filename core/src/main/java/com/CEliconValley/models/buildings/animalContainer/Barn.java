@@ -21,6 +21,7 @@ public class Barn implements Building {
     private int anchorY;
     private BarnType barnType;
     private int capacity;
+    private int id;
 
     public int getX() {
         return x;
@@ -38,7 +39,7 @@ public class Barn implements Building {
     }
 
     public Barn(ArrayList<Animal> animals, int anchorX,
-                int anchorY, BarnType barnType, int capacity, int x, int y, Farm farm) {
+                int anchorY, BarnType barnType, int capacity, int x, int y, Farm farm, int id) {
         this.animals = new ArrayList<>(animals);
         this.anchorX = anchorX;
         this.anchorY = anchorY;
@@ -79,6 +80,7 @@ public class Barn implements Building {
                 cell.setObjectMap(this);
             }
         }
+        this.id=id;
     }
 
     public Barn(int x, int y, Farm farm, BarnType barnType) {
@@ -121,6 +123,7 @@ public class Barn implements Building {
                 cell.setObjectMap(this);
             }
         }
+        this.id = farm.getBarns() == null ? 0 : farm.getBarns().size();
     }
     public Barn(int x, int y, Village village) {
         this.x = x;
@@ -198,5 +201,7 @@ public class Barn implements Building {
     }
 
 
-
+    public int getId() {
+        return id;
+    }
 }

@@ -4,8 +4,8 @@ import com.CEliconValley.client.model.AnimalSprite;
 import com.CEliconValley.client.view.screen.randomwalk.Node;
 import com.CEliconValley.client.view.screen.randomwalk.SimplePathFinder;
 import com.CEliconValley.common.AnimalData;
+import com.CEliconValley.common.BarnData;
 import com.CEliconValley.models.*;
-import com.CEliconValley.models.animals.animalKinds.*;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.client.view.screen.maps.BarnMap;
 import com.CEliconValley.models.ui.GameAssetManager;
@@ -33,10 +33,27 @@ public class BarnScreen extends GameScreen implements Screen {
     private boolean isBarnMenuOpen = false;
     private boolean onRepeat = true;
     private ArrayList<AnimalSprite> animalSprites;
-
+    private BarnData barnData;
     private final OrthographicCamera camera;
+    private int id;
 
-    public BarnScreen(FarmScreen farmScreen, BarnMap barn, Player player) {
+    public void updateAnimalSprites(BarnData barnData) {
+        if(animalSprites == null) {
+            animalSprites = new ArrayList<>();
+        }
+        if(barnData.getAnimalsData().size() == this.animalSprites.size()) {
+            return;
+        }
+        this.animalSprites = new ArrayList<>();
+        this.barnData = barnData;
+        for (int i = 0; i < barnData.getAnimalsData().size(); i++) {
+            AnimalData ad = barnData.getAnimalsData().get(i);
+            animalSprites.add(new AnimalSprite(barn, ad,
+                hero.playerX.get()+ (3*i % 5), hero.playerY.get()+ (i % 7)));
+        }
+    }
+
+    public BarnScreen(FarmScreen farmScreen, BarnMap barn, Player player, BarnData barnData) {
         super(null);
         this.barnMenuBar = super.getBarnOrCoopMenuBar();
         barnMenuBar.setPlayer(player);
@@ -51,34 +68,9 @@ public class BarnScreen extends GameScreen implements Screen {
                 break;
             }
         }
-        this.animalSprites = new ArrayList<>();
-        this.animalSprites.add(new AnimalSprite(barn,
-            new AnimalData(new Cow(null,"mamad")),
-            hero.playerX.get(), hero.playerY.get() + 2
-            ));
-        this.animalSprites.add(new AnimalSprite(barn,
-            new AnimalData(new Sheep(null,"asghar")),
-            hero.playerX.get() +3, hero.playerY.get() + 4
-            ));
-        this.animalSprites.add(new AnimalSprite(barn,
-            new AnimalData(new Pig(null,"jafar")),
-            hero.playerX.get() -2, hero.playerY.get() + 3
-            ));
-        this.animalSprites.add(new AnimalSprite(barn,
-            new AnimalData(new Goat(null,"abbas")),
-            hero.playerX.get() -4, hero.playerY.get() + 1
-            ));
-        this.animalSprites.add(new AnimalSprite(barn,
-            new AnimalData(new Dino(null,"abolfazl")),
-            hero.playerX.get() -5, hero.playerY.get() + 2
-            ));
-//        this.animalSprites.add(new AnimalSprite(barn,new AnimalData(
-//            new Pig(null, "asghar")), hero.playerX+1, hero.playerY + 3
-//        ));
+        updateAnimalSprites(barnData);
+        this.id = barnData.getId();
 
-
-//        this.background=TextureRegion.split(GameAssetManager.getGameAssetManager().getScreenTexture("Barn_Screen.png"),);
-//        this.background =
         Texture barnTexture = GameAssetManager.getGameAssetManager().getScreenTexture("Barn_Screen.png");
 
         int tileWidth = barnTexture.getWidth();
@@ -139,15 +131,15 @@ public class BarnScreen extends GameScreen implements Screen {
     @Override
     public void render(float delta) {
         if(isGameFinished) return;
-        Result result = Playeracts.handleInput(hero, barn, stage, delta);
+        Result result = PlayerActs.handleInput(hero, barn, stage, delta);
         if(!result.success()){
             if(result.message().equals("cheat")){
                 return;
             }
         }
         randomMovement();
-        Playeracts.approach(hero);
-        Playeracts.animalApproach(animalSprites,delta);
+        PlayerActs.approach(hero);
+        PlayerActs.animalApproach(animalSprites,delta);
         Gdx.gl.glClearColor(0.8f, 0.9f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -208,7 +200,7 @@ public class BarnScreen extends GameScreen implements Screen {
     }
 
     @Override public void show() {
-        Playeracts.setScreen(this);
+        PlayerActs.setScreen(this);
     }
     @Override public void hide() {}
     @Override public void pause() {}
@@ -223,4 +215,8 @@ public class BarnScreen extends GameScreen implements Screen {
     }
 
     public ArrayList<AnimalSprite> getAnimalSprites() {return animalSprites;}
+
+    public int getId() {
+        return id;
+    }
 }

@@ -23,6 +23,8 @@ public class AppClient {
     private static Lobby currentLobby;
     private static ArrayList<String> games = new ArrayList<>();
     private static Set<OnlineData> onlinePlayers = new HashSet<>();
+
+
     public static void login(UserData ud) {
         userData = ud;
         loggedIn = true;
