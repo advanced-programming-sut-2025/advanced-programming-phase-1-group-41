@@ -121,7 +121,7 @@ public class Inventory {
 
     private boolean appendInventory(Item item, int quantity){
         for (Slot slot : slots) {
-            if(slot == null || slot.getItem() == null){
+            if(slot == null || slot.getItem() == null || slot.getItem().getName() == null){
                 continue;
             }
             if(item.getName().equals((slot.getItem().getName()))){
