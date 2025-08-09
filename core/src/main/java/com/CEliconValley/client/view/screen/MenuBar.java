@@ -211,6 +211,17 @@ public class MenuBar {
                                             AppClient.getUserData().getUsername())
                                     );
                                     AppClient.getClient().send(new Gson().toJson(msg));
+                                }else if(Food.parseFood(item.getName()) != null){
+                                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                        new GameCommand("eat " + item.getName(),
+                                            AppClient.getUserData().getUsername())
+                                    );
+                                    AppClient.getClient().send(new Gson().toJson(msg));
+                                    screen.isMenuOpen = !screen.isMenuOpen;
+                                    screen.onRepeat = false;
+                                    screen.hero.currentAnimation = screen.hero.eat();
+                                    screen.hero.isActing.set(true);
+                                    screen.hero.stateTime = 0;
                                 }
                             }
 

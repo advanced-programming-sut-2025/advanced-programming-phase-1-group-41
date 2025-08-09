@@ -92,7 +92,6 @@ public class PlayerActs {
                 screen.scoreboardMode = false;
                 Gdx.input.setInputProcessor(screen.stage);
             }
-            //TODO kdslkad;l
             return new Result(false, "scoreboard");
         }
         if (screen.voteMode) {
