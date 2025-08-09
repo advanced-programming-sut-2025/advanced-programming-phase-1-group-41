@@ -8,7 +8,6 @@ import com.CEliconValley.common.FarmData;
 import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.*;
-import com.CEliconValley.models.App;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Menu;
 import com.CEliconValley.models.Player;
@@ -18,10 +17,6 @@ import com.badlogic.gdx.utils.Timer;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-
-import java.util.TimerTask;
-
-import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class ClientGameHandler {
     public static void handle(String type, JsonObject body, Gson gson, long timestamp) {
@@ -90,6 +85,10 @@ public class ClientGameHandler {
                 GameData gamedata = gson.fromJson(body, GameData.class);
                 Gdx.app.postRunnable(() -> {
                     AppClient.setGameData(gamedata);
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen() instanceof GameScreen gs){
+//                        gs.updateScoreboard();
+                    }
                     if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof FarmScreen fs){
                         if(fs.isGameFinished) return;
                         updateTime(fs);
@@ -236,7 +235,7 @@ public class ClientGameHandler {
                         .getScreen() instanceof GameScreen gs){
                         System.out.println("setting it to false");
                         gs.setHalt(false);
-                        Playeracts.alrSent = false;
+                        PlayerActs.alrSent = false;
                     }
                 }else if(command.equals("terminate-vote")){
                     if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
@@ -255,12 +254,12 @@ public class ClientGameHandler {
                             screen.overlay.remove();
                             screen.overlay = null;
                         }
-                        Playeracts.alrrSent = false;
+                        PlayerActs.alrrSent = false;
                     }
                 }else if(command.equals("exit-game")){
                     if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
                         .getScreen() instanceof GameScreen screen){
-                        Playeracts.alrrSent = false;
+                        PlayerActs.alrrSent = false;
                         AppClient.endGame(screen);
                     }
                 }else if(command.equals("new-ter")){
@@ -284,7 +283,7 @@ public class ClientGameHandler {
                             screen.overlay.remove();
                             screen.overlay = null;
                         }
-                        Playeracts.alrrSent = false;
+                        PlayerActs.alrrSent = false;
                     }
                 }
             }

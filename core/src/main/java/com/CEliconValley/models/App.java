@@ -1,7 +1,6 @@
 package com.CEliconValley.models;
 
 import com.CEliconValley.client.GameClient;
-import com.CEliconValley.client.view.screen.Playeracts;
 import com.CEliconValley.common.AppData;
 import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.OnlineData;

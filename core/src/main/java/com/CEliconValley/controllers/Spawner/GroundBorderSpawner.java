@@ -14,7 +14,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
-import static com.CEliconValley.client.view.screen.Playeracts.screen;
 
 public class GroundBorderSpawner {
 

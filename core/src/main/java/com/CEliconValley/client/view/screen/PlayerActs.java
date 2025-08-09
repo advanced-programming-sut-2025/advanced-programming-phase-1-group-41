@@ -3,7 +3,6 @@ package com.CEliconValley.client.view.screen;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.model.AnimalSprite;
 import com.CEliconValley.common.PlayerData;
-import com.CEliconValley.common.VillageData;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.TGPoint;
@@ -18,20 +17,18 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 import com.google.gson.Gson;
-import com.CEliconValley.models.tools.ToolLevel.*;
 
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.TimerTask;
 
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
-public class Playeracts {
+public class PlayerActs {
     public static GameScreen screen;
     public static boolean alrSent = false;
     public static boolean alrrSent = false;
     public static void setScreen(GameScreen screen) {
-        Playeracts.screen = screen;
+        PlayerActs.screen = screen;
     }
 
     public static Result handleInput(Hero hero, Location location, Stage stage, float delta) {
@@ -45,6 +42,7 @@ public class Playeracts {
                 String code = screen.cheatCodeField.getText();
                 System.out.println("Cheat code entered: " + code);
 
+                assert AppClient.getUserData() != null;
                 GameMessage<GameCommand> cmnd = new GameMessage<>("game-command",
                     new GameCommand(code, AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(cmnd));
@@ -73,6 +71,7 @@ public class Playeracts {
                 String message = screen.getChatInput().getText();
                 if (!message.isEmpty()) {
                     // TODO: Send Message
+                    assert AppClient.getUserData() != null;
                     GameMessage<PlayerMessage> msg = new GameMessage<>("player-message",
                         new PlayerMessage(AppClient.getUserData().getUsername(), message));
                     AppClient.getClient().send(new Gson().toJson(msg));
@@ -89,10 +88,11 @@ public class Playeracts {
         if(screen.scoreboardMode){
             screen.scoreboardStage.act(delta);
             screen.scoreboardStage.draw();
-            if(Gdx.input.isKeyJustPressed(Input.Keys.CAPS_LOCK)){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT)){
                 screen.scoreboardMode = false;
                 Gdx.input.setInputProcessor(screen.stage);
             }
+            //TODO kdslkad;l
             return new Result(false, "scoreboard");
         }
         if (screen.voteMode) {
@@ -101,7 +101,7 @@ public class Playeracts {
             screen.yesVoteButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if(alrrSent == false) {
+                    if(!alrrSent) {
                         GameMessage<String> msg = new GameMessage<>("update-vote", ";)");
                         AppClient.getClient().send(new Gson().toJson(msg));
                     }
@@ -112,7 +112,7 @@ public class Playeracts {
             screen.noVoteButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if(alrrSent == false){
+                    if(!alrrSent){
                         GameMessage<String> msg = new GameMessage<>("terminate-vote", ";)");
                         AppClient.getClient().send(new Gson().toJson(msg));
                     }
@@ -128,7 +128,7 @@ public class Playeracts {
             screen.teryesButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if(alrrSent == false) {
+                    if(!alrrSent) {
                         GameMessage<String> msg = new GameMessage<>("update-ter", ";)");
                         AppClient.getClient().send(new Gson().toJson(msg));
                     }
@@ -139,7 +139,7 @@ public class Playeracts {
             screen.ternoButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if(alrrSent == false){
+                    if(!alrrSent){
                         GameMessage<String> msg = new GameMessage<>("terminate-ter", ";)");
                         AppClient.getClient().send(new Gson().toJson(msg));
                     }
@@ -176,7 +176,7 @@ public class Playeracts {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {
-            Finder.getpd().getPlayer().setPlayerIsInVillage(true);
+            Objects.requireNonNull(Finder.getpd()).getPlayer().setPlayerIsInVillage(true);
             changeScreen(new VillageScreen(Objects.requireNonNull(Finder.getpd()).getPlayer()));
 
         }
@@ -215,13 +215,14 @@ public class Playeracts {
             return new Result(false, "act-move");
         }
 
-        if(Finder.getpd().getEnergy() <= 0){
+        if(Objects.requireNonNull(Finder.getpd()).getEnergy() <= 0){
             hero.currentAnimation = hero.generalAct(getSleepAct());
             screen.onRepeat = true;
             return new Result(false,"energy");
         }
 
         if (Gdx.input.isKeyJustPressed((Input.Keys.X))) {
+            assert AppClient.getUserData() != null;
             GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("at home", AppClient.getUserData().getUsername()));
             AppClient.getClient().send(new Gson().toJson(msg));
         }
@@ -245,6 +246,7 @@ public class Playeracts {
                 hero.targetX.set(hero.playerX.get());
                 hero.targetY.set(hero.playerY.get() + 1);
                 moved = true;
+                assert AppClient.getUserData() != null;
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("walk up", AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
             }
@@ -255,6 +257,7 @@ public class Playeracts {
                 hero.targetX.set(hero.playerX.get());
                 hero.targetY.set(hero.playerY.get() - 1);
                 moved = true;
+                assert AppClient.getUserData() != null;
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("walk down", AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
             }
@@ -266,6 +269,7 @@ public class Playeracts {
                 hero.targetY.set(hero.playerY.get());
                 screen.flip = true;
                 moved = true;
+                assert AppClient.getUserData() != null;
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("walk left", AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
             }
@@ -277,6 +281,7 @@ public class Playeracts {
                 hero.targetX.set(hero.playerX.get() + 1);
                 hero.targetY.set(hero.playerY.get());
                 moved = true;
+                assert AppClient.getUserData() != null;
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("walk right", AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
             }
@@ -311,6 +316,7 @@ public class Playeracts {
             hero.isActing.set(true);
             hero.stateTime = 0;
             if (screen instanceof FarmScreen farmScreen) {
+                assert AppClient.getUserData() != null;
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command",
                     new GameCommand("tools use -d " + hero.currentDirection, AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
@@ -339,7 +345,7 @@ public class Playeracts {
     }
 
     public static void approach(Hero hero) {
-        if(Finder.getpd().getEnergy() <= 0){
+        if(Objects.requireNonNull(Finder.getpd()).getEnergy() <= 0){
             hero.currentAnimation = hero.generalAct(getSleepAct());
             screen.onRepeat = true;
             if(screen.isHalt() && !alrSent){

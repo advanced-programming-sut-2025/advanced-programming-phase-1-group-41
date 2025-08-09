@@ -2,8 +2,10 @@ package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
+import com.CEliconValley.client.model.StrategyScoreboard;
 import com.CEliconValley.client.view.screen.maps.*;
 import com.CEliconValley.common.CellData;
+import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.controllers.Spawner.InventoryRenderer;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
@@ -25,10 +27,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -63,6 +67,9 @@ public abstract class GameScreen implements Screen {
     public Label terhowmanyLabel;
     public boolean terMode = false;
 
+    private Table scoreboardTable;
+    private Table scoreboardInfoTable;
+
     public boolean isGameFinished = false;
 
     protected Stage stage;
@@ -85,6 +92,8 @@ public abstract class GameScreen implements Screen {
     public Label dcLabel;
     Table chatTable;
 
+    StrategyScoreboard ss = new StrategyScoreboard();
+
     public void setTextForVoteLabel(String input){
         playerVoteLabel.setText(input);
         playerVoteLabel.setPosition(stage.getWidth() / 3 - playerVoteLabel.getWidth() / 2, stage.getHeight() * 5 / 6- playerVoteLabel.getHeight() / 2);
@@ -92,14 +101,14 @@ public abstract class GameScreen implements Screen {
 
     public void setTextForTerLabel(String input){
         terLabel.setText(input);
-        terLabel.setPosition(Gdx.graphics.getWidth() / 3 - terLabel.getWidth(), stage.getHeight() * 5 / 6- terLabel.getHeight() / 2);
+        terLabel.setPosition(Gdx.graphics.getWidth() / 3f - terLabel.getWidth(), stage.getHeight() * 5 / 6- terLabel.getHeight() / 2);
     }
 
     private void setupVoteUI(){
         playerVoteLabel = new Label("Vote", GameAssetManager.getGameAssetManager().getSkin());
         playerVoteLabel.setVisible(false);
         playerVoteLabel.setFontScale(2f);
-        playerVoteLabel.setPosition(Gdx.graphics.getWidth() / 2 - playerVoteLabel.getWidth(), stage.getHeight() * 5 / 6- playerVoteLabel.getHeight() / 2);
+        playerVoteLabel.setPosition(Gdx.graphics.getWidth() / 2f - playerVoteLabel.getWidth(), stage.getHeight() * 5 / 6- playerVoteLabel.getHeight() / 2);
         stage.addActor(playerVoteLabel);
         yesVoteButton = new TextButton("Yes", GameAssetManager.getGameAssetManager().getSkin());
         yesVoteButton.setColor(Color.GREEN);
@@ -113,7 +122,7 @@ public abstract class GameScreen implements Screen {
         stage.addActor(noVoteButton);
         howManyVotedLabel = new Label("Vote: 0 / "+AppClient.getGameData().getPlayersData().size(), GameAssetManager.getGameAssetManager().getSkin());
         howManyVotedLabel.setFontScale(1.5f);
-        howManyVotedLabel.setPosition(Gdx.graphics.getWidth() / 2 - howManyVotedLabel.getWidth(), stage.getHeight() * 4 / 6- howManyVotedLabel.getHeight() / 2);
+        howManyVotedLabel.setPosition(Gdx.graphics.getWidth() / 2f - howManyVotedLabel.getWidth(), stage.getHeight() * 4 / 6- howManyVotedLabel.getHeight() / 2);
         howManyVotedLabel.setVisible(false);
         stage.addActor(howManyVotedLabel);
 
@@ -130,16 +139,16 @@ public abstract class GameScreen implements Screen {
         terLabel = new Label("Terminate Game", GameAssetManager.getGameAssetManager().getSkin());
         terLabel.setVisible(false);
         terLabel.setFontScale(2f);
-        terLabel.setPosition(Gdx.graphics.getWidth() / 2 - terLabel.getWidth(), stage.getHeight() * 5 / 6- terLabel.getHeight() / 2);
+        terLabel.setPosition(Gdx.graphics.getWidth() / 2f - terLabel.getWidth(), stage.getHeight() * 5 / 6- terLabel.getHeight() / 2);
         stage.addActor(terLabel);
         terhowmanyLabel = new Label("Vote: 0 / "+AppClient.getGameData().getPlayersData().size(), GameAssetManager.getGameAssetManager().getSkin());
         terhowmanyLabel.setFontScale(1.5f);
-        terhowmanyLabel.setPosition(Gdx.graphics.getWidth() / 2 - terhowmanyLabel.getWidth(), stage.getHeight() * 4 / 6- terhowmanyLabel.getHeight() / 2);
+        terhowmanyLabel.setPosition(Gdx.graphics.getWidth() / 2f - terhowmanyLabel.getWidth(), stage.getHeight() * 4 / 6- terhowmanyLabel.getHeight() / 2);
         terhowmanyLabel.setVisible(false);
         stage.addActor(terhowmanyLabel);
         dcLabel = new Label("oops someone got dced...", GameAssetManager.getGameAssetManager().getSkin());
         dcLabel.setFontScale(2f);
-        dcLabel.setPosition(Gdx.graphics.getWidth() / 2 - dcLabel.getWidth(), stage.getHeight() * 5 / 6- dcLabel.getHeight() / 2);
+        dcLabel.setPosition(Gdx.graphics.getWidth() / 2f - dcLabel.getWidth(), stage.getHeight() * 5 / 6- dcLabel.getHeight() / 2);
         dcLabel.setVisible(false);
         stage.addActor(dcLabel);
     }
@@ -148,6 +157,7 @@ public abstract class GameScreen implements Screen {
         chatTable.clear();
         chatTable = new Table();
         for(PlayerMessage message : AppClient.getGameData().getPlayerMessages()){
+            assert AppClient.getUserData() != null;
             if(message.getSender().equals(AppClient.getUserData().getUsername())){
                 Label label = new Label(message.getMessage() + "-", GameAssetManager.getGameAssetManager().getSkin());
                 label.setWrap(true);
@@ -175,10 +185,10 @@ public abstract class GameScreen implements Screen {
     }
 
     private void setupChatUI(){
-        Table root = new Table();
         chatTable = new Table();
         chatTable.setFillParent(true);
         for(PlayerMessage message : AppClient.getGameData().getPlayerMessages()){
+            assert AppClient.getUserData() != null;
             if(message.getSender().equals(AppClient.getUserData().getUsername())){
                 Label label = new Label(message.getMessage() + "-", GameAssetManager.getGameAssetManager().getSkin());
                 label.setWrap(true);
@@ -211,8 +221,63 @@ public abstract class GameScreen implements Screen {
         chatStage.addActor(container);
     }
 
+    public void updateScoreboard(){
+        ss.updateScoreboard(scoreboardInfoTable);
+        scoreboardTable.add(scoreboardInfoTable);
+    }
+
     private void setupScoreboardUI(){
 
+        Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+
+        scoreboardInfoTable = new Table();
+        scoreboardInfoTable.setFillParent(true);
+
+        scoreboardTable = new Table(skin);
+        scoreboardTable.setFillParent(true);
+        scoreboardTable.center().top().padTop(100);
+
+        Table sortButtonsTable = new Table();
+        TextButton sortMoneyBtn = new TextButton("Sort by Money", skin);
+        sortMoneyBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ss.setStrategyScore(0);
+            }
+        });
+
+        TextButton sortMissionsBtn = new TextButton("Sort by Missions", skin);
+        sortMissionsBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ss.setStrategyScore(1);
+            }
+        });
+
+        TextButton sortSkillsBtn = new TextButton("Sort by Skills", skin);
+        sortSkillsBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ss.setStrategyScore(2);
+            }
+        });
+
+        sortButtonsTable.add(sortMoneyBtn).padRight(10);
+        sortButtonsTable.add(sortMissionsBtn).padRight(10);
+        sortButtonsTable.add(sortSkillsBtn);
+
+        scoreboardTable.add(sortButtonsTable).colspan(4).padBottom(20).row();
+
+        scoreboardTable.add(new Label("Player", skin)).pad(10);
+        scoreboardTable.add(new Label("Money", skin)).pad(10);
+        scoreboardTable.add(new Label("Missions", skin)).pad(10);
+        scoreboardTable.add(new Label("Skills", skin)).pad(10);
+        scoreboardTable.row();
+
+
+        updateScoreboard();
+        scoreboardTable.padTop(200);
+        scoreboardStage.addActor(scoreboardTable);
     }
 
 
@@ -302,7 +367,8 @@ public abstract class GameScreen implements Screen {
             for (CellData cd : villageMap.villageData.getCellsData()) {
                 if (cd.getX() == x && cd.getY() == y) {
                     Cell cell = cd.extractData();
-                    if (cell.getObjectMap() instanceof Lake ||( cell.getObjectMap() instanceof Grass grass && !grass.isGround() )||cell.getObjectMap() instanceof Wall ||cell.getObjectMap() instanceof Obstacle) {
+                    if (cell.getObjectMap() instanceof Lake ||( cell.getObjectMap() instanceof Grass grass && !grass.isGround() )
+                        ||cell.getObjectMap() instanceof Wall ||cell.getObjectMap() instanceof Obstacle) {
                         System.out.println(cd.getObjectName()+" "+cell.getX()+" "+cell.getY());
                         return false;
                     }
@@ -313,11 +379,8 @@ public abstract class GameScreen implements Screen {
         if(location instanceof CottageMap cottageMap){
             for (Cell cell : cottageMap.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
-                    if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock
-                        || cell.getObjectMap() instanceof Wall || cell.getObjectMap() instanceof ForagingTree) {
-                        return false;
-                    }
-                    return true;
+                    return !(cell.getObjectMap() instanceof Lake) && !(cell.getObjectMap() instanceof Rock)
+                        && !(cell.getObjectMap() instanceof Wall) && !(cell.getObjectMap() instanceof ForagingTree);
                 }
             }
             return false;
@@ -325,30 +388,21 @@ public abstract class GameScreen implements Screen {
         if(location instanceof GreenhouseMap greenHouseMap){
             for (Cell cell : greenHouseMap.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
-                    if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock ||cell.getObjectMap() instanceof Wall ||cell.getObjectMap() instanceof ForagingTree) {
-                        return false;
-                    }
-                    return true;
+                    return !(cell.getObjectMap() instanceof Lake) && !(cell.getObjectMap() instanceof Rock) && !(cell.getObjectMap() instanceof Wall) && !(cell.getObjectMap() instanceof ForagingTree);
                 }
             }
         }
         if(location instanceof CoopMap coopMap) {
             for (Cell cell : coopMap.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
-                    if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock || cell.getObjectMap() instanceof Wall) {
-                        return false;
-                    }
-                    return true;
+                    return !(cell.getObjectMap() instanceof Lake) && !(cell.getObjectMap() instanceof Rock) && !(cell.getObjectMap() instanceof Wall);
                 }
             }
         }
         if(location instanceof BarnMap barnMap){
             for (Cell cell : barnMap.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
-                    if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock || cell.getObjectMap() instanceof Wall) {
-                        return false;
-                    }
-                    return true;
+                    return !(cell.getObjectMap() instanceof Lake) && !(cell.getObjectMap() instanceof Rock) && !(cell.getObjectMap() instanceof Wall);
                 }
             }
         }
@@ -408,18 +462,17 @@ public abstract class GameScreen implements Screen {
 
         overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
             .getGameAssetManager()
-            .getBackgroundTexture("Chat_Background.png"))));
+            .getBackgroundTexture("Scoreboard_Background.png"))));
 
         overlay.setSize(stage.getWidth(), stage.getHeight());
         overlay.setPosition(0, 0);
-
         overlay.getColor().a = 0;
         overlay.addAction(Actions.fadeIn(0.5f));
-
-
         stage.addActor(overlay);
+        updateScoreboard();
         overlay.toBack();
     }
+
 
     public void handleVote(Stage stage, String name) {
         Gdx.app.postRunnable(() -> {

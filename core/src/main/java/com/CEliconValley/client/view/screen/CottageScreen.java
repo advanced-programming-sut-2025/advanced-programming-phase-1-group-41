@@ -62,13 +62,13 @@ public class CottageScreen extends GameScreen implements Screen {
     @Override
     public void render(float delta) {
         if(isGameFinished) return;
-        Result result = Playeracts.handleInput(hero, cottageMap, stage, delta);
+        Result result = PlayerActs.handleInput(hero, cottageMap, stage, delta);
         if(!result.success()){
             if(result.message().equals("cheat")){
                 return;
             }
         }
-        Playeracts.approach(hero);
+        PlayerActs.approach(hero);
 
         Gdx.gl.glClearColor(0.8f, 0.9f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -95,7 +95,7 @@ public class CottageScreen extends GameScreen implements Screen {
     public void transfer() {
         Cell cell = Finder.findCellByCoordinatesCottage(hero.playerX.get(), hero.playerY.get(), cottageMap);
         if (cell.getObjectMap() instanceof Door) {
-            Playeracts.changeScreen(farmScreen);
+            PlayerActs.changeScreen(farmScreen);
         }
     }
 
@@ -109,7 +109,7 @@ public class CottageScreen extends GameScreen implements Screen {
     }
 
     @Override public void show() {
-        Playeracts.setScreen(this);
+        PlayerActs.setScreen(this);
     }
     @Override public void hide() {}
     @Override public void pause() {}

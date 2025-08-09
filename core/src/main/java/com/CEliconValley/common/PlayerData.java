@@ -295,4 +295,11 @@ public class PlayerData {
     public int getQuestsFinsihed() {
         return questsFinsihed;
     }
+
+    public Double getPlayerSkills(){
+        return (this.getFarmingSkill().getLevel()
+            + this.getFishingSkill().getLevel()
+            + this.getForagingSkill().getLevel()
+            + this.getMiningSkill().getLevel()) / 4d;
+    }
 }

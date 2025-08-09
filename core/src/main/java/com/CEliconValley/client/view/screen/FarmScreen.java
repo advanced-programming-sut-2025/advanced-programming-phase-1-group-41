@@ -1,7 +1,6 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
-import com.CEliconValley.client.model.AnimalSprite;
 import com.CEliconValley.client.view.screen.maps.*;
 import com.CEliconValley.client.view.screen.randomwalk.Node;
 import com.CEliconValley.client.view.screen.randomwalk.SimplePathFinder;
@@ -195,7 +194,7 @@ public class FarmScreen extends GameScreen implements Screen {
         batch.setColor(ApplyFog(getTimeColor(AppClient.getGameData().getTime().getHour())));
         Gdx.gl.glClearColor(0.8f, 0.9f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Result result = Playeracts.handleInput(hero, farmMap, stage, delta);
+        Result result = PlayerActs.handleInput(hero, farmMap, stage, delta);
         if (!result.success()) {
             if (result.message().equals("cheat") ||
                 result.message().equals("chat") ||
@@ -209,7 +208,7 @@ public class FarmScreen extends GameScreen implements Screen {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        Playeracts.approach(hero);
+        PlayerActs.approach(hero);
 
         batch.begin();
         int minX = (int) ((camera.position.x - camera.viewportWidth / 2) / CELL_SIZE) - 8;
@@ -454,7 +453,7 @@ public class FarmScreen extends GameScreen implements Screen {
 
     @Override
     public void show() {
-        Playeracts.setScreen(this);
+        PlayerActs.setScreen(this);
         System.out.println("im here ;)");
     }
 
