@@ -29,7 +29,13 @@ public class ToolView {
                 new FarmData(Finder.getFarmByPlayer(Finder.getPlayerByUsername(playername))));
             App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(),
                 new Gson().toJson(msg));
-        } else if ((matcher = InventoryAndToolCommands.UpgradeTool.getMatcher(input)) != null) {
+        } else if ((matcher = InventoryAndToolCommands.UseShear.getMatcher(input)) != null) {
+            System.out.println(controller.useShear(matcher, playername));
+        }
+         else if ((matcher = InventoryAndToolCommands.UseMilkPale.getMatcher(input)) != null) {
+            System.out.println(controller.useMilkPale(matcher, playername));
+        }
+        else if ((matcher = InventoryAndToolCommands.UpgradeTool.getMatcher(input)) != null) {
             System.out.println(controller.upgradeTool(matcher));
         } else {
             return false;

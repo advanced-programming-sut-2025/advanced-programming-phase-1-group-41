@@ -359,6 +359,7 @@ public abstract class GameScreen implements Screen {
 
     public boolean canMoveTo(int x, int y, Location location) {
         if(location instanceof FarmMap farmMap){
+            System.out.println("checking farmmap");
             for (CellData cd : farmMap.farmData.getCells()) {
                 if (cd.getX() == x && cd.getY() == y) {
                     Cell cell = cd.extractData();
@@ -371,6 +372,7 @@ public abstract class GameScreen implements Screen {
             }
             return false;
         }else if(location instanceof VillageMap villageMap){
+            System.out.println("checking villagemap");
             for (CellData cd : villageMap.villageData.getCellsData()) {
                 if (cd.getX() == x && cd.getY() == y) {
                     Cell cell = cd.extractData();
@@ -382,8 +384,10 @@ public abstract class GameScreen implements Screen {
                     return true;
                 }
             }
+            return false;
         }
         if(location instanceof CottageMap cottageMap){
+            System.out.println("checking cottagemap");
             for (Cell cell : cottageMap.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
                     return !(cell.getObjectMap() instanceof Lake) && !(cell.getObjectMap() instanceof Rock)
@@ -393,25 +397,36 @@ public abstract class GameScreen implements Screen {
             return false;
         }
         if(location instanceof GreenhouseMap greenHouseMap){
+            System.out.println("checking greenhousemap");
             for (Cell cell : greenHouseMap.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
                     return !(cell.getObjectMap() instanceof Lake) && !(cell.getObjectMap() instanceof Rock) && !(cell.getObjectMap() instanceof Wall) && !(cell.getObjectMap() instanceof ForagingTree);
                 }
             }
+            return false;
         }
         if(location instanceof CoopMap coopMap) {
+            System.out.println("checking coopmap");
             for (Cell cell : coopMap.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
                     return !(cell.getObjectMap() instanceof Lake) && !(cell.getObjectMap() instanceof Rock) && !(cell.getObjectMap() instanceof Wall);
                 }
             }
+            return false;
         }
         if(location instanceof BarnMap barnMap){
+            System.out.println("checking barnmap");
             for (Cell cell : barnMap.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
+                    System.out.println("reason "+cell.getObjectMap().getName());
+                    System.out.println(" "+!(cell.getObjectMap() instanceof Lake) );
+                    System.out.println(" "+!(cell.getObjectMap() instanceof Rock));
+                    System.out.println(" "+!(cell.getObjectMap() instanceof Wall));
+                    System.out.println(!(cell.getObjectMap() instanceof Lake) && !(cell.getObjectMap() instanceof Rock) && !(cell.getObjectMap() instanceof Wall));
                     return !(cell.getObjectMap() instanceof Lake) && !(cell.getObjectMap() instanceof Rock) && !(cell.getObjectMap() instanceof Wall);
                 }
             }
+            return false;
         }
         return false;
     }

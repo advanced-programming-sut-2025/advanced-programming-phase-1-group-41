@@ -7,6 +7,10 @@ import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.TGPoint;
 import com.CEliconValley.models.*;
+import com.CEliconValley.models.animals.Animal;
+import com.CEliconValley.models.animals.animalKinds.Cow;
+import com.CEliconValley.models.animals.animalKinds.Goat;
+import com.CEliconValley.models.animals.animalKinds.Sheep;
 import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.tools.*;
 import com.badlogic.gdx.Gdx;
@@ -249,7 +253,8 @@ public class PlayerActs {
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("walk up", AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
             }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             hero.currentDirection = 3;
             screen.onRepeat = true;
             if (screen.canMoveTo(hero.playerX.get(), hero.playerY.get() - 1, location)) {
@@ -260,7 +265,8 @@ public class PlayerActs {
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("walk down", AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
             }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             hero.currentDirection = 4;
             screen.onRepeat = true;
             if (screen.canMoveTo(hero.playerX.get() - 1, hero.playerY.get(), location)) {
@@ -272,7 +278,8 @@ public class PlayerActs {
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("walk left", AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
             }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             hero.currentDirection = 2;
             screen.flip = false;
             screen.onRepeat = true;
@@ -289,7 +296,8 @@ public class PlayerActs {
             if(screen instanceof FarmScreen fs){
                     fs.getThunder().strikeAt(hero.playerX.get(), hero.playerY.get());
             }
-        }else if(Gdx.input.isKeyJustPressed((Input.Keys.TAB))) {
+        }
+        else if(Gdx.input.isKeyJustPressed((Input.Keys.TAB))) {
             if(screen instanceof BarnScreen){
                 ((BarnScreen) screen).setBarnMenuOpen(!((BarnScreen) screen).isBarnMenuOpen());
             } else if(screen instanceof CoopScreen){
@@ -301,12 +309,47 @@ public class PlayerActs {
         }
         else if (Gdx.input.isKeyJustPressed((Input.Keys.E))) {
             screen.onRepeat = false;
+            hero.stateTime = 0;
             int pre = getMainToolNumber();
             ArrayList<TGPoint> tgp = getOtherToolNumber();
             if (pre == -1) {
                 if(tgp == null){
-                    hero.currentAnimation = hero.useTool(pre+1);
-                }else{
+                    if(Finder.getpd().getCurrentToolName() != null &&Finder.getpd().getCurrentToolName().equals(new Shear().getName())){
+                        AnimalSprite animalSprite = isAnimalHere();
+                        if(animalSprite != null && animalSprite.animalData.getAnimalType().equals(new Sheep(null, null).getAnimalType())){
+                            GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                new GameCommand("shear " + animalSprite.animalData.getName(), AppClient.getUserData().getUsername()));
+                            AppClient.getClient().send(new Gson().toJson(msg));
+                            hero.currentAnimation = hero.shear();
+                            if(screen instanceof BarnScreen barnScreen){
+                                barnScreen.setLastAnimal(animalSprite);
+                            }
+                        }else{
+                            hero.currentAnimation = hero.useTool(pre+1);
+                        }
+                    }else if(Finder.getpd().getCurrentToolName() != null &&Finder.getpd().getCurrentToolName().equals(new MilkPale().getName())){
+                        AnimalSprite animalSprite = isAnimalHere();
+                        if(animalSprite != null &&(
+                            animalSprite.animalData.getAnimalType().equals(new Cow(null, null).getAnimalType())
+                            ||
+                            animalSprite.animalData.getAnimalType().equals(new Goat(null, null).getAnimalType()))
+                        ){
+                            GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                new GameCommand("milkpale " + animalSprite.animalData.getName(), AppClient.getUserData().getUsername()));
+                            AppClient.getClient().send(new Gson().toJson(msg));
+                            hero.currentAnimation = hero.milk();
+                            if(screen instanceof BarnScreen barnScreen){
+                                barnScreen.setLastAnimal(animalSprite);
+                            }
+                        }else{
+                            hero.currentAnimation = hero.useTool(pre+1);
+                        }
+                    }
+                    else{
+                        hero.currentAnimation = hero.useTool(pre+1);
+                    }
+                }
+                else{
                     hero.currentAnimation = hero.useOtherTool(tgp);
                 }
             }else{
@@ -363,7 +406,7 @@ public class PlayerActs {
             float targetPixelX = hero.targetX.get() * CELL_SIZE;
             float targetPixelY = hero.targetY.get() * CELL_SIZE;
 
-            float moveAmount = (float) CELL_SIZE / 2;
+            float moveAmount = (float) CELL_SIZE / 8;
 
             if (screen instanceof GreenHouseScreen) {
                 moveAmount /= 2;
@@ -584,4 +627,15 @@ public class PlayerActs {
         return tgp;
     }
 
+    public static AnimalSprite isAnimalHere(){
+        if(screen instanceof BarnScreen barnScreen){
+            for (AnimalSprite animalSprite : barnScreen.getAnimalSprites()) {
+                Hero hero = barnScreen.getHero();
+                if(animalSprite.x == hero.playerX.get() && animalSprite.y == hero.playerY.get()){
+                    return animalSprite;
+                }
+            }
+        }
+        return null;
+    }
 }

@@ -19,6 +19,7 @@ import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Products.Product;
 import com.CEliconValley.models.items.Products.ProductType;
 import com.CEliconValley.models.locations.Farm;
+import dev.morphia.aggregation.stages.Match;
 
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -91,9 +92,9 @@ public class ToolsController {
         }else if(tool instanceof Scythe){
             return useScythe(cell, tool, playername);
         }else if(tool instanceof MilkPale){
-            return useMilkPale(cell, tool, playername);
+//            return useMilkPale(cell, tool, playername);
         }else if(tool instanceof Shear){
-            return useShear(cell, tool, playername);
+//            return useShear(cell, tool, playername);
         }
 
 
@@ -497,10 +498,11 @@ public class ToolsController {
         return new Result(false, "it wasn't a bush or grass or crop or tree!");
     }
 
-    private Result useMilkPale(Cell cell, Tool tool, String playername){
+    public Result useMilkPale(Matcher matcher ,String playername){
         Player player = Finder.getPlayerByUsername(playername);
         Farm farm = Finder.getFarmByPlayer(player);
-        MilkPale milkPale = (MilkPale) tool;
+        MilkPale milkPale = (MilkPale) player.getCurrentTool();
+        String animalname = matcher.group(1).trim();
         int energy = 4;
         if(energy > player.getEnergy()){
             return new Result(false, "you don't have enough energy to use this tool");
@@ -508,35 +510,33 @@ public class ToolsController {
         player.decEnergyTool(energy);
         for (Barn barn : farm.getBarns()) {
             for (Animal animal : barn.getAnimals()) {
-                System.out.println(animal.getName()+" "+animal.getX()+" "+animal.getY());
-                if(animal.getX() == cell.getX() && animal.getY() == cell.getY()){
-                    double specialProduceChance=(animal.getFriendShip()+(150*(0.5 + Math.random()))/1500);
-                    if(animal instanceof Goat){
-                        if(Math.random()<specialProduceChance){
-                            player.getInventory().addToInventory
-                                    (new Product(ProductType.BigGoatMilk), 1);
-                            animal.setProduct(null);
-                            return new Result(true, "got a big goat milk");
-                        }
-                        else {
-                            player.getInventory().addToInventory
-                                    (new Product(ProductType.GoatMilk), 1);
-                            animal.setProduct(null);
-                            return new Result(true, "got a goat milk");
-                        }
+                if(!animal.getName().equals(animalname)) continue;
+                double specialProduceChance=(animal.getFriendShip()+(150*(0.5 + Math.random()))/1500);
+                if(animal instanceof Goat){
+                    if(Math.random()<specialProduceChance){
+                        player.getInventory().addToInventory
+                            (new Product(ProductType.BigGoatMilk), 1);
+                        animal.setProduct(null);
+                        return new Result(true, "got a big goat milk");
+                    }
+                    else {
+                        player.getInventory().addToInventory
+                            (new Product(ProductType.GoatMilk), 1);
+                        animal.setProduct(null);
+                        return new Result(true, "got a goat milk");
+                    }
 
-                    }else if(animal instanceof Cow){
-                        if(Math.random()<specialProduceChance) {
-                            player.getInventory().addToInventory
-                                    (new Product(ProductType.BigCowMilk), 1);
-                            animal.setProduct(null);
-                            return new Result(true, "got a big cow milk");
-                        }else{
-                            player.getInventory().addToInventory
-                                    (new Product(ProductType.CowMilk), 1);
-                            animal.setProduct(null);
-                            return new Result(true, "got a cow milk");
-                        }
+                }else if(animal instanceof Cow){
+                    if(Math.random()<specialProduceChance) {
+                        player.getInventory().addToInventory
+                            (new Product(ProductType.BigCowMilk), 1);
+                        animal.setProduct(null);
+                        return new Result(true, "got a big cow milk");
+                    }else{
+                        player.getInventory().addToInventory
+                            (new Product(ProductType.CowMilk), 1);
+                        animal.setProduct(null);
+                        return new Result(true, "got a cow milk");
                     }
                 }
             }
@@ -544,10 +544,11 @@ public class ToolsController {
         return new Result(false, "no animal around you");
     }
 
-    private Result useShear(Cell cell, Tool tool, String playername){
+    public Result useShear(Matcher matcher, String playername){
         Player player = Finder.getPlayerByUsername(playername);
         Farm farm = Finder.getFarmByPlayer(player);
-        Shear shear = (Shear) tool;
+        String animalName = matcher.group(1).trim();
+        Shear shear = (Shear) player.getCurrentTool();
         int energy = 4;
         if(energy > player.getEnergy()){
             return new Result(false, "you don't have enough energy to use this tool");
@@ -555,7 +556,7 @@ public class ToolsController {
         player.decEnergyTool(energy);
         for (Barn barn : farm.getBarns()) {
             for (Animal animal : barn.getAnimals()) {
-                if(animal.getX() == cell.getX() && animal.getY() == cell.getY()){
+                if(animal.getName().equals(animalName)){
                     if(animal instanceof Sheep){
                             player.getInventory().addToInventory
                                     (new Product(ProductType.SheepWool),1);

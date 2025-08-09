@@ -33,6 +33,7 @@ public class Inventory {
 
         addToInventory(new Pickaxe(), 1);
         addToInventory(new TrashCan(), 1);
+        addToInventory(new MilkPale(), 1);
         // todo buy this
         addToInventory(new FishingRod(), 1);
         addToInventory(new WateringCan(), 1);
