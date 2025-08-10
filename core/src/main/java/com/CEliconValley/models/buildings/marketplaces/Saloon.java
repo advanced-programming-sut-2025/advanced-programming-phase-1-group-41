@@ -93,6 +93,7 @@ public class Saloon extends Marketplace implements Building {
                 cell.setObjectMap(new Wall());
                 if(i == x + 4&&yWall==y){
                     cell.setObjectMap(door);
+                    doors.add(cell);
                 }
             }
             yWall+=7;

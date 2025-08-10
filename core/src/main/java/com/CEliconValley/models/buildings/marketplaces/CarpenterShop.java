@@ -1,5 +1,6 @@
 package com.CEliconValley.models.buildings.marketplaces;
 
+import com.CEliconValley.common.CellData;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.ui.TerminalColors;
@@ -76,6 +77,7 @@ public class CarpenterShop extends Marketplace implements Building {
                 cell.setObjectMap(new Wall());
                 if((i == x + 5||i==x+6)&&yWall==y){
                     cell.setObjectMap(door);
+                    doors.add(cell);
                 }
             }
             yWall+=7;

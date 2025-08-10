@@ -20,7 +20,6 @@ public class FishShop extends Marketplace implements Building {
     private final Door door = new Door();
     private int anchorX;
     private int anchorY;
-
     @Override
     public String getChar() {
         return TerminalColors.colorize(51,21,"FS");
@@ -67,6 +66,7 @@ public class FishShop extends Marketplace implements Building {
                 cell.setObjectMap(new Wall());
                 if(yWall == y&&i==x+1){
                     cell.setObjectMap(door);
+                    doors.add(cell);
                 }
 
             }

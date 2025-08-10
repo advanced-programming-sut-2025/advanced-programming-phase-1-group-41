@@ -1,7 +1,9 @@
 package com.CEliconValley.models.buildings;
 
 import com.CEliconValley.models.ui.TerminalColors;
+import dev.morphia.annotations.Embedded;
 
+@Embedded
 public class Door implements Building {
     @Override
     public String getChar() {
