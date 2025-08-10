@@ -209,6 +209,9 @@ public class GameHandler {
         });
         game.commandThread.start();
 
+        game.getVillage().getNPCs().forEach(npc -> {
+            npc.setRandomPoint();
+        });
 
         game.startScheduler();
     }

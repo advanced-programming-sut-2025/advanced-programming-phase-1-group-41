@@ -20,7 +20,8 @@ public class ClientMessageRouter {
                 System.out.println("Cmessage for lobby "+message);
             }
             case "game-data", "new-game", "pre-start-request", "game-command",
-                 "farm-data", "player-data", "new-vote", "message-cred" -> ClientGameHandler.handle(type, body, gson, timestamp);
+                 "farm-data", "player-data", "new-vote", "message-cred" ,
+                 "npc-data" -> ClientGameHandler.handle(type, body, gson, timestamp);
         }
     }
     public static void route(String type, Gson gson,

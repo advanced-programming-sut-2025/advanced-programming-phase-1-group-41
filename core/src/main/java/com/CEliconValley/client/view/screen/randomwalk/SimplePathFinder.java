@@ -13,6 +13,7 @@ import com.CEliconValley.models.foragings.Nature.Lake;
 import com.CEliconValley.models.foragings.Nature.Obstacle;
 import com.CEliconValley.models.foragings.Nature.Rock;
 import com.CEliconValley.client.view.screen.maps.BarnMap;
+import com.CEliconValley.models.locations.Village;
 
 import java.util.*;
 
@@ -23,6 +24,7 @@ public class SimplePathFinder {
     CoopMap coop = null;
     FarmMap farm = null;
     VillageMap villageMap = null;
+    Village village = null;
     public SimplePathFinder(BarnMap barn) {
         this.barn = barn;
     }
@@ -36,6 +38,11 @@ public class SimplePathFinder {
     public SimplePathFinder(VillageMap villageMap) {
         this.villageMap = villageMap;
     }
+
+    public SimplePathFinder(Village village) {
+        this.village = village;
+    }
+
     public Queue<Node> getPathQueue(int startX, int startY, int goalX, int goalY) {
         PriorityQueue<Node> openSet = new PriorityQueue<>();
         HashSet<String> visited = new HashSet<>();
@@ -165,6 +172,17 @@ public class SimplePathFinder {
                 }
             }
             return false;
+        }else if(village != null){
+            for (Cell cell : village.getCells()) {
+                if (cell.getX() == x && cell.getY() == y) {
+                    if (cell.getObjectMap() instanceof Lake ||( cell.getObjectMap() instanceof Grass grass && !grass.isGround() )
+                        ||cell.getObjectMap() instanceof Wall ||cell.getObjectMap() instanceof Obstacle) {
+                        return false;
+                    }
+                    return true;
+                }
+            }
+            return false;
         }
         return false;
     }
@@ -192,6 +210,12 @@ public class SimplePathFinder {
             for (CellData cell : villageMap.villageData.getCellsData()) {
                 if(cell.getX() == x && cell.getY() == y){
                     return cell.extractData();
+                }
+            }
+        }else if(village != null){
+            for (Cell cell : village.getCells()) {
+                if(cell.getX() == x && cell.getY() == y){
+                    return cell;
                 }
             }
         }

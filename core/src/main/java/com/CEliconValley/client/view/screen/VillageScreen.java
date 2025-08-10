@@ -12,6 +12,7 @@ import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.controllers.Spawner.*;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.foragings.Nature.Grass;
+import com.CEliconValley.models.locations.Village;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.CEliconValley.views.subGames.Rain;
 import com.CEliconValley.views.subGames.Snow;
@@ -73,6 +74,16 @@ public class VillageScreen extends GameScreen implements Screen {
     private float passiveStateTime = 0f;
     ArrayList<NPCSprite> npcSprites = new ArrayList<>();
 
+
+
+    public void updatenpcData() {
+        if(npcSprites == null) npcSprites = new ArrayList<>();
+        npcSprites.clear();
+        for (NPCData n : AppClient.getGameData().getVillageData().getNPCsData()) {
+            npcSprites.add(new NPCSprite(villageMap, n));
+        }
+    }
+
     public VillageScreen( Player player) {
 
         super(new InventoryRenderer(player.getInventory()));
@@ -132,14 +143,7 @@ public class VillageScreen extends GameScreen implements Screen {
         hero.targetX.set(hero.playerX.get());
         hero.targetY.set(hero.playerY.get());
 
-
-        NPCData first = AppClient.getGameData().getVillageData().getNPCsData().get(0);
-        npcSprites.add(new NPCSprite(villageMap, first, hero.playerX.get()+2, hero.playerY.get(), true));
-        for (NPCSprite npcSprite : npcSprites) {
-            npcSprite.currentAnimation = npcSprite.walk(false, npcSprite.currentDirection);
-            npcSprite.renderX = npcSprite.x * CELL_SIZE;
-            npcSprite.renderY = npcSprite.y * CELL_SIZE;
-        }
+        updatenpcData();
     }
 
     @Override
@@ -159,8 +163,6 @@ public class VillageScreen extends GameScreen implements Screen {
         hero.stateTime += delta;
 
 
-        randomMovement();
-        PlayerActs.npcApproach(npcSprites, delta);
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
@@ -230,9 +232,13 @@ public class VillageScreen extends GameScreen implements Screen {
 
         for (NPCSprite npcSprite : npcSprites) {
             if (npcSprite.currentAnimation != null) {
-                if(npcSprite.isOutside == false) continue;
+                npcSprite.currentAnimation = npcSprite.walk(npcSprite.getNPCData().isMoving, npcSprite.getNPCData().currentDirection);
+                if(npcSprite.getNPCData().isOutside == false) continue;
+                float ratio = ( Gdx.graphics.getWidth() / VIRTUAL_WIDTH);
+                float rx = npcSprite.getNPCData().renderX / 160 *(ratio * 160);
+                float ry = npcSprite.getNPCData().renderY / 160 *(ratio * 160);
                 TextureRegion currentFrame = npcSprite.currentAnimation.getKeyFrame(npcSprite.stateTime, true);
-                batch.draw(currentFrame, npcSprite.renderX - CELL_SIZE / 2f, npcSprite.renderY - CELL_SIZE / 2f, CELL_SIZE * 1.5f, CELL_SIZE * 1.5f);
+                batch.draw(currentFrame, rx - CELL_SIZE / 2f, ry - CELL_SIZE / 2f, CELL_SIZE * 1.5f, CELL_SIZE * 1.5f);
             }
         }
 
@@ -344,42 +350,6 @@ public class VillageScreen extends GameScreen implements Screen {
     @Override public void pause() { }
     @Override public void resume() { }
 
-    private void randomMovement() {
-        for (NPCSprite npcSprite : npcSprites) {
-            if(npcSprite.reachedDestination() && !npcSprite.randomSetter){
-                int delayTime = new Random().nextInt(5000, 10000);
-                npcSprite.randomSetter = true;
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        System.out.println("inside random setter");
-                        npcSprite.setRandomPoint();
-                        npcSprite.randomSetter = false;
-                        SimplePathFinder spf = new SimplePathFinder(villageMap);
-                        npcSprite.movementQueue = spf.getPathQueue(npcSprite.x, npcSprite.y, npcSprite.randomX, npcSprite.randomY);
-                    }
-                }, delayTime);
-            }
-            if(npcSprite.isMoving) continue;
-            Node nextNode = npcSprite.movementQueue.poll();
-            if (nextNode != null) {
-                npcSprite.targetX=nextNode.x;
-                npcSprite.targetY=nextNode.y;
-                System.out.println("new target"+ npcSprite.targetX + " " + npcSprite.targetY);
-                npcSprite.currentDirection = nextNode.getDirection() != 0 ? nextNode.getDirection() : npcSprite.currentDirection;
-                npcSprite.isMoving= true;
-                npcSprite.currentAnimation = npcSprite.walk(true, npcSprite.currentDirection);
-//                String command = "";
-//                switch (hero.currentDirection){
-//                    case 1 -> command = "npc walk up";
-//                    case 2 -> command = "npc walk right";
-//                    case 3 -> command = "npc walk down";
-//                    case 4 -> command = "npc walk left";
-//                }
-//                GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand(command, AppClient.getUserData().getUsername()));
-//                AppClient.getClient().send(new Gson().toJson(msg));
-            }
-        }
-    }
+
 
 }
