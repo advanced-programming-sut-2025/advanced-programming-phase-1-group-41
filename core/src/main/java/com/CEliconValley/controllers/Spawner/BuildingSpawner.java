@@ -21,6 +21,7 @@ import com.CEliconValley.models.buildings.animalContainer.CoopType;
 import com.CEliconValley.models.buildings.marketplaces.*;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.client.view.screen.FarmScreen;
+import com.CEliconValley.models.npc.npchomes.*;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -45,6 +46,11 @@ public class BuildingSpawner {
     private final Texture marnieRanchTexture = new Texture("game/Buildings/MarnieRanch.png");
     private final Texture carpenterShopTexture = new Texture("game/Buildings/CarpenterShop.png");
     private final Texture saloonTexture = new Texture("game/Buildings/Saloon.png");
+    private final Texture harveyHomeTexture = new Texture("game/Buildings/HarveyHome.png");
+    private final Texture abigailHomeTexture = new Texture("game/Buildings/AbigailHome.png");
+    private final Texture sebastienHomeTexture = new Texture("game/Buildings/SebastienHome.png");
+    private final Texture robinHomeTexture = new Texture("game/Buildings/RobinHome.png");
+    private final Texture liaHomeTexture = new Texture("game/Buildings/LiaHome.png");
 
     public BuildingSpawner() {
         this.waterSpawner = new WaterSpawner();
@@ -234,16 +240,60 @@ public class BuildingSpawner {
 
         }
         }
-        if(tmpCell.getObjectMap() instanceof CarpenterShop carpenterShop) {
-            System.out.println(carpenterShop.getAnchorX() + " " + carpenterShop.getAnchorY()+" "+tempcd.getX()+" "+tempcd.getY());
-
-        }
         if(tmpCell.getObjectMap() instanceof CarpenterShop carpenterShop && carpenterShop.getAnchorX()==tmpCell.getX() && carpenterShop.getAnchorY()==tmpCell.getY()) {
             int frameWidth = this.carpenterShopTexture.getWidth();
             int frameHeight = this.carpenterShopTexture.getHeight() / 4;
 
             TextureRegion cottageFrame = new TextureRegion(this.carpenterShopTexture, 0,(int)getSeasonalTexture(carpenterShopTexture), frameWidth, frameHeight);
             batch.draw(cottageFrame, x - CELL_SIZE * 10, y, CELL_SIZE *10, CELL_SIZE * 10);
+            return true;
+
+        }
+        if(tmpCell.getObjectMap() instanceof HarveyHome harveyHome && harveyHome.getAnchorX()==tmpCell.getX() && harveyHome.getAnchorY()==tmpCell.getY()) {
+            int frameWidth = this.harveyHomeTexture.getWidth();
+            int frameHeight = this.harveyHomeTexture.getHeight() / 4;
+
+            TextureRegion cottageFrame = new TextureRegion(this.harveyHomeTexture, 0,(int)getSeasonalTexture(harveyHomeTexture), frameWidth, frameHeight);
+            batch.draw(cottageFrame, x - CELL_SIZE * 6, y-CELL_SIZE, CELL_SIZE *7, CELL_SIZE * 5);
+            return true;
+
+        }
+        if(tmpCell.getObjectMap() instanceof RobinHome robinHome && robinHome.getAnchorX()==tmpCell.getX() && robinHome.getAnchorY()==tmpCell.getY()) {
+            int frameWidth = this.robinHomeTexture.getWidth();
+            int frameHeight = this.robinHomeTexture.getHeight() / 4;
+
+            TextureRegion cottageFrame = new TextureRegion(this.robinHomeTexture, 0,(int)getSeasonalTexture(robinHomeTexture), frameWidth, frameHeight);
+            batch.draw(cottageFrame, x - CELL_SIZE * 5, y-CELL_SIZE/2f, CELL_SIZE *6, CELL_SIZE * 3);
+            return true;
+
+        }
+        if(tmpCell.getObjectMap() instanceof SebastienHome sebastienHome && sebastienHome.getAnchorX()==tmpCell.getX() && sebastienHome.getAnchorY()==tmpCell.getY()) {
+            int frameWidth = this.sebastienHomeTexture.getWidth();
+            int frameHeight = this.sebastienHomeTexture.getHeight() / 4;
+
+            TextureRegion cottageFrame = new TextureRegion(this.sebastienHomeTexture, 0,(int)getSeasonalTexture(sebastienHomeTexture), frameWidth, frameHeight);
+            batch.draw(cottageFrame, x - CELL_SIZE * 5, y-CELL_SIZE/2f, CELL_SIZE *6, CELL_SIZE * 7);
+            return true;
+
+        }
+        if(tmpCell.getObjectMap() instanceof LiaHome liaHome && liaHome.getAnchorX()==tmpCell.getX() && liaHome.getAnchorY()==tmpCell.getY()) {
+            int frameWidth = this.liaHomeTexture.getWidth();
+            int frameHeight = this.liaHomeTexture.getHeight() / 4;
+
+            TextureRegion cottageFrame = new TextureRegion(this.liaHomeTexture, 0,(int)getSeasonalTexture(liaHomeTexture), frameWidth, frameHeight);
+            batch.draw(cottageFrame, x - CELL_SIZE * 5.66f, y-CELL_SIZE/2f, CELL_SIZE *7, CELL_SIZE * 7);
+            return true;
+
+        }
+        if(tmpCell.getObjectMap() instanceof AbigailHome abigailHome){
+            System.out.println(abigailHome.getAnchorX()+"?="+tmpCell.getX()+"and"+abigailHome.getAnchorY()+"?="+tmpCell.getY());
+        }
+        if(tmpCell.getObjectMap() instanceof AbigailHome abigailHome && abigailHome.getAnchorX()==tmpCell.getX() && abigailHome.getAnchorY()==tmpCell.getY()) {
+            int frameWidth = this.abigailHomeTexture.getWidth();
+            int frameHeight = this.abigailHomeTexture.getHeight() / 4;
+
+            TextureRegion cottageFrame = new TextureRegion(this.abigailHomeTexture, 0,(int)getSeasonalTexture(abigailHomeTexture), frameWidth, frameHeight);
+            batch.draw(cottageFrame, x - CELL_SIZE * 4.33f, y-CELL_SIZE/2f, CELL_SIZE *5, CELL_SIZE * 5);
             return true;
 
         }

@@ -44,7 +44,7 @@ public class VillageScreen extends GameScreen implements Screen {
     private String currentSeason = "";
 
     Map<Cell, TextureRegion> groundCache;
-
+    private Texture centerTexture= GameAssetManager.getGameAssetManager().getTileTexture("centerGround.png");
     public static Texture villageTexture = new Texture("game/Buildings/Screen/Village_Screen_Spring.png");
     public static Sprite villageSprite;
 
@@ -185,6 +185,7 @@ public class VillageScreen extends GameScreen implements Screen {
         for (CellData cellData : visibleCells){
             groundBorderSpawner.renderGround(batch, cellData, villageMap.villageData);
             waterSpawner.renderWater(batch, cellData, passiveStateTime, villageMap.villageData);
+            batch.draw(centerTexture,46*CELL_SIZE,31*CELL_SIZE,CELL_SIZE*3,CELL_SIZE*3);
         }
         for (CellData cellData : visibleCells) {
 

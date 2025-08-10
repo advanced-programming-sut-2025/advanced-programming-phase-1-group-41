@@ -20,8 +20,12 @@ public class HarveyHome extends NPCHome implements Building {
     }
     private int x;
     private int y;
+    private int anchorX;
+    private int anchorY;
 
     public HarveyHome() {
+        anchorX = 64;
+        anchorY = 55;
     }
 
     public HarveyHome(int x, int y, Village village) {
@@ -35,7 +39,7 @@ public class HarveyHome extends NPCHome implements Building {
                 Cell cell = Finder.findCellByCoordinatesVillage(i, yWall,village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
-                if(i == x + 3&&yWall==y+4){
+                if(i == x + 3&&yWall==y){
                     cell.setObjectMap(new Door());
                 }
             }
@@ -81,11 +85,11 @@ public class HarveyHome extends NPCHome implements Building {
 
     @Override
     public int getAnchorX() {
-        return 0;
+        return anchorX;
     }
 
     @Override
     public int getAnchorY() {
-        return 0;
+        return anchorY;
     }
 }
