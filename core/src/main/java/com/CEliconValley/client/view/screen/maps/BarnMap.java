@@ -55,10 +55,9 @@ public class BarnMap implements Location {
         }
 
         Door door = new Door();
-        getCell(offsetX + 14, offsetY + 4).setObjectMap(door);
-        getCell(offsetX + 14, offsetY + 3).setObjectMap(door);
-        getCell(offsetX + 13, offsetY + 4).setObjectMap(door);
-        getCell(offsetX + 13, offsetY + 3).setObjectMap(door);
+        getCell(offsetX + 12, offsetY + 1).setObjectMap(door);
+        getCell(offsetX + 11, offsetY + 1).setObjectMap(door);
+        getCell(offsetX + 10, offsetY + 1).setObjectMap(door);
     }
 
     public ArrayList<Cell> getCells() {

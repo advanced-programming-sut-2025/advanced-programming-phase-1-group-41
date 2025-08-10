@@ -24,6 +24,10 @@ public class CottageScreen extends GameScreen implements Screen {
     private final CottageMap cottageMap;
     private final Player player;
 
+
+    protected RefrigeratorBar refrigeratorBar = new RefrigeratorBar(this);
+    public boolean isRefrigeratorOpen = false;
+
     int[][] directions = {
         {0, 1},
         {1, 0},
@@ -84,12 +88,22 @@ public class CottageScreen extends GameScreen implements Screen {
 
         if (hero.currentAnimation != null) {
             TextureRegion currentFrame = hero.currentAnimation.getKeyFrame(hero.stateTime, onRepeat);
-            batch.draw(currentFrame, hero.renderX - CELL_SIZE, hero.renderY - CELL_SIZE, CELL_SIZE * 2f, CELL_SIZE * 2f);
+            //                System.out.println("stateTime: " + stateTime + ", frameIndex: " + currentAnimation.getKeyFrameIndex(stateTime));
+            if (!onRepeat && hero.currentAnimation.isAnimationFinished(hero.stateTime)) {
+                System.out.println("im here for a reason im not sure " + hero.stateTime);
+                hero.currentAnimation = hero.walk(false, hero.currentDirection);
+                onRepeat = true;
+                hero.isActing.set(false);
+                hero.stateTime = 0f;
+            }
+            batch.draw(currentFrame, hero.renderX - CELL_SIZE / 2f, hero.renderY - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
         }
         if (isMenuOpen) {
 //                menuBar.render(batch, menuX, menuY, menuWidth, menuHeight);
             menuBar.render(batch, camera);
-        } else {
+        } else if(isRefrigeratorOpen){
+            refrigeratorBar.render(batch, camera);
+        }else {
             inventoryRenderer.render(batch, camera);
         }
         camera.position.set(hero.renderX + CELL_SIZE / 2f, hero.renderY + CELL_SIZE / 2f, 0);

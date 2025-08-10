@@ -33,16 +33,20 @@ public class StrategyScoreboard {
     private void updateByMoney(Table scoreboardInfoTable){
 
         ArrayList<PlayerData> players = AppClient.getGameData().getPlayersData();
-        List<PlayerData> sortedPlayers = new ArrayList<>(players);
-        sortedPlayers.sort((p1, p2) -> Double.compare(p2.getMoney(), p1.getMoney()));
-        update(scoreboardInfoTable, sortedPlayers);
+        if(players != null){
+            List<PlayerData> sortedPlayers = new ArrayList<>(players);
+            sortedPlayers.sort((p1, p2) -> Double.compare(p2.getMoney(), p1.getMoney()));
+            update(scoreboardInfoTable, sortedPlayers);
+        }
     }
 
     private void updateByMissions(Table scoreboardInfoTable){
-        ArrayList<PlayerData> players = AppClient.getGameData().getPlayersData();
-        List<PlayerData> sortedPlayers = new ArrayList<>(players);
-        sortedPlayers.sort((p1 , p2) -> Integer.compare(p2.getQuestsFinsihed(), p1.getQuestsFinsihed()));
-        update(scoreboardInfoTable, sortedPlayers);
+        Gdx.app.postRunnable(()-> {
+            ArrayList<PlayerData> players = AppClient.getGameData().getPlayersData();
+            List<PlayerData> sortedPlayers = new ArrayList<>(players);
+            sortedPlayers.sort((p1 , p2) -> Integer.compare(p2.getQuestsFinsihed(), p1.getQuestsFinsihed()));
+            update(scoreboardInfoTable, sortedPlayers);
+        });
     }
     private void updateBySkillLevels(Table scoreboardInfoTable){
         ArrayList<PlayerData> players = AppClient.getGameData().getPlayersData();
