@@ -24,10 +24,12 @@ public class GameAssetManager {
     public Texture getSkillTexture(String name) {return new Texture(Gdx.files.internal("game/inventory/skills/" + name));}
     public Texture getTileTexture(String name) {return new Texture(Gdx.files.internal("game/general/tiles/" + name));}
     public Texture getScreenTexture(String name){return new Texture(Gdx.files.internal("game/Buildings/Screen/" + name));}
+    public Texture getNPCTexture(String name, String item){return new Texture(Gdx.files.internal("game/Hero/NPC/" + name + "/" + item));}
     public Drawable getDrawableBackground(String name) {
         TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal("backgrounds/" + name)));
         return new TextureRegionDrawable(region);
     }
+    public Texture getInventoryTexture(String name) {return new Texture(Gdx.files.internal("game/inventory/" + name));}
     public Texture getAvatarTexture(){return new Texture(AppClient.getUserData().getAvatarPath());}
 
     public static GameAssetManager getGameAssetManager() {

@@ -205,9 +205,11 @@ public class PlayerActs {
         if (screen.isMenuOpen) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
                 screen.menuBar.goToPreviousTab();
+                screen.menuBar.resetScroll();
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
                 screen.menuBar.goToNextTab();
+                screen.menuBar.resetScroll();
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
                 screen.menuBar.scrollUp();

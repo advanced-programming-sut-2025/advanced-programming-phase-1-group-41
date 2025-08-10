@@ -376,11 +376,11 @@
         }
 
         public void scrollDown() {
-            if (selectedIndex > 0) selectedIndex--;
+            if (selectedIndex < animalsData.size() - visibleAnimalsCount)
+                selectedIndex++;
         }
 
         public void scrollUp() {
-            if (selectedIndex < animalsData.size() - visibleAnimalsCount)
-                selectedIndex++;
+            if (selectedIndex > 0) selectedIndex--;
         }
     }
