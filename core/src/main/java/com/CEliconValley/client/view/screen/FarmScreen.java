@@ -1,6 +1,7 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
+import com.CEliconValley.client.controller.spawners.ItemSpawner;
 import com.CEliconValley.client.view.screen.maps.*;
 import com.CEliconValley.client.view.screen.randomwalk.Node;
 import com.CEliconValley.client.view.screen.randomwalk.SimplePathFinder;
@@ -49,6 +50,7 @@ public class FarmScreen extends GameScreen implements Screen {
     private final BuildingSpawner buildingSpawner;
     private final GroundSpawner groundSpawner;
     private final CropSpawner cropSpawner;
+    private final ItemSpawner itemSpawner;
     private FarmMap farmMap;
     private ArrayList<Hero> otherHeroes;
     private GroundBorderSpawner groundBorderSpawner;
@@ -63,7 +65,7 @@ public class FarmScreen extends GameScreen implements Screen {
     ;
 
 
-    private OrthographicCamera camera;
+    public OrthographicCamera camera;
 
     public static final float VIRTUAL_WIDTH = 3160f;
     public static final float VIRTUAL_HEIGHT = 1350f;
@@ -114,6 +116,7 @@ public class FarmScreen extends GameScreen implements Screen {
         groundSpawner = new GroundSpawner();
         cropSpawner = new CropSpawner();
         groundBorderSpawner = new GroundBorderSpawner();
+        itemSpawner = new ItemSpawner();
 
         batch = new SpriteBatch();
         groundCache = new HashMap<>();
@@ -281,6 +284,7 @@ public class FarmScreen extends GameScreen implements Screen {
             cropSpawner.renderCrops(batch, cellData, farmMap.farmData);
             waterSpawner.renderWater(batch, cellData, passiveStateTime, farmMap.farmData);
             rockSpawner.renderBreakingEffectForCell(batch, cellData, delta);
+            itemSpawner.renderItems(batch, cellData, farmMap.farmData);
             if (hero.playerX.get() == cellData.getX() && hero.playerY.get() == cellData.getY()) {
 
                 TextureRegion currentFrame = hero.currentAnimation.getKeyFrame(hero.stateTime, onRepeat);

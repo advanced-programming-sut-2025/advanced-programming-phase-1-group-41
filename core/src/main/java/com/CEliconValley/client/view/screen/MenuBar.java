@@ -224,7 +224,9 @@ public class MenuBar {
                                     screen.hero.stateTime = 0;
                                 }
                             }
-
+                            else if(Gdx.input.isButtonJustPressed(1)){
+                                screen.hero.selectedItemname = item.getName();
+                            }
 
                             String name = readableName(item.getName());
                             GlyphLayout layout = new GlyphLayout(font, name);

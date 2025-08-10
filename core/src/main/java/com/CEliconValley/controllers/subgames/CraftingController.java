@@ -34,27 +34,27 @@ public class CraftingController {
         return false;
     }
 
-    public Result preValidateUseTool(Matcher matcher) {
+    public Result preValidateUseTool(Matcher matcher, Player player) {
         String dirName = matcher.group("direction").trim();
         int dir = Integer.parseInt(dirName) - 1;
         if (dir < 0 || dir > 7) {
             return new Result(false, "invalid dir");
         }
         int[][] dirs = {{-1, -1}, {0, -1}, {1, -1}, {1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0},};
-        x = App.getGame().getCurrentPlayer().getX() + dirs[dir][0];
-        y = App.getGame().getCurrentPlayer().getY() + dirs[dir][1];
+        x = player.getX() + dirs[dir][0];
+        y = player.getY() + dirs[dir][1];
         return new Result(true, "x: " + x + " y: " + y);
     }
 
 
-    private void placeBomb(CraftableMachine craftableMachine, Cell cell) {
+    private void placeBomb(CraftableMachine craftableMachine, Cell cell, Player player, Farm farm) {
         int size = 3;
         if(craftableMachine.equals(CraftableMachine.Bomb)){
             size = 5;
         } else if(craftableMachine.equals(CraftableMachine.MegaBomb)){
             size = 7;
         }
-        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
+        Inventory inventory = player.getInventory();
         for(int x = cell.getX() - size; x < cell.getX() + size; x++) {
             for(int y = cell.getY() - size; y < cell.getY() + size; y++) {
                 int x1 = x - cell.getX();
@@ -62,7 +62,7 @@ public class CraftingController {
                 if(x1 * x1 + y1 * y1 >= size * size){
                     continue;
                 }
-                Cell cell1 = Finder.findCellByCoordinates(x, y, App.getGame().getCurrentPlayerFarm());
+                Cell cell1 = Finder.findCellByCoordinates(x, y, farm);
                 if(cell1 == null){
                     continue;
                 }
@@ -82,7 +82,7 @@ public class CraftingController {
                     } else if(objectMap instanceof Mineral){
                         inventory.addToInventory(new Mineral(((Mineral) objectMap).getMineralType()), 1);
                         System.out.println("You got a " + ((Mineral) objectMap).getMineralType().getName() + " by destroying a Mineral.");
-                        cell1.setObjectMap(new Mine(x,y,App.getGame().getCurrentPlayerFarm(),0));
+                        cell1.setObjectMap(new Mine(x,y,farm,0));
                         continue;
                     }
                     Grass grass = new Grass();
@@ -92,7 +92,7 @@ public class CraftingController {
             }
         }
     }
-    public void placeSprinkler(CraftableMachine craftableMachine, Cell cell) {
+    public void placeSprinkler(CraftableMachine craftableMachine, Cell cell, Player player, Farm farm) {
         int size = 4;
         if(craftableMachine.equals(CraftableMachine.QualitySprinkler)){
             size = 8;
@@ -102,7 +102,7 @@ public class CraftingController {
         }
         for(int x = cell.getX() - size; x < cell.getX() + size; x++) {
             for (int y = cell.getY() - size; y < cell.getY() + size; y++) {
-                Cell cell1 = Finder.findCellByCoordinates(x, y, App.getGame().getCurrentPlayerFarm());
+                Cell cell1 = Finder.findCellByCoordinates(x, y, farm);
                 if (cell1 == null) {
                     continue;
                 }
@@ -117,13 +117,15 @@ public class CraftingController {
             }
         }
     }
-    public Result placeItem(Matcher matcher) {
-        Result preResult = preValidateUseTool(matcher);
+    public Result placeItem(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
+        Result preResult = preValidateUseTool(matcher, player);
         if (!preResult.success()) {
             return preResult;
         }
         String itemName = matcher.group(1).trim();
-        Cell cell = Finder.findCellByCoordinates(x, y, App.getGame().getCurrentPlayerFarm());
+        Cell cell = Finder.findCellByCoordinates(x, y, farm);
         if (cell == null) {
             return new Result(false, "Cell not found");
         }
@@ -134,34 +136,34 @@ public class CraftingController {
         if (item instanceof Tool){
             return new Result(false,"u can't place a tool");
         }
-        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
+        Inventory inventory = player.getInventory();
         Slot slot = inventory.getSlotByItem(item);
         if (slot == null) {
             return new Result(false, "slot not found");
         }
         if(item instanceof Well){
-            if(cell.getY() <= App.getGame().getCurrentPlayer().getY()
-            && cell.getX() <= App.getGame().getCurrentPlayer().getX()){
+            if(cell.getY() <= player.getY()
+            && cell.getX() <= player.getX()){
                 return new Result(false,"choose another direction");
             }
-            Well well = new Well(cell.getX(), cell.getY(), App.getGame().getCurrentPlayerFarm());
-            App.getGame().getCurrentPlayerFarm().getBuildings().add(well);
+            Well well = new Well(cell.getX(), cell.getY(), farm);
+            farm.getBuildings().add(well);
             inventory.removeFromInventory(item, 1);
             return new Result(true, "well was placed");
         }
         if(item instanceof CraftableMachine machine){
             inventory.removeFromInventory(item, 1);
             if(machine.equals(CraftableMachine.Bomb) || machine.equals(CraftableMachine.CherryBomb) || machine.equals(CraftableMachine.MegaBomb)){
-                placeBomb(machine, cell);
+                placeBomb(machine, cell, player, farm);
                 return new Result(true, "Ka-Booooom");
             }
             if(machine.equals(CraftableMachine.Sprinkler) || machine.equals(CraftableMachine.QualitySprinkler) || machine.equals(CraftableMachine.IridiumSprinkler)){
-                placeSprinkler(machine ,cell);
+                placeSprinkler(machine ,cell, player, farm);
                 return new Result(true, "Fshhhh.., watering all");
             }
             if(machine.equals(CraftableMachine.MysticTreeSeed)){
-                Tree tree = new Tree(cell.getX(), cell.getY(), App.getGame().getCurrentPlayerFarm(), TreeType.Mystic);
-                App.getGame().getCurrentPlayerFarm().addTree(tree);
+                Tree tree = new Tree(cell.getX(), cell.getY(), farm, TreeType.Mystic);
+                farm.addTree(tree);
                 cell.setObjectMap(tree);
                 return new Result(true, "Mystical tree planted O_o");
             }

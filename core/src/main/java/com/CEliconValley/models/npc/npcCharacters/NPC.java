@@ -10,7 +10,7 @@ import com.CEliconValley.models.npc.npchomes.NPCHome;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public abstract class NPC {
+public abstract     class NPC {
 
 
     private String name;
@@ -193,4 +193,6 @@ public abstract class NPC {
     public void setQuests(ArrayList<Quest> quests) {
         this.quests = quests;
     }
+
+
 }

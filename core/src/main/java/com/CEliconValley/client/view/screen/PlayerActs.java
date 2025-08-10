@@ -2,6 +2,7 @@ package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.model.AnimalSprite;
+import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
@@ -15,6 +16,7 @@ import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.tools.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -192,6 +194,12 @@ public class PlayerActs {
             Objects.requireNonNull(Finder.getpd()).getPlayer().setPlayerIsInVillage(true);
             changeScreen(new VillageScreen(Objects.requireNonNull(Finder.getpd()).getPlayer()));
 
+        }else if(Gdx.input.isButtonJustPressed(0)){
+            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            if(screen instanceof FarmScreen farmScreen){
+                farmScreen.camera.unproject(mousePos);
+                putItemOnGround(mousePos.x, mousePos.y, farmScreen);
+            }
         }
         if (screen.isMenuOpen) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
@@ -647,5 +655,46 @@ public class PlayerActs {
             }
         }
         return null;
+    }
+
+    public static void putItemOnGround(float mouseX, float mouseY, FarmScreen fs){
+        Hero hero = fs.getHero();
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if(i ==0 && j == 0) continue;
+                CellData cd = Finder.getcdByFarmData(hero.playerX.get()+j,
+                    hero.playerY.get()+i, fs.getFarmMap().farmData);
+
+                if(mouseX >= cd.getX()*CELL_SIZE && mouseX <= (cd.getX()+1)*CELL_SIZE &&
+                mouseY >= cd.getY()*CELL_SIZE && mouseY <= (cd.getY()+1)*CELL_SIZE){
+                    System.out.println("im around :)");
+                    System.out.println("you clicked on "+cd.getX()+" "+cd.getY());
+                    System.out.println("player pos "+hero.playerX.get()+" "+hero.playerY.get());
+                    int dir = getDir(i, j);
+                    if(dir == -1){
+                        System.out.println("invalid dir");
+                        return;
+                    }
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand("place item -n "+hero.selectedItemname+" -d "+dir,
+                            AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
+                    return;
+                }
+
+            }
+
+        }
+    }
+    private static int getDir(int i, int j){
+        if(i == -1){
+            return j+2;
+        }else if(i == 0){
+            if(j == 1) return 4;
+            if(j == -1) return 8;
+        }else if(i==1){
+            return 6-j;
+        }
+        return -1;
     }
 }

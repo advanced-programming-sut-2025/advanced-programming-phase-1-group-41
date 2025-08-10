@@ -1,9 +1,14 @@
 package com.CEliconValley.common;
 
+import com.CEliconValley.models.Occupation;
 import com.CEliconValley.models.Player;
+import com.CEliconValley.models.items.Item;
+import com.CEliconValley.models.items.Slot;
 import com.CEliconValley.models.npc.npcCharacters.NPC;
+import com.CEliconValley.models.npc.npcCharacters.Quest;
 import dev.morphia.annotations.Embedded;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Embedded
@@ -12,7 +17,13 @@ public class NPCData {
     HashMap<String,Boolean> isTalkedTodayData;
     HashMap<String,Boolean> isGiftedTodayData;
     int daysToUnlockQ3;
-
+    String name;
+    Occupation job;
+    String homename;
+    ArrayList<String> dialogues;
+    ArrayList<String> favoriteItems;
+    ArrayList<SlotData> itemsToGive;
+    ArrayList<QuestData> questsdata;
     public NPCData() {
     }
 
@@ -30,6 +41,22 @@ public class NPCData {
         for (Player player : npc.getIsGiftedToday().keySet()) {
             isGiftedTodayData.put(player.getUser().getUsername(), npc.getIsGiftedToday().get(player));
         }
+        this.name = npc.getName();
+        this.job = npc.getJob();
+        this.homename = npc.getHome().getName();
+        this.dialogues = npc.getDialogues();
+        this.favoriteItems = new ArrayList<>();
+        for (Item favorite : npc.getFavorites()) {
+            favoriteItems.add(favorite.getName());
+        }
+        this.itemsToGive = new ArrayList<>();
+        for (Slot slot : npc.getItemsToGift()) {
+            itemsToGive.add(new SlotData(slot));
+        }
+        this.questsdata = new ArrayList<>();
+        for (Quest quest : npc.getQuests()) {
+            questsdata.add(new QuestData(quest));
+        }
     }
 
     public int getDaysToUnlockQ3() {
@@ -46,5 +73,33 @@ public class NPCData {
 
     public HashMap<String, Boolean> getIsTalkedTodayData() {
         return isTalkedTodayData;
+    }
+
+    public ArrayList<String> getDialogues() {
+        return dialogues;
+    }
+
+    public ArrayList<String> getFavoriteItems() {
+        return favoriteItems;
+    }
+
+    public String getHomename() {
+        return homename;
+    }
+
+    public ArrayList<SlotData> getItemsToGive() {
+        return itemsToGive;
+    }
+
+    public Occupation getJob() {
+        return job;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ArrayList<QuestData> getQuestsdata() {
+        return questsdata;
     }
 }
