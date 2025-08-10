@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 public class Sebastien extends NPC{
     NPCHome home;
-    public Sebastien(String name, Occupation job, NPCHome home, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift,ArrayList<Quest> quests) {
-        super(name, job, dialogues, favorites, itemsToGift, quests);
+    public Sebastien(String name, Occupation job, NPCHome home, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift) {
+        super(name, job, dialogues, favorites, itemsToGift);
         this.home = home;
         setX(16);setY(55);
         setDaysToUnlockQ3(7);

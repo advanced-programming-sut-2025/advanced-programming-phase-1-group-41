@@ -22,10 +22,11 @@ public class QuestData {
     private HashMap<String,Boolean> isFinished=new HashMap<>();
 
     public QuestData(Quest quest) {
-        requestdata = new SlotData(quest.getRequest());
-        rewarddata = new SlotData(quest.getReward());
-        this.ownername = quest.getOwner().getName();
+        requestdata =  new SlotData(quest.getRequest());
+        rewarddata = quest.getReward() == null ? null : new SlotData(quest.getReward());
         questName = quest.getQuestName();
+        System.out.println("qname "+questName);
+        this.ownername = quest.getOwner().getName();
         questPreTalk = quest.getQuestPreTalk();
         questPostTalk = quest.getQuestPostTalk();
         MoneyPrize = quest.getMoneyPrize();

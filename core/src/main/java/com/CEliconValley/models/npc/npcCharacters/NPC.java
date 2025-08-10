@@ -96,24 +96,29 @@ public abstract     class NPC {
     }
 
     public NPC(String name, Occupation job, ArrayList<String> dialogues,
-               ArrayList<Item> favorites, ArrayList<Slot> itemsToGift,
-               ArrayList<Quest> quests) {
+               ArrayList<Item> favorites, ArrayList<Slot> itemsToGift) {
         this.name = name;
         this.job = job;
         this.dialogues = dialogues;
         this.favorites = favorites;
         this.ItemsToGift = itemsToGift;
+
+    }
+
+    public void postLoad(ArrayList<Quest> quests){
         this.quests = quests;
+        for (Quest quest : this.quests) {
+            quest.setOwner(this);
+        }
         for (Player player :App.getGame().getPlayers()){
             friendShip.put(player,0);
             isTalkedToday.put(player,false);
             isGiftedToday.put(player,false);
             for(int i=0;i<3;i++){
-                quests.get(i).setLocked(player, true);
-                quests.get(i).setFinished(player, false);
+                this.quests.get(i).setLocked(player, true);
+                this.quests.get(i).setFinished(player, false);
             }
         }
-
     }
 
     public int getFriendShip(Player player) {

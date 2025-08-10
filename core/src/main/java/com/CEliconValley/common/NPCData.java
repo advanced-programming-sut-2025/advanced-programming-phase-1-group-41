@@ -43,7 +43,7 @@ public class NPCData {
         }
         this.name = npc.getName();
         this.job = npc.getJob();
-        this.homename = npc.getHome().getName();
+        this.homename = npc.getHome() == null ? null : npc.getHome().getName();
         this.dialogues = npc.getDialogues();
         this.favoriteItems = new ArrayList<>();
         for (Item favorite : npc.getFavorites()) {

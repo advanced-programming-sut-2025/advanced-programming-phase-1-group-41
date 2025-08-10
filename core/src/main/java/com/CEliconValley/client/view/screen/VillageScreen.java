@@ -1,6 +1,8 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
+import com.CEliconValley.client.model.AnimalSprite;
+import com.CEliconValley.client.model.NPCSprite;
 import com.CEliconValley.client.view.screen.maps.VillageMap;
 import com.CEliconValley.client.view.screen.randomwalk.Node;
 import com.CEliconValley.common.*;
@@ -23,6 +25,8 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.google.gson.Gson;
 
 import java.util.*;
+
+import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class VillageScreen extends GameScreen implements Screen {
     private final SpriteBatch batch;
@@ -48,6 +52,14 @@ public class VillageScreen extends GameScreen implements Screen {
     public static Texture villageTexture = new Texture("game/Buildings/Screen/Village_Screen_Spring.png");
     public static Sprite villageSprite;
 
+
+    Texture grassTexture = GameAssetManager.getGameAssetManager().getTileTexture("grass.png");
+    //        Texture groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("Village_Tile.png");
+    Texture sandTexture = GameAssetManager.getGameAssetManager().getTileTexture("sand.png");
+    Texture thunderedTexture = GameAssetManager.getGameAssetManager().getTileTexture("thundered.png");
+    Texture farmlandTexture = GameAssetManager.getGameAssetManager().getTileTexture("farmland.png");
+    Texture bombedTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
+
     private OrthographicCamera camera;
 
     public static final float VIRTUAL_WIDTH = 3160f;
@@ -57,7 +69,7 @@ public class VillageScreen extends GameScreen implements Screen {
 
     private Animation<TextureRegion>[] walkAnimations;
     private float passiveStateTime = 0f;
-    private boolean onRepeat = true;
+    ArrayList<NPCSprite> npcSprites = new ArrayList<>();
 
     public VillageScreen( Player player) {
 
@@ -117,6 +129,15 @@ public class VillageScreen extends GameScreen implements Screen {
 
         hero.targetX.set(hero.playerX.get());
         hero.targetY.set(hero.playerY.get());
+
+
+        NPCData first = AppClient.getGameData().getVillageData().getNPCsData().get(0);
+        npcSprites.add(new NPCSprite(villageMap, first, hero.playerX.get()+2, hero.playerY.get(), true));
+        for (NPCSprite npcSprite : npcSprites) {
+            npcSprite.currentAnimation = npcSprite.walk(false, npcSprite.currentDirection);
+            npcSprite.renderX = npcSprite.x * CELL_SIZE;
+            npcSprite.renderY = npcSprite.y * CELL_SIZE;
+        }
     }
 
     @Override
@@ -157,12 +178,7 @@ public class VillageScreen extends GameScreen implements Screen {
 
         batch.draw(villageTexture, 0, 0, CELL_SIZE * 95, CELL_SIZE * 65);
 
-        Texture grassTexture = GameAssetManager.getGameAssetManager().getTileTexture("grass.png");
-//        Texture groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("Village_Tile.png");
-        Texture sandTexture = GameAssetManager.getGameAssetManager().getTileTexture("sand.png");
-        Texture thunderedTexture = GameAssetManager.getGameAssetManager().getTileTexture("thundered.png");
-        Texture farmlandTexture = GameAssetManager.getGameAssetManager().getTileTexture("farmland.png");
-        Texture bombedTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
+
         for (CellData cellData : visibleCells) {
             Cell cell = cellData.extractData();
             int x = cell.getX() * CELL_SIZE;
@@ -205,6 +221,14 @@ public class VillageScreen extends GameScreen implements Screen {
             buildingSpawner.renderBuildings(batch, cellData, villageMap.villageData);
         }
 
+
+        for (NPCSprite npcSprite : npcSprites) {
+            if (npcSprite.currentAnimation != null) {
+                TextureRegion currentFrame = npcSprite.currentAnimation.getKeyFrame(npcSprite.stateTime, onRepeat);
+                batch.draw(currentFrame, npcSprite.renderX - CELL_SIZE / 2f, npcSprite.renderY - CELL_SIZE / 2f, CELL_SIZE * 1.5f, CELL_SIZE * 1.5f);
+            }
+        }
+
         if (AppClient.getGameData().getWeatherType().equals(WeatherType.Snowy)) snow.render(batch, camera);
         if (AppClient.getGameData().getWeatherType().equals(WeatherType.Rainy)) rain.render(batch, camera,200,false);
         if (AppClient.getGameData().getWeatherType().equals(WeatherType.Stormy)) rain.render(batch, camera,500,true);
@@ -221,6 +245,10 @@ public class VillageScreen extends GameScreen implements Screen {
         batch.end();
         stage.act(delta);
         stage.draw();
+
+        npcSprites.forEach(npcSprite -> {
+            npcSprite.stateTime += delta;
+        });
     }
 
     @Override
