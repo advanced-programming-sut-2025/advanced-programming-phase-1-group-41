@@ -25,7 +25,6 @@ public class QuestData {
         requestdata =  new SlotData(quest.getRequest());
         rewarddata = quest.getReward() == null ? null : new SlotData(quest.getReward());
         questName = quest.getQuestName();
-        System.out.println("qname "+questName);
         this.ownername = quest.getOwner().getName();
         questPreTalk = quest.getQuestPreTalk();
         questPostTalk = quest.getQuestPostTalk();

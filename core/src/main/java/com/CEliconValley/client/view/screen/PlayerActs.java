@@ -2,6 +2,7 @@ package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.model.AnimalSprite;
+import com.CEliconValley.client.model.NPCSprite;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.GameCommand;
@@ -493,6 +494,42 @@ public class PlayerActs {
                     // TODO need to change the animaldata as well perhaps
                     animalSprite.isMoving = false;
                     animalSprite.currentAnimation = animalSprite.walk(false, animalSprite.currentDirection);
+                }
+            }
+        });
+
+    }
+    public static void npcApproach(ArrayList<NPCSprite> npcSprites,
+                                      float delta) {
+        npcSprites.forEach(npsSprite -> {
+            if (npsSprite.isMoving) {
+                float moveAmount = 400 * delta;
+                float targetPixelX = npsSprite.targetX * CELL_SIZE;
+                float targetPixelY = npsSprite.targetY * CELL_SIZE;
+                npsSprite.currentAnimation = npsSprite.walk(true, npsSprite.currentDirection);
+                if (npsSprite.renderX < targetPixelX) {
+                    npsSprite.renderX += moveAmount;
+                    if (npsSprite.renderX > targetPixelX) npsSprite.renderX = targetPixelX;
+                } else if (npsSprite.renderX > targetPixelX) {
+                    npsSprite.renderX -= moveAmount;
+                    if (npsSprite.renderX < targetPixelX) npsSprite.renderX = targetPixelX;
+                }
+
+
+                if (npsSprite.renderY < targetPixelY) {
+                    npsSprite.renderY += moveAmount;
+                    if (npsSprite.renderY > targetPixelY) npsSprite.renderY = targetPixelY;
+                } else if (npsSprite.renderY > targetPixelY) {
+                    npsSprite.renderY -= moveAmount;
+                    if (npsSprite.renderY < targetPixelY) npsSprite.renderY = targetPixelY;
+                }
+
+                if (npsSprite.renderX == targetPixelX && npsSprite.renderY == targetPixelY) {
+                    npsSprite.x = npsSprite.targetX;
+                    npsSprite.y = npsSprite.targetY;
+                    // TODO need to change the animaldata as well perhaps
+                    npsSprite.isMoving = false;
+                    npsSprite.currentAnimation = npsSprite.walk(false, npsSprite.currentDirection);
                 }
             }
         });

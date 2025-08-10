@@ -286,7 +286,7 @@ public class BuildingSpawner {
 
         }
         if(tmpCell.getObjectMap() instanceof AbigailHome abigailHome){
-            System.out.println(abigailHome.getAnchorX()+"?="+tmpCell.getX()+"and"+abigailHome.getAnchorY()+"?="+tmpCell.getY());
+//            System.out.println(abigailHome.getAnchorX()+"?="+tmpCell.getX()+"and"+abigailHome.getAnchorY()+"?="+tmpCell.getY());
         }
         if(tmpCell.getObjectMap() instanceof AbigailHome abigailHome && abigailHome.getAnchorX()==tmpCell.getX() && abigailHome.getAnchorY()==tmpCell.getY()) {
             int frameWidth = this.abigailHomeTexture.getWidth();

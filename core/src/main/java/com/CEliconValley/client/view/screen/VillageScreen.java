@@ -5,6 +5,7 @@ import com.CEliconValley.client.model.AnimalSprite;
 import com.CEliconValley.client.model.NPCSprite;
 import com.CEliconValley.client.view.screen.maps.VillageMap;
 import com.CEliconValley.client.view.screen.randomwalk.Node;
+import com.CEliconValley.client.view.screen.randomwalk.SimplePathFinder;
 import com.CEliconValley.common.*;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
@@ -25,6 +26,7 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.google.gson.Gson;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
@@ -156,6 +158,10 @@ public class VillageScreen extends GameScreen implements Screen {
         if (!result.success() && result.message().equals("cheat")) return;
         hero.stateTime += delta;
 
+
+        randomMovement();
+        PlayerActs.npcApproach(npcSprites, delta);
+
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
@@ -224,7 +230,8 @@ public class VillageScreen extends GameScreen implements Screen {
 
         for (NPCSprite npcSprite : npcSprites) {
             if (npcSprite.currentAnimation != null) {
-                TextureRegion currentFrame = npcSprite.currentAnimation.getKeyFrame(npcSprite.stateTime, onRepeat);
+                if(npcSprite.isOutside == false) continue;
+                TextureRegion currentFrame = npcSprite.currentAnimation.getKeyFrame(npcSprite.stateTime, true);
                 batch.draw(currentFrame, npcSprite.renderX - CELL_SIZE / 2f, npcSprite.renderY - CELL_SIZE / 2f, CELL_SIZE * 1.5f, CELL_SIZE * 1.5f);
             }
         }
@@ -336,4 +343,43 @@ public class VillageScreen extends GameScreen implements Screen {
     @Override public void hide() { }
     @Override public void pause() { }
     @Override public void resume() { }
+
+    private void randomMovement() {
+        for (NPCSprite npcSprite : npcSprites) {
+            if(npcSprite.reachedDestination() && !npcSprite.randomSetter){
+                int delayTime = new Random().nextInt(5000, 10000);
+                npcSprite.randomSetter = true;
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        System.out.println("inside random setter");
+                        npcSprite.setRandomPoint();
+                        npcSprite.randomSetter = false;
+                        SimplePathFinder spf = new SimplePathFinder(villageMap);
+                        npcSprite.movementQueue = spf.getPathQueue(npcSprite.x, npcSprite.y, npcSprite.randomX, npcSprite.randomY);
+                    }
+                }, delayTime);
+            }
+            if(npcSprite.isMoving) continue;
+            Node nextNode = npcSprite.movementQueue.poll();
+            if (nextNode != null) {
+                npcSprite.targetX=nextNode.x;
+                npcSprite.targetY=nextNode.y;
+                System.out.println("new target"+ npcSprite.targetX + " " + npcSprite.targetY);
+                npcSprite.currentDirection = nextNode.getDirection() != 0 ? nextNode.getDirection() : npcSprite.currentDirection;
+                npcSprite.isMoving= true;
+                npcSprite.currentAnimation = npcSprite.walk(true, npcSprite.currentDirection);
+//                String command = "";
+//                switch (hero.currentDirection){
+//                    case 1 -> command = "npc walk up";
+//                    case 2 -> command = "npc walk right";
+//                    case 3 -> command = "npc walk down";
+//                    case 4 -> command = "npc walk left";
+//                }
+//                GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand(command, AppClient.getUserData().getUsername()));
+//                AppClient.getClient().send(new Gson().toJson(msg));
+            }
+        }
+    }
+
 }
