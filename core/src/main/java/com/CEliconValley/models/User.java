@@ -28,10 +28,6 @@ public class User {
     public User() {
     }
 
-    @PostLoad
-    public void load(){
-        this.avatarPath = "avatars/Raccoons.png";
-    }
 
     public User(String username, String password, String email, String nickname, Gender gender, String question, String answer) {
         this.username = username;
