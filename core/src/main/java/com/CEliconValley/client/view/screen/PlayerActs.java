@@ -15,6 +15,7 @@ import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.tools.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -192,6 +193,13 @@ public class PlayerActs {
             Objects.requireNonNull(Finder.getpd()).getPlayer().setPlayerIsInVillage(true);
             changeScreen(new VillageScreen(Objects.requireNonNull(Finder.getpd()).getPlayer()));
 
+        }else if(Gdx.input.isButtonJustPressed(0)){
+            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            if(screen instanceof FarmScreen farmScreen){
+                farmScreen.camera.unproject(mousePos);
+                System.out.println("you clicked on "+mousePos.x+" "+mousePos.y);
+                System.out.println("player pos "+hero.renderX+" "+hero.renderY);
+            }
         }
         if (screen.isMenuOpen) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
