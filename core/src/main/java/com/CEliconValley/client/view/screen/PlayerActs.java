@@ -429,6 +429,8 @@ public class PlayerActs {
 
             if (screen instanceof GreenHouseScreen) {
                 moveAmount /= 2;
+            }else if(screen instanceof VillageScreen){
+                moveAmount *= 2;
             }
 
             hero.renderX = approach(hero.renderX, targetPixelX, moveAmount);

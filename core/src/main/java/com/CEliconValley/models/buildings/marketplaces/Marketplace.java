@@ -14,8 +14,10 @@ public abstract class Marketplace implements Building {
     protected NPC owner;
     protected ArrayList<Slot> itemsForSale;
     public boolean isOpen = false;
-    public static final int outOfHome = 11;
+    public static final int outOfHome = 10;
+    public static final int goToWork = 12;
     public static final int outOfWork = 18;
+    public static final int goToHome = 22;
     public ArrayList<Cell> doors = new ArrayList<>();
 
     public Marketplace(NPC owner) {

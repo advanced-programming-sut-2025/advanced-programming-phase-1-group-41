@@ -4,6 +4,8 @@ import com.CEliconValley.models.*;
 import com.CEliconValley.models.animals.animalKinds.*;
 import com.CEliconValley.models.buildings.marketplaces.*;
 import com.CEliconValley.models.items.*;
+import com.CEliconValley.models.locations.Village;
+import com.CEliconValley.models.npc.npcCharacters.NPC;
 import com.CEliconValley.models.tools.*;
 
 import com.CEliconValley.models.animals.Animal;
@@ -15,6 +17,7 @@ import com.CEliconValley.models.buildings.animalContainer.CoopType;
 import com.CEliconValley.models.foragings.Nature.Rock;
 import com.CEliconValley.models.foragings.Nature.Wood;
 import com.CEliconValley.models.ui.TerminalColors;
+import dev.morphia.mapping.codec.reader.Mark;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -38,14 +41,33 @@ public class MarketplaceController {
         return new Result(true,"");
     }
     public static void updateHourly(){
-        for(Building market : App.getGame().getVillage().getBuildings()){
+        Village village = App.getGame().getVillage();
+        int hour = App.getGame().getTime().getHour();
+        for(Building market : village.getBuildings()){
             if(market instanceof Marketplace marketplace){
                 ((Marketplace) market).updateHourly();
-                int hour = App.getGame().getTime().getHour();
-                if(Marketplace.outOfHome <= hour && hour <= Marketplace.outOfWork){
+                if(Marketplace.goToWork <= hour && hour <= Marketplace.outOfWork){
                     marketplace.isOpen = true;
                 }else{
                     marketplace.isOpen = false;
+                }
+            }
+        }
+        for (NPC npc : village.getNPCs()) {
+            if(hour == Marketplace.outOfHome){
+                npc.isOutside = true;
+                npc.shouldGoToWork = true;
+            }
+            else if(hour == Marketplace.goToWork){
+                if(npc.getJob() != null || npc.getHome() != null){
+                    npc.isOutside = false;
+                }
+            }
+            else if(hour == Marketplace.outOfWork){
+                npc.isOutside = true;
+            }else if(hour == Marketplace.goToHome){
+                if(npc.getJob() != null || npc.getHome() != null){
+                    npc.isOutside = false;
                 }
             }
         }

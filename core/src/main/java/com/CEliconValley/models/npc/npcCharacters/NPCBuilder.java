@@ -153,7 +153,8 @@ public class NPCBuilder {
                         new Quest(new Slot(Food.TripleShotEspresso, 1), new Slot(CraftableItem.PaleAle, 2), "Wake-Up Call", "Need a counter-drink? Got you.", "Now I'm balanced!")
                     )));
                 NPCs.add(gus);
-            }else if(building instanceof MarnieRanch){
+            }
+            else if(building instanceof MarnieRanch){
                 NPC marnie =new Marine("Marnie", Occupation.Rancher, (MarnieRanch) building,
                     new ArrayList<String>(Arrays.asList(
                         "Animals are like family – treat them right.",
@@ -186,7 +187,8 @@ public class NPCBuilder {
                     new Quest(new Slot(CraftableItem.Cheese, 5), new Slot(Food.Bread, 5), "Cheesy Exchange", "Stocking up for winter meals.", "That'll last me weeks!")
                 )));
                 NPCs.add(marnie);
-            }else if(building instanceof Blacksmith){
+            }
+            else if(building instanceof Blacksmith){
                 NPC clint = new Clint("Clint", Occupation.BlackSmith, (Blacksmith) building,
                     new ArrayList<String>(Arrays.asList(
                         "Forge work is loud but satisfying.",
@@ -217,7 +219,8 @@ public class NPCBuilder {
                         new Quest(new Slot(CraftableItem.Coffee, 5), new Slot(CraftableItem.Cheese, 1), "Coffee for Craft", "Fuel me up and I’ll throw in some extras.", "Now I'm fired up!")
                     )));
                 NPCs.add(clint);
-            }else if(building instanceof CarpenterShop){
+            }
+            else if(building instanceof CarpenterShop){
                 for(Building building1 : App.getGame().getVillage().getBuildings()){
                     if(building1 instanceof RobinHome){
                         NPC robin = new Robin("Robin", Occupation.Carpenter,(RobinHome)building1, (CarpenterShop) building,
@@ -253,7 +256,8 @@ public class NPCBuilder {
                     }
                 }
 
-            }else if(building instanceof GeneralStore){
+            }
+            else if(building instanceof GeneralStore){
                 NPC pierre = new Pierre("Pierre", Occupation.Broker, (GeneralStore) building,
                     new ArrayList<String>(Arrays.asList(
                         "Prices go up, prices go down — supply and demand!",
@@ -284,7 +288,8 @@ public class NPCBuilder {
                     new Quest(new Slot(Food.Bread, 8), new Slot(Food.SurvivalBurger, 4), "Sandwich Deal", "Bread for jelly, sounds like a win!", "Perfect pairing.")
                 )));
                 NPCs.add(pierre);
-            }else if (building instanceof SebastienHome) {
+            }
+                else if (building instanceof SebastienHome) {
                 NPC sebastian = new Sebastien("Sebastien", Occupation.Jobless, (SebastienHome) building,
                     new ArrayList<String>(Arrays.asList(
                         "Spring feels so fresh!",
