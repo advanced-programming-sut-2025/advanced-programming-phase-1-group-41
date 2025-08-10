@@ -1,6 +1,9 @@
 package com.CEliconValley.models.buildings.marketplaces;
 
+import com.CEliconValley.common.CellData;
+import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.buildings.Building;
+import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
 import com.CEliconValley.models.npc.npcCharacters.NPC;
@@ -10,8 +13,10 @@ import java.util.ArrayList;
 public abstract class Marketplace implements Building {
     protected NPC owner;
     protected ArrayList<Slot> itemsForSale;
-
-
+    public boolean isOpen = false;
+    public static final int outOfHome = 11;
+    public static final int outOfWork = 18;
+    public ArrayList<Cell> doors = new ArrayList<>();
 
     public Marketplace(NPC owner) {
         this.owner = owner;

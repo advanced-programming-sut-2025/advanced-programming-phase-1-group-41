@@ -96,6 +96,7 @@ public class GeneralStore extends Marketplace implements Building {
                 cell.setObjectMap(new Wall());
                 if((i >=x+8&&i<=x+10)){
                     cell.setObjectMap(door);
+                    doors.add(cell);
                 }
             }
             yWall+=8;

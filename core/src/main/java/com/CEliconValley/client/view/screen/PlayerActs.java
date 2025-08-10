@@ -2,6 +2,7 @@ package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.model.AnimalSprite;
+import com.CEliconValley.client.model.NPCSprite;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.GameCommand;
@@ -498,6 +499,7 @@ public class PlayerActs {
         });
 
     }
+
 
     public static int getMainToolNumber() {
         PlayerData pd = Finder.getpd();

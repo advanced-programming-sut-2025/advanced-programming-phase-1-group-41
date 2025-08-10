@@ -68,9 +68,9 @@ public class GameClient extends WebSocketClient {
         try {
             GameMessage<Object> genericMsg = gson.fromJson(message, new TypeToken<GameMessage<Object>>() {
             }.getType());
-            long now = System.currentTimeMillis();
-            long sent = genericMsg.timestamp;
-            System.out.println("    Latency: " + (now - sent) + "ms");
+//            long now = System.currentTimeMillis();
+//            long sent = genericMsg.timestamp;
+//            System.out.println("    Latency: " + (now - sent) + "ms");
 //            JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
 //            JsonElement bodyElement = jsonObject.get("body");
 //            GameMessage<SuccessMessage> successMsg = null;

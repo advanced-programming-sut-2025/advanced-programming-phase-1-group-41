@@ -39,8 +39,14 @@ public class MarketplaceController {
     }
     public static void updateHourly(){
         for(Building market : App.getGame().getVillage().getBuildings()){
-            if(market instanceof Marketplace){
+            if(market instanceof Marketplace marketplace){
                 ((Marketplace) market).updateHourly();
+                int hour = App.getGame().getTime().getHour();
+                if(Marketplace.outOfHome <= hour && hour <= Marketplace.outOfWork){
+                    marketplace.isOpen = true;
+                }else{
+                    marketplace.isOpen = false;
+                }
             }
         }
     }

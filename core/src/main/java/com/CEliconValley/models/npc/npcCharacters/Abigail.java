@@ -11,8 +11,8 @@ import java.util.ArrayList;
 public class Abigail extends NPC{
     NPCHome home;
 
-    public Abigail(String name, Occupation job, NPCHome home, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift,ArrayList<Quest> quests) {
-        super(name, job, dialogues, favorites, itemsToGift, quests);
+    public Abigail(String name, Occupation job, NPCHome home, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift) {
+        super(name, job, dialogues, favorites, itemsToGift);
         this.home = home;
         setDaysToUnlockQ3(4*28);
         setX(26);setY(43);

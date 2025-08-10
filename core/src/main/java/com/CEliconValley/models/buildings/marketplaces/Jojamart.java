@@ -117,6 +117,7 @@ public class Jojamart extends Marketplace implements Building {
                 cell.setObjectMap(new Wall());
                 if(i == x + 5&&yWall==y) {
                     cell.setObjectMap(door);
+                    doors.add(cell);
                 }
             }
             yWall+=7;
@@ -129,6 +130,7 @@ public class Jojamart extends Marketplace implements Building {
                 cell.setObjectMap(new Wall());
                 if(j == y + 1&&xWall==x) {
                     cell.setObjectMap(door2);
+                    doors.add(cell);
                 }
             }
             xWall+=10;

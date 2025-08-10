@@ -131,4 +131,16 @@ public class VillageData {
     public ArrayList<CellData> getCellsData() {
         return cellsData;
     }
+
+    public ArrayList<BuildingData> getBuildingsData() {
+        return buildingsData;
+    }
+
+    public ArrayList<MarketPlaceData> getMarkplacesData() {
+        return markplacesData;
+    }
+
+    public ArrayList<NPCData> getNPCsData() {
+        return NPCsData;
+    }
 }

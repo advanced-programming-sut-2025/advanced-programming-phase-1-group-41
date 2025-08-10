@@ -4,30 +4,45 @@ package com.CEliconValley.client.view.screen.randomwalk;
 import com.CEliconValley.client.view.screen.FarmScreen;
 import com.CEliconValley.client.view.screen.maps.CoopMap;
 import com.CEliconValley.client.view.screen.maps.FarmMap;
+import com.CEliconValley.client.view.screen.maps.VillageMap;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.buildings.Wall;
+import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.foragings.Nature.Lake;
+import com.CEliconValley.models.foragings.Nature.Obstacle;
 import com.CEliconValley.models.foragings.Nature.Rock;
 import com.CEliconValley.client.view.screen.maps.BarnMap;
+import com.CEliconValley.models.locations.Village;
 
 import java.util.*;
 
+import static com.badlogic.gdx.scenes.scene2d.ui.Table.Debug.cell;
+
 public class SimplePathFinder {
-    BarnMap barn;
-    CoopMap coop;
-    FarmMap farm;
+    BarnMap barn = null;
+    CoopMap coop = null;
+    FarmMap farm = null;
+    VillageMap villageMap = null;
+    Village village = null;
     public SimplePathFinder(BarnMap barn) {
         this.barn = barn;
     }
     public SimplePathFinder(CoopMap coopMap) {
         this.coop = coopMap;
-        this.barn =null;
     }
 
     public SimplePathFinder(FarmMap farm) {
         this.farm = farm;
     }
+    public SimplePathFinder(VillageMap villageMap) {
+        this.villageMap = villageMap;
+    }
+
+    public SimplePathFinder(Village village) {
+        this.village = village;
+    }
+
     public Queue<Node> getPathQueue(int startX, int startY, int goalX, int goalY) {
         PriorityQueue<Node> openSet = new PriorityQueue<>();
         HashSet<String> visited = new HashSet<>();
@@ -112,7 +127,7 @@ public class SimplePathFinder {
     }
 
     private boolean canMoveTo(int x, int y) {
-        if(barn == null && farm == null){
+        if(coop != null){
             for (Cell cell : coop.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
                     if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock || cell.getObjectMap() instanceof Wall) {
@@ -122,7 +137,7 @@ public class SimplePathFinder {
                 }
             }
             return false;
-        }else if(coop == null && farm == null){
+        }else if(barn != null){
             for (Cell cell : barn.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
                     if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock || cell.getObjectMap() instanceof Wall) {
@@ -133,7 +148,7 @@ public class SimplePathFinder {
             }
             return false;
         }
-        else{
+        else if (farm != null){
             for (CellData cd : farm.farmData.getCells()) {
                 Cell cell = cd.extractData();
                 if (cell.getX() == x && cell.getY() == y) {
@@ -144,26 +159,63 @@ public class SimplePathFinder {
                 }
             }
             return false;
+        }else if(villageMap != null){
+            for (CellData cd : villageMap.villageData.getCellsData()) {
+                if (cd.getX() == x && cd.getY() == y) {
+                    Cell cell = cd.extractData();
+                    if (cell.getObjectMap() instanceof Lake ||( cell.getObjectMap() instanceof Grass grass && !grass.isGround() )
+                        ||cell.getObjectMap() instanceof Wall ||cell.getObjectMap() instanceof Obstacle) {
+                        System.out.println(cd.getObjectName()+" "+cell.getX()+" "+cell.getY());
+                        return false;
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }else if(village != null){
+            for (Cell cell : village.getCells()) {
+                if (cell.getX() == x && cell.getY() == y) {
+                    if (cell.getObjectMap() instanceof Lake ||( cell.getObjectMap() instanceof Grass grass && !grass.isGround() )
+                        ||cell.getObjectMap() instanceof Wall ||cell.getObjectMap() instanceof Obstacle) {
+                        return false;
+                    }
+                    return true;
+                }
+            }
+            return false;
         }
+        return false;
     }
     private Cell getCell(int x, int y) {
-        if(barn == null && farm == null){
+        if(coop != null){
             for (Cell cell : coop.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
                     return cell;
                 }
             }
             return null;
-        }else if(coop == null && farm == null){
+        }else if(barn != null){
             for (Cell cell : barn.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
                     return cell;
                 }
             }
-        }else{
+        }else if(farm != null){
             for (CellData cell : farm.farmData.getCells()) {
                 if(cell.getX() == x && cell.getY() == y){
                     return cell.extractData();
+                }
+            }
+        }else if(villageMap != null){
+            for (CellData cell : villageMap.villageData.getCellsData()) {
+                if(cell.getX() == x && cell.getY() == y){
+                    return cell.extractData();
+                }
+            }
+        }else if(village != null){
+            for (Cell cell : village.getCells()) {
+                if(cell.getX() == x && cell.getY() == y){
+                    return cell;
                 }
             }
         }

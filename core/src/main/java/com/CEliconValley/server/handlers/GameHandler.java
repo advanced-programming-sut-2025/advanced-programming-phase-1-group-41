@@ -6,6 +6,7 @@ import com.CEliconValley.common.messages.*;
 import com.CEliconValley.database.UserDB;
 import com.CEliconValley.models.*;
 import com.CEliconValley.client.view.GameMenu;
+import com.CEliconValley.models.npc.npcCharacters.NPCBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.java_websocket.WebSocket;
@@ -188,6 +189,7 @@ public class GameHandler {
         Game game = new Game(App.getPreGame().getPlayers(), App.getPreGame().getAdmin(), App.getPreGame().getLobby());
         System.out.println("game length is " + game.getPlayers().size());
         App.setGame(game);
+        new NPCBuilder();
 
         GameMessage<GameData> response = new GameMessage<>("new-game", new GameData(game));
         App.getServer().sendToGroupByPlayers(game.getPlayers(), new Gson().toJson(response));
@@ -207,6 +209,9 @@ public class GameHandler {
         });
         game.commandThread.start();
 
+        game.getVillage().getNPCs().forEach(npc -> {
+            npc.setRandomPoint();
+        });
 
         game.startScheduler();
     }

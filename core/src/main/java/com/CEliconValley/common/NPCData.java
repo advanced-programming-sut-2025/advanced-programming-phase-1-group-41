@@ -1,5 +1,6 @@
 package com.CEliconValley.common;
 
+import com.CEliconValley.client.view.screen.randomwalk.Node;
 import com.CEliconValley.models.Occupation;
 import com.CEliconValley.models.Player;
 import com.CEliconValley.models.items.Item;
@@ -10,6 +11,8 @@ import dev.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 
 @Embedded
 public class NPCData {
@@ -24,6 +27,17 @@ public class NPCData {
     ArrayList<String> favoriteItems;
     ArrayList<SlotData> itemsToGive;
     ArrayList<QuestData> questsdata;
+    public int x;
+    public int y;
+    public boolean isOutside;
+    public int randomX;
+    public int randomY;
+    public float renderX;
+    public float renderY;
+    public boolean randomSetter;
+    public boolean isMoving;
+    public int currentDirection;
+
     public NPCData() {
     }
 
@@ -43,7 +57,7 @@ public class NPCData {
         }
         this.name = npc.getName();
         this.job = npc.getJob();
-        this.homename = npc.getHome().getName();
+        this.homename = npc.getHome() == null ? null : npc.getHome().getName();
         this.dialogues = npc.getDialogues();
         this.favoriteItems = new ArrayList<>();
         for (Item favorite : npc.getFavorites()) {
@@ -57,6 +71,16 @@ public class NPCData {
         for (Quest quest : npc.getQuests()) {
             questsdata.add(new QuestData(quest));
         }
+        this.x = npc.x;
+        this.y = npc.y;
+        this.randomX = npc.randomX;
+        this.randomY = npc.randomY;
+        this.renderX = npc.renderX;
+        this.renderY = npc.renderY;
+        this.randomSetter = npc.randomSetter;
+        this.isMoving = npc.isMoving;
+        this.currentDirection = npc.currentDirection;
+        this.isOutside = npc.isOutside;
     }
 
     public int getDaysToUnlockQ3() {
@@ -102,4 +126,6 @@ public class NPCData {
     public ArrayList<QuestData> getQuestsdata() {
         return questsdata;
     }
+
+
 }

@@ -1,6 +1,7 @@
 package com.CEliconValley.models;
 
 import com.CEliconValley.common.GameData;
+import com.CEliconValley.common.NPCData;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.models.npc.npcCharacters.NPC;
@@ -54,6 +55,7 @@ public class Game {
     }
 
     public ScheduledExecutorService scheduler;
+    public ScheduledExecutorService npcScheduler;
     public Thread commandThread;
     private int howManyInHome = 0;
     private int howManyForVote = 0;
@@ -257,12 +259,30 @@ public class Game {
                 e.printStackTrace();
             }
         }, 10, 10, TimeUnit.SECONDS);
+        npcScheduler = Executors.newSingleThreadScheduledExecutor();
+        npcScheduler.scheduleAtFixedRate(() -> {
+            try {
+                village.randomMovement();
+                village.npcApproach();
+                village.getNPCs().forEach(npc -> {
+                    GameMessage<NPCData> msg = new GameMessage<>("npc-data",
+                        new NPCData(npc));
+                    App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), new Gson().toJson(msg));
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, 20, 20, TimeUnit.MILLISECONDS);
     }
 
     public void stopScheduler() {
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdownNow();
         }
+        if (npcScheduler != null && !npcScheduler.isShutdown()) {
+            npcScheduler.shutdownNow();
+        }
+
     }
 
 

@@ -73,6 +73,7 @@ public class MarnieRanch extends Marketplace implements Building {
                 cell.setObjectMap(new Wall());
                 if(i == x + 2&&yWall==y){
                     cell.setObjectMap(door);
+                    doors.add(cell);
                 }
             }
             yWall+=3;

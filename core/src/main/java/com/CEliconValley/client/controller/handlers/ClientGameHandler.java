@@ -3,11 +3,9 @@ package com.CEliconValley.client.controller.handlers;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.view.LobbyScreen;
 import com.CEliconValley.client.view.screen.*;
-import com.CEliconValley.common.CellData;
-import com.CEliconValley.common.FarmData;
-import com.CEliconValley.common.GameData;
-import com.CEliconValley.common.PlayerData;
+import com.CEliconValley.common.*;
 import com.CEliconValley.common.messages.*;
+import com.CEliconValley.models.App;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Menu;
 import com.CEliconValley.models.Player;
@@ -36,6 +34,15 @@ public class ClientGameHandler {
                 }
         });
         switch (type) {
+            case "npc-data" -> {
+                NPCData npcData = gson.fromJson(body, NPCData.class);
+                for (int i = 0; i < AppClient.getGameData().getVillageData().getNPCsData().size(); i++) {
+                    NPCData npcd = AppClient.getGameData().getVillageData().getNPCsData().get(i);
+                    if(npcd.getName().equals(npcData.getName())){
+                        AppClient.getGameData().getVillageData().getNPCsData().set(i, npcData);
+                    }
+                }
+            }
             case "player-data" -> {
                 PlayerData playerData = gson.fromJson(body, PlayerData.class);
                 Gdx.app.postRunnable(() -> {

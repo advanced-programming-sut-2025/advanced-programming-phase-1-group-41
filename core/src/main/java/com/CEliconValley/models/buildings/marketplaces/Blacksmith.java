@@ -1,5 +1,6 @@
 package com.CEliconValley.models.buildings.marketplaces;
 
+import com.CEliconValley.common.CellData;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.ui.TerminalColors;
@@ -72,6 +73,7 @@ public class Blacksmith extends Marketplace implements Building{
                 cell.setObjectMap(new Wall());
                 if(i == x+3&&yWall==y){
                     cell.setObjectMap(door);
+                    doors.add(cell);
                 }
             }
             yWall+=5;
