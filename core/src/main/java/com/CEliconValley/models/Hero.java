@@ -47,6 +47,7 @@ public class Hero {
     public int destX;
     public int destY;
     public Queue<Node> movementQueue = new LinkedList<>();
+    public String selectedItemname = null;
 
 
     public boolean reachedDestination(){
@@ -428,4 +429,6 @@ public class Hero {
         }
         return tgp;
     }
+
+
 }

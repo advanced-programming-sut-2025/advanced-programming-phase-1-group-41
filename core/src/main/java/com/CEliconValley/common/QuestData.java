@@ -5,9 +5,10 @@ import com.CEliconValley.models.items.CookingRecipe;
 import com.CEliconValley.models.items.Slot;
 import com.CEliconValley.models.npc.npcCharacters.NPC;
 import com.CEliconValley.models.npc.npcCharacters.Quest;
+import dev.morphia.annotations.Embedded;
 
 import java.util.HashMap;
-
+@Embedded
 public class QuestData {
     private SlotData requestdata;
     private SlotData rewarddata;
