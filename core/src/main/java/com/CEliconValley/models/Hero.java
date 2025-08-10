@@ -199,6 +199,7 @@ public class Hero {
         return null;
     }
 
+
     public Animation<TextureRegion> eat(){
         ArrayList<TGPoint> tgPoints = getEatTG();
         TextureRegion[] wantedActs=new TextureRegion[tgPoints.size()];

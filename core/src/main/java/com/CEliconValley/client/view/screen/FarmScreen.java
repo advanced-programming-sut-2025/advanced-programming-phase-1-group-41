@@ -268,6 +268,7 @@ public class FarmScreen extends GameScreen implements Screen {
         visibleCells.sort(Comparator.comparingInt(CellData::getY).reversed());
         for (CellData cellData : visibleCells){
             groundBorderSpawner.renderGround(batch, cellData, farmMap.farmData);
+            waterSpawner.renderWater(batch, cellData, passiveStateTime, farmMap.farmData);
         }
         for (CellData cellData : visibleCells) {
             Cell cell = cellData.extractData();
@@ -282,7 +283,6 @@ public class FarmScreen extends GameScreen implements Screen {
             buildingSpawner.renderBuildings(batch, cellData, farmMap.farmData);
             rockSpawner.renderRocks(batch, cellData, passiveStateTime);
             cropSpawner.renderCrops(batch, cellData, farmMap.farmData);
-            waterSpawner.renderWater(batch, cellData, passiveStateTime, farmMap.farmData);
             rockSpawner.renderBreakingEffectForCell(batch, cellData, delta);
             itemSpawner.renderItems(batch, cellData, farmMap.farmData);
             if (hero.playerX.get() == cellData.getX() && hero.playerY.get() == cellData.getY()) {

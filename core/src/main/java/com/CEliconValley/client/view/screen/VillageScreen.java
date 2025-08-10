@@ -203,6 +203,7 @@ public class VillageScreen extends GameScreen implements Screen {
                 batch.draw(frame, hero.renderX - CELL_SIZE / 2f, hero.renderY - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
             }
             buildingSpawner.renderBuildings(batch, cellData, villageMap.villageData);
+//            buildingSpawner.renderOnBuildings(batch, cellData, villageMap.villageData);
         }
 
         if (AppClient.getGameData().getWeatherType().equals(WeatherType.Snowy)) snow.render(batch, camera);

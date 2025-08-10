@@ -11,6 +11,7 @@ import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.buildings.Cottage;
+import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
 import com.CEliconValley.models.buildings.GreenHouse.WaterTank;
 import com.CEliconValley.models.buildings.Wall;
@@ -51,6 +52,7 @@ public class BuildingSpawner {
     private final Texture sebastienHomeTexture = new Texture("game/Buildings/SebastienHome.png");
     private final Texture robinHomeTexture = new Texture("game/Buildings/RobinHome.png");
     private final Texture liaHomeTexture = new Texture("game/Buildings/LiaHome.png");
+    private final Texture CloseSignTexture = new Texture("game/Buildings/CloseSign.png");
 
     public BuildingSpawner() {
         this.waterSpawner = new WaterSpawner();
@@ -285,9 +287,7 @@ public class BuildingSpawner {
             return true;
 
         }
-        if(tmpCell.getObjectMap() instanceof AbigailHome abigailHome){
-            System.out.println(abigailHome.getAnchorX()+"?="+tmpCell.getX()+"and"+abigailHome.getAnchorY()+"?="+tmpCell.getY());
-        }
+
         if(tmpCell.getObjectMap() instanceof AbigailHome abigailHome && abigailHome.getAnchorX()==tmpCell.getX() && abigailHome.getAnchorY()==tmpCell.getY()) {
             int frameWidth = this.abigailHomeTexture.getWidth();
             int frameHeight = this.abigailHomeTexture.getHeight() / 4;
@@ -299,6 +299,45 @@ public class BuildingSpawner {
         }
 
 
+
+
+        return false;
+    }
+    public boolean renderOnBuildings(SpriteBatch batch, CellData cellData, VillageData villageData) {
+        Cell cell = cellData.extractData();
+        float x = (float)(cell.getX() * CELL_SIZE);
+        float y = (float)(cell.getY() * CELL_SIZE);
+        if (cell.getObjectMap() instanceof Building) {
+        }
+        Cell tmpCell=cellData.extractData();
+        if(tmpCell.getObjectMap() instanceof Door door) {
+            float frameWidth;
+            float frameHeight;
+            if(door.getInitialize()==-1) {
+                if (Finder.findCellByCoordinatesVillage(tmpCell.getX()+1, tmpCell.getY(), villageData).extractData().getObjectMap() instanceof Door door2) {
+                    if (Finder.findCellByCoordinatesVillage(tmpCell.getX() + 2, tmpCell.getY(), villageData).extractData().getObjectMap() instanceof Door door3) {
+                        door.setInitialize(3);
+                        door2.setInitialize(0);
+                        door3.setInitialize(0);
+                    }else{
+                        door.setInitialize(2);
+                        door2.setInitialize(0);
+                    }
+                }
+                door.setInitialize(1);
+            }
+//            door.setClosed(true);
+            if(door.isClosed()&&door.getInitialize()!=0) {
+                frameWidth = door.getInitialize()*0.4f;
+                frameHeight = frameWidth;
+                TextureRegion cottageFrame = new TextureRegion(this.CloseSignTexture, 0,0, this.CloseSignTexture.getWidth(), this.CloseSignTexture.getHeight());
+                batch.draw(cottageFrame, x , y+CELL_SIZE/2f, frameWidth, frameHeight);
+                System.out.println("done");
+            }
+
+            return true;
+
+        }
         return false;
     }
     private float getSeasonalTexture(Texture texture) {
