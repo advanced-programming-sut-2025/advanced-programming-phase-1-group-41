@@ -63,7 +63,6 @@ public class FarmScreen extends GameScreen implements Screen {
     private String currentSeason = "";
 
 
-
     Map<Cell, TextureRegion> groundCache;
 
     public static Texture farmTexture =GameAssetManager.getGameAssetManager().getScreenTexture("Farm_Screen_Spring.png");
@@ -332,8 +331,7 @@ public class FarmScreen extends GameScreen implements Screen {
             menuBar.render(batch, camera);
 
         } else if(isArtisanMenuOpen){
-
-            artisanMenu.render(batch, camera);
+            artisanMenu.render(batch, camera, cm);
         } else{
             inventoryRenderer.render(batch, camera);
         }

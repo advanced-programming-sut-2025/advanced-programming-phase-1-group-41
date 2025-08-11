@@ -1,19 +1,12 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
-import com.CEliconValley.common.CellData;
-import com.CEliconValley.common.MachineData;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.controllers.ItemManager;
-import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Player;
-import com.CEliconValley.models.animals.FishType;
-import com.CEliconValley.models.buildings.Refrigerator;
 import com.CEliconValley.models.foragings.FruitType;
 import com.CEliconValley.models.items.*;
-import com.CEliconValley.models.items.craftablemachines.Machine;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -23,13 +16,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ArtisanMenu {
 //    private final Texture menuTexture;
@@ -39,8 +31,6 @@ public class ArtisanMenu {
     private final TextureRegion[] artisanElementsTexture;
     final float DESIGN_WIDTH = 142f;
     final float DESIGN_HEIGHT = 80f;
-    private Machine machine;
-    private ArrayList<Slot> neededItems;
     private Slot produce;
 
     private boolean startFill = false;
@@ -66,7 +56,6 @@ public class ArtisanMenu {
 //    private final int tileHeight;
 
 
-    private Refrigerator refrigerator;
 
     private int startingRow = 0;
     private int selectedIndex = 0;
@@ -78,7 +67,6 @@ public class ArtisanMenu {
     ShapeRenderer shapeRenderer = new ShapeRenderer();
     private float startingX;
     private float startingY;
-    private String currentTab;
     ArrayList<Slot> foodsData = null;
     private OrthographicCamera camera;
 
@@ -111,15 +99,9 @@ public class ArtisanMenu {
     public void setPlayer(Player player) {
         this.player = player;
     }
-    public void setMachine(MachineData machineData) {
-        this.machine = machineData.getMachine();
-        fillTimer=machine.getProcessTime();
-        neededItems=machine.getReceivedItems();
-        produce=machine.getProduce();
-    }
 
-    public void render(Batch batch, OrthographicCamera camera) {
-
+    public void render(Batch batch, OrthographicCamera camera, CraftableMachine craftableMachine) {
+        HashMap<Item, Integer> neededItems = craftableMachine.getRecipe().getNeededItems() ;
 
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
@@ -143,9 +125,10 @@ public class ArtisanMenu {
          float realN2 =  startingX + (neededItemBound[2]/DESIGN_WIDTH)*menuWidth;
          float realM2 = startingY + (neededItemBound[3]/DESIGN_HEIGHT)*menuHeight;
          float itemSize=realN2-realN1/neededItems.size();
-         for(int i=0;i<neededItems.size();i++) {
-             batch.draw(ItemManager.getTexture(neededItems.get(i).getItem()),realN1+(i)*itemSize,realM1,itemSize,itemSize);
-         }
+         AtomicInteger counter = new AtomicInteger();
+         neededItems.forEach((item,quantity)->{
+             batch.draw(ItemManager.getTexture(item),realN1+ (counter.getAndIncrement()) *itemSize,realM1,itemSize,itemSize);
+         });
         for (int i = 0; i < buttonBounds.length; i++) {
 
             float realX1 = startingX + (buttonBounds[i][0] / DESIGN_WIDTH) * menuWidth;
@@ -161,6 +144,7 @@ public class ArtisanMenu {
 
 
             if (isHover && Gdx.input.isButtonJustPressed(0)) {
+                // TODO idk what
                 buttonActive[i] = !buttonActive[i];
                 System.out.println("Clicked artisan button " + (i + 1));
             }
@@ -283,13 +267,14 @@ public class ArtisanMenu {
                         if (mousePos.x >= x && mousePos.x <= x + slotSize &&
                             mousePos.y >= y && mousePos.y <= y + slotSize) {
                             if (Gdx.input.isButtonJustPressed(0)) {
-                                if(isFood(item)) {
-                                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                                        new GameCommand("cooking refrigerator put " + item.getName(),
-                                            AppClient.getUserData().getUsername())
-                                    );
-                                    AppClient.getClient().send(new Gson().toJson(msg));
-                                }
+                                // TODO click on inventory
+//                                if(isFood(item)) {
+//                                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+//                                        new GameCommand("cooking refrigerator put " + item.getName(),
+//                                            AppClient.getUserData().getUsername())
+//                                    );
+//                                    AppClient.getClient().send(new Gson().toJson(msg));
+//                                }
                             }
 
 

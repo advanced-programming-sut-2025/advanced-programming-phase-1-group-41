@@ -14,7 +14,9 @@ import com.CEliconValley.models.animals.animalKinds.Goat;
 import com.CEliconValley.models.animals.animalKinds.Sheep;
 import com.CEliconValley.models.foragings.Fertilizer;
 import com.CEliconValley.models.foragings.Seed;
+import com.CEliconValley.models.items.CraftableMachine;
 import com.CEliconValley.models.items.Item;
+import com.CEliconValley.models.items.craftablemachines.Machine;
 import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.tools.*;
 import com.badlogic.gdx.Gdx;
@@ -94,6 +96,7 @@ public class PlayerActs {
                 screen.getChatInput().setText("");
             } else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                 screen.chatMode = false;
+                screen.isArtisanMenuOpen = false;
                 screen.getChatInput().setVisible(false);
                 Gdx.input.setInputProcessor(screen.stage);
             }
@@ -744,6 +747,13 @@ public class PlayerActs {
 
                 if(mouseX >= cd.getX()*CELL_SIZE && mouseX <= (cd.getX()+1)*CELL_SIZE &&
                 mouseY >= cd.getY()*CELL_SIZE && mouseY <= (cd.getY()+1)*CELL_SIZE){
+
+                    if(Finder.parseItem(cd.getObjectName()) instanceof CraftableMachine craftableMachine){
+                        screen.isArtisanMenuOpen = !screen.isArtisanMenuOpen;
+                        screen.cm = craftableMachine;
+                        return;
+                    }
+
                     System.out.println("im around :)");
                     System.out.println("you clicked on "+cd.getX()+" "+cd.getY());
                     System.out.println("player pos "+hero.playerX.get()+" "+hero.playerY.get());

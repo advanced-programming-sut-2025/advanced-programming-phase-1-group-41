@@ -18,6 +18,7 @@ import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.foragings.Nature.Lake;
 import com.CEliconValley.models.foragings.Nature.Obstacle;
 import com.CEliconValley.models.foragings.Nature.Rock;
+import com.CEliconValley.models.items.CraftableMachine;
 import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.ui.CustomColors;
 import com.CEliconValley.models.ui.GameAssetManager;
@@ -80,6 +81,7 @@ public abstract class GameScreen implements Screen {
     protected Stage scoreboardStage;
     protected Stage friendshipStage;
     private FriendshipStageHandler friendshipStageHandler;
+    public CraftableMachine cm = null;
 
     public abstract void transfer();
     protected Hero hero;
