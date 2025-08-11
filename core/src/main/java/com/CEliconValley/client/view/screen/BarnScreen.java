@@ -7,6 +7,7 @@ import com.CEliconValley.common.AnimalData;
 import com.CEliconValley.common.BarnData;
 import com.CEliconValley.controllers.Spawner.InventoryRenderer;
 import com.CEliconValley.models.*;
+import com.CEliconValley.models.animals.animalKinds.Goat;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.client.view.screen.maps.BarnMap;
 import com.CEliconValley.models.ui.GameAssetManager;
@@ -185,7 +186,12 @@ public class BarnScreen extends GameScreen implements Screen {
                     continue;
                 }
                 TextureRegion currentFrame = animalSprite.currentAnimation.getKeyFrame(animalSprite.stateTime, onRepeat);
-                batch.draw(currentFrame, animalSprite.renderX - CELL_SIZE / 2f, animalSprite.renderY - CELL_SIZE / 2f, CELL_SIZE * 1.5f, CELL_SIZE * 1.5f);
+                if(animalSprite.animalData.getAnimalType().equals(new Goat(Finder.getpd().getPlayer(),"sss").getAnimalType())){
+                    batch.draw(currentFrame, animalSprite.renderX - CELL_SIZE * 2f, animalSprite.renderY - CELL_SIZE * 2f, CELL_SIZE * 4.5f, CELL_SIZE * 4.5f);
+
+                }else {
+                    batch.draw(currentFrame, animalSprite.renderX - CELL_SIZE / 2f, animalSprite.renderY - CELL_SIZE / 2f, CELL_SIZE * 1.5f, CELL_SIZE * 1.5f);
+                }
             }
         }
 

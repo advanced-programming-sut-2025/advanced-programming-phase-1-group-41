@@ -10,6 +10,7 @@ import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.controllers.Spawner.*;
 import com.CEliconValley.models.*;
+import com.CEliconValley.models.animals.FishType;
 import com.CEliconValley.models.buildings.*;
 import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
 import com.CEliconValley.models.buildings.animalContainer.Barn;
@@ -17,6 +18,9 @@ import com.CEliconValley.models.buildings.animalContainer.BarnType;
 import com.CEliconValley.models.buildings.animalContainer.Coop;
 import com.CEliconValley.models.buildings.animalContainer.CoopType;
 import com.CEliconValley.models.foragings.Nature.Grass;
+import com.CEliconValley.models.items.CraftableMachine;
+import com.CEliconValley.models.items.craftablemachines.FishSmoker;
+import com.CEliconValley.models.items.craftablemachines.Machine;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.CEliconValley.views.subGames.Rain;
@@ -43,6 +47,7 @@ public class FarmScreen extends GameScreen implements Screen {
     private final Snow snow;
     private final Thunder thunder;
     private MenuBar menuBar;
+    private ArtisanMenu artisanMenu;
     private final Player player;
     private final TreeSpawner treeSpawner;
     private final WaterSpawner waterSpawner;
@@ -106,6 +111,8 @@ public class FarmScreen extends GameScreen implements Screen {
         super(new InventoryRenderer(player.getInventory()));
         this.menuBar = super.getMenuBar();
         menuBar.setPlayer(player);
+        artisanMenu=super.getArtisanMenu();
+        artisanMenu.setPlayer(player);
         otherHeroes = new ArrayList<>();
         this.farmMap = new FarmMap(Finder.getFarmDataById(AppClient.getGameData(), AppClient.getUserData().getUsername()));
         System.out.println("this farm map " + this.farmMap.farmData.getId());
@@ -322,7 +329,11 @@ public class FarmScreen extends GameScreen implements Screen {
         if (isMenuOpen) {
 //                menuBar.render(batch, menuX, menuY, menuWidth, menuHeight);
             menuBar.render(batch, camera);
-        } else {
+
+        } else if(isArtisanMenuOpen){
+
+            artisanMenu.render(batch, camera);
+        } else{
             inventoryRenderer.render(batch, camera);
         }
 

@@ -45,6 +45,7 @@ public abstract class GameScreen implements Screen {
     protected boolean onRepeat = true;
     protected boolean flip = false;
     protected boolean isMenuOpen = false;
+    protected boolean isArtisanMenuOpen = false;
     protected InventoryRenderer inventoryRenderer;
     protected boolean cheatMode = false;
     public boolean voteMode = false;
@@ -78,6 +79,7 @@ public abstract class GameScreen implements Screen {
     public abstract void transfer();
     protected Hero hero;
     protected MenuBar menuBar = new MenuBar(this);
+    protected ArtisanMenu artisanMenu=new ArtisanMenu(this);
     protected BarnOrCoopMenuBar barnOrCoopMenuBar = new BarnOrCoopMenuBar(this);
     protected Texture hudTexture = new Texture(Gdx.files.internal("game/Clock/Clock.png"));
     protected Image hudImage, energyBarImage, energyGreenImage, energyRedImage, energyYellowImage;
@@ -584,6 +586,7 @@ public abstract class GameScreen implements Screen {
     public MenuBar getMenuBar() {
         return menuBar;
     }
+    public ArtisanMenu getArtisanMenu() {return artisanMenu;}
     public BarnOrCoopMenuBar getBarnOrCoopMenuBar() {
         return barnOrCoopMenuBar;
     }

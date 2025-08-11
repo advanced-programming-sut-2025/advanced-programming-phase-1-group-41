@@ -68,6 +68,7 @@ public class MenuBar {
         characterTexture = GameAssetManager.getGameAssetManager().getScreenTexture("character.png");
         infoTexture = GameAssetManager.getGameAssetManager().getBackgroundTexture("Info_Background1.png");
 
+
         tileWidth = menuTexture.getWidth() / 3;
         tileHeight = menuTexture.getHeight() / 3;
 
@@ -733,6 +734,7 @@ public class MenuBar {
 
         return true;
     }
+
 
 
 
