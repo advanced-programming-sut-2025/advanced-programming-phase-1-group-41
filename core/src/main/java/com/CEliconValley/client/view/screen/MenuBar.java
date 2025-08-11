@@ -1,16 +1,20 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
-import com.CEliconValley.common.PlayerData;
-import com.CEliconValley.common.SlotData;
+import com.CEliconValley.common.*;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.VoteMessage;
 import com.CEliconValley.controllers.ItemManager;
+import com.CEliconValley.models.App;
 import com.CEliconValley.models.Finder;
+import com.CEliconValley.models.FriendshipLevel;
 import com.CEliconValley.models.Player;
+import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.items.*;
+import com.CEliconValley.models.npc.npcCharacters.NPC;
 import com.CEliconValley.models.tools.Tool;
+import com.CEliconValley.models.ui.CustomColors;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -27,14 +31,19 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class MenuBar {
     private final Texture menuTexture;
     private final Texture miniMapTexture;
     private final Texture characterTexture;
     private final Texture infoTexture;
+    private final Texture heartTexture;
+    private final Texture emptyHeartTexture;
+    private final Texture giftTexture;
     private final TextureRegion[] tabTextures;
     private final int tileWidth;
     private final int tileHeight;
@@ -46,14 +55,14 @@ public class MenuBar {
     private float startingY;
     private String currentTab;
     private OrthographicCamera camera;
+    private boolean camSet = false;
+    private final ArrayList<Texture> relationTextures = new ArrayList<>();
+    private final ArrayList<NPCData> NPCsData;
+    private final ArrayList<Integer> relationsIndex = new ArrayList<>();
 
-    private Table cheatsTable;
-    private final ButtonGroup<TextButton> playerButtonGroup = new ButtonGroup<>();
+    private final int visibleRelationsCount = 2;
+    private int selectedIndex = 0;
 
-    private Rectangle[] playerButtons = new Rectangle[4];
-    private Rectangle saveButton = new Rectangle();
-    private Rectangle terminateButton = new Rectangle();
-    private int selectedIndex = -1;
     private GameScreen screen;
     private final String[] tabOrder = {
         "Inventory", "Stats", "Relation",
@@ -67,6 +76,36 @@ public class MenuBar {
         miniMapTexture = GameAssetManager.getGameAssetManager().getScreenTexture("map.jpg");
         characterTexture = GameAssetManager.getGameAssetManager().getScreenTexture("character.png");
         infoTexture = GameAssetManager.getGameAssetManager().getBackgroundTexture("Info_Background1.png");
+        heartTexture = GameAssetManager.getGameAssetManager().getInventoryTexture("relations/Heart.png");
+        emptyHeartTexture = GameAssetManager.getGameAssetManager().getInventoryTexture("relations/Empty_Heart.png");
+        giftTexture = GameAssetManager.getGameAssetManager().getInventoryTexture("relations/Gift.png");
+
+
+        int i = 0;
+        for(PlayerData playerData : AppClient.getGameData().getPlayersData()){
+            assert AppClient.getUserData() != null;
+            if(playerData.getUsername().equals(AppClient.getUserData().getUsername())){
+                i++;
+                continue;
+            }
+            relationsIndex.add(i);
+            relationTextures.add(new Texture(playerData.getAvatarPath()));
+            i++;
+        }
+        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Clint", "Clint.png"));
+        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Willy", "Willy.png"));
+        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Mohsen", "Mohsen.png"));
+        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Morris", "Morris.png"));
+        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Gus","Gus.png"));
+        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Marnie", "Marnie.png"));
+        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Robin", "Robin.png"));
+        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Pierre", "Pierre.png"));
+        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Sebastian", "Sebastian.png"));
+        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Leah", "Leah.png"));
+        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Harvey", "Harvey.png"));
+        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Abigail", "Abigail.png"));
+
+        NPCsData = AppClient.getGameData().getVillageData().getNPCsData();
 
 
         tileWidth = menuTexture.getWidth() / 3;
@@ -101,6 +140,11 @@ public class MenuBar {
         Inventory inventory = Finder.getpd().getInventoryData().getInventory();
         this.camera = camera;
 
+        if(screen instanceof GreenHouseScreen && !camSet){
+            camSet = true;
+//            camera.zoom *= 2;
+        }
+
         float menuWidth = screenWidth * 0.6f;
         float menuHeight = screenHeight * 0.7f;
         startingX = camera.position.x - menuWidth / 2f;
@@ -112,11 +156,14 @@ public class MenuBar {
         }
 
         switch (currentTab) {
-            case "Inventory":
             case "Crafting":
             case "Food":
             case "Control":
                 renderInventoryBar(batch, camera, inventory);
+                break;
+            case "Inventory":
+                renderInventoryBar(batch, camera, inventory);
+                renderSelectedItem(batch);
                 break;
             case "Vote":
                 renderVote(batch);
@@ -196,7 +243,7 @@ public class MenuBar {
                             font.getData().setScale(2.5f);
                             String amountText = String.valueOf(slot.getQuantity());
                             GlyphLayout layout = new GlyphLayout(font, amountText);
-                            float textX = drawX + slotSize * 3 / 4f;
+                            float textX = drawX + slotSize / 2f;
                             float textY = drawY + layout.height / 3f;
                             font.draw(batch, layout, textX, textY);
                             font.getData().setScale(1f);
@@ -207,12 +254,14 @@ public class MenuBar {
                             mousePos.y >= y && mousePos.y <= y + slotSize) {
                             if (Gdx.input.isButtonJustPressed(0)) {
                                 if (item instanceof Tool) {
+                                    assert AppClient.getUserData() != null;
                                     GameMessage<GameCommand> msg = new GameMessage<>("game-command",
                                         new GameCommand("tools equip " + item.getName(),
                                             AppClient.getUserData().getUsername())
                                     );
                                     AppClient.getClient().send(new Gson().toJson(msg));
                                 }else if(Food.parseFood(item.getName()) != null){
+                                    assert AppClient.getUserData() != null;
                                     GameMessage<GameCommand> msg = new GameMessage<>("game-command",
                                         new GameCommand("eat " + item.getName(),
                                             AppClient.getUserData().getUsername())
@@ -263,6 +312,29 @@ public class MenuBar {
         }
     }
 
+    private void renderSelectedItem(Batch batch) {
+        float screenWidth = camera.viewportWidth;
+        float screenHeight = camera.viewportHeight;
+
+        Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        camera.unproject(mousePos);
+
+        if(Finder.getpd().getCurrentToolName() == null){
+            return;
+        }
+        Tool tool = (Tool) Finder.parseItem(Finder.getpd().getCurrentToolName());
+        TextureRegion texture = ItemManager.getTexture(tool.getID());
+        if (texture == null) return;
+
+        float drawX = startingX + screenWidth / 4f;
+        float drawY = startingY + screenHeight * 0.075f;
+        float width = screenWidth * 0.1f;
+        float height = screenWidth * 0.1f;
+
+        batch.draw(texture, drawX, drawY, width, height);
+        batch.setColor(1, 1, 1, 1);
+
+    }
 
     private void renderStats(@NotNull Batch batch) {
         Texture farmingIcon = GameAssetManager.getGameAssetManager().getSkillTexture("Farming_Skill_Icon.png");
@@ -369,9 +441,184 @@ public class MenuBar {
         font.getData().setScale(1f);
     }
 
-
     private void renderRelations(Batch batch) {
+        float screenWidth = camera.viewportWidth;
+        float screenHeight = camera.viewportHeight;
+        this.camera = camera;
 
+        float menuWidth = screenWidth * 0.6f;
+        float menuHeight = screenHeight * 0.7f;
+        startingX = camera.position.x - menuWidth / 2f;
+        startingY = camera.position.y - menuHeight / 2f;
+
+        float x = startingX + screenWidth * 0.025f;
+        float y = startingY + screenHeight * 0.6f;
+
+        float spacing = screenWidth * 0.2f;
+        float characterSize = screenHeight * 0.2f;
+
+        Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        camera.unproject(mousePos);
+
+
+
+        int endIndex = Math.min(selectedIndex + visibleRelationsCount, relationTextures.size());
+        for (int i = selectedIndex; i < endIndex; i++) {
+            int friendShipLevel = 0;
+            float characterX = x;
+            float characterY = y - characterSize + 5;
+            if(i < relationsIndex.size()) {
+                PlayerData playerData = AppClient.getGameData().getPlayersData().get(relationsIndex.get(i));
+                String username = playerData.getUsername();
+
+                for(FriendshipData friendshipData : Objects.requireNonNull(Finder.getpd()).getFriendshipsData()){
+                    if(friendshipData.getPlayer1Name().equals(username) || friendshipData.getPlayer2Name().equals(username)) {
+                        friendShipLevel = friendshipData.getLevel();
+                    }
+                }
+
+                batch.draw(relationTextures.get(i), characterX, characterY, characterSize, characterSize);
+
+                boolean hovered = mousePos.x >= characterX && mousePos.x <= characterX + characterSize &&
+                    mousePos.y >= characterY && mousePos.y <= characterY + characterSize;
+
+                boolean clicked = false;
+
+                if (hovered) {
+                    if (Gdx.input.isButtonJustPressed(0)) {
+                        clicked = true;
+                    }
+
+                    GlyphLayout tooltipLayout = new GlyphLayout(font, username);
+
+                    float playerNameWidth = tooltipLayout.width + 40;
+                    float playerNameHeight = tooltipLayout.height + 30;
+
+                    float playerNameX = characterX + characterSize / 2f - playerNameWidth / 2f;
+                    float playerNameY = characterY + characterSize;
+
+                    batch.end();
+                    shapeRenderer.setProjectionMatrix(camera.combined);
+                    shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                    shapeRenderer.setColor(0, 0, 0, 0.85f);
+                    shapeRenderer.rect(playerNameX, playerNameY, playerNameWidth, playerNameHeight);
+                    shapeRenderer.end();
+                    batch.begin();
+
+                    font.setColor(CustomColors.SWAMP_COLOR);
+
+                    font.draw(batch, username, playerNameX + 20, playerNameY + playerNameHeight - 15);
+
+                    font.setColor(Color.WHITE);
+                }
+                if (clicked) {
+                    //TODO Click on player
+                }
+            } else{
+                NPCData npcData = NPCsData.get(i - relationsIndex.size());
+                String NPCname = npcData.getName();
+
+                friendShipLevel = npcData.getFriendShipData().get(Objects.requireNonNull(Finder.getpd()).getUsername());
+
+                batch.draw(relationTextures.get(i), characterX, characterY, characterSize, characterSize);
+
+                boolean hovered = mousePos.x >= characterX && mousePos.x <= characterX + characterSize &&
+                    mousePos.y >= characterY && mousePos.y <= characterY + characterSize;
+
+                boolean clicked = false;
+
+                if (hovered) {
+                    if (Gdx.input.isButtonJustPressed(0)) {
+                        clicked = true;
+                    }
+
+                    GlyphLayout tooltipLayout = new GlyphLayout(font, NPCname);
+
+                    float NPCNameWidth = tooltipLayout.width + 40;
+                    float NPCNameHeight = tooltipLayout.height + 30;
+
+                    float NPCNameX = characterX + characterSize / 2f - NPCNameWidth / 2f;
+                    float NPCNameY = characterY + characterSize;
+
+                    batch.end();
+                    shapeRenderer.setProjectionMatrix(camera.combined);
+                    shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                    shapeRenderer.setColor(0, 0, 0, 0.85f);
+                    shapeRenderer.rect(NPCNameX, NPCNameY, NPCNameWidth, NPCNameHeight);
+                    shapeRenderer.end();
+                    batch.begin();
+
+                    font.setColor(CustomColors.SWAMP_COLOR);
+
+                    font.draw(batch, NPCname, NPCNameX + 20, NPCNameY + NPCNameHeight - 15);
+
+                    font.setColor(Color.WHITE);
+                }
+                if (clicked) {
+                    //TODO Click on npc
+                }
+            }
+
+            float itemSize = characterSize / 4;
+
+            characterX += screenWidth / 7.5f;
+            characterY += itemSize / 4f;
+
+            String friendShipState;
+
+            for(int j = 0; j < friendShipLevel; j++){
+                batch.draw(heartTexture, characterX, characterY, itemSize, itemSize);
+                characterX += screenWidth / 20f;
+            }
+            if(i < relationsIndex.size()) {
+                for(int j = 0; j < 4 - Math.max(friendShipLevel, 0); j++){
+                    batch.draw(emptyHeartTexture, characterX, characterY, itemSize, itemSize);
+                    characterX += screenWidth / 20f;
+                }
+
+                friendShipState = FriendshipLevel.values()[friendShipLevel].name();
+
+            } else{
+                for(int j = 0; j < 3 - friendShipLevel; j++){
+                    batch.draw(emptyHeartTexture, characterX, characterY, itemSize, itemSize);
+                    characterX += screenWidth / 20f;
+                }
+
+                if(friendShipLevel == 0) {
+                    friendShipState = "Stranger";
+                } else if(friendShipLevel == 1) {
+                    friendShipState = "Friend";
+                } else if(friendShipLevel == 2) {
+                    friendShipState = "Close Friend";
+                } else{
+                    friendShipState = "Best Friend";
+                }
+            }
+
+            characterX += screenWidth / 15f;
+
+            GlyphLayout tooltipLayout = new GlyphLayout(font, friendShipState);
+
+            float friendShipLevelWidth = tooltipLayout.width + 40;
+            float playerNameHeight = tooltipLayout.height + 30;
+
+            float friendShipLevelX = characterX + itemSize / 2f - friendShipLevelWidth / 2f;
+            float friendShipLevelY = characterY;
+
+
+            font.getData().setScale(2f);
+
+            font.setColor(CustomColors.GAMEGREENCOLOR);
+
+            font.draw(batch, friendShipState, friendShipLevelX + 20, friendShipLevelY + playerNameHeight - 15);
+
+            font.setColor(Color.WHITE);
+
+            font.getData().setScale(1f);
+
+            y -= spacing;
+
+        }
     }
 
     private void renderMap(Batch batch) {
@@ -472,8 +719,8 @@ public class MenuBar {
             }
             currentX += width * 2.3f;
         }
-
     }
+
     private void renderCooking(Batch batch) {
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
@@ -552,7 +799,6 @@ public class MenuBar {
             currentX += width *1.33f;
         }
     }
-
 
     private void renderVote(@NotNull Batch batch) {
         Texture nameTexture = GameAssetManager.getGameAssetManager().getBackgroundTexture("Player Name Background.png");
@@ -720,6 +966,7 @@ public class MenuBar {
 
         return true;
     }
+
     private boolean hasAllItems(CookingRecipe recipe) {
         Map<Item, Integer> requiredItems = recipe.neededItems;
         Inventory inventory = player.getInventory();
@@ -877,15 +1124,22 @@ public class MenuBar {
         menuTexture.dispose();
     }
 
+    public void resetScroll(){
+        startingRow = 0;
+        selectedIndex = 0;
+    }
+
     public void scrollDown() {
         startingRow++;
 
+        if (selectedIndex < relationTextures.size() - visibleRelationsCount)
+            selectedIndex++;
     }
 
     public void scrollUp() {
-        if (startingRow > 0) {
-            startingRow--;
-        }
+        if (startingRow > 0) startingRow--;
+
+        if (selectedIndex > 0) selectedIndex--;
     }
 
     public void goToNextTab() {

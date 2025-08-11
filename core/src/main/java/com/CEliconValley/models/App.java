@@ -5,7 +5,9 @@ import com.CEliconValley.common.AppData;
 import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.OnlineData;
 import com.CEliconValley.common.PlayerData;
+import com.CEliconValley.common.messages.ErrorMessage;
 import com.CEliconValley.common.messages.GameMessage;
+import com.CEliconValley.common.messages.SuccessMessage;
 import com.CEliconValley.database.UserDB;
 import com.CEliconValley.server.GameServer;
 import com.CEliconValley.server.handlers.LobbyHandler;
@@ -230,5 +232,18 @@ public class App {
             }
         }
         return null;
+    }
+
+
+    public static void sendResult(Result result, String playername){
+        if(!result.success()){
+            GameMessage<ErrorMessage> response = new GameMessage<>("game_response",
+                new ErrorMessage("game_request", result.message()));
+            App.getServer().sendToPlayername(playername, new Gson().toJson(response));
+        }else{
+            GameMessage<SuccessMessage> response = new GameMessage<>("game_response",
+                new SuccessMessage("game_request", result.message()));
+            App.getServer().sendToPlayername(playername, new Gson().toJson(response));
+        }
     }
 }

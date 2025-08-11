@@ -234,7 +234,7 @@ public class VillageScreen extends GameScreen implements Screen {
         for (NPCSprite npcSprite : npcSprites) {
             if (npcSprite.currentAnimation != null) {
                 npcSprite.currentAnimation = npcSprite.walk(npcSprite.getNPCData().isMoving, npcSprite.getNPCData().currentDirection);
-                if(npcSprite.getNPCData().isOutside == false) continue;
+//                if(npcSprite.getNPCData().isOutside == false) continue;
                 float ratio = ( Gdx.graphics.getWidth() / VIRTUAL_WIDTH);
                 float rx = npcSprite.getNPCData().renderX / 160 *(ratio * 160);
                 float ry = npcSprite.getNPCData().renderY / 160 *(ratio * 160);

@@ -7,6 +7,7 @@ import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.foragings.ForagingCrop;
 import com.CEliconValley.models.foragings.ForagingCropType;
+import com.CEliconValley.models.foragings.Nature.Rock;
 import com.CEliconValley.models.items.Item;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,6 +18,9 @@ public class ItemSpawner {
     public void renderItems(SpriteBatch batch, CellData cellData, FarmData farmData) {
         Item item = Finder.parseItem(cellData.getObjectName());
         if (item == null) {
+            return;
+        }
+        if(item instanceof Rock){
             return;
         }
         TextureRegion itemTexture = ItemManager.getTexture(item.getID());

@@ -228,7 +228,7 @@ public class BuildingSpawner {
 
         }
         if(tmpCell.getObjectMap() instanceof Saloon saloon) {
-            System.out.println(saloon.getAnchorX() + " "+tmpCell.getX()+" " + saloon.getAnchorY()+"  "+tmpCell.getY());
+//            System.out.println(saloon.getAnchorX() + " "+tmpCell.getX()+" " + saloon.getAnchorY()+"  "+tmpCell.getY());
 
 
         if( saloon.getAnchorX()==tmpCell.getX() && saloon.getAnchorY()==tmpCell.getY()) {

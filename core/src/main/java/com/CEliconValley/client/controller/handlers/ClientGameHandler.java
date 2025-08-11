@@ -54,7 +54,7 @@ public class ClientGameHandler {
                         PlayerData pd = AppClient.getGameData().getPlayersData().get(i);
                         if(pd.getUsername().equals(playerData.getUsername())) {
                             AppClient.getGameData().getPlayersData().set(i, playerData);
-                            System.out.println("updating "+playerData.getUsername());
+//                            System.out.println("updating "+playerData.getUsername());
                             break;
                         }
                     }
@@ -299,6 +299,7 @@ public class ClientGameHandler {
 
 
     private static void updateTime(GameScreen gs){
+        if(AppClient.getGameData() == null) return;
         gs.getTimeScreen().updatePointer(AppClient.getGameData().getTime().getHour(),
             AppClient.getGameData().getTime().convertDay()
             ,AppClient.getGameData().getTime().getYear(),

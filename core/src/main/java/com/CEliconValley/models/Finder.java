@@ -3,6 +3,8 @@ package com.CEliconValley.models;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.view.screen.maps.CoopMap;
 import com.CEliconValley.common.*;
+import com.CEliconValley.models.buildings.Building;
+import com.CEliconValley.models.buildings.marketplaces.*;
 import com.CEliconValley.models.buildings.marketplaces.items.*;
 import com.CEliconValley.models.foragings.*;
 import com.CEliconValley.models.foragings.Nature.*;
@@ -10,6 +12,8 @@ import com.CEliconValley.models.items.*;
 import com.CEliconValley.client.view.screen.maps.CottageMap;
 import com.CEliconValley.client.view.screen.maps.BarnMap;
 import com.CEliconValley.client.view.screen.maps.GreenhouseMap;
+import com.CEliconValley.models.npc.npcCharacters.*;
+import com.CEliconValley.models.npc.npchomes.*;
 import org.bson.types.ObjectId;
 import com.CEliconValley.models.buildings.ShippingBin;
 import com.CEliconValley.models.buildings.Well;
@@ -17,7 +21,6 @@ import com.CEliconValley.models.items.Products.ProductType;
 import com.CEliconValley.models.items.craftableitems.CraftableNames;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.locations.Village;
-import com.CEliconValley.models.npc.npcCharacters.NPC;
 import com.CEliconValley.models.tools.FishingRodLevel;
 import com.CEliconValley.models.tools.NormalTools;
 import com.CEliconValley.models.tools.Tool;
@@ -347,6 +350,54 @@ public class Finder {
         for (CoopData cd : farmData.getCoopsData()) {
             if(cd.getId() == id){
                 return cd;
+            }
+        }
+        return null;
+    }
+
+
+    public static Building getBuildingBynpc(NPC npc, boolean work){
+        for (Building building : App.getGame().getVillage().getBuildings()) {
+            if(!work){
+                if(building instanceof AbigailHome && npc instanceof Abigail){
+                    return building;
+                }
+                if(building instanceof LiaHome && npc instanceof Lia){
+                    return building;
+                }
+                if(building instanceof SebastienHome && npc instanceof Sebastien){
+                    return building;
+                }
+                if(building instanceof RobinHome && npc instanceof Robin){
+                    return building;
+                }
+                if(building instanceof HarveyHome && npc instanceof Harvey){
+                    return building;
+                }
+            }else{
+                if(building instanceof Blacksmith && npc instanceof Clint){
+                    return building;
+                }
+                if(building instanceof FishShop && (
+                    ( npc instanceof Willy ) || npc instanceof Mohsen
+                )){
+                    return building;
+                }
+                if(building instanceof GeneralStore && npc instanceof Pierre){
+                    return building;
+                }
+                if(building instanceof Saloon && npc instanceof Gus){
+                    return building;
+                }
+                if(building instanceof MarnieRanch && npc instanceof Marine){
+                    return building;
+                }
+                if(building instanceof CarpenterShop && npc instanceof Robin){
+                    return building;
+                }
+                if(building instanceof Jojamart && npc instanceof Morris){
+                    return building;
+                }
             }
         }
         return null;

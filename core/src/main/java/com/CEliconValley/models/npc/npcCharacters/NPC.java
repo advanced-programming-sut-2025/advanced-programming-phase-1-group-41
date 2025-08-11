@@ -1,10 +1,10 @@
 package com.CEliconValley.models.npc.npcCharacters;
 
 import com.CEliconValley.client.view.screen.randomwalk.Node;
-import com.CEliconValley.models.App;
-import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Occupation;
-import com.CEliconValley.models.Player;
+import com.CEliconValley.common.CellData;
+import com.CEliconValley.models.*;
+import com.CEliconValley.models.buildings.Building;
+import com.CEliconValley.models.buildings.marketplaces.Marketplace;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
 import com.CEliconValley.models.locations.Village;
@@ -29,7 +29,7 @@ public abstract class NPC {
     private int daysToUnlockQ3 = 0;
     public int x = -10;
     public int y = -10;
-    public boolean isOutside = true;
+    public boolean isOutside = false;
     public int randomX = -1;
     public int randomY = -1;
     public int targetX = -1;
@@ -41,6 +41,8 @@ public abstract class NPC {
     public Queue<Node> movementQueue = new LinkedList<>();
     public int currentDirection = 3;
     public boolean isSet = false;
+    public boolean shouldGoHome = false;
+    public boolean shouldGoToWork = false;
 
 
     public static final int CELL_SIZE = (int)  160;
@@ -62,6 +64,7 @@ public abstract class NPC {
             isSet = true;
             return;
         }
+
         if (isOutside) {
             Random random = new Random();
             Village village = App.getGame().getVillage();
@@ -80,6 +83,27 @@ public abstract class NPC {
                     this.randomY = cell.getY();
                     break;
                 }
+            }
+        }else{
+            int hour = App.getGame().getTime().getHour();
+            if(getJob() != null && getJob()!=Occupation.Jobless && (Marketplace.goToWork <= hour && hour <= Marketplace.outOfWork)){
+                Building building = Finder.getBuildingBynpc(this, true);
+                if(building == null){
+                    System.out.println("got a null marketplace "+name);
+                    return;
+                }
+                Cell cell = App.getGame().getVillage().getCellAroundABuilding(building);
+                this.randomX = cell.getX();
+                this.randomY = cell.getY();
+            }else if(getHome() != null &&(hour <= Marketplace.outOfHome || hour >= Marketplace.goToHome)){
+                Building building = Finder.getBuildingBynpc(this, false);
+                if(building == null){
+                    System.out.println("got a null");
+                    return;
+                }
+                Cell cell = App.getGame().getVillage().getCellAroundABuilding(building);
+                this.randomX = cell.getX();
+                this.randomY = cell.getY();
             }
         }
     }

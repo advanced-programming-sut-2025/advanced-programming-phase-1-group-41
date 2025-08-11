@@ -16,7 +16,7 @@ public class Robin extends NPC{
         super(name, job, dialogues, favorites, itemsToGift);
         this.marketplace = marketplace;
         this.home = home;
-        setX(70);setY(13);
+        setX(13);setY(53);
         setDaysToUnlockQ3(11*28);
     }
     @Override

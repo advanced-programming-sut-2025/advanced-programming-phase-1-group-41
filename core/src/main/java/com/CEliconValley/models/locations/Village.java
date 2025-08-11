@@ -41,7 +41,7 @@ public class Village implements Location{ ;
     public void randomMovement() {
         for (NPC npc : getNPCs()) {
             if(npc.reachedDestination() && !npc.randomSetter){
-                int delayTime = new Random().nextInt(5000, 10000);
+                int delayTime = new Random().nextInt(2000, 5000);
                 ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
                 npc.randomSetter = true;
                 scheduler.schedule(() -> {
@@ -65,7 +65,7 @@ public class Village implements Location{ ;
     public void npcApproach() {
         NPCs.forEach(npc -> {
             if (npc.isMoving) {
-                float moveAmount = 5;
+                float moveAmount = 20;
                 float targetPixelX = npc.targetX * CELL_SIZE;
                 float targetPixelY = npc.targetY * CELL_SIZE;
 //                npc.currentAnimation = npc.walk(true, npc.currentDirection);
@@ -492,6 +492,17 @@ public class Village implements Location{ ;
             }
         }
         return false;
+    }
+
+
+    public Cell getCellAroundABuilding(Building building){
+        ArrayList<Cell> hasCells = new ArrayList<>();
+        for (Cell cell : getCells()) {
+            if(cell.getObjectMap().getName().equals(building.getName())){
+                hasCells.add(cell);
+            }
+        }
+        return hasCells.get(new Random().nextInt(hasCells.size()));
     }
 
     //    public void setCells(ArrayList<Cell> cells) {

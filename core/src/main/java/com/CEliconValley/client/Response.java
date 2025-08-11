@@ -1,6 +1,7 @@
 package com.CEliconValley.client;
 
 import com.CEliconValley.client.view.MainMenuView;
+import com.CEliconValley.client.view.screen.GameScreen;
 import com.CEliconValley.common.UserData;
 import com.CEliconValley.common.messages.ErrorMessage;
 import com.CEliconValley.common.messages.SuccessMessage;
@@ -10,6 +11,7 @@ import com.CEliconValley.client.view.AuthenticationMenuView;
 import com.CEliconValley.client.view.ProfileMenuView;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.Timer;
 import com.google.gson.Gson;
 
 public class Response {
@@ -60,6 +62,20 @@ public class Response {
                     screen.updateInfo();
                 }
             }
+            case "game_request" -> {
+                if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                    .getScreen()  instanceof GameScreen screen){
+                    screen.updateMessage(message.success, Color.GREEN);
+                    System.out.println("in client set it to "+message.success);
+                    new Timer().schedule(new Timer.Task() {
+
+                        @Override
+                        public void run() {
+                            screen.removeMessage();
+                        }
+                    }, 3);
+                }
+            }
         }
     }
 
@@ -80,6 +96,19 @@ public class Response {
                         System.out.println("set the error " + message.error);
                     }
                 });
+            }
+            case "game_request" -> {
+                if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                    .getScreen()  instanceof GameScreen screen){
+                    screen.updateMessage(message.error, Color.RED);
+                    new Timer().schedule(new Timer.Task() {
+
+                        @Override
+                        public void run() {
+                            screen.removeMessage();
+                        }
+                    }, 3);
+                }
             }
         }
     }
