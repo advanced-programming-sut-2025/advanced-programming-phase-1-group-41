@@ -23,6 +23,7 @@ import com.CEliconValley.models.items.craftablemachines.FishSmoker;
 import com.CEliconValley.models.items.craftablemachines.Machine;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.ui.GameAssetManager;
+import com.CEliconValley.views.subGames.FishingMiniGame;
 import com.CEliconValley.views.subGames.Rain;
 import com.CEliconValley.views.subGames.Snow;
 import com.CEliconValley.views.subGames.Thunder;
@@ -56,6 +57,7 @@ public class FarmScreen extends GameScreen implements Screen {
     private final GroundSpawner groundSpawner;
     private final CropSpawner cropSpawner;
     private final ItemSpawner itemSpawner;
+    private boolean isFishing=false;
     private FarmMap farmMap;
     private ArrayList<Hero> otherHeroes;
     private GroundBorderSpawner groundBorderSpawner;
@@ -71,6 +73,7 @@ public class FarmScreen extends GameScreen implements Screen {
 
 
     public OrthographicCamera camera;
+    FishingMiniGame fishingMiniGame ;
 
     public static final float VIRTUAL_WIDTH = 3160f;
     public static final float VIRTUAL_HEIGHT = 1350f;
@@ -131,6 +134,7 @@ public class FarmScreen extends GameScreen implements Screen {
         farmSprite = new Sprite(farmTexture);
         farmSprite.setSize(CELL_SIZE, CELL_SIZE);
         camera = new OrthographicCamera();
+
         thunder = new Thunder();
         snow = new Snow();
         rain = new Rain(thunder);
@@ -326,6 +330,21 @@ public class FarmScreen extends GameScreen implements Screen {
         }
         batch.setColor(Color.WHITE);
         thunder.render(batch, camera);
+        if (isFishing) {
+
+            fishingMiniGame.update(Gdx.graphics.getDeltaTime());
+            fishingMiniGame.render(batch);
+
+
+            if (fishingMiniGame.isFinished()) {
+                isFishing = false;
+                if (fishingMiniGame.isSuccess()) {
+
+                } else {
+
+                }
+            }
+        }
         if (isMenuOpen) {
 //                menuBar.render(batch, menuX, menuY, menuWidth, menuHeight);
             menuBar.render(batch, camera);
@@ -583,5 +602,17 @@ public class FarmScreen extends GameScreen implements Screen {
         }
     }
 
+
+    public boolean isFishing() {
+        return isFishing;
+    }
+
+    public void setFishing(boolean fishing) {
+        isFishing = fishing;
+    }
+    public void startFishing(FishType fishType) {
+        fishingMiniGame = new FishingMiniGame(camera, fishType);
+        isFishing = true;
+    }
 
 }

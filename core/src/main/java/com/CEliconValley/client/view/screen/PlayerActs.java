@@ -9,6 +9,7 @@ import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.Position;
 import com.CEliconValley.common.messages.TGPoint;
 import com.CEliconValley.models.*;
+import com.CEliconValley.models.animals.FishType;
 import com.CEliconValley.models.animals.animalKinds.Cow;
 import com.CEliconValley.models.animals.animalKinds.Goat;
 import com.CEliconValley.models.animals.animalKinds.Sheep;
@@ -337,6 +338,10 @@ public class PlayerActs {
                 assert AppClient.getUserData() != null;
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("walk left", AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
+            }
+        }else if(Gdx.input.isKeyPressed(Input.Keys.F)){
+            if(screen instanceof FarmScreen fs&& !fs.isFishing()){
+                fs.startFishing(FishType.Shad);
             }
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
