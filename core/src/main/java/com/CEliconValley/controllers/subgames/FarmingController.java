@@ -4,10 +4,7 @@ import com.CEliconValley.models.*;
 import com.CEliconValley.models.foragings.*;
 
 import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
-import com.CEliconValley.models.foragings.Nature.Grass;
-import com.CEliconValley.models.foragings.Nature.Tree;
-import com.CEliconValley.models.foragings.Nature.TreeType;
-import com.CEliconValley.models.foragings.Nature.Wood;
+import com.CEliconValley.models.foragings.Nature.*;
 import com.CEliconValley.models.items.Inventory;
 import com.CEliconValley.models.items.Slot;
 import com.CEliconValley.models.locations.Farm;
@@ -49,7 +46,9 @@ public class FarmingController {
         player.decMoney(1000);
         return new Result(true, "Greenhouse has been built!");
     }
-    public Result plant(Matcher matcher){
+    public Result plant(Matcher matcher, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
         String seed = matcher.group("seed");
         SeedType seedType = SeedType.parseSeedType(seed);
         String direction = matcher.group("direction");
@@ -58,23 +57,22 @@ public class FarmingController {
             return new Result(false, "invalid direction");
         }
         int [][]dirs = {{-1,-1},{0,-1},{1,-1},{1,0},{1,1},{0,1},{-1,1},{-1,0},};
-        int x = App.getGame().getCurrentPlayer().getX()+dirs[dir][0];
-        int y = App.getGame().getCurrentPlayer().getY()+dirs[dir][1];
+        int x = player.getX()+dirs[dir][0];
+        int y = player.getY()+dirs[dir][1];
 
         if(seedType == null){
             return new Result(false, "Seed type not found!");
         }
 
         if(!App.getGame().getTime().getSeason().equals(seedType.getSeason()) && !seedType.getSeason().equals(Season.Special)
-                && !App.getGame().getCurrentPlayerFarm().getGreenhouse().isGreenHouse(x, y)){
+                && !farm.getGreenhouse().isGreenHouse(x, y)){
             return new Result(false, "Can't plant this seed on this season!");
         }
-        if(App.getGame().getCurrentPlayer().getInventory().getSlotByItem(new Seed(seedType)) == null){
+        if(player.getInventory().getSlotByItem(new Seed(seedType)) == null){
             return new Result(false, "You don't have any seed in your inventory!");
         }
 
-        Farm farm = App.getCurrentUser().getCurrentGame().getCurrentPlayerFarm();
-        Inventory inventory = App.getCurrentUser().getCurrentGame().getCurrentPlayer().getInventory();
+        Inventory inventory = player.getInventory();
         Cell cell = Finder.findCellByCoordinates(x, y, farm);
 
         assert cell != null;
@@ -230,7 +228,9 @@ public class FarmingController {
         }
         return new Result(false, "No Plant found!");
     }
-    public Result fertilize(Matcher matcher){
+    public Result fertilize(Matcher matcher, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
         String fertilizer = matcher.group("fertilizer");
         FertilizerType fertilizerType = FertilizerType.parseFertilizerType(fertilizer);
         if(fertilizerType == null){
@@ -243,18 +243,18 @@ public class FarmingController {
             return new Result(false, "invalid direction");
         }
         int [][]dirs = {{-1,-1},{0,-1},{1,-1},{1,0},{1,1},{0,1},{-1,1},{-1,0},};
-        int x = App.getGame().getCurrentPlayer().getX()+dirs[dir][0];
-        int y = App.getGame().getCurrentPlayer().getY()+dirs[dir][1];
-        Cell cell = Finder.findCellByCoordinates(x, y, App.getGame().getCurrentPlayerFarm());
+        int x = player.getX()+dirs[dir][0];
+        int y = player.getY()+dirs[dir][1];
+        Cell cell = Finder.findCellByCoordinates(x, y, farm);
         assert cell != null;
         if(fertilizerType.equals(FertilizerType.GrassStarter)){
-            fertilizeGrass(cell, App.getGame().getCurrentPlayerFarm());
+            fertilizeGrass(cell, farm);
             return new Result(true, "Grass starter used at " + x + "," + y);
         }
         if(!(cell.getObjectMap() instanceof Crop) && !(cell.getObjectMap() instanceof Tree)){
             return new Result(false, "Cell is not a crop or a tree!");
         }
-        Inventory inventory = App.getCurrentUser().getCurrentGame().getCurrentPlayer().getInventory();
+        Inventory inventory = player.getInventory();
         for(Slot slot : inventory.getSlots()){
             if(slot.getItem() instanceof Fertilizer){
                 if(slot.getItem().getName().equals(fertilizerType.getName())){

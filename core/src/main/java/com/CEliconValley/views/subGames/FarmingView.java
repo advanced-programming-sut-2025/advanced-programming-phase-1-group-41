@@ -10,14 +10,14 @@ import java.util.regex.Matcher;
 
 public class FarmingView {
     static FarmingController controller = new FarmingController();
-    public static boolean check(String input){
+    public static boolean check(String input, String playername){
         Matcher matcher;
         if ((matcher = FarmingCommands.CraftInfo.getMatcher(input)) != null) {
             System.out.println(controller.craftInfo(matcher));
         }else if ((matcher = FarmingCommands.GreenhouseBuild.getMatcher(input)) != null) {
             System.out.println(controller.buildGreenhouse(matcher));
         }else if((matcher = FarmingCommands.Plant.getMatcher(input)) != null){
-            System.out.println(controller.plant(matcher));
+            System.out.println(controller.plant(matcher, playername));
         } else if((matcher = FarmingCommands.ShowPlant.getMatcher(input)) != null){
             System.out.println(controller.showPlant(matcher));
         } else if((matcher = FarmingCommands.HowMuchWater.getMatcher(input)) != null){
@@ -25,7 +25,7 @@ public class FarmingView {
                 System.out.println("Water left: " + ((WateringCan) App.getGame().getCurrentPlayer().getInventory().getSlotByItem(Finder.getToolByName("WateringCan")).getItem()).getTiles());
             }
         } else if((matcher = FarmingCommands.Fertilize.getMatcher(input)) != null){
-            System.out.println(controller.fertilize(matcher));
+            System.out.println(controller.fertilize(matcher, playername));
         }
         else{
             return false;

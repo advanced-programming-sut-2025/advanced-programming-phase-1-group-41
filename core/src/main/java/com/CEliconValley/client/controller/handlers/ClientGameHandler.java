@@ -54,7 +54,7 @@ public class ClientGameHandler {
                         PlayerData pd = AppClient.getGameData().getPlayersData().get(i);
                         if(pd.getUsername().equals(playerData.getUsername())) {
                             AppClient.getGameData().getPlayersData().set(i, playerData);
-                            System.out.println("updating "+playerData.getUsername());
+//                            System.out.println("updating "+playerData.getUsername());
                             break;
                         }
                     }
