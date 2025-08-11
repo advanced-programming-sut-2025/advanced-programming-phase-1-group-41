@@ -210,9 +210,6 @@ public class PlayerActs {
                 }
             }
             return new Result(true, "menu");
-        }if(Gdx.input.isKeyJustPressed(Input.Keys.X)){
-            screen.isArtisanMenuOpen = !screen.isArtisanMenuOpen;
-            return new Result(true, "Artisan");
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {

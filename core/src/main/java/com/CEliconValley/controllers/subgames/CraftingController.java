@@ -141,16 +141,16 @@ public class CraftingController {
         if (slot == null) {
             return new Result(false, "slot not found");
         }
-        if(item instanceof Well){
-            if(cell.getY() <= player.getY()
-            && cell.getX() <= player.getX()){
-                return new Result(false,"choose another direction");
-            }
-            Well well = new Well(cell.getX(), cell.getY(), farm);
-            farm.getBuildings().add(well);
-            inventory.removeFromInventory(item, 1);
-            return new Result(true, "well was placed");
-        }
+//        if(item instanceof Well){
+//            if(cell.getY() <= player.getY()
+//            && cell.getX() <= player.getX()){
+//                return new Result(false,"choose another direction");
+//            }
+//            Well well = new Well(cell.getX(), cell.getY(), farm);
+//            farm.getBuildings().add(well);
+//            inventory.removeFromInventory(item, 1);
+//            return new Result(true, "well was placed at "+well.getX()+", "+well.getY());
+//        }
         if(item instanceof CraftableMachine machine){
             inventory.removeFromInventory(item, 1);
             if(machine.equals(CraftableMachine.Bomb) || machine.equals(CraftableMachine.CherryBomb) || machine.equals(CraftableMachine.MegaBomb)){

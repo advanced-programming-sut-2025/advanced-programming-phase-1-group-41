@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class ItemManager {
     private static final TextureRegion[][][] allRegions = new TextureRegion[11][][];
-
+    public static Texture well;
     private static final int[] rows = {3,11, 5, 5, 2, 5, 1, 4, 8, 7, 1};
     private static final int[] cols = {3,12, 6, 6, 3, 5, 1, 5, 8, 5, 1};
 
@@ -15,6 +15,9 @@ public class ItemManager {
         for (int i = 0; i <= 10; i++) {
             String path = "game/inventory/items/" + (i) + ".png";
             Texture texture = new Texture(Gdx.files.internal(path));
+            if(i == 10){
+                well = texture;
+            }
             allRegions[i] = TextureRegion.split(texture,
                 texture.getWidth() / cols[i],
                 texture.getHeight() / rows[i]
@@ -22,8 +25,12 @@ public class ItemManager {
         }
     }
 
+
     public static TextureRegion getTexture(Item item) {
         int id = item.getID();
+        if (id == 100000) {
+            return new TextureRegion(well);
+        }
         int imageIndex = id / 10000;
         int row = (id / 100) % 100;
         int col = id % 100;
@@ -36,7 +43,9 @@ public class ItemManager {
         return allRegions[imageIndex][row][col];
     }
     public static TextureRegion getTexture(int id) {
-
+        if (id == 100000) {
+            return new TextureRegion(well);
+        }
         int imageIndex = id / 10000;
         int row = (id / 100) % 100;
         int col = id % 100;
