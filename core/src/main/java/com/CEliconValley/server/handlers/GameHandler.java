@@ -205,7 +205,7 @@ public class GameHandler {
 
         GameMessage<GameData> response = new GameMessage<>("new-game", new GameData(game));
         App.getServer().sendToGroupByPlayers(game.getPlayers(), new Gson().toJson(response));
-
+        App.lobbies.remove(App.getPreGame().getLobby());
         // Start command processor thread
         game.commandThread = new Thread(() -> {
             while (!Thread.currentThread().isInterrupted()) {
