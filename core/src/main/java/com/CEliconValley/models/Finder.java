@@ -378,7 +378,9 @@ public class Finder {
                 if(building instanceof Blacksmith && npc instanceof Clint){
                     return building;
                 }
-                if(building instanceof FishShop && npc instanceof Willy){
+                if(building instanceof FishShop && (
+                    ( npc instanceof Willy ) || npc instanceof Mohsen
+                )){
                     return building;
                 }
                 if(building instanceof GeneralStore && npc instanceof Pierre){

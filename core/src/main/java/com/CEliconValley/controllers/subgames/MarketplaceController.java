@@ -56,18 +56,27 @@ public class MarketplaceController {
         for (NPC npc : village.getNPCs()) {
             if(hour == Marketplace.outOfHome){
                 npc.isOutside = true;
-                npc.shouldGoToWork = true;
+                npc.shouldGoToWork = false;
+                npc.shouldGoHome = false;
             }
             else if(hour == Marketplace.goToWork){
-                if(npc.getJob() != null || npc.getHome() != null){
-                    npc.isOutside = false;
+                if(npc.getJob() != null && npc.getJob()!=Occupation.Jobless || npc.getHome() != null){
+                    if(npc.getJob() != null && npc.getJob()!=Occupation.Jobless){
+                        npc.shouldGoToWork = true;
+                        npc.isOutside = false;
+                    }
                 }
             }
             else if(hour == Marketplace.outOfWork){
                 npc.isOutside = true;
+                npc.shouldGoToWork = false;
+                npc.shouldGoHome = false;
             }else if(hour == Marketplace.goToHome){
-                if(npc.getJob() != null || npc.getHome() != null){
-                    npc.isOutside = false;
+                if(npc.getJob() != null && npc.getJob()!=Occupation.Jobless || npc.getHome() != null){
+                    if(npc.getHome() != null){
+                        npc.shouldGoHome = true;
+                        npc.isOutside = false;
+                    }
                 }
             }
         }

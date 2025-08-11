@@ -86,10 +86,10 @@ public abstract class NPC {
             }
         }else{
             int hour = App.getGame().getTime().getHour();
-            if(getJob() != null && (Marketplace.goToWork <= hour && hour <= Marketplace.outOfWork)){
+            if(getJob() != null && getJob()!=Occupation.Jobless && (Marketplace.goToWork <= hour && hour <= Marketplace.outOfWork)){
                 Building building = Finder.getBuildingBynpc(this, true);
                 if(building == null){
-                    System.out.println("got a null");
+                    System.out.println("got a null marketplace "+name);
                     return;
                 }
                 Cell cell = App.getGame().getVillage().getCellAroundABuilding(building);
