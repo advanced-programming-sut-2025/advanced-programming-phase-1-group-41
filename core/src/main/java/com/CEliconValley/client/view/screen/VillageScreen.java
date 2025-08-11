@@ -3,12 +3,14 @@ package com.CEliconValley.client.view.screen;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.model.AnimalSprite;
 import com.CEliconValley.client.model.NPCSprite;
+import com.CEliconValley.client.model.PlayerSprite;
 import com.CEliconValley.client.view.screen.maps.VillageMap;
 import com.CEliconValley.client.view.screen.randomwalk.Node;
 import com.CEliconValley.client.view.screen.randomwalk.SimplePathFinder;
 import com.CEliconValley.common.*;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
+import com.CEliconValley.common.messages.PosDiff;
 import com.CEliconValley.controllers.Spawner.*;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.foragings.Nature.Grass;
@@ -49,7 +51,7 @@ public class VillageScreen extends GameScreen implements Screen {
     private GroundBorderSpawner groundBorderSpawner;
     private final List<CellData> visibleCells = new ArrayList<>();
     private String currentSeason = "";
-
+    public FarmScreen farmScreen;
     Map<Cell, TextureRegion> groundCache;
     private Texture centerTexture= GameAssetManager.getGameAssetManager().getTileTexture("centerGround.png");
     public static Texture villageTexture = new Texture("game/Buildings/Screen/Village_Screen_Spring.png");
@@ -73,7 +75,7 @@ public class VillageScreen extends GameScreen implements Screen {
     private Animation<TextureRegion>[] walkAnimations;
     private float passiveStateTime = 0f;
     ArrayList<NPCSprite> npcSprites = new ArrayList<>();
-
+    ArrayList<PlayerSprite> playerSprites = new ArrayList<>();
 
 
     public void updatenpcData() {
@@ -84,8 +86,32 @@ public class VillageScreen extends GameScreen implements Screen {
         }
     }
 
-    public VillageScreen( Player player) {
 
+    public ArrayList<PlayerData> playersInVillage(){
+        ArrayList<PlayerData> playersInVillage = new ArrayList<>();
+        for (PlayerData p : AppClient.getGameData().getPlayersData()) {
+            if(p.getUsername().equals(AppClient.getUserData().getUsername())) continue;
+            if(p.isPlayerInVillage()) playersInVillage.add(p);
+        }
+        return playersInVillage;
+    }
+
+    public void updatePlayers() {
+        if (playerSprites == null) {
+            playerSprites = new ArrayList<>();
+        }
+        ArrayList<PlayerData> piv = playersInVillage();
+        if (playerSprites.size() == piv.size()) {
+            return;
+        }
+        this.playerSprites = new ArrayList<>();
+        for (PlayerData playerData : piv) {
+            playerSprites.add(new PlayerSprite(playerData));
+        }
+    }
+
+
+    public VillageScreen( Player player, FarmScreen farmScreen) {
         super(new InventoryRenderer(player.getInventory()));
         this.menuBar = super.getMenuBar();
         menuBar.setPlayer(player);
@@ -138,12 +164,17 @@ public class VillageScreen extends GameScreen implements Screen {
         hero.renderY = 32*CELL_SIZE;
         hero.playerX.set(47);
         hero.playerY.set(32);
+        PosDiff posDiff = new PosDiff(AppClient.getUserData().getUsername(), 47, 32);
+        AppClient.getClient().send(new Gson().toJson(new GameMessage<>("pos-diff", posDiff)));
         setDest();
 
         hero.targetX.set(hero.playerX.get());
         hero.targetY.set(hero.playerY.get());
 
+        this.farmScreen = farmScreen;
+
         updatenpcData();
+        updatePlayers();
     }
 
     @Override
@@ -233,6 +264,7 @@ public class VillageScreen extends GameScreen implements Screen {
 
         for (NPCSprite npcSprite : npcSprites) {
             if (npcSprite.currentAnimation != null) {
+                if(npcSprite.getNPCData() == null ) continue;
                 npcSprite.currentAnimation = npcSprite.walk(npcSprite.getNPCData().isMoving, npcSprite.getNPCData().currentDirection);
 //                if(npcSprite.getNPCData().isOutside == false) continue;
                 float ratio = ( Gdx.graphics.getWidth() / VIRTUAL_WIDTH);
@@ -240,6 +272,16 @@ public class VillageScreen extends GameScreen implements Screen {
                 float ry = npcSprite.getNPCData().renderY / 160 *(ratio * 160);
                 TextureRegion currentFrame = npcSprite.currentAnimation.getKeyFrame(npcSprite.stateTime, true);
                 batch.draw(currentFrame, rx - CELL_SIZE / 2f, ry - CELL_SIZE / 2f, CELL_SIZE * 1.5f, CELL_SIZE * 1.5f);
+            }
+        }
+        for (PlayerSprite playerSprite : playerSprites) {
+            if(playerSprite.currentAnimation != null) {
+                float renderx = playerSprite.getPlayerData().getX() * CELL_SIZE;
+                float rendery = playerSprite.getPlayerData().getY() * CELL_SIZE;
+                System.out.println("> "+renderx+" "+rendery);
+                System.out.println("hero> "+hero.renderX+" "+hero.renderY);
+                TextureRegion currentFrame = playerSprite.currentAnimation.getKeyFrame(playerSprite.stateTime, true);
+                batch.draw(currentFrame, renderx - CELL_SIZE / 2f, rendery - CELL_SIZE / 2f, CELL_SIZE * 1.5f, CELL_SIZE * 1.5f);
             }
         }
 
@@ -262,6 +304,9 @@ public class VillageScreen extends GameScreen implements Screen {
 
         npcSprites.forEach(npcSprite -> {
             npcSprite.stateTime += delta;
+        });
+        playerSprites.forEach(playerSprite -> {
+            playerSprite.stateTime += delta;
         });
     }
 

@@ -160,6 +160,7 @@ public abstract class GameScreen implements Screen {
     public void updateChat(){
         chatTable.clear();
         chatTable = new Table();
+        if(AppClient.getGameData() == null ) return;
         for(PlayerMessage message : AppClient.getGameData().getPlayerMessages()){
             assert AppClient.getUserData() != null;
             if(message.getSender().equals(AppClient.getUserData().getUsername())){
@@ -386,13 +387,13 @@ public abstract class GameScreen implements Screen {
             }
             return false;
         }else if(location instanceof VillageMap villageMap){
-            System.out.println("checking villagemap");
+//            System.out.println("checking villagemap");
             for (CellData cd : villageMap.villageData.getCellsData()) {
                 if (cd.getX() == x && cd.getY() == y) {
                     Cell cell = cd.extractData();
                     if (cell.getObjectMap() instanceof Lake ||( cell.getObjectMap() instanceof Grass grass && !grass.isGround() )
                         ||cell.getObjectMap() instanceof Wall ||cell.getObjectMap() instanceof Obstacle) {
-                        System.out.println(cd.getObjectName()+" "+cell.getX()+" "+cell.getY());
+//                        System.out.println(cd.getObjectName()+" "+cell.getX()+" "+cell.getY());
                         return false;
                     }
                     return true;
@@ -401,7 +402,7 @@ public abstract class GameScreen implements Screen {
             return false;
         }
         if(location instanceof CottageMap cottageMap){
-            System.out.println("checking cottagemap");
+//            System.out.println("checking cottagemap");
             for (Cell cell : cottageMap.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
                     return !(cell.getObjectMap() instanceof Lake) && !(cell.getObjectMap() instanceof Rock)
@@ -411,7 +412,7 @@ public abstract class GameScreen implements Screen {
             return false;
         }
         if(location instanceof GreenhouseMap greenHouseMap){
-            System.out.println("checking greenhousemap");
+//            System.out.println("checking greenhousemap");
             for (Cell cell : greenHouseMap.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
                     return !(cell.getObjectMap() instanceof Lake) && !(cell.getObjectMap() instanceof Rock) && !(cell.getObjectMap() instanceof Wall) && !(cell.getObjectMap() instanceof ForagingTree);
@@ -420,7 +421,7 @@ public abstract class GameScreen implements Screen {
             return false;
         }
         if(location instanceof CoopMap coopMap) {
-            System.out.println("checking coopmap");
+//            System.out.println("checking coopmap");
             for (Cell cell : coopMap.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
                     return !(cell.getObjectMap() instanceof Lake) && !(cell.getObjectMap() instanceof Rock) && !(cell.getObjectMap() instanceof Wall);
@@ -429,14 +430,14 @@ public abstract class GameScreen implements Screen {
             return false;
         }
         if(location instanceof BarnMap barnMap){
-            System.out.println("checking barnmap");
+//            System.out.println("checking barnmap");
             for (Cell cell : barnMap.getCells()) {
                 if (cell.getX() == x && cell.getY() == y) {
-                    System.out.println("reason "+cell.getObjectMap().getName());
-                    System.out.println(" "+!(cell.getObjectMap() instanceof Lake) );
-                    System.out.println(" "+!(cell.getObjectMap() instanceof Rock));
-                    System.out.println(" "+!(cell.getObjectMap() instanceof Wall));
-                    System.out.println(!(cell.getObjectMap() instanceof Lake) && !(cell.getObjectMap() instanceof Rock) && !(cell.getObjectMap() instanceof Wall));
+//                    System.out.println("reason "+cell.getObjectMap().getName());
+//                    System.out.println(" "+!(cell.getObjectMap() instanceof Lake) );
+//                    System.out.println(" "+!(cell.getObjectMap() instanceof Rock));
+//                    System.out.println(" "+!(cell.getObjectMap() instanceof Wall));
+//                    System.out.println(!(cell.getObjectMap() instanceof Lake) && !(cell.getObjectMap() instanceof Rock) && !(cell.getObjectMap() instanceof Wall));
                     return !(cell.getObjectMap() instanceof Lake) && !(cell.getObjectMap() instanceof Rock) && !(cell.getObjectMap() instanceof Wall);
                 }
             }

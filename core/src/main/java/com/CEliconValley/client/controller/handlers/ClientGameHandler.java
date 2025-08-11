@@ -16,6 +16,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.Objects;
+
 public class ClientGameHandler {
     public static void handle(String type, JsonObject body, Gson gson, long timestamp) {
         Gdx.app.postRunnable(() -> {
@@ -31,6 +33,9 @@ public class ClientGameHandler {
                 }
                 updateTime(gs);
                 gs.updateChat();
+                if(gs instanceof VillageScreen vs){
+                    vs.updatePlayers();
+                }
                 }
         });
         switch (type) {
@@ -209,6 +214,29 @@ public class ClientGameHandler {
                             }
                         }, 5);
                     }
+                }else if(gamecommand.command.equals("go-to-village")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen() instanceof FarmScreen screen){
+                        Gdx.app.postRunnable(()->{
+                            PlayerActs.changeScreen(new VillageScreen(Objects.requireNonNull(Finder.getpd()).getPlayer(), screen));
+                        });
+                    }
+                }else if(gamecommand.command.equals("go-to-farm")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen() instanceof VillageScreen screen){
+                        Gdx.app.postRunnable(()->{
+                            ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                                .setScreen(screen.farmScreen);
+                        });
+                    }
+                }else if(gamecommand.command.equals("update-village")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen() instanceof VillageScreen screen){
+                        Gdx.app.postRunnable(()->{
+                           screen.updatePlayers();
+                        });
+                    }
+
                 }
             }
 
