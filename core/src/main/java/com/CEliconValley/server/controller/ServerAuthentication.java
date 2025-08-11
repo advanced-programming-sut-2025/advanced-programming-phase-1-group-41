@@ -140,6 +140,7 @@ public class ServerAuthentication {
                     App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(),
                         new Gson().toJson(new GameMessage<>("game-command",
                             new GameCommand("resume-game", ";)"))));
+                    App.getGame().startScheduler();
                 }else{
                     GameMessage<GameCommand> msg = new GameMessage<>("game-command",
                         new GameCommand("dc-game", ":)"));

@@ -60,7 +60,7 @@ public class GameMenu implements Screen {
 
             }else if(FriendshipView.check(input)){
 
-            }else if(MarketplaceView.check(input)){
+            }else if(MarketplaceView.check(input, playerName)){
 
             }else if(NPCView.check(input)){
 

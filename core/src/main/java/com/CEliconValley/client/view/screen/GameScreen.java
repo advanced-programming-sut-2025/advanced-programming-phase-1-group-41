@@ -4,6 +4,7 @@ import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.model.StrategyScoreboard;
 import com.CEliconValley.client.view.screen.maps.*;
+import com.CEliconValley.client.view.screen.menu.ShippingBinBar;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.NPCData;
 import com.CEliconValley.common.PlayerData;
@@ -12,6 +13,7 @@ import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.PlayerMessage;
+import com.CEliconValley.models.buildings.ShippingBin;
 import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.foragings.ForagingTree;
 import com.CEliconValley.models.foragings.Nature.Grass;
@@ -56,7 +58,7 @@ public abstract class GameScreen implements Screen {
     public boolean friendshipMode = false;
     public Image overlay;
     protected TextField cheatCodeField;
-
+    protected ShippingBinBar shippingBinBar;
     public TextButton yesVoteButton, noVoteButton;
     public Label playerVoteLabel;
     public Label howManyVotedLabel;
@@ -82,6 +84,7 @@ public abstract class GameScreen implements Screen {
     protected Stage friendshipStage;
     private FriendshipStageHandler friendshipStageHandler;
     public CraftableMachine cm = null;
+    public boolean sellmode = false;
 
     public abstract void transfer();
     protected Hero hero;

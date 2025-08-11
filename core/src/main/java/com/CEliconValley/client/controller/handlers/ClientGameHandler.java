@@ -35,6 +35,7 @@ public class ClientGameHandler {
                 gs.updateChat();
                 if(gs instanceof VillageScreen vs){
                     vs.updatePlayers();
+                    vs.villageMap.updateVillageData();
                 }
                 }
         });

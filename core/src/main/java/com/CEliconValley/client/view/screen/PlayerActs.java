@@ -12,11 +12,11 @@ import com.CEliconValley.models.*;
 import com.CEliconValley.models.animals.animalKinds.Cow;
 import com.CEliconValley.models.animals.animalKinds.Goat;
 import com.CEliconValley.models.animals.animalKinds.Sheep;
+import com.CEliconValley.models.buildings.ShippingBin;
 import com.CEliconValley.models.foragings.Fertilizer;
 import com.CEliconValley.models.foragings.Seed;
 import com.CEliconValley.models.items.CraftableMachine;
 import com.CEliconValley.models.items.Item;
-import com.CEliconValley.models.items.craftablemachines.Machine;
 import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.tools.*;
 import com.badlogic.gdx.Gdx;
@@ -50,6 +50,12 @@ public class PlayerActs {
                 ((CottageScreen) screen).isRefrigeratorOpen = !((CottageScreen) screen).isRefrigeratorOpen;
             }
             return new Result(true, "refrigerator opened");
+        }
+
+        if(screen.sellmode){
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+                screen.sellmode = false;
+            }
         }
 
         if (screen.cheatMode) {
@@ -239,7 +245,10 @@ public class PlayerActs {
                 putItemOnGround(mousePos.x, mousePos.y, farmScreen);
             }else if(screen instanceof GreenHouseScreen greenHouseScreen){
                 greenHouseScreen.camera.unproject(mousePos);
-                putSeedInGreenhouse(mousePos.x, mousePos.y, greenHouseScreen);
+                smthOnVillage(mousePos.x, mousePos.y, greenHouseScreen);
+            }else if(screen instanceof VillageScreen villageScreen){
+                villageScreen.camera.unproject(mousePos);
+                smthOnVillage(mousePos.x, mousePos.y, villageScreen);
             }
         }
         if (screen.isMenuOpen) {
@@ -705,7 +714,7 @@ public class PlayerActs {
     }
 
 
-    public static void putSeedInGreenhouse(float mouseX, float mouseY, GreenHouseScreen screen){
+    public static void smthOnVillage(float mouseX, float mouseY, GreenHouseScreen screen){
         Hero hero = screen.getHero();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
@@ -737,6 +746,27 @@ public class PlayerActs {
             }
         }
     }
+    public static void smthOnVillage(float mouseX, float mouseY, VillageScreen screen){
+        Hero hero = screen.getHero();
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                CellData cd = Finder.getcdByvd(hero.playerX.get()+j,
+                    hero.playerY.get()+i);
+                Cell cell = cd.extractData();
+                if(mouseX >= cell.getX()*CELL_SIZE && mouseX <= (cell.getX()+1)*CELL_SIZE &&
+                    mouseY >= cell.getY()*CELL_SIZE && mouseY <= (cell.getY()+1)*CELL_SIZE){
+                    int dir = getDir(i, j);
+                    if(dir == -1){
+                        System.out.println("invalid dir");
+                        return;
+                    }
+                    if(Finder.parseItem(cd.getObjectName()) instanceof ShippingBin shippingBin){
+                        screen.sellmode = true;
+                    }
+                }
+            }
+        }
+    }
 
     public static void putItemOnGround(float mouseX, float mouseY, FarmScreen fs){
         Hero hero = fs.getHero();
@@ -753,6 +783,9 @@ public class PlayerActs {
                         screen.isArtisanMenuOpen = !screen.isArtisanMenuOpen;
                         screen.cm = craftableMachine;
                         return;
+                    }else if(Finder.parseItem(cd.getObjectName()) instanceof ShippingBin shippingBin){
+                        System.out.println("im here for shippingbin s:)");
+                        screen.sellmode = true;
                     }
 
                     System.out.println("im around :)");
