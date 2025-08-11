@@ -55,7 +55,7 @@ public class MenuBar {
     private float startingY;
     private String currentTab;
     private OrthographicCamera camera;
-
+    private boolean camSet = false;
     private final ArrayList<Texture> relationTextures = new ArrayList<>();
     private final ArrayList<NPCData> NPCsData;
     private final ArrayList<Integer> relationsIndex = new ArrayList<>();
@@ -138,6 +138,11 @@ public class MenuBar {
 
         Inventory inventory = Finder.getpd().getInventoryData().getInventory();
         this.camera = camera;
+
+        if(screen instanceof GreenHouseScreen && !camSet){
+            camSet = true;
+//            camera.zoom *= 2;
+        }
 
         float menuWidth = screenWidth * 0.6f;
         float menuHeight = screenHeight * 0.7f;

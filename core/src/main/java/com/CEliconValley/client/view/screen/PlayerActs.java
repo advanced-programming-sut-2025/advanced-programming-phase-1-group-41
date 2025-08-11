@@ -13,6 +13,9 @@ import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.animals.animalKinds.Cow;
 import com.CEliconValley.models.animals.animalKinds.Goat;
 import com.CEliconValley.models.animals.animalKinds.Sheep;
+import com.CEliconValley.models.foragings.Fertilizer;
+import com.CEliconValley.models.foragings.Seed;
+import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.tools.*;
 import com.badlogic.gdx.Gdx;
@@ -188,6 +191,14 @@ public class PlayerActs {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
             screen.isMenuOpen = !screen.isMenuOpen;
+            if(screen instanceof GreenHouseScreen greenHouseScreen){
+                if(greenHouseScreen.isMenuOpen){
+                    greenHouseScreen.camera.zoom *= 2;
+                }else{
+                    greenHouseScreen.camera.zoom /= 2;
+
+                }
+            }
             return new Result(true, "menu");
         }
 
@@ -200,6 +211,9 @@ public class PlayerActs {
             if(screen instanceof FarmScreen farmScreen){
                 farmScreen.camera.unproject(mousePos);
                 putItemOnGround(mousePos.x, mousePos.y, farmScreen);
+            }else if(screen instanceof GreenHouseScreen greenHouseScreen){
+                greenHouseScreen.camera.unproject(mousePos);
+                putSeedInGreenhouse(mousePos.x, mousePos.y, greenHouseScreen);
             }
         }
         if (screen.isMenuOpen) {
@@ -663,6 +677,40 @@ public class PlayerActs {
         return null;
     }
 
+
+    public static void putSeedInGreenhouse(float mouseX, float mouseY, GreenHouseScreen screen){
+        Hero hero = screen.getHero();
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                Cell cell = screen.greenHouse.getCell(hero.playerX.get()+j,
+                    hero.playerY.get()+i);
+                if(mouseX >= cell.getX()*CELL_SIZE && mouseX <= (cell.getX()+1)*CELL_SIZE &&
+                    mouseY >= cell.getY()*CELL_SIZE && mouseY <= (cell.getY()+1)*CELL_SIZE){
+                    int dir = getDir(i, j);
+                    if(dir == -1){
+                        System.out.println("invalid dir");
+                        return;
+                    }
+                    if(hero.selectedItemname == null) return;
+                    Item item = Finder.parseItem(hero.selectedItemname);
+                    if(item == null) return ;
+                    if(item instanceof Seed seed) {
+                        GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                            new GameCommand("plant -s " + seed.getName() + " -d " + dir,
+                                AppClient.getUserData().getUsername()));
+                        AppClient.getClient().send(new Gson().toJson(msg));
+                    }
+                    else if(item instanceof Fertilizer fertilizer){
+                        GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                            new GameCommand("fertilize -f " + fertilizer.getName() + " -d " + dir,
+                                AppClient.getUserData().getUsername()));
+                        AppClient.getClient().send(new Gson().toJson(msg));
+                    }
+                }
+            }
+        }
+    }
+
     public static void putItemOnGround(float mouseX, float mouseY, FarmScreen fs){
         Hero hero = fs.getHero();
         for (int i = -1; i <= 1; i++) {
@@ -681,11 +729,28 @@ public class PlayerActs {
                         System.out.println("invalid dir");
                         return;
                     }
-                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                        new GameCommand("place item -n "+hero.selectedItemname+" -d "+dir,
-                            AppClient.getUserData().getUsername()));
-                    AppClient.getClient().send(new Gson().toJson(msg));
-                    return;
+                    if(hero.selectedItemname == null) return;
+                    Item item = Finder.parseItem(hero.selectedItemname);
+                    if(item == null) return ;
+                    if(item instanceof Seed seed) {
+                        GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                            new GameCommand("plant -s " + seed.getName() + " -d " + dir,
+                                AppClient.getUserData().getUsername()));
+                        AppClient.getClient().send(new Gson().toJson(msg));
+                    }
+                    else if(item instanceof Fertilizer fertilizer){
+                        GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                            new GameCommand("fertilize -f " + fertilizer.getName() + " -d " + dir,
+                                AppClient.getUserData().getUsername()));
+                        AppClient.getClient().send(new Gson().toJson(msg));
+                    }
+                    else{
+                        GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                            new GameCommand("place item -n "+hero.selectedItemname+" -d "+dir,
+                                AppClient.getUserData().getUsername()));
+                        AppClient.getClient().send(new Gson().toJson(msg));
+                        return;
+                    }
                 }
 
             }
