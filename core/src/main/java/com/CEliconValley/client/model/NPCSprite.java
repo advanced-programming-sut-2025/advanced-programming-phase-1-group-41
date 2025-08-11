@@ -4,6 +4,9 @@ import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.NPCData;
 import com.CEliconValley.common.messages.TGPoint;
 import com.CEliconValley.models.locations.Location;
+import com.CEliconValley.models.npc.npcCharacters.Abigail;
+import com.CEliconValley.models.npc.npchomes.AbigailHome;
+import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -30,19 +33,15 @@ public class NPCSprite {
 
 
     public NPCSprite(Location location, NPCData npcData) {
-        this.texture = new Texture("game/Hero/NPC/Sheep.png");
         this.npcName = npcData.getName();
         setCR();
+        this.texture = GameAssetManager.getGameAssetManager().getNPCAssets(npcName);
         currentDirection=3;
         this.npcActs = TextureRegion.split(texture, texture.getWidth()/columns, texture.getHeight()/rows);
         this.location = location;
         this.currentAnimation = walk(false, currentDirection);
     }
 
-    private void setCR(){
-        this.rows = 7;
-        this.columns = 4;
-    }
 
     public Animation<TextureRegion> walk(boolean canWalk, int direction) {
         currentDirection=direction;
@@ -87,22 +86,35 @@ public class NPCSprite {
 
     private ArrayList<TGPoint> walkAnime(boolean canwalk){
         ArrayList<TGPoint> anime = new ArrayList<>();
-        int delta = canwalk ? 0 : 3;
+        int delta = canwalk ? 0 : 0;
         switch (currentDirection){
             case 1 -> {
-                for(int i=0;i<npcActs[2+delta].length;i++){
-                    anime.add(new TGPoint(2+delta,i));
+                if(canwalk){
+                    for(int i=0;i<npcActs[2+delta].length;i++){
+                        anime.add(new TGPoint(2+delta,i));
+                    }
+                }else{
+                    anime.add(new TGPoint(2,0));
                 }
             }
             case 2, 4 -> {
-                for(int i=0;i<npcActs[1+delta].length;i++){
-                    anime.add(new TGPoint(1+delta,i));
+                if(canwalk){
+                    for(int i=0;i<npcActs[1+delta].length;i++){
+                        anime.add(new TGPoint(1+delta,i));
+                    }
+                }else{
+                    anime.add(new TGPoint(1,0));
                 }
             }
             case 3 -> {
-                for(int i=0;i<npcActs[0].length;i++){
-                    anime.add(new TGPoint(0+delta,i));
+                if(canwalk){
+                    for(int i=0;i<npcActs[0].length;i++){
+                        anime.add(new TGPoint(0+delta,i));
+                    }
+                }else{
+                    anime.add(new TGPoint(0,0));
                 }
+
             }
         }
         return anime;
@@ -116,6 +128,24 @@ public class NPCSprite {
             }
         }
         return null;
+    }
+
+    private void setCR(){
+        this.columns = 4;
+        switch (npcName){
+            case "Willy" -> this.rows = 10;
+            case "Mohsen" -> this.rows = 9;
+            case "Morris" -> this.rows = 5;
+            case "Gus" ->this.rows = 13 ;
+            case "Marnie" -> this.rows = 9;
+            case "Clint" -> this.rows = 10;
+            case "Robin" -> this.rows = 9;
+            case "Pierre" -> this.rows = 6;
+            case "Sebastien" -> this.rows = 14;
+            case "leah" -> this.rows = 12;
+            case "Harvey" -> this.rows = 14;
+            case "Abigail" -> this.rows = 14;
+        }
     }
 
 

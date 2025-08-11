@@ -100,6 +100,9 @@ public class ClientGameHandler {
                     if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
                         .getScreen() instanceof GameScreen gs){
                         gs.updateScoreboard();
+                        if(gs instanceof VillageScreen vs){
+                            vs.updatenpcData();
+                        }
                     }
                     if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof FarmScreen fs){
                         if(fs.isGameFinished) return;

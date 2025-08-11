@@ -7,33 +7,35 @@ import com.CEliconValley.models.animals.Fish;
 import com.CEliconValley.models.animals.FishType;
 import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.buildings.marketplaces.*;
-import com.CEliconValley.models.items.*;
-import com.CEliconValley.models.npc.npchomes.*;
 import com.CEliconValley.models.foragings.Crop;
 import com.CEliconValley.models.foragings.CropType;
 import com.CEliconValley.models.foragings.Nature.Mineral;
 import com.CEliconValley.models.foragings.Nature.MineralType;
 import com.CEliconValley.models.foragings.Nature.Rock;
 import com.CEliconValley.models.foragings.Nature.Wood;
+import com.CEliconValley.models.items.*;
 import com.CEliconValley.models.items.Products.Product;
 import com.CEliconValley.models.items.Products.ProductType;
 import com.CEliconValley.models.items.craftableitems.Pickles;
 import com.CEliconValley.models.items.craftableitems.SmokedFish;
+import com.CEliconValley.models.npc.npchomes.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class NPCBuilder {
     ArrayList<NPC> NPCs = new ArrayList<>();
+
     public NPCBuilder() {
         buildNPCs();
 
 
     }
+
     private void buildNPCs() {
-        for(Building building:App.getGame().getVillage().getBuildings()){
-            if(building instanceof FishShop){
-                NPC willy = new Willy("Willy", Occupation.Fisher,(FishShop) building,
+        for (Building building : App.getGame().getVillage().getBuildings()) {
+            if (building instanceof FishShop) {
+                NPC willy = new Willy("Willy", Occupation.Fisher, (FishShop) building,
                     new ArrayList<String>(Arrays.asList(
                         "You found legend fish back in you farm?, i though they are just legend",
                         "Best season for fishing, yeah?",
@@ -52,15 +54,15 @@ public class NPCBuilder {
                         Food.DishOTheSea,
                         Food.BakedFish)),
                     new ArrayList<Slot>(Arrays.asList(
-                        new Slot(new Fish(FishType.Crimsonfish),1),
-                        new Slot(new Fish(FishType.Tilapia),2),
-                        new Slot(new Fish(FishType.Perch),10))));
+                        new Slot(new Fish(FishType.Crimsonfish), 1),
+                        new Slot(new Fish(FishType.Tilapia), 2),
+                        new Slot(new Fish(FishType.Perch), 10))));
                 willy.postLoad(new ArrayList<Quest>(Arrays.asList(
                     new Quest(new Slot(new Fish(FishType.Legend), 1), new Slot(new Fish(FishType.Angler), 10), "find the legend", "Find me a legend fish, i`ll give you 10 angler", "it`s beautiful!"),
                     new Quest(new Slot(new SmokedFish(), 2), new Slot(new Fish(FishType.Glacierfish), 5), "cook the fish", "I love Glacier Fish, more than that,I love food", "Yummy"),
                     new Quest(new Slot(CraftableItem.Beer, 10), new Slot(new Fish(FishType.RainbowTrout), 100), "better than fish", "Can you find it for me?", "oh Gosh , thank you"))));
                 NPCs.add(willy);
-                NPC mohsen =new Mohsen("Mohsen", Occupation.Fisher,(FishShop) building,
+                NPC mohsen = new Mohsen("Mohsen", Occupation.Fisher, (FishShop) building,
                     new ArrayList<String>(Arrays.asList(
                         "Are kheili jaleb bood",
                         "Are kheili jaleb bood",
@@ -79,19 +81,19 @@ public class NPCBuilder {
                         Food.DishOTheSea,
                         Food.BakedFish)),
                     new ArrayList<Slot>(Arrays.asList(
-                        new Slot(new Fish(FishType.Crimsonfish),1),
-                        new Slot(new Fish(FishType.Tilapia),2),
-                        new Slot(new Fish(FishType.Perch),10)))
-                    );
+                        new Slot(new Fish(FishType.Crimsonfish), 1),
+                        new Slot(new Fish(FishType.Tilapia), 2),
+                        new Slot(new Fish(FishType.Perch), 10)))
+                );
                 mohsen.postLoad(
                     new ArrayList<Quest>(Arrays.asList(
                         new Quest(new Slot(new Fish(FishType.Legend), 1), new Slot(new Fish(FishType.Angler), 10), "find the legend", "Find me a legend fish, i`ll give you 10 angler", "it`s beautiful!"),
                         new Quest(new Slot(new SmokedFish(), 2), new Slot(new Fish(FishType.Glacierfish), 5), "cook the fish", "I love Glacier Fish, more than that,I love food", "Yummy"),
                         new Quest(new Slot(CraftableItem.Beer, 10), new Slot(new Fish(FishType.RainbowTrout), 100), "better than fish", "Can you find it for me?", "oh Gosh , thank you"))
-                ));
+                    ));
                 NPCs.add(mohsen);
             }
-            else if(building instanceof Jojamart){
+            else if (building instanceof Jojamart) {
                 NPC morris = new Morris("Morris", Occupation.Farmer, (Jojamart) building,
                     new ArrayList<String>(Arrays.asList(
                         "Crops need love and sunlight.",
@@ -116,13 +118,13 @@ public class NPCBuilder {
                         new Slot(Food.FarmerLunch, 1)
                     )));
                 morris.postLoad(new ArrayList<Quest>(Arrays.asList(
-                        new Quest(new Slot(Food.FruitSalad, 1), new Slot(Food.PumpkinPie, 2), "F for the Fruits", "Make something good from you fruits", "Tastes like strength!"),
-                        new Quest(new Slot(Food.VegetableMedley, 3), new Slot(CraftableItem.Honey, 5), "Garden Exchange", "Veggies for sweetness?", "Sweet deal!"),
-                        new Quest(new Slot(Food.FarmerLunch, 1), new Slot(CraftableItem.GoldBar, 2), "Midday Boost", "Can’t farm without fuel.", "Let’s keep growing.")
-                    )));
+                    new Quest(new Slot(Food.FruitSalad, 1), new Slot(Food.PumpkinPie, 2), "F for the Fruits", "Make something good from you fruits", "Tastes like strength!"),
+                    new Quest(new Slot(Food.VegetableMedley, 3), new Slot(CraftableItem.Honey, 5), "Garden Exchange", "Veggies for sweetness?", "Sweet deal!"),
+                    new Quest(new Slot(Food.FarmerLunch, 1), new Slot(CraftableItem.GoldBar, 2), "Midday Boost", "Can’t farm without fuel.", "Let’s keep growing.")
+                )));
                 NPCs.add(morris);
             }
-            else if(building instanceof Saloon){
+            else if (building instanceof Saloon) {
                 NPC gus = new Gus("Gus", Occupation.Bartender, (Saloon) building,
                     new ArrayList<String>(Arrays.asList(
                         "Nothing like a cold one after a long day.",
@@ -148,14 +150,14 @@ public class NPCBuilder {
                         new Slot(Food.Pizza, 1)
                     )));
                 gus.postLoad(new ArrayList<Quest>(Arrays.asList(
-                        new Quest(new Slot(CraftableItem.Coffee, 1), new Slot(CraftableItem.Mead, 3), "Long Night", "give me some cofee", "that would do it!"),
-                        new Quest(new Slot(CraftableItem.Beer, 10), new Slot(Food.Cookie, 5), "Pub Game Reward", "Beer for snacks? Always a win.", "Tasty!"),
-                        new Quest(new Slot(Food.TripleShotEspresso, 1), new Slot(CraftableItem.PaleAle, 2), "Wake-Up Call", "Need a counter-drink? Got you.", "Now I'm balanced!")
-                    )));
+                    new Quest(new Slot(CraftableItem.Coffee, 1), new Slot(CraftableItem.Mead, 3), "Long Night", "give me some cofee", "that would do it!"),
+                    new Quest(new Slot(CraftableItem.Beer, 10), new Slot(Food.Cookie, 5), "Pub Game Reward", "Beer for snacks? Always a win.", "Tasty!"),
+                    new Quest(new Slot(Food.TripleShotEspresso, 1), new Slot(CraftableItem.PaleAle, 2), "Wake-Up Call", "Need a counter-drink? Got you.", "Now I'm balanced!")
+                )));
                 NPCs.add(gus);
             }
-            else if(building instanceof MarnieRanch){
-                NPC marnie =new Marine("Marnie", Occupation.Rancher, (MarnieRanch) building,
+            else if (building instanceof MarnieRanch) {
+                NPC marnie = new Marine("Marnie", Occupation.Rancher, (MarnieRanch) building,
                     new ArrayList<String>(Arrays.asList(
                         "Animals are like family – treat them right.",
                         "Milk day is the best day!",
@@ -188,7 +190,7 @@ public class NPCBuilder {
                 )));
                 NPCs.add(marnie);
             }
-            else if(building instanceof Blacksmith){
+            else if (building instanceof Blacksmith) {
                 NPC clint = new Clint("Clint", Occupation.BlackSmith, (Blacksmith) building,
                     new ArrayList<String>(Arrays.asList(
                         "Forge work is loud but satisfying.",
@@ -214,16 +216,16 @@ public class NPCBuilder {
                         new Slot(Food.Bread, 3)
                     )));
                 clint.postLoad(new ArrayList<Quest>(Arrays.asList(
-                        new Quest(new Slot(Food.TripleShotEspresso, 1), new Slot(Food.MinerTreat, 3), "Smith’s Brew", "I need high energy to smelt all day.", "Whew! Much better."),
-                        new Quest(new Slot(Food.Spaghetti, 2), new Slot(Food.HashBrowns, 4), "Lunch for Tools", "Trade some grub for extra nails.", "Much appreciated."),
-                        new Quest(new Slot(CraftableItem.Coffee, 5), new Slot(CraftableItem.Cheese, 1), "Coffee for Craft", "Fuel me up and I’ll throw in some extras.", "Now I'm fired up!")
-                    )));
+                    new Quest(new Slot(Food.TripleShotEspresso, 1), new Slot(Food.MinerTreat, 3), "Smith’s Brew", "I need high energy to smelt all day.", "Whew! Much better."),
+                    new Quest(new Slot(Food.Spaghetti, 2), new Slot(Food.HashBrowns, 4), "Lunch for Tools", "Trade some grub for extra nails.", "Much appreciated."),
+                    new Quest(new Slot(CraftableItem.Coffee, 5), new Slot(CraftableItem.Cheese, 1), "Coffee for Craft", "Fuel me up and I’ll throw in some extras.", "Now I'm fired up!")
+                )));
                 NPCs.add(clint);
             }
-            else if(building instanceof CarpenterShop){
-                for(Building building1 : App.getGame().getVillage().getBuildings()){
-                    if(building1 instanceof RobinHome){
-                        NPC robin = new Robin("Robin", Occupation.Carpenter,(RobinHome)building1, (CarpenterShop) building,
+            else if (building instanceof CarpenterShop) {
+                for (Building building1 : App.getGame().getVillage().getBuildings()) {
+                    if (building1 instanceof RobinHome) {
+                        NPC robin = new Robin("Robin", Occupation.Carpenter, (RobinHome) building1, (CarpenterShop) building,
                             new ArrayList<String>(Arrays.asList(
                                 "Wood is the soul of any home.",
                                 "Sawdust in your lungs builds character.",
@@ -249,15 +251,15 @@ public class NPCBuilder {
                             )));
                         robin.postLoad(new ArrayList<Quest>(Arrays.asList(
                             new Quest(new Slot(new Wood(), 80), 1000.0, "Wood is working", "Need some gold? Bring wood!", "Now that hits the spot."),
-                            new Quest(new Slot(CraftableItem.IronBar, 10), new Slot(CraftableMachine.BeeHouse,3), "Bees of iron", "Wanna see a bee House made by iron?", "cool right?"),
-                            new Quest(new Slot(new Wood(), 1000),25000.0, "More Wood is even working better", "Need more gold? Bring more wood", "I need a new store for this much wood")
+                            new Quest(new Slot(CraftableItem.IronBar, 10), new Slot(CraftableMachine.BeeHouse, 3), "Bees of iron", "Wanna see a bee House made by iron?", "cool right?"),
+                            new Quest(new Slot(new Wood(), 1000), 25000.0, "More Wood is even working better", "Need more gold? Bring more wood", "I need a new store for this much wood")
                         )));
                         NPCs.add(robin);
                     }
                 }
 
             }
-            else if(building instanceof GeneralStore){
+            else if (building instanceof GeneralStore) {
                 NPC pierre = new Pierre("Pierre", Occupation.Broker, (GeneralStore) building,
                     new ArrayList<String>(Arrays.asList(
                         "Prices go up, prices go down — supply and demand!",
@@ -289,7 +291,7 @@ public class NPCBuilder {
                 )));
                 NPCs.add(pierre);
             }
-                else if (building instanceof SebastienHome) {
+            else if (building instanceof SebastienHome) {
                 NPC sebastian = new Sebastien("Sebastien", Occupation.Jobless, (SebastienHome) building,
                     new ArrayList<String>(Arrays.asList(
                         "Spring feels so fresh!",
@@ -317,7 +319,7 @@ public class NPCBuilder {
                 sebastian.postLoad(new ArrayList<Quest>(Arrays.asList(
                         new Quest(
                             new Slot(CraftableItem.IronBar, 50),
-                            new Slot(new Mineral(MineralType.Diamond),2),
+                            new Slot(new Mineral(MineralType.Diamond), 2),
                             "switch bars",
                             "I need some iron to build a new house",
                             "50 is enough"
@@ -339,7 +341,8 @@ public class NPCBuilder {
                     ))
                 );
                 NPCs.add(sebastian);
-            } else if (building instanceof leahHome) {
+            }
+            else if (building instanceof leahHome) {
                 NPC leah = new leah("leah", Occupation.Jobless, (leahHome) building,
                     new ArrayList<String>(Arrays.asList(
                         "Springtime is when everything wakes up.",
@@ -362,7 +365,7 @@ public class NPCBuilder {
                     new ArrayList<Slot>(Arrays.asList(
                         new Slot(Food.FruitSalad, 1),
                         new Slot(Food.Salad, 3),
-                        new Slot(new Crop(CropType.AncientFruit),3)
+                        new Slot(new Crop(CropType.AncientFruit), 3)
                     )));
                 leah.postLoad(new ArrayList<Quest>(Arrays.asList(
                     new Quest(
@@ -373,7 +376,7 @@ public class NPCBuilder {
                         "Thanks a lot!"
                     ),
                     new Quest(
-                        new Slot(new Fish(FishType.Salmon),1),
+                        new Slot(new Fish(FishType.Salmon), 1),
                         CookingRecipe.SalmonDinner,
                         "Salmon dinner",
                         "i wanna show you how to cook salmon",
@@ -381,14 +384,15 @@ public class NPCBuilder {
                     ),
                     new Quest(
                         new Slot(new Wood(), 200),
-                        new Slot(CraftableMachine.DeluxeScarecrow,3),
+                        new Slot(CraftableMachine.DeluxeScarecrow, 3),
                         "For Harvey and crows",
                         "You bring more wood for my door ,I make some scarecrow for your farm",
                         "Yummy trade!"
                     )
                 )));
                 NPCs.add(leah);
-            }else if (building instanceof HarveyHome) {
+            }
+            else if (building instanceof HarveyHome) {
                 NPC harvey = new Harvey("Harvey", Occupation.Jobless, (HarveyHome) building,
                     new ArrayList<String>(Arrays.asList(
                         "get out of here",
@@ -416,21 +420,21 @@ public class NPCBuilder {
                     )));
                 harvey.postLoad(new ArrayList<Quest>(Arrays.asList(
                     new Quest(
-                        new Slot(new Crop(CropType.Blueberry),12),
+                        new Slot(new Crop(CropType.Blueberry), 12),
                         750.0,
                         "small paradise",
                         "my paradise looks so empty, do sth",
                         "ok, no go away"
                     ),
                     new Quest(
-                        new Slot(new Fish(FishType.Salmon),1),
+                        new Slot(new Fish(FishType.Salmon), 1),
                         200,
                         "Salmon for dinner",
                         "give me a salmon",
                         "ok, from now on , you are not one of those dumbAsses"
                     ),
                     new Quest(
-                        new Slot(CraftableItem.Beer,1),
+                        new Slot(CraftableItem.Beer, 1),
                         new Slot(Food.Salad, 5),
                         "the one-Player Party",
                         "I`m having a party with mySelf, bring a bear",
@@ -438,7 +442,8 @@ public class NPCBuilder {
                     )
                 )));
                 NPCs.add(harvey);
-            }  else if (building instanceof AbigailHome) { // Assuming leahHome exists
+            }
+            else if (building instanceof AbigailHome) { // Assuming leahHome exists
                 NPC abigail = new Abigail("Abigail", Occupation.Jobless, (AbigailHome) building,
                     new ArrayList<String>(Arrays.asList(
                         "Spring feels so fresh!",
@@ -461,7 +466,7 @@ public class NPCBuilder {
                         CraftableItem.Coffee
                     )),
                     new ArrayList<Slot>(Arrays.asList(
-                        new Slot(new Mineral(MineralType.Ruby),3),
+                        new Slot(new Mineral(MineralType.Ruby), 3),
                         new Slot(Food.MakiRoll, 4),
                         new Slot(Food.Tortilla, 10)
                     )));
@@ -474,7 +479,7 @@ public class NPCBuilder {
                         "hi, my new friend"
                     ),
                     new Quest(
-                        new Slot(Food.PumpkinPie,1),
+                        new Slot(Food.PumpkinPie, 1),
                         500.0,
                         "Friends in need",
                         "can you bring me a pumpkin pie?",
@@ -482,7 +487,7 @@ public class NPCBuilder {
                     ),
                     new Quest(
                         new Slot(new Crop(CropType.Wheat), 50),
-                        new Slot(CraftableMachine.IridiumSprinkler,1),
+                        new Slot(CraftableMachine.IridiumSprinkler, 1),
                         "for bread",
                         "give me 50 wheat , you wont regret it",
                         "oh gosh, you dont have a iridium Sprinkler?"

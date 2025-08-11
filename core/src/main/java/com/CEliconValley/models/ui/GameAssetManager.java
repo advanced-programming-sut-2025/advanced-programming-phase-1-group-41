@@ -32,6 +32,7 @@ public class GameAssetManager {
     public Texture getScreenTexture(String name){return new Texture(Gdx.files.internal("game/Buildings/Screen/" + name));}
     public Texture getNPCTexture(String name, String item){return new Texture(Gdx.files.internal("game/Hero/NPC/" + name + "/" + item));}
     public Texture getNPCAssets(String name){
+        if(name.equals("Mohsen")) name = "Marnie";
         Season season=AppClient.getGameData().getTime().getSeason();
         int seasonID=0;
         switch (season){

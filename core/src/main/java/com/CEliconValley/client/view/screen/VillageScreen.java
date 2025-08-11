@@ -272,7 +272,9 @@ public class VillageScreen extends GameScreen implements Screen {
                 float rx = npcSprite.getNPCData().renderX / 160 *(ratio * 160);
                 float ry = npcSprite.getNPCData().renderY / 160 *(ratio * 160);
                 TextureRegion currentFrame = npcSprite.currentAnimation.getKeyFrame(npcSprite.stateTime, true);
-                batch.draw(currentFrame, rx - CELL_SIZE / 2f, ry - CELL_SIZE / 2f, CELL_SIZE * 1.5f, CELL_SIZE * 1.5f);
+                float height = CELL_SIZE * 1.2f;
+                float width = height / currentFrame.getRegionHeight(); width *= currentFrame.getRegionWidth();
+                batch.draw(currentFrame, rx - CELL_SIZE / 2f, ry - CELL_SIZE / 2f, width, height);
             }
         }
         playerSprites.forEach(player -> {
