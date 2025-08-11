@@ -328,7 +328,7 @@ public class VillageScreen extends GameScreen implements Screen {
 
         if (isMenuOpen) menuBar.render(batch, camera);
         else if(sellmode){
-            shippingBinBar.render(batch, camera);
+            shippingBinBar.render(batch, camera, true);
         }
         else inventoryRenderer.render(batch, camera);
 

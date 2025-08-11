@@ -786,6 +786,11 @@ public class PlayerActs {
                     }else if(Finder.parseItem(cd.getObjectName()) instanceof ShippingBin shippingBin){
                         System.out.println("im here for shippingbin s:)");
                         screen.sellmode = true;
+                    }else if(Finder.parseItem(cd.getObjectName()) instanceof BasicTool bt){
+                        if(bt == BasicTool.TrashCan){
+                            System.out.println("im here for basic tool s:)");
+                            screen.sellmode = true;
+                        }
                     }
 
                     System.out.println("im around :)");

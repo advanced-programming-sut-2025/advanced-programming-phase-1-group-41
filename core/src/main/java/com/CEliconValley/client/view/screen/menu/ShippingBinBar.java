@@ -29,7 +29,6 @@ public class ShippingBinBar {
     private final int tileWidth;
     private final int tileHeight;
 
-    public boolean shipping;
 
 
     private int startingRow = 0;
@@ -47,20 +46,19 @@ public class ShippingBinBar {
 
     private GameScreen screen;
 
-    public ShippingBinBar(GameScreen screen, boolean shipping) {
+    public ShippingBinBar(GameScreen screen) {
         this.screen = screen;
         menuTexture = GameAssetManager.getGameAssetManager().getScreenTexture("ShippingBin.png");
 
         tileWidth = menuTexture.getWidth() / 3;
         tileHeight = menuTexture.getHeight() / 3;
-        this.shipping = shipping;
     }
 
     public void setPlayer(Player player) {
         this.player = player;
     }
 
-    public void render(Batch batch, OrthographicCamera camera) {
+    public void render(Batch batch, OrthographicCamera camera, boolean shipping) {
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
 
@@ -95,10 +93,11 @@ public class ShippingBinBar {
 //                }
 //            }
 //        }
-        renderInventoryBar(batch, camera, Objects.requireNonNull(Finder.getpd()).getInventoryData().getInventory());
+        renderInventoryBar(batch, camera, Objects.requireNonNull(Finder.getpd()).getInventoryData().getInventory(),
+                shipping);
     }
 
-    private void renderInventoryBar(Batch batch, OrthographicCamera camera, Inventory inventory) {
+    private void renderInventoryBar(Batch batch, OrthographicCamera camera, Inventory inventory, boolean shipping) {
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
 

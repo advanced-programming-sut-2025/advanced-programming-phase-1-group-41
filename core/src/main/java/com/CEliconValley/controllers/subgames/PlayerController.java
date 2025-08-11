@@ -136,7 +136,9 @@ public class PlayerController {
         return new Result(false, "inventory is full");
     }
 
-    public Result inventoryTrash(Matcher matcher) {
+    public Result inventoryTrash(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
         // trim MUSTT be there, cuz of the regex ,don't touch it
         String itemName = matcher.group(1).trim();
         String quantity = matcher.group("number");
@@ -150,25 +152,26 @@ public class PlayerController {
             itemQuantity = Integer.parseInt(quantity);
         }
 
-        double cof = App.getGame().getCurrentPlayer().getInventory().getCofOfTrashCan();
+        double cof = player.getInventory().getCofOfTrashCan();
         System.out.println("cof is : "+cof);
         if(quantity != null) {
-            if(App.getGame().getCurrentPlayer().getInventory().removeFromInventory(item,itemQuantity)){
+            if(player.getInventory().removeFromInventory(item,itemQuantity)){
                 double value = (item.getPrice())*itemQuantity*cof;
-                App.getGame().getCurrentPlayer().incMoney(value);
+                value ++;
+                player.incMoney(value);
                 System.out.println("you received "+value+" money");
                 return new Result(true, itemName+" removed from the inventory");
             }else{
                 return new Result(false, itemName+" doesn't exist");
             }
         }else{
-            Slot slot = App.getGame().getCurrentPlayer().getInventory().getSlotByItem(item);
+            Slot slot = player.getInventory().getSlotByItem(item);
             double value = 0;
             if(slot!=null){
                 value = (item.getPrice())*slot.getQuantity()*cof;
             }
-            if(App.getGame().getCurrentPlayer().getInventory().removeFromInventory(item)){
-                App.getGame().getCurrentPlayer().incMoney(value);
+            if(player.getInventory().removeFromInventory(item)){
+                player.incMoney(value);
                 System.out.println("you received "+value+" money");
                 return new Result(true,"removed the item successfully");
             }else{
