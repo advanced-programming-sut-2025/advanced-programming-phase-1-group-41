@@ -96,11 +96,15 @@ public class PlayerActs {
                 screen.getChatInput().setText("");
             } else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                 screen.chatMode = false;
-                screen.isArtisanMenuOpen = false;
                 screen.getChatInput().setVisible(false);
                 Gdx.input.setInputProcessor(screen.stage);
             }
             return new Result(false, "chat");
+        }
+        if(screen.isArtisanMenuOpen && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+            screen.isArtisanMenuOpen = false;
+            screen.getChatInput().setVisible(false);
+            Gdx.input.setInputProcessor(screen.stage);
         }
         if(screen.scoreboardMode){
             screen.scoreboardStage.act(delta);

@@ -86,7 +86,7 @@ public abstract class GameScreen implements Screen {
     public abstract void transfer();
     protected Hero hero;
     protected MenuBar menuBar = new MenuBar(this);
-    protected ArtisanMenu artisanMenu=new ArtisanMenu(this);
+    protected ArtisanMenu artisanMenu = new ArtisanMenu(this);
     protected BarnOrCoopMenuBar barnOrCoopMenuBar = new BarnOrCoopMenuBar(this);
     protected Texture hudTexture = new Texture(Gdx.files.internal("game/Clock/Clock.png"));
     protected Image hudImage, energyBarImage, energyGreenImage, energyRedImage, energyYellowImage;

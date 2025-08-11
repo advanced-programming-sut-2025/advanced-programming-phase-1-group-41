@@ -23,6 +23,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
+
 public class MenuBar {
     private final Texture menuTexture;
     private final Texture miniMapTexture;
@@ -306,12 +308,14 @@ public class MenuBar {
                 float width = screenWidth * 0.1f;
                 float height = screenWidth * 0.1f;
 
-                batch.draw(texture1, drawX, drawY, width, height);
+                batch.draw(texture1, drawX, drawY - 30, width, height);
                 batch.setColor(1, 1, 1, 1);
 
+                String itemText = "Selected Tool: " + Finder.getpd().getCurrentToolName();
+
                 font.getData().setScale(2f);
-                font.draw(batch, Finder.getpd().getCurrentToolName(),
-                    drawX + width / 2 - Finder.getpd().getCurrentToolName().length() / 2f * 7.5f, drawY + height + 20);
+                font.draw(batch, itemText,
+                    drawX + width / 2 - itemText.length() * 7.5f, drawY + height + 20);
                 font.getData().setScale(1f);
             }
         }
@@ -325,15 +329,17 @@ public class MenuBar {
 
         float drawX = startingX + screenWidth / 2.5f;
         float drawY = startingY + screenHeight * 0.075f;
-        float width = screenWidth * 0.1f;
+        float width = screenWidth * 0.1f * texture2.getRegionWidth() / texture2.getRegionHeight();
         float height = screenWidth * 0.1f;
 
-        batch.draw(texture2, drawX, drawY, width, height);
+        batch.draw(texture2, drawX, drawY - 30, width, height);
         batch.setColor(1, 1, 1, 1);
 
+        String itemText = "Selected Item: " + screen.hero.selectedItemName;
+
         font.getData().setScale(2f);
-        font.draw(batch, screen.hero.selectedItemName,
-            drawX + width / 2 - screen.hero.selectedItemName.length() / 2f * 7.5f, drawY + height + 20);
+        font.draw(batch, itemText,
+            drawX + width / 2 - itemText.length() * 7.5f, drawY + height + 20);
         font.getData().setScale(1f);
 
     }
