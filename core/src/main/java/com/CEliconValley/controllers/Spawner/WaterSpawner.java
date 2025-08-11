@@ -89,9 +89,11 @@ public class WaterSpawner {
         float x = cellData.getX() * CELL_SIZE;
         float y = cellData.getY() * CELL_SIZE;
         Cell cell = cellData.extractData();
-        Cell checker = Finder.getcdByFarmData(cellData.getX(), cellData.getY() - 1, farmData).extractData();
-        if(checker.getObjectMap() instanceof Well){
-            return false;
+        if(Finder.getcdByFarmData(cellData.getX(), cellData.getY() - 1, farmData) != null) {
+            Cell checker = Finder.getcdByFarmData(cellData.getX(), cellData.getY() - 1, farmData).extractData();
+            if(checker.getObjectMap() instanceof Well){
+                return false;
+            }
         }
         if (cell.getObjectMap() instanceof Lake lake) {
             TextureRegion waterFrame = waterAnimation.getKeyFrame(passiveStateTime, true);

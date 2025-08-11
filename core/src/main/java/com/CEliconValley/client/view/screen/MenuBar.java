@@ -309,8 +309,10 @@ public class MenuBar {
                 batch.draw(texture1, drawX, drawY, width, height);
                 batch.setColor(1, 1, 1, 1);
 
+                font.getData().setScale(2f);
                 font.draw(batch, Finder.getpd().getCurrentToolName(),
                     drawX + width / 2 - Finder.getpd().getCurrentToolName().length() / 2f * 7.5f, drawY + height + 20);
+                font.getData().setScale(1f);
             }
         }
 
@@ -329,8 +331,10 @@ public class MenuBar {
         batch.draw(texture2, drawX, drawY, width, height);
         batch.setColor(1, 1, 1, 1);
 
+        font.getData().setScale(2f);
         font.draw(batch, screen.hero.selectedItemName,
             drawX + width / 2 - screen.hero.selectedItemName.length() / 2f * 7.5f, drawY + height + 20);
+        font.getData().setScale(1f);
 
     }
 
