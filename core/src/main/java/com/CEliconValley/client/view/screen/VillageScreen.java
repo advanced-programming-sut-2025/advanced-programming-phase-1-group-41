@@ -26,6 +26,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.google.gson.Gson;
 
 import java.util.*;
@@ -274,14 +275,40 @@ public class VillageScreen extends GameScreen implements Screen {
                 batch.draw(currentFrame, rx - CELL_SIZE / 2f, ry - CELL_SIZE / 2f, CELL_SIZE * 1.5f, CELL_SIZE * 1.5f);
             }
         }
+        playerSprites.forEach(player -> {
+            player.currentAnimation = player.walk(player.getPlayerData().isMoving, player.getPlayerData().currentDirection);
+        });
         for (PlayerSprite playerSprite : playerSprites) {
             if(playerSprite.currentAnimation != null) {
-                float renderx = playerSprite.getPlayerData().getX() * CELL_SIZE;
-                float rendery = playerSprite.getPlayerData().getY() * CELL_SIZE;
-                System.out.println("> "+renderx+" "+rendery);
-                System.out.println("hero> "+hero.renderX+" "+hero.renderY);
+                float renderx = playerSprite.getPlayerData().renderx;
+                float rendery = playerSprite.getPlayerData().rendery;
                 TextureRegion currentFrame = playerSprite.currentAnimation.getKeyFrame(playerSprite.stateTime, true);
-                batch.draw(currentFrame, renderx - CELL_SIZE / 2f, rendery - CELL_SIZE / 2f, CELL_SIZE * 1.5f, CELL_SIZE * 1.5f);
+                batch.draw(currentFrame, renderx - CELL_SIZE / 2f, rendery - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
+
+                float fontScale = CELL_SIZE / 40f;
+                playerSprite.font.getData().setScale(fontScale);
+                playerSprite.layout.setText(playerSprite.font, playerSprite.name);
+
+                float drawY = rendery - CELL_SIZE / 2f;
+                float textWidth = playerSprite.layout.width;
+                float textHeight = playerSprite.layout.height;
+
+                float textX = renderx + CELL_SIZE / 2f - textWidth / 2f;
+                float textY = drawY + CELL_SIZE * 2f - 5;
+
+                batch.end();
+                playerSprite.shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+                Gdx.gl.glEnable(GL20.GL_BLEND);
+                playerSprite.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                playerSprite.shapeRenderer.setColor(0, 0, 0, 0.3f);
+                playerSprite.shapeRenderer.rect(textX - 4, textY - textHeight - 2, textWidth + 8, textHeight + 4);
+                playerSprite.shapeRenderer.end();
+                Gdx.gl.glDisable(GL20.GL_BLEND);
+                batch.begin();
+
+                playerSprite.font.draw(batch, playerSprite.layout, textX, textY);
+
+
             }
         }
 

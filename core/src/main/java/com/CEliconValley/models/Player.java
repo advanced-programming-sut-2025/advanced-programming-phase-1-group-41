@@ -1,5 +1,6 @@
 package com.CEliconValley.models;
 
+import com.CEliconValley.common.messages.Position;
 import com.CEliconValley.models.items.*;
 import com.CEliconValley.models.items.craftablemachines.Machine;
 import com.CEliconValley.models.locations.FarmType;
@@ -42,6 +43,12 @@ public class Player {
     private FarmType farmType;
     private int x;
     private int y;
+    public int targetx;
+    public int targety;
+    public float renderx;
+    public float rendery;
+    public int currentDirection = 3;
+    public boolean isMoving = false;
     private double energy;
     private int maxEnergy = 200;
     private boolean energyUnlimited;
@@ -106,7 +113,8 @@ public class Player {
                   int maxEnergy, Skill miningSkill, double money,
                   ArrayList<Machine> onGoingMachines,
                   boolean playerIsInVillage,
-                  double savings, User user, int x, int y, FarmType farmType, int questsFinsihed) {
+                  double savings, User user, int x, int y, FarmType farmType, int questsFinsihed,
+                  int targetx, int targety, float renderx, float rendery, int currentDirection, boolean isMoving) {
         this.cookingRecipes = cookingRecipes;
         this.craftingRecipes = craftingRecipes;
         this.currentBuff = currentBuff;
@@ -131,6 +139,12 @@ public class Player {
         this.user = user;
         this.x = x;
         this.y = y;
+        this.targetx = targetx;
+        this.targety = targety;
+        this.renderx = renderx;
+        this.rendery = rendery;
+        this.currentDirection = currentDirection;
+        this.isMoving = isMoving;
         this.questsFinsihed = questsFinsihed;
     }
 
@@ -156,6 +170,10 @@ public class Player {
         savings = 0;
         x = 35;
         y = 55;
+        this.targetx = x;
+        this.targety = y;
+        this.renderx = renderx * 160;
+        this.rendery = rendery * 160;
         energy = 200;
         this.farmId = farmId;
         this.farmType = farmType;
@@ -532,5 +550,16 @@ public class Player {
 
     public void incrementQuestsFinished(){
         questsFinsihed++;
+    }
+
+    public void updatePos(Position pos){
+        this.x = pos.x;
+        this.y = pos.y;
+        this.targetx = pos.targetx;
+        this.targety = pos.targety;
+        this.renderx = pos.renderx;
+        this.rendery = pos.rendery;
+        this.currentDirection = pos.currentdirection;
+        this.isMoving = pos.ismoving;
     }
 }
