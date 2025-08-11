@@ -206,10 +206,22 @@ public class PlayerActs {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {
-            Objects.requireNonNull(Finder.getpd()).getPlayer().setPlayerIsInVillage(true);
-            changeScreen(new VillageScreen(Objects.requireNonNull(Finder.getpd()).getPlayer()));
-
-        }else if(Gdx.input.isButtonJustPressed(0)){
+            if(screen instanceof FarmScreen farmScreen){
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                    new GameCommand("go-to-village",AppClient.getUserData().getUsername())
+                    );
+                AppClient.getClient().send(new Gson().toJson(msg));
+            }
+        }
+        else if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
+            if(screen instanceof VillageScreen villageScreen){
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                    new GameCommand("go-to-farm",AppClient.getUserData().getUsername())
+                );
+                AppClient.getClient().send(new Gson().toJson(msg));
+            }
+        }
+        else if(Gdx.input.isButtonJustPressed(0)){
             Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             if(screen instanceof FarmScreen farmScreen){
                 farmScreen.camera.unproject(mousePos);

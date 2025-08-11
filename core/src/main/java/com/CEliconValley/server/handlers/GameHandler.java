@@ -1,5 +1,6 @@
 package com.CEliconValley.server.handlers;
 
+import com.CEliconValley.client.view.screen.GameScreen;
 import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.*;
@@ -258,6 +259,25 @@ public class GameHandler {
             }
             case "at home" -> {
                 App.getGame().incHowManyInHome();
+            }
+            case "go-to-village" -> {
+                Finder.getPlayerByUsername(command.playerName).setPlayerIsInVillage(true);
+                GameMessage<GameCommand> response = new GameMessage<>("game-command",
+                    new GameCommand("go-to-village", ":)"));
+                App.getServer().sendToPlayername(command.playerName, new Gson().toJson(response));
+
+                GameMessage<GameCommand> updateVillage = new GameMessage<>("game-command",
+                    new GameCommand("update-village", ":)"));
+                App.getServer().sendToPlayername(command.playerName, new Gson().toJson(updateVillage));
+            }
+            case "go-to-farm" -> {
+                Finder.getPlayerByUsername(command.playerName).setPlayerIsInVillage(false);
+                GameMessage<GameCommand> response = new GameMessage<>("game-command",
+                    new GameCommand("go-to-farm", ":)"));
+                App.getServer().sendToPlayername(command.playerName, new Gson().toJson(response));
+                GameMessage<GameCommand> updateVillage = new GameMessage<>("game-command",
+                    new GameCommand("update-village", ":)"));
+                App.getServer().sendToPlayername(command.playerName, new Gson().toJson(updateVillage));
             }
         }
 
