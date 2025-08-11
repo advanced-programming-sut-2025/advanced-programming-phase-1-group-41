@@ -29,6 +29,7 @@ public class ShippingBinBar {
     private final int tileWidth;
     private final int tileHeight;
 
+    public boolean shipping;
 
 
     private int startingRow = 0;
@@ -46,12 +47,13 @@ public class ShippingBinBar {
 
     private GameScreen screen;
 
-    public ShippingBinBar(GameScreen screen) {
+    public ShippingBinBar(GameScreen screen, boolean shipping) {
         this.screen = screen;
         menuTexture = GameAssetManager.getGameAssetManager().getScreenTexture("ShippingBin.png");
 
         tileWidth = menuTexture.getWidth() / 3;
         tileHeight = menuTexture.getHeight() / 3;
+        this.shipping = shipping;
     }
 
     public void setPlayer(Player player) {
@@ -160,11 +162,19 @@ public class ShippingBinBar {
                         if (mousePos.x >= x && mousePos.x <= x + slotSize &&
                             mousePos.y >= y && mousePos.y <= y + slotSize) {
                             if (Gdx.input.isButtonJustPressed(0)) {
-                                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                                    new GameCommand("sell " + item.getName()+" -n "+1,
-                                        AppClient.getUserData().getUsername())
-                                );
-                                AppClient.getClient().send(new Gson().toJson(msg));
+                                if(shipping){
+                                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                        new GameCommand("sell " + item.getName()+" -n "+1,
+                                            AppClient.getUserData().getUsername())
+                                    );
+                                    AppClient.getClient().send(new Gson().toJson(msg));
+                                }else {
+                                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                            new GameCommand("inventory trash -i " + item.getName()+" -n "+1,
+                                                    AppClient.getUserData().getUsername())
+                                    );
+                                    AppClient.getClient().send(new Gson().toJson(msg));
+                                }
                             }
 
 
