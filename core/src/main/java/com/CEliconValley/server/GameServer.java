@@ -71,15 +71,17 @@ public class GameServer extends WebSocketServer {
     @Override
     public void onMessage(WebSocket conn, String message) {
         Gson gson = new Gson();
+        String type = null;
         try{
             GameMessage<Object> genericMsg = gson.fromJson(message, new TypeToken<GameMessage<Object>>() {}.getType());
+            type = genericMsg.type;
             ServerMessageRouter.route(genericMsg.type, message, conn, gson);
-            System.out.println(onlineConnections);
+//            System.out.println(onlineConnections);
         } catch (Exception e) {
             System.out.println("ESmessage: "+message);
             e.printStackTrace();
         }
-        System.out.println("Smessage: "+message);
+        if(!type.equals("position")) System.out.println("Smessage: "+message);
     }
 
     @Override

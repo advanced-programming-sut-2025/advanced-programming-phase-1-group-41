@@ -28,6 +28,12 @@ public class PlayerData {
     int inFarmId;
     int x;
     int y;
+    public int targetx;
+    public int targety;
+    public float renderx;
+    public float rendery;
+    public int currentDirection = 3;
+    public boolean isMoving = false;
     double energy;
     int maxEnergy;
     boolean energyUnlimited;
@@ -113,6 +119,13 @@ public class PlayerData {
             this.totalTradesListData.add(new TradeData(trade));
         }
         this.buffData = player.getBuff() == null ? null : new BuffData(player.getBuff());
+
+        this.targetx = player.targetx;
+        this.targety = player.targety;
+        this.renderx = player.renderx;
+        this.rendery = player.rendery;
+        this.currentDirection = player.currentDirection;
+        this.isMoving = player.isMoving;
     }
 
 
@@ -147,7 +160,8 @@ public class PlayerData {
         return new Player(cookingRecipes, craftingRecipes, buff, tool, depressionDaysLeft,
                 energy, energyUnlimited, farmId, getFarmingSkill(), getFishingSkill(),
                 getForagingSkill(), inFarmId, inventory, maxEnergy, getMiningSkill(),
-                money, getMachines(), isPlayerInVillage, savings, user, x, y, farmType, questsFinsihed);
+                money, getMachines(), isPlayerInVillage, savings, user, x, y, farmType, questsFinsihed,
+            targetx, targety, renderx, rendery, currentDirection, isMoving);
     }
 
     public Skill getFarmingSkill() {

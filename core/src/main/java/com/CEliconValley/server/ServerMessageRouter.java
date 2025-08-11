@@ -19,7 +19,8 @@ public class ServerMessageRouter {
                  "game-command", "pos-diff", "new-vote",
                  "update-vote", "terminate-vote",
                  "new-ter" , "update-ter" , "terminate-ter",
-                 "save-game", "load-game", "player-message" -> {
+                 "save-game", "load-game", "player-message",
+                 "position" -> {
                 GameHandler.handle(type, rawJson, conn, gson);
             }
             case "make-lobby", "join-lobby", "leave-lobby" -> {
