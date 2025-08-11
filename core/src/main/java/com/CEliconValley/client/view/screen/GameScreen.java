@@ -58,6 +58,7 @@ public abstract class GameScreen implements Screen {
     public Label howManyVotedLabel;
 
     public Label tagMessageLabel;
+    public Label messageLabel;
 
     private TextField chatInput;
     private ScrollPane chatScrollPane;
@@ -74,6 +75,7 @@ public abstract class GameScreen implements Screen {
     protected Stage stage;
     protected Stage chatStage;
     protected Stage scoreboardStage;
+    protected Stage friendshipStage;
 
     public abstract void transfer();
     protected Hero hero;
@@ -327,6 +329,7 @@ public abstract class GameScreen implements Screen {
         timeScreen.goldLabel.setFontScale(1.18f);
         timeScreen.dateLabel.setFontScale(0.8f);
 
+
         Texture labelTexture = GameAssetManager.getGameAssetManager().getBackgroundTexture("Info_Background1.png");
 //        TextureRegionDrawable background = new TextureRegionDrawable(new TextureRegion(labelTexture));
 
@@ -346,7 +349,14 @@ public abstract class GameScreen implements Screen {
         tagMessageLabel.setColor(CustomColors.SWAMP_COLOR);
         tagMessageLabel.setVisible(false);
 
+        messageLabel = new Label("", style);
+        messageLabel.pack();
+        messageLabel.setPosition(stage.getWidth() / 2 - tagMessageLabel.getWidth() / 2, stage.getHeight() / 1.2f);
+        messageLabel.setColor(CustomColors.GAMEGREENCOLOR);
+        messageLabel.setVisible(false);
+
         stage.addActor(tagMessageLabel);
+        stage.addActor(messageLabel);
         stage.addActor(timeScreen.dateLabel);
         stage.addActor(timeScreen.timeLabel);
         stage.addActor(timeScreen.goldLabel);
@@ -497,6 +507,27 @@ public abstract class GameScreen implements Screen {
         overlay.toBack();
     }
 
+    public void handleFriendship(Stage stage) {
+        cheatMode = true;
+        cheatCodeField.setVisible(true);
+        stage.setKeyboardFocus(cheatCodeField);
+        cheatCodeField.setText("");
+
+        overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
+            .getGameAssetManager()
+            .getBackgroundTexture("Field3.png"))));
+
+//        overlay.setColor(0, 0, 0, 0.5f);
+        overlay.setSize(stage.getWidth(), stage.getHeight());
+        overlay.setPosition(0, 0);
+
+        overlay.getColor().a = 0;
+        overlay.addAction(Actions.fadeIn(0.5f));
+
+
+        stage.addActor(overlay);
+        overlay.toBack();
+    }
 
     public void handleVote(Stage stage, String name) {
         Gdx.app.postRunnable(() -> {
@@ -673,6 +704,18 @@ public abstract class GameScreen implements Screen {
     public void removeTagMessage(){
         tagMessageLabel.setText("");
         tagMessageLabel.setVisible(false);
+    }
+
+    public void updateMessage(String message, Color color) {
+        messageLabel.setColor(color);
+        messageLabel.setText(message);
+        messageLabel.setVisible(true);
+        messageLabel.setPosition(stage.getWidth() / 2 - tagMessageLabel.getWidth() / 2, stage.getHeight() / 1.2f);
+        messageLabel.pack();
+    }
+    public void removeMessage(){
+        messageLabel.setText("");
+        messageLabel.setVisible(false);
     }
 }
 
