@@ -8,6 +8,7 @@ import com.CEliconValley.common.messages.VoteMessage;
 import com.CEliconValley.controllers.ItemManager;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Finder;
+import com.CEliconValley.models.FriendshipLevel;
 import com.CEliconValley.models.Player;
 import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.items.*;
@@ -236,7 +237,7 @@ public class MenuBar {
                             font.getData().setScale(2.5f);
                             String amountText = String.valueOf(slot.getQuantity());
                             GlyphLayout layout = new GlyphLayout(font, amountText);
-                            float textX = drawX + slotSize * 3 / 4f;
+                            float textX = drawX + slotSize / 2f;
                             float textY = drawY + layout.height / 3f;
                             font.draw(batch, layout, textX, textY);
                             font.getData().setScale(1f);
@@ -552,9 +553,12 @@ public class MenuBar {
                 }
             }
 
-            characterX += screenWidth / 7.5f;
-
             float itemSize = characterSize / 4;
+
+            characterX += screenWidth / 7.5f;
+            characterY += itemSize / 4f;
+
+            String friendShipState;
 
             for(int j = 0; j < friendShipLevel; j++){
                 batch.draw(heartTexture, characterX, characterY, itemSize, itemSize);
@@ -565,52 +569,46 @@ public class MenuBar {
                     batch.draw(emptyHeartTexture, characterX, characterY, itemSize, itemSize);
                     characterX += screenWidth / 20f;
                 }
+
+                friendShipState = FriendshipLevel.values()[friendShipLevel].name();
+
             } else{
                 for(int j = 0; j < 3 - friendShipLevel; j++){
                     batch.draw(emptyHeartTexture, characterX, characterY, itemSize, itemSize);
                     characterX += screenWidth / 20f;
                 }
+
+                if(friendShipLevel == 0) {
+                    friendShipState = "Stranger";
+                } else if(friendShipLevel == 1) {
+                    friendShipState = "Friend";
+                } else if(friendShipLevel == 2) {
+                    friendShipState = "Close Friend";
+                } else{
+                    friendShipState = "Best Friend";
+                }
             }
 
             characterX += screenWidth / 15f;
 
-            batch.draw(giftTexture, characterX, characterY, itemSize, itemSize);
+            GlyphLayout tooltipLayout = new GlyphLayout(font, friendShipState);
 
-            boolean hovered = mousePos.x >= characterX && mousePos.x <= characterX + itemSize &&
-                mousePos.y >= characterY && mousePos.y <= characterY + itemSize;
+            float friendShipLevelWidth = tooltipLayout.width + 40;
+            float playerNameHeight = tooltipLayout.height + 30;
 
-            boolean clicked = false;
+            float friendShipLevelX = characterX + itemSize / 2f - friendShipLevelWidth / 2f;
+            float friendShipLevelY = characterY;
 
-            if (hovered) {
-                if (Gdx.input.isButtonJustPressed(0)) {
-                    clicked = true;
-                }
 
-                GlyphLayout tooltipLayout = new GlyphLayout(font, "Wanna Gift?");
+            font.getData().setScale(2f);
 
-                float playerNameWidth = tooltipLayout.width + 40;
-                float playerNameHeight = tooltipLayout.height + 30;
+            font.setColor(CustomColors.GAMEGREENCOLOR);
 
-                float animalSoundX = characterX + itemSize / 2f - playerNameWidth / 2f;
-                float animalSoundY = characterY + itemSize + playerNameHeight / 2;
+            font.draw(batch, friendShipState, friendShipLevelX + 20, friendShipLevelY + playerNameHeight - 15);
 
-                batch.end();
-                shapeRenderer.setProjectionMatrix(camera.combined);
-                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-                shapeRenderer.setColor(0, 0, 0, 0.85f);
-                shapeRenderer.rect(animalSoundX, animalSoundY, playerNameWidth, playerNameHeight);
-                shapeRenderer.end();
-                batch.begin();
+            font.setColor(Color.WHITE);
 
-                font.setColor(CustomColors.SWAMP_COLOR);
-
-                font.draw(batch, "Wanna Gift?", animalSoundX + 20, animalSoundY + playerNameHeight - 15);
-
-                font.setColor(Color.WHITE);
-            }
-            if (clicked) {
-                // TODO Gift!
-            }
+            font.getData().setScale(1f);
 
             y -= spacing;
 
