@@ -48,10 +48,10 @@ public class MenuBar {
     private float startingX;
     private float startingY;
     private String currentTab;
-    Map<String, Map<Integer, TextureRegion[]>> npcTextures;
     private OrthographicCamera camera;
     private boolean camSet = false;
     private final ArrayList<Texture> relationTextures = new ArrayList<>();
+    private final Texture mohsenAvatarTexture;
     private final ArrayList<NPCData> NPCsData;
     private final ArrayList<Integer> relationsIndex = new ArrayList<>();
 
@@ -88,47 +88,7 @@ public class MenuBar {
             i++;
         }
 
-
-        npcTextures = new HashMap<>();
-
-        String[] npcNames = {
-            "Clint", "Willy", "Mohsen", "Morris", "Gus",
-            "Marnie", "Robin", "Pierre", "Sebastian", "Leah",
-            "Harvey", "Abigail"
-        };
-        for (String name : npcNames) {
-            npcTextures.put(name, new HashMap<>());
-
-            for (int x = 1; x <= 3; x++) {
-                Texture fullTexture = GameAssetManager.getGameAssetManager()
-                    .getNPCTexture(name, name + "Pic" + x + ".png");
-
-                int partWidth = fullTexture.getWidth();
-                int partHeight = fullTexture.getHeight()/6;
-
-                TextureRegion[] parts = new TextureRegion[6];
-                for (int p = 0; p < 6; p++) {
-                    parts[p] = new TextureRegion(fullTexture, 0, p * partWidth, partWidth, partHeight);
-                }
-
-                npcTextures.get(name).put(x, parts);
-            }
-        }
-
-
-
-//        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Clint", "ClintPic"+x+".png"));
-//        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Willy", "WillyPic"+x+".png"));
-//        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Mohsen", "MohsenPic"+x+".png"));
-//        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Morris", "MorrisPic"+x+".png"));
-//        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Gus","GusPic"+x+".png"));
-//        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Marnie", "MarniePic"+x+".png"));
-//        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Robin", "RobinPic"+x+".png"));
-//        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Pierre", "PierrePic"+x+".png"));
-//        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Sebastian", "SebastianPic"+x+".png"));
-//        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Leah", "LeahPic"+x+".png"));
-//        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Harvey", "HarveyPic"+x+".png"));
-//        relationTextures.add(GameAssetManager.getGameAssetManager().getNPCTexture("Abigail", "AbigailPic"+x+".png"));
+        mohsenAvatarTexture = GameAssetManager.getGameAssetManager().getNPCTexture("Mohsen", "Mohsen.png");
 
         NPCsData = AppClient.getGameData().getVillageData().getNPCsData();
 
@@ -156,34 +116,6 @@ public class MenuBar {
 
     public void setPlayer(Player player) {
         this.player = player;
-    }
-    public TextureRegion getNPCImage(String name, int friendshipLevel) {
-        int x = getSeasonTextureIndex();
-        TextureRegion[] parts = npcTextures.get(name).get(x);
-        if (parts == null) return null;
-        return parts[getFriendshipTextureIndex(friendshipLevel)];
-    }
-    private int getFriendshipTextureIndex(int friendshipLevel) {
-        switch (friendshipLevel) {
-            case 0: return 2;
-            case 1: return 0;
-            case 2: return 3;
-            default: return 1;
-        }
-    }
-    private int getSeasonTextureIndex() {
-        Season season=AppClient.getGameData().getTime().getSeason();
-        switch (season) {
-            case Spring -> {
-                return 1;
-            }
-            case Summer -> {
-                return 3;
-            }
-            default -> {
-                return 2;
-            }
-        }
     }
 
     public void render(Batch batch, OrthographicCamera camera) {
@@ -566,6 +498,8 @@ public class MenuBar {
                 }
                 if (clicked) {
                     //TODO Click on player
+                    screen.friendshipMode = true;
+                    screen.handleFriendship(screen.friendshipStage, playerData, null);
                 }
             } else{
                 NPCData npcData = NPCsData.get(i - relationsIndex.size());
@@ -573,7 +507,12 @@ public class MenuBar {
 
                 friendShipLevel = npcData.getFriendShipData().get(Objects.requireNonNull(Finder.getpd()).getUsername());
 
-                batch.draw(relationTextures.get(i), characterX, characterY, characterSize, characterSize);
+                if(npcData.getName().equals("Mohsen")) {
+                    batch.draw(mohsenAvatarTexture, characterX, characterY, characterSize, characterSize);
+                }else{
+                    batch.draw(GameAssetManager.getGameAssetManager().getNPCImage(npcData.getName(), friendShipLevel),
+                        characterX, characterY, characterSize, characterSize);
+                }
 
                 boolean hovered = mousePos.x >= characterX && mousePos.x <= characterX + characterSize &&
                     mousePos.y >= characterY && mousePos.y <= characterY + characterSize;
@@ -609,6 +548,8 @@ public class MenuBar {
                 }
                 if (clicked) {
                     //TODO Click on npc
+                    screen.friendshipMode = true;
+                    screen.handleFriendship(screen.friendshipStage, null, npcData);
                 }
             }
 
@@ -922,7 +863,6 @@ public class MenuBar {
                 GameMessage<VoteMessage> msg = new GameMessage<>("new-vote",
                     new VoteMessage(name));
                 AppClient.getClient().send(new Gson().toJson(msg));
-                //TODO Sepehr Kick Vote
             }
 
             x += spacing;
@@ -983,7 +923,6 @@ public class MenuBar {
                 if(i == 0){
                     GameMessage<String> msg = new GameMessage<>("new-ter", ";)");
                     AppClient.getClient().send(new Gson().toJson(msg));
-                    //TODO Sepehr: Force Terminate
                 } else{
                     if(AppClient.getUserData().getUsername().equals(
                         AppClient.getGameData().getLobby().getAdmin()
@@ -995,7 +934,6 @@ public class MenuBar {
                         System.out.println("  you: "+AppClient.getUserData().getUsername());
                         System.out.println("  adming: "+AppClient.getGameData().getLobby().getAdmin());
                     }
-                    //TODO Sepehr: Save
                 }
             }
 
@@ -1185,7 +1123,7 @@ public class MenuBar {
     public void scrollDown() {
         startingRow++;
 
-        if (selectedIndex < relationTextures.size() - visibleRelationsCount)
+        if (selectedIndex < GameAssetManager.getGameAssetManager().npcTextures.size() + relationTextures.size() - visibleRelationsCount + 1)
             selectedIndex++;
     }
 

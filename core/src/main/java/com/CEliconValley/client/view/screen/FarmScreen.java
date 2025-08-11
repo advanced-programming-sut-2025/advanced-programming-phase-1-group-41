@@ -209,6 +209,7 @@ public class FarmScreen extends GameScreen implements Screen {
         if (!result.success()) {
             if (result.message().equals("cheat") ||
                 result.message().equals("chat") ||
+                result.message().equals("friendship") ||
                 result.message().equals("scoreboard")) {
                 return;
             }

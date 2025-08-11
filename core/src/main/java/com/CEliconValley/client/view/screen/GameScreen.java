@@ -5,6 +5,7 @@ import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.model.StrategyScoreboard;
 import com.CEliconValley.client.view.screen.maps.*;
 import com.CEliconValley.common.CellData;
+import com.CEliconValley.common.NPCData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.controllers.Spawner.InventoryRenderer;
 import com.CEliconValley.models.Cell;
@@ -51,6 +52,7 @@ public abstract class GameScreen implements Screen {
     public boolean voteMode = false;
     public boolean chatMode = false;
     public boolean scoreboardMode = false;
+    public boolean friendshipMode = false;
     public Image overlay;
     protected TextField cheatCodeField;
 
@@ -77,6 +79,7 @@ public abstract class GameScreen implements Screen {
     protected Stage chatStage;
     protected Stage scoreboardStage;
     protected Stage friendshipStage;
+    private FriendshipStageHandler friendshipStageHandler;
 
     public abstract void transfer();
     protected Hero hero;
@@ -299,6 +302,7 @@ public abstract class GameScreen implements Screen {
         stage = new Stage(new ScreenViewport(), Main.getBatch());
         chatStage = new Stage(new ScreenViewport(), Main.getBatch());
         scoreboardStage = new Stage(new ScreenViewport(), Main.getBatch());
+        friendshipStage = new Stage(new ScreenViewport(), Main.getBatch());
         Gdx.input.setInputProcessor(stage);
         this.inventoryRenderer = inventoryRenderer;
         cheatCodeField = new TextField("", GameAssetManager.getGameAssetManager().getSkin());
@@ -510,17 +514,13 @@ public abstract class GameScreen implements Screen {
         overlay.toBack();
     }
 
-    public void handleFriendship(Stage stage) {
-        cheatMode = true;
-        cheatCodeField.setVisible(true);
-        stage.setKeyboardFocus(cheatCodeField);
-        cheatCodeField.setText("");
+    public void handleFriendship(Stage stage, PlayerData playerData, NPCData npcData) {
+        friendshipStageHandler = new FriendshipStageHandler(stage, playerData, npcData);
+        friendshipMode = true;
 
         overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
-            .getGameAssetManager()
-            .getBackgroundTexture("Field3.png"))));
+            .getGameAssetManager().getBackgroundTexture("Friendship_Background.png"))));
 
-//        overlay.setColor(0, 0, 0, 0.5f);
         overlay.setSize(stage.getWidth(), stage.getHeight());
         overlay.setPosition(0, 0);
 

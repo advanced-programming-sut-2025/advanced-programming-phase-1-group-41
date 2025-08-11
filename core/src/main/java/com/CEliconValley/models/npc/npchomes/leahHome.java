@@ -8,7 +8,7 @@ import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.locations.Village;
 
-public class LiaHome extends NPCHome implements Building {
+public class leahHome extends NPCHome implements Building {
     @Override
     public String getChar() {
         return TerminalColors.colorize(0,208,"..");
@@ -16,19 +16,19 @@ public class LiaHome extends NPCHome implements Building {
 
     @Override
     public String getName() {
-        return "Lia Home";
+        return "leah Home";
     }
     private int x;
     private int y;
     private int anchorX;
     private int anchorY;
 
-    public LiaHome() {
+    public leahHome() {
         anchorY=59;
         anchorX=17;
     }
 
-    public LiaHome(int x, int y, Village village) {
+    public leahHome(int x, int y, Village village) {
         this.x = x;
         this.y = y;
         int xWall;

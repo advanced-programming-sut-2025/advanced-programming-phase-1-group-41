@@ -339,8 +339,8 @@ public class NPCBuilder {
                     ))
                 );
                 NPCs.add(sebastian);
-            } else if (building instanceof LiaHome) {
-                NPC lia = new Lia("Lia", Occupation.Jobless, (LiaHome) building,
+            } else if (building instanceof leahHome) {
+                NPC leah = new leah("leah", Occupation.Jobless, (leahHome) building,
                     new ArrayList<String>(Arrays.asList(
                         "Springtime is when everything wakes up.",
                         "Summer is perfect for adventures.",
@@ -364,7 +364,7 @@ public class NPCBuilder {
                         new Slot(Food.Salad, 3),
                         new Slot(new Crop(CropType.AncientFruit),3)
                     )));
-                lia.postLoad(new ArrayList<Quest>(Arrays.asList(
+                leah.postLoad(new ArrayList<Quest>(Arrays.asList(
                     new Quest(
                         new Slot(new Wood(), 10),//todo add hard wood
                         500.0,
@@ -387,7 +387,7 @@ public class NPCBuilder {
                         "Yummy trade!"
                     )
                 )));
-                NPCs.add(lia);
+                NPCs.add(leah);
             }else if (building instanceof HarveyHome) {
                 NPC harvey = new Harvey("Harvey", Occupation.Jobless, (HarveyHome) building,
                     new ArrayList<String>(Arrays.asList(
@@ -438,7 +438,7 @@ public class NPCBuilder {
                     )
                 )));
                 NPCs.add(harvey);
-            }  else if (building instanceof AbigailHome) { // Assuming LiaHome exists
+            }  else if (building instanceof AbigailHome) { // Assuming leahHome exists
                 NPC abigail = new Abigail("Abigail", Occupation.Jobless, (AbigailHome) building,
                     new ArrayList<String>(Arrays.asList(
                         "Spring feels so fresh!",

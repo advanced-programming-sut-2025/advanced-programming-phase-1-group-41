@@ -2,14 +2,12 @@ package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.model.AnimalSprite;
-import com.CEliconValley.client.model.NPCSprite;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.TGPoint;
 import com.CEliconValley.models.*;
-import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.animals.animalKinds.Cow;
 import com.CEliconValley.models.animals.animalKinds.Goat;
 import com.CEliconValley.models.animals.animalKinds.Sheep;
@@ -86,7 +84,6 @@ public class PlayerActs {
             if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
                 String message = screen.getChatInput().getText();
                 if (!message.isEmpty()) {
-                    // TODO: Send Message
                     assert AppClient.getUserData() != null;
                     GameMessage<PlayerMessage> msg = new GameMessage<>("player-message",
                         new PlayerMessage(AppClient.getUserData().getUsername(), message));
@@ -109,6 +106,15 @@ public class PlayerActs {
                 Gdx.input.setInputProcessor(screen.stage);
             }
             return new Result(false, "scoreboard");
+        }
+        if(screen.friendshipMode){
+            screen.friendshipStage.act(delta);
+            screen.friendshipStage.draw();
+            if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+                screen.friendshipMode = false;
+                Gdx.input.setInputProcessor(screen.stage);
+            }
+            return new Result(false, "friendship");
         }
         if (screen.voteMode) {
             stage.act(delta);
@@ -471,9 +477,6 @@ public class PlayerActs {
                 hero.playerX.set(hero.targetX.get());
                 hero.playerY.set(hero.targetY.get());
                 hero.isMoving.set(false);
-                //TODO Lower Energy
-//                Finder.getpd().setEnergy(Finder.getpd().getEnergy() - 10);
-//                stateTime = 0f;
             }
         }
     }
@@ -697,7 +700,7 @@ public class PlayerActs {
         Hero hero = screen.getHero();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                Cell cell = screen.greenHouse.getCell(hero.playerX.get()+j,
+                Cell cell = screen.greenHouseMap.getCell(hero.playerX.get()+j,
                     hero.playerY.get()+i);
                 if(mouseX >= cell.getX()*CELL_SIZE && mouseX <= (cell.getX()+1)*CELL_SIZE &&
                     mouseY >= cell.getY()*CELL_SIZE && mouseY <= (cell.getY()+1)*CELL_SIZE){

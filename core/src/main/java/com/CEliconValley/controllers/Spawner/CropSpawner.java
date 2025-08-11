@@ -3,6 +3,7 @@ package com.CEliconValley.controllers.Spawner;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.FarmData;
 import com.CEliconValley.models.Cell;
+import com.CEliconValley.models.foragings.Crop;
 import com.CEliconValley.models.foragings.CropType;
 import com.CEliconValley.models.foragings.ForagingCrop;
 import com.CEliconValley.models.foragings.ForagingCropType;
@@ -64,23 +65,21 @@ public class CropSpawner {
 
 
     public void renderCrops(SpriteBatch batch, CellData cellData, FarmData farmData) {
-//        if (cell.getObjectMap() instanceof Crop crop) {
-//            CropType type = crop.getCropType();
-//            int stageIndex = crop.getCurrentStage();
-//
-//            TextureRegion[] frames = cropFramesMap.get(type);
-//            if (frames != null && stageIndex >= 0 && stageIndex < frames.length) {
-//                TextureRegion frame = frames[stageIndex];
-//
-//                float drawX = cell.getX() * CELL_SIZE;
-//                float drawY = cell.getY() * CELL_SIZE;
-//
-//                batch.draw(frame, drawX, drawY, CELL_SIZE, CELL_SIZE);
-//            }
-//        }
-//        else
         Cell cell = cellData.extractData();
-        if (cell.getObjectMap() instanceof ForagingCrop forage) {
+        if (cell.getObjectMap() instanceof Crop crop) {
+            CropType type = crop.getCropType();
+            int stageIndex = crop.getCurrentStage();
+
+            TextureRegion[] frames = cropFramesMap.get(type);
+            if (frames != null && stageIndex >= 0 && stageIndex < frames.length) {
+                TextureRegion frame = frames[stageIndex];
+
+                float drawX = cell.getX() * CELL_SIZE;
+                float drawY = cell.getY() * CELL_SIZE;
+
+                batch.draw(frame, drawX, drawY, CELL_SIZE, CELL_SIZE);
+            }
+        } else if (cell.getObjectMap() instanceof ForagingCrop forage) {
             ForagingCropType type = forage.getForagingCropType();
 
             TextureRegion frame = foragingCropFramesMap.get(type);

@@ -1,6 +1,12 @@
 package com.CEliconValley.client.view.screen;
 
+import com.CEliconValley.client.AppClient;
+import com.CEliconValley.client.controller.spawners.ItemSpawner;
+import com.CEliconValley.client.view.screen.maps.FarmMap;
+import com.CEliconValley.common.CellData;
+import com.CEliconValley.controllers.Spawner.CropSpawner;
 import com.CEliconValley.controllers.Spawner.InventoryRenderer;
+import com.CEliconValley.controllers.Spawner.TreeSpawner;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.client.view.screen.maps.GreenhouseMap;
@@ -14,15 +20,23 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class GreenHouseScreen extends GameScreen implements Screen {
     private final FarmScreen farmScreen;
     private final SpriteBatch batch;
     private final Texture background;
-    public final GreenhouseMap greenHouse;
+    public final GreenhouseMap greenHouseMap;
     private final Player player;
 
+    private final TreeSpawner treeSpawner;
+    private final CropSpawner cropSpawner;
+    private final ItemSpawner itemSpawner;
+    private FarmMap farmMap;
+    private final List<CellData> greenhouseCells = new ArrayList<>();
 
     int[][] directions = {
         {0, 1},
@@ -39,14 +53,12 @@ public class GreenHouseScreen extends GameScreen implements Screen {
 //    private final BuildingSpawner buildingSpawner;
     public final OrthographicCamera camera;
 
-
-
     public GreenHouseScreen(FarmScreen farmScreen,GreenhouseMap greenHouse, Player player) {
         super(new InventoryRenderer(player.getInventory()));
         this.menuBar = super.getMenuBar();
         menuBar.setPlayer(player);
         this.farmScreen=farmScreen;
-        this.greenHouse = greenHouse;
+        this.greenHouseMap = greenHouse;
         this.player = player;
         this.batch = new SpriteBatch();
         this.background = GameAssetManager.getGameAssetManager().getScreenTexture("GreenHouse_Screen.png");
@@ -64,9 +76,18 @@ public class GreenHouseScreen extends GameScreen implements Screen {
         this.hero.renderY = hero.playerY.get() * CELL_SIZE;
         this.hero.currentAnimation = hero.walk(false, hero.currentDirection);
 
-//        treeSpawner = new TreeSpawner(greenHouse);
-//        rockSpawner = new RockSpawner(greenHouse);
-//        buildingSpawner = new BuildingSpawner(greenHouse);
+        treeSpawner = new TreeSpawner();
+        cropSpawner = new CropSpawner();
+        itemSpawner = new ItemSpawner();
+        this.farmMap = new FarmMap(Finder.getFarmDataById(AppClient.getGameData(), AppClient.getUserData().getUsername()));
+
+        for(CellData cellData : farmMap.farmData.getCells()){
+            if(cellData.getX() >= farmMap.farmData.getGreenhouseX() && cellData.getY() >= farmMap.farmData.getGreenhouseY()
+                && cellData.getX() < farmMap.farmData.getGreenhouseX() + Greenhouse.getGreenhouseLength()
+                && cellData.getY() < farmMap.farmData.getGreenhouseY() + Greenhouse.getGreenhouseHeight()){
+                greenhouseCells.add(cellData);
+            }
+        }
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -76,7 +97,7 @@ public class GreenHouseScreen extends GameScreen implements Screen {
     @Override
     public void render(float delta) {
         if(isGameFinished) return;
-        Result result = PlayerActs.handleInput(hero, greenHouse, stage, delta);
+        Result result = PlayerActs.handleInput(hero, greenHouseMap, stage, delta);
         if(!result.success()){
             if(result.message().equals("cheat")){
                 return;
@@ -91,16 +112,21 @@ public class GreenHouseScreen extends GameScreen implements Screen {
 
         batch.begin();
 
-
-
         batch.draw(background, CELL_SIZE/2f, CELL_SIZE/2f,CELL_SIZE* Greenhouse.getGreenhouseLength(),CELL_SIZE*Greenhouse.getGreenhouseHeight());
+
+        for (CellData cellData : greenhouseCells) {
+//            System.out.println(cellData.getX() + ", " + cellData.getY());
+            cropSpawner.renderCrops(batch, cellData, farmMap.farmData);
+            itemSpawner.renderItems(batch, cellData, farmMap.farmData);
+            treeSpawner.renderTrees(batch, cellData, 0);
+//            System.out.println(cellData.getObjectName());
+        }
 
         if (hero.currentAnimation != null) {
             TextureRegion currentFrame = hero.currentAnimation.getKeyFrame(hero.stateTime, onRepeat);
             batch.draw(currentFrame, hero.renderX - CELL_SIZE / 2f, hero.renderY - CELL_SIZE / 2f, CELL_SIZE, CELL_SIZE);
         }
         if (isMenuOpen) {
-//                menuBar.render(batch, menuX, menuY, menuWidth, menuHeight);
             menuBar.render(batch, camera);
         } else {
             inventoryRenderer.render(batch, camera);
@@ -114,7 +140,7 @@ public class GreenHouseScreen extends GameScreen implements Screen {
     }
 
     public void transfer() {
-        Cell cell=Finder.findCellByCoordinatesGreenHouse(hero.playerX.get(), hero.playerY.get(),this.greenHouse);
+        Cell cell=Finder.findCellByCoordinatesGreenHouse(hero.playerX.get(), hero.playerY.get(),this.greenHouseMap);
         if (cell.getObjectMap() instanceof Door) {
             ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(farmScreen);
         }

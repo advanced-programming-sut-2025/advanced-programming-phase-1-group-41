@@ -8,9 +8,9 @@ import com.CEliconValley.models.items.Slot;
 
 import java.util.ArrayList;
 
-public class Lia extends NPC{
+public class leah extends NPC{
     NPCHome home;
-    public Lia(String name, Occupation job, NPCHome home, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift) {
+    public leah(String name, Occupation job, NPCHome home, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift) {
         super(name, job, dialogues, favorites, itemsToGift);
         this.home = home;setX(11);setY(53);
         setDaysToUnlockQ3(7*28);

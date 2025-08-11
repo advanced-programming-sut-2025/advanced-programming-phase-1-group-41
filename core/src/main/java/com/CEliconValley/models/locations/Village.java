@@ -164,7 +164,7 @@ public class Village implements Location{ ;
 //        buildings.add(new Coop(77,4,this));
         buildings.add(new Jojamart(81,10,this, load));//
         buildings.add(new AbigailHome(35,58,this));
-        buildings.add(new LiaHome(12,58,this));//
+        buildings.add(new leahHome(12,58,this));//
         buildings.add(new SebastienHome(24,58,this));//
         buildings.add(new RobinHome(12,52,this));//
         buildings.add(new HarveyHome(59,54,this));//

@@ -129,9 +129,11 @@ public class ToolsController {
             player.decEnergyTool(energy);
             wc.setTiles(wc.getMaxTilesNumberByLevel());
             // todo count the skill of energy decrease
-            return new Result(true, "wc is filled now with " +
-                    wc.getTiles() +
-                    " tiles");
+            Result result = new Result(true, "wc is filled now with " +
+                wc.getTiles() +
+                " tiles");
+            App.sendResult(result, playername);
+            return result;
         } else if(cell.getObjectMap() instanceof Crop || cell.getObjectMap() instanceof Tree){
             if(cell.getObjectMap() instanceof Crop){
                 if(((Crop) cell.getObjectMap()).isWateredToday()){

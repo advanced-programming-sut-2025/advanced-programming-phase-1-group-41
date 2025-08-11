@@ -53,8 +53,8 @@ public interface Building extends ObjectMap {
         if(buildingName.equals(new Jojamart().getName())){
             return new Jojamart();
         }
-        if(buildingName.equals(new LiaHome().getName())){
-            return new LiaHome();
+        if(buildingName.equals(new leahHome().getName())){
+            return new leahHome();
         }
         if(buildingName.equals(new MarnieRanch().getName())){
             return new MarnieRanch();

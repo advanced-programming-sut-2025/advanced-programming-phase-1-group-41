@@ -51,7 +51,7 @@ public class BuildingSpawner {
     private final Texture abigailHomeTexture = new Texture("game/Buildings/AbigailHome.png");
     private final Texture sebastienHomeTexture = new Texture("game/Buildings/SebastienHome.png");
     private final Texture robinHomeTexture = new Texture("game/Buildings/RobinHome.png");
-    private final Texture liaHomeTexture = new Texture("game/Buildings/LiaHome.png");
+    private final Texture leahHomeTexture = new Texture("game/Buildings/leahHome.png");
     private final Texture CloseSignTexture = new Texture("game/Buildings/CloseSign.png");
 
     public BuildingSpawner() {
@@ -278,11 +278,11 @@ public class BuildingSpawner {
             return true;
 
         }
-        if(tmpCell.getObjectMap() instanceof LiaHome liaHome && liaHome.getAnchorX()==tmpCell.getX() && liaHome.getAnchorY()==tmpCell.getY()) {
-            int frameWidth = this.liaHomeTexture.getWidth();
-            int frameHeight = this.liaHomeTexture.getHeight() / 4;
+        if(tmpCell.getObjectMap() instanceof leahHome leahHome && leahHome.getAnchorX()==tmpCell.getX() && leahHome.getAnchorY()==tmpCell.getY()) {
+            int frameWidth = this.leahHomeTexture.getWidth();
+            int frameHeight = this.leahHomeTexture.getHeight() / 4;
 
-            TextureRegion cottageFrame = new TextureRegion(this.liaHomeTexture, 0,(int)getSeasonalTexture(liaHomeTexture), frameWidth, frameHeight);
+            TextureRegion cottageFrame = new TextureRegion(this.leahHomeTexture, 0,(int)getSeasonalTexture(leahHomeTexture), frameWidth, frameHeight);
             batch.draw(cottageFrame, x - CELL_SIZE * 5.66f, y-CELL_SIZE/2f, CELL_SIZE *7, CELL_SIZE * 7);
             return true;
 

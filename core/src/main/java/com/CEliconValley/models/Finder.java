@@ -362,7 +362,7 @@ public class Finder {
                 if(building instanceof AbigailHome && npc instanceof Abigail){
                     return building;
                 }
-                if(building instanceof LiaHome && npc instanceof Lia){
+                if(building instanceof leahHome && npc instanceof leah){
                     return building;
                 }
                 if(building instanceof SebastienHome && npc instanceof Sebastien){
