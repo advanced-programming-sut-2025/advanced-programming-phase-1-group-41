@@ -13,8 +13,11 @@ import com.CEliconValley.models.buildings.Well;
 import com.CEliconValley.models.items.Products.Product;
 import com.CEliconValley.models.items.Products.ProductType;
 import com.CEliconValley.models.locations.Farm;
+import com.CEliconValley.models.tools.BasicTool;
 import com.CEliconValley.models.tools.Tool;
+import com.CEliconValley.models.tools.TrashCan;
 
+import javax.crypto.spec.PSource;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.regex.Matcher;
@@ -134,7 +137,10 @@ public class CraftingController {
             return new Result(false, "item not found");
         }
         if (item instanceof Tool){
-            return new Result(false,"u can't place a tool");
+            if(item instanceof TrashCan bt){
+            }else{
+                return new Result(false,"u can't place a tool");
+            }
         }
         Inventory inventory = player.getInventory();
         Slot slot = inventory.getSlotByItem(item);

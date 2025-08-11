@@ -85,6 +85,7 @@ public abstract class GameScreen implements Screen {
     private FriendshipStageHandler friendshipStageHandler;
     public CraftableMachine cm = null;
     public boolean sellmode = false;
+    public boolean trashmode = false;
 
     public abstract void transfer();
     protected Hero hero;

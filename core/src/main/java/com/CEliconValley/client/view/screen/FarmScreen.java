@@ -338,6 +338,8 @@ class FarmScreen extends GameScreen implements Screen {
             artisanMenu.render(batch, camera, cm);
         }else if(sellmode){
             shippingBinBar.render(batch, camera, true);
+        }else if(trashmode){
+            shippingBinBar.render(batch, camera, false);
         }
         else{
             inventoryRenderer.render(batch, camera);
