@@ -3,6 +3,7 @@ package com.CEliconValley.client.view.screen;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.controller.spawners.ItemSpawner;
 import com.CEliconValley.client.view.screen.maps.*;
+import com.CEliconValley.client.view.screen.menu.ShippingBinBar;
 import com.CEliconValley.client.view.screen.randomwalk.Node;
 import com.CEliconValley.client.view.screen.randomwalk.SimplePathFinder;
 import com.CEliconValley.common.*;
@@ -41,7 +42,8 @@ import com.google.gson.Gson;
 
 import java.util.*;
 
-public class FarmScreen extends GameScreen implements Screen {
+public
+class FarmScreen extends GameScreen implements Screen {
     private final SpriteBatch batch;
     private final Rain rain;
     private final Snow snow;
@@ -190,6 +192,8 @@ public class FarmScreen extends GameScreen implements Screen {
         hero.targetX.set(hero.playerX.get());
         hero.targetY.set(hero.playerY.get());
 
+
+        shippingBinBar = new ShippingBinBar(this);
     }
 
 
@@ -332,7 +336,10 @@ public class FarmScreen extends GameScreen implements Screen {
 
         } else if(isArtisanMenuOpen){
             artisanMenu.render(batch, camera, cm);
-        } else{
+        }else if(sellmode){
+            shippingBinBar.render(batch, camera);
+        }
+        else{
             inventoryRenderer.render(batch, camera);
         }
 

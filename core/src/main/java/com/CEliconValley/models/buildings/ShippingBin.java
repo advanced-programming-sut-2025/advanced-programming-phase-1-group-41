@@ -1,9 +1,10 @@
 package com.CEliconValley.models.buildings;
 
+import com.CEliconValley.models.foragings.Nature.Obstacle;
 import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.items.Item;
 
-public class ShippingBin implements Building, Item {
+public class ShippingBin implements Building, Item, Obstacle {
 
     @Override
     public String getChar() {

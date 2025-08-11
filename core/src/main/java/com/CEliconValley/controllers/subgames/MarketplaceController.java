@@ -4,6 +4,7 @@ import com.CEliconValley.models.*;
 import com.CEliconValley.models.animals.animalKinds.*;
 import com.CEliconValley.models.buildings.marketplaces.*;
 import com.CEliconValley.models.items.*;
+import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.locations.Village;
 import com.CEliconValley.models.npc.npcCharacters.NPC;
 import com.CEliconValley.models.tools.*;
@@ -162,13 +163,12 @@ public class MarketplaceController {
         return true;
     }
 
-    private boolean nearShippingBin(){
-        player = App.getGame().getCurrentPlayer();
+    private boolean nearShippingBin(Player player, Farm farm){
         inventory = player.getInventory();
         if(!player.isPlayerIsInVillage()){
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
-                    Cell nextCell = Finder.findCellByCoordinates(player.getX()+i, player.getY()+j, App.getGame().getCurrentPlayerFarm());
+                    Cell nextCell = Finder.findCellByCoordinates(player.getX()+i, player.getY()+j, farm);
                     if(nextCell == null) continue;
                     if(nextCell.getObjectMap() instanceof ShippingBin){
                         return true;
@@ -190,8 +190,10 @@ public class MarketplaceController {
 
     }
 
-    public Result sellProduct(Matcher matcher){
-        boolean nearShippingBin = nearShippingBin();
+    public Result sellProduct(Matcher matcher, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
+        boolean nearShippingBin = nearShippingBin(player, farm);
         if(!nearShippingBin){
             return new Result(false, "you're not near a shipping bin");
         }
@@ -202,7 +204,6 @@ public class MarketplaceController {
         if(item == null){
             return new Result(false, "item doesn't exist");
         }
-        Player player = App.getGame().getCurrentPlayer();
         Slot slot = player.getInventory().getSlotByItem(item);
         if(slot == null){
             return new Result(false, "you don't have this item");
