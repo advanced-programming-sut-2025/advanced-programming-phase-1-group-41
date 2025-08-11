@@ -222,7 +222,7 @@ public class FarmScreen extends GameScreen implements Screen {
         PlayerActs.approach(hero);
 
         batch.begin();
-        int minX = (int) ((camera.position.x - camera.viewportWidth / 2) / CELL_SIZE);
+        int minX = (int) ((camera.position.x - camera.viewportWidth / 2) / CELL_SIZE) - 2;
         int maxX = (int) ((camera.position.x + camera.viewportWidth / 2) / CELL_SIZE) + 8;
         int minY = (int) ((camera.position.y - camera.viewportHeight / 2) / CELL_SIZE) - 8;
         int maxY = (int) ((camera.position.y + camera.viewportHeight / 2) / CELL_SIZE);

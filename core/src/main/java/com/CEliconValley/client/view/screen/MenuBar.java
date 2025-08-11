@@ -180,7 +180,7 @@ public class MenuBar {
         float slotSize = screenWidth * 0.035f;
 
         float spacingX = slotSize * 0.275f;
-        float spacingY = slotSize * 0.6f;
+        float spacingY = slotSize * 0.525f;
 
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mousePos);

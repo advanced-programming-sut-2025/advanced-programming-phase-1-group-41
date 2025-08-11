@@ -49,7 +49,7 @@ public class ArtisanMenu {
         {42, 13, 56, 28}
     };;
     float[] neededItemBound=new float[]{
-        60,13,98,26
+        65,13,98,26
     };
 
 //    private final int tileWidth;
@@ -108,7 +108,7 @@ public class ArtisanMenu {
         float menuHeight = screenHeight * 0.5f;
 
         startingX = camera.position.x - menuWidth / 2f;
-        startingY = camera.position.y - menuHeight / 20f;
+        startingY = camera.position.y - menuHeight / 7.5f;
 
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mousePos);
@@ -119,11 +119,15 @@ public class ArtisanMenu {
          float realM1 = startingY + (neededItemBound[1] / DESIGN_HEIGHT) * menuHeight;
          float realN2 =  startingX + (neededItemBound[2]/DESIGN_WIDTH)*menuWidth;
          float realM2 = startingY + (neededItemBound[3]/DESIGN_HEIGHT)*menuHeight;
-         float itemSize=realN2-realN1/neededItems.size();
-         AtomicInteger counter = new AtomicInteger();
-         neededItems.forEach((item,quantity)->{
-             batch.draw(ItemManager.getTexture(item),realN1+ (counter.getAndIncrement()) *itemSize,realM1,itemSize,itemSize);
-         });
+         float itemSize = screenHeight / 20f;
+//         AtomicInteger counter = new AtomicInteger();
+//         neededItems.forEach((item,quantity)->{
+//             batch.draw(ItemManager.getTexture(item),realN1+ (counter.getAndIncrement()) *itemSize,realM1,itemSize,itemSize);
+//         });
+        int counter = 0;
+         for(Item item:neededItems.keySet()){
+             batch.draw(ItemManager.getTexture(item), realN1 + (counter++) * itemSize, realM1, itemSize, itemSize);
+         }
         for (int i = 0; i < buttonBounds.length; i++) {
 
             float realX1 = startingX + (buttonBounds[i][0] / DESIGN_WIDTH) * menuWidth;
@@ -192,13 +196,13 @@ public class ArtisanMenu {
         float screenHeight = camera.viewportHeight;
 
         float menuWidth = screenWidth * 0.6f;
-        float menuHeight = screenHeight * 0.45f;
+        float menuHeight = screenHeight * 0.35f;
 
         startingY = startingY - menuHeight;
         batch.draw(inventoryTexture,startingX,startingY,menuWidth,menuHeight);
 
         float firstItemX = screenWidth * 0.03f;
-        float firstItemY = screenHeight * 0.4975f;
+        float firstItemY = screenHeight * 0.23f;
 
         int row = 0, startPoint = 0;
         float slotSize = screenWidth * 0.036f;
