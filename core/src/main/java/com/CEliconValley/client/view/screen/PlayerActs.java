@@ -6,6 +6,7 @@ import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
+import com.CEliconValley.common.messages.Position;
 import com.CEliconValley.common.messages.TGPoint;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.animals.animalKinds.Cow;
@@ -467,7 +468,7 @@ public class PlayerActs {
             if (screen instanceof GreenHouseScreen) {
                 moveAmount /= 2;
             }else if(screen instanceof VillageScreen){
-                moveAmount *= 2;
+//                moveAmount *= 2;
             }
 
             hero.renderX = approach(hero.renderX, targetPixelX, moveAmount);
@@ -479,6 +480,10 @@ public class PlayerActs {
                 hero.isMoving.set(false);
             }
         }
+        GameMessage<Position> msg = new GameMessage<>("position",
+            new Position(hero.currentDirection, hero.isMoving.get(), AppClient.getUserData().getUsername(),
+                hero.renderX, hero.renderY, hero.targetX.get(), hero.targetY.get(), hero.playerX.get(), hero.playerY.get()));
+        AppClient.getClient().send(new Gson().toJson(msg));
     }
 
     private static float approach(float current, float target, float delta) {

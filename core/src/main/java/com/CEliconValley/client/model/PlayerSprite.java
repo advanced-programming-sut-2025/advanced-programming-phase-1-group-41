@@ -6,7 +6,10 @@ import com.CEliconValley.models.App;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
@@ -16,9 +19,12 @@ public class PlayerSprite {
     public TextureRegion[][] playerActs;
     public String name;
     public Label label;
+    public BitmapFont font = new BitmapFont();
     public int currentDirection;
     public float stateTime = 0f;
     public Animation<TextureRegion> currentAnimation;
+    public GlyphLayout layout;
+    public ShapeRenderer shapeRenderer = new ShapeRenderer();
 
     public PlayerSprite(PlayerData playerData) {
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
@@ -28,6 +34,8 @@ public class PlayerSprite {
         this.label = new Label(this.name, skin);
         this.currentDirection = 3;
         this.currentAnimation = walk(false, currentDirection);
+        layout = new GlyphLayout(font, this.name);
+
     }
 
     public Animation<TextureRegion> walk(boolean canWalk, int direction) {

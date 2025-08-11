@@ -1,5 +1,6 @@
 package com.CEliconValley.server.handlers;
 
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.view.screen.GameScreen;
 import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.PlayerData;
@@ -75,11 +76,11 @@ public class GameHandler {
                 GameMessage<PosDiff> msg = gson.fromJson(message, new TypeToken<GameMessage<PosDiff>>() {
                 }.getType());
                 Player player = Finder.getPlayerByUsername(msg.body.playername);
-                player.setX(msg.body.x);
-                player.setY(msg.body.y);
-                GameMessage<PlayerData> response = new GameMessage<>("player-data",
-                    new PlayerData(player));
-                App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(response));
+//                player.setX(msg.body.x);
+//                player.setY(msg.body.y);
+//                GameMessage<PlayerData> response = new GameMessage<>("player-data",
+//                    new PlayerData(player));
+//                App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(response));
             }
             case "new-vote" -> {
                 GameMessage<VoteMessage> msg = gson.fromJson(message, new TypeToken<GameMessage<VoteMessage>>(){}.getType());
@@ -135,6 +136,16 @@ public class GameHandler {
                 }
                 lobby.postLoad(gd.getLobby().getLobbyID(), gd.get_id(), conn);
             }
+            case "position" -> {
+                GameMessage<Position> msg = gson.fromJson(message, new TypeToken<GameMessage<Position>>() {}.getType());
+                Position pos = msg.body;
+                Player player = Finder.getPlayerByUsername(pos.playername);
+                player.updatePos(pos);
+                GameMessage<PlayerData> response = new GameMessage<>("player-data",
+                    new PlayerData(player));
+                App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(response));
+            }
+
             case "player-message" -> {
                 GameMessage<PlayerMessage> playerMsg = gson.fromJson(message, new TypeToken<GameMessage<PlayerMessage>>() {}.getType());
                 App.getGame().getPlayerMessages().add(playerMsg.body);

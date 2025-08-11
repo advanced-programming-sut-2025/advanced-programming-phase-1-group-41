@@ -31,6 +31,30 @@ public class GameAssetManager {
     public Texture getTileTexture(String name) {return new Texture(Gdx.files.internal("game/general/tiles/" + name));}
     public Texture getScreenTexture(String name){return new Texture(Gdx.files.internal("game/Buildings/Screen/" + name));}
     public Texture getNPCTexture(String name, String item){return new Texture(Gdx.files.internal("game/Hero/NPC/" + name + "/" + item));}
+    public Texture getNPCAssets(String name){
+        Season season=AppClient.getGameData().getTime().getSeason();
+        int seasonID=0;
+        switch (season){
+            case Spring -> {
+                seasonID=1;
+            }
+            case Summer -> {
+                seasonID=3;
+            }
+            case Autumn -> {
+                seasonID=2;
+            }
+            case Winter -> {
+                if(name.equals("Morris")){
+                    seasonID=4;
+                }
+                else{
+                    seasonID=2;
+                }
+            }
+        }
+        return new Texture("game/Hero/NPC/" + name + "/"+name+seasonID+".png");
+    }
     public Drawable getDrawableBackground(String name) {
         TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal("backgrounds/" + name)));
         return new TextureRegionDrawable(region);
