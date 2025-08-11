@@ -4,6 +4,7 @@ import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.model.StrategyScoreboard;
 import com.CEliconValley.client.view.screen.maps.*;
+import com.CEliconValley.client.view.screen.menu.ShippingBinBar;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.NPCData;
 import com.CEliconValley.common.PlayerData;
@@ -12,6 +13,7 @@ import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.PlayerMessage;
+import com.CEliconValley.models.buildings.ShippingBin;
 import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.foragings.ForagingTree;
 import com.CEliconValley.models.foragings.Nature.Grass;
@@ -56,7 +58,7 @@ public abstract class GameScreen implements Screen {
     public boolean friendshipMode = false;
     public Image overlay;
     protected TextField cheatCodeField;
-
+    protected ShippingBinBar shippingBinBar;
     public TextButton yesVoteButton, noVoteButton;
     public Label playerVoteLabel;
     public Label howManyVotedLabel;
@@ -82,11 +84,13 @@ public abstract class GameScreen implements Screen {
     protected Stage friendshipStage;
     private FriendshipStageHandler friendshipStageHandler;
     public CraftableMachine cm = null;
+    public boolean sellmode = false;
+    public boolean trashmode = false;
 
     public abstract void transfer();
     protected Hero hero;
     protected MenuBar menuBar = new MenuBar(this);
-    protected ArtisanMenu artisanMenu=new ArtisanMenu(this);
+    protected ArtisanMenu artisanMenu = new ArtisanMenu(this);
     protected BarnOrCoopMenuBar barnOrCoopMenuBar = new BarnOrCoopMenuBar(this);
     protected Texture hudTexture = new Texture(Gdx.files.internal("game/Clock/Clock.png"));
     protected Image hudImage, energyBarImage, energyGreenImage, energyRedImage, energyYellowImage;
@@ -517,7 +521,7 @@ public abstract class GameScreen implements Screen {
     }
 
     public void handleFriendship(Stage stage, PlayerData playerData, NPCData npcData) {
-        friendshipStageHandler = new FriendshipStageHandler(stage, playerData, npcData);
+        friendshipStageHandler = new FriendshipStageHandler(this, stage, playerData, npcData);
         friendshipMode = true;
 
         overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
@@ -528,7 +532,6 @@ public abstract class GameScreen implements Screen {
 
         overlay.getColor().a = 0;
         overlay.addAction(Actions.fadeIn(0.5f));
-
 
         stage.addActor(overlay);
         overlay.toBack();

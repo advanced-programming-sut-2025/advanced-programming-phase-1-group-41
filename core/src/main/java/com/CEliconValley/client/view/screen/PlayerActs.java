@@ -13,11 +13,11 @@ import com.CEliconValley.models.animals.FishType;
 import com.CEliconValley.models.animals.animalKinds.Cow;
 import com.CEliconValley.models.animals.animalKinds.Goat;
 import com.CEliconValley.models.animals.animalKinds.Sheep;
+import com.CEliconValley.models.buildings.ShippingBin;
 import com.CEliconValley.models.foragings.Fertilizer;
 import com.CEliconValley.models.foragings.Seed;
 import com.CEliconValley.models.items.CraftableMachine;
 import com.CEliconValley.models.items.Item;
-import com.CEliconValley.models.items.craftablemachines.Machine;
 import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.tools.*;
 import com.badlogic.gdx.Gdx;
@@ -51,6 +51,17 @@ public class PlayerActs {
                 ((CottageScreen) screen).isRefrigeratorOpen = !((CottageScreen) screen).isRefrigeratorOpen;
             }
             return new Result(true, "refrigerator opened");
+        }
+
+        if(screen.sellmode){
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+                screen.sellmode = false;
+            }
+        }
+        if(screen.trashmode){
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+                screen.trashmode = false;
+            }
         }
 
         if (screen.cheatMode) {
@@ -97,11 +108,15 @@ public class PlayerActs {
                 screen.getChatInput().setText("");
             } else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                 screen.chatMode = false;
-                screen.isArtisanMenuOpen = false;
                 screen.getChatInput().setVisible(false);
                 Gdx.input.setInputProcessor(screen.stage);
             }
             return new Result(false, "chat");
+        }
+        if(screen.isArtisanMenuOpen && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+            screen.isArtisanMenuOpen = false;
+            screen.getChatInput().setVisible(false);
+            Gdx.input.setInputProcessor(screen.stage);
         }
         if(screen.scoreboardMode){
             screen.scoreboardStage.act(delta);
@@ -211,9 +226,6 @@ public class PlayerActs {
                 }
             }
             return new Result(true, "menu");
-        }if(Gdx.input.isKeyJustPressed(Input.Keys.X)){
-            screen.isArtisanMenuOpen = !screen.isArtisanMenuOpen;
-            return new Result(true, "Artisan");
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {
@@ -239,7 +251,10 @@ public class PlayerActs {
                 putItemOnGround(mousePos.x, mousePos.y, farmScreen);
             }else if(screen instanceof GreenHouseScreen greenHouseScreen){
                 greenHouseScreen.camera.unproject(mousePos);
-                putSeedInGreenhouse(mousePos.x, mousePos.y, greenHouseScreen);
+                smthOnVillage(mousePos.x, mousePos.y, greenHouseScreen);
+            }else if(screen instanceof VillageScreen villageScreen){
+                villageScreen.camera.unproject(mousePos);
+                smthOnVillage(mousePos.x, mousePos.y, villageScreen);
             }
         }
         if (screen.isMenuOpen) {
@@ -709,7 +724,7 @@ public class PlayerActs {
     }
 
 
-    public static void putSeedInGreenhouse(float mouseX, float mouseY, GreenHouseScreen screen){
+    public static void smthOnVillage(float mouseX, float mouseY, GreenHouseScreen screen){
         Hero hero = screen.getHero();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
@@ -722,8 +737,8 @@ public class PlayerActs {
                         System.out.println("invalid dir");
                         return;
                     }
-                    if(hero.selectedItemname == null) return;
-                    Item item = Finder.parseItem(hero.selectedItemname);
+                    if(hero.selectedItemName == null) return;
+                    Item item = Finder.parseItem(hero.selectedItemName);
                     if(item == null) return ;
                     if(item instanceof Seed seed) {
                         GameMessage<GameCommand> msg = new GameMessage<>("game-command",
@@ -736,6 +751,27 @@ public class PlayerActs {
                             new GameCommand("fertilize -f " + fertilizer.getName() + " -d " + dir,
                                 AppClient.getUserData().getUsername()));
                         AppClient.getClient().send(new Gson().toJson(msg));
+                    }
+                }
+            }
+        }
+    }
+    public static void smthOnVillage(float mouseX, float mouseY, VillageScreen screen){
+        Hero hero = screen.getHero();
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                CellData cd = Finder.getcdByvd(hero.playerX.get()+j,
+                    hero.playerY.get()+i);
+                Cell cell = cd.extractData();
+                if(mouseX >= cell.getX()*CELL_SIZE && mouseX <= (cell.getX()+1)*CELL_SIZE &&
+                    mouseY >= cell.getY()*CELL_SIZE && mouseY <= (cell.getY()+1)*CELL_SIZE){
+                    int dir = getDir(i, j);
+                    if(dir == -1){
+                        System.out.println("invalid dir");
+                        return;
+                    }
+                    if(Finder.parseItem(cd.getObjectName()) instanceof ShippingBin shippingBin){
+                        screen.sellmode = true;
                     }
                 }
             }
@@ -757,6 +793,12 @@ public class PlayerActs {
                         screen.isArtisanMenuOpen = !screen.isArtisanMenuOpen;
                         screen.cm = craftableMachine;
                         return;
+                    }else if(Finder.parseItem(cd.getObjectName()) instanceof ShippingBin shippingBin){
+                        System.out.println("im here for shippingbin s:)");
+                        screen.sellmode = true;
+                    }else if(Finder.parseItem(cd.getObjectName()) instanceof TrashCan){
+                        System.out.println("im here for basic tool s:)");
+                        screen.trashmode = true;
                     }
 
                     System.out.println("im around :)");
@@ -767,8 +809,8 @@ public class PlayerActs {
                         System.out.println("invalid dir");
                         return;
                     }
-                    if(hero.selectedItemname == null) return;
-                    Item item = Finder.parseItem(hero.selectedItemname);
+                    if(hero.selectedItemName == null) return;
+                    Item item = Finder.parseItem(hero.selectedItemName);
                     if(item == null) return ;
                     if(item instanceof Seed seed) {
                         GameMessage<GameCommand> msg = new GameMessage<>("game-command",
@@ -784,7 +826,7 @@ public class PlayerActs {
                     }
                     else{
                         GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                            new GameCommand("place item -n "+hero.selectedItemname+" -d "+dir,
+                            new GameCommand("place item -n "+hero.selectedItemName +" -d "+dir,
                                 AppClient.getUserData().getUsername()));
                         AppClient.getClient().send(new Gson().toJson(msg));
                         return;

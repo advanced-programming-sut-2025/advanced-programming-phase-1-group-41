@@ -7,6 +7,7 @@ import com.CEliconValley.common.VillageData;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.buildings.Bridge;
+import com.CEliconValley.models.buildings.Well;
 import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.foragings.Nature.Lake;
 import com.CEliconValley.models.foragings.Nature.WaterTile;
@@ -88,6 +89,12 @@ public class WaterSpawner {
         float x = cellData.getX() * CELL_SIZE;
         float y = cellData.getY() * CELL_SIZE;
         Cell cell = cellData.extractData();
+        if(Finder.getcdByFarmData(cellData.getX(), cellData.getY() - 1, farmData) != null) {
+            Cell checker = Finder.getcdByFarmData(cellData.getX(), cellData.getY() - 1, farmData).extractData();
+            if(checker.getObjectMap() instanceof Well){
+                return false;
+            }
+        }
         if (cell.getObjectMap() instanceof Lake lake) {
             TextureRegion waterFrame = waterAnimation.getKeyFrame(passiveStateTime, true);
             batch.draw(waterFrame, x, y, CELL_SIZE, CELL_SIZE);

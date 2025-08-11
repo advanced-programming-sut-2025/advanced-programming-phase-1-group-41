@@ -8,6 +8,7 @@ import com.CEliconValley.common.messages.*;
 import com.CEliconValley.database.UserDB;
 import com.CEliconValley.models.*;
 import com.CEliconValley.client.view.GameMenu;
+import com.CEliconValley.models.buildings.ShippingBin;
 import com.CEliconValley.models.npc.npcCharacters.NPCBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -205,7 +206,11 @@ public class GameHandler {
 
         GameMessage<GameData> response = new GameMessage<>("new-game", new GameData(game));
         App.getServer().sendToGroupByPlayers(game.getPlayers(), new Gson().toJson(response));
-
+        App.lobbies.remove(App.getPreGame().getLobby());
+        App.getGame().getVillage().getCell(44,14).setObjectMap(new ShippingBin());
+        App.getGame().getVillage().getCell(45,14).setObjectMap(new ShippingBin());
+        App.getGame().getVillage().getCell(49,14).setObjectMap(new ShippingBin());
+        App.getGame().getVillage().getCell(50,14).setObjectMap(new ShippingBin());
         // Start command processor thread
         game.commandThread = new Thread(() -> {
             while (!Thread.currentThread().isInterrupted()) {

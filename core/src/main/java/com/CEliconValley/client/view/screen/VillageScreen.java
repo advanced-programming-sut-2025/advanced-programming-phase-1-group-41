@@ -1,10 +1,12 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
+import com.CEliconValley.client.controller.spawners.ItemSpawner;
 import com.CEliconValley.client.model.AnimalSprite;
 import com.CEliconValley.client.model.NPCSprite;
 import com.CEliconValley.client.model.PlayerSprite;
 import com.CEliconValley.client.view.screen.maps.VillageMap;
+import com.CEliconValley.client.view.screen.menu.ShippingBinBar;
 import com.CEliconValley.client.view.screen.randomwalk.Node;
 import com.CEliconValley.client.view.screen.randomwalk.SimplePathFinder;
 import com.CEliconValley.common.*;
@@ -47,7 +49,8 @@ public class VillageScreen extends GameScreen implements Screen {
     private final BuildingSpawner buildingSpawner;
     private final GroundSpawner groundSpawner;
     private final CropSpawner cropSpawner;
-    private VillageMap villageMap;
+    private final ItemSpawner itemSpawner = new ItemSpawner();
+    public VillageMap villageMap;
     private ArrayList<Hero> otherHeroes;
     private GroundBorderSpawner groundBorderSpawner;
     private final List<CellData> visibleCells = new ArrayList<>();
@@ -66,7 +69,7 @@ public class VillageScreen extends GameScreen implements Screen {
     Texture farmlandTexture = GameAssetManager.getGameAssetManager().getTileTexture("farmland.png");
     Texture bombedTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
 
-    private OrthographicCamera camera;
+    public OrthographicCamera camera;
 
     public static final float VIRTUAL_WIDTH = 3160f;
     public static final float VIRTUAL_HEIGHT = 1350f;
@@ -174,6 +177,8 @@ public class VillageScreen extends GameScreen implements Screen {
 
         this.farmScreen = farmScreen;
 
+        shippingBinBar = new ShippingBinBar(this);
+
         updatenpcData();
         updatePlayers();
     }
@@ -202,10 +207,10 @@ public class VillageScreen extends GameScreen implements Screen {
         PlayerActs.approach(hero);
 
         batch.begin();
-        int minX = (int) ((camera.position.x - camera.viewportWidth / 2) / CELL_SIZE) - 8;
-        int maxX = (int) ((camera.position.x + camera.viewportWidth / 2) / CELL_SIZE) + 8;
-        int minY = (int) ((camera.position.y - camera.viewportHeight / 2) / CELL_SIZE) - 8;
-        int maxY = (int) ((camera.position.y + camera.viewportHeight / 2) / CELL_SIZE) + 8;
+        int minX = (int) ((camera.position.x - camera.viewportWidth / 2) / CELL_SIZE);
+        int maxX = (int) ((camera.position.x + camera.viewportWidth / 2) / CELL_SIZE) + 12;
+        int minY = (int) ((camera.position.y - camera.viewportHeight / 2) / CELL_SIZE) - 10;
+        int maxY = (int) ((camera.position.y + camera.viewportHeight / 2) / CELL_SIZE);
 
         visibleCells.clear();
         for (CellData cell : villageMap.villageData.getCellsData()) {
@@ -259,6 +264,7 @@ public class VillageScreen extends GameScreen implements Screen {
                 batch.draw(frame, hero.renderX - CELL_SIZE / 2f, hero.renderY - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
             }
             buildingSpawner.renderBuildings(batch, cellData, villageMap.villageData);
+            itemSpawner.renderItems(batch, cellData, this);
 //            buildingSpawner.renderOnBuildings(batch, cellData, villageMap.villageData);
         }
 
@@ -319,7 +325,11 @@ public class VillageScreen extends GameScreen implements Screen {
         if (AppClient.getGameData().getWeatherType().equals(WeatherType.Stormy)) rain.render(batch, camera,500,true);
         thunder.render(batch, camera);
 
+
         if (isMenuOpen) menuBar.render(batch, camera);
+        else if(sellmode){
+            shippingBinBar.render(batch, camera, true);
+        }
         else inventoryRenderer.render(batch, camera);
 
         passiveStateTime += delta;

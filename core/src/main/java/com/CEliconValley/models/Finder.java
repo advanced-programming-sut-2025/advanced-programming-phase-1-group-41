@@ -402,4 +402,13 @@ public class Finder {
         }
         return null;
     }
+
+    public static CellData getcdByvd(int x, int y) {
+        for (CellData cd : AppClient.getGameData().getVillageData().getCellsData()) {
+            if(cd.getX() == x && cd.getY() == y){
+                return cd;
+            }
+        }
+        return null;
+    }
 }

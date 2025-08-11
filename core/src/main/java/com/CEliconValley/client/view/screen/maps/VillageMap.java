@@ -1,5 +1,6 @@
 package com.CEliconValley.client.view.screen.maps;
 
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.VillageData;
 import com.CEliconValley.models.Cell;
@@ -15,6 +16,10 @@ public class VillageMap implements Location {
 
     public VillageMap(VillageData villageData) {
         this.villageData = villageData;
+    }
+
+    public void updateVillageData(){
+        this.villageData = AppClient.getGameData().getVillageData();
     }
 
     public boolean canMoveTo(int x, int y){

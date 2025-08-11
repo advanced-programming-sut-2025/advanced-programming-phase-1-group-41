@@ -7,9 +7,7 @@ import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.VoteMessage;
 import com.CEliconValley.controllers.ItemManager;
 import com.CEliconValley.models.*;
-import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.items.*;
-import com.CEliconValley.models.npc.npcCharacters.NPC;
 import com.CEliconValley.models.tools.Tool;
 import com.CEliconValley.models.ui.CustomColors;
 import com.CEliconValley.models.ui.GameAssetManager;
@@ -19,16 +17,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+
+import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class MenuBar {
     private final Texture menuTexture;
@@ -185,7 +180,7 @@ public class MenuBar {
         float slotSize = screenWidth * 0.035f;
 
         float spacingX = slotSize * 0.275f;
-        float spacingY = slotSize * 0.6f;
+        float spacingY = slotSize * 0.525f;
 
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mousePos);
@@ -260,7 +255,7 @@ public class MenuBar {
                                 }
                             }
                             else if(Gdx.input.isButtonJustPressed(1)){
-                                screen.hero.selectedItemname = item.getName();
+                                screen.hero.selectedItemName = item.getName();
                             }
 
                             String name = readableName(item.getName());
@@ -304,20 +299,48 @@ public class MenuBar {
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mousePos);
 
-        if(Finder.getpd().getCurrentToolName() == null){
+        if(Finder.getpd().getCurrentToolName() != null){
+            Tool tool = (Tool) Finder.parseItem(Finder.getpd().getCurrentToolName());
+            TextureRegion texture1 = ItemManager.getTexture(tool.getID());
+            if (texture1 != null){
+                float drawX = startingX + screenWidth / 10f;
+                float drawY = startingY + screenHeight * 0.075f;
+                float width = screenWidth * 0.1f;
+                float height = screenWidth * 0.1f;
+
+                batch.draw(texture1, drawX, drawY - 30, width, height);
+                batch.setColor(1, 1, 1, 1);
+
+                String itemText = "Selected Tool: " + Finder.getpd().getCurrentToolName();
+
+                font.getData().setScale(2f);
+                font.draw(batch, itemText,
+                    drawX + width / 2 - itemText.length() * 7.5f, drawY + height + 20);
+                font.getData().setScale(1f);
+            }
+        }
+
+        if(screen.hero.selectedItemName == null){
             return;
         }
-        Tool tool = (Tool) Finder.parseItem(Finder.getpd().getCurrentToolName());
-        TextureRegion texture = ItemManager.getTexture(tool.getID());
-        if (texture == null) return;
+        Item item = Finder.parseItem(screen.hero.selectedItemName);
+        TextureRegion texture2 = ItemManager.getTexture(item.getID());
+        if (texture2 == null) return;
 
-        float drawX = startingX + screenWidth / 4f;
+        float drawX = startingX + screenWidth / 2.5f;
         float drawY = startingY + screenHeight * 0.075f;
-        float width = screenWidth * 0.1f;
+        float width = screenWidth * 0.1f * texture2.getRegionWidth() / texture2.getRegionHeight();
         float height = screenWidth * 0.1f;
 
-        batch.draw(texture, drawX, drawY, width, height);
+        batch.draw(texture2, drawX, drawY - 30, width, height);
         batch.setColor(1, 1, 1, 1);
+
+        String itemText = "Selected Item: " + screen.hero.selectedItemName;
+
+        font.getData().setScale(2f);
+        font.draw(batch, itemText,
+            drawX + width / 2 - itemText.length() * 7.5f, drawY + height + 20);
+        font.getData().setScale(1f);
 
     }
 
@@ -497,7 +520,6 @@ public class MenuBar {
                     font.setColor(Color.WHITE);
                 }
                 if (clicked) {
-                    //TODO Click on player
                     screen.friendshipMode = true;
                     screen.handleFriendship(screen.friendshipStage, playerData, null);
                 }
@@ -547,7 +569,6 @@ public class MenuBar {
                     font.setColor(Color.WHITE);
                 }
                 if (clicked) {
-                    //TODO Click on npc
                     screen.friendshipMode = true;
                     screen.handleFriendship(screen.friendshipStage, null, npcData);
                 }

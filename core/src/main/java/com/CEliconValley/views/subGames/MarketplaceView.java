@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 
 public class MarketplaceView {
     static MarketplaceController controller = new MarketplaceController();
-    public static boolean check(String input){
+    public static boolean check(String input, String playername){
         Matcher matcher;
         if ((matcher = StoreCommands.ShowAllProducts.getMatcher(input)) != null) {
             System.out.println(controller.showAllProducts(matcher));
@@ -16,7 +16,7 @@ public class MarketplaceView {
         }else if ((matcher = StoreCommands.Purchase.getMatcher(input)) != null) {
             System.out.println(controller.purchaseProduct(matcher));
         }else if ((matcher = StoreCommands.Sell.getMatcher(input)) != null) {
-            System.out.println(controller.sellProduct(matcher));
+            System.out.println(controller.sellProduct(matcher, playername));
         } else if ((matcher = StoreCommands.CheatAddDollars.getMatcher(input)) != null) {
 //            System.out.println(controller.cheatAddMoney(matcher));
         } else{

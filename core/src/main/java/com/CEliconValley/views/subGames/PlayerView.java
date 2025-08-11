@@ -21,7 +21,7 @@ public class PlayerView {
         }else if((matcher = GameMainCommands.CheatAddItem.getMatcher(input))!=null){
 //            System.out.println(controller.cheatAddItem(matcher));
         }else if((matcher = InventoryAndToolCommands.InventoryTrash.getMatcher(input))!=null){
-            System.out.println(controller.inventoryTrash(matcher));;
+            System.out.println(controller.inventoryTrash(matcher, playername));;
         }else if((matcher = InventoryAndToolCommands.InventoryShow.getMatcher(input))!=null){
             System.out.println(controller.showInventory(matcher, playername));
         }else if((matcher = GameMainCommands.Fishing.getMatcher(input))!=null){

@@ -49,7 +49,7 @@ public class ArtisanMenu {
         {42, 13, 56, 28}
     };;
     float[] neededItemBound=new float[]{
-        60,13,98,26
+        65,13,98,26
     };
 
 //    private final int tileWidth;
@@ -90,9 +90,7 @@ public class ArtisanMenu {
         artisanElementsTexture[7]=initialize[7][0];
         artisanElementsTexture[8]=initialize[8][0];
 
-
-
-         buttonActive = new boolean[3];
+        buttonActive = new boolean[3];
 
     }
 
@@ -106,29 +104,30 @@ public class ArtisanMenu {
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
 
-
         float menuWidth = screenWidth * 0.6f;
         float menuHeight = screenHeight * 0.5f;
+
         startingX = camera.position.x - menuWidth / 2f;
-        startingY = camera.position.y;
+        startingY = camera.position.y - menuHeight / 7.5f;
 
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mousePos);
 
-
         batch.draw(artisanElementsTexture[0], startingX, startingY, menuWidth, menuHeight);
 
-
-
          float realN1 = startingX + (neededItemBound[0]/DESIGN_WIDTH)*menuWidth;
-         float realM1 =startingY + (neededItemBound[1] / DESIGN_HEIGHT) * menuHeight;
+         float realM1 = startingY + (neededItemBound[1] / DESIGN_HEIGHT) * menuHeight;
          float realN2 =  startingX + (neededItemBound[2]/DESIGN_WIDTH)*menuWidth;
          float realM2 = startingY + (neededItemBound[3]/DESIGN_HEIGHT)*menuHeight;
-         float itemSize=realN2-realN1/neededItems.size();
-         AtomicInteger counter = new AtomicInteger();
-         neededItems.forEach((item,quantity)->{
-             batch.draw(ItemManager.getTexture(item),realN1+ (counter.getAndIncrement()) *itemSize,realM1,itemSize,itemSize);
-         });
+         float itemSize = screenHeight / 20f;
+//         AtomicInteger counter = new AtomicInteger();
+//         neededItems.forEach((item,quantity)->{
+//             batch.draw(ItemManager.getTexture(item),realN1+ (counter.getAndIncrement()) *itemSize,realM1,itemSize,itemSize);
+//         });
+        int counter = 0;
+         for(Item item:neededItems.keySet()){
+             batch.draw(ItemManager.getTexture(item), realN1 + (counter++) * itemSize, realM1, itemSize, itemSize);
+         }
         for (int i = 0; i < buttonBounds.length; i++) {
 
             float realX1 = startingX + (buttonBounds[i][0] / DESIGN_WIDTH) * menuWidth;
@@ -136,12 +135,8 @@ public class ArtisanMenu {
             float realX2 = startingX + (buttonBounds[i][2] / DESIGN_WIDTH) * menuWidth;
             float realY2 = startingY + (buttonBounds[i][3] / DESIGN_HEIGHT) * menuHeight;
 
-
             boolean isHover = mousePos.x >= realX1 && mousePos.x <= realX2 &&
                 mousePos.y >= realY1 && mousePos.y <= realY2;
-
-
-
 
             if (isHover && Gdx.input.isButtonJustPressed(0)) {
                 // TODO idk what
@@ -161,9 +156,9 @@ public class ArtisanMenu {
                 float progress = Math.min(fillTimer / fillDuration, 1f);
 
 
-                 realX1 = startingX + (texX1 / DESIGN_WIDTH) * menuWidth;
-                 realY1 = startingY + (texY1 / DESIGN_HEIGHT) * menuHeight;
-                 realX2 = startingX + (texX2 / DESIGN_WIDTH) * menuWidth;
+                realX1 = startingX + (texX1 / DESIGN_WIDTH) * menuWidth;
+                realY1 = startingY + (texY1 / DESIGN_HEIGHT) * menuHeight;
+                realX2 = startingX + (texX2 / DESIGN_WIDTH) * menuWidth;
                 realY2 = startingY + (texY2 / DESIGN_HEIGHT) * menuHeight;
 
                 float barWidth = realX2 - realX1;
@@ -190,9 +185,6 @@ public class ArtisanMenu {
                     startFill = false;
                 }
             }
-
-
-
         }
         renderInventoryBar(batch, camera, player.getInventory());
     }
@@ -200,12 +192,14 @@ public class ArtisanMenu {
 
 
     private void renderInventoryBar(Batch batch, OrthographicCamera camera, Inventory inventory) {
-        float menuWidth = camera.viewportWidth * 0.6f;
-        float menuHeight = camera.viewportHeight * 0.35f;
-        startingY=startingY-menuHeight*1.25f;
-        batch.draw(inventoryTexture,startingX,startingY,menuWidth,menuHeight);
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
+
+        float menuWidth = screenWidth * 0.6f;
+        float menuHeight = screenHeight * 0.35f;
+
+        startingY = startingY - menuHeight;
+        batch.draw(inventoryTexture,startingX,startingY,menuWidth,menuHeight);
 
         float firstItemX = screenWidth * 0.03f;
         float firstItemY = screenHeight * 0.23f;
