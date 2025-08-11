@@ -1,8 +1,10 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
+import com.CEliconValley.common.FriendshipData;
 import com.CEliconValley.common.NPCData;
 import com.CEliconValley.common.PlayerData;
+import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.ui.FakeCheckbox;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
@@ -15,14 +17,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class FriendshipStageHandler {
     private Stage stage;
+    private GameScreen screen;
     private final Texture backgroundTexture = new Texture(GameAssetManager.getGameAssetManager().CEliconValleyBackground);
     private final Image background = new Image(backgroundTexture);
 
     // Navigation buttons
-    private final TextButton registerTab, loginTab, forgotTab, exitTab;
+    private final TextButton chatTab, giftTab, hugTab, tradeTab, backTab;
 
     // Shared
     private final Label messageLabel;
@@ -30,10 +34,11 @@ public class FriendshipStageHandler {
     private final boolean isPlayer;
     private final PlayerData playerData;
     private final NPCData npcData;
+    private FriendshipData friendshipData;
+    private int friendShipLevel;
 
     // Register form
-    public final TextField regUsername, regPassword, regConfirmPassword, regNickname, regEmail;
-    public final TextButton genderMaleButton, genderFemaleButton, regSubmitButton, randomPasswordButton;
+    public final TextField chatTextField;
 
     // Login form
     public final TextField loginUsername, loginPassword;
@@ -55,50 +60,52 @@ public class FriendshipStageHandler {
     private final Stack formStack;
     public final Table registerForm, loginForm, forgotForm, securityQuestionForm;
 
-    public FriendshipStageHandler(Stage stage, PlayerData playerData, NPCData npcData) {
+    public FriendshipStageHandler(GameScreen screen, Stage stage, PlayerData playerData, NPCData npcData) {
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
 
+
         this.stage = stage;
+        this.screen = screen;
 
         isPlayer = playerData != null;
         this.playerData = playerData;
         this.npcData = npcData;
 
+        if(isPlayer){
+            for(FriendshipData friendshipData1 : playerData.getFriendshipsData()){
+                if(friendshipData1.getPlayer1Name().equals(Finder.getpd().getUsername())
+                    || friendshipData1.getPlayer2Name().equals(Finder.getpd().getUsername())){
+                    friendshipData = friendshipData1;
+                    friendShipLevel = friendshipData1.getLevel();
+                    break;
+                }
+            }
+        } else{
+            friendShipLevel = npcData.getFriendShipData().get(Objects.requireNonNull(Finder.getpd()).getUsername());
+        }
+
         // --- Tabs
-        registerTab = new TextButton("Register", skin);
-        loginTab = new TextButton("Login", skin);
-        forgotTab = new TextButton("Forgot Password", skin);
-        exitTab = new TextButton("Exit", skin);
+        chatTab = new TextButton("Chat", skin);
+        giftTab = new TextButton("Gift", skin);
+        hugTab = new TextButton("Hug", skin);
+        tradeTab = new TextButton("Trade", skin);
+        backTab = new TextButton("Back", skin);
 
         // --- Message
         messageLabel = new Label("", skin);
         messageLabel.setColor(Color.RED);
         messageLabel.setAlignment(Align.center);
 
-        // --- Register Fields
-        regUsername = new TextField("", skin);
-        regUsername.setMessageText("Username");
+        if(friendShipLevel <= 1){
+            giftTab.getLabel().setColor(Color.RED);
+            hugTab.getLabel().setColor(Color.RED);
+        } else if(friendShipLevel == 2){
+            hugTab.getLabel().setColor(Color.RED);
+        }
 
-        regPassword = new TextField("", skin);
-//        regPassword.setPasswordCharacter('*');
-        regPassword.setPasswordMode(true);
-        regPassword.setMessageText("Password");
-
-        regConfirmPassword = new TextField("", skin);
-//        regConfirmPassword.setPasswordCharacter('*');
-        regConfirmPassword.setPasswordMode(true);
-        regConfirmPassword.setMessageText("Confirm Password");
-
-        regNickname = new TextField("", skin);
-        regNickname.setMessageText("Nickname");
-
-        regEmail = new TextField("", skin);
-        regEmail.setMessageText("Email");
-
-        genderMaleButton = new TextButton("Male", skin);
-        genderFemaleButton = new TextButton("Female", skin);
-        regSubmitButton = new TextButton("Submit Registration", skin);
-        randomPasswordButton = new TextButton("Generate Random Password", skin);
+        // --- Chat Fields
+        chatTextField = new TextField("", skin);
+        chatTextField.setMessageText("Type Something...");
 
         // --- Login Fields
         loginUsername = new TextField("", skin);
@@ -153,28 +160,14 @@ public class FriendshipStageHandler {
     private void buildUI() {
         // Tab Row
         Table tabRow = new Table();
-        tabRow.add(registerTab).pad(10);
-        tabRow.add(loginTab).pad(10);
-        tabRow.add(forgotTab).pad(10);
-        tabRow.add(exitTab).pad(10);
-
-        // Register Form Layout
-        Table genderRow = new Table();
-        genderRow.add(genderMaleButton).width(250).pad(5);
-        genderRow.add(genderFemaleButton).width(250).pad(5);
-
-        Table passwordRow = new Table();
-        passwordRow.add(regPassword).width(300).pad(5);
-        passwordRow.add(regConfirmPassword).width(300).pad(5);
+        tabRow.add(chatTab).width(200).pad(10);
+        tabRow.add(giftTab).width(200).pad(10);
+        tabRow.add(hugTab).width(200).pad(10);
+        tabRow.add(tradeTab).width(200).pad(10);
+        tabRow.add(backTab).width(200).pad(10);
 
         registerForm.clear();
-        registerForm.add(regUsername).width(400).row();
-        registerForm.add(regNickname).width(400).padTop(10).row();
-        registerForm.add(regEmail).width(400).padTop(10).row();
-        registerForm.add(passwordRow).padTop(10).row();
-        registerForm.add(randomPasswordButton).width(600).padTop(10).row();
-        registerForm.add(genderRow).padTop(10).row();
-        registerForm.add(regSubmitButton).width(500).padTop(20);
+        registerForm.add(chatTextField).width(400).row();
 
         // Login Form Layout
         loginForm.clear();
@@ -214,7 +207,7 @@ public class FriendshipStageHandler {
 
         mainTable.clear();
         mainTable.top();
-        mainTable.add(tabRow).padTop(20).padBottom(340).row();
+        mainTable.add(tabRow).padTop(200).padBottom(340).row();
         mainTable.add(messageLabel).pad(10).row();
         mainTable.add(formStack).padTop(10);
 
@@ -233,7 +226,7 @@ public class FriendshipStageHandler {
     }
 
     private void setupListeners(){
-        registerTab.addListener(new ClickListener() {
+        chatTab.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 switchForm("register");
@@ -241,7 +234,7 @@ public class FriendshipStageHandler {
             }
         });
 
-        loginTab.addListener(new ClickListener() {
+        giftTab.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 switchForm("login");
@@ -249,11 +242,19 @@ public class FriendshipStageHandler {
             }
         });
 
-        forgotTab.addListener(new ClickListener() {
+        hugTab.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 switchForm("forgot");
                 setMessage("", Color.CLEAR);
+            }
+        });
+
+        backTab.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                screen.friendshipMode = false;
+                Gdx.input.setInputProcessor(screen.stage);
             }
         });
     }
@@ -269,10 +270,6 @@ public class FriendshipStageHandler {
         forgotUsername.setText("");
         forgotAnswer.setText("");
         newPassword.setText("");
-        regUsername.setText("");
-        regEmail.setText("");
-        regNickname.setText("");
-        regPassword.setText("");
-        regConfirmPassword.setText("");
+        chatTextField.setText("");
     }
 }

@@ -6,7 +6,6 @@ import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.ArrayList;
@@ -47,7 +46,7 @@ public class Hero {
     public int destX;
     public int destY;
     public Queue<Node> movementQueue = new LinkedList<>();
-    public String selectedItemname = null;
+    public String selectedItemName = null;
 
 
     public boolean reachedDestination(){

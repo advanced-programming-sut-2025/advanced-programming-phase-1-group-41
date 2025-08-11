@@ -517,7 +517,7 @@ public abstract class GameScreen implements Screen {
     }
 
     public void handleFriendship(Stage stage, PlayerData playerData, NPCData npcData) {
-        friendshipStageHandler = new FriendshipStageHandler(stage, playerData, npcData);
+        friendshipStageHandler = new FriendshipStageHandler(this, stage, playerData, npcData);
         friendshipMode = true;
 
         overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
@@ -528,7 +528,6 @@ public abstract class GameScreen implements Screen {
 
         overlay.getColor().a = 0;
         overlay.addAction(Actions.fadeIn(0.5f));
-
 
         stage.addActor(overlay);
         overlay.toBack();

@@ -717,8 +717,8 @@ public class PlayerActs {
                         System.out.println("invalid dir");
                         return;
                     }
-                    if(hero.selectedItemname == null) return;
-                    Item item = Finder.parseItem(hero.selectedItemname);
+                    if(hero.selectedItemName == null) return;
+                    Item item = Finder.parseItem(hero.selectedItemName);
                     if(item == null) return ;
                     if(item instanceof Seed seed) {
                         GameMessage<GameCommand> msg = new GameMessage<>("game-command",
@@ -762,8 +762,8 @@ public class PlayerActs {
                         System.out.println("invalid dir");
                         return;
                     }
-                    if(hero.selectedItemname == null) return;
-                    Item item = Finder.parseItem(hero.selectedItemname);
+                    if(hero.selectedItemName == null) return;
+                    Item item = Finder.parseItem(hero.selectedItemName);
                     if(item == null) return ;
                     if(item instanceof Seed seed) {
                         GameMessage<GameCommand> msg = new GameMessage<>("game-command",
@@ -779,7 +779,7 @@ public class PlayerActs {
                     }
                     else{
                         GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                            new GameCommand("place item -n "+hero.selectedItemname+" -d "+dir,
+                            new GameCommand("place item -n "+hero.selectedItemName +" -d "+dir,
                                 AppClient.getUserData().getUsername()));
                         AppClient.getClient().send(new Gson().toJson(msg));
                         return;

@@ -7,9 +7,7 @@ import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.VoteMessage;
 import com.CEliconValley.controllers.ItemManager;
 import com.CEliconValley.models.*;
-import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.items.*;
-import com.CEliconValley.models.npc.npcCharacters.NPC;
 import com.CEliconValley.models.tools.Tool;
 import com.CEliconValley.models.ui.CustomColors;
 import com.CEliconValley.models.ui.GameAssetManager;
@@ -19,12 +17,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 
@@ -260,7 +253,7 @@ public class MenuBar {
                                 }
                             }
                             else if(Gdx.input.isButtonJustPressed(1)){
-                                screen.hero.selectedItemname = item.getName();
+                                screen.hero.selectedItemName = item.getName();
                             }
 
                             String name = readableName(item.getName());
@@ -304,20 +297,40 @@ public class MenuBar {
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mousePos);
 
-        if(Finder.getpd().getCurrentToolName() == null){
+        if(Finder.getpd().getCurrentToolName() != null){
+            Tool tool = (Tool) Finder.parseItem(Finder.getpd().getCurrentToolName());
+            TextureRegion texture1 = ItemManager.getTexture(tool.getID());
+            if (texture1 != null){
+                float drawX = startingX + screenWidth / 10f;
+                float drawY = startingY + screenHeight * 0.075f;
+                float width = screenWidth * 0.1f;
+                float height = screenWidth * 0.1f;
+
+                batch.draw(texture1, drawX, drawY, width, height);
+                batch.setColor(1, 1, 1, 1);
+
+                font.draw(batch, Finder.getpd().getCurrentToolName(),
+                    drawX + width / 2 - Finder.getpd().getCurrentToolName().length() / 2f * 7.5f, drawY + height + 20);
+            }
+        }
+
+        if(screen.hero.selectedItemName == null){
             return;
         }
-        Tool tool = (Tool) Finder.parseItem(Finder.getpd().getCurrentToolName());
-        TextureRegion texture = ItemManager.getTexture(tool.getID());
-        if (texture == null) return;
+        Item item = Finder.parseItem(screen.hero.selectedItemName);
+        TextureRegion texture2 = ItemManager.getTexture(item.getID());
+        if (texture2 == null) return;
 
-        float drawX = startingX + screenWidth / 4f;
+        float drawX = startingX + screenWidth / 2.5f;
         float drawY = startingY + screenHeight * 0.075f;
         float width = screenWidth * 0.1f;
         float height = screenWidth * 0.1f;
 
-        batch.draw(texture, drawX, drawY, width, height);
+        batch.draw(texture2, drawX, drawY, width, height);
         batch.setColor(1, 1, 1, 1);
+
+        font.draw(batch, screen.hero.selectedItemName,
+            drawX + width / 2 - screen.hero.selectedItemName.length() / 2f * 7.5f, drawY + height + 20);
 
     }
 
@@ -497,7 +510,6 @@ public class MenuBar {
                     font.setColor(Color.WHITE);
                 }
                 if (clicked) {
-                    //TODO Click on player
                     screen.friendshipMode = true;
                     screen.handleFriendship(screen.friendshipStage, playerData, null);
                 }
@@ -547,7 +559,6 @@ public class MenuBar {
                     font.setColor(Color.WHITE);
                 }
                 if (clicked) {
-                    //TODO Click on npc
                     screen.friendshipMode = true;
                     screen.handleFriendship(screen.friendshipStage, null, npcData);
                 }

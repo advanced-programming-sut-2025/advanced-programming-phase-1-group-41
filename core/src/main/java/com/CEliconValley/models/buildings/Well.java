@@ -63,7 +63,6 @@ public class Well implements Building, Item{
         return 1000;
     }
     public int getID() {
-
         return 100000;
     }
 

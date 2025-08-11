@@ -41,7 +41,7 @@ public class ItemManager {
         int row = (id / 100) % 100;
         int col = id % 100;
 
-        if (imageIndex < 0 || imageIndex >= 10) return null;
+        if (imageIndex < 0 || imageIndex > 10) return null;
         if (row < 0 || row >= rows[imageIndex]) return null;
         if (col < 0 || col >= cols[imageIndex]) return null;
 
