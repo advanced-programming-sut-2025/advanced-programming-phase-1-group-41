@@ -299,6 +299,7 @@ public class ClientGameHandler {
 
 
     private static void updateTime(GameScreen gs){
+        if(AppClient.getGameData() == null) return;
         gs.getTimeScreen().updatePointer(AppClient.getGameData().getTime().getHour(),
             AppClient.getGameData().getTime().convertDay()
             ,AppClient.getGameData().getTime().getYear(),

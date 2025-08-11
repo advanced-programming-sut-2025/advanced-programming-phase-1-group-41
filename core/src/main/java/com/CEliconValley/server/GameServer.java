@@ -131,6 +131,21 @@ public class GameServer extends WebSocketServer {
             System.out.println("checker is " + checker);
             System.out.println("names size is " + names.size());
         }
+    }
 
+    public void sendToPlayername(String playername, String message){
+        onlineConnections.forEach((k,v)->{
+            if(v.getUsername().equals(playername)){
+                k.send(message);
+            }
+        });
+    }
+
+    public void sendToPlayer(Player player, String message){
+        onlineConnections.forEach((k,v)->{
+            if(v.getUsername().equals(player.getUser().getUsername())){
+                k.send(message);
+            }
+        });
     }
 }

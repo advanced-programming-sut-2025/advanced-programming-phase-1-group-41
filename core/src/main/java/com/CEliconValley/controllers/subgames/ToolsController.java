@@ -153,7 +153,9 @@ public class ToolsController {
                 } else if(cell.getObjectMap() instanceof Tree){
                     ((Tree) cell.getObjectMap()).water();
                 }
-                return new Result(true, cell.getObjectMap().getName() + " has been watered successfully.");
+                Result result = new Result(true, cell.getObjectMap().getName() + " has been watered successfully.");
+                App.sendResult(result, playername);
+                return result;
             } else{
                 return new Result(false, "Not enough water: " + wc.getTiles());
             }
