@@ -1,12 +1,17 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
+import com.CEliconValley.common.MachineData;
+import com.CEliconValley.common.SlotData;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.controllers.ItemManager;
+import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Player;
+import com.CEliconValley.models.Result;
 import com.CEliconValley.models.foragings.FruitType;
 import com.CEliconValley.models.items.*;
+import com.CEliconValley.models.items.craftablemachines.Machine;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -100,7 +105,13 @@ public class ArtisanMenu {
 
     public void render(Batch batch, OrthographicCamera camera, CraftableMachine craftableMachine) {
         HashMap<Item, Integer> neededItems = craftableMachine.getRecipe().getNeededItems() ;
-
+        MachineData md = null;
+        for (MachineData machine : Finder.getpd().getOnGoingMachines()) {
+            if(machine.getCraftableMachineName().equals(craftableMachine.getName())){
+                md = machine;
+                break;
+            }
+        }
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
 
@@ -124,10 +135,15 @@ public class ArtisanMenu {
 //         neededItems.forEach((item,quantity)->{
 //             batch.draw(ItemManager.getTexture(item),realN1+ (counter.getAndIncrement()) *itemSize,realM1,itemSize,itemSize);
 //         });
-        int counter = 0;
-         for(Item item:neededItems.keySet()){
-             batch.draw(ItemManager.getTexture(item), realN1 + (counter++) * itemSize, realM1, itemSize, itemSize);
-         }
+        if(md != null){
+            int counter = 0;
+            for (SlotData sd : md.getReceivedItemsData()) {
+                if(sd.getQuantity() <= 0) continue;
+                Item item = Finder.parseItem(sd.getItemName());
+                batch.draw(ItemManager.getTexture(item), realN1 + (counter++) * itemSize, realM1, itemSize, itemSize);
+            }
+            buttonActive[1] = false;
+        }
         for (int i = 0; i < buttonBounds.length; i++) {
 
             float realX1 = startingX + (buttonBounds[i][0] / DESIGN_WIDTH) * menuWidth;
@@ -141,6 +157,25 @@ public class ArtisanMenu {
             if (isHover && Gdx.input.isButtonJustPressed(0)) {
                 // TODO idk what
                 buttonActive[i] = !buttonActive[i];
+                if(i == 2 && md != null){
+                    GameMessage<GameCommand> msg = new GameMessage<GameCommand>("game-command",
+                        new GameCommand("artisan start "+craftableMachine.getName(),
+                            AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
+                }else if(i == 0 && md != null){
+                    GameMessage<GameCommand> msg = new GameMessage<GameCommand>("game-command",
+                        new GameCommand("artisan cheat "+craftableMachine.getName(),
+                            AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
+                }else if(i == 1 && md != null){
+                    GameMessage<GameCommand> msg = new GameMessage<GameCommand>("game-command",
+                        new GameCommand("artisan stop "+craftableMachine.getName(),
+                            AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
+                    for (int i1 = 1; i1 < buttonActive.length; i1++) {
+                        buttonActive[i1] = false;
+                    }
+                }
                 System.out.println("Clicked artisan button " + (i + 1));
             }
             int texIndex = buttonActive[i] ? (2 + i * 2) : (1 + i * 2);
@@ -151,9 +186,10 @@ public class ArtisanMenu {
                 fillTimer = 0f;
             }
 
-            if (startFill) {
-                fillTimer += Gdx.graphics.getDeltaTime();
-                float progress = Math.min(fillTimer / fillDuration, 1f);
+            if (md != null) {
+                int init = md.getInitTime();
+                int current = init - md.getProcessTime();
+                float progress = Math.min((float) current / init, 1f);
 
 
                 realX1 = startingX + (texX1 / DESIGN_WIDTH) * menuWidth;
@@ -185,13 +221,34 @@ public class ArtisanMenu {
                     startFill = false;
                 }
             }
+
+            if(md != null && md.getProduceData() != null){
+
+                for (int i1 = 0; i1 < buttonActive.length; i1++) {
+                    buttonActive[i1] = false;
+                }
+
+                Slot slot = md.getProduceData().getSlot();
+                batch.draw(ItemManager.getTexture(slot.getItem()), realN1 - itemSize * 3,
+                    realM1 + itemSize * 2.75f, itemSize * 2, itemSize * 2);
+                if (mousePos.x >= realN1 - itemSize * 3 && mousePos.x <= realN1 - itemSize &&
+                    mousePos.y >= realM1 + itemSize * 2.75f && mousePos.y <= realM1 + itemSize * 4.75) {
+                    if (Gdx.input.isButtonJustPressed(0)) {
+                        GameMessage<GameCommand> msg = new GameMessage<GameCommand>("game-command",
+                            new GameCommand("artisan get "+craftableMachine.getName(),
+                                AppClient.getUserData().getUsername()));
+                        AppClient.getClient().send(new Gson().toJson(msg));
+                    }
+                }
+            }
         }
-        renderInventoryBar(batch, camera, player.getInventory());
+        renderInventoryBar(batch, camera, Finder.getpd().getInventoryData().getInventory(), craftableMachine);
     }
 
 
 
-    private void renderInventoryBar(Batch batch, OrthographicCamera camera, Inventory inventory) {
+    private void renderInventoryBar(Batch batch, OrthographicCamera camera, Inventory inventory,
+                                    CraftableMachine craftableMachine) {
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
 
@@ -261,6 +318,10 @@ public class ArtisanMenu {
                         if (mousePos.x >= x && mousePos.x <= x + slotSize &&
                             mousePos.y >= y && mousePos.y <= y + slotSize) {
                             if (Gdx.input.isButtonJustPressed(0)) {
+                                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                    new GameCommand("artisan use "+craftableMachine.getName()+
+                                        " "+item.getName(), AppClient.getUserData().getUsername()));
+                                AppClient.getClient().send(new Gson().toJson(msg));
                                 // TODO click on inventory
 //                                if(isFood(item)) {
 //                                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",

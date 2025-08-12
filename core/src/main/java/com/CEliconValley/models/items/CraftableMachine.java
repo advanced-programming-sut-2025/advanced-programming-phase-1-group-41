@@ -1,8 +1,9 @@
 package com.CEliconValley.models.items;
 
+import com.CEliconValley.models.foragings.Nature.Obstacle;
 import com.CEliconValley.models.ui.TerminalColors;
 
-public enum CraftableMachine implements Item{
+public enum CraftableMachine implements Item, Obstacle {
     CherryBomb("cb", "CherryBomb",50,CraftingRecipe.CherryBomb),
     Bomb("bb","Bomb",50, CraftingRecipe.Bomb),
     MegaBomb("mb", "Megabomb", 50 , CraftingRecipe.MegaBomb ),
