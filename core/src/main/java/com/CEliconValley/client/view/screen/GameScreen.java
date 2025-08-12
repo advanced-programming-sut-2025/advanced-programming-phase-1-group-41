@@ -27,6 +27,7 @@ import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
@@ -63,6 +64,8 @@ public abstract class GameScreen implements Screen {
     public Label playerVoteLabel;
     public Label howManyVotedLabel;
 
+    public OrthographicCamera camera;
+
     public Label tagMessageLabel;
     public Label messageLabel;
 
@@ -82,7 +85,7 @@ public abstract class GameScreen implements Screen {
     protected Stage chatStage;
     protected Stage scoreboardStage;
     protected Stage friendshipStage;
-    private FriendshipStageHandler friendshipStageHandler;
+    protected FriendshipStageHandler friendshipStageHandler;
     public CraftableMachine cm = null;
     public boolean sellmode = false;
     public boolean trashmode = false;

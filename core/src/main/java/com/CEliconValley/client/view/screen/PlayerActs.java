@@ -56,11 +56,13 @@ public class PlayerActs {
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
                 screen.sellmode = false;
             }
+            return new Result(true, "sellmode opened");
         }
         if(screen.trashmode){
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
                 screen.trashmode = false;
             }
+            return new Result(true, "trash opened");
         }
 
         if (screen.cheatMode) {
@@ -112,10 +114,13 @@ public class PlayerActs {
             }
             return new Result(false, "chat");
         }
-        if(screen.isArtisanMenuOpen && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            screen.isArtisanMenuOpen = false;
-            screen.getChatInput().setVisible(false);
-            Gdx.input.setInputProcessor(screen.stage);
+        if(screen.isArtisanMenuOpen){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+                screen.isArtisanMenuOpen = false;
+                screen.getChatInput().setVisible(false);
+                Gdx.input.setInputProcessor(screen.stage);
+            }
+            return new Result(true, "artisan menu opened");
         }
         if(screen.scoreboardMode){
             screen.scoreboardStage.act(delta);
@@ -127,6 +132,9 @@ public class PlayerActs {
             return new Result(false, "scoreboard");
         }
         if(screen.friendshipMode){
+            if(screen.friendshipStageHandler.isGifting){
+                screen.friendshipStageHandler.renderInventoryBar(stage.getBatch(), screen.camera, Finder.getpd().getInventoryData().getInventory());
+            }
             screen.friendshipStage.act(delta);
             screen.friendshipStage.draw();
             if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){

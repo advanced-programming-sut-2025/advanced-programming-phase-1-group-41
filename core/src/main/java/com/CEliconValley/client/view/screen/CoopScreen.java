@@ -33,7 +33,6 @@ public class CoopScreen extends GameScreen implements Screen {
     private boolean isCoopMenuOpen = false;
     private ArrayList<AnimalSprite> animalSprites;
     private CoopData coopData;
-    private final OrthographicCamera camera;
     private int id;
     public void updateAnimalSprites(CoopData coopData) {
         if(animalSprites == null) {

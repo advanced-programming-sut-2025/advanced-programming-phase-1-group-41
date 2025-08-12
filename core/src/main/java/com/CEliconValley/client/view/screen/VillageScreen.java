@@ -69,8 +69,6 @@ public class VillageScreen extends GameScreen implements Screen {
     Texture farmlandTexture = GameAssetManager.getGameAssetManager().getTileTexture("farmland.png");
     Texture bombedTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
 
-    public OrthographicCamera camera;
-
     public static final float VIRTUAL_WIDTH = 3160f;
     public static final float VIRTUAL_HEIGHT = 1350f;
     public static final int CELLS_IN_WIDTH = 15;

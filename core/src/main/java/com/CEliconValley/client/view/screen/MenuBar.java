@@ -37,8 +37,8 @@ public class MenuBar {
     private final int tileWidth;
     private final int tileHeight;
     private Player player;
-    BitmapFont font = new BitmapFont();
-    ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private final BitmapFont font = new BitmapFont();
+    private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private int startingRow = 0;
     private float startingX;
     private float startingY;

@@ -35,7 +35,6 @@ public class BarnScreen extends GameScreen implements Screen {
     private boolean isBarnMenuOpen = false;
     private ArrayList<AnimalSprite> animalSprites;
     private BarnData barnData;
-    private final OrthographicCamera camera;
     private int id;
     private AnimalSprite lastAnimal = null;
 
