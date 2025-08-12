@@ -19,6 +19,8 @@ import com.CEliconValley.models.buildings.animalContainer.BarnType;
 import com.CEliconValley.models.buildings.animalContainer.Coop;
 import com.CEliconValley.models.buildings.animalContainer.CoopType;
 import com.CEliconValley.models.foragings.Nature.Grass;
+import com.CEliconValley.models.foragings.Nature.Mine;
+import com.CEliconValley.models.foragings.Nature.Mineral;
 import com.CEliconValley.models.items.CraftableMachine;
 import com.CEliconValley.models.items.craftablemachines.FishSmoker;
 import com.CEliconValley.models.items.craftablemachines.Machine;
@@ -275,6 +277,8 @@ class FarmScreen extends GameScreen implements Screen {
                     batch.draw(sandTexture, x, y, CELL_SIZE, CELL_SIZE);
                 } else {
                 }
+            } else if(cell.getObjectMap() instanceof Mine || cell.getObjectMap() instanceof Mineral) {
+                batch.draw(bombedTexture, x, y, CELL_SIZE, CELL_SIZE);
             }
 //            batch.draw(groundCache.get(cell), x, y, CELL_SIZE, CELL_SIZE);
         }

@@ -8,13 +8,16 @@ import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.controllers.ItemManager;
 import com.CEliconValley.models.Finder;
+import com.CEliconValley.models.PlayerMessage;
 import com.CEliconValley.models.items.Food;
 import com.CEliconValley.models.items.Inventory;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
 import com.CEliconValley.models.tools.Tool;
+import com.CEliconValley.models.ui.CustomColors;
 import com.CEliconValley.models.ui.FakeCheckbox;
 import com.CEliconValley.models.ui.GameAssetManager;
+import com.CEliconValley.models.ui.InventoryBarActor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -39,14 +42,13 @@ public class FriendshipStageHandler {
     private Stage stage;
     private GameScreen screen;
     private final Texture backgroundTexture = new Texture(GameAssetManager.getGameAssetManager().CEliconValleyBackground);
-    private final Image background = new Image(backgroundTexture);
 
     private final BitmapFont font = new BitmapFont();
-    private ShapeRenderer shapeRenderer = new ShapeRenderer();
-    private float startingX;
-    private float startingY;
     private int startingRow = 0;
-    public boolean isGifting = false;
+    private final InventoryBarActor invActor;
+    public boolean isGifting = false, isChatting = false;
+    private final Image avatarImage;
+    private final Label nameLabel;
 
     // Navigation buttons
     private final TextButton chatTab, giftTab, hugTab, tradeTab, backTab;
@@ -54,14 +56,16 @@ public class FriendshipStageHandler {
     // Shared
     private final Label messageLabel;
 
-    private final boolean isPlayer;
-    private final PlayerData playerData;
-    private final NPCData npcData;
+    public final boolean isPlayer;
+    public final PlayerData playerData;
+    public final NPCData npcData;
     private FriendshipData friendshipData;
     private int friendShipLevel;
 
-    // Register form
+    // Chat form
     public final TextField chatTextField;
+    public Table chatTable;
+    private ScrollPane chatScrollPane;
 
     // Forgot Password form
     public final TextField forgotUsername, forgotAnswer, newPassword;
@@ -88,10 +92,6 @@ public class FriendshipStageHandler {
 
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
-        float menuWidth = screenWidth * 0.6f;
-        float menuHeight = screenHeight * 0.7f;
-        startingX = camera.position.x - menuWidth / 2f;
-        startingY = camera.position.y - menuHeight / 2f;
 
         isPlayer = playerData != null;
         this.playerData = playerData;
@@ -106,8 +106,14 @@ public class FriendshipStageHandler {
                     break;
                 }
             }
+            avatarImage = new Image(new Texture(Gdx.files.internal(playerData.getAvatarPath())));
+            nameLabel = new Label(playerData.getUsername(), skin);
+            nameLabel.setColor(CustomColors.SWAMP_COLOR);
         } else{
             friendShipLevel = npcData.getFriendShipData().get(Objects.requireNonNull(Finder.getpd()).getUsername());
+            avatarImage = new Image(GameAssetManager.getGameAssetManager().getNPCImage(npcData.getName(), friendShipLevel));
+            nameLabel = new Label(npcData.getName(), skin);
+            nameLabel.setColor(CustomColors.SWAMP_COLOR);
         }
 
         // --- Tabs
@@ -132,8 +138,22 @@ public class FriendshipStageHandler {
         // --- Chat Fields
         chatTextField = new TextField("", skin);
         chatTextField.setMessageText("Type Something...");
+        chatTextField.setWidth(200);
+
+        chatScrollPane = new ScrollPane(chatTable, GameAssetManager.getGameAssetManager().getSkin(), "hiddenScroll");
+        chatScrollPane.setFadeScrollBars(false);
+        chatScrollPane.setScrollingDisabled(true, false);
+
+        chatScrollPane.setActor(chatTable);
+        Gdx.app.postRunnable(() -> {
+            chatScrollPane.validate();
+            chatScrollPane.setScrollPercentY(1f);
+        });
+
 
         // --- Gift Fields
+        invActor = new InventoryBarActor(this, camera, Finder.getpd().getInventoryData().getInventory(), font);
+        invActor.setVisible(false);
 
         // --- Forgot Fields
         forgotUsername = new TextField("", skin);
@@ -166,11 +186,83 @@ public class FriendshipStageHandler {
         hugForm = new Table();
         tradeForm = new Table();
 
+
         Gdx.input.setInputProcessor(stage);
+        stage.addActor(invActor);
         stage.addActor(mainTable);
-//        stage.addActor(background);
+        stage.addActor(avatarImage);
+
+        avatarImage.setPosition(screenWidth * 0.15f, screenHeight * 0.75f);
 
         buildUI();
+    }
+
+    public void updateChat(){
+        chatTable.clear();
+        chatTable = new Table();
+        if(AppClient.getGameData() == null ) return;
+        //TODO Players Chat update
+        for(PlayerMessage message : AppClient.getGameData().getPlayerMessages()){
+            assert AppClient.getUserData() != null;
+            if(message.getSender().equals(AppClient.getUserData().getUsername())){
+                Label label = new Label(message.getMessage() + "-", GameAssetManager.getGameAssetManager().getSkin());
+                label.setWrap(true);
+                label.setAlignment(Align.right);
+                label.setColor(CustomColors.GAMEGREENCOLOR);
+                chatTable.add(label).width(380).right().padBottom(5).row();
+            } else{
+                Label label = new Label(message.getSender() + ": " + message.getMessage(), GameAssetManager.getGameAssetManager().getSkin());
+                label.setAlignment(Align.left);
+                if(label.getText().toString().matches(".+@"+AppClient.getUserData().getUsername()+".+")){
+                    label.setColor(Color.BLUE);
+                }
+                chatTable.add(label).width(380).left().padBottom(5).row();
+            }
+        }
+        chatTable.row();
+        chatTable.row().row();
+        chatTable.padBottom(20);
+        chatScrollPane.setActor(chatTable);
+        chatScrollPane.setFadeScrollBars(false);
+        chatScrollPane.setScrollingDisabled(true, false);
+        Gdx.app.postRunnable(() -> {
+            chatScrollPane.validate();
+            chatScrollPane.setScrollPercentY(1f);
+        });
+
+    }
+
+    private void setupChatUI(){
+        chatTable = new Table();
+        chatTable.setFillParent(true);
+        //TODO Players Chat
+        for(PlayerMessage message : AppClient.getGameData().getPlayerMessages()){
+            assert AppClient.getUserData() != null;
+            if(message.getSender().equals(AppClient.getUserData().getUsername())){
+                Label label = new Label(message.getMessage() + "-", GameAssetManager.getGameAssetManager().getSkin());
+                label.setWrap(true);
+                label.setAlignment(Align.right);
+                label.setColor(CustomColors.GAMEGREENCOLOR);
+                chatTable.add(label).width(380).right().padBottom(5).row();
+            } else{
+                Label label = new Label(message.getSender() + ": " + message.getMessage(), GameAssetManager.getGameAssetManager().getSkin());
+                label.setWrap(true);
+                label.setAlignment(Align.left);
+                chatTable.add(label).width(380).left().padBottom(5).row();
+            }
+        }
+        chatScrollPane = new ScrollPane(chatTable, GameAssetManager.getGameAssetManager().getSkin(), "hiddenScroll");
+        chatScrollPane.setFadeScrollBars(false);
+        chatScrollPane.setScrollingDisabled(true, false);
+
+        Table container = new Table();
+        container.setFillParent(true);
+        container.bottom().left().pad(10);
+        container.add(chatScrollPane).width(400).height(325).row();
+        container.add(chatTextField).width(400).height(60);
+
+        container.setPosition(stage.getWidth() / 3.5f, stage.getHeight() / 4.25f);
+        chatForm.addActor(container);
     }
 
     private void buildUI() {
@@ -183,7 +275,7 @@ public class FriendshipStageHandler {
         tabRow.add(backTab).width(200).pad(10);
 
         chatForm.clear();
-        chatForm.add(chatTextField).width(400).row();
+        setupChatUI();
 
         // Login Form Layout
         giftForm.clear();
@@ -219,8 +311,8 @@ public class FriendshipStageHandler {
 
         mainTable.clear();
         mainTable.top();
-        mainTable.add(tabRow).padTop(200).padBottom(340).row();
-        mainTable.add(messageLabel).pad(10).row();
+        mainTable.add(tabRow).padTop(200).row();
+        mainTable.add(messageLabel).pad(10).padBottom(200).row();
         mainTable.add(formStack).padTop(10);
 
         switchForm("gift");
@@ -242,24 +334,32 @@ public class FriendshipStageHandler {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 switchForm("chat");
-                setMessage("", Color.CLEAR);
+                isChatting = true;
             }
         });
 
         giftTab.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+//                if(friendShipLevel <= 1){
+//                    setMessage("Your friendship level should be at least 2 to gift.", Color.RED);
+//                    return;
+//                }
                 switchForm("gift");
-                setMessage("", Color.CLEAR);
                 isGifting = true;
+                invActor.setVisible(true);
             }
         });
 
         hugTab.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                if(friendShipLevel <= 2){
+                    setMessage("Your friendship level should be at least 3 to hug.", Color.RED);
+                    return;
+                }
                 switchForm("hug");
-                setMessage("", Color.CLEAR);
+                //TODO Hug
             }
         });
 
@@ -267,7 +367,6 @@ public class FriendshipStageHandler {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 switchForm("trade");
-                setMessage("", Color.CLEAR);
             }
         });
 
@@ -276,6 +375,7 @@ public class FriendshipStageHandler {
             public void clicked(InputEvent event, float x, float y) {
                 screen.friendshipMode = false;
                 Gdx.input.setInputProcessor(screen.stage);
+                emptyFields();
             }
         });
     }
@@ -290,135 +390,9 @@ public class FriendshipStageHandler {
         forgotAnswer.setText("");
         newPassword.setText("");
         chatTextField.setText("");
+        setMessage("", Color.CLEAR);
+        invActor.setVisible(false);
         isGifting = false;
+        isChatting = false;
     }
-
-    public void renderInventoryBar(Batch batch, OrthographicCamera camera, Inventory inventory) {
-        float screenWidth = camera.viewportWidth;
-        float screenHeight = camera.viewportHeight;
-
-        float firstItemX = screenWidth * 0.0370f;
-        float firstItemY = screenHeight * 0.5225f;
-
-        int row = 0, startPoint = 0;
-        float slotSize = screenWidth * 0.035f;
-
-        float spacingX = slotSize * 0.275f;
-        float spacingY = slotSize * 0.525f;
-
-        Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        camera.unproject(mousePos);
-        batch.begin();
-
-        for (int col = 0; row < 3; ) {
-            int index = col + (startingRow + row) * 12;
-            if (inventory.getBackpack().getSize() > index) {
-                Slot slot = inventory.getSlots().get(index);
-                Item item = slot.getItem();
-                TextureRegion texture;
-
-                if (item != null) {
-                    texture = ItemManager.getTexture(item);
-                    if (texture != null) {
-                        float x = startingX + firstItemX + col * (slotSize + spacingX);
-                        float y = startingY + firstItemY - row * (slotSize + spacingY) * 0.9f;
-
-                        float originalWidth = texture.getRegionWidth() * 0.9f;
-                        float originalHeight = texture.getRegionHeight() * 0.9f;
-
-                        float aspectRatio = originalWidth / originalHeight;
-
-                        float drawWidth, drawHeight;
-
-                        if (originalWidth > originalHeight) {
-                            drawWidth = slotSize;
-                            drawHeight = slotSize / aspectRatio;
-                        } else {
-                            drawHeight = slotSize;
-                            drawWidth = slotSize * aspectRatio;
-                        }
-
-                        float drawX = x + (slotSize - drawWidth) / 2f;
-                        float drawY = y + (slotSize - drawHeight) / 2f;
-
-                        batch.draw(texture, drawX, drawY, drawWidth, drawHeight);
-
-
-                        if (slot.getQuantity()>1) {
-                            font.getData().setScale(2.5f);
-                            String amountText = String.valueOf(slot.getQuantity());
-                            GlyphLayout layout = new GlyphLayout(font, amountText);
-                            float textX = drawX + slotSize / 2f;
-                            float textY = drawY + layout.height / 3f;
-                            font.draw(batch, layout, textX, textY);
-                            font.getData().setScale(1f);
-                        }
-
-
-                        if (mousePos.x >= x && mousePos.x <= x + slotSize &&
-                            mousePos.y >= y && mousePos.y <= y + slotSize) {
-                            if (Gdx.input.isButtonJustPressed(0)) {
-                                if (item instanceof Tool) {
-                                    assert AppClient.getUserData() != null;
-                                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                                        new GameCommand("tools equip " + item.getName(),
-                                            AppClient.getUserData().getUsername())
-                                    );
-                                    AppClient.getClient().send(new Gson().toJson(msg));
-                                }else if(Food.parseFood(item.getName()) != null){
-                                    assert AppClient.getUserData() != null;
-                                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                                        new GameCommand("eat " + item.getName(),
-                                            AppClient.getUserData().getUsername())
-                                    );
-                                    AppClient.getClient().send(new Gson().toJson(msg));
-                                    screen.isMenuOpen = !screen.isMenuOpen;
-                                    screen.onRepeat = false;
-                                    screen.hero.currentAnimation = screen.hero.eat();
-                                    screen.hero.isActing.set(true);
-                                    screen.hero.stateTime = 0;
-                                }
-                            }
-                            else if(Gdx.input.isButtonJustPressed(1)){
-                                screen.hero.selectedItemName = item.getName();
-                            }
-
-                            String name = readableName(item.getName());
-                            GlyphLayout layout = new GlyphLayout(font, name);
-                            float tooltipWidth = layout.width + 20;
-                            float tooltipHeight = layout.height + 10;
-
-                            float tooltipX = x + slotSize / 2f - tooltipWidth / 2f;
-                            float tooltipY = y + slotSize + 10;
-
-
-                            batch.end();
-                            shapeRenderer.setProjectionMatrix(camera.combined);
-                            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-                            shapeRenderer.setColor(0, 0, 0, 0.8f);
-                            shapeRenderer.rect(tooltipX, tooltipY, tooltipWidth, tooltipHeight);
-                            shapeRenderer.end();
-                            batch.begin();
-
-                            font.draw(batch, layout, tooltipX + 10, tooltipY + tooltipHeight - 5);
-                        }
-                    }
-                }
-            }
-
-            col++;
-            if (col == 12) {
-                col = 0;
-                row++;
-                if (row == 2) {
-                    startingY += 22;
-                }
-            }
-        }
-        batch.end();
-    }
-    private String readableName(String camelCase) {
-        return camelCase.replaceAll("([a-z])([A-Z])", "$1 $2");
-    }
-
 }

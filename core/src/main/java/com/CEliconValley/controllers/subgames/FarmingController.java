@@ -33,8 +33,9 @@ public class FarmingController {
         }
         return new Result(false, "Craft not found!");
     }
-    public Result buildGreenhouse(Matcher matcher) {
-        Player player = App.getGame().getCurrentPlayer();
+    public Result buildGreenhouse(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
         if(player.getInventory().getSlotByItem(new Wood()) == null){
             return new Result(false, "You don't have any wood! Try to chop some trees first!");
         }
@@ -42,7 +43,7 @@ public class FarmingController {
             return new Result(false, "insufficient funds, you need at least 1000 money and 500 wood!\nMoney: "
                     + player.getMoney() + "\nWood: " + player.getInventory().getSlotByItem(new Wood()).getQuantity());
         }
-        App.getGame().getCurrentPlayerFarm().getGreenhouse().unlock();
+        farm.getGreenhouse().unlock();
         player.getInventory().removeFromInventory(new Wood(), 500);
         player.decMoney(1000);
         return new Result(true, "Greenhouse has been built!");
