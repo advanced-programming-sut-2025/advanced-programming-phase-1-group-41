@@ -3,6 +3,11 @@ package com.CEliconValley.models.items;
 import com.CEliconValley.models.animals.Fish;
 import com.CEliconValley.models.animals.FishType;
 import com.CEliconValley.models.buildings.Well;
+import com.CEliconValley.models.foragings.Nature.Mineral;
+import com.CEliconValley.models.foragings.Nature.MineralType;
+import com.CEliconValley.models.foragings.Seed;
+import com.CEliconValley.models.foragings.SeedType;
+import com.CEliconValley.models.items.craftablemachines.Furnace;
 import com.CEliconValley.models.tools.*;
 
 import java.util.ArrayList;
@@ -42,6 +47,10 @@ public class Inventory {
         addToInventory(new Scythe(), 1);
         addToInventory(new Shear(), 1);
         addToInventory(new Well(),1);
+        addToInventory(CraftableMachine.Furnace,1);
+        addToInventory(new Mineral(MineralType.Coal),1);
+        addToInventory(new Mineral(MineralType.CopperOre),5);
+        addToInventory(new Seed(SeedType.CherrySapling), 5);
 //        addToInventory(new Fish(FishType.Squid),1);
 //        addToInventory(new Fish(FishType.Shad),1);
 //        addToInventory(new Fish(FishType.BlueDiscus),1);
@@ -71,9 +80,6 @@ public class Inventory {
         addToInventory(Food.Omelet,1);
         addToInventory(Food.HashBrowns,1);
         addToInventory(Food.Pancakes,1);
-
-
-
 
 
 

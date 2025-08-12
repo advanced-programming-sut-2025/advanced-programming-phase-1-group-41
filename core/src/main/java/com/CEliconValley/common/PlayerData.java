@@ -155,7 +155,7 @@ public class PlayerData {
     public Player getPlayer() {
         User user = PlayerFinder.getUserByPlayerName(username);
         Inventory inventory = inventoryData.getInventory();
-        Tool tool = currentToolName == null ? null : Finder.getToolByName(currentToolName);
+        Tool tool = currentToolName == null ? null : (Tool) Finder.parseItem(currentToolName);
         Buff buff = buffData == null ? null : buffData.getBuff();
         return new Player(cookingRecipes, craftingRecipes, buff, tool, depressionDaysLeft,
                 energy, energyUnlimited, farmId, getFarmingSkill(), getFishingSkill(),

@@ -1,7 +1,9 @@
 package com.CEliconValley.controllers.Spawner;
 
+import com.CEliconValley.client.view.screen.GreenHouseScreen;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.models.Cell;
+import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.foragings.ForagingTree;
 import com.CEliconValley.models.foragings.Nature.Tree;
 import com.CEliconValley.models.foragings.Nature.TreeType;
@@ -78,17 +80,42 @@ public class TreeSpawner {
 
                     TextureRegion frame = frames[stage];
 
-                    float centerX = cell.getX() * CELL_SIZE+CELL_SIZE/2;
-                    float centerY = cell.getY() * CELL_SIZE+CELL_SIZE/2;
+                    float centerX = cell.getX()* CELL_SIZE+CELL_SIZE/2;
+                    float centerY = cell.getY()* CELL_SIZE+CELL_SIZE/2;
 
                     float drawX = centerX - CELL_SIZE * 1.5f;
                     float drawY = centerY - CELL_SIZE*0.4f ;
-
                     batch.draw(frame, drawX, drawY,CELL_SIZE*3,CELL_SIZE*5);
                 }
 
             }
 
+
+
+    }
+
+    public void renderTrees(SpriteBatch batch, CellData cellData, float passiveState, GreenHouseScreen greenHouseScreen){
+        Cell cell = cellData.extractData();
+
+        if (cell.getObjectMap() instanceof Tree) {
+            Tree tree = (Tree) cell.getObjectMap();
+            TreeType type = tree.getTreeType();
+            int stage = 7;
+
+            TextureRegion[] frames = treeFramesMap.get(type.name());
+            if (frames != null && stage >= 0 && stage < frames.length) {
+
+                TextureRegion frame = frames[stage];
+                int cs = CELL_SIZE / 2;
+                float centerX = (cell.getX() - Finder.getfd().getGreenhouseX())* cs +cs /2;
+                float centerY = (cell.getY() - Finder.getfd().getGreenhouseY() )* cs + cs /2;
+
+                float drawX = centerX * 1.5f;
+                float drawY = centerY * 1.4f ;
+                batch.draw(frame, drawX + cs, drawY + cs,cs*3,cs*5);
+            }
+
+        }
 
 
     }

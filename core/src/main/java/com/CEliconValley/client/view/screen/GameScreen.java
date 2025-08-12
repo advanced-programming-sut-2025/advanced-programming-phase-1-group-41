@@ -6,6 +6,7 @@ import com.CEliconValley.client.model.StrategyScoreboard;
 import com.CEliconValley.client.view.screen.maps.*;
 import com.CEliconValley.client.view.screen.menu.ShippingBinBar;
 import com.CEliconValley.common.CellData;
+import com.CEliconValley.common.FarmData;
 import com.CEliconValley.common.NPCData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.controllers.Spawner.InventoryRenderer;
@@ -13,6 +14,8 @@ import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.PlayerMessage;
+import com.CEliconValley.models.buildings.Door;
+import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
 import com.CEliconValley.models.buildings.ShippingBin;
 import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.foragings.ForagingTree;
@@ -27,6 +30,7 @@ import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
@@ -42,6 +46,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import javax.print.attribute.standard.Fidelity;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -63,6 +68,8 @@ public abstract class GameScreen implements Screen {
     public Label playerVoteLabel;
     public Label howManyVotedLabel;
 
+    public OrthographicCamera camera;
+
     public Label tagMessageLabel;
     public Label messageLabel;
 
@@ -82,7 +89,7 @@ public abstract class GameScreen implements Screen {
     protected Stage chatStage;
     protected Stage scoreboardStage;
     protected Stage friendshipStage;
-    private FriendshipStageHandler friendshipStageHandler;
+    protected FriendshipStageHandler friendshipStageHandler;
     public CraftableMachine cm = null;
     public boolean sellmode = false;
     public boolean trashmode = false;
@@ -102,8 +109,8 @@ public abstract class GameScreen implements Screen {
     protected boolean halt = false;
     public boolean dcmode = false;
     public Label dcLabel;
-    Table chatTable;
-    Table sortButtonsTable;
+    public Table chatTable;
+    private Table sortButtonsTable;
 
     StrategyScoreboard ss = new StrategyScoreboard();
 
@@ -305,6 +312,7 @@ public abstract class GameScreen implements Screen {
 
 
     public GameScreen(InventoryRenderer inventoryRenderer) {
+        camera = new OrthographicCamera();
         stage = new Stage(new ScreenViewport(), Main.getBatch());
         chatStage = new Stage(new ScreenViewport(), Main.getBatch());
         scoreboardStage = new Stage(new ScreenViewport(), Main.getBatch());
@@ -335,20 +343,18 @@ public abstract class GameScreen implements Screen {
         hudImage.setPosition(posX, posY);
         timeScreen.dateLabel.setPosition(posX + 120, posY + 180);
         timeScreen.timeLabel.setPosition(posX + 120, posY + 90);
-        timeScreen.goldLabel.setPosition(posX + 66.5f, posY + 10);
+        timeScreen.goldLabel.setPosition(posX + 67f, posY + 10);
         timeScreen.getHudTable().setPosition(0, -stage.getHeight() / 21f);
         energyBarImage.setPosition(stage.getWidth() - energyBarImage.getWidth() * 2, energyBarImage.getHeight() * 1.5f);
         timeScreen.goldLabel.setAlignment(Align.left);
         timeScreen.goldLabel.setFontScale(1.18f);
         timeScreen.dateLabel.setFontScale(0.8f);
 
-
         Texture labelTexture = GameAssetManager.getGameAssetManager().getBackgroundTexture("Info_Background1.png");
 //        TextureRegionDrawable background = new TextureRegionDrawable(new TextureRegion(labelTexture));
 
         NinePatch ninePatch = new NinePatch(labelTexture, 40, 40, 0, 0);
         NinePatchDrawable background = new NinePatchDrawable(ninePatch);
-
 
         Label.LabelStyle style = new Label.LabelStyle();
         style.font = new BitmapFont();
@@ -384,13 +390,28 @@ public abstract class GameScreen implements Screen {
 
     public boolean canMoveTo(int x, int y, Location location) {
         if(location instanceof FarmMap farmMap){
-            System.out.println("checking farmmap");
             for (CellData cd : farmMap.farmData.getCells()) {
                 if (cd.getX() == x && cd.getY() == y) {
                     Cell cell = cd.extractData();
                     if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock ||cell.getObjectMap() instanceof Wall ||cell.getObjectMap() instanceof Obstacle) {
-                        System.out.println(cd.getObjectName()+" "+cell.getX()+" "+cell.getY());
                         return false;
+                    }
+
+                    if(cell.getObjectMap() instanceof Door){
+                        for (int i = -2; i <= 2 ; i++) {
+                            for (int j = -2; j <= 2 ; j++) {
+                                int testx = cell.getX()+i;
+                                int testy = cell.getY()+j;
+                                FarmData fd= Finder.getfd();
+                                if(fd.getGreenhouseX() < testx && testx < fd.getGreenhouseX()+Greenhouse.getGreenhouseLength()
+                                && fd.getGreenhouseY() < testy && testy < fd.getGreenhouseY()+Greenhouse.getGreenhouseHeight()
+                                ){
+                                    if(!fd.isGreenHouseUnlocked()){
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
                     }
                     return true;
                 }
@@ -523,6 +544,7 @@ public abstract class GameScreen implements Screen {
     public void handleFriendship(Stage stage, PlayerData playerData, NPCData npcData) {
         friendshipStageHandler = new FriendshipStageHandler(this, stage, playerData, npcData);
         friendshipMode = true;
+        Gdx.input.setInputProcessor(stage);
 
         overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
             .getGameAssetManager().getBackgroundTexture("Friendship_Background.png"))));
@@ -719,7 +741,7 @@ public abstract class GameScreen implements Screen {
         messageLabel.setColor(color);
         messageLabel.setText(message);
         messageLabel.setVisible(true);
-        messageLabel.setPosition(stage.getWidth() / 2 - tagMessageLabel.getWidth() / 2, stage.getHeight() / 1.2f);
+        messageLabel.setPosition(stage.getWidth() / 2 - messageLabel.getWidth() / 2, stage.getHeight() / 1.2f);
         messageLabel.pack();
     }
     public void removeMessage(){

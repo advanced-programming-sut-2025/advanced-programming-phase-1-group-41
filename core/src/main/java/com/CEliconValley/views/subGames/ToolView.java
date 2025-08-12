@@ -36,7 +36,7 @@ public class ToolView {
             System.out.println(controller.useMilkPale(matcher, playername));
         }
         else if ((matcher = InventoryAndToolCommands.UpgradeTool.getMatcher(input)) != null) {
-            System.out.println(controller.upgradeTool(matcher));
+//            System.out.println(controller.upgradeTool(matcher));
         } else {
             return false;
         }

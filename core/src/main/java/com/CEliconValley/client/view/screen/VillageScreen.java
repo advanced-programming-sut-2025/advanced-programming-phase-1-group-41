@@ -16,7 +16,9 @@ import com.CEliconValley.common.messages.PosDiff;
 import com.CEliconValley.controllers.Spawner.*;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.foragings.Nature.Grass;
+import com.CEliconValley.models.locations.FarmType;
 import com.CEliconValley.models.locations.Village;
+import com.CEliconValley.models.ui.CustomColors;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.CEliconValley.views.subGames.Rain;
 import com.CEliconValley.views.subGames.Snow;
@@ -51,7 +53,6 @@ public class VillageScreen extends GameScreen implements Screen {
     private final CropSpawner cropSpawner;
     private final ItemSpawner itemSpawner = new ItemSpawner();
     public VillageMap villageMap;
-    private ArrayList<Hero> otherHeroes;
     private GroundBorderSpawner groundBorderSpawner;
     private final List<CellData> visibleCells = new ArrayList<>();
     private String currentSeason = "";
@@ -68,8 +69,6 @@ public class VillageScreen extends GameScreen implements Screen {
     Texture thunderedTexture = GameAssetManager.getGameAssetManager().getTileTexture("thundered.png");
     Texture farmlandTexture = GameAssetManager.getGameAssetManager().getTileTexture("farmland.png");
     Texture bombedTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
-
-    public OrthographicCamera camera;
 
     public static final float VIRTUAL_WIDTH = 3160f;
     public static final float VIRTUAL_HEIGHT = 1350f;
@@ -119,7 +118,6 @@ public class VillageScreen extends GameScreen implements Screen {
         super(new InventoryRenderer(player.getInventory()));
         this.menuBar = super.getMenuBar();
         menuBar.setPlayer(player);
-        otherHeroes = new ArrayList<>();
         this.villageMap = new VillageMap(AppClient.getGameData().getVillageData());
         this.player = player;
         treeSpawner = new TreeSpawner();
@@ -314,7 +312,21 @@ public class VillageScreen extends GameScreen implements Screen {
                 Gdx.gl.glDisable(GL20.GL_BLEND);
                 batch.begin();
 
+                Color customColor = Color.WHITE;
+                switch (playerSprite.getPlayerData().getFarmType()){
+                    case Jungle -> {
+                        customColor = CustomColors.JUNGLE_COLOR;
+                    }
+                    case Swamp -> {
+                        customColor = CustomColors.SWAMP_COLOR;
+                    }
+                    case Mountain -> {
+                        customColor = CustomColors.MOUNTAIN_COLOR;
+                    }
+                }
+                playerSprite.font.setColor(customColor);
                 playerSprite.font.draw(batch, playerSprite.layout, textX, textY);
+//                playerSprite.font.setColor(Color.WHITE);
 
 
             }

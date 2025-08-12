@@ -7,6 +7,7 @@ import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.VoteMessage;
 import com.CEliconValley.controllers.ItemManager;
 import com.CEliconValley.models.*;
+import com.CEliconValley.models.foragings.Nature.Wood;
 import com.CEliconValley.models.items.*;
 import com.CEliconValley.models.tools.Tool;
 import com.CEliconValley.models.ui.CustomColors;
@@ -37,8 +38,8 @@ public class MenuBar {
     private final int tileWidth;
     private final int tileHeight;
     private Player player;
-    BitmapFont font = new BitmapFont();
-    ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private final BitmapFont font = new BitmapFont();
+    private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private int startingRow = 0;
     private float startingX;
     private float startingY;
@@ -167,7 +168,6 @@ public class MenuBar {
                 renderCooking(batch);
         }
     }
-
 
     private void renderInventoryBar(Batch batch, OrthographicCamera camera, Inventory inventory) {
         float screenWidth = camera.viewportWidth;
@@ -889,24 +889,28 @@ public class MenuBar {
             x += spacing;
         }
         x = startingX + screenWidth * 0.025f;
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             String text = "Force Terminate";
             if(i == 1) { // TODO If CurrentName Only Admin! if not, break;
 //                if(Admin){
 //                  break;
 //                }
                 text = "Save Game";
+            } if (i == 2 && !Finder.getfd().isGreenHouseUnlocked()) {
+                text = "Unlock Greenhouse";
+            } else if(i == 2 && Finder.getfd().isGreenHouseUnlocked()) {
+                continue;
             }
 
             float playerX = x;
             float playerY = y - playerSize + 5 + screenHeight * 0.3f;
 
-            batch.draw(buttonTexture, playerX, playerY, playerSize * 4, playerSize);
+            batch.draw(buttonTexture, playerX, playerY, playerSize * 3.8f, playerSize);
 
             font.getData().setScale(2f);
-            font.draw(batch, text, playerX + playerSize * 2f - text.length() * font.getScaleX() * 7.5f / 2f, playerY + playerSize / 1.5f);
+            font.draw(batch, text, playerX + playerSize * 2f - text.length() * font.getScaleX() * 7.5f / 8f * 3.8f, playerY + playerSize / 1.5f);
 
-            boolean hovered = mousePos.x >= playerX && mousePos.x <= playerX + playerSize * 4f &&
+            boolean hovered = mousePos.x >= playerX && mousePos.x <= playerX + playerSize * 3.8f &&
                 mousePos.y >= playerY && mousePos.y <= playerY + playerSize;
 
             boolean clicked = false;
@@ -914,16 +918,18 @@ public class MenuBar {
             if(hovered && Gdx.input.isButtonJustPressed(0)){
                 clicked = true;
             }
-            if (hovered && i == 0) {
-
+            if (hovered && i != 1) {
                 String warnText = "Vote For Force Terminate";
+                if(i == 2){
+                    warnText = "Build Greenhouse";
+                }
 
                 GlyphLayout tooltipLayout = new GlyphLayout(font, warnText);
 
                 float tooltipWidth = tooltipLayout.width + 40;
                 float tooltipHeight = tooltipLayout.height + 30;
 
-                float tooltipX = playerX + playerSize * 2f - tooltipWidth / 2f;
+                float tooltipX = playerX + playerSize * 3.8f / 2f - tooltipWidth / 2f;
                 float tooltipY = playerY + playerSize + 20;
 
                 batch.end();
@@ -936,6 +942,12 @@ public class MenuBar {
 
                 font.setColor(Color.RED);
 
+                if(i == 2 && Finder.getpd().getInventoryData().getInventory().getSlotByItem(new Wood()) != null){
+                    if(Finder.getpd().getMoney() >= 1000 && Finder.getpd().getInventoryData().getInventory().getSlotByItem(new Wood()).getQuantity() >= 500){
+                        font.setColor(CustomColors.GAMEGREENCOLOR);
+                    }
+                }
+
                 font.draw(batch, warnText, tooltipX + 20, tooltipY + tooltipHeight - 15);
 
                 font.setColor(Color.WHITE);
@@ -944,7 +956,7 @@ public class MenuBar {
                 if(i == 0){
                     GameMessage<String> msg = new GameMessage<>("new-ter", ";)");
                     AppClient.getClient().send(new Gson().toJson(msg));
-                } else{
+                } else if(i == 1){
                     if(AppClient.getUserData().getUsername().equals(
                         AppClient.getGameData().getLobby().getAdmin()
                     )){
@@ -955,10 +967,17 @@ public class MenuBar {
                         System.out.println("  you: "+AppClient.getUserData().getUsername());
                         System.out.println("  adming: "+AppClient.getGameData().getLobby().getAdmin());
                     }
+                } else{
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand("greenhouse build", AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
                 }
             }
 
-            x += spacing * 2.5f;
+            if(i == 0 && Finder.getfd().isGreenHouseUnlocked()){
+                x += 1.25f * spacing;
+            }
+            x += spacing * 1.25f;
         }
 
         font.getData().setScale(1f);
@@ -993,9 +1012,6 @@ public class MenuBar {
 
         return true;
     }
-
-
-
 
     private String readableName(String camelCase) {
         return camelCase.replaceAll("([a-z])([A-Z])", "$1 $2");

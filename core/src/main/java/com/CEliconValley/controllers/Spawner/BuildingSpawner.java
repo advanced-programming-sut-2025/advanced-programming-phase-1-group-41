@@ -33,6 +33,7 @@ public class BuildingSpawner {
     private final WaterSpawner waterSpawner;
     private final Texture cottageTexture = new Texture("game/cottage.png");
     private final Texture greenhouseTexture = new Texture("game/Buildings/GreenHouse.png");
+    private final Texture brokenGreenhouseTexture = new Texture("game/Buildings/GreenHouse_Broken.png");
     private final Texture waterTankTexture = new Texture("game/Buildings/WaterTank.png");
     private final Texture barnTexture = new Texture("game/Buildings/Barn.png");
     private final Texture bigBarnTexture = new Texture("game/Buildings/Big_Barn.png");
@@ -78,7 +79,12 @@ public class BuildingSpawner {
         } else if(cellData.getX() == farmData.getGreenhouseX() + Greenhouse.getGreenhouseLength() && cellData.getY() == farmData.getGreenhouseY()) {
             int frameWidth = this.greenhouseTexture.getWidth();
             int frameHeight = this.greenhouseTexture.getHeight();
-            TextureRegion greenHouseFrame = new TextureRegion(this.greenhouseTexture, 0, 0, frameWidth, frameHeight);
+            TextureRegion greenHouseFrame;
+            if(Finder.getfd().isGreenHouseUnlocked()){
+                greenHouseFrame = new TextureRegion(this.greenhouseTexture, 0, 0, frameWidth, frameHeight);
+            } else{
+                greenHouseFrame = new TextureRegion(this.brokenGreenhouseTexture, 0, 0, frameWidth, frameHeight);
+            }
             batch.draw(greenHouseFrame, x - CELL_SIZE*6, y, CELL_SIZE*7, CELL_SIZE*8);
             return true;
 //        }else if (tmpCell != null && tmpCell.getObjectMap() instanceof Cottage) {

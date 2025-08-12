@@ -62,17 +62,8 @@ public class ShippingBinBar {
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
 
-        float firstItemX = screenWidth * 0.03f;
-        float firstItemY = screenHeight * 0.58f;
-
-        int row = 0, startPoint = 0;
-        float slotSize = screenWidth * 0.036f;
-
-        float spacingX = slotSize * 0.275f;
-        float spacingY = slotSize * 0.6f;
-
         float menuWidth = screenWidth * 0.6f;
-        float menuHeight = screenHeight * 0.7f;
+        float menuHeight = screenHeight * 0.35f;
         startingX = camera.position.x - menuWidth / 2f;
         startingY = camera.position.y - menuHeight / 2f;
 
@@ -81,18 +72,6 @@ public class ShippingBinBar {
 
         batch.draw(menuTexture, startingX, startingY, menuWidth, menuHeight);
 
-//        for (int col = 0; row < 3; ) {
-//            int index = col + (startingRow + row) * 12;
-//
-//            col++;
-//            if (col == 12) {
-//                col = 0;
-//                row++;
-//                if (row == 2) {
-//                    startingY += 22;
-//                }
-//            }
-//        }
         renderInventoryBar(batch, camera, Objects.requireNonNull(Finder.getpd()).getInventoryData().getInventory(),
                 shipping);
     }
@@ -102,7 +81,7 @@ public class ShippingBinBar {
         float screenHeight = camera.viewportHeight;
 
         float firstItemX = screenWidth * 0.03f;
-        float firstItemY = screenHeight * 0.21f;
+        float firstItemY = screenHeight * 0.23f;
 
         int row = 0, startPoint = 0;
         float slotSize = screenWidth * 0.036f;

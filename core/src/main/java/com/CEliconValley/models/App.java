@@ -64,6 +64,7 @@ public class App {
                     if(System.currentTimeMillis() - dcTimestamp > 60_000 * 2){
                         // handle save and quit for all
                         UserDB.saveGame(App.getGame());
+                        System.out.println("saving game here");
                         GameMessage<String> exiter = new GameMessage<>("game-command","exit-game");
                         ArrayList<Player> senders = new ArrayList<>();
                         for (Player player : App.getGame().getPlayers()) {

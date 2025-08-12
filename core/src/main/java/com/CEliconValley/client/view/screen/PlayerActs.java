@@ -57,11 +57,13 @@ public class PlayerActs {
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
                 screen.sellmode = false;
             }
+            return new Result(true, "sellmode opened");
         }
         if(screen.trashmode){
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
                 screen.trashmode = false;
             }
+            return new Result(true, "trash opened");
         }
 
         if (screen.cheatMode) {
@@ -113,10 +115,13 @@ public class PlayerActs {
             }
             return new Result(false, "chat");
         }
-        if(screen.isArtisanMenuOpen && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            screen.isArtisanMenuOpen = false;
-            screen.getChatInput().setVisible(false);
-            Gdx.input.setInputProcessor(screen.stage);
+        if(screen.isArtisanMenuOpen){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+                screen.isArtisanMenuOpen = false;
+                screen.getChatInput().setVisible(false);
+                Gdx.input.setInputProcessor(screen.stage);
+            }
+            return new Result(true, "artisan menu opened");
         }
         if(screen.scoreboardMode){
             screen.scoreboardStage.act(delta);
@@ -130,9 +135,15 @@ public class PlayerActs {
         if(screen.friendshipMode){
             screen.friendshipStage.act(delta);
             screen.friendshipStage.draw();
+            if(screen.friendshipStageHandler.isChatting && Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+                String message = screen.friendshipStageHandler.chatTextField.getText();
+                // TODO Chatting
+                screen.friendshipStageHandler.chatTextField.setText("");
+            }
             if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
                 screen.friendshipMode = false;
                 Gdx.input.setInputProcessor(screen.stage);
+                screen.friendshipStageHandler.emptyFields();
             }
             return new Result(false, "friendship");
         }
@@ -251,10 +262,10 @@ public class PlayerActs {
                 putItemOnGround(mousePos.x, mousePos.y, farmScreen);
             }else if(screen instanceof GreenHouseScreen greenHouseScreen){
                 greenHouseScreen.camera.unproject(mousePos);
-                smthOnVillage(mousePos.x, mousePos.y, greenHouseScreen);
+                putInGreenhouse(mousePos.x, mousePos.y, greenHouseScreen);
             }else if(screen instanceof VillageScreen villageScreen){
                 villageScreen.camera.unproject(mousePos);
-                smthOnVillage(mousePos.x, mousePos.y, villageScreen);
+                putInGreenhouse(mousePos.x, mousePos.y, villageScreen);
             }
         }
         if (screen.isMenuOpen) {
@@ -455,6 +466,12 @@ public class PlayerActs {
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.Q)){
             System.out.println("you're at "+hero.playerX+" "+hero.playerY);
+        }else if(Gdx.input.isKeyPressed(Input.Keys.P)){
+            if(screen instanceof BarnScreen screen){
+                petBarn(screen);
+            } else if(screen instanceof CoopScreen screen){
+                petCoop(screen);
+            }
         }
         else if (Gdx.input.isKeyJustPressed((Input.Keys.E))) {
             screen.onRepeat = false;
@@ -512,6 +529,16 @@ public class PlayerActs {
                     new GameCommand("tools use -d " + hero.currentDirection, AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
 //                farmScreen.hit(hero.currentDirection, hero.playerX.get(), hero.playerY.get());
+            }else if(screen instanceof GreenHouseScreen greenHouseScreen){
+                if(Finder.getpd().getCurrentToolName().equals(new WateringCan().getName())){
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand("greenhouse water", AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
+                }else if(Finder.getpd().getCurrentToolName().equals(new Scythe().getName())){
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand("greenhouse harvest", AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
+                }
             }
         } else if (
             (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_RIGHT) ||
@@ -555,7 +582,7 @@ public class PlayerActs {
             float targetPixelX = hero.targetX.get() * CELL_SIZE;
             float targetPixelY = hero.targetY.get() * CELL_SIZE;
 
-            float moveAmount = (float) CELL_SIZE / 8;
+            float moveAmount = (float) CELL_SIZE / 4;
 
             if (screen instanceof GreenHouseScreen) {
                 moveAmount /= 2;
@@ -793,12 +820,13 @@ public class PlayerActs {
     }
 
 
-    public static void smthOnVillage(float mouseX, float mouseY, GreenHouseScreen screen){
+    public static void putInGreenhouse(float mouseX, float mouseY, GreenHouseScreen screen){
         Hero hero = screen.getHero();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 Cell cell = screen.greenHouseMap.getCell(hero.playerX.get()+j,
                     hero.playerY.get()+i);
+                if(cell == null) continue;
                 if(mouseX >= cell.getX()*CELL_SIZE && mouseX <= (cell.getX()+1)*CELL_SIZE &&
                     mouseY >= cell.getY()*CELL_SIZE && mouseY <= (cell.getY()+1)*CELL_SIZE){
                     int dir = getDir(i, j);
@@ -811,13 +839,13 @@ public class PlayerActs {
                     if(item == null) return ;
                     if(item instanceof Seed seed) {
                         GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                            new GameCommand("plant -s " + seed.getName() + " -d " + dir,
+                            new GameCommand("greenhouse plant -s " + seed.getName() + " -d " + dir,
                                 AppClient.getUserData().getUsername()));
                         AppClient.getClient().send(new Gson().toJson(msg));
                     }
                     else if(item instanceof Fertilizer fertilizer){
                         GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                            new GameCommand("fertilize -f " + fertilizer.getName() + " -d " + dir,
+                            new GameCommand("greenhouse fertilize -f " + fertilizer.getName() + " -d " + dir,
                                 AppClient.getUserData().getUsername()));
                         AppClient.getClient().send(new Gson().toJson(msg));
                     }
@@ -825,7 +853,7 @@ public class PlayerActs {
             }
         }
     }
-    public static void smthOnVillage(float mouseX, float mouseY, VillageScreen screen){
+    public static void putInGreenhouse(float mouseX, float mouseY, VillageScreen screen){
         Hero hero = screen.getHero();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
@@ -916,6 +944,43 @@ public class PlayerActs {
             return 6-j;
         }
         return -1;
+    }
+
+
+    public static void petBarn(BarnScreen barnScreen){
+        for (AnimalSprite animalSprite : barnScreen.getAnimalSprites()) {
+            float dx = animalSprite.renderX - barnScreen.hero.renderX;
+            if (dx < 0) dx = -dx;
+            float dy = animalSprite.renderY - barnScreen.hero.renderY;
+            if (dy < 0) dy = -dy;
+            if(dx+dy < CELL_SIZE * 2){
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                    new GameCommand("pet -w inside -n "+animalSprite.animalData.getName(), AppClient.getUserData().getUsername()));
+                AppClient.getClient().send(new Gson().toJson(msg));
+                screen.hero.isActing.set(true);
+                screen.hero.currentAnimation = screen.hero.pet();
+                screen.hero.stateTime = 0;
+                screen.onRepeat = false;
+                break;
+            }
+        }
+    }
+    public static void petCoop(CoopScreen coopScreen){
+        for (AnimalSprite animalSprite : coopScreen.getAnimalSprites()) {
+            float dx = animalSprite.renderX - coopScreen.hero.renderX;
+            if (dx < 0) dx = -dx;
+            float dy = animalSprite.renderY - coopScreen.hero.renderY;
+            if (dy < 0) dy = -dy;
+            if(dx+dy < CELL_SIZE * 2){
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                    new GameCommand("pet -w inside -n "+animalSprite.animalData.getName(), AppClient.getUserData().getUsername()));
+                AppClient.getClient().send(new Gson().toJson(msg));
+                screen.hero.isActing.set(true);
+                screen.hero.currentAnimation = screen.hero.pet();
+                screen.hero.stateTime = 0;
+                screen.onRepeat = false;
+            }
+        }
     }
 
 }

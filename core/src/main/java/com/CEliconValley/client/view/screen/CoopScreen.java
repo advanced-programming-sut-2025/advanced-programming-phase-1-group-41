@@ -33,7 +33,6 @@ public class CoopScreen extends GameScreen implements Screen {
     private boolean isCoopMenuOpen = false;
     private ArrayList<AnimalSprite> animalSprites;
     private CoopData coopData;
-    private final OrthographicCamera camera;
     private int id;
     public void updateAnimalSprites(CoopData coopData) {
         if(animalSprites == null) {
@@ -172,7 +171,7 @@ public class CoopScreen extends GameScreen implements Screen {
         for (AnimalSprite animalSprite : animalSprites) {
             if(animalSprite.currentAnimation != null){
                 TextureRegion currentFrame = animalSprite.currentAnimation.getKeyFrame(animalSprite.stateTime, onRepeat);
-                batch.draw(currentFrame, animalSprite.renderX - CELL_SIZE / 2f, animalSprite.renderY - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
+                batch.draw(currentFrame, animalSprite.renderX - CELL_SIZE / 2f, animalSprite.renderY - CELL_SIZE / 2f, CELL_SIZE * 1.5f, CELL_SIZE * 1.5f);
             }
         }
 
