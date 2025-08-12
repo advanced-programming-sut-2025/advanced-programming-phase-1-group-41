@@ -14,7 +14,7 @@ public class FriendshipView {
         if((matcher = FriendShipCommands.Friendships.getMatcher(input)) != null){
             System.out.println(controller.friendshipsList(matcher));
         } else if((matcher = FriendShipCommands.Talk.getMatcher(input)) != null){
-            System.out.println(controller.talk(matcher));
+            System.out.println(controller.talk(matcher, playername));
         } else if((matcher = FriendShipCommands.TalkHistory.getMatcher(input)) != null){
             System.out.println(controller.talkHistory(matcher));
         } else if((matcher = FriendShipCommands.Gift.getMatcher(input)) != null){

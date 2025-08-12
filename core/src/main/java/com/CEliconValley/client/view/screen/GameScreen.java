@@ -204,7 +204,9 @@ public abstract class GameScreen implements Screen {
             chatScrollPane.validate();
             chatScrollPane.setScrollPercentY(1f);
         });
-
+        if(friendshipStageHandler != null){
+            friendshipStageHandler.updateChat();
+        }
     }
 
     private void setupChatUI(){

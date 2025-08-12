@@ -198,21 +198,34 @@ public class FriendshipStageHandler {
         chatTable = new Table();
         if(AppClient.getGameData() == null ) return;
         //TODO Players Chat update
-        for(PlayerMessage message : AppClient.getGameData().getPlayerMessages()){
-            assert AppClient.getUserData() != null;
-            if(message.getSender().equals(AppClient.getUserData().getUsername())){
-                Label label = new Label(message.getMessage() + "-", GameAssetManager.getGameAssetManager().getSkin());
-                label.setWrap(true);
-                label.setAlignment(Align.right);
-                label.setColor(CustomColors.GAMEGREENCOLOR);
-                chatTable.add(label).width(380).right().padBottom(5).row();
-            } else{
-                Label label = new Label(message.getSender() + ": " + message.getMessage(), GameAssetManager.getGameAssetManager().getSkin());
-                label.setAlignment(Align.left);
-                if(label.getText().toString().matches(".+@"+AppClient.getUserData().getUsername()+".+")){
-                    label.setColor(Color.BLUE);
+        if(isPlayer){
+            FriendshipData fsd = null;
+            String playername = Finder.getpd().getUsername();
+
+            for(FriendshipData friendshipData1 : Finder.getpd().getFriendshipsData()){
+                if(friendshipData1.getPlayer1Name().equals(playerData.getUsername())
+                    || friendshipData1.getPlayer2Name().equals(playerData.getUsername())){
+                    fsd = friendshipData1;
+                    break;
                 }
-                chatTable.add(label).width(380).left().padBottom(5).row();
+            }
+            if(fsd == null) return;
+            for(ArrayList<String> message : fsd.getTalks()){
+                assert AppClient.getUserData() != null;
+                if(message.get(0).equals(AppClient.getUserData().getUsername())){
+                    Label label = new Label(message.get(1) + "-", GameAssetManager.getGameAssetManager().getSkin());
+                    label.setWrap(true);
+                    label.setAlignment(Align.right);
+                    label.setColor(CustomColors.GAMEGREENCOLOR);
+                    chatTable.add(label).width(380).right().padBottom(5).row();
+                } else{
+                    Label label = new Label(message.get(0) + ": " + message.get(1), GameAssetManager.getGameAssetManager().getSkin());
+                    label.setAlignment(Align.left);
+                    if(label.getText().toString().matches(".+@"+AppClient.getUserData().getUsername()+".+")){
+                        label.setColor(Color.BLUE);
+                    }
+                    chatTable.add(label).width(380).left().padBottom(5).row();
+                }
             }
         }
         chatTable.row();
@@ -231,19 +244,34 @@ public class FriendshipStageHandler {
         chatTable = new Table();
         chatTable.setFillParent(true);
         //TODO Players Chat
-        for(PlayerMessage message : AppClient.getGameData().getPlayerMessages()){
-            assert AppClient.getUserData() != null;
-            if(message.getSender().equals(AppClient.getUserData().getUsername())){
-                Label label = new Label(message.getMessage() + "-", GameAssetManager.getGameAssetManager().getSkin());
-                label.setWrap(true);
-                label.setAlignment(Align.right);
-                label.setColor(CustomColors.GAMEGREENCOLOR);
-                chatTable.add(label).width(380).right().padBottom(5).row();
-            } else{
-                Label label = new Label(message.getSender() + ": " + message.getMessage(), GameAssetManager.getGameAssetManager().getSkin());
-                label.setWrap(true);
-                label.setAlignment(Align.left);
-                chatTable.add(label).width(380).left().padBottom(5).row();
+        if(isPlayer){
+            FriendshipData fsd = null;
+            String playername = playerData.getUsername();
+            System.out.println("playername is "+playername);
+            for (FriendshipData friendshipsDatum : Finder.getpd().getFriendshipsData()) {
+                System.out.println("checking for "+friendshipsDatum.getPlayer1Name());
+                if(friendshipsDatum.getPlayer1Name().equals(playername) || friendshipsDatum.getPlayer2Name().equals(playername)){
+                    fsd = friendshipsDatum;
+                    break;
+                }
+            }
+            if(fsd == null) return;
+            for(ArrayList<String> message : fsd.getTalks()){
+                assert AppClient.getUserData() != null;
+                if(message.get(0).equals(AppClient.getUserData().getUsername())){
+                    Label label = new Label(message.get(1) + "-", GameAssetManager.getGameAssetManager().getSkin());
+                    label.setWrap(true);
+                    label.setAlignment(Align.right);
+                    label.setColor(CustomColors.GAMEGREENCOLOR);
+                    chatTable.add(label).width(380).right().padBottom(5).row();
+                } else{
+                    Label label = new Label(message.get(0) + ": " + message.get(1), GameAssetManager.getGameAssetManager().getSkin());
+                    label.setAlignment(Align.left);
+                    if(label.getText().toString().matches(".+@"+AppClient.getUserData().getUsername()+".+")){
+                        label.setColor(Color.BLUE);
+                    }
+                    chatTable.add(label).width(380).left().padBottom(5).row();
+                }
             }
         }
         chatScrollPane = new ScrollPane(chatTable, GameAssetManager.getGameAssetManager().getSkin(), "hiddenScroll");
@@ -325,6 +353,11 @@ public class FriendshipStageHandler {
             public void clicked(InputEvent event, float x, float y) {
                 switchForm("chat");
                 isChatting = true;
+                if(isPlayer){
+                    for (FriendshipData fsd : Finder.getpd().getFriendshipsData()) {
+                        System.out.println(fsd.getFriendshipXp()+" "+fsd.getPlayer1Name()+" "+fsd.getPlayer2Name());
+                    }
+                }
             }
         });
 
@@ -344,8 +377,8 @@ public class FriendshipStageHandler {
         hugOrQuestTab.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(friendShipLevel <= 2){
-                    setMessage("Your friendship level should be at least 3 to hugOrQuest.", Color.RED);
+                if(friendShipLevel <= 2 && isPlayer){
+                    setMessage("Your friendship level should be at least 3 to hug.", Color.RED);
                     return;
                 }
                 switchForm("hugOrQuest");

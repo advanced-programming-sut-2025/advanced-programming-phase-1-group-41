@@ -228,7 +228,19 @@ public class ClientGameHandler {
                             }
                         }, 5);
                     }
-                }else if(gamecommand.command.equals("go-to-village")){
+                }else if(gamecommand.command.equals("text-mention")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen() instanceof GameScreen screen){
+                        screen.updateTagMessage(gamecommand.playerName);
+                        new Timer().schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                screen.removeTagMessage();
+                            }
+                        }, 5);
+                    }
+                }
+                else if(gamecommand.command.equals("go-to-village")){
                     if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
                         .getScreen() instanceof FarmScreen screen){
                         Gdx.app.postRunnable(()->{

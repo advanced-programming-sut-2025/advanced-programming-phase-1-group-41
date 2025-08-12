@@ -1,11 +1,14 @@
 package com.CEliconValley.controllers.subgames;
 
+import com.CEliconValley.common.messages.GameCommand;
+import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.models.*;
 
 import com.CEliconValley.models.buildings.marketplaces.items.MarketplaceItems;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
 import com.CEliconValley.models.locations.Farm;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -31,27 +34,30 @@ public class FriendshipController {
         result.delete(result.length() - 1, result.length());
         return new Result(true, result.toString());
     }
-    public Result talk(Matcher matcher) {
+    public Result talk(Matcher matcher, String playername) {
         String username = matcher.group("username");
         String message = matcher.group("message");
-        Player player = App.getGame().getCurrentPlayer();
+        Player player = Finder.getPlayerByUsername(playername);
         Player player2 = Finder.findPlayerByUsername(username);
         if(player2 == null){
             return new Result(false, "Player not found");
         }
-        if(Math.abs(player.getX() - player2.getX()) <= 1 && Math.abs(player.getY() - player2.getY()) <= 1
-                && player.isPlayerIsInVillage() && player2.isPlayerIsInVillage()){
-            ArrayList<String> userMessage = new ArrayList<>();
-            userMessage.add(player.getUser().getUsername());
-            userMessage.add(message);
-            Friendship friendship = player.findFriendship(player2);
-            friendship.addTalk(userMessage);
-            friendship.talk();
-            friendship.interact();
-            friendship.increaseLevel(player);
-            return new Result(true, "Message sent successfully!");
-        }
-        return new Result(false, "You should be next to each other!");
+        ArrayList<String> userMessage = new ArrayList<>();
+        userMessage.add(player.getUser().getUsername());
+        userMessage.add(message);
+        Friendship friendship = player.findFriendship(player2);
+        friendship.addTalk(userMessage);
+        friendship.talk();
+        friendship.interact();
+        friendship.increaseLevel(player);
+        GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+            new GameCommand("mention", "you got mention in private chat"));
+        App.getServer().sendToPlayer(player2, new Gson().toJson(msg));
+        return new Result(true, "Message sent successfully!");
+//        if(Math.abs(player.getX() - player2.getX()) <= 1 && Math.abs(player.getY() - player2.getY()) <= 1
+//                && player.isPlayerIsInVillage() && player2.isPlayerIsInVillage()){
+//        }
+//        return new Result(false, "You should be next to each other!");
     }
     public Result talkHistory(Matcher matcher) {
         String username = matcher.group("username");
@@ -88,19 +94,23 @@ public class FriendshipController {
             return new Result(false, "You and " + player2.getUser().getUsername() + " are " + friendship.getFriendshipLevel().getName()
                     + ".\nYou should be at least friends to send gifts to each other!");
         }
-        if(Math.abs(player.getX() - player2.getX()) <= 1 && Math.abs(player.getY() - player2.getY()) <= 1
-                && player.isPlayerIsInVillage() && player2.isPlayerIsInVillage()){
-            Gift gift = new Gift(player, player2, new Slot(slot.getItem(), amount));
-            player.getInventory().removeFromInventory(slot.getItem(), amount);
-            player2.getInventory().addToInventory(slot.getItem(), amount);
-            player2.addNewGift(gift);
-            player2.addReceivedGift(gift);
-            player.addSendGift(gift);
-            friendship.interact();
-            friendship.increaseLevel(player);
-            return new Result(true, "Gift sent successfully!");
-        }
-        return new Result(false, "You should be next to each other!");
+        Gift gift = new Gift(player, player2, new Slot(slot.getItem(), amount));
+        player.getInventory().removeFromInventory(slot.getItem(), amount);
+        player2.getInventory().addToInventory(slot.getItem(), amount);
+        player2.addNewGift(gift);
+        player2.addReceivedGift(gift);
+        player.addSendGift(gift);
+        friendship.interact();
+        friendship.increaseLevel(player);
+        GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+            new GameCommand("text-mention", "you got a " +
+                item.getName()+" from "+player.getUser().getUsername()));
+        App.getServer().sendToPlayer(player2, new Gson().toJson(msg));
+        return new Result(true, "Gift sent successfully!");
+//        if(Math.abs(player.getX() - player2.getX()) <= 1 && Math.abs(player.getY() - player2.getY()) <= 1
+//                && player.isPlayerIsInVillage() && player2.isPlayerIsInVillage()){
+//        }
+//        return new Result(false, "You should be next to each other!");
     }
     public Result giftList(Matcher matcher) {
         StringBuilder result = new StringBuilder();
