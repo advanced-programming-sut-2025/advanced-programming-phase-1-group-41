@@ -34,6 +34,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
@@ -370,7 +371,25 @@ public class FriendshipStageHandler {
                 }
                 switchForm("gift");
                 isGifting = true;
-                invActor.setVisible(true);
+                Gdx.app.postRunnable(() -> {
+                    invActor.setVisible(true);
+                    invActor.setTouchable(Touchable.enabled);
+                    stage.setKeyboardFocus(invActor);
+                    invActor.setVisible(true);
+                    invActor.setTouchable(Touchable.enabled);
+                    invActor.toFront(); // Ensure it's drawn above other actors
+                    screen.camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                    screen.camera.update();
+                    stage.setKeyboardFocus(invActor);
+                    stage.setScrollFocus(invActor);
+                });
+
+
+                stage.act(Gdx.graphics.getDeltaTime());
+                stage.draw();
+                Gdx.input.setInputProcessor(stage);
+
+
             }
         });
 

@@ -50,8 +50,10 @@ public class InventoryBarActor extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        toFront();
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.update();
         inventory = Finder.getpd().getInventoryData().getInventory();
-
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
 
@@ -85,7 +87,6 @@ public class InventoryBarActor extends Actor {
                     if (texture != null) {
                         float x = startingX + firstItemX + col * (slotSize + spacingX);
                         float y = startingY + firstItemY - row * (slotSize + spacingY) * 0.9f;
-
                         float originalWidth = texture.getRegionWidth() * 0.9f;
                         float originalHeight = texture.getRegionHeight() * 0.9f;
 
