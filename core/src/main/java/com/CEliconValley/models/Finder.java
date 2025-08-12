@@ -305,6 +305,7 @@ public class Finder {
         return null;
     }
     public static PlayerData getpd(){
+        if(AppClient.getGameData() == null) return null;
         for (PlayerData pd : AppClient.getGameData().getPlayersData()) {
             if(pd.getUsername().equals(AppClient.getUserData().getUsername())){
                 return pd;

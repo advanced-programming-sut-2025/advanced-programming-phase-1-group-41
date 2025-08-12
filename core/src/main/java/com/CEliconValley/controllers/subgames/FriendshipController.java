@@ -63,7 +63,8 @@ public class FriendshipController {
         Friendship friendship = player.findFriendship(player2);
         return new Result(true, friendship.talksHistory());
     }
-    public Result gift(Matcher matcher) {
+    public Result gift(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
         String username = matcher.group("username");
         String itemName = matcher.group("item");
         int amount = Integer.parseInt(matcher.group("amount"));
@@ -71,14 +72,13 @@ public class FriendshipController {
         if(item == null){
             return new Result(false, "Item not found");
         }
-        Slot slot = App.getGame().getCurrentPlayer().getInventory().getSlotByItem(item);
+        Slot slot = player.getInventory().getSlotByItem(item);
         if(slot == null){
             return new Result(false, "Item not found in your inventory!");
         }
         if(slot.getQuantity() < amount){
             return new Result(false, "Not enough amount in your inventory!");
         }
-        Player player = App.getGame().getCurrentPlayer();
         Player player2 = Finder.findPlayerByUsername(username);
         if(player2 == null){
             return new Result(false, "Player not found");
