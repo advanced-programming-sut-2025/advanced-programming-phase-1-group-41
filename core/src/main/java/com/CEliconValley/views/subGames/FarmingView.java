@@ -20,7 +20,9 @@ public class FarmingView {
         if ((matcher = FarmingCommands.CraftInfo.getMatcher(input)) != null) {
             System.out.println(controller.craftInfo(matcher));
         }else if ((matcher = FarmingCommands.GreenhouseBuild.getMatcher(input)) != null) {
-            System.out.println(controller.buildGreenhouse(matcher));
+            Result result = controller.buildGreenhouse(matcher, playername);
+            System.out.println(result);
+            App.sendResult(result, playername);
         }else if((matcher = FarmingCommands.Plant.getMatcher(input)) != null){
             Result result = controller.plant(matcher, playername);
             System.out.println(result);

@@ -133,14 +133,17 @@ public class PlayerActs {
             return new Result(false, "scoreboard");
         }
         if(screen.friendshipMode){
-            if(screen.friendshipStageHandler.isGifting){
-                screen.friendshipStageHandler.renderInventoryBar(stage.getBatch(), screen.camera, Finder.getpd().getInventoryData().getInventory());
-            }
             screen.friendshipStage.act(delta);
             screen.friendshipStage.draw();
+            if(screen.friendshipStageHandler.isChatting && Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+                String message = screen.friendshipStageHandler.chatTextField.getText();
+                // TODO Chatting
+                screen.friendshipStageHandler.chatTextField.setText("");
+            }
             if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
                 screen.friendshipMode = false;
                 Gdx.input.setInputProcessor(screen.stage);
+                screen.friendshipStageHandler.emptyFields();
             }
             return new Result(false, "friendship");
         }

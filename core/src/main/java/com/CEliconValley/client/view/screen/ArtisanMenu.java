@@ -25,6 +25,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -141,6 +142,10 @@ public class ArtisanMenu {
                 if(sd.getQuantity() <= 0) continue;
                 Item item = Finder.parseItem(sd.getItemName());
                 batch.draw(ItemManager.getTexture(item), realN1 + (counter++) * itemSize, realM1, itemSize, itemSize);
+
+                font.getData().setScale(2f);
+                font.draw(batch, sd.getQuantity() + "", realN1 + (counter++ - 0.25f) * itemSize, realM1 + itemSize * 0.3f);
+                font.getData().setScale(1f);
             }
             buttonActive[1] = false;
         }
@@ -155,7 +160,6 @@ public class ArtisanMenu {
                 mousePos.y >= realY1 && mousePos.y <= realY2;
 
             if (isHover && Gdx.input.isButtonJustPressed(0)) {
-                // TODO idk what
                 buttonActive[i] = !buttonActive[i];
                 if(i == 2 && md != null){
                     GameMessage<GameCommand> msg = new GameMessage<GameCommand>("game-command",
@@ -224,13 +228,16 @@ public class ArtisanMenu {
 
             if(md != null && md.getProduceData() != null){
 
-                for (int i1 = 0; i1 < buttonActive.length; i1++) {
-                    buttonActive[i1] = false;
-                }
+                Arrays.fill(buttonActive, false);
 
                 Slot slot = md.getProduceData().getSlot();
                 batch.draw(ItemManager.getTexture(slot.getItem()), realN1 - itemSize * 3,
                     realM1 + itemSize * 2.75f, itemSize * 2, itemSize * 2);
+
+                font.getData().setScale(2f);
+                font.draw(batch, slot.getQuantity() + "", realN1 - itemSize * 1.5f, realM1 + itemSize * 3.3f);
+                font.getData().setScale(1f);
+
                 if (mousePos.x >= realN1 - itemSize * 3 && mousePos.x <= realN1 - itemSize &&
                     mousePos.y >= realM1 + itemSize * 2.75f && mousePos.y <= realM1 + itemSize * 4.75) {
                     if (Gdx.input.isButtonJustPressed(0)) {
@@ -322,14 +329,6 @@ public class ArtisanMenu {
                                     new GameCommand("artisan use "+craftableMachine.getName()+
                                         " "+item.getName(), AppClient.getUserData().getUsername()));
                                 AppClient.getClient().send(new Gson().toJson(msg));
-                                // TODO click on inventory
-//                                if(isFood(item)) {
-//                                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-//                                        new GameCommand("cooking refrigerator put " + item.getName(),
-//                                            AppClient.getUserData().getUsername())
-//                                    );
-//                                    AppClient.getClient().send(new Gson().toJson(msg));
-//                                }
                             }
 
 

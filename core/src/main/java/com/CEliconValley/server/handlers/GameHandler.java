@@ -116,6 +116,7 @@ public class GameHandler {
             }
             case "save-game" -> {
                 UserDB.saveGame(App.getGame());
+                System.out.println("saving game there");
                 GameMessage<String> exiter = new GameMessage<>("game-command","exit-game");
                 App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(exiter));
                 App.setGame(null);

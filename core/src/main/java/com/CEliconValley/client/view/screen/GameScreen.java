@@ -109,8 +109,8 @@ public abstract class GameScreen implements Screen {
     protected boolean halt = false;
     public boolean dcmode = false;
     public Label dcLabel;
-    Table chatTable;
-    Table sortButtonsTable;
+    public Table chatTable;
+    private Table sortButtonsTable;
 
     StrategyScoreboard ss = new StrategyScoreboard();
 
@@ -312,6 +312,7 @@ public abstract class GameScreen implements Screen {
 
 
     public GameScreen(InventoryRenderer inventoryRenderer) {
+        camera = new OrthographicCamera();
         stage = new Stage(new ScreenViewport(), Main.getBatch());
         chatStage = new Stage(new ScreenViewport(), Main.getBatch());
         scoreboardStage = new Stage(new ScreenViewport(), Main.getBatch());
@@ -342,20 +343,18 @@ public abstract class GameScreen implements Screen {
         hudImage.setPosition(posX, posY);
         timeScreen.dateLabel.setPosition(posX + 120, posY + 180);
         timeScreen.timeLabel.setPosition(posX + 120, posY + 90);
-        timeScreen.goldLabel.setPosition(posX + 66.5f, posY + 10);
+        timeScreen.goldLabel.setPosition(posX + 67f, posY + 10);
         timeScreen.getHudTable().setPosition(0, -stage.getHeight() / 21f);
         energyBarImage.setPosition(stage.getWidth() - energyBarImage.getWidth() * 2, energyBarImage.getHeight() * 1.5f);
         timeScreen.goldLabel.setAlignment(Align.left);
         timeScreen.goldLabel.setFontScale(1.18f);
         timeScreen.dateLabel.setFontScale(0.8f);
 
-
         Texture labelTexture = GameAssetManager.getGameAssetManager().getBackgroundTexture("Info_Background1.png");
 //        TextureRegionDrawable background = new TextureRegionDrawable(new TextureRegion(labelTexture));
 
         NinePatch ninePatch = new NinePatch(labelTexture, 40, 40, 0, 0);
         NinePatchDrawable background = new NinePatchDrawable(ninePatch);
-
 
         Label.LabelStyle style = new Label.LabelStyle();
         style.font = new BitmapFont();
@@ -545,6 +544,7 @@ public abstract class GameScreen implements Screen {
     public void handleFriendship(Stage stage, PlayerData playerData, NPCData npcData) {
         friendshipStageHandler = new FriendshipStageHandler(this, stage, playerData, npcData);
         friendshipMode = true;
+        Gdx.input.setInputProcessor(stage);
 
         overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
             .getGameAssetManager().getBackgroundTexture("Friendship_Background.png"))));
@@ -741,7 +741,7 @@ public abstract class GameScreen implements Screen {
         messageLabel.setColor(color);
         messageLabel.setText(message);
         messageLabel.setVisible(true);
-        messageLabel.setPosition(stage.getWidth() / 2 - tagMessageLabel.getWidth() / 2, stage.getHeight() / 1.2f);
+        messageLabel.setPosition(stage.getWidth() / 2 - messageLabel.getWidth() / 2, stage.getHeight() / 1.2f);
         messageLabel.pack();
     }
     public void removeMessage(){
