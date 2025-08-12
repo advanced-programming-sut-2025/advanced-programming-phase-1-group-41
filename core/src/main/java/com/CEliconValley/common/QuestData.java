@@ -21,6 +21,7 @@ public class QuestData {
     private HashMap<String,Boolean> isLocked=new HashMap<>();
     private HashMap<String,Boolean> isFinished=new HashMap<>();
 
+    public QuestData(){}
     public QuestData(Quest quest) {
         requestdata =  new SlotData(quest.getRequest());
         rewarddata = quest.getReward() == null ? null : new SlotData(quest.getReward());

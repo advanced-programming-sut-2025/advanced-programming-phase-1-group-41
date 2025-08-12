@@ -356,9 +356,74 @@ public class PlayerActs {
             }
         }else if(Gdx.input.isKeyPressed(Input.Keys.F)){
             if(screen instanceof FarmScreen fs){
-                if(fs.isLakeAhead()){
-                    if(!fs.isFishing()){
-                        fs.startFishing(FishType.Shad);
+                if(fs.isLakeAhead()) {
+                    if (FishingRodLevel.parseFishingRodLevel(Finder.getpd().getCurrentToolName()) != null) {
+                        screen.onRepeat = false;
+                        hero.stateTime = 0;
+                        int pre = getMainToolNumber();
+                        ArrayList<TGPoint> tgp = getOtherToolNumber();
+                        if (pre == -1) {
+                            if(tgp == null){
+                                if(Finder.getpd().getCurrentToolName() != null &&Finder.getpd().getCurrentToolName().equals(new Shear().getName())){
+                                    AnimalSprite animalSprite = isAnimalHere();
+                                    if(animalSprite != null && animalSprite.animalData.getAnimalType().equals(new Sheep(null, null).getAnimalType())){
+                                        GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                                new GameCommand("shear " + animalSprite.animalData.getName(), AppClient.getUserData().getUsername()));
+                                        AppClient.getClient().send(new Gson().toJson(msg));
+                                        hero.currentAnimation = hero.shear();
+                                        if(screen instanceof BarnScreen barnScreen){
+                                            barnScreen.setLastAnimal(animalSprite);
+                                        }
+                                    }else{
+                                        hero.currentAnimation = hero.useTool(pre+1);
+                                    }
+                                }else if(Finder.getpd().getCurrentToolName() != null &&Finder.getpd().getCurrentToolName().equals(new MilkPale().getName())){
+                                    AnimalSprite animalSprite = isAnimalHere();
+                                    if(animalSprite != null &&(
+                                            animalSprite.animalData.getAnimalType().equals(new Cow(null, null).getAnimalType())
+                                                    ||
+                                                    animalSprite.animalData.getAnimalType().equals(new Goat(null, null).getAnimalType()))
+                                    ){
+                                        GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                                new GameCommand("milkpale " + animalSprite.animalData.getName(), AppClient.getUserData().getUsername()));
+                                        AppClient.getClient().send(new Gson().toJson(msg));
+                                        hero.currentAnimation = hero.milk();
+                                        if(screen instanceof BarnScreen barnScreen){
+                                            barnScreen.setLastAnimal(animalSprite);
+                                        }
+                                    }else{
+                                        hero.currentAnimation = hero.useTool(pre+1);
+                                    }
+                                }
+                                else{
+                                    hero.currentAnimation = hero.useTool(pre+1);
+                                }
+                            }
+                            else{
+                                hero.currentAnimation = hero.useOtherTool(tgp);
+                            }
+                        }else{
+                            hero.currentAnimation = hero.useTool(pre);
+                        }
+                        hero.isActing.set(true);
+                        hero.stateTime = 0;
+                        if (screen instanceof FarmScreen farmScreen) {
+                            assert AppClient.getUserData() != null;
+                            GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                    new GameCommand("tools use -d " + hero.currentDirection, AppClient.getUserData().getUsername()));
+                            AppClient.getClient().send(new Gson().toJson(msg));
+//                farmScreen.hit(hero.currentDirection, hero.playerX.get(), hero.playerY.get());
+                        }
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                if (!fs.isFishing()) {
+                                    fs.startFishing(FishType.Shad);
+                                }
+                            }
+                        }, 0.5f);
+
+
                     }
                 }
             }

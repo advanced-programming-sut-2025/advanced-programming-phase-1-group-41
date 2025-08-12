@@ -11,6 +11,7 @@ import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.controllers.Spawner.*;
 import com.CEliconValley.models.*;
+import com.CEliconValley.models.animals.Fish;
 import com.CEliconValley.models.animals.FishType;
 import com.CEliconValley.models.buildings.*;
 import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
@@ -20,10 +21,13 @@ import com.CEliconValley.models.buildings.animalContainer.Coop;
 import com.CEliconValley.models.buildings.animalContainer.CoopType;
 import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.foragings.Nature.Lake;
+import com.CEliconValley.models.items.BuffType;
 import com.CEliconValley.models.items.CraftableMachine;
 import com.CEliconValley.models.items.craftablemachines.FishSmoker;
 import com.CEliconValley.models.items.craftablemachines.Machine;
 import com.CEliconValley.models.locations.Farm;
+import com.CEliconValley.models.tools.FishingRod;
+import com.CEliconValley.models.tools.FishingRodLevel;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.CEliconValley.views.subGames.FishingMiniGame;
 import com.CEliconValley.views.subGames.Rain;
@@ -344,7 +348,7 @@ class FarmScreen extends GameScreen implements Screen {
             if (fishingMiniGame.isFinished()) {
                 isFishing = false;
                 if (fishingMiniGame.isSuccess()) {
-
+                    fishing();
                 } else {
 
                 }
@@ -628,17 +632,153 @@ class FarmScreen extends GameScreen implements Screen {
         boolean isThatLake=false;
          switch (Finder.getpd().currentDirection) {
              case 1 -> {
-                 System.out.println("jelo");
-                 isThatLake= Finder.getcdByFarmData(player.getX(), player.getY() + 1, Finder.getfd()).equals(new Lake().getName());
+                 isThatLake= Finder.getcdByFarmData(getHero().playerX.get(), getHero().playerY.get() + 1, Finder.getfd()).extractData().getObjectMap().getName().equals(new Lake().getName());
              }
              case 2 ->
-                isThatLake=Finder.getcdByFarmData(player.getX() + 1, player.getY(), Finder.getfd()).extractData().getObjectMap() instanceof Lake;
+                isThatLake=Finder.getcdByFarmData(getHero().playerX.get() + 1, getHero().playerY.get() , Finder.getfd()).extractData().getObjectMap() instanceof Lake;
             case 3 ->
-                isThatLake=Finder.getcdByFarmData(player.getX(), player.getY() - 1, Finder.getfd()).extractData().getObjectMap() instanceof Lake;
+                    isThatLake= Finder.getcdByFarmData(getHero().playerX.get(), getHero().playerY.get() +-1, Finder.getfd()).extractData().getObjectMap().getName().equals(new Lake().getName());
             case 4 ->
-                isThatLake=Finder.getcdByFarmData(player.getX() - 1, player.getY() + 1, Finder.getfd()).extractData().getObjectMap() instanceof Lake;
+                    isThatLake= Finder.getcdByFarmData(getHero().playerX.get()-1, getHero().playerY.get() , Finder.getfd()).extractData().getObjectMap().getName().equals(new Lake().getName());
         };
          return isThatLake;
+    }
+    public Result fishing(){
+        GameData game=AppClient.getGameData();
+        Player player = Finder.getpd().getPlayer();
+
+        FishingRod fishingRod = (FishingRod) player.getCurrentTool();
+
+        double weatherEffect;
+        switch(game.getWeatherType()){
+            case Sunny:
+                weatherEffect=1.5;
+                break;
+            case Rainy:
+                weatherEffect=1.2;
+                break;
+            case Stormy:
+                weatherEffect=0.5;
+                break;
+            default:
+                weatherEffect=1.0;
+                break;
+        }
+
+        int quantityOfFish=(int)Math.floor(Math.random()*weatherEffect*(player.getFishingSkill().getLevel() + 2));
+        Fish caughtFish = null;
+        double fishQuality=1.0;
+        if(fishingRod.getLevel() == FishingRodLevel.Training){
+            switch(game.getTime().getSeason()){
+                case Spring:
+                    caughtFish=new Fish(FishType.Herring);
+                    break;
+                case Summer:
+                    caughtFish=new Fish(FishType.Sunfish);
+                    break;
+                case Autumn:
+                    caughtFish=new Fish(FishType.Sardine);
+                    break;
+                case Winter:
+                    caughtFish=new Fish(FishType.Perch);
+                    break;
+            }
+        }
+        else{
+            int chance = 1 + (int)(Math.random() * 100);
+            switch(game.getTime().getSeason()){
+                case Spring:
+                    if(chance<7&&player.getFishingSkill().isMaxLevel()){
+                        caughtFish=new Fish(FishType.Legend);
+                    }
+                    else if(chance<30){
+                        caughtFish=new Fish(FishType.Flounder);
+                    }
+                    else if(chance<50){
+                        caughtFish=new Fish(FishType.Lionfish);
+                    }
+                    else if(chance<75){
+                        caughtFish=new Fish(FishType.Herring);
+                    }
+                    else{
+                        caughtFish=new Fish(FishType.Ghostfish);
+                    }
+                    break;
+                case Summer:
+                    if(chance<7&&player.getFishingSkill().isMaxLevel()){
+                        caughtFish=new Fish(FishType.Crimsonfish);
+                    }
+                    else if(chance<30){
+                        caughtFish=new Fish(FishType.Tilapia);
+                    }
+                    else if(chance<50){
+                        caughtFish=new Fish(FishType.Dorado);
+                    }
+                    else if(chance<75){
+                        caughtFish=new Fish(FishType.Sunfish);
+                    }
+                    else{
+                        caughtFish=new Fish(FishType.RainbowTrout);
+                    }
+                    break;
+                case Autumn:
+                    if(chance<7&&player.getFishingSkill().isMaxLevel()){
+                        caughtFish=new Fish(FishType.Angler);
+                    }
+                    else if(chance<30){
+                        caughtFish=new Fish(FishType.Sardine);
+                    }
+                    else if(chance<50){
+                        caughtFish=new Fish(FishType.Shad);
+                    }
+                    else if(chance<75){
+                        caughtFish=new Fish(FishType.BlueDiscus);
+                    }
+                    else{
+                        caughtFish=new Fish(FishType.Salmon);
+                    }
+                    break;
+                case Winter:
+                    if(chance<20&&player.getFishingSkill().isMaxLevel()){
+                        caughtFish=new Fish(FishType.Glacierfish);
+                    }
+                    else if(chance<30){
+                        caughtFish=new Fish(FishType.MidnightCarp);
+                    }
+                    else if(chance<50){
+                        caughtFish=new Fish(FishType.Perch);
+                    }
+                    else if(chance<75){
+                        caughtFish=new Fish(FishType.Tuna);
+                    }
+                    else{
+                        caughtFish=new Fish(FishType.Squid);
+                    }
+                    break;
+
+            }
+        }
+        int value =player.getFishingSkill().isMaxLevel() ? -1 : 0;
+        int energy = fishingRod.getLevel().getEnergyUsage() + value;
+        if(player.getBuff() != null){
+            if(player.getBuff().getBuffType().equals(BuffType.Fishing)){
+                System.out.println("since you have a buff you're gonna lose 1 less energy");
+                if(energy >= 1){
+                    energy--;
+                }
+            }
+        }
+//        if(energy > App.getGame().getCurrentPlayer().getEnergy()){
+//            new Result(false, "your energy is too low..");
+//        }
+        fishQuality=Math.floor(Math.random()*( App.getGame().getCurrentPlayer().getFishingSkill().getLevel() + 2)*fishingRod.getLevel().getPole())/(7-weatherEffect);
+        assert caughtFish != null;
+        caughtFish.setQuality(fishQuality);
+        player.getFishingSkill().increaseXp(quantityOfFish * 5);
+        //todo dec of energy is not checked here
+        player.getInventory().addToInventory(caughtFish,quantityOfFish,(int)fishQuality);
+        return new Result(true,"You have "+quantityOfFish+" fresh fish of "+caughtFish.getFishType().getName());
+
     }
 
 }
