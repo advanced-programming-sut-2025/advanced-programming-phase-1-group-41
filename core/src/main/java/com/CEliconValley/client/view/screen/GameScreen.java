@@ -6,6 +6,7 @@ import com.CEliconValley.client.model.StrategyScoreboard;
 import com.CEliconValley.client.view.screen.maps.*;
 import com.CEliconValley.client.view.screen.menu.ShippingBinBar;
 import com.CEliconValley.common.CellData;
+import com.CEliconValley.common.FarmData;
 import com.CEliconValley.common.NPCData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.controllers.Spawner.InventoryRenderer;
@@ -13,6 +14,8 @@ import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.PlayerMessage;
+import com.CEliconValley.models.buildings.Door;
+import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
 import com.CEliconValley.models.buildings.ShippingBin;
 import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.foragings.ForagingTree;
@@ -43,6 +46,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import javax.print.attribute.standard.Fidelity;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -387,13 +391,28 @@ public abstract class GameScreen implements Screen {
 
     public boolean canMoveTo(int x, int y, Location location) {
         if(location instanceof FarmMap farmMap){
-            System.out.println("checking farmmap");
             for (CellData cd : farmMap.farmData.getCells()) {
                 if (cd.getX() == x && cd.getY() == y) {
                     Cell cell = cd.extractData();
                     if (cell.getObjectMap() instanceof Lake || cell.getObjectMap() instanceof Rock ||cell.getObjectMap() instanceof Wall ||cell.getObjectMap() instanceof Obstacle) {
-                        System.out.println(cd.getObjectName()+" "+cell.getX()+" "+cell.getY());
                         return false;
+                    }
+
+                    if(cell.getObjectMap() instanceof Door){
+                        for (int i = -2; i <= 2 ; i++) {
+                            for (int j = -2; j <= 2 ; j++) {
+                                int testx = cell.getX()+i;
+                                int testy = cell.getY()+j;
+                                FarmData fd= Finder.getfd();
+                                if(fd.getGreenhouseX() < testx && testx < fd.getGreenhouseX()+Greenhouse.getGreenhouseLength()
+                                && fd.getGreenhouseY() < testy && testy < fd.getGreenhouseY()+Greenhouse.getGreenhouseHeight()
+                                ){
+                                    if(!fd.isGreenHouseUnlocked()){
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
                     }
                     return true;
                 }

@@ -81,13 +81,7 @@ public class GreenHouseScreen extends GameScreen implements Screen {
         itemSpawner = new ItemSpawner();
         this.farmMap = new FarmMap(Finder.getFarmDataById(AppClient.getGameData(), AppClient.getUserData().getUsername()));
 
-        for(CellData cellData : farmMap.farmData.getCells()){
-            if(cellData.getX() >= farmMap.farmData.getGreenhouseX() && cellData.getY() >= farmMap.farmData.getGreenhouseY()
-                && cellData.getX() < farmMap.farmData.getGreenhouseX() + Greenhouse.getGreenhouseLength()
-                && cellData.getY() < farmMap.farmData.getGreenhouseY() + Greenhouse.getGreenhouseHeight()){
-                greenhouseCells.add(cellData);
-            }
-        }
+
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -114,16 +108,31 @@ public class GreenHouseScreen extends GameScreen implements Screen {
 
         batch.draw(background, CELL_SIZE/2f, CELL_SIZE/2f,CELL_SIZE* Greenhouse.getGreenhouseLength(),CELL_SIZE*Greenhouse.getGreenhouseHeight());
 
+        greenhouseCells.clear();
+        farmMap.farmData = Finder.getfd();
+        for(CellData cellData : farmMap.farmData.getCells()){
+            if(cellData.getX() >= farmMap.farmData.getGreenhouseX() && cellData.getY() >= farmMap.farmData.getGreenhouseY()
+                && cellData.getX() < farmMap.farmData.getGreenhouseX() + Greenhouse.getGreenhouseLength()
+                && cellData.getY() < farmMap.farmData.getGreenhouseY() + Greenhouse.getGreenhouseHeight()){
+                greenhouseCells.add(cellData);
+            }
+        }
         for (CellData cellData : greenhouseCells) {
-//            System.out.println(cellData.getX() + ", " + cellData.getY());
-            cropSpawner.renderCrops(batch, cellData, farmMap.farmData);
+            cropSpawner.renderCrops(batch, cellData, this);
             itemSpawner.renderItems(batch, cellData, farmMap.farmData);
-            treeSpawner.renderTrees(batch, cellData, 0);
-//            System.out.println(cellData.getObjectName());
+            treeSpawner.renderTrees(batch, cellData, 0, this);
         }
 
         if (hero.currentAnimation != null) {
             TextureRegion currentFrame = hero.currentAnimation.getKeyFrame(hero.stateTime, onRepeat);
+            //                System.out.println("stateTime: " + stateTime + ", frameIndex: " + currentAnimation.getKeyFrameIndex(stateTime));
+            if (!onRepeat && hero.currentAnimation.isAnimationFinished(hero.stateTime)) {
+                System.out.println("im here for a reason im not sure " + hero.stateTime);
+                hero.currentAnimation = hero.walk(false, hero.currentDirection);
+                onRepeat = true;
+                hero.isActing.set(false);
+                hero.stateTime = 0f;
+            }
             batch.draw(currentFrame, hero.renderX - CELL_SIZE / 2f, hero.renderY - CELL_SIZE / 2f, CELL_SIZE, CELL_SIZE);
         }
         if (isMenuOpen) {

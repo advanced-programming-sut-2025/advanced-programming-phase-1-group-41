@@ -1,8 +1,10 @@
 package com.CEliconValley.controllers.Spawner;
 
+import com.CEliconValley.client.view.screen.GreenHouseScreen;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.FarmData;
 import com.CEliconValley.models.Cell;
+import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.foragings.Crop;
 import com.CEliconValley.models.foragings.CropType;
 import com.CEliconValley.models.foragings.ForagingCrop;
@@ -88,6 +90,23 @@ public class CropSpawner {
                 float drawY = cell.getY() * CELL_SIZE;
 
                 batch.draw(frame, drawX, drawY, CELL_SIZE, CELL_SIZE);
+            }
+        }
+    }
+    public void renderCrops(SpriteBatch batch, CellData cellData, GreenHouseScreen greenHouseScreen) {
+        Cell cell = cellData.extractData();
+        if (cell.getObjectMap() instanceof Crop crop) {
+            CropType type = crop.getCropType();
+            int stageIndex = crop.getCurrentStage();
+
+            TextureRegion[] frames = cropFramesMap.get(type);
+            if (frames != null && stageIndex >= 0 && stageIndex < frames.length) {
+                TextureRegion frame = frames[stageIndex];
+                int cs = CELL_SIZE;
+                float drawX = (cell.getX() - Finder.getfd().getGreenhouseX()) * cs + cs/2 * 1.2f ;drawX*= 1.1f;
+                float drawY = (cell.getY() - Finder.getfd().getGreenhouseY()) * cs + cs;drawY *= 0.9f;
+
+                batch.draw(frame, drawX, drawY, cs / 2 , cs / 2);
             }
         }
     }

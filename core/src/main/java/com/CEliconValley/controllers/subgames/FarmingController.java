@@ -1,5 +1,6 @@
 package com.CEliconValley.controllers.subgames;
 
+import com.CEliconValley.common.CellData;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.foragings.*;
 
@@ -46,6 +47,42 @@ public class FarmingController {
         player.decMoney(1000);
         return new Result(true, "Greenhouse has been built!");
     }
+
+
+
+    public Result greenhousePlant(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
+        String seed = matcher.group("seed");
+        SeedType seedType = SeedType.parseSeedType(seed);
+        String direction = matcher.group("direction");
+        int dir = Integer.parseInt(direction)-1;
+        if(dir < 0 || dir > 7){
+            return new Result(false, "invalid direction");
+        }
+        int [][]dirs = {{-1,-1},{0,-1},{1,-1},{1,0},{1,1},{0,1},{-1,1},{-1,0},};
+        int x = player.getX()+dirs[dir][0] + farm.getGreenhouse().getX();
+        int y = player.getY()+dirs[dir][1] + farm.getGreenhouse().getY();
+
+        if(seedType == null){
+            return new Result(false, "Seed type not found!");
+        }
+
+        if(!App.getGame().getTime().getSeason().equals(seedType.getSeason()) && !seedType.getSeason().equals(Season.Special)
+            && !farm.getGreenhouse().isGreenHouse(x, y)){
+            return new Result(false, "Can't plant this seed on this season!");
+        }
+        if(player.getInventory().getSlotByItem(new Seed(seedType)) == null){
+            return new Result(false, "You don't have any seed in your inventory!");
+        }
+
+        Inventory inventory = player.getInventory();
+        Cell cell = Finder.findCellByCoordinates(x, y, farm);
+
+        assert cell != null;
+        return realPlant(cell, player, inventory, farm, seedType, seed, x, y);
+    }
+
     public Result plant(Matcher matcher, String playername){
         Player player = Finder.getPlayerByUsername(playername);
         Farm farm = Finder.getFarmByPlayer(player);
@@ -76,6 +113,11 @@ public class FarmingController {
         Cell cell = Finder.findCellByCoordinates(x, y, farm);
 
         assert cell != null;
+        return realPlant(cell, player, inventory, farm, seedType, seed, x, y);
+    }
+
+    private Result realPlant(Cell cell, Player player, Inventory inventory, Farm farm, SeedType seedType, String seed,
+                             int x, int y){
         if(cell.getObjectMap() instanceof Grass || cell.getObjectMap() instanceof Greenhouse){
             boolean canPlant = true;
             if(cell.getObjectMap() instanceof Grass){
@@ -87,9 +129,9 @@ public class FarmingController {
                         if(slot.getItem().getName().equals(seed)
                             || ((Seed) slot.getItem()).getSeedType().equals(seedType)){
                             List<String> mixedCropNames = Arrays.asList(
-                                    "CauliflowerSeed", "ParsnipSeed", "PotatoSeed", "BlueJazzSeed", "TulipSeed",
-                                    "CornSeed", "HotPepperSeed", "RadishSeed", "WheatSeed", "PoppySeed", "SunflowerSeed", "SummerSpangleSeed",
-                                    "ArtichokeSeed", "EggplantSeed", "PumpkinSeed", "FairyRoseSeed", "PowdermelonSeed"
+                                "CauliflowerSeed", "ParsnipSeed", "PotatoSeed", "BlueJazzSeed", "TulipSeed",
+                                "CornSeed", "HotPepperSeed", "RadishSeed", "WheatSeed", "PoppySeed", "SunflowerSeed", "SummerSpangleSeed",
+                                "ArtichokeSeed", "EggplantSeed", "PumpkinSeed", "FairyRoseSeed", "PowdermelonSeed"
                             );
                             if(seedType.equals(SeedType.Mixed)){
                                 Random rand = new Random();
@@ -228,6 +270,117 @@ public class FarmingController {
         }
         return new Result(false, "No Plant found!");
     }
+
+    public Result greenhouseHarvest(Matcher matcher, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
+        for (Cell cell : farm.getCells()) {
+            if (cell.getX() < farm.getGreenhouse().getX() || cell.getX() > farm.getGreenhouse().getX() + Greenhouse.getGreenhouseLength())
+                continue;
+            if (cell.getY() < farm.getGreenhouse().getY() || cell.getY() > farm.getGreenhouse().getY() + Greenhouse.getGreenhouseHeight())
+                continue;
+            if (cell.getObjectMap() instanceof Crop crop) {
+                if (!(crop.getStages().size() - 1 == crop.getCurrentStage()) || (!crop.getCropType().isOneTimeHarvest() && crop.getCurrentStageLevel() < crop.getRegrowthTime())) {
+                    continue;
+                } else {
+                    if (!crop.getCanRegrow()) {
+                        if (crop.isGiantCrop()) {
+                            player.getInventory().addToInventory(crop, 10);
+                            player.getFarmingSkill().increaseXp(5);
+                            int x = crop.getX();
+                            int y = crop.getY();
+                            farm.getCrops().remove(crop);
+                            Cell cell1 = Finder.findCellByCoordinates(x, y, farm);
+                            assert cell1 != null;
+                            cell1.setObjectMap(new Grass());
+                            Cell cell2 = Finder.findCellByCoordinates(x + 1, y, farm);
+                            assert cell2 != null;
+                            cell2.setObjectMap(new Grass());
+                            Cell cell3 = Finder.findCellByCoordinates(x, y + 1, farm);
+                            assert cell3 != null;
+                            cell3.setObjectMap(new Grass());
+                            Cell cell4 = Finder.findCellByCoordinates(x + 1, y + 1, farm);
+                            assert cell4 != null;
+                            cell4.setObjectMap(new Grass());
+                        } else {
+                            player.getInventory().addToInventory(crop, 1);
+                            player.getFarmingSkill().increaseXp(5);
+                            if (farm.getGreenhouse().isGreenHouse(crop.getX(), crop.getY())) {
+                                cell.setObjectMap(new Greenhouse());
+                            } else {
+                                cell.setObjectMap(new Grass());
+                            }
+                        }
+                    } else {
+                        crop.setCurrentStageLevel(0);
+                        crop.setCanRegrow(false);
+                        if (crop.isGiantCrop()) {
+                            player.getInventory().addToInventory(crop, 10);
+                            player.getFarmingSkill().increaseXp(20);
+                        } else {
+                            player.getInventory().addToInventory(crop, 1);
+                            player.getFarmingSkill().increaseXp(5);
+                        }
+                    }
+                }
+            } else if (cell.getObjectMap() instanceof Tree tree) {
+                if (tree.isThundered()) {
+                    player.getInventory().addToInventory(new Mineral(MineralType.Coal), 5);
+                    cell.setObjectMap(new Grass());
+                    continue;
+                }
+                if (tree.isAttacked()) {
+                    continue;
+                }
+                if (tree.getCurrentStage() < 3 || tree.getCurrentStageLevel() < 7) {
+                    continue;
+                } else if (tree.getCurrentStageLevel() < tree.getTreeType().getFruitHarvestCycle()) {
+                    continue;
+                }
+                tree.setCurrentStageLevel(0);
+                player.getInventory().addToInventory(new Fruit(tree.getTreeType().getFruitType()), 1);
+                player.getFarmingSkill().increaseXp(5);
+            }
+        }
+        return new Result(true, "harvested all successfully");
+    }
+
+    public Result greenhouseWater(Matcher matcher, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
+        for (Cell cell : farm.getCells()) {
+            if(cell.getX() < farm.getGreenhouse().getX() || cell.getX() > farm.getGreenhouse().getX()+Greenhouse.getGreenhouseLength()) continue;
+            if(cell.getY() < farm.getGreenhouse().getY() || cell.getY() > farm.getGreenhouse().getY()+Greenhouse.getGreenhouseHeight()) continue;
+            if(cell.getObjectMap() instanceof Crop crop){
+                crop.water();
+            }
+            if(cell.getObjectMap() instanceof Tree tree){
+                tree.water();
+            }
+        }
+        return new Result(true,"watered all successfully");
+    }
+
+    public Result greenhouseFertilize(Matcher matcher, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
+        String fertilizer = matcher.group("fertilizer");
+        FertilizerType fertilizerType = FertilizerType.parseFertilizerType(fertilizer);
+        if(fertilizerType == null){
+            return new Result(false, "Fertilizer type not found!");
+        }
+
+        String direction = matcher.group("direction");
+        int dir = Integer.parseInt(direction)-1;
+        if(dir < 0 || dir > 7){
+            return new Result(false, "invalid direction");
+        }
+        int [][]dirs = {{-1,-1},{0,-1},{1,-1},{1,0},{1,1},{0,1},{-1,1},{-1,0},};
+        int x = player.getX()+dirs[dir][0] + farm.getGreenhouse().getX();
+        int y = player.getY()+dirs[dir][1] + farm.getGreenhouse().getY();
+        return realFertilize(x,y,farm, player, fertilizerType);
+    }
+
     public Result fertilize(Matcher matcher, String playername){
         Player player = Finder.getPlayerByUsername(playername);
         Farm farm = Finder.getFarmByPlayer(player);
@@ -245,6 +398,11 @@ public class FarmingController {
         int [][]dirs = {{-1,-1},{0,-1},{1,-1},{1,0},{1,1},{0,1},{-1,1},{-1,0},};
         int x = player.getX()+dirs[dir][0];
         int y = player.getY()+dirs[dir][1];
+        return realFertilize(x,y,farm, player, fertilizerType);
+    }
+
+
+    private Result realFertilize(int x, int y, Farm farm, Player player, FertilizerType fertilizerType){
         Cell cell = Finder.findCellByCoordinates(x, y, farm);
         assert cell != null;
         if(fertilizerType.equals(FertilizerType.GrassStarter)){
@@ -273,6 +431,7 @@ public class FarmingController {
         }
         return new Result(false, "No Fertilizer of this type found in your inventory!");
     }
+
     private void fertilizeCrop(Crop crop, FertilizerType fertilizerType){
         Random rand = new Random();
         int chance = 0;

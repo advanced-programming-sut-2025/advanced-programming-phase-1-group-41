@@ -259,10 +259,10 @@ public class PlayerActs {
                 putItemOnGround(mousePos.x, mousePos.y, farmScreen);
             }else if(screen instanceof GreenHouseScreen greenHouseScreen){
                 greenHouseScreen.camera.unproject(mousePos);
-                smthOnVillage(mousePos.x, mousePos.y, greenHouseScreen);
+                putInGreenhouse(mousePos.x, mousePos.y, greenHouseScreen);
             }else if(screen instanceof VillageScreen villageScreen){
                 villageScreen.camera.unproject(mousePos);
-                smthOnVillage(mousePos.x, mousePos.y, villageScreen);
+                putInGreenhouse(mousePos.x, mousePos.y, villageScreen);
             }
         }
         if (screen.isMenuOpen) {
@@ -451,6 +451,16 @@ public class PlayerActs {
                     new GameCommand("tools use -d " + hero.currentDirection, AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
 //                farmScreen.hit(hero.currentDirection, hero.playerX.get(), hero.playerY.get());
+            }else if(screen instanceof GreenHouseScreen greenHouseScreen){
+                if(Finder.getpd().getCurrentToolName().equals(new WateringCan().getName())){
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand("greenhouse water", AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
+                }else if(Finder.getpd().getCurrentToolName().equals(new Scythe().getName())){
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand("greenhouse harvest", AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
+                }
             }
         } else if (
             (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_RIGHT) ||
@@ -732,12 +742,13 @@ public class PlayerActs {
     }
 
 
-    public static void smthOnVillage(float mouseX, float mouseY, GreenHouseScreen screen){
+    public static void putInGreenhouse(float mouseX, float mouseY, GreenHouseScreen screen){
         Hero hero = screen.getHero();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 Cell cell = screen.greenHouseMap.getCell(hero.playerX.get()+j,
                     hero.playerY.get()+i);
+                if(cell == null) continue;
                 if(mouseX >= cell.getX()*CELL_SIZE && mouseX <= (cell.getX()+1)*CELL_SIZE &&
                     mouseY >= cell.getY()*CELL_SIZE && mouseY <= (cell.getY()+1)*CELL_SIZE){
                     int dir = getDir(i, j);
@@ -750,13 +761,13 @@ public class PlayerActs {
                     if(item == null) return ;
                     if(item instanceof Seed seed) {
                         GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                            new GameCommand("plant -s " + seed.getName() + " -d " + dir,
+                            new GameCommand("greenhouse plant -s " + seed.getName() + " -d " + dir,
                                 AppClient.getUserData().getUsername()));
                         AppClient.getClient().send(new Gson().toJson(msg));
                     }
                     else if(item instanceof Fertilizer fertilizer){
                         GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                            new GameCommand("fertilize -f " + fertilizer.getName() + " -d " + dir,
+                            new GameCommand("greenhouse fertilize -f " + fertilizer.getName() + " -d " + dir,
                                 AppClient.getUserData().getUsername()));
                         AppClient.getClient().send(new Gson().toJson(msg));
                     }
@@ -764,7 +775,7 @@ public class PlayerActs {
             }
         }
     }
-    public static void smthOnVillage(float mouseX, float mouseY, VillageScreen screen){
+    public static void putInGreenhouse(float mouseX, float mouseY, VillageScreen screen){
         Hero hero = screen.getHero();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {

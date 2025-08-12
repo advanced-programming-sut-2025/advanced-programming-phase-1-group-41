@@ -47,10 +47,6 @@ public class ItemSpawner {
         float drawX = cellData.getX() * CELL_SIZE;
         float drawY = cellData.getY() * CELL_SIZE;
         float newWidth = itemTexture.getTexture().getWidth() * ((float)(CELL_SIZE) / itemTexture.getTexture().getHeight());
-        if(item instanceof ShippingBin){
-            System.out.println("shipping "+drawX+" "+drawY+" "+newWidth+" "+CELL_SIZE);
-            System.out.println("hero "+Finder.getpd().renderx+" "+Finder.getpd().rendery);
-        }
         batch.draw(itemTexture, drawX + (CELL_SIZE-newWidth) / 2 , drawY,  newWidth , CELL_SIZE);
     }
 }

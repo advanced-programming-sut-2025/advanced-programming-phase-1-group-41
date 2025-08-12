@@ -5,6 +5,8 @@ import com.CEliconValley.models.animals.FishType;
 import com.CEliconValley.models.buildings.Well;
 import com.CEliconValley.models.foragings.Nature.Mineral;
 import com.CEliconValley.models.foragings.Nature.MineralType;
+import com.CEliconValley.models.foragings.Seed;
+import com.CEliconValley.models.foragings.SeedType;
 import com.CEliconValley.models.items.craftablemachines.Furnace;
 import com.CEliconValley.models.tools.*;
 
@@ -48,6 +50,7 @@ public class Inventory {
         addToInventory(CraftableMachine.Furnace,1);
         addToInventory(new Mineral(MineralType.Coal),1);
         addToInventory(new Mineral(MineralType.CopperOre),5);
+        addToInventory(new Seed(SeedType.CherrySapling), 5);
 //        addToInventory(new Fish(FishType.Squid),1);
 //        addToInventory(new Fish(FishType.Shad),1);
 //        addToInventory(new Fish(FishType.BlueDiscus),1);

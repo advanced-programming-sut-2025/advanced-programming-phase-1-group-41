@@ -1,6 +1,7 @@
 package com.CEliconValley.models;
 
 import com.CEliconValley.client.AppClient;
+import com.CEliconValley.client.view.screen.PlayerActs;
 import com.CEliconValley.client.view.screen.maps.CoopMap;
 import com.CEliconValley.common.*;
 import com.CEliconValley.models.buildings.Building;
@@ -136,8 +137,8 @@ public class Finder {
         return null;
     }
 
-    public static Tool getToolByName(String name){
-        for (Slot slot : App.getGame().getCurrentPlayer().getInventory().getSlots()) {
+    public static Tool getToolByName(String name, Player player){
+        for (Slot slot : player.getInventory().getSlots()) {
             if(slot.getItem() == null){
                 continue;
             }

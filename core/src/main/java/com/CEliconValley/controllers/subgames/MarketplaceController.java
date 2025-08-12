@@ -225,7 +225,9 @@ public class MarketplaceController {
         value += 1;
         player.incSavings(value);
         player.getInventory().removeFromInventory(slot.getItem(), wantedQuantity);
-        return new Result(true,"you're gonna gain "+value+" later.. current saving: "+player.getSavings());
+        Result result = new Result(true,"you're gonna gain "+value+" later.. current saving: "+player.getSavings());
+        App.sendResult(result, playername);
+        return result;
     }
 
     public Result purchaseProduct(Matcher matcher){

@@ -30,7 +30,7 @@ public class ToolsController {
     public Result equipTool(Matcher matcher, String playername){
         Player player = Finder.getPlayerByUsername(playername);
         String toolName = matcher.group(1).trim();
-        Tool tool = Finder.getToolByName(toolName);
+        Tool tool = Finder.getToolByName(toolName, player);
         if(tool == null){
             return new Result(false, "Tool " +
                     toolName +
@@ -41,14 +41,14 @@ public class ToolsController {
     }
 
 
-    public Result upgradeTool(Matcher matcher){
-        String itemName = matcher.group(1).trim();
-        Tool tool = Finder.getToolByName(itemName);
-        if(tool == null){
-            return new Result(false, "You don't have"+itemName+" in your inventory");
-        }
-        return (new MarketplaceController()).upgradeTool(tool);
-    }
+//    public Result upgradeTool(Matcher matcher){
+//        String itemName = matcher.group(1).trim();
+//        Tool tool = Finder.getToolByName(itemName);
+//        if(tool == null){
+//            return new Result(false, "You don't have"+itemName+" in your inventory");
+//        }
+//        return (new MarketplaceController()).upgradeTool(tool);
+//    }
 
     public Result preValidateUseTool(Matcher matcher, Player player){
         String dirName = matcher.group("direction").trim();
