@@ -19,6 +19,7 @@ import com.CEliconValley.models.buildings.animalContainer.BarnType;
 import com.CEliconValley.models.buildings.animalContainer.Coop;
 import com.CEliconValley.models.buildings.animalContainer.CoopType;
 import com.CEliconValley.models.foragings.Nature.Grass;
+import com.CEliconValley.models.foragings.Nature.Lake;
 import com.CEliconValley.models.items.CraftableMachine;
 import com.CEliconValley.models.items.craftablemachines.FishSmoker;
 import com.CEliconValley.models.items.craftablemachines.Machine;
@@ -622,6 +623,22 @@ class FarmScreen extends GameScreen implements Screen {
     public void startFishing(FishType fishType) {
         fishingMiniGame = new FishingMiniGame(camera, fishType);
         isFishing = true;
+    }
+    public boolean isLakeAhead(){
+        boolean isThatLake=false;
+         switch (Finder.getpd().currentDirection) {
+             case 1 -> {
+                 System.out.println("jelo");
+                 isThatLake= Finder.getcdByFarmData(player.getX(), player.getY() + 1, Finder.getfd()).equals(new Lake().getName());
+             }
+             case 2 ->
+                isThatLake=Finder.getcdByFarmData(player.getX() + 1, player.getY(), Finder.getfd()).extractData().getObjectMap() instanceof Lake;
+            case 3 ->
+                isThatLake=Finder.getcdByFarmData(player.getX(), player.getY() - 1, Finder.getfd()).extractData().getObjectMap() instanceof Lake;
+            case 4 ->
+                isThatLake=Finder.getcdByFarmData(player.getX() - 1, player.getY() + 1, Finder.getfd()).extractData().getObjectMap() instanceof Lake;
+        };
+         return isThatLake;
     }
 
 }

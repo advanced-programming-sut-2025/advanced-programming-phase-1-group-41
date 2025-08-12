@@ -355,8 +355,12 @@ public class PlayerActs {
                 AppClient.getClient().send(new Gson().toJson(msg));
             }
         }else if(Gdx.input.isKeyPressed(Input.Keys.F)){
-            if(screen instanceof FarmScreen fs&& !fs.isFishing()){
-                fs.startFishing(FishType.Shad);
+            if(screen instanceof FarmScreen fs){
+                if(fs.isLakeAhead()){
+                    if(!fs.isFishing()){
+                        fs.startFishing(FishType.Shad);
+                    }
+                }
             }
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
@@ -848,4 +852,5 @@ public class PlayerActs {
         }
         return -1;
     }
+
 }

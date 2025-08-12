@@ -316,4 +316,5 @@ public class PlayerData {
             + this.getForagingSkill().getLevel()
             + this.getMiningSkill().getLevel()) / 4d;
     }
+
 }
