@@ -55,13 +55,13 @@ public class NPCSprite {
                     flippedFrame.flip(true, false);
                     wantedActs[i] = flippedFrame;
                 }
-                return new Animation<>(0.15f,wantedActs);
+                return new Animation<>(0.25f,wantedActs);
             }else{
                 for (int i = 0; i < tgPoints.size(); i++) {
                     TGPoint tgPoint = tgPoints.get(i);
                     wantedActs[i] = npcActs[tgPoint.row][tgPoint.col];
                 }
-                return new Animation<>(0.15f,wantedActs);
+                return new Animation<>(0.25f,wantedActs);
             }
         }else {
             ArrayList<TGPoint> tgPoints = walkAnime(false);
@@ -73,13 +73,13 @@ public class NPCSprite {
                     flippedFrame.flip(true, false);
                     wantedActs[i] = flippedFrame;
                 }
-                return new Animation<>(0.15f,wantedActs);
+                return new Animation<>(0.25f,wantedActs);
             }else{
                 for (int i = 0; i < tgPoints.size(); i++) {
                     TGPoint tgPoint = tgPoints.get(i);
                     wantedActs[i] = npcActs[tgPoint.row][tgPoint.col];
                 }
-                return new Animation<>(0.15f,wantedActs);
+                return new Animation<>(0.25f,wantedActs);
             }
         }
     }
