@@ -259,6 +259,15 @@
                     GameMessage<GameCommand> msg = new GameMessage<>("game-command",
                         new GameCommand("feed hay -n "+name, AppClient.getUserData().getUsername()));
                     AppClient.getClient().send(new Gson().toJson(msg));
+                    if(screen instanceof BarnScreen){
+                        ((BarnScreen) screen).setBarnMenuOpen(!((BarnScreen) screen).isBarnMenuOpen());
+                    } else if(screen instanceof CoopScreen){
+                        ((CoopScreen) screen).setCoopMenuOpen(!((CoopScreen) screen).isCoopMenuOpen());
+                    }
+                    screen.hero.isActing.set(true);
+                    screen.hero.currentAnimation = screen.hero.feed();
+                    screen.hero.stateTime = 0;
+                    screen.onRepeat = false;
                 }
 
                 animalX += screenWidth / 12.5f;

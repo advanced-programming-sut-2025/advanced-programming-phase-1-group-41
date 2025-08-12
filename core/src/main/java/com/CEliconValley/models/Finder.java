@@ -13,6 +13,7 @@ import com.CEliconValley.models.items.*;
 import com.CEliconValley.client.view.screen.maps.CottageMap;
 import com.CEliconValley.client.view.screen.maps.BarnMap;
 import com.CEliconValley.client.view.screen.maps.GreenhouseMap;
+import com.CEliconValley.models.items.craftableitems.SmokedFish;
 import com.CEliconValley.models.npc.npcCharacters.*;
 import com.CEliconValley.models.npc.npchomes.*;
 import org.bson.types.ObjectId;

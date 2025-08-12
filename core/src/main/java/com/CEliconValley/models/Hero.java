@@ -20,11 +20,13 @@ public class Hero {
     private final Texture toolsTexture_Back;
     private final Texture toolsTexture_Side;
     private final Texture extraActsTexture;
+    private final Texture buffTexture;
     private TextureRegion[][] playerActs;
     private TextureRegion[][] toolsActs_Front;
     private TextureRegion[][] toolsActs_Back;
     private TextureRegion[][] toolsActs_Side;
     private TextureRegion[][] extraActs;
+    private TextureRegion[][] buff;
 
     private final Texture generalToolsTexture_Front;
     private final Texture generalToolsTexture_Back;
@@ -45,10 +47,13 @@ public class Hero {
     public final AtomicBoolean isActing = new AtomicBoolean(false);
     public float stateTime = 0f;
     public Animation<TextureRegion> currentAnimation;
+    public Animation<TextureRegion> buffAnimation;
     public int destX;
     public int destY;
     public Queue<Node> movementQueue = new LinkedList<>();
     public String selectedItemName = null;
+    public float buffStateTime = 0f;
+
 
 
     public boolean reachedDestination(){
@@ -60,6 +65,7 @@ public class Hero {
     public Hero() {
         playerTexture = GameAssetManager.getGameAssetManager().getHeroTexture("generalActs.png");
         extraActsTexture = GameAssetManager.getGameAssetManager().getHeroTexture("ExtraActs.png");
+        buffTexture = GameAssetManager.getGameAssetManager().getHeroTexture("Particles.png");
         toolsTexture_Front = GameAssetManager.getGameAssetManager().getHeroTexture("tools_Front.png");
         toolsTexture_Back = GameAssetManager.getGameAssetManager().getHeroTexture("tools_Back.png");
         toolsTexture_Side = GameAssetManager.getGameAssetManager().getHeroTexture("tools_Side.png");
@@ -74,7 +80,7 @@ public class Hero {
         otherToolsActs_Front = TextureRegion.split(generalToolsTexture_Front, generalToolsTexture_Front.getWidth()/6,generalToolsTexture_Front.getHeight()/8);
         otherToolsActs_Back = TextureRegion.split(generalToolsTexture_Back, generalToolsTexture_Front.getWidth()/6,generalToolsTexture_Front.getHeight()/8);
         otherToolsActs_Side = TextureRegion.split(generalToolsTexture_Side, generalToolsTexture_Front.getWidth()/6,generalToolsTexture_Front.getHeight()/8);
-
+        buff = TextureRegion.split(buffTexture, buffTexture.getWidth()/8,buffTexture.getHeight()/2);
 //        this.farm =(Farm) location;
     }
 
@@ -295,6 +301,36 @@ public class Hero {
             return new Animation<>(0.15f,wantedActs);
         }
     }
+    public Animation<TextureRegion> feed(){
+        ArrayList<TGPoint> tgPoints = getFeed();
+        TextureRegion[] wantedActs=new TextureRegion[tgPoints.size()];
+        if(currentDirection==4){
+            for (int i = 0; i < tgPoints.size(); i++) {
+                TGPoint tgPoint = tgPoints.get(i);
+                TextureRegion flippedFrame = new TextureRegion(extraActs[tgPoint.row][tgPoint.col]);
+                flippedFrame.flip(true, false);
+                wantedActs[i] = flippedFrame;
+            }
+            return new Animation<>(0.15f,wantedActs);
+        }else{
+            for (int i = 0; i < tgPoints.size(); i++) {
+                TGPoint tgPoint = tgPoints.get(i);
+                wantedActs[i] = extraActs[tgPoint.row][tgPoint.col];
+            }
+            return new Animation<>(0.15f,wantedActs);
+        }
+    }
+    public Animation<TextureRegion> buff(){
+        ArrayList<TGPoint> tgPoints = getBuff();
+        TextureRegion[] wantedActs=new TextureRegion[tgPoints.size()];
+        for (int i = 0; i < tgPoints.size(); i++) {
+            TGPoint tgPoint = tgPoints.get(i);
+            TextureRegion flippedFrame = new TextureRegion(buff[tgPoint.row][tgPoint.col]);
+            flippedFrame.flip(true, false);
+            wantedActs[i] = flippedFrame;
+        }
+        return new Animation<>(0.20f,wantedActs);
+    }
     public Farm getFarm() {
         return farm;
     }
@@ -473,6 +509,34 @@ public class Hero {
                     pet.add(new TGPoint(0, i));
                 }
             }
+        }
+        return pet;
+    }
+    private ArrayList<TGPoint> getFeed(){
+        ArrayList<TGPoint> pet = new ArrayList();
+        switch (currentDirection) {
+            case 1 -> {
+                for (int i = 0; i < 4; i++) {
+                    pet.add(new TGPoint(6, i));
+                }
+            }
+            case 2, 4 -> {
+                for (int i = 0; i < 4; i++) {
+                    pet.add(new TGPoint(5, i));
+                }
+            }
+            case 3 -> {
+                for (int i = 0; i < 4; i++) {
+                    pet.add(new TGPoint(4, i));
+                }
+            }
+        }
+        return pet;
+    }
+    private ArrayList<TGPoint> getBuff(){
+        ArrayList<TGPoint> pet = new ArrayList();
+        for (int i = 0; i < 8; i++) {
+            pet.add(new TGPoint(0, i));
         }
         return pet;
     }

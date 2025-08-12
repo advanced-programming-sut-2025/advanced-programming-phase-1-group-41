@@ -240,7 +240,7 @@ public class MenuBar {
                                             AppClient.getUserData().getUsername())
                                     );
                                     AppClient.getClient().send(new Gson().toJson(msg));
-                                }else if(Food.parseFood(item.getName()) != null){
+                                }else if(Finder.parseItem(item.getName()) instanceof Eatable){
                                     assert AppClient.getUserData() != null;
                                     GameMessage<GameCommand> msg = new GameMessage<>("game-command",
                                         new GameCommand("eat " + item.getName(),

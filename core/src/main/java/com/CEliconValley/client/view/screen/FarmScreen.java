@@ -323,6 +323,12 @@ class FarmScreen extends GameScreen implements Screen {
 
                 batch.draw(currentFrame, hero.renderX - CELL_SIZE / 2f, hero.renderY - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
             }
+            if(Finder.getpd().getBuffData() != null){
+                hero.buffAnimation = hero.buff();
+                TextureRegion currentFrame = hero.buffAnimation.getKeyFrame(hero.buffStateTime, true);
+                batch.draw(currentFrame, hero.renderX + CELL_SIZE * 0.20f, hero.renderY + CELL_SIZE *0.95f, CELL_SIZE*0.55f, CELL_SIZE*0.55f);
+                hero.buffStateTime += delta;
+            }
             treeSpawner.renderTrees(batch, cellData, passiveStateTime);
 //            if (didHit) {
 //                hit(hero.currentDirection, hero.playerX, hero.playerY);
@@ -372,6 +378,7 @@ class FarmScreen extends GameScreen implements Screen {
         }
 
         passiveStateTime += delta;
+
 
         float halfViewportWidth = camera.viewportWidth * camera.zoom / 2;
         float halfViewportHeight = camera.viewportHeight * camera.zoom / 2;
@@ -773,12 +780,16 @@ class FarmScreen extends GameScreen implements Screen {
 //        if(energy > App.getGame().getCurrentPlayer().getEnergy()){
 //            new Result(false, "your energy is too low..");
 //        }
-        fishQuality=Math.floor(Math.random()*( App.getGame().getCurrentPlayer().getFishingSkill().getLevel() + 2)*fishingRod.getLevel().getPole())/(7-weatherEffect);
+        fishQuality=Math.floor(Math.random()*( player.getFishingSkill().getLevel() + 2)*fishingRod.getLevel().getPole())/(7-weatherEffect);
         assert caughtFish != null;
         caughtFish.setQuality(fishQuality);
         player.getFishingSkill().increaseXp(quantityOfFish * 5);
         //todo dec of energy is not checked here
         player.getInventory().addToInventory(caughtFish,quantityOfFish,(int)fishQuality);
+        GameMessage<GameCommand> message = new GameMessage<GameCommand>("game-command",
+            new GameCommand("fish -n "+caughtFish.getName()+" -c "+quantityOfFish,
+                AppClient.getUserData().getUsername()));
+        AppClient.getClient().send(new Gson().toJson(message));
         return new Result(true,"You have "+quantityOfFish+" fresh fish of "+caughtFish.getFishType().getName());
 
     }
