@@ -22,8 +22,8 @@ import static com.CEliconValley.models.Finder.parseNPC;
 public class NPCController {
 
     public Result meetNpc(Matcher matcher){
-        Inventory inventory= App.getGame().getCurrentPlayer().getInventory();
-        Player player=App.getGame().getCurrentPlayer();
+        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
+        Player player = App.getGame().getCurrentPlayer();
         String npcName = matcher.group(1);
         NPC npc=findNPCAround(npcName, player);
         if(npc==null){
@@ -70,7 +70,13 @@ public class NPCController {
         Inventory inventory=player.getInventory();
         String npcName = matcher.group(1);
         String itemName = matcher.group(2);
-        NPC npc=findNPCAround(npcName, player);
+        NPC npc = null;
+        for(NPC npc1 : App.getGame().getVillage().getNPCs()){
+            if(npc1.getName().equals(npcName)){
+                npc = npc1;
+            }
+        }
+//        NPC npc=findNPCAround(npcName, player);
         if(npc==null){
             if(!getNPCList().contains(npcName)){
                 return new Result(false, "no one`s here with that name");

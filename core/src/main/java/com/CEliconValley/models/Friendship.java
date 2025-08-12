@@ -19,7 +19,6 @@ public class Friendship {
     private boolean areMarried = false;
     private Player proposer = null;
 
-
     public Friendship(Player proposer, Player player1, Player player2,
                       int level, int lastReadMessage, boolean hadTradeToday,
                       boolean hadTalkingToday, boolean hadRejectedTradeToday,

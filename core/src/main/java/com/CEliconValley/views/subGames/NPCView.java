@@ -1,6 +1,8 @@
 package com.CEliconValley.views.subGames;
 
 import com.CEliconValley.controllers.subgames.NPCController;
+import com.CEliconValley.models.App;
+import com.CEliconValley.models.Result;
 import com.CEliconValley.views.commands.gameCommands.NPCCommands;
 
 import java.util.regex.Matcher;
@@ -12,7 +14,9 @@ public class NPCView {
         if((matcher = NPCCommands.MeetNPC.getMatcher(input))!=null){
             System.out.println(controller.meetNpc(matcher));
         }else if((matcher = NPCCommands.GiftNPC.getMatcher(input))!=null){
-            System.out.println(controller.giftToNpc(matcher, playername));
+            Result result = controller.giftToNpc(matcher, playername);
+            System.out.println(result);
+            App.sendRawResult(result, playername);
         }else if((matcher = NPCCommands.FriendshipNPCList.getMatcher(input))!=null){
             System.out.println(controller.friendshipList(matcher));
         }else if((matcher = NPCCommands.QuestsList.getMatcher(input))!=null){
