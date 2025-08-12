@@ -394,6 +394,12 @@ public class PlayerActs {
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.Q)){
             System.out.println("you're at "+hero.playerX+" "+hero.playerY);
+        }else if(Gdx.input.isKeyPressed(Input.Keys.P)){
+            if(screen instanceof BarnScreen screen){
+                petBarn(screen);
+            } else if(screen instanceof CoopScreen screen){
+                petCoop(screen);
+            }
         }
         else if (Gdx.input.isKeyJustPressed((Input.Keys.E))) {
             screen.onRepeat = false;
@@ -866,5 +872,42 @@ public class PlayerActs {
             return 6-j;
         }
         return -1;
+    }
+
+
+    public static void petBarn(BarnScreen barnScreen){
+        for (AnimalSprite animalSprite : barnScreen.getAnimalSprites()) {
+            float dx = animalSprite.renderX - barnScreen.hero.renderX;
+            if (dx < 0) dx = -dx;
+            float dy = animalSprite.renderY - barnScreen.hero.renderY;
+            if (dy < 0) dy = -dy;
+            if(dx+dy < CELL_SIZE * 2){
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                    new GameCommand("pet -w inside -n "+animalSprite.animalData.getName(), AppClient.getUserData().getUsername()));
+                AppClient.getClient().send(new Gson().toJson(msg));
+                screen.hero.isActing.set(true);
+                screen.hero.currentAnimation = screen.hero.pet();
+                screen.hero.stateTime = 0;
+                screen.onRepeat = false;
+                break;
+            }
+        }
+    }
+    public static void petCoop(CoopScreen coopScreen){
+        for (AnimalSprite animalSprite : coopScreen.getAnimalSprites()) {
+            float dx = animalSprite.renderX - coopScreen.hero.renderX;
+            if (dx < 0) dx = -dx;
+            float dy = animalSprite.renderY - coopScreen.hero.renderY;
+            if (dy < 0) dy = -dy;
+            if(dx+dy < CELL_SIZE * 2){
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                    new GameCommand("pet -w inside -n "+animalSprite.animalData.getName(), AppClient.getUserData().getUsername()));
+                AppClient.getClient().send(new Gson().toJson(msg));
+                screen.hero.isActing.set(true);
+                screen.hero.currentAnimation = screen.hero.pet();
+                screen.hero.stateTime = 0;
+                screen.onRepeat = false;
+            }
+        }
     }
 }

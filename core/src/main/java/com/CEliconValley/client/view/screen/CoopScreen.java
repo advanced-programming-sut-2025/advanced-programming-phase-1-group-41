@@ -171,7 +171,7 @@ public class CoopScreen extends GameScreen implements Screen {
         for (AnimalSprite animalSprite : animalSprites) {
             if(animalSprite.currentAnimation != null){
                 TextureRegion currentFrame = animalSprite.currentAnimation.getKeyFrame(animalSprite.stateTime, onRepeat);
-                batch.draw(currentFrame, animalSprite.renderX - CELL_SIZE / 2f, animalSprite.renderY - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
+                batch.draw(currentFrame, animalSprite.renderX - CELL_SIZE / 2f, animalSprite.renderY - CELL_SIZE / 2f, CELL_SIZE * 1.5f, CELL_SIZE * 1.5f);
             }
         }
 

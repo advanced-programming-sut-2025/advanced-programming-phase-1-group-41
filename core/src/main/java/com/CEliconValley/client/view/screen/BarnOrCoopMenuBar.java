@@ -192,9 +192,18 @@
                     font.setColor(Color.WHITE);
                 }
                 if (clicked) {
+                    if(screen instanceof BarnScreen){
+                        ((BarnScreen) screen).setBarnMenuOpen(!((BarnScreen) screen).isBarnMenuOpen());
+                    } else if(screen instanceof CoopScreen){
+                        ((CoopScreen) screen).setCoopMenuOpen(!((CoopScreen) screen).isCoopMenuOpen());
+                    }
                     GameMessage<GameCommand> msg = new GameMessage<>("game-command",
                         new GameCommand("pet -w inside -n "+name, AppClient.getUserData().getUsername()));
                     AppClient.getClient().send(new Gson().toJson(msg));
+                    screen.hero.isActing.set(true);
+                    screen.hero.currentAnimation = screen.hero.pet();
+                    screen.hero.stateTime = 0;
+                    screen.onRepeat = false;
                 }
 
                 animalX += screenWidth / 12.5f;
