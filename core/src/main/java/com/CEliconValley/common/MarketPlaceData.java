@@ -22,7 +22,7 @@ public class MarketPlaceData {
         this.name = marketplace.getName();
         itemsForSaleData = new ArrayList<>();
         for (Slot slot : marketplace.getItemsForSale()) {
-            itemsForSaleData.add(new SlotData(slot));
+            itemsForSaleData.add(new SlotData(slot, slot.getItem().getPrice()));
         }
         this.isOpen = marketplace.isOpen;
         this.doors = new ArrayList<>();
