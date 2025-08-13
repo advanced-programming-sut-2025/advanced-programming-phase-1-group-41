@@ -15,6 +15,7 @@ import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.PosDiff;
 import com.CEliconValley.controllers.Spawner.*;
 import com.CEliconValley.models.*;
+import com.CEliconValley.models.buildings.marketplaces.Marketplace;
 import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.locations.FarmType;
 import com.CEliconValley.models.locations.Village;
@@ -44,6 +45,7 @@ public class VillageScreen extends GameScreen implements Screen {
     private final Snow snow;
     private final Thunder thunder;
     private MenuBar menuBar;
+    private MarketPlaceMenu marketPlaceMenu;
     private final Player player;
     private final TreeSpawner treeSpawner;
     private final WaterSpawner waterSpawner;
@@ -118,6 +120,7 @@ public class VillageScreen extends GameScreen implements Screen {
         super(new InventoryRenderer(player.getInventory()));
         this.menuBar = super.getMenuBar();
         menuBar.setPlayer(player);
+        this.marketPlaceMenu = super.getMarketPlaceMenu();
         this.villageMap = new VillageMap(AppClient.getGameData().getVillageData());
         this.player = player;
         treeSpawner = new TreeSpawner();
@@ -341,8 +344,14 @@ public class VillageScreen extends GameScreen implements Screen {
         if (isMenuOpen) menuBar.render(batch, camera);
         else if(sellmode){
             shippingBinBar.render(batch, camera, true);
+        }else if(isMarketMenuOpen) {
+
+            if(Finder.findCellByCoordinatesVillage(hero.playerX.get(),hero.playerY.get(),villageMap.villageData).extractData().getObjectMap() instanceof Marketplace marketplace) {
+                marketPlaceMenu.renderShopMenu(batch, camera, marketplace);
+
+            }
         }
-        else inventoryRenderer.render(batch, camera);
+        else {inventoryRenderer.render(batch, camera);}
 
         passiveStateTime += delta;
 
@@ -448,5 +457,9 @@ public class VillageScreen extends GameScreen implements Screen {
     @Override public void resume() { }
 
 
-
+    public void tryOpeningMarketMenu() {
+        if(Finder.findCellByCoordinatesVillage(hero.playerX.get(),hero.playerY.get(),villageMap.villageData).extractData().getObjectMap() instanceof Marketplace marketplace) {
+            isMarketMenuOpen =! isMarketMenuOpen;
+        };
+    }
 }

@@ -126,6 +126,8 @@ public class MenuBar {
 //            camera.zoom *= 2;
         }
 
+
+
         float menuWidth = screenWidth * 0.6f;
         float menuHeight = screenHeight * 0.7f;
         startingX = camera.position.x - menuWidth / 2f;
