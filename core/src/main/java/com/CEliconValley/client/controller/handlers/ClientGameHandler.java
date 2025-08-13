@@ -16,6 +16,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.Objects;
 
+import static com.CEliconValley.client.view.screen.VillageScreen.CELL_SIZE;
+
 public class ClientGameHandler {
     public static void handle(String type, JsonObject body, Gson gson, long timestamp) {
         if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
@@ -314,6 +316,68 @@ public class ClientGameHandler {
                         });
                     }
 
+                }else if(gamecommand.command.equals("go-left")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen() instanceof VillageScreen screen){
+                        Gdx.app.postRunnable(()->{
+                            screen.getHero().playerX.set(screen.getHero().playerX.get()-1);
+                            screen.getHero().targetX.set(screen.getHero().targetX.get()-1);
+                            screen.getHero().renderX = screen.getHero().playerX.get() * CELL_SIZE;
+                            screen.getHero().currentDirection = 2;
+                        });
+                    }else{
+                        System.out.println("not in village for marriage");
+                    }
+
+                }else if(gamecommand.command.equals("go-right")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen() instanceof VillageScreen screen){
+                        Gdx.app.postRunnable(()->{
+//                            screen.getHero().playerX.set(screen.getHero().playerX.get()+1);
+//                            screen.getHero().targetX.set(screen.getHero().targetX.get()+1);
+//                            screen.getHero().renderX = screen.getHero().playerX.get() * CELL_SIZE;
+                            screen.getHero().currentDirection = 4;
+                        });
+                    }else{
+                        System.out.println("not in village for marriage");
+                    }
+
+                }else if(gamecommand.command.equals("propose")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof VillageScreen screen){
+                        screen.getHero().isActing.set(true);
+                        screen.getHero().stateTime = 0;
+                        screen.getHero().currentAnimation = screen.getHero().ring();
+                        screen.onRepeat = false;
+                    }
+                }
+                else if(gamecommand.command.equals("other-propose")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof VillageScreen screen){
+                        for (PlayerSprite playerSprite : screen.playerSprites) {
+                            if(playerSprite.getPlayerData().getUsername().equals(gamecommand.playerName)){
+                                playerSprite.isActing = true;
+                                playerSprite.stateTime = 0;
+                                playerSprite.currentAnimation = playerSprite.ring();
+                            }
+                        }
+                    }
+                }else if(gamecommand.command.equals("kiss")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof VillageScreen screen){
+                        screen.getHero().isActing.set(true);
+                        screen.getHero().stateTime = 0;
+                        screen.getHero().currentAnimation = screen.getHero().hug();
+                        screen.onRepeat = false;
+                    }
+                }
+                else if(gamecommand.command.equals("other-kiss")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof VillageScreen screen){
+                        for (PlayerSprite playerSprite : screen.playerSprites) {
+                            if(playerSprite.getPlayerData().getUsername().equals(gamecommand.playerName)){
+                                playerSprite.isActing = true;
+                                playerSprite.stateTime = 0;
+                                playerSprite.currentAnimation = playerSprite.hug();
+                            }
+                        }
+                    }
                 }
             }
 

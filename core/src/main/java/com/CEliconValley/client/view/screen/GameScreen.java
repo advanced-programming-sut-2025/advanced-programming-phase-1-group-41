@@ -23,6 +23,7 @@ import com.CEliconValley.models.foragings.Nature.Lake;
 import com.CEliconValley.models.foragings.Nature.Obstacle;
 import com.CEliconValley.models.foragings.Nature.Rock;
 import com.CEliconValley.models.items.CraftableMachine;
+import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.ui.CustomColors;
 import com.CEliconValley.models.ui.GameAssetManager;
@@ -98,6 +99,7 @@ public abstract class GameScreen implements Screen {
     public boolean trashmode = false;
 
     public String lastProposer = null;
+    public String lastCraftInfo = null;
 
     public abstract void transfer();
     public Hero hero;

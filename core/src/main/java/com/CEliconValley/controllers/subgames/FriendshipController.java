@@ -310,9 +310,71 @@ public class FriendshipController {
         friendship.marry();
         friendship.interact();
         friendship.increaseLevel(player);
-        App.sendResult(new Result(true, playername+" accepted your offer"), username);
-        App.sendResult(new Result(true, "you are now married to "+username), playername);
+
+        setupCutscene(player, player2);
+
         return new Result(true, "You are so great for each other!");
+    }
+
+
+    public void setupCutscene(Player bride, Player groom) {
+        groom.setPlayerIsInVillage(true);
+        bride.setPlayerIsInVillage(true);
+        String groomName = groom.getUser().getUsername();
+        String brideName = bride.getUser().getUsername();
+        Gson gson = new Gson();
+        GameMessage<GameCommand> response = new GameMessage<>("game-command",
+            new GameCommand("go-to-village", ":)"));
+        App.getServer().sendToPlayername(groom.getUser().getUsername(), gson.toJson(response));
+
+        GameMessage<GameCommand> updateVillage = new GameMessage<>("game-command",
+            new GameCommand("update-village", ":)"));
+        App.getServer().sendToPlayername(groom.getUser().getUsername(), gson.toJson(updateVillage));
+        GameMessage<GameCommand> response2 = new GameMessage<>("game-command",
+            new GameCommand("go-to-village", ":)"));
+        App.getServer().sendToPlayername(bride.getUser().getUsername(), gson.toJson(response2));
+
+        GameMessage<GameCommand> updateVillage2 = new GameMessage<>("game-command",
+            new GameCommand("update-village", ":)"));
+        App.getServer().sendToPlayername(bride.getUser().getUsername(), gson.toJson(updateVillage2));
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        GameMessage<GameCommand> left = new GameMessage<>("game-command",
+            new GameCommand("go-left", ":)"));
+        App.getServer().sendToPlayername(groom.getUser().getUsername(), gson.toJson(left));
+        GameMessage<GameCommand> right = new GameMessage<>("game-command",
+            new GameCommand("go-right", ":)"));
+        App.getServer().sendToPlayername(bride.getUser().getUsername(), gson.toJson(right));
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        GameMessage<GameCommand> propose = new GameMessage<>("game-command",
+            new GameCommand("propose", ":)"));
+        App.getServer().sendToPlayer(groom, gson.toJson(propose));
+        GameMessage<GameCommand> otherpropose = new GameMessage<>("game-command",
+            new GameCommand("other-propose", groom.getUser().getUsername()));
+        App.getServer().sendToPlayer(bride, gson.toJson(otherpropose));
+
+        App.sendResult(new Result(true, brideName+" accepted your offer"), brideName);
+        App.sendResult(new Result(true, "you are now married to "+groomName), groomName);
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        GameMessage<GameCommand> kiss = new GameMessage<>("game-command",
+            new GameCommand("kiss", ":)"));
+        GameMessage<GameCommand> otherkiss = new GameMessage<>("game-command",
+            new GameCommand("other-kiss", brideName));
+        App.getServer().sendToPlayer(bride, gson.toJson(kiss));
+        App.getServer().sendToPlayer(groom, gson.toJson(otherkiss));
+
     }
 
     public Result goToFarm(Matcher matcher){

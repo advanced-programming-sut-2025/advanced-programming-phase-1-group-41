@@ -381,8 +381,7 @@ class FarmScreen extends GameScreen implements Screen {
         }else if(trashmode){
             shippingBinBar.render(batch, camera, false);
         } else if(isCraftInfo){
-            // TODO Craft Info
-            craftInfo.render(batch, camera, CropType.Artichoke.toString());
+            craftInfo.render(batch, camera, lastCraftInfo);
         } else{
             inventoryRenderer.render(batch, camera);
         }

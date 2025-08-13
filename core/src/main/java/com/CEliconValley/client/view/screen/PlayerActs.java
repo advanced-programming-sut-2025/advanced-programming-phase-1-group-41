@@ -17,7 +17,10 @@ import com.CEliconValley.models.animals.animalKinds.Cow;
 import com.CEliconValley.models.animals.animalKinds.Goat;
 import com.CEliconValley.models.animals.animalKinds.Sheep;
 import com.CEliconValley.models.buildings.ShippingBin;
+import com.CEliconValley.models.foragings.CropType;
 import com.CEliconValley.models.foragings.Fertilizer;
+import com.CEliconValley.models.foragings.ForagingCropType;
+import com.CEliconValley.models.foragings.Nature.TreeType;
 import com.CEliconValley.models.foragings.Seed;
 import com.CEliconValley.models.items.CraftableMachine;
 import com.CEliconValley.models.items.Item;
@@ -58,7 +61,6 @@ public class PlayerActs {
             return new Result(true, "refrigerator opened");
         }
         if(screen instanceof FarmScreen && ((FarmScreen) screen).isCraftInfo){
-            // TODO Show Craft Info
             if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
                 ((FarmScreen) screen).isCraftInfo = false;
             }
@@ -304,6 +306,9 @@ public class PlayerActs {
             if(screen instanceof VillageScreen villageScreen){
                 villageScreen.camera.unproject(mousePos);
                 handleClick(mousePos.x, mousePos.y, villageScreen);
+            }else if(screen instanceof FarmScreen farmScreen){
+                farmScreen.camera.unproject(mousePos);
+                handleClick(mousePos.x, mousePos.y, farmScreen);
             }
 
         }
@@ -536,10 +541,10 @@ public class PlayerActs {
             } else if(screen instanceof CoopScreen screen){
                 petCoop(screen);
             }
-        } else if(Gdx.input.isKeyPressed(Input.Keys.Y) && screen instanceof FarmScreen){
-            ((FarmScreen) screen).isCraftInfo = true;
-            // TODO Show CraftInfo
         }
+//        else if(Gdx.input.isKeyPressed(Input.Keys.Y) && screen instanceof FarmScreen){
+//            ((FarmScreen) screen).isCraftInfo = true;
+//        }
         else if (Gdx.input.isKeyJustPressed((Input.Keys.E))) {
             screen.onRepeat = false;
             hero.stateTime = 0;
@@ -1062,6 +1067,38 @@ public class PlayerActs {
         }
     }
 
+
+    public static void handleClick(float mouseX, float mouseY, FarmScreen farmScreen){
+        for (CellData cell : Finder.getfd().getCells()) {
+            float renderx = cell.getX() * CELL_SIZE;
+            float rendery = cell.getY() * CELL_SIZE;
+            if(renderx < mouseX && mouseX < renderx + CELL_SIZE &&
+            rendery < mouseY && mouseY < rendery + CELL_SIZE){
+                String craftName = cell.getObjectName();
+                for(CropType cropType : CropType.values()){
+                    if(craftName.equalsIgnoreCase(cropType.getName())){
+                        farmScreen.isCraftInfo = true;
+                        screen.lastCraftInfo = cropType.toString();
+                        return;
+                    }
+                }
+                for(TreeType treeType : TreeType.values()){
+                    if(craftName.equalsIgnoreCase(treeType.getName())){
+                        farmScreen.isCraftInfo = true;
+                        screen.lastCraftInfo = treeType.toString();
+                        return;
+                    }
+                }
+                for(ForagingCropType foragingCropType : ForagingCropType.values()){
+                    if(craftName.equalsIgnoreCase(foragingCropType.getName())){
+                        farmScreen.isCraftInfo = true;
+                        screen.lastCraftInfo = foragingCropType.toString();
+                        return;
+                    }
+                }
+            }
+        }
+    }
 
     public static void handleClick(float mouseX, float mouseY, VillageScreen vs){
         for (PlayerSprite playerSprite : vs.playerSprites) {
