@@ -398,6 +398,11 @@ public class FriendshipStageHandler {
                             @Override
                             public void clicked(InputEvent event, float x, float y) {
                                 // TODO Finish Quest
+                                int index = npcData.getQuestsdata().indexOf(questData);
+                                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                    new GameCommand("quests finish -i "+index+1+" "+npcData.getName(),
+                                        AppClient.getUserData().getUsername()));
+                                AppClient.getClient().send(new Gson().toJson(msg));
                             }
                         });
                         table.add(finishQuestButton).width(300).center().pad(20).row();
@@ -408,6 +413,11 @@ public class FriendshipStageHandler {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
                             // TODO Collect Quest Reward
+                            int index = npcData.getQuestsdata().indexOf(questData);
+                            GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                new GameCommand("quests collect -i "+index+1+" "+npcData.getName(),
+                                    AppClient.getUserData().getUsername()));
+                            AppClient.getClient().send(new Gson().toJson(msg));
                         }
                     });
                     table.add(collectQuestButton).center().width(300).pad(20).row();

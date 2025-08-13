@@ -1060,7 +1060,7 @@ public class MenuBar {
             for(int i = 0; i < 5; i++){
                 playerX += playerSize / 2f;
 
-                font.draw(batch, i + "", playerX + playerSize * 1.5f, playerY + playerSize / 1.5f);
+                font.draw(batch, (i+1) + "", playerX + playerSize * 1.5f, playerY + playerSize / 1.5f);
 
                 boolean hovered = mousePos.x >= playerX + playerSize * 1.5f && mousePos.x <= playerX + playerSize * 2 &&
                     mousePos.y >= playerY && mousePos.y <= playerY + playerSize / 1.5f;
@@ -1103,7 +1103,7 @@ public class MenuBar {
                 }
                 if(clicked && AppClient.getGameData().getPlayersData().size() > 1){
                     //TODO Rate Gift
-
+                    // rate is i + 1
                 }
             }
 
