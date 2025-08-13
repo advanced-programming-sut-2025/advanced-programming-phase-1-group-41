@@ -9,8 +9,11 @@ import com.CEliconValley.models.buildings.marketplaces.Marketplace;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
 import com.CEliconValley.models.locations.Village;
+import com.CEliconValley.models.npc.LLMClient;
+import com.CEliconValley.models.npc.PromptBuilder;
 import com.CEliconValley.models.npc.npchomes.NPCHome;
 
+import java.io.IOException;
 import java.util.*;
 
 public abstract class NPC {
@@ -44,10 +47,27 @@ public abstract class NPC {
     public boolean isSet = false;
     public boolean shouldGoHome = false;
     public boolean shouldGoToWork = false;
+    private long lastLLMRequestTime = 0;
+    private static final long MIN_REQUEST_INTERVAL_MS = 3000; // 3 seconds
 
+    public boolean canSendLLMRequest() {
+        long now = System.currentTimeMillis();
+        if (now - lastLLMRequestTime < MIN_REQUEST_INTERVAL_MS) return false;
+        lastLLMRequestTime = now;
+        return true;
+    }
+
+    protected LLMClient llmClient = new LLMClient(App.api_key);
+    protected String personality = "Strict impolite but kind-hearted , has sexual attraction" +
+        " and uses some new slangs in his words and answers briefly";
 
     public static final int CELL_SIZE = (int)  160;
 
+
+    public String speakToPlayer(String input, WeatherType weatherType, Season season) throws IOException {
+        String prompt = PromptBuilder.buildPrompt(name, personality, weatherType, season, input);
+        return llmClient.sendMessageSync(prompt);
+    }
 
     public boolean reachedDestination() {
         return x == randomX && y == randomY;
@@ -325,5 +345,17 @@ public abstract class NPC {
             }
         }
         return null;
+    }
+
+    public LLMClient getLlmClient() {
+        return llmClient;
+    }
+
+    public Queue<Node> getMovementQueue() {
+        return movementQueue;
+    }
+
+    public String getPersonality() {
+        return personality;
     }
 }

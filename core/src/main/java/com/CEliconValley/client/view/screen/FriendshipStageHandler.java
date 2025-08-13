@@ -183,12 +183,11 @@ public class FriendshipStageHandler {
         buildUI();
     }
 
-    public void updateChat(){
-        chatTable.clear();
-        chatTable = new Table();
-        if(AppClient.getGameData() == null ) return;
+    public void updateChat() {
+        chatTable.clearChildren(); // Keeps the same instance
+        if (AppClient.getGameData() == null) return;
         //TODO Players Chat update
-        if(isPlayer){
+        if (isPlayer) {
             FriendshipData fsd = null;
             String playername = Finder.getpd().getUsername();
 
@@ -207,35 +206,39 @@ public class FriendshipStageHandler {
                     label.setWrap(true);
                     label.setAlignment(Align.right);
                     label.setColor(CustomColors.GAMEGREENCOLOR);
+                    label.pack();
                     chatTable.add(label).width(380).right().padBottom(5).row();
                 } else {
                     Label label = new Label(message.get(0) + ": " + message.get(1), GameAssetManager.getGameAssetManager().getSkin());
                     label.setAlignment(Align.left);
                     label.setWrap(true);
-                    if(label.getText().toString().matches(".+@"+AppClient.getUserData().getUsername()+".+")){
+                    label.pack();
+                    if (label.getText().toString().matches(".+@" + AppClient.getUserData().getUsername() + ".+")) {
                         label.setColor(Color.BLUE);
                     }
                     chatTable.add(label).width(380).left().padBottom(5).row();
                 }
             }
-        }else{
+        } else {
             NPCData npc = Finder.getnpcdatabyname(npcData.getName());
             String playername = Finder.getpd().getUsername();
             Talk talk = npc.getTalkByName(playername);
             for (Messagenpc t : talk.getTalks()) {
-                if(!t.isNPC){
-                    Label label = new Label(t.message+ "-", GameAssetManager.getGameAssetManager().getSkin());
+                if (!t.isNPC) {
+                    Label label = new Label(t.message + "-", GameAssetManager.getGameAssetManager().getSkin());
                     label.setWrap(true);
                     label.setAlignment(Align.right);
                     label.setColor(CustomColors.GAMEGREENCOLOR);
+                    label.pack();
                     chatTable.add(label).width(380).right().padBottom(5).row();
-                } else{
+                } else {
                     Label label = new Label(npc.getName() + ": " + t.message, GameAssetManager.getGameAssetManager().getSkin());
                     label.setAlignment(Align.left);
                     label.setWrap(true);
-                    if (label.getText().toString().matches(".+@"+AppClient.getUserData().getUsername()+".+")){
+                    if (label.getText().toString().matches(".+@" + AppClient.getUserData().getUsername() + ".+")) {
                         label.setColor(Color.BLUE);
                     }
+                    label.pack();
                     chatTable.add(label).width(380).left().padBottom(5).row();
                 }
             }
@@ -243,18 +246,21 @@ public class FriendshipStageHandler {
         chatTable.row();
         chatTable.row().row();
         chatTable.padBottom(20);
+        chatTable.invalidateHierarchy(); // Recalculate layout tree
+        chatScrollPane.layout();         // Recalculate scroll pane layout
         chatScrollPane.setActor(chatTable);
         chatScrollPane.setFadeScrollBars(false);
         chatScrollPane.setScrollingDisabled(true, false);
         Gdx.app.postRunnable(() -> {
-            chatScrollPane.validate();
+            chatScrollPane.layout(); // Ensure layout is recalculated
             chatScrollPane.setScrollPercentY(1f);
+
         });
     }
 
     private void setupChatUI() {
         chatTable = new Table();
-        chatTable.setFillParent(true);
+//        chatTable.setFillParent(true);
         //TODO Players Chat
         if (isPlayer) {
             FriendshipData fsd = null;
@@ -280,28 +286,28 @@ public class FriendshipStageHandler {
                     Label label = new Label(message.get(0) + ": " + message.get(1), GameAssetManager.getGameAssetManager().getSkin());
                     label.setAlignment(Align.left);
                     label.setWrap(true);
-                    if(label.getText().toString().matches(".+@"+AppClient.getUserData().getUsername()+".+")){
+                    if (label.getText().toString().matches(".+@" + AppClient.getUserData().getUsername() + ".+")) {
                         label.setColor(Color.BLUE);
                     }
                     chatTable.add(label).width(380).left().padBottom(5).row();
                 }
             }
-        }else{
+        } else {
             NPCData npc = Finder.getnpcdatabyname(npcData.getName());
             String playername = Finder.getpd().getUsername();
             Talk talk = npc.getTalkByName(playername);
             for (Messagenpc t : talk.getTalks()) {
-                if(!t.isNPC){
-                    Label label = new Label(t.message+ "-", GameAssetManager.getGameAssetManager().getSkin());
+                if (!t.isNPC) {
+                    Label label = new Label(t.message + "-", GameAssetManager.getGameAssetManager().getSkin());
                     label.setWrap(true);
                     label.setAlignment(Align.right);
                     label.setColor(CustomColors.GAMEGREENCOLOR);
                     chatTable.add(label).width(380).right().padBottom(5).row();
-                } else{
+                } else {
                     Label label = new Label(npc.getName() + ": " + t.message, GameAssetManager.getGameAssetManager().getSkin());
                     label.setAlignment(Align.left);
                     label.setWrap(true);
-                    if (label.getText().toString().matches(".+@"+AppClient.getUserData().getUsername()+".+")){
+                    if (label.getText().toString().matches(".+@" + AppClient.getUserData().getUsername() + ".+")) {
                         label.setColor(Color.BLUE);
                     }
                     chatTable.add(label).width(380).left().padBottom(5).row();
@@ -373,7 +379,7 @@ public class FriendshipStageHandler {
                             , GameAssetManager.getGameAssetManager().getSkin());
                     }
 
-                    if(!questData.getIsLocked().get(Finder.getpd().getUsername())) {
+                    if (!questData.getIsLocked().get(Finder.getpd().getUsername())) {
                         questNeededItems.setColor(Color.CYAN);
                         questReward.setColor(CustomColors.GAMEGREENCOLOR);
                     }
@@ -384,7 +390,7 @@ public class FriendshipStageHandler {
                     table.add(questNeededItems).width(width).pad(20).row();
                     table.add(questReward).width(width).pad(20).row();
 
-                    if(!questData.getIsLocked().get(Finder.getpd().getUsername())) {
+                    if (!questData.getIsLocked().get(Finder.getpd().getUsername())) {
                         TextButton finishQuestButton = new TextButton("Finish Quest", GameAssetManager.getGameAssetManager().getSkin());
                         finishQuestButton.addListener(new ClickListener() {
                             @Override
@@ -394,7 +400,7 @@ public class FriendshipStageHandler {
                         });
                         table.add(finishQuestButton).width(300).center().pad(20).row();
                     }
-                } else{
+                } else {
                     TextButton collectQuestButton = new TextButton("Collect Reward", GameAssetManager.getGameAssetManager().getSkin());
                     collectQuestButton.addListener(new ClickListener() {
                         @Override

@@ -22,65 +22,33 @@ import static com.CEliconValley.models.Finder.parseNPC;
 
 public class NPCController {
 
-    public Result meetNpc(Matcher matcher, String playername){
+    public Result meetNpc(Matcher matcher, String playername) {
         Player player = Finder.getPlayerByUsername(playername);
-        Inventory inventory = player.getInventory();
         String npcName = matcher.group(1);
         String input = matcher.group(2);
-//        NPC npc=findNPCAround(npcName, player);
-//        if(npc==null){
-//            if(!getNPCList().contains(npcName)){
-//                return new Result(false, "no one`s here with that name");
-//            }
-//            return new Result(false,  npcName+" is not around");
-//        }
-        NPC npc = null;
-        for(NPC npc1 : App.getGame().getVillage().getNPCs()){
-            if(npc1.getName().equals(npcName)){
-                npc = npc1;
-            }
-        }
-        if(!npc.isTalkedToday(player)){
-            npc.incFriendShip(player,20);
-            npc.setTalkedToday(player,true);
-            npc.getQuests().get(0).setLocked(player,false);
-        }
-        String text = null;
-        if(!App.getGame().getWeatherType().equals(WeatherType.Sunny)){
-            switch (App.getGame().getWeatherType()){
-                case Rainy -> text = npc.getDialogues(4);
-//                    return new Result(true, npc.getDialogues(4));
-                case Snowy -> text = npc.getDialogues(5);
-//                    return new Result(true, npc.getDialogues(5));
-                case Stormy -> text = npc.getDialogues(6);
-//                    return new Result(true, npc.getDialogues(6));
-            }
-        }else if(App.getGame().getTime().getHour()>18){
-            text = npc.getDialogues(7);
-//            return new Result(true, npc.getDialogues(7));
-        }else if(npc.getFriendShip(player)>=600){
-            text = npc.getDialogues(8);
-//            return new Result(true, npc.getDialogues(8));
-        }else{
-            switch (App.getGame().getTime().getSeason()){
-                case Spring -> text = npc.getDialogues(0);
-//                    return new Result(true, npc.getDialogues(0));
-                case Summer -> text = npc.getDialogues(1);
-//                    return new Result(true, npc.getDialogues(1));
-                case Autumn -> text = npc.getDialogues(2);
-//                    return new Result(true, npc.getDialogues(2));
-                case Winter -> text = npc.getDialogues(3);
-//                    return new Result(true, npc.getDialogues(3));
-            }
-        }
-        if(text == null){
-            return new Result(false,"something went wrong");
-        }
-        npc.getTalkByName(playername).getTalks().add(new Messagenpc(false, input));
-        npc.getTalkByName(playername).getTalks().add(new Messagenpc(true, text));
-        return new Result(true, text);
-    }
 
+        NPC npc = App.getGame().getVillage().getNPCs().stream()
+            .filter(n -> n.getName().equals(npcName))
+            .findFirst()
+            .orElse(null);
+
+        if (npc == null) {
+            return new Result(false, "No one’s here with that name or they're not around.");
+        }
+//
+//        if (!npc.isTalkedToday(player)) {
+//            npc.incFriendShip(player, 20);
+//            npc.setTalkedToday(player, true);
+//            npc.getQuests().get(0).setLocked(player, false);
+//        }
+//
+//        npc.getTalkByName(playername).getTalks().add(new Messagenpc(false, input));
+
+        // Delegate async LLM response handling
+        npc.getLlmClient().meetNpcAsync(matcher, playername);
+
+        return new Result(true, npc.getName() + " is thinking and will respond shortly.");
+    }
     public Result giftToNpc(Matcher matcher, String playername){
         Player player = Finder.getPlayerByUsername(playername);
         Inventory inventory=player.getInventory();

@@ -30,6 +30,7 @@ public class ClientGameHandler {
                 }
                 updateTime(gs);
                 gs.updateChat();
+//                gs.friendshipStageHandler.updateChat();
                 if(gs instanceof VillageScreen vs){
                     vs.updatePlayers();
                     vs.villageMap.updateVillageData();

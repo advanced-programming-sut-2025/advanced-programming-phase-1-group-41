@@ -43,4 +43,15 @@ public class Talk {
         }
         return builder.toString();
     }
+
+    public String toString(int maxMessages) {
+        StringBuilder builder = new StringBuilder();
+        int start = Math.max(0, talks.size() - maxMessages);
+        for (int i = start; i < talks.size(); i++) {
+            Messagenpc talk = talks.get(i);
+            builder.append(talk.isNPC ? "NPC: " : "Player: ");
+            builder.append(talk.message).append("\n");
+        }
+        return builder.toString();
+    }
 }
