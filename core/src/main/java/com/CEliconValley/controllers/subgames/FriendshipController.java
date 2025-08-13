@@ -2,6 +2,7 @@ package com.CEliconValley.controllers.subgames;
 
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
+import com.CEliconValley.common.messages.HugCred;
 import com.CEliconValley.models.*;
 
 import com.CEliconValley.models.buildings.marketplaces.items.MarketplaceItems;
@@ -192,6 +193,10 @@ public class FriendshipController {
         Result result =new Result(true, "You hugged " + player2.getUser().getUsername() + " =D");
         App.sendResult(result, playername);
         App.sendResult(result, username);
+        GameMessage<HugCred> msg1 = new GameMessage<>("hug", new HugCred(player.currentDirection, true, playername));
+        GameMessage<HugCred> msg2 = new GameMessage<>("hug", new HugCred((player.currentDirection + 2 )% 4, false, username));
+        App.getServer().sendToPlayer(player , new Gson().toJson(msg1));
+        App.getServer().sendToPlayer(player2 , new Gson().toJson(msg2));
         return result;
 //        if(Math.abs(player.getX() - player2.getX()) <= 1 && Math.abs(player.getY() - player2.getY()) <= 1
 //                && player.isPlayerIsInVillage() && player2.isPlayerIsInVillage()){

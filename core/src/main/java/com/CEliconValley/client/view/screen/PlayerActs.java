@@ -2,8 +2,10 @@ package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.model.AnimalSprite;
+import com.CEliconValley.client.model.NPCSprite;
 import com.CEliconValley.client.model.PlayerSprite;
 import com.CEliconValley.common.CellData;
+import com.CEliconValley.common.NPCData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
@@ -35,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
+import static com.CEliconValley.client.view.screen.FarmScreen.VIRTUAL_WIDTH;
 
 public class PlayerActs {
     public static GameScreen screen;
@@ -134,8 +137,10 @@ public class PlayerActs {
             return new Result(false, "scoreboard");
         }
         if(screen.friendshipMode){
-            screen.friendshipStage.act(delta);
-            screen.friendshipStage.draw();
+            if(screen.friendshipStage != null){
+                screen.friendshipStage.act(delta);
+                screen.friendshipStage.draw();
+            }
             if(screen.friendshipStageHandler.isChatting && Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
                 String message = screen.friendshipStageHandler.chatTextField.getText();
                 // TODO Chatting
@@ -1042,6 +1047,22 @@ public class PlayerActs {
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command",
                     new GameCommand("hug -u "+playerSprite.getPlayerData().getUsername(), AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
+                return;
+            }
+        }
+        for (NPCSprite npcSprite : vs.npcSprites) {
+            float ratio = ( Gdx.graphics.getWidth() / VIRTUAL_WIDTH);
+            float renderx = npcSprite.getNPCData().renderX / 160 *(ratio * 160);
+            float rendery = npcSprite.getNPCData().renderY / 160 *(ratio * 160);
+            float cs = CELL_SIZE * 2f;
+            if(renderx - cs < mouseX && mouseX < renderx + cs
+                &&
+                rendery - cs < mouseY && mouseY < rendery + cs){
+                Gdx.app.postRunnable(() -> {
+                    System.out.println("found "+npcSprite.getNPCData().getName());
+                    screen.friendshipMode = true;
+                    screen.handleFriendship(screen.friendshipStage, null, npcSprite.getNPCData());
+                });
             }
         }
     }

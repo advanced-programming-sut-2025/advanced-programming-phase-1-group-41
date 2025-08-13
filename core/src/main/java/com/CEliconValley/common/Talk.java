@@ -11,6 +11,9 @@ public class Talk {
     String playername;
     ArrayList<Messagenpc> talks;
 
+    public Talk() {
+    }
+
     public Talk(String playername, ArrayList<Messagenpc> talks) {
         this.playername = playername;
         this.talks = talks;

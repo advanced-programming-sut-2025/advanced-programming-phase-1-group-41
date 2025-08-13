@@ -79,8 +79,8 @@ public class VillageScreen extends GameScreen implements Screen {
 
     private Animation<TextureRegion>[] walkAnimations;
     private float passiveStateTime = 0f;
-    ArrayList<NPCSprite> npcSprites = new ArrayList<>();
-    ArrayList<PlayerSprite> playerSprites = new ArrayList<>();
+    public ArrayList<NPCSprite> npcSprites = new ArrayList<>();
+    public ArrayList<PlayerSprite> playerSprites = new ArrayList<>();
 
 
     public void updatenpcData() {
@@ -197,7 +197,14 @@ public class VillageScreen extends GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         Result result = PlayerActs.handleInput(hero, villageMap, stage, delta);
-        if (!result.success() && result.message().equals("cheat")) return;
+        if (!result.success()) {
+            if (result.message().equals("cheat") ||
+                result.message().equals("chat") ||
+                result.message().equals("friendship") ||
+                result.message().equals("scoreboard")) {
+                return;
+            }
+        }
         hero.stateTime += delta;
 
 
@@ -291,8 +298,18 @@ public class VillageScreen extends GameScreen implements Screen {
             if(playerSprite.currentAnimation != null) {
                 float renderx = playerSprite.getPlayerData().renderx;
                 float rendery = playerSprite.getPlayerData().rendery;
-                TextureRegion currentFrame = playerSprite.currentAnimation.getKeyFrame(playerSprite.stateTime, true);
-                batch.draw(currentFrame, renderx - CELL_SIZE / 2f, rendery - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
+                if(playerSprite.isActing){
+                    System.out.println("trying to act");
+                    if (playerSprite.currentAnimation.isAnimationFinished(playerSprite.stateTime)) {
+                        playerSprite.isActing = false;
+                    }else{
+                        TextureRegion currentFrame = playerSprite.currentAnimation.getKeyFrame(playerSprite.stateTime, false);
+                        batch.draw(currentFrame, renderx - CELL_SIZE / 2f, rendery - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
+                    }
+                }else{
+                    TextureRegion currentFrame = playerSprite.currentAnimation.getKeyFrame(playerSprite.stateTime, true);
+                    batch.draw(currentFrame, renderx - CELL_SIZE / 2f, rendery - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
+                }
 
                 float fontScale = CELL_SIZE / 40f;
                 playerSprite.font.getData().setScale(fontScale);

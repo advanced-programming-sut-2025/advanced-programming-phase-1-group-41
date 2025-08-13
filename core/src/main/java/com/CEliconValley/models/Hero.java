@@ -320,6 +320,44 @@ public class Hero {
             return new Animation<>(0.15f,wantedActs);
         }
     }
+    public Animation<TextureRegion> ring(){
+        ArrayList<TGPoint> tgPoints = getRing();
+        TextureRegion[] wantedActs=new TextureRegion[tgPoints.size()];
+        if(currentDirection==4){
+            for (int i = 0; i < tgPoints.size(); i++) {
+                TGPoint tgPoint = tgPoints.get(i);
+                TextureRegion flippedFrame = new TextureRegion(extraActs[tgPoint.row][tgPoint.col]);
+                flippedFrame.flip(true, false);
+                wantedActs[i] = flippedFrame;
+            }
+            return new Animation<>(0.15f,wantedActs);
+        }else{
+            for (int i = 0; i < tgPoints.size(); i++) {
+                TGPoint tgPoint = tgPoints.get(i);
+                wantedActs[i] = extraActs[tgPoint.row][tgPoint.col];
+            }
+            return new Animation<>(0.15f,wantedActs);
+        }
+    }
+    public Animation<TextureRegion> hug(){
+        ArrayList<TGPoint> tgPoints = getHug();
+        TextureRegion[] wantedActs=new TextureRegion[tgPoints.size()];
+        if(currentDirection==4){
+            for (int i = 0; i < tgPoints.size(); i++) {
+                TGPoint tgPoint = tgPoints.get(i);
+                TextureRegion flippedFrame = new TextureRegion(extraActs[tgPoint.row][tgPoint.col]);
+                flippedFrame.flip(true, false);
+                wantedActs[i] = flippedFrame;
+            }
+            return new Animation<>(0.15f,wantedActs);
+        }else{
+            for (int i = 0; i < tgPoints.size(); i++) {
+                TGPoint tgPoint = tgPoints.get(i);
+                wantedActs[i] = extraActs[tgPoint.row][tgPoint.col];
+            }
+            return new Animation<>(0.15f,wantedActs);
+        }
+    }
     public Animation<TextureRegion> buff(){
         ArrayList<TGPoint> tgPoints = getBuff();
         TextureRegion[] wantedActs=new TextureRegion[tgPoints.size()];
@@ -540,5 +578,24 @@ public class Hero {
         }
         return pet;
     }
+    private ArrayList<TGPoint> getRing(){
+        ArrayList<TGPoint> pet = new ArrayList();
+        for (int i = 0; i < 4; i++) {
+            pet.add(new TGPoint(7, i));
+        }
+        pet.add(new TGPoint(7, 3));
+        pet.add(new TGPoint(7, 3));
+        return pet;
+    }
+    private ArrayList<TGPoint> getHug(){
+        ArrayList<TGPoint> pet = new ArrayList();
+        for (int i = 0; i < 4; i++) {
+            pet.add(new TGPoint(8, i));
+        }
+        pet.add(new TGPoint(8, 3));
+        pet.add(new TGPoint(8, 3));
+        return pet;
+    }
+
 
 }

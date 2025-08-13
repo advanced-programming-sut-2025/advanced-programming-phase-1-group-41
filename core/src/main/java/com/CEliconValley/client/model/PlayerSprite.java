@@ -25,6 +25,8 @@ public class PlayerSprite {
     public Animation<TextureRegion> currentAnimation;
     public GlyphLayout layout;
     public ShapeRenderer shapeRenderer = new ShapeRenderer();
+    public boolean isActing = false;
+    public boolean onRepeat = true;
 
     public PlayerSprite(PlayerData playerData) {
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();

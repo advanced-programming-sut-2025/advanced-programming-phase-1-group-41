@@ -1,6 +1,7 @@
 package com.CEliconValley.client.controller.handlers;
 
 import com.CEliconValley.client.AppClient;
+import com.CEliconValley.client.model.PlayerSprite;
 import com.CEliconValley.client.view.LobbyScreen;
 import com.CEliconValley.client.view.screen.*;
 import com.CEliconValley.common.*;
@@ -187,6 +188,32 @@ public class ClientGameHandler {
                     MessageCred cred = gson.fromJson(body, MessageCred.class);
                     AppClient.getGameData().setPlayerMessages(cred.playerMessages);
                     gs.updateChat();
+                }
+            }
+            case "hug" -> {
+                if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                    .getScreen()  instanceof GameScreen gs){
+                    HugCred cred = gson.fromJson(body, HugCred.class);
+                    if(cred.straight){
+                        gs.getHero().currentDirection = cred.direction;
+                        gs.getHero().currentAnimation = gs.getHero().hug();
+                        gs.getHero().stateTime = 0;
+                        gs.onRepeat = false;
+                        gs.getHero().isActing.set(true);
+                    }else{
+                        if(gs instanceof VillageScreen vs){
+                            for (PlayerSprite playerSprite : vs.playerSprites) {
+                                if(playerSprite.getPlayerData().getUsername().equals(cred.name)){
+                                    playerSprite.currentDirection = cred.direction;
+                                    playerSprite.currentAnimation = gs.getHero().hug();
+                                    playerSprite.stateTime = 0;
+                                    playerSprite.onRepeat = false;
+                                    playerSprite.isActing = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
             }
             case "game-result" -> {

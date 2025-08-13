@@ -51,7 +51,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public abstract class GameScreen implements Screen {
-    protected boolean onRepeat = true;
+    public boolean onRepeat = true;
     protected boolean flip = false;
     protected boolean isMenuOpen = false;
     protected boolean isMarketMenuOpen = false;
