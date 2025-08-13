@@ -2,6 +2,7 @@ package com.CEliconValley.client.model;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.PlayerData;
+import com.CEliconValley.common.messages.TGPoint;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,6 +13,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+
+import java.util.ArrayList;
 
 
 public class PlayerSprite {
@@ -27,6 +30,8 @@ public class PlayerSprite {
     public ShapeRenderer shapeRenderer = new ShapeRenderer();
     public boolean isActing = false;
     public boolean onRepeat = true;
+    private final Texture extraActsTexture;
+    private TextureRegion[][] extraActs;
 
     public PlayerSprite(PlayerData playerData) {
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
@@ -37,6 +42,8 @@ public class PlayerSprite {
         this.currentDirection = 3;
         this.currentAnimation = walk(false, currentDirection);
         layout = new GlyphLayout(font, this.name);
+        extraActsTexture = GameAssetManager.getGameAssetManager().getHeroTexture("ExtraActs.png");
+        extraActs = TextureRegion.split(extraActsTexture, extraActsTexture.getWidth() / 4, extraActsTexture.getHeight() / 9);
 
     }
 
@@ -92,6 +99,36 @@ public class PlayerSprite {
         return null;
     }
 
+    public Animation<TextureRegion> hug(){
+        ArrayList<TGPoint> tgPoints = getHug();
+        TextureRegion[] wantedActs=new TextureRegion[tgPoints.size()];
+        if(currentDirection==4){
+            for (int i = 0; i < tgPoints.size(); i++) {
+                TGPoint tgPoint = tgPoints.get(i);
+                TextureRegion flippedFrame = new TextureRegion(extraActs[tgPoint.row][tgPoint.col]);
+                flippedFrame.flip(true, false);
+                wantedActs[i] = flippedFrame;
+            }
+            return new Animation<>(0.15f,wantedActs);
+        }else{
+            for (int i = 0; i < tgPoints.size(); i++) {
+                TGPoint tgPoint = tgPoints.get(i);
+                wantedActs[i] = extraActs[tgPoint.row][tgPoint.col];
+            }
+            return new Animation<>(0.15f,wantedActs);
+        }
+    }
+
+
+    private ArrayList<TGPoint> getHug(){
+        ArrayList<TGPoint> pet = new ArrayList();
+        for (int i = 0; i < 4; i++) {
+            pet.add(new TGPoint(8, i));
+        }
+        pet.add(new TGPoint(8, 3));
+        pet.add(new TGPoint(8, 3));
+        return pet;
+    }
 
     public PlayerData getPlayerData() {
         for (PlayerData playersDatum : AppClient.getGameData().getPlayersData()) {

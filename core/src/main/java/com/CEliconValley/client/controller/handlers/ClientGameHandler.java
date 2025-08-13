@@ -207,8 +207,8 @@ public class ClientGameHandler {
                                     playerSprite.currentDirection = cred.direction;
                                     playerSprite.currentAnimation = gs.getHero().hug();
                                     playerSprite.stateTime = 0;
-                                    playerSprite.onRepeat = false;
                                     playerSprite.isActing = true;
+                                    System.out.println("setting the actor");
                                     break;
                                 }
                             }

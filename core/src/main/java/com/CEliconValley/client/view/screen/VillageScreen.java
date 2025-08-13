@@ -292,7 +292,7 @@ public class VillageScreen extends GameScreen implements Screen {
             }
         }
         playerSprites.forEach(player -> {
-            player.currentAnimation = player.walk(player.getPlayerData().isMoving, player.getPlayerData().currentDirection);
+            if(!player.isActing)  player.currentAnimation = player.walk(player.getPlayerData().isMoving, player.getPlayerData().currentDirection);
         });
         for (PlayerSprite playerSprite : playerSprites) {
             if(playerSprite.currentAnimation != null) {
@@ -300,6 +300,7 @@ public class VillageScreen extends GameScreen implements Screen {
                 float rendery = playerSprite.getPlayerData().rendery;
                 if(playerSprite.isActing){
                     System.out.println("trying to act");
+                    System.out.println(playerSprite.stateTime);
                     if (playerSprite.currentAnimation.isAnimationFinished(playerSprite.stateTime)) {
                         playerSprite.isActing = false;
                     }else{
