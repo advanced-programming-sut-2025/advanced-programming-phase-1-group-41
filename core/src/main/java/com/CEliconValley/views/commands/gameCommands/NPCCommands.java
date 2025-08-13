@@ -5,7 +5,8 @@ import com.CEliconValley.views.commands.Command;
 import java.util.regex.Matcher;
 
 public enum NPCCommands implements Command {
-    MeetNPC("\\s*meet\\s+NPC\\s+(?<npcName>\\S+)\\s*"),
+//    MeetNPC("\\s*meet\\s+NPC\\s+(?<npcName>\\S+)\\s*"),
+    MeetNPC("\\s*meet\\s+NPC\\s+(?<npcName>\\S+)\\s+(?<input>.+)"),
     GiftNPC("\\s*gift\\s+NPC\\s+(?<npcName>\\S+)\\s+-i\\s+(?<item>.*)\\s*"),
     FriendshipNPCList("\\s*friendship\\s+NPC\\s+list\\s*"),
     QuestsList("\\s*quests\\s+list\\s*"),

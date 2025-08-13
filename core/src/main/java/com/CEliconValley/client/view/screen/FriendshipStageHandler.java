@@ -1,12 +1,10 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
-import com.CEliconValley.common.FriendshipData;
-import com.CEliconValley.common.NPCData;
-import com.CEliconValley.common.PlayerData;
-import com.CEliconValley.common.QuestData;
+import com.CEliconValley.common.*;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
+import com.CEliconValley.common.messages.Messagenpc;
 import com.CEliconValley.common.messages.ResultSender;
 import com.CEliconValley.controllers.ItemManager;
 import com.CEliconValley.models.Finder;
@@ -17,6 +15,7 @@ import com.CEliconValley.models.items.Food;
 import com.CEliconValley.models.items.Inventory;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
+import com.CEliconValley.models.npc.npcCharacters.NPC;
 import com.CEliconValley.models.tools.Tool;
 import com.CEliconValley.models.ui.CustomColors;
 import com.CEliconValley.models.ui.FakeCheckbox;
@@ -222,6 +221,28 @@ public class FriendshipStageHandler {
                 } else{
                     Label label = new Label(message.get(0) + ": " + message.get(1), GameAssetManager.getGameAssetManager().getSkin());
                     label.setAlignment(Align.left);
+                    label.setWrap(true);
+                    if(label.getText().toString().matches(".+@"+AppClient.getUserData().getUsername()+".+")){
+                        label.setColor(Color.BLUE);
+                    }
+                    chatTable.add(label).width(380).left().padBottom(5).row();
+                }
+            }
+        }else{
+            NPCData npc = Finder.getnpcdatabyname(npcData.getName());
+            String playername = Finder.getpd().getUsername();
+            Talk talk = npc.getTalkByName(playername);
+            for (Messagenpc t : talk.getTalks()) {
+                if(!t.isNPC){
+                    Label label = new Label(t.message+ "-", GameAssetManager.getGameAssetManager().getSkin());
+                    label.setWrap(true);
+                    label.setAlignment(Align.right);
+                    label.setColor(CustomColors.GAMEGREENCOLOR);
+                    chatTable.add(label).width(380).right().padBottom(5).row();
+                } else{
+                    Label label = new Label(npc.getName() + ": " + t.message, GameAssetManager.getGameAssetManager().getSkin());
+                    label.setAlignment(Align.left);
+                    label.setWrap(true);
                     if(label.getText().toString().matches(".+@"+AppClient.getUserData().getUsername()+".+")){
                         label.setColor(Color.BLUE);
                     }
@@ -268,6 +289,28 @@ public class FriendshipStageHandler {
                 } else{
                     Label label = new Label(message.get(0) + ": " + message.get(1), GameAssetManager.getGameAssetManager().getSkin());
                     label.setAlignment(Align.left);
+                    label.setWrap(true);
+                    if(label.getText().toString().matches(".+@"+AppClient.getUserData().getUsername()+".+")){
+                        label.setColor(Color.BLUE);
+                    }
+                    chatTable.add(label).width(380).left().padBottom(5).row();
+                }
+            }
+        }else{
+            NPCData npc = Finder.getnpcdatabyname(npcData.getName());
+            String playername = Finder.getpd().getUsername();
+            Talk talk = npc.getTalkByName(playername);
+            for (Messagenpc t : talk.getTalks()) {
+                if(!t.isNPC){
+                    Label label = new Label(t.message+ "-", GameAssetManager.getGameAssetManager().getSkin());
+                    label.setWrap(true);
+                    label.setAlignment(Align.right);
+                    label.setColor(CustomColors.GAMEGREENCOLOR);
+                    chatTable.add(label).width(380).right().padBottom(5).row();
+                } else{
+                    Label label = new Label(npc.getName() + ": " + t.message, GameAssetManager.getGameAssetManager().getSkin());
+                    label.setAlignment(Align.left);
+                    label.setWrap(true);
                     if(label.getText().toString().matches(".+@"+AppClient.getUserData().getUsername()+".+")){
                         label.setColor(Color.BLUE);
                     }
