@@ -41,7 +41,7 @@ public class FriendshipStageHandler {
     private final Label nameLabel;
 
     // Navigation buttons
-    private final TextButton chatTab, giftTab, hugOrQuestTab, tradeTab, backTab;
+    private final TextButton chatTab, giftTab, proposeOrQuestTab, tradeTab, backTab;
 
     // Shared
     private final Label messageLabel;
@@ -66,8 +66,7 @@ public class FriendshipStageHandler {
 
     // Layout
     private final Table mainTable;
-    private final Stack formStack;
-    public final Table chatForm, giftForm, hugOrQuestForm, tradeForm;
+    public final Table chatForm, giftForm, proposeOrQuestForm, tradeForm;
 
     public FriendshipStageHandler(GameScreen screen, Stage stage, PlayerData playerData, NPCData npcData) {
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
@@ -113,10 +112,20 @@ public class FriendshipStageHandler {
         // --- Tabs
         chatTab = new TextButton("Chat", skin);
         giftTab = new TextButton("Gift", skin);
-        if (isPlayer) {
-            hugOrQuestTab = new TextButton("Hug", skin);
+        if (isPlayer && friendShipLevel < 3) {
+            proposeOrQuestTab = new TextButton("Give Flower", skin);
+            if(friendShipLevel < 2 || friendshipData.getFriendshipXp() < 300){
+                proposeOrQuestTab.getLabel().setColor(Color.RED);
+            }
+        } else if (isPlayer && friendShipLevel == 3) {
+            proposeOrQuestTab = new TextButton("Propose", skin);
+            if(friendshipData.getFriendshipXp() < 400){
+                proposeOrQuestTab.getLabel().setColor(Color.RED);
+            }
+        } else if (isPlayer) {
+            proposeOrQuestTab = new TextButton("Go To Farm", skin);
         } else {
-            hugOrQuestTab = new TextButton("Quest", skin);
+            proposeOrQuestTab = new TextButton("Quest", skin);
         }
         tradeTab = new TextButton("Trade", skin);
         backTab = new TextButton("Back", skin);
@@ -128,9 +137,9 @@ public class FriendshipStageHandler {
 
         if (friendShipLevel <= 1 && isPlayer) {
             giftTab.getLabel().setColor(Color.RED);
-            hugOrQuestTab.getLabel().setColor(Color.RED);
+            proposeOrQuestTab.getLabel().setColor(Color.RED);
         } else if (friendShipLevel == 2 && isPlayer) {
-            hugOrQuestTab.getLabel().setColor(Color.RED);
+            proposeOrQuestTab.getLabel().setColor(Color.RED);
         }
 
         // --- Chat Fields
@@ -161,13 +170,12 @@ public class FriendshipStageHandler {
         mainTable = new Table();
         mainTable.setFillParent(true);
 
-        formStack = new Stack();
         chatForm = new Table();
         chatForm.setFillParent(true);
         giftForm = new Table();
         giftForm.setFillParent(true);
-        hugOrQuestForm = new Table();
-        hugOrQuestForm.setFillParent(true);
+        proposeOrQuestForm = new Table();
+        proposeOrQuestForm.setFillParent(true);
         tradeForm = new Table();
         tradeForm.setFillParent(true);
 
@@ -177,7 +185,7 @@ public class FriendshipStageHandler {
         stage.addActor(mainTable);
         stage.addActor(chatForm);
         stage.addActor(giftForm);
-        stage.addActor(hugOrQuestForm);
+        stage.addActor(proposeOrQuestForm);
         stage.addActor(tradeForm);
         stage.addActor(avatarImage);
 
@@ -189,10 +197,8 @@ public class FriendshipStageHandler {
     public void updateChat() {
         chatTable.clearChildren(); // Keeps the same instance
         if (AppClient.getGameData() == null) return;
-        //TODO Players Chat update
         if (isPlayer) {
             FriendshipData fsd = null;
-            String playername = Finder.getpd().getUsername();
 
             for (FriendshipData friendshipData1 : Finder.getpd().getFriendshipsData()) {
                 if (friendshipData1.getPlayer1Name().equals(playerData.getUsername())
@@ -262,8 +268,6 @@ public class FriendshipStageHandler {
 
     private void setupChatUI() {
         chatTable = new Table();
-//        chatTable.setFillParent(true);
-        //TODO Players Chat
         if (isPlayer) {
             FriendshipData fsd = null;
             String playername = playerData.getUsername();
@@ -332,10 +336,9 @@ public class FriendshipStageHandler {
 
     public void updateQuestsUI() {
         questsTable.clear();
-//        questsTable.add(new Label("", GameAssetManager.getGameAssetManager().getSkin())).padLeft(2000);
         float width = stage.getWidth() / 3.5f, height = stage.getHeight() / 2.25f;
-        NPCData npcd = Finder.getnpcdatabyname(npcData.getName());
         if (!isPlayer) {
+            NPCData npcd = Finder.getnpcdatabyname(npcData.getName());
             for (QuestData questData : npcd.getQuestsdata()) {
                 Table table = new Table();
 
@@ -397,10 +400,9 @@ public class FriendshipStageHandler {
                         finishQuestButton.addListener(new ClickListener() {
                             @Override
                             public void clicked(InputEvent event, float x, float y) {
-                                // TODO Finish Quest
                                 int index = npcd.getQuestsdata().indexOf(questData);
                                 GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                                    new GameCommand("quests finish -i "+(index+1)+" "+npcData.getName(),
+                                    new GameCommand("quests finish -i " + (index + 1) + " "+npcData.getName(),
                                         AppClient.getUserData().getUsername()));
                                 AppClient.getClient().send(new Gson().toJson(msg));
                             }
@@ -412,10 +414,9 @@ public class FriendshipStageHandler {
                     collectQuestButton.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
-                            // TODO Collect Quest Reward
                             int index = npcd.getQuestsdata().indexOf(questData);
                             GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                                new GameCommand("quests collect -i "+(index+1)+" "+npcData.getName(),
+                                new GameCommand("quests collect -i " + (index + 1) + " "+npcData.getName(),
                                     AppClient.getUserData().getUsername()));
                             AppClient.getClient().send(new Gson().toJson(msg));
                         }
@@ -432,7 +433,7 @@ public class FriendshipStageHandler {
         Table tabRow = new Table();
         tabRow.add(chatTab).width(200).pad(10);
         tabRow.add(giftTab).width(200).pad(10);
-        tabRow.add(hugOrQuestTab).width(200).pad(10);
+        tabRow.add(proposeOrQuestTab).width(200).pad(10);
         tabRow.add(tradeTab).width(200).pad(10);
         tabRow.add(backTab).width(200).pad(10);
 
@@ -443,9 +444,9 @@ public class FriendshipStageHandler {
         giftForm.clear();
 
         // Hug Or Quest Form Layout
-        hugOrQuestForm.clear();
-        hugOrQuestForm.add(questsTable);
-        hugOrQuestForm.setPosition(-stage.getWidth() / 20f, -stage.getHeight() / 2.5f);
+        proposeOrQuestForm.clear();
+        proposeOrQuestForm.add(questsTable);
+        proposeOrQuestForm.setPosition(-stage.getWidth() / 20f, -stage.getHeight() / 2.5f);
 
         // Security Form Layout
         tradeForm.clear();
@@ -453,7 +454,7 @@ public class FriendshipStageHandler {
 //        formStack.clear();
 //        formStack.add(chatForm);
 //        formStack.add(giftForm);
-//        formStack.add(hugOrQuestForm);
+//        formStack.add(proposeOrQuestForm);
 //        formStack.add(tradeForm);
 
         mainTable.clear();
@@ -471,9 +472,23 @@ public class FriendshipStageHandler {
     public void switchForm(String formName) {
         chatForm.setVisible(formName.equals("chat"));
         giftForm.setVisible(formName.equals("gift"));
-        hugOrQuestForm.setVisible(formName.equals("hugOrQuest"));
+        proposeOrQuestForm.setVisible(formName.equals("proposeOrQuest"));
         tradeForm.setVisible(formName.equals("trade"));
+        updateQuestsUI();
         emptyFields();
+        if (isPlayer && friendShipLevel < 3) {
+            proposeOrQuestTab.setText("Give Flower");
+            if(friendShipLevel < 2 || friendshipData.getFriendshipXp() < 300){
+                proposeOrQuestTab.getLabel().setColor(Color.RED);
+            }
+        } else if (isPlayer && friendShipLevel == 3) {
+            proposeOrQuestTab.setText("Propose");
+            if(friendshipData.getFriendshipXp() < 400){
+                proposeOrQuestTab.getLabel().setColor(Color.RED);
+            }
+        } else if (isPlayer) {
+            proposeOrQuestTab.setText("Go To Farm");
+        }
     }
 
     private void setupListeners() {
@@ -516,14 +531,32 @@ public class FriendshipStageHandler {
             }
         });
 
-        hugOrQuestTab.addListener(new ClickListener() {
+        proposeOrQuestTab.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (friendShipLevel <= 2 && isPlayer) {
-                    setMessage("Your friendship level should be at least 3 to hug.", Color.RED);
+                if (isPlayer && friendShipLevel < 3) {
+                    if(friendShipLevel < 2){
+                        setMessage("Your friendship level should be at least 3 to give flower.", Color.RED);
+                        return;
+                    }
+                    if(friendshipData.getFriendshipXp() < 300){
+                        setMessage("Your friendship xp is " + friendshipData.getFriendshipXp() + ", it should be at 300 xp to give flower.", Color.RED);
+                        return;
+                    }
+                    // TODO give flower
+                    return;
+                } else if (isPlayer && friendShipLevel == 3) {
+                    if(friendshipData.getFriendshipXp() < 400){
+                        setMessage("Your friendship xp is " + friendshipData.getFriendshipXp() + ", it should be at 400 xp to give flower.", Color.RED);
+                        return;
+                    }
+                    // TODO Propose
+                    return;
+                } else if (isPlayer) {
+                    // TODO GO TO Farm
                     return;
                 }
-                switchForm("hugOrQuest");
+                switchForm("proposeOrQuest");
                 updateQuestsUI();
                 if(isPlayer){
                     GameMessage<GameCommand> msg = new GameMessage<>("game-command",
@@ -533,7 +566,7 @@ public class FriendshipStageHandler {
                     Gdx.input.setInputProcessor(screen.stage);
                     emptyFields();
                 }
-                //TODO hugOrQuest
+                //TODO proposeOrQuest
             }
         });
 

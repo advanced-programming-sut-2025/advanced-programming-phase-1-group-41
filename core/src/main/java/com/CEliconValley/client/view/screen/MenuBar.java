@@ -1,13 +1,14 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
-import com.CEliconValley.client.GameClient;
 import com.CEliconValley.common.*;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.VoteMessage;
 import com.CEliconValley.controllers.ItemManager;
-import com.CEliconValley.models.*;
+import com.CEliconValley.models.Finder;
+import com.CEliconValley.models.FriendshipLevel;
+import com.CEliconValley.models.Player;
 import com.CEliconValley.models.foragings.Nature.Wood;
 import com.CEliconValley.models.items.*;
 import com.CEliconValley.models.tools.Tool;
@@ -15,17 +16,21 @@ import com.CEliconValley.models.ui.CustomColors;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
-
-import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class MenuBar {
     private final Texture menuTexture;
@@ -53,7 +58,9 @@ public class MenuBar {
     private final ArrayList<Integer> relationsIndex = new ArrayList<>();
 
     private final int visibleRelationsCount = 2;
+    private final int visibleGiftsCount = 4;
     private int selectedIndex = 0;
+    private int selectedGiftIndex = 0;
 
     private GameScreen screen;
     private final String[] tabOrder = {
@@ -74,9 +81,9 @@ public class MenuBar {
 
 
         int i = 0;
-        for(PlayerData playerData : AppClient.getGameData().getPlayersData()){
+        for (PlayerData playerData : AppClient.getGameData().getPlayersData()) {
             assert AppClient.getUserData() != null;
-            if(playerData.getUsername().equals(AppClient.getUserData().getUsername())){
+            if (playerData.getUsername().equals(AppClient.getUserData().getUsername())) {
                 i++;
                 continue;
             }
@@ -122,11 +129,10 @@ public class MenuBar {
         Inventory inventory = Finder.getpd().getInventoryData().getInventory();
         this.camera = camera;
 
-        if(screen instanceof GreenHouseScreen && !camSet){
+        if (screen instanceof GreenHouseScreen && !camSet) {
             camSet = true;
 //            camera.zoom *= 2;
         }
-
 
 
         float menuWidth = screenWidth * 0.6f;
@@ -221,7 +227,7 @@ public class MenuBar {
                         batch.draw(texture, drawX, drawY, drawWidth, drawHeight);
 
 
-                        if (slot.getQuantity()>1) {
+                        if (slot.getQuantity() > 1) {
                             font.getData().setScale(2.5f);
                             String amountText = String.valueOf(slot.getQuantity());
                             GlyphLayout layout = new GlyphLayout(font, amountText);
@@ -242,7 +248,7 @@ public class MenuBar {
                                             AppClient.getUserData().getUsername())
                                     );
                                     AppClient.getClient().send(new Gson().toJson(msg));
-                                }else if(Finder.parseItem(item.getName()) instanceof Eatable){
+                                } else if (Finder.parseItem(item.getName()) instanceof Eatable) {
                                     assert AppClient.getUserData() != null;
                                     GameMessage<GameCommand> msg = new GameMessage<>("game-command",
                                         new GameCommand("eat " + item.getName(),
@@ -255,8 +261,7 @@ public class MenuBar {
                                     screen.hero.isActing.set(true);
                                     screen.hero.stateTime = 0;
                                 }
-                            }
-                            else if(Gdx.input.isButtonJustPressed(1)){
+                            } else if (Gdx.input.isButtonJustPressed(1)) {
                                 screen.hero.selectedItemName = item.getName();
                             }
 
@@ -301,10 +306,10 @@ public class MenuBar {
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mousePos);
 
-        if(Finder.getpd().getCurrentToolName() != null){
+        if (Finder.getpd().getCurrentToolName() != null) {
             Tool tool = (Tool) Finder.parseItem(Finder.getpd().getCurrentToolName());
             TextureRegion texture1 = ItemManager.getTexture(tool.getID());
-            if (texture1 != null){
+            if (texture1 != null) {
                 float drawX = startingX + screenWidth / 10f;
                 float drawY = startingY + screenHeight * 0.075f;
                 float width = screenWidth * 0.1f;
@@ -322,7 +327,7 @@ public class MenuBar {
             }
         }
 
-        if(screen.hero.selectedItemName == null){
+        if (screen.hero.selectedItemName == null) {
             return;
         }
         Item item = Finder.parseItem(screen.hero.selectedItemName);
@@ -364,9 +369,9 @@ public class MenuBar {
         int foraging = Finder.getpd().getForagingSkill().getLevel();
         int mining = Finder.getpd().getMiningSkill().getLevel();
 
-        String[] names = { "Farming", "Fishing", "Foraging", "Mining" };
-        Texture[] icons = { farmingIcon, fishingIcon, foragingIcon, miningIcon };
-        int[] levels = { farming, fishing, foraging, mining };
+        String[] names = {"Farming", "Fishing", "Foraging", "Mining"};
+        Texture[] icons = {farmingIcon, fishingIcon, foragingIcon, miningIcon};
+        int[] levels = {farming, fishing, foraging, mining};
         String[] tooltips = {
             "Levels are gained by harvesting crops and caring for animals.\nEach level grants +1 hoe and watering can proficiency.",
             "Fishing is increased by catching fish or using crab pots.\nEach level grants +1 fishing rod proficiency.",
@@ -476,12 +481,12 @@ public class MenuBar {
             int friendShipLevel = 0;
             float characterX = x;
             float characterY = y - characterSize + 5;
-            if(i < relationsIndex.size()) {
+            if (i < relationsIndex.size()) {
                 PlayerData playerData = AppClient.getGameData().getPlayersData().get(relationsIndex.get(i));
                 String username = playerData.getUsername();
 
-                for(FriendshipData friendshipData : Objects.requireNonNull(Finder.getpd()).getFriendshipsData()){
-                    if(friendshipData.getPlayer1Name().equals(username) || friendshipData.getPlayer2Name().equals(username)) {
+                for (FriendshipData friendshipData : Objects.requireNonNull(Finder.getpd()).getFriendshipsData()) {
+                    if (friendshipData.getPlayer1Name().equals(username) || friendshipData.getPlayer2Name().equals(username)) {
                         friendShipLevel = friendshipData.getLevel();
                     }
                 }
@@ -524,15 +529,15 @@ public class MenuBar {
                     screen.friendshipMode = true;
                     screen.handleFriendship(screen.friendshipStage, playerData, null);
                 }
-            } else{
+            } else {
                 NPCData npcData = NPCsData.get(i - relationsIndex.size());
                 String NPCname = npcData.getName();
 
                 friendShipLevel = npcData.getFriendShipData().get(Objects.requireNonNull(Finder.getpd()).getUsername()) / 200;
 
-                if(npcData.getName().equals("Mohsen")) {
+                if (npcData.getName().equals("Mohsen")) {
                     batch.draw(mohsenAvatarTexture, characterX, characterY, characterSize, characterSize);
-                }else{
+                } else {
                     batch.draw(GameAssetManager.getGameAssetManager().getNPCImage(npcData.getName(), friendShipLevel),
                         characterX, characterY, characterSize, characterSize);
                 }
@@ -582,31 +587,31 @@ public class MenuBar {
 
             String friendShipState;
 
-            for(int j = 0; j < friendShipLevel; j++){
+            for (int j = 0; j < friendShipLevel; j++) {
                 batch.draw(heartTexture, characterX, characterY, itemSize, itemSize);
                 characterX += screenWidth / 20f;
             }
-            if(i < relationsIndex.size()) {
-                for(int j = 0; j < 4 - Math.max(friendShipLevel, 0); j++){
+            if (i < relationsIndex.size()) {
+                for (int j = 0; j < 4 - Math.max(friendShipLevel, 0); j++) {
                     batch.draw(emptyHeartTexture, characterX, characterY, itemSize, itemSize);
                     characterX += screenWidth / 20f;
                 }
 
-                friendShipState = FriendshipLevel.values()[friendShipLevel+1].name();
+                friendShipState = FriendshipLevel.values()[friendShipLevel + 1].name();
 
-            } else{
-                for(int j = 0; j < 3 - friendShipLevel; j++){
+            } else {
+                for (int j = 0; j < 3 - friendShipLevel; j++) {
                     batch.draw(emptyHeartTexture, characterX, characterY, itemSize, itemSize);
                     characterX += screenWidth / 20f;
                 }
 
-                if(friendShipLevel == 0) {
+                if (friendShipLevel == 0) {
                     friendShipState = "Stranger";
-                } else if(friendShipLevel == 1) {
+                } else if (friendShipLevel == 1) {
                     friendShipState = "Friend";
-                } else if(friendShipLevel == 2) {
+                } else if (friendShipLevel == 2) {
                     friendShipState = "Close Friend";
-                } else{
+                } else {
                     friendShipState = "Best Friend";
                 }
             }
@@ -643,17 +648,17 @@ public class MenuBar {
         batch.draw(miniMapTexture, startingX + screenWidth / 80f, startingY + screenHeight / 60f, menuTexture.getWidth() / 2.32f, menuTexture.getHeight() / 3f);
         int farmId = Finder.getpd().getFarmId();
         float characterX = startingX + Finder.getpd().getX() * screenWidth / 350f, characterY = startingY + Finder.getpd().getY() * screenHeight / 420f;
-        if(Finder.getpd().isPlayerInVillage()){
-            characterX += screenWidth / 4f;
+        if (Finder.getpd().isPlayerInVillage()) {
+            characterX += screenWidth / 8f;
             characterY += screenHeight / 4f;
             batch.draw(characterTexture, characterX, characterY, characterTexture.getWidth() / 2f, characterTexture.getHeight() / 2f);
         }
-        if(farmId == 1){
+        if (farmId == 1) {
             characterX += screenWidth / 2.5f;
             characterY += screenHeight / 2.5f;
-        } else if(farmId == 0){
+        } else if (farmId == 0) {
             characterY += screenHeight / 2.5f;
-        } else if(farmId == 3){
+        } else if (farmId == 3) {
             characterX += screenWidth / 2.5f;
         }
         //TODO If Village!
@@ -675,12 +680,12 @@ public class MenuBar {
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mousePos);
 
-        if(!(screen instanceof CottageScreen)){
+        if (!(screen instanceof CottageScreen)) {
             font.getData().setScale(2f);
             font.setColor(Color.RED);
 
             GlyphLayout layout = new GlyphLayout(font, "You Should Go Home To Use This!");
-            font.draw(batch, layout,  startingX + screenWidth / 3.2f - layout.width / 2, startingY + maxY + screenHeight / 9f);
+            font.draw(batch, layout, startingX + screenWidth / 3.2f - layout.width / 2, startingY + maxY + screenHeight / 9f);
             font.setColor(Color.WHITE);
             font.getData().setScale(1f);
         }
@@ -718,7 +723,7 @@ public class MenuBar {
 
                 if (Gdx.input.justTouched()) {
                     GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                        new GameCommand("crafting craft "+machine, AppClient.getUserData().getUsername()));
+                        new GameCommand("crafting craft " + machine, AppClient.getUserData().getUsername()));
                     AppClient.getClient().send(new Gson().toJson(msg));
 //                    if (hasAllItems(machine.getRecipe())) {
 //                        Map<Item, Integer> requiredItems = machine.getRecipe().neededItems;
@@ -752,12 +757,12 @@ public class MenuBar {
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mousePos);
 
-        if(!(screen instanceof CottageScreen)){
+        if (!(screen instanceof CottageScreen)) {
             font.getData().setScale(2f);
             font.setColor(Color.RED);
 
             GlyphLayout layout = new GlyphLayout(font, "You Should Go Home To Use This!");
-            font.draw(batch, layout,  startingX + screenWidth / 3.2f - layout.width / 2, startingY + maxY + screenHeight / 9f);
+            font.draw(batch, layout, startingX + screenWidth / 3.2f - layout.width / 2, startingY + maxY + screenHeight / 9f);
             font.setColor(Color.WHITE);
             font.getData().setScale(1f);
         }
@@ -777,7 +782,7 @@ public class MenuBar {
             float drawX = startingX + currentX;
             float drawY = startingY + currentY;
             float width = screenWidth * 0.03f;
-            float height = width ;
+            float height = width;
 
             CookingRecipe recipe = food.getRecipe();
             boolean unlocked = recipe != null && Finder.getpd().getCookingRecipes().contains(recipe);
@@ -797,7 +802,7 @@ public class MenuBar {
 
                 if (Gdx.input.isButtonJustPressed(0)) {
                     GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                        new GameCommand("cooking prepare "+food, AppClient.getUserData().getUsername()));
+                        new GameCommand("cooking prepare " + food, AppClient.getUserData().getUsername()));
                     AppClient.getClient().send(new Gson().toJson(msg));
 //                    if (hasAllItems(recipe)) {
 //                        Map<Item, Integer> requiredItems = recipe.neededItems;
@@ -812,7 +817,7 @@ public class MenuBar {
                 }
             }
 
-            currentX += width *1.33f;
+            currentX += width * 1.33f;
         }
     }
 
@@ -852,7 +857,7 @@ public class MenuBar {
             boolean clicked = false;
 
             if (hovered) {
-                if(Gdx.input.isButtonJustPressed(0)){
+                if (Gdx.input.isButtonJustPressed(0)) {
                     clicked = true;
                 }
                 String warnText = "Vote " + name;
@@ -881,7 +886,7 @@ public class MenuBar {
 
                 font.setColor(Color.WHITE);
             }
-            if(clicked && AppClient.getGameData().getPlayersData().size() > 1){
+            if (clicked && AppClient.getGameData().getPlayersData().size() > 1) {
                 GameMessage<VoteMessage> msg = new GameMessage<>("new-vote",
                     new VoteMessage(name));
                 AppClient.getClient().send(new Gson().toJson(msg));
@@ -892,14 +897,15 @@ public class MenuBar {
         x = startingX + screenWidth * 0.025f;
         for (int i = 0; i < 3; i++) {
             String text = "Force Terminate";
-            if(i == 1) { // TODO If CurrentName Only Admin! if not, break;
+            if (i == 1) { // TODO If CurrentName Only Admin! if not, break;
 //                if(Admin){
 //                  break;
 //                }
                 text = "Save Game";
-            } if (i == 2 && !Finder.getfd().isGreenHouseUnlocked()) {
+            }
+            if (i == 2 && !Finder.getfd().isGreenHouseUnlocked()) {
                 text = "Unlock Greenhouse";
-            } else if(i == 2 && Finder.getfd().isGreenHouseUnlocked()) {
+            } else if (i == 2 && Finder.getfd().isGreenHouseUnlocked()) {
                 continue;
             }
 
@@ -916,12 +922,12 @@ public class MenuBar {
 
             boolean clicked = false;
 
-            if(hovered && Gdx.input.isButtonJustPressed(0)){
+            if (hovered && Gdx.input.isButtonJustPressed(0)) {
                 clicked = true;
             }
             if (hovered && i != 1) {
                 String warnText = "Vote For Force Terminate";
-                if(i == 2){
+                if (i == 2) {
                     warnText = "Build Greenhouse";
                 }
 
@@ -943,8 +949,8 @@ public class MenuBar {
 
                 font.setColor(Color.RED);
 
-                if(i == 2 && Finder.getpd().getInventoryData().getInventory().getSlotByItem(new Wood()) != null){
-                    if(Finder.getpd().getMoney() >= 1000 && Finder.getpd().getInventoryData().getInventory().getSlotByItem(new Wood()).getQuantity() >= 500){
+                if (i == 2 && Finder.getpd().getInventoryData().getInventory().getSlotByItem(new Wood()) != null) {
+                    if (Finder.getpd().getMoney() >= 1000 && Finder.getpd().getInventoryData().getInventory().getSlotByItem(new Wood()).getQuantity() >= 500) {
                         font.setColor(CustomColors.GAMEGREENCOLOR);
                     }
                 }
@@ -953,29 +959,29 @@ public class MenuBar {
 
                 font.setColor(Color.WHITE);
             }
-            if(clicked){
-                if(i == 0){
+            if (clicked) {
+                if (i == 0) {
                     GameMessage<String> msg = new GameMessage<>("new-ter", ";)");
                     AppClient.getClient().send(new Gson().toJson(msg));
-                } else if(i == 1){
-                    if(AppClient.getUserData().getUsername().equals(
+                } else if (i == 1) {
+                    if (AppClient.getUserData().getUsername().equals(
                         AppClient.getGameData().getLobby().getAdmin()
-                    )){
+                    )) {
                         GameMessage<String> msg = new GameMessage<>("save-game", ";)");
                         AppClient.getClient().send(new Gson().toJson(msg));
-                    }else{
+                    } else {
                         System.out.println("you are not admin");
-                        System.out.println("  you: "+AppClient.getUserData().getUsername());
-                        System.out.println("  adming: "+AppClient.getGameData().getLobby().getAdmin());
+                        System.out.println("  you: " + AppClient.getUserData().getUsername());
+                        System.out.println("  adming: " + AppClient.getGameData().getLobby().getAdmin());
                     }
-                } else{
+                } else {
                     GameMessage<GameCommand> msg = new GameMessage<>("game-command",
                         new GameCommand("greenhouse build", AppClient.getUserData().getUsername()));
                     AppClient.getClient().send(new Gson().toJson(msg));
                 }
             }
 
-            if(i == 0 && Finder.getfd().isGreenHouseUnlocked()){
+            if (i == 0 && Finder.getfd().isGreenHouseUnlocked()) {
                 x += 1.15f * spacing;
             }
             x += spacing * 1.325f;
@@ -984,13 +990,11 @@ public class MenuBar {
         font.getData().setScale(1f);
     }
 
-    private void renderGifts(Batch batch){
-        Texture nameTexture = GameAssetManager.getGameAssetManager().getBackgroundTexture("Player Name Background.png");
-
+    private void renderGifts(Batch batch) {
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
 
-        float x = startingX + screenWidth * 0.05f;
+        float x = startingX + screenWidth * 0.1f;
         float y = startingY + screenHeight * 0.55f;
 
         float spacing = screenWidth * 0.14f;
@@ -1001,54 +1005,58 @@ public class MenuBar {
 
         font.getData().setScale(2.4f);
         font.setColor(CustomColors.SWAMP_COLOR);
-        font.draw(batch, "Sent Gifts:", x + playerSize * 1.5f - "Send Gifts".length() * font.getScaleX() * 7.5f / 2f, y + playerSize / 1.5f);
+        font.draw(batch, "Sent Gifts:", x + playerSize * 1.5f - "Send Gifts".length() * font.getScaleX() * 7.5f / 2f, y + playerSize / 2 + 5);
         font.setColor(Color.WHITE);
         font.getData().setScale(1f);
 
-        for (GiftData giftData : Finder.getpd().getSendGiftsData()) {
-            String text = giftData.getSlotData().getQuantity() + " " + giftData.getSlotData().getItemName() + " to " + giftData.getToName();
+        int endIndex = Math.min(selectedGiftIndex + visibleGiftsCount, Finder.getpd().getSendGiftsData().size());
 
-            float playerX = x;
+        for (int i = selectedGiftIndex; i < endIndex; i++) {
+            GiftData giftData = Finder.getpd().getSendGiftsData().get(i);
+            String text = giftData.getSlotData().getItemName() + " to " + giftData.getToName();
+
             float playerY = y - playerSize + 5;
 
             font.getData().setScale(2f);
-            font.draw(batch, text, playerX + playerSize * 1.5f - text.length() * font.getScaleX() * 7.5f / 2f, playerY + playerSize / 1.5f);
+            font.draw(batch, text, x + playerSize * 1.5f - text.length() * font.getScaleX() * 7.5f / 2f, playerY + playerSize / 1.5f);
 
             y -= spacing / 5f;
         }
-        y -= spacing / 4f;
+        y -= spacing / 2f;
 
         font.getData().setScale(2.4f);
         font.setColor(CustomColors.GAMEGREENCOLOR);
-        font.draw(batch, "Received Gifts:", x + playerSize * 1.5f - "Received Gifts".length() * font.getScaleX() * 7.5f / 2f, y + playerSize / 1.5f);
+        font.draw(batch, "Received Gifts:", x + playerSize * 1.5f - "Received Gifts".length() * font.getScaleX() * 7.5f / 2f, y + playerSize / 2+ 5);
         font.setColor(Color.WHITE);
         font.getData().setScale(1f);
 
-        for (GiftData giftData : Finder.getpd().getReceivedGiftsData()) {
-            String text = giftData.getSlotData().getQuantity() + " " + giftData.getSlotData().getItemName() + " from " + giftData.getFromName();
+        endIndex = Math.min(selectedGiftIndex + visibleGiftsCount, Finder.getpd().getReceivedGiftsData().size());
 
-            float playerX = x;
+        for (int i = selectedGiftIndex; i < endIndex; i++) {
+            GiftData giftData = Finder.getpd().getReceivedGiftsData().get(i);
+            String text = giftData.getSlotData().getItemName() + " from " + giftData.getFromName();
+
             float playerY = y - playerSize + 5;
 
             font.getData().setScale(2f);
-            font.draw(batch, text, playerX + playerSize * 1.5f - text.length() * font.getScaleX() * 7.5f / 2f, playerY + playerSize / 1.5f);
+            font.draw(batch, text, x + playerSize * 1.5f - text.length() * font.getScaleX() * 7.5f / 2f, playerY + playerSize / 1.5f);
 
             y -= spacing / 5f;
         }
 
         y = startingY + screenHeight * 0.55f;
-        x += screenWidth * 0.3f;
+        x += screenWidth * 0.25f;
 
         font.getData().setScale(2.4f);
-        font.setColor(CustomColors.GAMEGREENCOLOR);
+        font.setColor(CustomColors.GOLD);
         font.draw(batch, "New Unrated Gifts:", x + playerSize * 1.5f - "New Unrated Gifts".length() * font.getScaleX() * 7.5f / 2f, y + playerSize / 1.5f);
         font.setColor(Color.WHITE);
         font.getData().setScale(1f);
 
-        x -= screenHeight * 0.025f;
+        x -= screenHeight * 0.0275f;
 
         for (GiftData giftData : Finder.getpd().getNewGiftsData()) {
-            String text = giftData.getSlotData().getQuantity() + " " + giftData.getSlotData().getItemName() + " from " + giftData.getFromName();
+            String text = giftData.getSlotData().getItemName() + " from " + giftData.getFromName();
 
             float playerX = x;
             float playerY = y - playerSize + 5;
@@ -1056,12 +1064,12 @@ public class MenuBar {
             font.getData().setScale(2f);
             font.draw(batch, text, playerX, playerY + playerSize / 1.5f);
 
-            playerX += playerSize * 2;
+            playerX += playerSize * 1.2f;
 
-            for(int i = 0; i < 5; i++){
+            for (int i = 0; i < 5; i++) {
                 playerX += playerSize / 2f;
 
-                font.draw(batch, (i+1) + "", playerX + playerSize * 1.5f, playerY + playerSize / 1.5f);
+                font.draw(batch, (i + 1) + "", playerX + playerSize * 1.5f, playerY + playerSize / 1.5f);
 
                 boolean hovered = mousePos.x >= playerX + playerSize * 1.5f && mousePos.x <= playerX + playerSize * 2 &&
                     mousePos.y >= playerY && mousePos.y <= playerY + playerSize / 1.5f;
@@ -1069,7 +1077,7 @@ public class MenuBar {
                 boolean clicked = false;
 
                 if (hovered) {
-                    if(Gdx.input.isButtonJustPressed(0)){
+                    if (Gdx.input.isButtonJustPressed(0)) {
                         clicked = true;
                     }
                     String warnText = "Rate " + (i + 1);
@@ -1080,7 +1088,7 @@ public class MenuBar {
                     float tooltipHeight = tooltipLayout.height + 30;
 
                     float tooltipX = playerX + playerSize * 1.5f - tooltipWidth / 2f;
-                    float tooltipY = playerY + playerSize + 20;
+                    float tooltipY = playerY + playerSize / 2;
 
                     batch.end();
                     shapeRenderer.setProjectionMatrix(camera.combined);
@@ -1090,11 +1098,11 @@ public class MenuBar {
                     shapeRenderer.end();
                     batch.begin();
 
-                    if(i <= 1){
+                    if (i <= 1) {
                         font.setColor(Color.RED);
-                    } else if(i == 2){
+                    } else if (i == 2) {
                         font.setColor(Color.YELLOW);
-                    } else{
+                    } else {
                         font.setColor(Color.GREEN);
                     }
 
@@ -1102,12 +1110,11 @@ public class MenuBar {
 
                     font.setColor(Color.WHITE);
                 }
-                if(clicked && AppClient.getGameData().getPlayersData().size() > 1){
-                    //TODO Rate Gift
-                    // rate is i + 1
+                if (clicked && AppClient.getGameData().getPlayersData().size() > 1) {
+
                     GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                        new GameCommand("gift rate -i "+
-                            (Finder.getpd().getNewGiftsData().indexOf(giftData)+1)+" -r "+(i+1), AppClient.getUserData().getUsername()));
+                        new GameCommand("gift rate -i " +
+                            (Finder.getpd().getNewGiftsData().indexOf(giftData) + 1) + " -r " + (i + 1), AppClient.getUserData().getUsername()));
                     AppClient.getClient().send(new Gson().toJson(msg));
                 }
             }
@@ -1180,10 +1187,10 @@ public class MenuBar {
         String title = readableName(machine.name());
         font.getData().setScale(2f);
         GlyphLayout layout = new GlyphLayout(font, title);
-        batch.draw(infoTexture,x-2*padding, y - 2 * padding,
+        batch.draw(infoTexture, x - 2 * padding, y - 2 * padding,
             Math.max(infoTexture.getWidth(), layout.width + 40), infoTexture.getHeight() * recipe.getNeededItems().size() / 2f);
 
-        font.draw(batch, layout, x  + Math.max(infoTexture.getWidth(), layout.width + 40) / 2 - layout.width / 2 - padding * 2, y + height - 2 * padding);
+        font.draw(batch, layout, x + Math.max(infoTexture.getWidth(), layout.width + 40) / 2 - layout.width / 2 - padding * 2, y + height - 2 * padding);
         font.getData().setScale(1f);
 
 
@@ -1211,9 +1218,9 @@ public class MenuBar {
 
     private boolean hasInInventory(Item item, int quantity) {
         PlayerData pd = Finder.getpd();
-        for(SlotData slot : pd.getInventoryData().getSlots()){
-            if(slot.getItemName() == null || slot.getQuantity() == 0) continue;
-            if(slot.getItemName().equals(item.getName())){
+        for (SlotData slot : pd.getInventoryData().getSlots()) {
+            if (slot.getItemName() == null || slot.getQuantity() == 0) continue;
+            if (slot.getItemName().equals(item.getName())) {
                 return slot.getQuantity() >= quantity;
             }
         }
@@ -1245,10 +1252,10 @@ public class MenuBar {
 
         batch.begin();
 
-        if(recipe.neededItems.size() <= 1){
+        if (recipe.neededItems.size() <= 1) {
             batch.draw(infoTexture, x - 2 * padding, y - 2 * padding,
                 infoTexture.getWidth(), infoTexture.getHeight());
-        }else{
+        } else {
             batch.draw(infoTexture, x - 2 * padding, y - 2 * padding,
                 infoTexture.getWidth(), infoTexture.getHeight() * recipe.neededItems.size() / 2f);
         }
@@ -1285,7 +1292,7 @@ public class MenuBar {
         menuTexture.dispose();
     }
 
-    public void resetScroll(){
+    public void resetScroll() {
         startingRow = 0;
         selectedIndex = 0;
     }
@@ -1295,12 +1302,17 @@ public class MenuBar {
 
         if (selectedIndex < GameAssetManager.getGameAssetManager().npcTextures.size() + relationTextures.size() - visibleRelationsCount - 3)
             selectedIndex++;
+
+        if (selectedGiftIndex < visibleGiftsCount)
+            selectedGiftIndex++;
     }
 
     public void scrollUp() {
         if (startingRow > 0) startingRow--;
 
         if (selectedIndex > 0) selectedIndex--;
+
+        if (selectedGiftIndex > 0) selectedGiftIndex--;
     }
 
     public void goToNextTab() {
