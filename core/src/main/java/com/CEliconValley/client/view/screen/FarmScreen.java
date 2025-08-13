@@ -76,7 +76,7 @@ class FarmScreen extends GameScreen implements Screen {
     private final Texture thunderedTexture = GameAssetManager.getGameAssetManager().getTileTexture("thundered.png");
     private final Texture farmlandTexture = GameAssetManager.getGameAssetManager().getTileTexture("farmland.png");
     private final Texture bombedTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
-    private final Texture BushTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
+    private Texture bushTexture;
 
     Map<Cell, TextureRegion> groundCache;
 
@@ -212,6 +212,7 @@ class FarmScreen extends GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        bushTexture = GameAssetManager.getGameAssetManager().getTileTexture("Bush_" + AppClient.getGameData().getTime().getSeason().name + ".png");
         if(isGameFinished) return;
         String season = AppClient.getGameData().getTime().getSeason().name();
         if (!season.equals(currentSeason)) {
@@ -337,7 +338,7 @@ class FarmScreen extends GameScreen implements Screen {
             int y = (int) (cell.getY() * CELL_SIZE);
 //            batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
             if (cell.getObjectMap() instanceof Bush) {
-                batch.draw(thunderedTexture, x, y, CELL_SIZE, CELL_SIZE);
+                batch.draw(bushTexture, x, y, CELL_SIZE, CELL_SIZE);
             }
         }
         if (AppClient.getGameData().getWeatherType().equals(WeatherType.Snowy)) {
