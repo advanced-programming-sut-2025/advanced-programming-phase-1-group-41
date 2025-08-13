@@ -17,6 +17,10 @@ import java.util.Objects;
 
 public class ClientGameHandler {
     public static void handle(String type, JsonObject body, Gson gson, long timestamp) {
+        if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+            .getScreen()  instanceof GameScreen gs){
+            if(gs.isGameFinished) return;
+        }
         Gdx.app.postRunnable(() -> {
             if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
                 .getScreen()  instanceof GameScreen gs){
@@ -49,11 +53,11 @@ public class ClientGameHandler {
             }
             case "player-data" -> {
                 PlayerData playerData = gson.fromJson(body, PlayerData.class);
+                if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                    .getScreen() instanceof GameScreen gs){
+                    if(gs.isGameFinished) return;
+                }
                 Gdx.app.postRunnable(() -> {
-                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
-                        .getScreen() instanceof GameScreen gs){
-                        if(gs.isGameFinished) return;
-                    }
                     for (int i = 0; i < AppClient.getGameData().getPlayersData().size(); i++) {
                         PlayerData pd = AppClient.getGameData().getPlayersData().get(i);
                         if(pd.getUsername().equals(playerData.getUsername())) {
@@ -66,11 +70,11 @@ public class ClientGameHandler {
             }
             case "farm-data" -> {
                 FarmData farmData = gson.fromJson(body, FarmData.class);
+                if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                    .getScreen() instanceof GameScreen gs){
+                    if(gs.isGameFinished) return;
+                }
                 Gdx.app.postRunnable(() -> {
-                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
-                        .getScreen() instanceof GameScreen gs){
-                        if(gs.isGameFinished) return;
-                    }
                     for (int i = 0; i < AppClient.getGameData().getFarmsData().size(); i++) {
                         FarmData fd = AppClient.getGameData().getFarmsData().get(i);
                         if(fd.getId() == farmData.getId()){

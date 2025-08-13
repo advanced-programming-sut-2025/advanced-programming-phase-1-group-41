@@ -2,6 +2,8 @@ package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.*;
+import com.CEliconValley.common.messages.GameCommand;
+import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.Messagenpc;
 import com.CEliconValley.common.messages.ResultSender;
 import com.CEliconValley.models.Finder;
@@ -21,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -247,7 +250,6 @@ public class FriendshipStageHandler {
         chatTable.row().row();
         chatTable.padBottom(20);
         chatTable.invalidateHierarchy(); // Recalculate layout tree
-        chatScrollPane.layout();         // Recalculate scroll pane layout
         chatScrollPane.setActor(chatTable);
         chatScrollPane.setFadeScrollBars(false);
         chatScrollPane.setScrollingDisabled(true, false);
@@ -513,6 +515,14 @@ public class FriendshipStageHandler {
                 }
                 switchForm("hugOrQuest");
                 updateQuestsUI();
+                if(isPlayer){
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand("hug -u "+playerData.getUsername(), AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
+                    screen.friendshipMode = false;
+                    Gdx.input.setInputProcessor(screen.stage);
+                    emptyFields();
+                }
                 //TODO hugOrQuest
             }
         });

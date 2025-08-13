@@ -2,6 +2,7 @@ package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.model.AnimalSprite;
+import com.CEliconValley.client.model.PlayerSprite;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.GameCommand;
@@ -280,6 +281,13 @@ public class PlayerActs {
                 villageScreen.camera.unproject(mousePos);
                 putInGreenhouse(mousePos.x, mousePos.y, villageScreen);
             }
+        }else if(Gdx.input.isButtonJustPressed(1)){
+            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            if(screen instanceof VillageScreen villageScreen){
+                villageScreen.camera.unproject(mousePos);
+                handleClick(mousePos.x, mousePos.y, villageScreen);
+            }
+
         }
         if (screen.isMenuOpen) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
@@ -996,4 +1004,20 @@ public class PlayerActs {
         }
     }
 
+
+    public static void handleClick(float mouseX, float mouseY, VillageScreen vs){
+        for (PlayerSprite playerSprite : vs.playerSprites) {
+            float renderx = playerSprite.getPlayerData().renderx;
+            float rendery = playerSprite.getPlayerData().rendery;
+            float cs = CELL_SIZE * 2f;
+            if(renderx - cs < mouseX && mouseX < renderx + cs
+                &&
+                rendery - cs < mouseY && mouseY < rendery + cs){
+                System.out.println("found "+playerSprite.getPlayerData().getUsername());
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                    new GameCommand("hug -u "+playerSprite.getPlayerData().getUsername(), AppClient.getUserData().getUsername()));
+                AppClient.getClient().send(new Gson().toJson(msg));
+            }
+        }
+    }
 }

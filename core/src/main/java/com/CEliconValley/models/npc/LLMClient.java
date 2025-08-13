@@ -124,7 +124,7 @@ public class LLMClient {
         if (npc == null) return;
 
         if (!npc.isTalkedToday(player)) {
-            npc.incFriendShip(player, 20);
+            npc.incFriendShip(player, 100);
             npc.setTalkedToday(player, true);
             npc.getQuests().get(0).setLocked(player, false);
         }

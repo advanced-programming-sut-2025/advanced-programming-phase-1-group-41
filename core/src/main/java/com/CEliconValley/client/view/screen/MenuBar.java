@@ -595,7 +595,7 @@ public class MenuBar {
                     characterX += screenWidth / 20f;
                 }
 
-                friendShipState = FriendshipLevel.values()[friendShipLevel].name();
+                friendShipState = FriendshipLevel.values()[friendShipLevel+1].name();
 
             } else{
                 for(int j = 0; j < 3 - friendShipLevel; j++){

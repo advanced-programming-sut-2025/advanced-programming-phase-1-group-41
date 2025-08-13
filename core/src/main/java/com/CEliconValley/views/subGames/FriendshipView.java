@@ -28,7 +28,7 @@ public class FriendshipView {
         } else if((matcher = FriendShipCommands.GiftHistory.getMatcher(input)) != null){
             System.out.println(controller.giftHistory(matcher));
         } else if((matcher = FriendShipCommands.Hug.getMatcher(input)) != null){
-            System.out.println(controller.hug(matcher));
+            System.out.println(controller.hug(matcher, playername));
         } else if((matcher = FriendShipCommands.Flower.getMatcher(input)) != null){
             System.out.println(controller.flower(matcher));
         } else if((matcher = FriendShipCommands.Marriage.getMatcher(input)) != null){

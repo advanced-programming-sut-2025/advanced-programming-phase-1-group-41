@@ -174,10 +174,10 @@ public class FriendshipController {
         }
         return new Result(true, result.toString());
     }
-    public Result hug(Matcher matcher) {
+    public Result hug(Matcher matcher, String playername) {
         String username = matcher.group("username");
         Player player2 = Finder.findPlayerByUsername(username);
-        Player player = App.getGame().getCurrentPlayer();
+        Player player = Finder.getPlayerByUsername(playername);
         if(player2 == null){
             return new Result(false, "Player not found!");
         }
@@ -186,14 +186,17 @@ public class FriendshipController {
             return new Result(false, "You and " + player2.getUser().getUsername() + " are " + friendship.getFriendshipLevel().getName()
                     + ".\nYou should be at least close friends to hug each other!");
         }
-        if(Math.abs(player.getX() - player2.getX()) <= 1 && Math.abs(player.getY() - player2.getY()) <= 1
-                && player.isPlayerIsInVillage() && player2.isPlayerIsInVillage()){
-            friendship.hug();
-            friendship.interact();
-            friendship.increaseLevel(player);
-            return new Result(true, "You hugged " + player2.getUser().getUsername() + " =D");
-        }
-        return new Result(false, "You should be next to each other!");
+        friendship.hug();
+        friendship.interact();
+        friendship.increaseLevel(player);
+        Result result =new Result(true, "You hugged " + player2.getUser().getUsername() + " =D");
+        App.sendResult(result, playername);
+        App.sendResult(result, username);
+        return result;
+//        if(Math.abs(player.getX() - player2.getX()) <= 1 && Math.abs(player.getY() - player2.getY()) <= 1
+//                && player.isPlayerIsInVillage() && player2.isPlayerIsInVillage()){
+//        }
+//        return new Result(false, "You should be next to each other!");
     }
     public Result flower(Matcher matcher) {
         String username = matcher.group("username");
