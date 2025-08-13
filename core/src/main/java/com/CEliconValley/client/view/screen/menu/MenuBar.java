@@ -1,6 +1,9 @@
-package com.CEliconValley.client.view.screen;
+package com.CEliconValley.client.view.screen.menu;
 
 import com.CEliconValley.client.AppClient;
+import com.CEliconValley.client.view.screen.CottageScreen;
+import com.CEliconValley.client.view.screen.GameScreen;
+import com.CEliconValley.client.view.screen.GreenHouseScreen;
 import com.CEliconValley.common.*;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;

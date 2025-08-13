@@ -1,13 +1,13 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.model.AnimalSprite;
+import com.CEliconValley.client.view.screen.menu.BarnOrCoopMenuBar;
 import com.CEliconValley.client.view.screen.randomwalk.Node;
 import com.CEliconValley.client.view.screen.randomwalk.SimplePathFinder;
 import com.CEliconValley.common.AnimalData;
 import com.CEliconValley.common.BarnData;
 import com.CEliconValley.controllers.Spawner.InventoryRenderer;
 import com.CEliconValley.models.*;
-import com.CEliconValley.models.animals.animalKinds.Goat;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.client.view.screen.maps.BarnMap;
 import com.CEliconValley.models.ui.GameAssetManager;

@@ -25,6 +25,7 @@ import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.tools.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -56,7 +57,13 @@ public class PlayerActs {
             }
             return new Result(true, "refrigerator opened");
         }
-
+        if(screen instanceof FarmScreen && ((FarmScreen) screen).isCraftInfo){
+            // TODO Show Craft Info
+            if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+                ((FarmScreen) screen).isCraftInfo = false;
+            }
+            return new Result(true, "craft info opened");
+        }
         if(screen.sellmode){
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
                 screen.sellmode = false;
@@ -529,6 +536,9 @@ public class PlayerActs {
             } else if(screen instanceof CoopScreen screen){
                 petCoop(screen);
             }
+        } else if(Gdx.input.isKeyPressed(Input.Keys.Y) && screen instanceof FarmScreen){
+            ((FarmScreen) screen).isCraftInfo = true;
+            // TODO Show CraftInfo
         }
         else if (Gdx.input.isKeyJustPressed((Input.Keys.E))) {
             screen.onRepeat = false;

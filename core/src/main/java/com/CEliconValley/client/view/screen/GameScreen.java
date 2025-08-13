@@ -4,7 +4,7 @@ import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.model.StrategyScoreboard;
 import com.CEliconValley.client.view.screen.maps.*;
-import com.CEliconValley.client.view.screen.menu.ShippingBinBar;
+import com.CEliconValley.client.view.screen.menu.*;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.FarmData;
 import com.CEliconValley.common.NPCData;
@@ -16,7 +16,6 @@ import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.PlayerMessage;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
-import com.CEliconValley.models.buildings.ShippingBin;
 import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.foragings.ForagingTree;
 import com.CEliconValley.models.foragings.Nature.Grass;
@@ -46,14 +45,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import javax.print.attribute.standard.Fidelity;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public abstract class GameScreen implements Screen {
     public boolean onRepeat = true;
     protected boolean flip = false;
-    protected boolean isMenuOpen = false;
+    public boolean isMenuOpen = false;
     protected boolean isMarketMenuOpen = false;
     protected boolean isArtisanMenuOpen = false;
     protected InventoryRenderer inventoryRenderer;
@@ -65,6 +62,7 @@ public abstract class GameScreen implements Screen {
     public Image overlay;
     protected TextField cheatCodeField;
     protected ShippingBinBar shippingBinBar;
+    protected CraftInfo craftInfo;
     public TextButton yesVoteButton, noVoteButton;
     public Label playerVoteLabel;
     public Label howManyVotedLabel;
@@ -93,7 +91,7 @@ public abstract class GameScreen implements Screen {
     protected Stage stage;
     protected Stage chatStage;
     protected Stage scoreboardStage;
-    protected Stage friendshipStage;
+    public Stage friendshipStage;
     public FriendshipStageHandler friendshipStageHandler;
     public CraftableMachine cm = null;
     public boolean sellmode = false;
@@ -102,7 +100,7 @@ public abstract class GameScreen implements Screen {
     public String lastProposer = null;
 
     public abstract void transfer();
-    protected Hero hero;
+    public Hero hero;
     protected MenuBar menuBar = new MenuBar(this);
     protected MarketPlaceMenu marketPlaceMenu=new MarketPlaceMenu(this);
     protected ArtisanMenu artisanMenu = new ArtisanMenu(this);

@@ -1,7 +1,9 @@
-    package com.CEliconValley.client.view.screen;
+    package com.CEliconValley.client.view.screen.menu;
 
     import com.CEliconValley.client.AppClient;
-    import com.CEliconValley.client.model.AnimalSprite;
+    import com.CEliconValley.client.view.screen.BarnScreen;
+    import com.CEliconValley.client.view.screen.CoopScreen;
+    import com.CEliconValley.client.view.screen.GameScreen;
     import com.CEliconValley.common.AnimalData;
     import com.CEliconValley.common.messages.GameCommand;
     import com.CEliconValley.common.messages.GameMessage;
@@ -11,8 +13,6 @@
     import com.CEliconValley.models.ui.CustomColors;
     import com.CEliconValley.models.ui.GameAssetManager;
     import com.badlogic.gdx.Gdx;
-    import com.badlogic.gdx.Input;
-    import com.badlogic.gdx.InputAdapter;
     import com.badlogic.gdx.graphics.Color;
     import com.badlogic.gdx.graphics.OrthographicCamera;
     import com.badlogic.gdx.graphics.Texture;

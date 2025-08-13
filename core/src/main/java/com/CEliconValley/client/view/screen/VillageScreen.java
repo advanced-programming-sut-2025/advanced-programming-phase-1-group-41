@@ -2,13 +2,13 @@ package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.controller.spawners.ItemSpawner;
-import com.CEliconValley.client.model.AnimalSprite;
 import com.CEliconValley.client.model.NPCSprite;
 import com.CEliconValley.client.model.PlayerSprite;
 import com.CEliconValley.client.view.screen.maps.VillageMap;
+import com.CEliconValley.client.view.screen.menu.MarketPlaceMenu;
+import com.CEliconValley.client.view.screen.menu.MenuBar;
 import com.CEliconValley.client.view.screen.menu.ShippingBinBar;
 import com.CEliconValley.client.view.screen.randomwalk.Node;
-import com.CEliconValley.client.view.screen.randomwalk.SimplePathFinder;
 import com.CEliconValley.common.*;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
@@ -17,8 +17,6 @@ import com.CEliconValley.controllers.Spawner.*;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.buildings.marketplaces.Marketplace;
 import com.CEliconValley.models.foragings.Nature.Grass;
-import com.CEliconValley.models.locations.FarmType;
-import com.CEliconValley.models.locations.Village;
 import com.CEliconValley.models.ui.CustomColors;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.CEliconValley.views.subGames.Rain;
@@ -35,9 +33,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.google.gson.Gson;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
-
-import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class VillageScreen extends GameScreen implements Screen {
     private final SpriteBatch batch;

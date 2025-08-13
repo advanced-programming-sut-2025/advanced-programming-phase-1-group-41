@@ -3,6 +3,9 @@ package com.CEliconValley.client.view.screen;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.controller.spawners.ItemSpawner;
 import com.CEliconValley.client.view.screen.maps.*;
+import com.CEliconValley.client.view.screen.menu.ArtisanMenu;
+import com.CEliconValley.client.view.screen.menu.CraftInfo;
+import com.CEliconValley.client.view.screen.menu.MenuBar;
 import com.CEliconValley.client.view.screen.menu.ShippingBinBar;
 import com.CEliconValley.client.view.screen.randomwalk.Node;
 import com.CEliconValley.client.view.screen.randomwalk.SimplePathFinder;
@@ -19,11 +22,9 @@ import com.CEliconValley.models.buildings.animalContainer.Barn;
 import com.CEliconValley.models.buildings.animalContainer.BarnType;
 import com.CEliconValley.models.buildings.animalContainer.Coop;
 import com.CEliconValley.models.buildings.animalContainer.CoopType;
+import com.CEliconValley.models.foragings.CropType;
 import com.CEliconValley.models.foragings.Nature.*;
 import com.CEliconValley.models.items.BuffType;
-import com.CEliconValley.models.items.CraftableMachine;
-import com.CEliconValley.models.items.craftablemachines.FishSmoker;
-import com.CEliconValley.models.items.craftablemachines.Machine;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.tools.FishingRod;
 import com.CEliconValley.models.tools.FishingRodLevel;
@@ -97,6 +98,7 @@ class FarmScreen extends GameScreen implements Screen {
     private Animation<TextureRegion>[] coastAnimations;
     private float passiveStateTime = 0f;
 
+    public boolean isCraftInfo = false;
 
     public void updateFarmData() {
         // maybe needs change?
@@ -207,6 +209,7 @@ class FarmScreen extends GameScreen implements Screen {
 
 
         shippingBinBar = new ShippingBinBar(this);
+        craftInfo = new CraftInfo(this);
     }
 
 
@@ -377,8 +380,10 @@ class FarmScreen extends GameScreen implements Screen {
             shippingBinBar.render(batch, camera, true);
         }else if(trashmode){
             shippingBinBar.render(batch, camera, false);
-        }
-        else{
+        } else if(isCraftInfo){
+            // TODO Craft Info
+            craftInfo.render(batch, camera, CropType.Artichoke.toString());
+        } else{
             inventoryRenderer.render(batch, camera);
         }
 

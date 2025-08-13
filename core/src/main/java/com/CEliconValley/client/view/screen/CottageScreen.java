@@ -1,5 +1,6 @@
 package com.CEliconValley.client.view.screen;
 
+import com.CEliconValley.client.view.screen.menu.RefrigeratorBar;
 import com.CEliconValley.controllers.Spawner.InventoryRenderer;
 import com.CEliconValley.models.*;
 //import com.CEliconValley.models.buildings.GreenHouse.Door;
