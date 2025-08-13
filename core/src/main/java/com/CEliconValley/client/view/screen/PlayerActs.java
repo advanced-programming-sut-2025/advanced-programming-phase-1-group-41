@@ -104,7 +104,7 @@ public class PlayerActs {
             screen.chatStage.draw();
             if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
                 String message = screen.getChatInput().getText();
-                if (!message.isEmpty()) {
+                if (!message.trim().isEmpty()) {
                     assert AppClient.getUserData() != null;
                     GameMessage<PlayerMessage> msg = new GameMessage<>("player-message",
                         new PlayerMessage(AppClient.getUserData().getUsername(), message));
@@ -143,19 +143,20 @@ public class PlayerActs {
             }
             if(screen.friendshipStageHandler.isChatting && Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
                 String message = screen.friendshipStageHandler.chatTextField.getText();
-                // TODO Chatting
-                if(screen.friendshipStageHandler.isPlayer){
-                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                        new GameCommand
-                            ("talk -u "+screen.friendshipStageHandler.playerData.getUsername()+
-                                " -m "+message, AppClient.getUserData().getUsername()));
-                    AppClient.getClient().send(new Gson().toJson(msg));
-                }else{
-                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                        new GameCommand
-                            ("meet NPC "+screen.friendshipStageHandler.npcData.getName()+
-                                " "+message, AppClient.getUserData().getUsername()));
-                    AppClient.getClient().send(new Gson().toJson(msg));
+                if (!message.trim().isEmpty()) {
+                    if (screen.friendshipStageHandler.isPlayer) {
+                        GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                            new GameCommand
+                                ("talk -u " + screen.friendshipStageHandler.playerData.getUsername() +
+                                    " -m " + message, AppClient.getUserData().getUsername()));
+                        AppClient.getClient().send(new Gson().toJson(msg));
+                    } else {
+                        GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                            new GameCommand
+                                ("meet NPC " + screen.friendshipStageHandler.npcData.getName() +
+                                    " " + message, AppClient.getUserData().getUsername()));
+                        AppClient.getClient().send(new Gson().toJson(msg));
+                    }
                 }
                 screen.friendshipStageHandler.chatTextField.setText("");
             }
