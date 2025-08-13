@@ -19,11 +19,8 @@ import com.CEliconValley.models.buildings.animalContainer.Barn;
 import com.CEliconValley.models.buildings.animalContainer.BarnType;
 import com.CEliconValley.models.buildings.animalContainer.Coop;
 import com.CEliconValley.models.buildings.animalContainer.CoopType;
-import com.CEliconValley.models.foragings.Nature.Grass;
-import com.CEliconValley.models.foragings.Nature.Lake;
+import com.CEliconValley.models.foragings.Nature.*;
 import com.CEliconValley.models.items.BuffType;
-import com.CEliconValley.models.foragings.Nature.Mine;
-import com.CEliconValley.models.foragings.Nature.Mineral;
 import com.CEliconValley.models.items.CraftableMachine;
 import com.CEliconValley.models.items.craftablemachines.FishSmoker;
 import com.CEliconValley.models.items.craftablemachines.Machine;
@@ -73,6 +70,13 @@ class FarmScreen extends GameScreen implements Screen {
     private final List<CellData> visibleCells = new ArrayList<>();
     private String currentSeason = "";
 
+    private final Texture grassTexture = GameAssetManager.getGameAssetManager().getTileTexture("grass.png");
+    private final Texture groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("ground.png");
+    private final Texture sandTexture = GameAssetManager.getGameAssetManager().getTileTexture("sand.png");
+    private final Texture thunderedTexture = GameAssetManager.getGameAssetManager().getTileTexture("thundered.png");
+    private final Texture farmlandTexture = GameAssetManager.getGameAssetManager().getTileTexture("farmland.png");
+    private final Texture bombedTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
+    private final Texture BushTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
 
     Map<Cell, TextureRegion> groundCache;
 
@@ -257,14 +261,8 @@ class FarmScreen extends GameScreen implements Screen {
 
         batch.draw(farmTexture, 0, 0, (float) (CELL_SIZE * 60), (float) (CELL_SIZE * 75));
 
-        Texture grassTexture = GameAssetManager.getGameAssetManager().getTileTexture("grass.png");
-        Texture groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("ground.png");
-        Texture sandTexture = GameAssetManager.getGameAssetManager().getTileTexture("sand.png");
-        Texture thunderedTexture = GameAssetManager.getGameAssetManager().getTileTexture("thundered.png");
-        Texture farmlandTexture = GameAssetManager.getGameAssetManager().getTileTexture("farmland.png");
-        Texture bombedTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
-        for (CellData cellDate : visibleCells) {
-            Cell cell = cellDate.extractData();
+        for (CellData cellData : visibleCells) {
+            Cell cell = cellData.extractData();
             int x = (int) (cell.getX() * CELL_SIZE);
             int y = (int) (cell.getY() * CELL_SIZE);
 //            batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
@@ -335,8 +333,12 @@ class FarmScreen extends GameScreen implements Screen {
 //                hit(hero.currentDirection, hero.playerX, hero.playerY);
 //                didHit = false;
 //            }
-
-
+            int x = (int) (cell.getX() * CELL_SIZE);
+            int y = (int) (cell.getY() * CELL_SIZE);
+//            batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
+            if (cell.getObjectMap() instanceof Bush) {
+                batch.draw(thunderedTexture, x, y, CELL_SIZE, CELL_SIZE);
+            }
         }
         if (AppClient.getGameData().getWeatherType().equals(WeatherType.Snowy)) {
             snow.render(batch, camera);

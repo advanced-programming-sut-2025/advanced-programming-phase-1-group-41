@@ -215,14 +215,14 @@ public class FriendshipController {
 //        }
 //        return new Result(false, "You should be next to each other!");
     }
-    public Result flower(Matcher matcher) {
+    public Result flower(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
         String username = matcher.group("username");
-        Player player = App.getGame().getCurrentPlayer();
         Player player2 = Finder.findPlayerByUsername(username);
         if(player2 == null){
             return new Result(false, "Player not found!");
         }
-        Slot slot = App.getGame().getCurrentPlayer().getInventory().getSlotByItem(MarketplaceItems.Bouquet);
+        Slot slot = player.getInventory().getSlotByItem(MarketplaceItems.Bouquet);
         if(slot == null){
             return new Result(false, "Bouquet not found in your inventory!");
         }
@@ -235,16 +235,13 @@ public class FriendshipController {
 //        if(flower == null){
 //            return new Result(false, "Flower not found!");
 //        }
-        if(Math.abs(player.getX() - player2.getX()) <= 1 && Math.abs(player.getY() - player2.getY()) <= 1
-                && player.isPlayerIsInVillage() && player2.isPlayerIsInVillage()){
-            player.getInventory().removeFromInventory(MarketplaceItems.Bouquet, 1);
-            player2.getInventory().addToInventory(MarketplaceItems.Bouquet, 1);
-            friendship.giveFlower();
-            friendship.interact();
-            friendship.increaseLevel(player);
-            return new Result(true, "Awww, you gave " + player2.getUser().getUsername() + " a bouquet :))");
-        }
-        return new Result(false, "You should be next to each other!");
+        player.getInventory().removeFromInventory(MarketplaceItems.Bouquet, 1);
+        player2.getInventory().addToInventory(MarketplaceItems.Bouquet, 1);
+        friendship.giveFlower();
+        friendship.interact();
+        friendship.increaseLevel(player);
+        App.sendResult(new Result(true, "you received a flower from "+playername), username);
+        return new Result(true, "Awww, you gave " + player2.getUser().getUsername() + " a bouquet :))");
     }
     public Result propose(Matcher matcher) {
         String username = matcher.group("username");

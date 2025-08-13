@@ -2,10 +2,7 @@ package com.CEliconValley.models.locations;
 
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.animals.animalKinds.*;
-import com.CEliconValley.models.foragings.Crop;
-import com.CEliconValley.models.foragings.Foraging;
-import com.CEliconValley.models.foragings.ForagingCrop;
-import com.CEliconValley.models.foragings.ForagingTree;
+import com.CEliconValley.models.foragings.*;
 import com.CEliconValley.models.foragings.Nature.*;
 
 import com.CEliconValley.models.animals.Animal;
@@ -190,13 +187,13 @@ public class Farm {
 //                i--;
 //            }
 //        }
-        for(int i = 0; i < foragingTreeCount ;i++){
+        for(int i = 0; i < foragingCropCount ;i++){
             int y = rand.nextInt(MaxLength - 4) + 4;
             int x = rand.nextInt(MaxHeight - 4) + 4;
             if(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap() instanceof Grass){
-                Tree tree = new Tree(x, y, this, TreeType.values()[rand.nextInt(TreeType.values().length)]);
-                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(tree);
-                trees.add(tree);
+                ForagingCrop foragingCrop = new ForagingCrop(x, y, this);
+                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(foragingCrop);
+                foragings.add(foragingCrop);
             } else{
                 i--;
             }

@@ -966,18 +966,30 @@ public class PlayerActs {
                             new GameCommand("plant -s " + seed.getName() + " -d " + dir,
                                 AppClient.getUserData().getUsername()));
                         AppClient.getClient().send(new Gson().toJson(msg));
+                        screen.hero.isActing.set(true);
+                        screen.onRepeat = false;
+                        screen.hero.stateTime = 0;
+                        screen.hero.currentAnimation = screen.hero.plant();
                     }
                     else if(item instanceof Fertilizer fertilizer){
                         GameMessage<GameCommand> msg = new GameMessage<>("game-command",
                             new GameCommand("fertilize -f " + fertilizer.getName() + " -d " + dir,
                                 AppClient.getUserData().getUsername()));
                         AppClient.getClient().send(new Gson().toJson(msg));
+                        screen.hero.isActing.set(true);
+                        screen.onRepeat = false;
+                        screen.hero.stateTime = 0;
+                        screen.hero.currentAnimation = screen.hero.fertilize();
                     }
                     else{
                         GameMessage<GameCommand> msg = new GameMessage<>("game-command",
                             new GameCommand("place item -n "+hero.selectedItemName +" -d "+dir,
                                 AppClient.getUserData().getUsername()));
                         AppClient.getClient().send(new Gson().toJson(msg));
+                        screen.hero.isActing.set(true);
+                        screen.onRepeat = false;
+                        screen.hero.stateTime = 0;
+                        screen.hero.currentAnimation = screen.hero.plant();
                         return;
                     }
                 }

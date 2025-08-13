@@ -21,6 +21,7 @@ public class Hero {
     private final Texture toolsTexture_Side;
     private final Texture extraActsTexture;
     private final Texture buffTexture;
+    private final Texture farmingTexture;
     private TextureRegion[][] playerActs;
     private TextureRegion[][] toolsActs_Front;
     private TextureRegion[][] toolsActs_Back;
@@ -34,6 +35,7 @@ public class Hero {
     private TextureRegion[][] otherToolsActs_Front;
     private TextureRegion[][] otherToolsActs_Back;
     private TextureRegion[][] otherToolsActs_Side;
+    private TextureRegion[][] farmingActs;
     private Farm farm;
     public int currentDirection=3;
 
@@ -64,6 +66,7 @@ public class Hero {
 
     public Hero() {
         playerTexture = GameAssetManager.getGameAssetManager().getHeroTexture("generalActs.png");
+        farmingTexture = GameAssetManager.getGameAssetManager().getHeroTexture("farmingActs.png");
         extraActsTexture = GameAssetManager.getGameAssetManager().getHeroTexture("ExtraActs.png");
         buffTexture = GameAssetManager.getGameAssetManager().getHeroTexture("Particles.png");
         toolsTexture_Front = GameAssetManager.getGameAssetManager().getHeroTexture("tools_Front.png");
@@ -73,6 +76,7 @@ public class Hero {
         generalToolsTexture_Back = GameAssetManager.getGameAssetManager().getHeroTexture("generalTools_Back.png");
         generalToolsTexture_Side = GameAssetManager.getGameAssetManager().getHeroTexture("generalTools_Side.png");
         playerActs = TextureRegion.split(playerTexture, playerTexture.getWidth() / 8, playerTexture.getHeight() / 11);
+        farmingActs = TextureRegion.split(farmingTexture, farmingTexture.getWidth() / 6, farmingTexture.getHeight() / 6);
         extraActs = TextureRegion.split(extraActsTexture, extraActsTexture.getWidth() / 4, extraActsTexture.getHeight() / 9);
         toolsActs_Front = TextureRegion.split(toolsTexture_Front, toolsTexture_Front.getWidth()/5,toolsTexture_Front.getHeight()/15 );
         toolsActs_Back = TextureRegion.split(toolsTexture_Back, toolsTexture_Back.getWidth()/5,toolsTexture_Back.getHeight()/15);
@@ -297,6 +301,44 @@ public class Hero {
             for (int i = 0; i < tgPoints.size(); i++) {
                 TGPoint tgPoint = tgPoints.get(i);
                 wantedActs[i] = extraActs[tgPoint.row][tgPoint.col];
+            }
+            return new Animation<>(0.15f,wantedActs);
+        }
+    }
+    public Animation<TextureRegion> plant(){
+        ArrayList<TGPoint> tgPoints = getPlant();
+        TextureRegion[] wantedActs=new TextureRegion[tgPoints.size()];
+        if(currentDirection==4){
+            for (int i = 0; i < tgPoints.size(); i++) {
+                TGPoint tgPoint = tgPoints.get(i);
+                TextureRegion flippedFrame = new TextureRegion(farmingActs[tgPoint.row][tgPoint.col]);
+                flippedFrame.flip(true, false);
+                wantedActs[i] = flippedFrame;
+            }
+            return new Animation<>(0.15f,wantedActs);
+        }else{
+            for (int i = 0; i < tgPoints.size(); i++) {
+                TGPoint tgPoint = tgPoints.get(i);
+                wantedActs[i] = farmingActs[tgPoint.row][tgPoint.col];
+            }
+            return new Animation<>(0.15f,wantedActs);
+        }
+    }
+    public Animation<TextureRegion> fertilize(){
+        ArrayList<TGPoint> tgPoints = getFertilize();
+        TextureRegion[] wantedActs=new TextureRegion[tgPoints.size()];
+        if(currentDirection==4){
+            for (int i = 0; i < tgPoints.size(); i++) {
+                TGPoint tgPoint = tgPoints.get(i);
+                TextureRegion flippedFrame = new TextureRegion(farmingActs[tgPoint.row][tgPoint.col]);
+                flippedFrame.flip(true, false);
+                wantedActs[i] = flippedFrame;
+            }
+            return new Animation<>(0.15f,wantedActs);
+        }else{
+            for (int i = 0; i < tgPoints.size(); i++) {
+                TGPoint tgPoint = tgPoints.get(i);
+                wantedActs[i] = farmingActs[tgPoint.row][tgPoint.col];
             }
             return new Animation<>(0.15f,wantedActs);
         }
@@ -571,6 +613,48 @@ public class Hero {
         }
         return pet;
     }
+    private ArrayList<TGPoint> getFertilize(){
+        ArrayList<TGPoint> pet = new ArrayList();
+        switch (currentDirection) {
+            case 1 -> {
+                for (int i = 0; i < 6; i++) {
+                    pet.add(new TGPoint(2, i));
+                }
+            }
+            case 2, 4 -> {
+                for (int i = 0; i < 6; i++) {
+                    pet.add(new TGPoint(1, i));
+                }
+            }
+            case 3 -> {
+                for (int i = 0; i < 6; i++) {
+                    pet.add(new TGPoint(0, i));
+                }
+            }
+        }
+        return pet;
+    }
+    private ArrayList<TGPoint> getPlant(){
+        ArrayList<TGPoint> pet = new ArrayList();
+        switch (currentDirection) {
+            case 1 -> {
+                for (int i = 0; i < 6; i++) {
+                    pet.add(new TGPoint(5, i));
+                }
+            }
+            case 2, 4 -> {
+                for (int i = 0; i < 6; i++) {
+                    pet.add(new TGPoint(4, i));
+                }
+            }
+            case 3 -> {
+                for (int i = 0; i < 6; i++) {
+                    pet.add(new TGPoint(3, i));
+                }
+            }
+        }
+        return pet;
+    }
     private ArrayList<TGPoint> getBuff(){
         ArrayList<TGPoint> pet = new ArrayList();
         for (int i = 0; i < 8; i++) {
@@ -596,6 +680,5 @@ public class Hero {
         pet.add(new TGPoint(8, 3));
         return pet;
     }
-
 
 }

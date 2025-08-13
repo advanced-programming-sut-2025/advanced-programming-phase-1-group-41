@@ -30,7 +30,9 @@ public class FriendshipView {
         } else if((matcher = FriendShipCommands.Hug.getMatcher(input)) != null){
             System.out.println(controller.hug(matcher, playername));
         } else if((matcher = FriendShipCommands.Flower.getMatcher(input)) != null){
-            System.out.println(controller.flower(matcher));
+            Result result = controller.flower(matcher, playername);
+            System.out.println(result);
+            App.sendRawResult(result, playername);
         } else if((matcher = FriendShipCommands.Marriage.getMatcher(input)) != null){
             System.out.println(controller.propose(matcher));
         } else if((matcher = FriendShipCommands.Respond.getMatcher(input)) != null){

@@ -45,7 +45,7 @@ public class Friendship {
         this.player1 = player1;
         this.player2 = player2;
         friendshipLevel = FriendshipLevel.Stranger;
-        level = 3;
+        level = 0;
         friendshipXp = 0;
     }
 
@@ -172,7 +172,7 @@ public class Friendship {
     }
     public void talk() {
         if(!hadTalkingToday){
-            friendshipXp += 100;
+            friendshipXp += 20;
         }
         hadTalkingToday = true;
     }
