@@ -1,6 +1,7 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
+import com.CEliconValley.client.GameClient;
 import com.CEliconValley.common.*;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
@@ -1104,6 +1105,10 @@ public class MenuBar {
                 if(clicked && AppClient.getGameData().getPlayersData().size() > 1){
                     //TODO Rate Gift
                     // rate is i + 1
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand("gift rate -i "+
+                            (Finder.getpd().getNewGiftsData().indexOf(giftData)+1)+" -r "+(i+1), AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
                 }
             }
 
