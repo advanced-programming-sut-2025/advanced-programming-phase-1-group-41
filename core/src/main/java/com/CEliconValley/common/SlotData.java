@@ -9,13 +9,18 @@ public class SlotData {
 
     String itemName;
     int quantity;
-
+    double price;
     public SlotData() {
     }
 
     public SlotData(Slot slot) {
         this.itemName = slot.getItem().getName();
         this.quantity = slot.getQuantity();
+    }
+    public SlotData(Slot slot, double price) {
+        this.itemName = slot.getItem().getName();
+        this.quantity = slot.getQuantity();
+        this.price = price;
     }
 
 
@@ -32,4 +37,8 @@ public class SlotData {
         return quantity;
     }
 
+
+    public double getPrice() {
+        return price;
+    }
 }

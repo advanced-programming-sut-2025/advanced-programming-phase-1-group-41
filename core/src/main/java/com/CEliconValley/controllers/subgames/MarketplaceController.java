@@ -28,8 +28,7 @@ public class MarketplaceController {
     Player player;
     Inventory inventory;
     Cell currentCell;
-    private Result inMarketPlace(){
-        player = App.getGame().getCurrentPlayer();
+    private Result inMarketPlace(Player player){
         currentCell = App.getGame().getVillage().getCell(player.getX(), player.getY());
         inventory = player.getInventory();
         if(!player.isPlayerIsInVillage()){
@@ -83,10 +82,10 @@ public class MarketplaceController {
         }
     }
     public Result showAllProducts(Matcher matcher){
-        Result preResult = inMarketPlace();
-        if(!preResult.success()){
-            return preResult;
-        }
+//        Result preResult = inMarketPlace();
+//        if(!preResult.success()){
+//            return preResult;
+//        }
         Marketplace mp = (Marketplace) currentCell.getObjectMap();
         System.out.println("All Products: \n");
         for(Slot slot : mp.getItemsForSale()){
@@ -113,10 +112,10 @@ public class MarketplaceController {
     }
 
     public Result showAllAvailableProducts(Matcher matcher){
-        Result preResult = inMarketPlace();
-        if(!preResult.success()){
-            return preResult;
-        }
+//        Result preResult = inMarketPlace();
+//        if(!preResult.success()){
+//            return preResult;
+//        }
         Marketplace mp = (Marketplace) currentCell.getObjectMap();
         StringBuilder message = new StringBuilder();
         System.out.println("Available products:\n");
@@ -230,8 +229,9 @@ public class MarketplaceController {
         return result;
     }
 
-    public Result purchaseProduct(Matcher matcher){
-        Result preResult = inMarketPlace();
+    public Result purchaseProduct(Matcher matcher, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        Result preResult = inMarketPlace(player);
         if(!preResult.success()){
             return preResult;
         }
@@ -251,13 +251,17 @@ public class MarketplaceController {
                     case FiberGlass -> {
                         int fishingLevel = player.getFishingSkill().getLevel();
                         if(fishingLevel < 2){
-                            return new Result(false, "your fishing needs to be at least 2");
+                            Result result = new Result(false, "your fishing needs to be at least 2");
+                            App.sendResult(result, playername);
+                            return result;
                         }
                     }
                     case Iridium -> {
                         int fishingLevel = player.getFishingSkill().getLevel();
                         if(fishingLevel < 4){
-                            return new Result(false, "your fishing needs to be at least 4");
+                            Result result =  new Result(false, "your fishing needs to be at least 4");
+                            App.sendResult(result, playername);
+                            return result;
                         }
                     }
                 }
@@ -269,16 +273,23 @@ public class MarketplaceController {
                 switch (bp){
                     case Deluxe -> {
                         if(player.getInventory().getBackpack() == Backpack.Default){
-                            return new Result(false, "you need to buy a large backpack first");
+                            Result result =  new Result(false, "you need to buy a large backpack first");
+                            App.sendResult(result, playername);
+                            return result;
                         }
                     }
                 }
                 if(bp.equals(player.getInventory().getBackpack())){
-                    return new Result(false,"you already have " +
+
+                    Result result =  new Result(false,"you already have " +
                             player.getInventory().getBackpack()+" backpack");
+                    App.sendResult(result, playername);
+                    return result;
                 }
                 if(bp.ordinal() < player.getInventory().getBackpack().ordinal()){
-                    return new Result(false,"you can't downgrade your backpack..");
+                    Result result = new Result(false,"you can't downgrade your backpack..");
+                    App.sendResult(result, playername);
+                    return result;
                 }
             }
         }
@@ -296,11 +307,15 @@ public class MarketplaceController {
             return new Result(false, "Out of stock for "+itemName);
         }
         if(slot.getQuantity() < wantedQuantity){
-            return new Result(false, "Low stock for "+itemName);
+            Result result =  new Result(false, "Low stock for "+itemName);
+            App.sendResult(result, playername);
+            return result;
         }
         double delta = player.getMoney() - (wantedQuantity * slot.getItem().getPrice());
         if(delta < 0){
-            return new Result(false, "Not enough money for "+itemName+" you need "+(-delta) + " more money");
+            Result result =  new Result(false, "Not enough money for "+itemName+" you need "+(-delta) + " more money");
+            App.sendResult(result, playername);
+            return result;
         }
         if(mp instanceof CarpenterShop carpenterShop){
             Slot neededItem = null;
@@ -313,11 +328,15 @@ public class MarketplaceController {
                 Slot s = inventory.getSlotByItem(neededItem.getItem());
                 if(s != null){
                     if(s.getQuantity() < neededItem.getQuantity()){
-                        return new Result(false,"insufficient material..");
+                        Result result =  new Result(false,"insufficient material..");
+                        App.sendResult(result, playername);
+                        return result;
                     }
                     inventory.removeFromInventory(neededItem.getItem(), neededItem.getQuantity());
                 }else{
-                    return new Result(false, "you don't have the needed resources");
+                    Result result =  new Result(false, "you don't have the needed resources");
+                    App.sendResult(result, playername);
+                    return result;
                 }
             }
         }
@@ -400,10 +419,10 @@ public class MarketplaceController {
 
 
     public Result upgradeTool(Tool tool){
-        Result preResult = inMarketPlace();
-        if(!preResult.success()){
-            return preResult;
-        }
+//        Result preResult = inMarketPlace();
+//        if(!preResult.success()){
+//            return preResult;
+//        }
         Blacksmith bs;
         try{
             bs = (Blacksmith) currentCell.getObjectMap();
@@ -484,10 +503,10 @@ public class MarketplaceController {
 
 
     public Result buyAnimal(Animal animal, Building building){
-        Result preResult = inMarketPlace();
-        if(!preResult.success()){
-            return preResult;
-        }
+//        Result preResult = inMarketPlace();
+//        if(!preResult.success()){
+//            return preResult;
+//        }
         MarnieRanch ranch;
         if((currentCell.getObjectMap() instanceof MarnieRanch marnieRanch)){
             ranch = marnieRanch;
@@ -553,10 +572,10 @@ public class MarketplaceController {
     }
 
     public Result buildBaoop(double cost, int rockCount, int woodCount, int index){
-        Result preResult = inMarketPlace();
-        if(!preResult.success()){
-            return preResult;
-        }
+//        Result preResult = inMarketPlace();
+//        if(!preResult.success()){
+//            return preResult;
+//        }
         Slot rockSlot = new Slot(new Rock(), rockCount);
         Slot woodSlot = new Slot(new Wood(), woodCount);
         Slot playerRock = inventory.getSlotByItem(rockSlot.getItem());

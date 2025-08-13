@@ -193,8 +193,17 @@ public class FriendshipController {
         Result result =new Result(true, "You hugged " + player2.getUser().getUsername() + " =D");
         App.sendResult(result, playername);
         App.sendResult(result, username);
-        GameMessage<HugCred> msg1 = new GameMessage<>("hug", new HugCred(player.currentDirection, true, playername));
-        GameMessage<HugCred> msg2 = new GameMessage<>("hug", new HugCred((player.currentDirection + 2 )% 4, false, username));
+        int kir = 2;
+        int otherKir = 2;
+        if(player.getX() > player2.getX()){
+            kir = 4;
+            otherKir = 2;
+        }else{
+            kir = 2;
+            otherKir = 4;
+        }
+        GameMessage<HugCred> msg1 = new GameMessage<>("hug", new HugCred(kir, true, playername));
+        GameMessage<HugCred> msg2 = new GameMessage<>("hug", new HugCred(otherKir, false, playername));
         App.getServer().sendToPlayer(player , new Gson().toJson(msg1));
         App.getServer().sendToPlayer(player2 , new Gson().toJson(msg2));
         return result;

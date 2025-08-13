@@ -1,6 +1,7 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
+import com.CEliconValley.common.MarketPlaceData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.SlotData;
 import com.CEliconValley.common.messages.GameCommand;
@@ -56,15 +57,17 @@ public class MarketPlaceMenu {
     }
 
     public void renderShopMenu(Batch batch, OrthographicCamera camera, Marketplace shop) {
-        System.out.println(startingRow);
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
+        MarketPlaceData mpd = null;
+        for (MarketPlaceData marketplacesDatum : AppClient.getGameData().getVillageData().getMarketplacesData()) {
+            if(marketplacesDatum.getName().equals(shop.getName())) {
+                mpd = marketplacesDatum;
+                break;
+            }
+        }
 
-
-        Inventory inventory = Finder.getpd().getInventoryData().getInventory();
         this.camera = camera;
-
-
 
         float menuWidth = screenWidth * 0.6f;
         float menuHeight = screenHeight * 0.7f;
@@ -89,22 +92,7 @@ public class MarketPlaceMenu {
         camera.unproject(mousePos);
 
 
-//        ArrayList<Slot> shopItems = shop.getItemsForSale();//todo rhhthhh
-        ArrayList<SlotData> shopItems = new ArrayList<>();
-        shopItems.add(new SlotData(new Slot(FishType.Angler,10)));
-        shopItems.add(new SlotData(new Slot(FishType.BlueDiscus,100)));
-        shopItems.add(new SlotData(new Slot(FishType.Crimsonfish,1)));
-        shopItems.add(new SlotData(new Slot(FishType.Dorado,10)));
-        shopItems.add(new SlotData(new Slot(FishType.Flounder,10)));
-        shopItems.add(new SlotData(new Slot(FishType.Ghostfish,10)));
-        shopItems.add(new SlotData(new Slot(FishType.Glacierfish,10)));
-        shopItems.add(new SlotData(new Slot(FishType.Herring,10)));
-        shopItems.add(new SlotData(new Slot(FishType.Legend,10)));
-        shopItems.add(new SlotData(new Slot(FishType.Tuna,10)));
-        shopItems.add(new SlotData(new Slot(FishType.Tilapia,10)));
-        shopItems.add(new SlotData(new Slot(FishType.Sunfish,10)));
-        shopItems.add(new SlotData(new Slot(FishType.Squid,10)));
-        shopItems.add(new SlotData(new Slot(FishType.RainbowTrout,0)));
+        ArrayList<SlotData> shopItems = mpd.getItemsForSaleData();
 
 //        for(SlotData slot:shopItems){
 //            System.out.println(slot.getSlot().getItem().getName());
@@ -124,7 +112,8 @@ public class MarketPlaceMenu {
 
         for (int i = 0; i < shopItems.size(); i++) {
             if(shopItems.size()<=i+startingRow*3){continue;}
-            Slot slot = shopItems.get(i+startingRow*3).getSlot();
+            SlotData sd = shopItems.get(i+startingRow*3);
+            Slot slot = sd.getSlot();
             Item item = slot.getItem();
             if (item == null) continue;
 
@@ -174,7 +163,7 @@ public class MarketPlaceMenu {
             }font.setColor(Color.WHITE);
 
             font.getData().setScale(1.2f);
-            font.draw(batch, "$" + getItemPrice(item), x + slotSize + 120, y + slotSize / 2f);
+            font.draw(batch, "$" + sd.getPrice(), x + slotSize + 120, y + slotSize / 2f);
 
             font.getData().setScale(1f);
 
@@ -184,7 +173,7 @@ public class MarketPlaceMenu {
                     assert AppClient.getUserData() != null;
                     GameMessage<GameCommand> msg = new GameMessage<>(
                         "game-command",
-                        new GameCommand("buy " + item.getName(),
+                        new GameCommand("purchase " + item.getName(),
                             AppClient.getUserData().getUsername())
                     );
                     AppClient.getClient().send(new Gson().toJson(msg));
