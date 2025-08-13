@@ -92,15 +92,15 @@ public class FarmBuilder {
                 i--;
             }
         }
-//        for(int i = 0; i < foragingCropCount ;i++){
-//            int y = rand.nextInt(MaxLength - 4) + 2;
-//            int x = rand.nextInt(MaxHeight - 4) + 2;
-//            if(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, farm)).getObjectMap() instanceof Grass){
-//                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, farm)).setObjectMap(new ForagingCrop(x, y, farm));
-//            } else{
-//                i--;
-//            }
-//        }
+        for(int i = 0; i < foragingCropCount ;i++){
+            int y = rand.nextInt(MaxLength - 4) + 2;
+            int x = rand.nextInt(MaxHeight - 4) + 2;
+            if(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, farm)).getObjectMap() instanceof Grass){
+                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, farm)).setObjectMap(new ForagingCrop(x, y, farm));
+            } else{
+                i--;
+            }
+        }
 
         // TODO important fix this!
         farm.getStartPoints().get(0).setObjectMap(new Grass());
