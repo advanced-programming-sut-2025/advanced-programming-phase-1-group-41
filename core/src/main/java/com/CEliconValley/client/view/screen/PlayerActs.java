@@ -291,9 +291,11 @@ public class PlayerActs {
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
                 screen.menuBar.scrollUp();
+
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
                 screen.menuBar.scrollDown();
+
             }
         }else if((screen instanceof FarmScreen) || screen instanceof CottageScreen){ //TODO Just For Now The Condition!!!
             if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
@@ -309,7 +311,20 @@ public class PlayerActs {
                     screen.barnOrCoopMenuBar.scrollUp();
                 } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)){
                     screen.barnOrCoopMenuBar.scrollDown();
+
                 }
+            }
+        }else if(screen instanceof VillageScreen villageScreen){
+            if (Gdx.input.isKeyJustPressed(Input.Keys.UP)){
+                if(villageScreen.isMarketMenuOpen){
+                    villageScreen.getMarketPlaceMenu().scrollUp();
+                }
+            } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)){
+                if(villageScreen.isMarketMenuOpen){
+                    villageScreen.getMarketPlaceMenu().scrollDown();
+                }
+
+
             }
         }
         if (hero.isActing.get() || hero.isMoving.get()) {
@@ -463,6 +478,10 @@ public class PlayerActs {
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("walk right", AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
             }
+        }else if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
+            if(screen instanceof VillageScreen villageScreen){
+                villageScreen.tryOpeningMarketMenu();
+            }
         }
         else if (Gdx.input.isKeyJustPressed((Input.Keys.R))) {
             if(screen instanceof FarmScreen fs){
@@ -478,6 +497,12 @@ public class PlayerActs {
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.Q)){
             System.out.println("you're at "+hero.playerX+" "+hero.playerY);
+        }else if(Gdx.input.isKeyJustPressed(Input.Keys.K)){
+            if(screen instanceof VillageScreen villageScreen){
+                if(villageScreen.isMarketMenuOpen){
+                    villageScreen.getMarketPlaceMenu().hideSoldOuts();
+                }
+            }
         }else if(Gdx.input.isKeyPressed(Input.Keys.P)){
             if(screen instanceof BarnScreen screen){
                 petBarn(screen);
