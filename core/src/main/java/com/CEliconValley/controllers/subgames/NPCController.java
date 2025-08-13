@@ -167,9 +167,13 @@ public class NPCController {
             }
             if (canQuestBeFinished(quest, player)) {
                 quest.setFinished(player, true);
-                return new Result(true, "quest " + quest.getQuestName() + " finished successfully, " + quest.getReward().getQuantity() + " " + quest.getReward().getItem().getName() + " added to your inventory");
+                Result result = new Result(true, "quest " + quest.getQuestName() + " finished successfully, " + quest.getReward().getQuantity() + " " + quest.getReward().getItem().getName() + " added to your inventory");
+                App.sendRawResult(result, playername);
+                return result;
             }else{
-                return new Result(false, "insufficient material");
+                Result result =new Result(false, "insufficient material");
+                App.sendRawResult(result, playername);
+                return result;
             }
         }
         return new Result(false, "nobody is around");

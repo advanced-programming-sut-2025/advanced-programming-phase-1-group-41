@@ -208,6 +208,9 @@ public abstract class GameScreen implements Screen {
         });
         if(friendshipStageHandler != null){
             friendshipStageHandler.updateChat();
+//            if(!friendshipStageHandler.isPlayer){
+//                friendshipStageHandler.updateQuestsUI();
+//            }
         }
     }
 
