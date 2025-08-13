@@ -23,7 +23,10 @@ public class NPCView {
             System.out.println(controller.questList(matcher));
         }else if((matcher = NPCCommands.QuestFinish.getMatcher(input))!=null){
             System.out.println(controller.finishQuest(matcher, playername));
-        }  else{
+        }else if((matcher = NPCCommands.QuestCollect.getMatcher(input))!=null){
+            System.out.println(controller.collectReward(matcher, playername));
+        }
+        else{
             return false;
         }
         return true;

@@ -127,24 +127,27 @@ public class FriendshipController {
         }
         return new Result(true, result.toString());
     }
-    public Result giftRate(Matcher matcher) {
+    public Result giftRate(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
         int giftNumber = Integer.parseInt(matcher.group("giftNumber"));
         int rate = Integer.parseInt(matcher.group("rate"));
         if(rate <= 0 || rate > 5){
             return new Result(false, "Gift rate must be between 1 and 5");
         }
-        Player player = App.getGame().getCurrentPlayer();
         if(giftNumber <= 0 || giftNumber > player.getNewGifts().size()){
             return new Result(false, "No gift found with that number");
         }
         Gift gift = player.getNewGifts().get(giftNumber - 1);
         player.removeNewGift(gift);
-        App.getGame().getCurrentPlayer().findFriendship(gift.getFrom()).rateGift(rate, player);
+        player.findFriendship(gift.getFrom()).rateGift(rate, player);
         StringBuilder result = new StringBuilder();
         int a = 1;
-        for(Gift gift1 : App.getGame().getCurrentPlayer().getNewGifts()){
+        for(Gift gift1 : player.getNewGifts()){
             result.append(a++).append(". ").append(gift1.toString()).append("\n");
         }
+
+        App.sendResult(new Result(true, "gift rated successfully"), playername);
+
         if(!result.isEmpty()){
             result.delete(result.length() - 1, result.length());
             return new Result(true, "Gift rated successfully. New Gits List:\n" + result.toString());

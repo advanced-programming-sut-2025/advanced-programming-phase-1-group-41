@@ -330,13 +330,13 @@ public class FriendshipStageHandler {
         chatForm.addActor(container);
     }
 
-    private void updateQuestsUI() {
+    public void updateQuestsUI() {
         questsTable.clear();
 //        questsTable.add(new Label("", GameAssetManager.getGameAssetManager().getSkin())).padLeft(2000);
         float width = stage.getWidth() / 3.5f, height = stage.getHeight() / 2.25f;
-
+        NPCData npcd = Finder.getnpcdatabyname(npcData.getName());
         if (!isPlayer) {
-            for (QuestData questData : questsData) {
+            for (QuestData questData : npcd.getQuestsdata()) {
                 Table table = new Table();
 
                 TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(questTexture));
@@ -398,6 +398,11 @@ public class FriendshipStageHandler {
                             @Override
                             public void clicked(InputEvent event, float x, float y) {
                                 // TODO Finish Quest
+                                int index = npcd.getQuestsdata().indexOf(questData);
+                                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                    new GameCommand("quests finish -i "+(index+1)+" "+npcData.getName(),
+                                        AppClient.getUserData().getUsername()));
+                                AppClient.getClient().send(new Gson().toJson(msg));
                             }
                         });
                         table.add(finishQuestButton).width(300).center().pad(20).row();
@@ -408,6 +413,11 @@ public class FriendshipStageHandler {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
                             // TODO Collect Quest Reward
+                            int index = npcd.getQuestsdata().indexOf(questData);
+                            GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                new GameCommand("quests collect -i "+(index+1)+" "+npcData.getName(),
+                                    AppClient.getUserData().getUsername()));
+                            AppClient.getClient().send(new Gson().toJson(msg));
                         }
                     });
                     table.add(collectQuestButton).center().width(300).pad(20).row();

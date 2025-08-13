@@ -1,6 +1,7 @@
 package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.AppClient;
+import com.CEliconValley.client.GameClient;
 import com.CEliconValley.common.*;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
@@ -149,6 +150,7 @@ public class MenuBar {
                 break;
             case "Gift":
                 renderGifts(batch);
+                break;
             case "Inventory":
                 renderInventoryBar(batch, camera, inventory);
                 renderSelectedItem(batch);
@@ -166,13 +168,6 @@ public class MenuBar {
                 renderMap(batch);
                 break;
 
-        }
-        switch (currentTab) {
-            case "Crafting":
-                renderCrafting(batch);
-                break;
-            case "Food":
-                renderCooking(batch);
         }
     }
 
@@ -981,16 +976,146 @@ public class MenuBar {
             }
 
             if(i == 0 && Finder.getfd().isGreenHouseUnlocked()){
-                x += 1.25f * spacing;
+                x += 1.15f * spacing;
             }
-            x += spacing * 1.25f;
+            x += spacing * 1.325f;
         }
 
         font.getData().setScale(1f);
     }
 
     private void renderGifts(Batch batch){
+        Texture nameTexture = GameAssetManager.getGameAssetManager().getBackgroundTexture("Player Name Background.png");
 
+        float screenWidth = camera.viewportWidth;
+        float screenHeight = camera.viewportHeight;
+
+        float x = startingX + screenWidth * 0.05f;
+        float y = startingY + screenHeight * 0.55f;
+
+        float spacing = screenWidth * 0.14f;
+        float playerSize = screenHeight * 0.08f;
+
+        Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        camera.unproject(mousePos);
+
+        font.getData().setScale(2.4f);
+        font.setColor(CustomColors.SWAMP_COLOR);
+        font.draw(batch, "Sent Gifts:", x + playerSize * 1.5f - "Send Gifts".length() * font.getScaleX() * 7.5f / 2f, y + playerSize / 1.5f);
+        font.setColor(Color.WHITE);
+        font.getData().setScale(1f);
+
+        for (GiftData giftData : Finder.getpd().getSendGiftsData()) {
+            String text = giftData.getSlotData().getQuantity() + " " + giftData.getSlotData().getItemName() + " to " + giftData.getToName();
+
+            float playerX = x;
+            float playerY = y - playerSize + 5;
+
+            font.getData().setScale(2f);
+            font.draw(batch, text, playerX + playerSize * 1.5f - text.length() * font.getScaleX() * 7.5f / 2f, playerY + playerSize / 1.5f);
+
+            y -= spacing / 5f;
+        }
+        y -= spacing / 4f;
+
+        font.getData().setScale(2.4f);
+        font.setColor(CustomColors.GAMEGREENCOLOR);
+        font.draw(batch, "Received Gifts:", x + playerSize * 1.5f - "Received Gifts".length() * font.getScaleX() * 7.5f / 2f, y + playerSize / 1.5f);
+        font.setColor(Color.WHITE);
+        font.getData().setScale(1f);
+
+        for (GiftData giftData : Finder.getpd().getReceivedGiftsData()) {
+            String text = giftData.getSlotData().getQuantity() + " " + giftData.getSlotData().getItemName() + " from " + giftData.getFromName();
+
+            float playerX = x;
+            float playerY = y - playerSize + 5;
+
+            font.getData().setScale(2f);
+            font.draw(batch, text, playerX + playerSize * 1.5f - text.length() * font.getScaleX() * 7.5f / 2f, playerY + playerSize / 1.5f);
+
+            y -= spacing / 5f;
+        }
+
+        y = startingY + screenHeight * 0.55f;
+        x += screenWidth * 0.3f;
+
+        font.getData().setScale(2.4f);
+        font.setColor(CustomColors.GAMEGREENCOLOR);
+        font.draw(batch, "New Unrated Gifts:", x + playerSize * 1.5f - "New Unrated Gifts".length() * font.getScaleX() * 7.5f / 2f, y + playerSize / 1.5f);
+        font.setColor(Color.WHITE);
+        font.getData().setScale(1f);
+
+        x -= screenHeight * 0.025f;
+
+        for (GiftData giftData : Finder.getpd().getNewGiftsData()) {
+            String text = giftData.getSlotData().getQuantity() + " " + giftData.getSlotData().getItemName() + " from " + giftData.getFromName();
+
+            float playerX = x;
+            float playerY = y - playerSize + 5;
+
+            font.getData().setScale(2f);
+            font.draw(batch, text, playerX, playerY + playerSize / 1.5f);
+
+            playerX += playerSize * 2;
+
+            for(int i = 0; i < 5; i++){
+                playerX += playerSize / 2f;
+
+                font.draw(batch, (i+1) + "", playerX + playerSize * 1.5f, playerY + playerSize / 1.5f);
+
+                boolean hovered = mousePos.x >= playerX + playerSize * 1.5f && mousePos.x <= playerX + playerSize * 2 &&
+                    mousePos.y >= playerY && mousePos.y <= playerY + playerSize / 1.5f;
+
+                boolean clicked = false;
+
+                if (hovered) {
+                    if(Gdx.input.isButtonJustPressed(0)){
+                        clicked = true;
+                    }
+                    String warnText = "Rate " + (i + 1);
+
+                    GlyphLayout tooltipLayout = new GlyphLayout(font, warnText);
+
+                    float tooltipWidth = tooltipLayout.width + 40;
+                    float tooltipHeight = tooltipLayout.height + 30;
+
+                    float tooltipX = playerX + playerSize * 1.5f - tooltipWidth / 2f;
+                    float tooltipY = playerY + playerSize + 20;
+
+                    batch.end();
+                    shapeRenderer.setProjectionMatrix(camera.combined);
+                    shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                    shapeRenderer.setColor(0, 0, 0, 0.85f);
+                    shapeRenderer.rect(tooltipX, tooltipY, tooltipWidth, tooltipHeight);
+                    shapeRenderer.end();
+                    batch.begin();
+
+                    if(i <= 1){
+                        font.setColor(Color.RED);
+                    } else if(i == 2){
+                        font.setColor(Color.YELLOW);
+                    } else{
+                        font.setColor(Color.GREEN);
+                    }
+
+                    font.draw(batch, warnText, tooltipX + 20, tooltipY + tooltipHeight - 15);
+
+                    font.setColor(Color.WHITE);
+                }
+                if(clicked && AppClient.getGameData().getPlayersData().size() > 1){
+                    //TODO Rate Gift
+                    // rate is i + 1
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand("gift rate -i "+
+                            (Finder.getpd().getNewGiftsData().indexOf(giftData)+1)+" -r "+(i+1), AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
+                }
+            }
+
+            y -= spacing / 5f;
+        }
+
+        font.getData().setScale(1f);
     }
 
     private boolean hasAllItems(CraftingRecipe recipe) {
