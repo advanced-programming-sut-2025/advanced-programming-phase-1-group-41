@@ -997,7 +997,7 @@ public class MenuBar {
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
 
-        float x = startingX + screenWidth * 0.1f;
+        float x = startingX + screenWidth * 0.75f;
         float y = startingY + screenHeight * 0.55f;
 
         float spacing = screenWidth * 0.14f;
@@ -1048,7 +1048,7 @@ public class MenuBar {
         }
 
         y = startingY + screenHeight * 0.55f;
-        x += screenWidth * 0.275f;
+        x += screenWidth * 0.3f;
 
         font.getData().setScale(2.4f);
         font.setColor(CustomColors.GOLD);
@@ -1056,14 +1056,14 @@ public class MenuBar {
         font.setColor(Color.WHITE);
         font.getData().setScale(1f);
 
-        x -= screenHeight * 0.04f;
+        x -= screenHeight * 0.09f;
 
-        endIndex = Math.min(selectedGiftIndex + 12, Finder.getpd().getReceivedGiftsData().size());
+        endIndex = Math.min(selectedGiftIndex + 10, Finder.getpd().getReceivedGiftsData().size());
 
         for (int j = selectedGiftIndex; j < endIndex; j++) {
             GiftData giftData = Finder.getpd().getReceivedGiftsData().get(j);
 
-            String text = giftData.getSlotData().getItemName() + " from " + giftData.getFromName();
+            String text = giftData.getSlotData().getItemName() + " by " + giftData.getFromName();
 
             float playerX = x;
             float playerY = y - playerSize + 5;
@@ -1095,7 +1095,7 @@ public class MenuBar {
                     float tooltipHeight = tooltipLayout.height + 30;
 
                     float tooltipX = playerX + playerSize * 1.5f - tooltipWidth / 2f;
-                    float tooltipY = playerY + playerSize / 2;
+                    float tooltipY = playerY + playerSize;
 
                     batch.end();
                     shapeRenderer.setProjectionMatrix(camera.combined);

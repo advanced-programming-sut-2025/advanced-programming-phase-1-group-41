@@ -45,7 +45,7 @@ public class Friendship {
         this.player1 = player1;
         this.player2 = player2;
         friendshipLevel = FriendshipLevel.Stranger;
-        level = 0;
+        level = 2;
         friendshipXp = 0;
     }
 

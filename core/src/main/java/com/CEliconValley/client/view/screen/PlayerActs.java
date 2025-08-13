@@ -275,7 +275,7 @@ public class PlayerActs {
                 AppClient.getClient().send(new Gson().toJson(msg));
             }
         }
-        else if(Gdx.input.isButtonJustPressed(0)){
+        else if(Gdx.input.isButtonJustPressed(0) && !screen.isMenuOpen && screen.hero.selectedItemName != null){
             Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             if(screen instanceof FarmScreen farmScreen){
                 farmScreen.camera.unproject(mousePos);
