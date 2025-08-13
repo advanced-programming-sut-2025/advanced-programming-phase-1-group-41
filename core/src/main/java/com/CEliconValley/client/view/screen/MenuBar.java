@@ -530,6 +530,9 @@ public class MenuBar {
                     screen.handleFriendship(screen.friendshipStage, playerData, null);
                 }
             } else {
+                if(NPCsData.isEmpty()){
+                    return;
+                }
                 NPCData npcData = NPCsData.get(i - relationsIndex.size());
                 String NPCname = npcData.getName();
 
@@ -1053,9 +1056,13 @@ public class MenuBar {
         font.setColor(Color.WHITE);
         font.getData().setScale(1f);
 
-        x -= screenHeight * 0.025f;
+        x -= screenHeight * 0.04f;
 
-        for (GiftData giftData : Finder.getpd().getNewGiftsData()) {
+        endIndex = Math.min(selectedGiftIndex + 12, Finder.getpd().getReceivedGiftsData().size());
+
+        for (int j = selectedGiftIndex; j < endIndex; j++) {
+            GiftData giftData = Finder.getpd().getReceivedGiftsData().get(j);
+
             String text = giftData.getSlotData().getItemName() + " from " + giftData.getFromName();
 
             float playerX = x;
@@ -1064,7 +1071,7 @@ public class MenuBar {
             font.getData().setScale(2f);
             font.draw(batch, text, playerX, playerY + playerSize / 1.5f);
 
-            playerX += playerSize * 1.3f;
+            playerX += playerSize * 1.4f;
 
             for (int i = 0; i < 5; i++) {
                 playerX += playerSize / 2f;
