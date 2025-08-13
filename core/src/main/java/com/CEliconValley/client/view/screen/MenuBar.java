@@ -48,7 +48,7 @@ public class MenuBar {
     private boolean camSet = false;
     private final ArrayList<Texture> relationTextures = new ArrayList<>();
     private final Texture mohsenAvatarTexture;
-    private final ArrayList<NPCData> NPCsData;
+    private ArrayList<NPCData> NPCsData;
     private final ArrayList<Integer> relationsIndex = new ArrayList<>();
 
     private final int visibleRelationsCount = 2;
@@ -58,7 +58,7 @@ public class MenuBar {
     private final String[] tabOrder = {
         "Inventory", "Stats", "Relation",
         "Map", "Crafting", "Food",
-        "Control", "Vote", null
+        "Gift", "Vote", null
     };
 
     public MenuBar(GameScreen screen) {
@@ -139,7 +139,7 @@ public class MenuBar {
         switch (currentTab) {
             case "Crafting":
             case "Food":
-            case "Control":
+            case "Gift":
                 renderInventoryBar(batch, camera, inventory);
                 break;
             case "Inventory":
@@ -452,7 +452,8 @@ public class MenuBar {
     private void renderRelations(Batch batch) {
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
-        this.camera = camera;
+
+        NPCsData = AppClient.getGameData().getVillageData().getNPCsData();
 
         float menuWidth = screenWidth * 0.6f;
         float menuHeight = screenHeight * 0.7f;
@@ -467,8 +468,6 @@ public class MenuBar {
 
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mousePos);
-
-
 
         int endIndex = Math.min(selectedIndex + visibleRelationsCount, 9);
         for (int i = selectedIndex; i < endIndex; i++) {
@@ -542,7 +541,7 @@ public class MenuBar {
                 boolean clicked = false;
 
                 if (hovered) {
-                    if (Gdx.input.isButtonJustPressed(0)) {
+                    if (Gdx.input.isButtonJustPressed(0) && !npcData.getName().equals("Mohsen")) {
                         clicked = true;
                     }
 

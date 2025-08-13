@@ -5,40 +5,24 @@ import com.CEliconValley.common.FriendshipData;
 import com.CEliconValley.common.NPCData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.QuestData;
-import com.CEliconValley.common.messages.GameCommand;
-import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.ResultSender;
-import com.CEliconValley.controllers.ItemManager;
 import com.CEliconValley.models.Finder;
-import com.CEliconValley.models.Gift;
-import com.CEliconValley.models.PlayerMessage;
-import com.CEliconValley.models.Result;
-import com.CEliconValley.models.items.Food;
-import com.CEliconValley.models.items.Inventory;
-import com.CEliconValley.models.items.Item;
-import com.CEliconValley.models.items.Slot;
-import com.CEliconValley.models.tools.Tool;
 import com.CEliconValley.models.ui.CustomColors;
-import com.CEliconValley.models.ui.FakeCheckbox;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.CEliconValley.models.ui.InventoryBarActor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -46,12 +30,12 @@ import java.util.Objects;
 public class FriendshipStageHandler {
     private Stage stage;
     private GameScreen screen;
-    private final Texture backgroundTexture = new Texture(GameAssetManager.getGameAssetManager().CEliconValleyBackground);
 
     private final BitmapFont font = new BitmapFont();
     private int startingRow = 0;
     public boolean isGifting = false, isChatting = false;
     private final Image avatarImage;
+    private final Texture questTexture;
     private final Label nameLabel;
 
     // Navigation buttons
@@ -76,9 +60,7 @@ public class FriendshipStageHandler {
     public final InventoryBarActor invActor;
 
     // Quest form
-    public final ArrayList<TextButton> securityQuestions = new ArrayList<>();
-    public final TextField securityAnswer;
-    public final TextButton securitySubmitButton;
+    public final Table questsTable;
 
     // Layout
     private final Table mainTable;
@@ -87,6 +69,8 @@ public class FriendshipStageHandler {
 
     public FriendshipStageHandler(GameScreen screen, Stage stage, PlayerData playerData, NPCData npcData) {
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
+
+        questTexture = GameAssetManager.getGameAssetManager().getBackgroundTexture("Quest_Background.png");
 
         stage.clear();
         Gdx.input.setInputProcessor(stage);
@@ -102,21 +86,23 @@ public class FriendshipStageHandler {
         this.playerData = playerData;
         this.npcData = npcData;
 
-        if(isPlayer){
-            for(FriendshipData friendshipData1 : playerData.getFriendshipsData()){
-                if(friendshipData1.getPlayer1Name().equals(Finder.getpd().getUsername())
-                    || friendshipData1.getPlayer2Name().equals(Finder.getpd().getUsername())){
+        if (isPlayer) {
+            for (FriendshipData friendshipData1 : playerData.getFriendshipsData()) {
+                if (friendshipData1.getPlayer1Name().equals(Finder.getpd().getUsername())
+                    || friendshipData1.getPlayer2Name().equals(Finder.getpd().getUsername())) {
                     friendshipData = friendshipData1;
                     friendShipLevel = friendshipData1.getLevel();
                     break;
                 }
             }
             avatarImage = new Image(new Texture(Gdx.files.internal(playerData.getAvatarPath())));
+            avatarImage.setSize(screenWidth / 20f, screenHeight / 20f);
             nameLabel = new Label(playerData.getUsername(), skin);
             nameLabel.setColor(CustomColors.SWAMP_COLOR);
-        } else{
+        } else {
             friendShipLevel = npcData.getFriendShipData().get(Objects.requireNonNull(Finder.getpd()).getUsername()) / 200;
             avatarImage = new Image(GameAssetManager.getGameAssetManager().getNPCImage(npcData.getName(), friendShipLevel));
+            avatarImage.setSize(screenHeight / 20f, screenHeight / 20f);
             nameLabel = new Label(npcData.getName(), skin);
             nameLabel.setColor(CustomColors.SWAMP_COLOR);
             questsData = npcData.getQuestsdata();
@@ -125,9 +111,9 @@ public class FriendshipStageHandler {
         // --- Tabs
         chatTab = new TextButton("Chat", skin);
         giftTab = new TextButton("Gift", skin);
-        if(isPlayer){
+        if (isPlayer) {
             hugOrQuestTab = new TextButton("Hug", skin);
-        } else{
+        } else {
             hugOrQuestTab = new TextButton("Quest", skin);
         }
         tradeTab = new TextButton("Trade", skin);
@@ -138,10 +124,10 @@ public class FriendshipStageHandler {
         messageLabel.setColor(Color.RED);
         messageLabel.setAlignment(Align.center);
 
-        if(friendShipLevel <= 1){
+        if (friendShipLevel <= 1 && isPlayer) {
             giftTab.getLabel().setColor(Color.RED);
             hugOrQuestTab.getLabel().setColor(Color.RED);
-        } else if(friendShipLevel == 2){
+        } else if (friendShipLevel == 2 && isPlayer) {
             hugOrQuestTab.getLabel().setColor(Color.RED);
         }
 
@@ -166,12 +152,8 @@ public class FriendshipStageHandler {
         invActor.setVisible(false);
 
         // --- Quest Fields
-        securityAnswer = new TextField("", skin);
-        securityAnswer.setMessageText("Security Question Answer");
-        securityAnswer.setColor(Color.YELLOW);
-
-        securitySubmitButton = new TextButton("Submit Question And Answer", skin);
-        securitySubmitButton.setColor(Color.ORANGE);
+        questsTable = new Table();
+        questsTable.setFillParent(true);
 
         // --- Layouts
         mainTable = new Table();
@@ -179,14 +161,22 @@ public class FriendshipStageHandler {
 
         formStack = new Stack();
         chatForm = new Table();
+        chatForm.setFillParent(true);
         giftForm = new Table();
+        giftForm.setFillParent(true);
         hugOrQuestForm = new Table();
+        hugOrQuestForm.setFillParent(true);
         tradeForm = new Table();
+        tradeForm.setFillParent(true);
 
 
         Gdx.input.setInputProcessor(stage);
         stage.addActor(invActor);
         stage.addActor(mainTable);
+        stage.addActor(chatForm);
+        stage.addActor(giftForm);
+        stage.addActor(hugOrQuestForm);
+        stage.addActor(tradeForm);
         stage.addActor(avatarImage);
 
         avatarImage.setPosition(screenWidth * 0.15f, screenHeight * 0.75f);
@@ -194,35 +184,35 @@ public class FriendshipStageHandler {
         buildUI();
     }
 
-    public void updateChat(){
+    public void updateChat() {
         chatTable.clear();
         chatTable = new Table();
-        if(AppClient.getGameData() == null ) return;
+        if (AppClient.getGameData() == null) return;
         //TODO Players Chat update
-        if(isPlayer){
+        if (isPlayer) {
             FriendshipData fsd = null;
             String playername = Finder.getpd().getUsername();
 
-            for(FriendshipData friendshipData1 : Finder.getpd().getFriendshipsData()){
-                if(friendshipData1.getPlayer1Name().equals(playerData.getUsername())
-                    || friendshipData1.getPlayer2Name().equals(playerData.getUsername())){
+            for (FriendshipData friendshipData1 : Finder.getpd().getFriendshipsData()) {
+                if (friendshipData1.getPlayer1Name().equals(playerData.getUsername())
+                    || friendshipData1.getPlayer2Name().equals(playerData.getUsername())) {
                     fsd = friendshipData1;
                     break;
                 }
             }
-            if(fsd == null) return;
-            for(ArrayList<String> message : fsd.getTalks()){
+            if (fsd == null) return;
+            for (ArrayList<String> message : fsd.getTalks()) {
                 assert AppClient.getUserData() != null;
-                if(message.get(0).equals(AppClient.getUserData().getUsername())){
+                if (message.get(0).equals(AppClient.getUserData().getUsername())) {
                     Label label = new Label(message.get(1) + "-", GameAssetManager.getGameAssetManager().getSkin());
                     label.setWrap(true);
                     label.setAlignment(Align.right);
                     label.setColor(CustomColors.GAMEGREENCOLOR);
                     chatTable.add(label).width(380).right().padBottom(5).row();
-                } else{
+                } else {
                     Label label = new Label(message.get(0) + ": " + message.get(1), GameAssetManager.getGameAssetManager().getSkin());
                     label.setAlignment(Align.left);
-                    if(label.getText().toString().matches(".+@"+AppClient.getUserData().getUsername()+".+")){
+                    if (label.getText().toString().matches(".+@" + AppClient.getUserData().getUsername() + ".+")) {
                         label.setColor(Color.BLUE);
                     }
                     chatTable.add(label).width(380).left().padBottom(5).row();
@@ -241,34 +231,34 @@ public class FriendshipStageHandler {
         });
     }
 
-    private void setupChatUI(){
+    private void setupChatUI() {
         chatTable = new Table();
         chatTable.setFillParent(true);
         //TODO Players Chat
-        if(isPlayer){
+        if (isPlayer) {
             FriendshipData fsd = null;
             String playername = playerData.getUsername();
-            System.out.println("playername is "+playername);
+            System.out.println("playername is " + playername);
             for (FriendshipData friendshipsDatum : Finder.getpd().getFriendshipsData()) {
-                System.out.println("checking for "+friendshipsDatum.getPlayer1Name());
-                if(friendshipsDatum.getPlayer1Name().equals(playername) || friendshipsDatum.getPlayer2Name().equals(playername)){
+                System.out.println("checking for " + friendshipsDatum.getPlayer1Name());
+                if (friendshipsDatum.getPlayer1Name().equals(playername) || friendshipsDatum.getPlayer2Name().equals(playername)) {
                     fsd = friendshipsDatum;
                     break;
                 }
             }
-            if(fsd == null) return;
-            for(ArrayList<String> message : fsd.getTalks()){
+            if (fsd == null) return;
+            for (ArrayList<String> message : fsd.getTalks()) {
                 assert AppClient.getUserData() != null;
-                if(message.get(0).equals(AppClient.getUserData().getUsername())){
+                if (message.get(0).equals(AppClient.getUserData().getUsername())) {
                     Label label = new Label(message.get(1) + "-", GameAssetManager.getGameAssetManager().getSkin());
                     label.setWrap(true);
                     label.setAlignment(Align.right);
                     label.setColor(CustomColors.GAMEGREENCOLOR);
                     chatTable.add(label).width(380).right().padBottom(5).row();
-                } else{
+                } else {
                     Label label = new Label(message.get(0) + ": " + message.get(1), GameAssetManager.getGameAssetManager().getSkin());
                     label.setAlignment(Align.left);
-                    if(label.getText().toString().matches(".+@"+AppClient.getUserData().getUsername()+".+")){
+                    if (label.getText().toString().matches(".+@" + AppClient.getUserData().getUsername() + ".+")) {
                         label.setColor(Color.BLUE);
                     }
                     chatTable.add(label).width(380).left().padBottom(5).row();
@@ -285,8 +275,95 @@ public class FriendshipStageHandler {
         container.add(chatScrollPane).width(400).height(325).row();
         container.add(chatTextField).width(400).height(60);
 
-        container.setPosition(stage.getWidth() / 3.5f, stage.getHeight() / 4.25f);
+        container.setPosition(stage.getWidth() / 2.75f, stage.getHeight() / 3.1f);
         chatForm.addActor(container);
+    }
+
+    private void updateQuestsUI() {
+        questsTable.clear();
+//        questsTable.add(new Label("", GameAssetManager.getGameAssetManager().getSkin())).padLeft(2000);
+        float width = stage.getWidth() / 3.5f, height = stage.getHeight() / 2.25f;
+
+        if (!isPlayer) {
+            for (QuestData questData : questsData) {
+                Table table = new Table();
+
+                TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(questTexture));
+
+                table.setBackground(backgroundDrawable);
+
+                Label questName = new Label(questData.getQuestName() + " (Ongoing)", GameAssetManager.getGameAssetManager().getSkin());
+                questName.setColor(Color.YELLOW);
+                if (questData.getIsFinished().get(Finder.getpd().getUsername())) {
+                    questName.setColor(CustomColors.GAMEGREENCOLOR);
+                    questName.setText(questData.getQuestName() + " (Finished)");
+                } else if (questData.getIsLocked().get(Finder.getpd().getUsername())) {
+                    questName.setColor(Color.GRAY);
+                    questName.setText(questData.getQuestName() + " (Locked)");
+                }
+                questName.setAlignment(Align.center);
+                table.add(questName).align(Align.center).center().width(width).padLeft(width / 7.5f).pad(20).row();
+                if (!questData.getIsFinished().get(Finder.getpd().getUsername())) {
+                    Label questPreTalk = new Label(questData.getQuestPreTalk(), GameAssetManager.getGameAssetManager().getSkin());
+                    questPreTalk.setWrap(true);
+                    table.add(questPreTalk).width(width).padLeft(width / 7.5f).pad(20).row();
+                } else {
+                    Label questPostTalk = new Label(questData.getQuestPostTalk(), GameAssetManager.getGameAssetManager().getSkin());
+                    questPostTalk.setWrap(true);
+                    table.add(questPostTalk).padLeft(width / 7.5f).width(width).pad(20).row();
+                }
+                if (!questData.getIsFinished().get(Finder.getpd().getUsername())) {
+                    Label questNeededItems = new Label("  Request: " +
+                        questData.getRequestdata().getQuantity() + " "
+                        + questData.getRequestdata().getItemName()
+                        , GameAssetManager.getGameAssetManager().getSkin());
+
+                    Label questReward;
+                    if (questData.getCookingRecipe() != null) {
+                        questReward = new Label("  Reward: " + questData.getCookingRecipe().getName(), GameAssetManager.getGameAssetManager().getSkin());
+                    } else if (questData.getMoneyPrize() > 0 || questData.getRewarddata() == null) {
+                        questReward = new Label("  Reward: " + questData.getMoneyPrize() + " Coins", GameAssetManager.getGameAssetManager().getSkin());
+                    } else {
+                        questReward = new Label("  Reward: " +
+                            questData.getRewarddata().getQuantity() + " " +
+                            questData.getRewarddata().getItemName()
+                            , GameAssetManager.getGameAssetManager().getSkin());
+                    }
+
+                    if(!questData.getIsLocked().get(Finder.getpd().getUsername())) {
+                        questNeededItems.setColor(Color.CYAN);
+                        questReward.setColor(CustomColors.GAMEGREENCOLOR);
+                    }
+
+                    questNeededItems.setWrap(true);
+                    questReward.setWrap(true);
+
+                    table.add(questNeededItems).width(width).pad(20).row();
+                    table.add(questReward).width(width).pad(20).row();
+
+                    if(!questData.getIsLocked().get(Finder.getpd().getUsername())) {
+                        TextButton finishQuestButton = new TextButton("Finish Quest", GameAssetManager.getGameAssetManager().getSkin());
+                        finishQuestButton.addListener(new ClickListener() {
+                            @Override
+                            public void clicked(InputEvent event, float x, float y) {
+                                // TODO Finish Quest
+                            }
+                        });
+                        table.add(finishQuestButton).width(300).center().pad(20).row();
+                    }
+                } else{
+                    TextButton collectQuestButton = new TextButton("Collect Reward", GameAssetManager.getGameAssetManager().getSkin());
+                    collectQuestButton.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            // TODO Collect Quest Reward
+                        }
+                    });
+                    table.add(collectQuestButton).center().width(300).pad(20).row();
+                }
+                questsTable.add(table).width(width).height(height).padLeft(width / 10);
+            }
+        }
     }
 
     private void buildUI() {
@@ -304,35 +381,25 @@ public class FriendshipStageHandler {
         // Login Form Layout
         giftForm.clear();
 
-        // Forgot Form Layout
+        // Hug Or Quest Form Layout
         hugOrQuestForm.clear();
+        hugOrQuestForm.add(questsTable);
+        hugOrQuestForm.setPosition(-stage.getWidth() / 20f, -stage.getHeight() / 2.5f);
 
         // Security Form Layout
         tradeForm.clear();
-        int i = 1;
-        for(String securityQuestion : AppClient.questions){
-            TextButton button = new TextButton(securityQuestion, GameAssetManager.getGameAssetManager().getSkin());
-            securityQuestions.add(button);
-            if(i++ % 2 == 0){
-                tradeForm.add(button).width(800).padLeft(10).padTop(10).row();
-            } else{
-                tradeForm.add(button).width(800).padRight(10).padTop(10);
-            }
-        }
-        tradeForm.add(securityAnswer).width(700).padTop(10);
-        tradeForm.add(securitySubmitButton).width(700).padTop(10);
 
-        formStack.clear();
-        formStack.add(chatForm);
-        formStack.add(giftForm);
-        formStack.add(hugOrQuestForm);
-        formStack.add(tradeForm);
+//        formStack.clear();
+//        formStack.add(chatForm);
+//        formStack.add(giftForm);
+//        formStack.add(hugOrQuestForm);
+//        formStack.add(tradeForm);
 
         mainTable.clear();
         mainTable.top();
         mainTable.add(tabRow).padTop(200).row();
         mainTable.add(messageLabel).pad(10).padBottom(200).row();
-        mainTable.add(formStack).padTop(10);
+//        mainTable.add(formStack).padTop(10);
 
         switchForm("gift");
 
@@ -348,24 +415,19 @@ public class FriendshipStageHandler {
         emptyFields();
     }
 
-    private void setupListeners(){
+    private void setupListeners() {
         chatTab.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 switchForm("chat");
                 isChatting = true;
-                if(isPlayer){
-                    for (FriendshipData fsd : Finder.getpd().getFriendshipsData()) {
-                        System.out.println(fsd.getFriendshipXp()+" "+fsd.getPlayer1Name()+" "+fsd.getPlayer2Name());
-                    }
-                }
             }
         });
 
         giftTab.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(friendShipLevel <= 1 && isPlayer){
+                if (friendShipLevel <= 1 && isPlayer) {
                     setMessage("Your friendship level should be at least 2 to gift.", Color.RED);
                     return;
                 }
@@ -396,11 +458,12 @@ public class FriendshipStageHandler {
         hugOrQuestTab.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(friendShipLevel <= 2 && isPlayer){
+                if (friendShipLevel <= 2 && isPlayer) {
                     setMessage("Your friendship level should be at least 3 to hug.", Color.RED);
                     return;
                 }
                 switchForm("hugOrQuest");
+                updateQuestsUI();
                 //TODO hugOrQuest
             }
         });
@@ -429,9 +492,9 @@ public class FriendshipStageHandler {
 
     public void setMessage(ResultSender result) {
         messageLabel.setText(result.message);
-        if(result.code){
+        if (result.code) {
             messageLabel.setColor(Color.GREEN);
-        } else{
+        } else {
             messageLabel.setColor(Color.RED);
         }
     }

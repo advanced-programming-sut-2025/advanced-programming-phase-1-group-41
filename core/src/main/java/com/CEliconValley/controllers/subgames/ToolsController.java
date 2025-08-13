@@ -251,7 +251,8 @@ public class ToolsController {
                 }
                 return new Result(true,"broke");
             }
-        }else{
+        }else if(!(cell.getObjectMap() instanceof Tree || cell.getObjectMap() instanceof ForagingTree
+                    || cell.getObjectMap() instanceof Crop || cell.getObjectMap() instanceof ForagingCrop)){
             if(energy - 1 > player.getEnergy()){
                 return new Result(false, "you don't have enough energy to use this tool");
             }
@@ -274,6 +275,7 @@ public class ToolsController {
             }
             return new Result(false,"you used your pickaxe..");
         }
+        return new Result(false,"It's a plant");
     }
 
 

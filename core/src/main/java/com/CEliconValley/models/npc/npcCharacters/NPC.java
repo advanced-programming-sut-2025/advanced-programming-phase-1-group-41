@@ -195,9 +195,12 @@ public abstract class NPC {
             isTalkedToday.put(player, false);
             isGiftedToday.put(player, false);
             for (int i = 0; i < 3; i++) {
-                this.quests.get(i).setLocked(player, true);
+                if(i != 0){
+                    this.quests.get(i).setLocked(player, true);
+                }
                 this.quests.get(i).setFinished(player, false);
             }
+            this.quests.get(0).setLocked(player, false);
         }
     }
 

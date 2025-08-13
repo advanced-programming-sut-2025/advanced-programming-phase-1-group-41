@@ -97,7 +97,6 @@ public class NPCController {
         if(npc.getFavorites().contains(item)){
             if(!npc.isGiftedToday(player)) {
                 npc.incFriendShip(player, 200);
-
             }
             npc.setGiftedToday(player,true);
             return new Result(true, npc.getDialogues(10));
