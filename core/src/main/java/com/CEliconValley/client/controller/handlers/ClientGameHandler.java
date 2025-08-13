@@ -30,6 +30,7 @@ public class ClientGameHandler {
                 }
                 updateTime(gs);
                 gs.updateChat();
+//                gs.friendshipStageHandler.updateChat();
                 if(gs instanceof VillageScreen vs){
                     vs.updatePlayers();
                     vs.villageMap.updateVillageData();
@@ -164,6 +165,17 @@ public class ClientGameHandler {
                 if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof GameScreen screen){
                     screen.handleVote(screen.getStage(), vote.target);
                 }
+            }
+            case "rock-anime" -> {
+                BreakAnimCred cred = gson.fromJson(body, BreakAnimCred.class);
+                CellData cellData = cred.cellData;
+                if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                    .getScreen()  instanceof GameScreen gs){
+                    if(gs instanceof FarmScreen screen){
+                        // todo shahab break animation
+                    }
+                }
+
             }
             case "message-cred" -> {
                 if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())

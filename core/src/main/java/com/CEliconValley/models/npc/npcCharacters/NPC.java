@@ -1,16 +1,19 @@
 package com.CEliconValley.models.npc.npcCharacters;
 
 import com.CEliconValley.client.view.screen.randomwalk.Node;
-import com.CEliconValley.common.CellData;
+import com.CEliconValley.common.Talk;
+import com.CEliconValley.common.messages.Messagenpc;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.buildings.marketplaces.Marketplace;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
 import com.CEliconValley.models.locations.Village;
+import com.CEliconValley.models.npc.LLMClient;
+import com.CEliconValley.models.npc.PromptBuilder;
 import com.CEliconValley.models.npc.npchomes.NPCHome;
-import com.badlogic.gdx.Gdx;
 
+import java.io.IOException;
 import java.util.*;
 
 public abstract class NPC {
@@ -20,6 +23,7 @@ public abstract class NPC {
     private Occupation job;
     private NPCHome home;
     private ArrayList<String> dialogues;
+    private ArrayList<Talk> talks;
     private ArrayList<Item> favorites;
     private ArrayList<Slot> ItemsToGift;
     private ArrayList<Quest> quests;
@@ -43,10 +47,27 @@ public abstract class NPC {
     public boolean isSet = false;
     public boolean shouldGoHome = false;
     public boolean shouldGoToWork = false;
+    private long lastLLMRequestTime = 0;
+    private static final long MIN_REQUEST_INTERVAL_MS = 3000; // 3 seconds
 
+    public boolean canSendLLMRequest() {
+        long now = System.currentTimeMillis();
+        if (now - lastLLMRequestTime < MIN_REQUEST_INTERVAL_MS) return false;
+        lastLLMRequestTime = now;
+        return true;
+    }
+
+    protected LLMClient llmClient = new LLMClient(App.api_key);
+    protected String personality = "Strict impolite but kind-hearted , has sexual attraction" +
+        " and uses some new slangs in his words and answers briefly";
 
     public static final int CELL_SIZE = (int)  160;
 
+
+    public String speakToPlayer(String input, WeatherType weatherType, Season season) throws IOException {
+        String prompt = PromptBuilder.buildPrompt(name, personality, weatherType, season, input);
+        return llmClient.sendMessageSync(prompt);
+    }
 
     public boolean reachedDestination() {
         return x == randomX && y == randomY;
@@ -182,7 +203,10 @@ public abstract class NPC {
         this.dialogues = dialogues;
         this.favorites = favorites;
         this.ItemsToGift = itemsToGift;
-
+        this.talks = new ArrayList<>();
+        for (Player player : App.getGame().getPlayers()) {
+            this.talks.add(new Talk(player.getUser().getUsername()));
+        }
     }
 
     public void postLoad(ArrayList<Quest> quests) {
@@ -195,9 +219,12 @@ public abstract class NPC {
             isTalkedToday.put(player, false);
             isGiftedToday.put(player, false);
             for (int i = 0; i < 3; i++) {
-                this.quests.get(i).setLocked(player, true);
+                if(i != 0){
+                    this.quests.get(i).setLocked(player, true);
+                }
                 this.quests.get(i).setFinished(player, false);
             }
+            this.quests.get(0).setLocked(player, false);
         }
     }
 
@@ -301,5 +328,34 @@ public abstract class NPC {
 
     public void setRandomY(int randomY) {
         this.randomY = randomY;
+    }
+
+    public ArrayList<Talk> getTalks() {
+        return talks;
+    }
+
+    public void setTalks(ArrayList<Talk> talks) {
+        this.talks = talks;
+    }
+
+    public Talk getTalkByName(String name) {
+        for (Talk talk : this.talks) {
+            if(talk.getPlayername().equals(name)) {
+                return talk;
+            }
+        }
+        return null;
+    }
+
+    public LLMClient getLlmClient() {
+        return llmClient;
+    }
+
+    public Queue<Node> getMovementQueue() {
+        return movementQueue;
+    }
+
+    public String getPersonality() {
+        return personality;
     }
 }

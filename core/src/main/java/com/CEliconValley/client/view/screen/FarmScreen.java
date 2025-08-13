@@ -308,6 +308,7 @@ class FarmScreen extends GameScreen implements Screen {
             cropSpawner.renderCrops(batch, cellData, farmMap.farmData);
             rockSpawner.renderBreakingEffectForCell(batch, cellData, delta);
             itemSpawner.renderItems(batch, cellData, farmMap.farmData);
+
             if (hero.playerX.get() == cellData.getX() && hero.playerY.get() == cellData.getY()) {
 
                 TextureRegion currentFrame = hero.currentAnimation.getKeyFrame(hero.stateTime, onRepeat);

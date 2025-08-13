@@ -252,7 +252,8 @@ public class NPCBuilder {
                         robin.postLoad(new ArrayList<Quest>(Arrays.asList(
                             new Quest(new Slot(new Wood(), 80), 1000.0, "Wood is working", "Need some gold? Bring wood!", "Now that hits the spot."),
                             new Quest(new Slot(CraftableItem.IronBar, 10), new Slot(CraftableMachine.BeeHouse, 3), "Bees of iron", "Wanna see a bee House made by iron?", "cool right?"),
-                            new Quest(new Slot(new Wood(), 1000), 25000.0, "More Wood is even working better", "Need more gold? Bring more wood", "I need a new store for this much wood")
+                            new Quest(new Slot(new Wood(), 1000), 25000.0, "More Wood works better", "Need more gold? Bring more wood", "I need a new store for this much wood")
+//                            new Quest(new Slot(new Wood(), 1000), 25000.0, "More Wood is even working better", "Need more gold? Bring more wood", "I need a new store for this much wood")
                         )));
                         NPCs.add(robin);
                     }

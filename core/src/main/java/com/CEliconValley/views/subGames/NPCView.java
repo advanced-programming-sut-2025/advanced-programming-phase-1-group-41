@@ -12,7 +12,7 @@ public class NPCView {
     public static boolean check(String input, String playername){
         Matcher matcher;
         if((matcher = NPCCommands.MeetNPC.getMatcher(input))!=null){
-            System.out.println(controller.meetNpc(matcher));
+            System.out.println(controller.meetNpc(matcher, playername));
         }else if((matcher = NPCCommands.GiftNPC.getMatcher(input))!=null){
             Result result = controller.giftToNpc(matcher, playername);
             System.out.println(result);

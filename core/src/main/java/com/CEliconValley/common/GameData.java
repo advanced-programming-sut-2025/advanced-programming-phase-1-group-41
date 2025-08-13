@@ -3,6 +3,7 @@ package com.CEliconValley.common;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.locations.Village;
+import com.CEliconValley.models.npc.npcCharacters.NPC;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import org.bson.types.ObjectId;
@@ -91,6 +92,14 @@ public class GameData {
         setUsersCurrentGame(game);
         game.set_id(this._id);
         game.setLobby(this.lobby);
+        for (NPC npc : game.getVillage().getNPCs()) {
+            for (NPCData npCsDatum : villageData.getNPCsData()) {
+                if(npCsDatum.getName().equals(npc.getName())) {
+                    npc.setTalks(new ArrayList<>(npCsDatum.getTalks()));
+                    break;
+                }
+            }
+        }
         return game;
     }
 

@@ -1,5 +1,6 @@
 package com.CEliconValley.controllers.subgames;
 
+import com.CEliconValley.common.messages.Messagenpc;
 import com.CEliconValley.models.*;
 
 import com.CEliconValley.models.items.CraftableMachine;
@@ -21,50 +22,33 @@ import static com.CEliconValley.models.Finder.parseNPC;
 
 public class NPCController {
 
-    public Result meetNpc(Matcher matcher){
-        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
-        Player player = App.getGame().getCurrentPlayer();
+    public Result meetNpc(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
         String npcName = matcher.group(1);
-        NPC npc=findNPCAround(npcName, player);
-        if(npc==null){
-            if(!getNPCList().contains(npcName)){
-                return new Result(false, "no one`s here with that name");
-            }
-            return new Result(false,  npcName+" is not around");
-        }
-        if(!npc.isTalkedToday(player)){
-            npc.incFriendShip(player,20);
-            npc.setTalkedToday(player,true);
-            npc.getQuests().get(0).setLocked(player,false);
-        }
-        if(!App.getGame().getWeatherType().equals(WeatherType.Sunny)){
-            switch (App.getGame().getWeatherType()){
-                case Rainy:
-                    return new Result(true, npc.getDialogues(4));
-                case Snowy:
-                    return new Result(true, npc.getDialogues(5));
-                case Stormy:
-                    return new Result(true, npc.getDialogues(6));
-            }
-        }else if(App.getGame().getTime().getHour()>18){
-            return new Result(true, npc.getDialogues(7));
-        }else if(npc.getFriendShip(player)>=600){
-            return new Result(true, npc.getDialogues(8));
-        }else{
-            switch (App.getGame().getTime().getSeason()){
-                case Spring:
-                    return new Result(true, npc.getDialogues(0));
-                case Summer:
-                    return new Result(true, npc.getDialogues(1));
-                case Autumn:
-                    return new Result(true, npc.getDialogues(2));
-                case Winter:
-                    return new Result(true, npc.getDialogues(3));
-            }
-        }
-        return new Result(false, "impossible");
-    }
+        String input = matcher.group(2);
 
+        NPC npc = App.getGame().getVillage().getNPCs().stream()
+            .filter(n -> n.getName().equals(npcName))
+            .findFirst()
+            .orElse(null);
+
+        if (npc == null) {
+            return new Result(false, "No one’s here with that name or they're not around.");
+        }
+//
+//        if (!npc.isTalkedToday(player)) {
+//            npc.incFriendShip(player, 20);
+//            npc.setTalkedToday(player, true);
+//            npc.getQuests().get(0).setLocked(player, false);
+//        }
+//
+//        npc.getTalkByName(playername).getTalks().add(new Messagenpc(false, input));
+
+        // Delegate async LLM response handling
+        npc.getLlmClient().meetNpcAsync(matcher, playername);
+
+        return new Result(true, npc.getName() + " is thinking and will respond shortly.");
+    }
     public Result giftToNpc(Matcher matcher, String playername){
         Player player = Finder.getPlayerByUsername(playername);
         Inventory inventory=player.getInventory();
@@ -97,7 +81,6 @@ public class NPCController {
         if(npc.getFavorites().contains(item)){
             if(!npc.isGiftedToday(player)) {
                 npc.incFriendShip(player, 200);
-
             }
             npc.setGiftedToday(player,true);
             return new Result(true, npc.getDialogues(10));

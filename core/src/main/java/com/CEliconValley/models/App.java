@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class App {
+    public static String api_key = "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";
     public static int MaxLength = 75;
     public static int MaxHeight = 60;
     public final static ArrayList<User> users = new ArrayList<>();

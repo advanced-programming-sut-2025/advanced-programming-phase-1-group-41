@@ -147,7 +147,8 @@ public class PlayerActs {
                 }else{
                     GameMessage<GameCommand> msg = new GameMessage<>("game-command",
                         new GameCommand
-                            ("meet NPC "+screen.friendshipStageHandler.npcData.getName(), AppClient.getUserData().getUsername()));
+                            ("meet NPC "+screen.friendshipStageHandler.npcData.getName()+
+                                " "+message, AppClient.getUserData().getUsername()));
                     AppClient.getClient().send(new Gson().toJson(msg));
                 }
                 screen.friendshipStageHandler.chatTextField.setText("");

@@ -1,6 +1,7 @@
 package com.CEliconValley.common;
 
 import com.CEliconValley.client.view.screen.randomwalk.Node;
+import com.CEliconValley.common.messages.Messagenpc;
 import com.CEliconValley.models.Occupation;
 import com.CEliconValley.models.Player;
 import com.CEliconValley.models.items.Item;
@@ -27,6 +28,7 @@ public class NPCData {
     ArrayList<String> favoriteItems;
     ArrayList<SlotData> itemsToGive;
     ArrayList<QuestData> questsdata;
+    ArrayList<Talk> talks;
     public int x;
     public int y;
     public boolean isOutside;
@@ -81,6 +83,7 @@ public class NPCData {
         this.isMoving = npc.isMoving;
         this.currentDirection = npc.currentDirection;
         this.isOutside = npc.isOutside;
+        this.talks = new ArrayList<>(npc.getTalks());
     }
 
     public int getDaysToUnlockQ3() {
@@ -127,5 +130,20 @@ public class NPCData {
         return questsdata;
     }
 
+    public ArrayList<Talk> getTalks() {
+        return talks;
+    }
 
+    public void setTalks(ArrayList<Talk> talks) {
+        this.talks = talks;
+    }
+
+    public Talk getTalkByName(String name) {
+        for (Talk talk : this.talks) {
+            if(talk.getPlayername().equals(name)) {
+                return talk;
+            }
+        }
+        return null;
+    }
 }

@@ -414,4 +414,13 @@ public class Finder {
         }
         return null;
     }
+
+    public static NPCData getnpcdatabyname(String name){
+        for (NPCData npcd : AppClient.getGameData().getVillageData().getNPCsData()) {
+            if(npcd.getName().equals(name)){
+                return npcd;
+            }
+        }
+        return null;
+    }
 }
