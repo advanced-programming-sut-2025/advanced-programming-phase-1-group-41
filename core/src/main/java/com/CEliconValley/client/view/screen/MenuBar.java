@@ -461,7 +461,7 @@ public class MenuBar {
         float screenHeight = camera.viewportHeight;
 
         NPCsData = AppClient.getGameData().getVillageData().getNPCsData();
-
+        if(NPCsData == null) return;
         float menuWidth = screenWidth * 0.6f;
         float menuHeight = screenHeight * 0.7f;
         startingX = camera.position.x - menuWidth / 2f;

@@ -306,6 +306,14 @@ public class ClientGameHandler {
                         });
                     }
 
+                }else if(gamecommand.command.equals("propose-mode")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen() instanceof GameScreen screen){
+                        Gdx.app.postRunnable(()->{
+                           screen.handlePropose(screen.getStage(), gamecommand.playerName);
+                        });
+                    }
+
                 }
             }
 

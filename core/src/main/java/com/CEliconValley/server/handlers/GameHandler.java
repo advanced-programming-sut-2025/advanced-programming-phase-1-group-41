@@ -114,6 +114,9 @@ public class GameHandler {
                     "terminate-ter");
                 App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(response));
             }
+            case "propose-yes" -> {
+
+            }
             case "save-game" -> {
                 UserDB.saveGame(App.getGame());
                 System.out.println("saving game there");

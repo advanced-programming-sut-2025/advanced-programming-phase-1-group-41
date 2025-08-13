@@ -561,6 +561,9 @@ public class FriendshipStageHandler {
                         setMessage("Your friendship xp is " + friendshipData.getFriendshipXp() + ", it should be at 400 xp to give flower.", Color.RED);
                         return;
                     }
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand("ask marriage -u "+playerData.getUsername(), AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
                     // TODO Propose
                     return;
                 } else if (isPlayer) {

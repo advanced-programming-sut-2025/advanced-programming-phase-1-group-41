@@ -194,6 +194,31 @@ public class PlayerActs {
 
             return new Result(false, "cheat");
         }
+        if (screen.proposeMode) {
+            stage.act(delta);
+            stage.draw();
+            screen.proposeyesButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand("respond accept -u "+screen.lastProposer, AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
+                    resetPropose();
+                }
+            });
+
+            screen.proposenoButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand("respond reject -u "+screen.lastProposer, AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
+                    resetPropose();
+                }
+            });
+
+            return new Result(false, "cheat");
+        }
         if(screen.terMode){
             stage.act(delta);
             stage.draw();
@@ -512,6 +537,7 @@ public class PlayerActs {
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.Q)){
             System.out.println("you're at "+hero.playerX+" "+hero.playerY);
+            screen.handlePropose(stage, "sepehr");
         }else if(Gdx.input.isKeyJustPressed(Input.Keys.K)){
             if(screen instanceof VillageScreen villageScreen){
                 if(villageScreen.isMarketMenuOpen){
@@ -1078,5 +1104,26 @@ public class PlayerActs {
                 });
             }
         }
+    }
+
+    public static void resetPropose(){
+        Gdx.app.postRunnable(() -> {
+            screen.proposeMode = false;
+            screen.proposenoButton.setVisible(false);
+            screen.proposeyesButton.setVisible(false);
+            screen.proposenoButton.reset();
+            screen.proposeyesButton.reset();
+            screen.proposeLabel.setVisible(false);
+            if(screen.overlay == null) return;
+            screen.overlay.addAction(Actions.sequence(
+                Actions.fadeOut(0.5f),
+                Actions.run(() -> screen.overlay.remove())
+            ));
+
+            if (screen.overlay != null) {
+                screen.overlay.remove();
+                screen.overlay = null;
+            }
+        });
     }
 }
