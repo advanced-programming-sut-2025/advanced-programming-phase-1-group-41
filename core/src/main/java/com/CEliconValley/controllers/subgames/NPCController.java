@@ -1,5 +1,6 @@
 package com.CEliconValley.controllers.subgames;
 
+import com.CEliconValley.common.messages.Messagenpc;
 import com.CEliconValley.models.*;
 
 import com.CEliconValley.models.items.CraftableMachine;
@@ -21,48 +22,63 @@ import static com.CEliconValley.models.Finder.parseNPC;
 
 public class NPCController {
 
-    public Result meetNpc(Matcher matcher){
-        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
-        Player player = App.getGame().getCurrentPlayer();
+    public Result meetNpc(Matcher matcher, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        Inventory inventory = player.getInventory();
         String npcName = matcher.group(1);
-        NPC npc=findNPCAround(npcName, player);
-        if(npc==null){
-            if(!getNPCList().contains(npcName)){
-                return new Result(false, "no one`s here with that name");
+        String input = matcher.group(2);
+//        NPC npc=findNPCAround(npcName, player);
+//        if(npc==null){
+//            if(!getNPCList().contains(npcName)){
+//                return new Result(false, "no one`s here with that name");
+//            }
+//            return new Result(false,  npcName+" is not around");
+//        }
+        NPC npc = null;
+        for(NPC npc1 : App.getGame().getVillage().getNPCs()){
+            if(npc1.getName().equals(npcName)){
+                npc = npc1;
             }
-            return new Result(false,  npcName+" is not around");
         }
         if(!npc.isTalkedToday(player)){
             npc.incFriendShip(player,20);
             npc.setTalkedToday(player,true);
             npc.getQuests().get(0).setLocked(player,false);
         }
+        String text = null;
         if(!App.getGame().getWeatherType().equals(WeatherType.Sunny)){
             switch (App.getGame().getWeatherType()){
-                case Rainy:
-                    return new Result(true, npc.getDialogues(4));
-                case Snowy:
-                    return new Result(true, npc.getDialogues(5));
-                case Stormy:
-                    return new Result(true, npc.getDialogues(6));
+                case Rainy -> text = npc.getDialogues(4);
+//                    return new Result(true, npc.getDialogues(4));
+                case Snowy -> text = npc.getDialogues(5);
+//                    return new Result(true, npc.getDialogues(5));
+                case Stormy -> text = npc.getDialogues(6);
+//                    return new Result(true, npc.getDialogues(6));
             }
         }else if(App.getGame().getTime().getHour()>18){
-            return new Result(true, npc.getDialogues(7));
+            text = npc.getDialogues(7);
+//            return new Result(true, npc.getDialogues(7));
         }else if(npc.getFriendShip(player)>=600){
-            return new Result(true, npc.getDialogues(8));
+            text = npc.getDialogues(8);
+//            return new Result(true, npc.getDialogues(8));
         }else{
             switch (App.getGame().getTime().getSeason()){
-                case Spring:
-                    return new Result(true, npc.getDialogues(0));
-                case Summer:
-                    return new Result(true, npc.getDialogues(1));
-                case Autumn:
-                    return new Result(true, npc.getDialogues(2));
-                case Winter:
-                    return new Result(true, npc.getDialogues(3));
+                case Spring -> text = npc.getDialogues(0);
+//                    return new Result(true, npc.getDialogues(0));
+                case Summer -> text = npc.getDialogues(1);
+//                    return new Result(true, npc.getDialogues(1));
+                case Autumn -> text = npc.getDialogues(2);
+//                    return new Result(true, npc.getDialogues(2));
+                case Winter -> text = npc.getDialogues(3);
+//                    return new Result(true, npc.getDialogues(3));
             }
         }
-        return new Result(false, "impossible");
+        if(text == null){
+            return new Result(false,"something went wrong");
+        }
+        npc.getTalkByName(playername).getTalks().add(new Messagenpc(false, input));
+        npc.getTalkByName(playername).getTalks().add(new Messagenpc(true, text));
+        return new Result(true, text);
     }
 
     public Result giftToNpc(Matcher matcher, String playername){

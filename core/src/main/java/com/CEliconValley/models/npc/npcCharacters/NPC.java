@@ -1,7 +1,8 @@
 package com.CEliconValley.models.npc.npcCharacters;
 
 import com.CEliconValley.client.view.screen.randomwalk.Node;
-import com.CEliconValley.common.CellData;
+import com.CEliconValley.common.Talk;
+import com.CEliconValley.common.messages.Messagenpc;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.buildings.marketplaces.Marketplace;
@@ -9,7 +10,6 @@ import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
 import com.CEliconValley.models.locations.Village;
 import com.CEliconValley.models.npc.npchomes.NPCHome;
-import com.badlogic.gdx.Gdx;
 
 import java.util.*;
 
@@ -20,6 +20,7 @@ public abstract class NPC {
     private Occupation job;
     private NPCHome home;
     private ArrayList<String> dialogues;
+    private ArrayList<Talk> talks;
     private ArrayList<Item> favorites;
     private ArrayList<Slot> ItemsToGift;
     private ArrayList<Quest> quests;
@@ -182,7 +183,10 @@ public abstract class NPC {
         this.dialogues = dialogues;
         this.favorites = favorites;
         this.ItemsToGift = itemsToGift;
-
+        this.talks = new ArrayList<>();
+        for (Player player : App.getGame().getPlayers()) {
+            this.talks.add(new Talk(player.getUser().getUsername()));
+        }
     }
 
     public void postLoad(ArrayList<Quest> quests) {
@@ -304,5 +308,22 @@ public abstract class NPC {
 
     public void setRandomY(int randomY) {
         this.randomY = randomY;
+    }
+
+    public ArrayList<Talk> getTalks() {
+        return talks;
+    }
+
+    public void setTalks(ArrayList<Talk> talks) {
+        this.talks = talks;
+    }
+
+    public Talk getTalkByName(String name) {
+        for (Talk talk : this.talks) {
+            if(talk.getPlayername().equals(name)) {
+                return talk;
+            }
+        }
+        return null;
     }
 }
