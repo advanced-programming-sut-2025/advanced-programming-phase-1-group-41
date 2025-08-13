@@ -120,15 +120,25 @@ public class BuildingSpawner {
                     texture = bigBarnTexture;
                     width++;
                     height++;
+                    int frameWidth = texture.getWidth();
+                    int frameHeight = texture.getHeight();
+                    TextureRegion barnFrame = new TextureRegion(texture, 0, 0, frameWidth, frameHeight);
+                    batch.draw(barnFrame, x - CELL_SIZE*6, y, CELL_SIZE*width, CELL_SIZE*height);
                 } else if(barnType.equals(BarnType.Deluxe)){
                     texture = deluxeTexture;
                     width += 2;
                     height += 2;
+                    int frameWidth = texture.getWidth();
+                    int frameHeight = texture.getHeight();
+                    TextureRegion barnFrame = new TextureRegion(texture, 0, 0, frameWidth, frameHeight);
+                    batch.draw(barnFrame, x - CELL_SIZE*7, y, CELL_SIZE*width, CELL_SIZE*height);
+                }else{
+                    int frameWidth = texture.getWidth();
+                    int frameHeight = texture.getHeight();
+                    TextureRegion barnFrame = new TextureRegion(texture, 0, 0, frameWidth, frameHeight);
+                    batch.draw(barnFrame, x - CELL_SIZE*5, y, CELL_SIZE*width, CELL_SIZE*height);
                 }
-                int frameWidth = texture.getWidth();
-                int frameHeight = texture.getHeight();
-                TextureRegion barnFrame = new TextureRegion(texture, 0, 0, frameWidth, frameHeight);
-                batch.draw(barnFrame, x - CELL_SIZE*6, y, CELL_SIZE*width, CELL_SIZE*height);
+
                 return true;
             }
         }
@@ -137,20 +147,31 @@ public class BuildingSpawner {
             if(cellData.getX() + 1 == coopData.getAnchorX() && cellData.getY() + 1 == coopData.getAnchorY()){
                 Texture texture = coopTexture;
                 int width = 7, height = 8;
-                if(cell.equals(CoopType.Big)){
+                if(coopType.equals(CoopType.Big)){
                     texture = bigCoopTexture;
                     width++;
                     height++;
+                    int frameWidth = texture.getWidth();
+                    int frameHeight = texture.getHeight();
+                    TextureRegion barnFrame = new TextureRegion(texture, 0, 0, frameWidth, frameHeight);
+                    batch.draw(barnFrame, x - CELL_SIZE*5, y, CELL_SIZE*width, CELL_SIZE*height);
+                    return true;
                 } else if(coopType.equals(CoopType.Deluxe)){
                     texture = deluxeCoopTexture;
                     width += 2;
                     height += 2;
-                }
+                    int frameWidth = texture.getWidth();
+                    int frameHeight = texture.getHeight();
+                    TextureRegion barnFrame = new TextureRegion(texture, 0, 0, frameWidth, frameHeight);
+                    batch.draw(barnFrame, x - CELL_SIZE*6.5f, y, CELL_SIZE*width+1, CELL_SIZE*height);
+                    return true;
+                }else{
                 int frameWidth = texture.getWidth();
                 int frameHeight = texture.getHeight();
                 TextureRegion barnFrame = new TextureRegion(texture, 0, 0, frameWidth, frameHeight);
-                batch.draw(barnFrame, x - CELL_SIZE*6, y, CELL_SIZE*width, CELL_SIZE*height);
+                batch.draw(barnFrame, x - CELL_SIZE*4, y, CELL_SIZE*width, CELL_SIZE*height);
                 return true;
+                }
             }
         }
 //        else if(tmpCell != null && tmpCell.getObjectMap() instanceof Barn){

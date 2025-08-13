@@ -113,9 +113,8 @@ public class RockSpawner {
         Cell cell = cellData.extractData();
         if (cell.getObjectMap() instanceof Rock rock) {
             if (rock.getRockType() == RockType.BigRock) {
-                if (rock.getHitPoints() > 1) {
-                    rock.decreaseHitPoints();
-                } else if (!breakingBigRockEffects.containsKey(cell)) {
+
+                 if (!breakingBigRockEffects.containsKey(cell)) {
                     new Thread(() -> {
                         try {
                             Thread.sleep(450);

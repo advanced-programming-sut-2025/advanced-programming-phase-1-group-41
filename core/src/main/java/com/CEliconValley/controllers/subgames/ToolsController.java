@@ -82,6 +82,7 @@ public class ToolsController {
         }
 
         if(tool instanceof Pickaxe){
+            System.out.println("Pickaxe");
             return usePickaxe(cell, tool, playername);
         }else if(tool instanceof WateringCan){
             return useWateringCan(cell, tool, playername);

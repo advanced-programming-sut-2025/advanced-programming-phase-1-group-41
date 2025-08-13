@@ -174,8 +174,13 @@ public class BarnScreen extends GameScreen implements Screen {
                     lastAnimal.targetY = hero.targetY.get();
                     lastAnimal = null;
                 }
+            }if(barnData.getBarnTypeInt()==1){
+                batch.draw(currentFrame, hero.renderX , hero.renderY - CELL_SIZE , CELL_SIZE * 2f, CELL_SIZE * 2f);
+            }else if(barnData.getBarnTypeInt()==2) {
+                batch.draw(currentFrame, hero.renderX - CELL_SIZE / 2f, hero.renderY - CELL_SIZE , CELL_SIZE * 2f, CELL_SIZE * 2f);
+            }else{
+                batch.draw(currentFrame, hero.renderX - CELL_SIZE / 2f, hero.renderY - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
             }
-            batch.draw(currentFrame, hero.renderX - CELL_SIZE / 2f, hero.renderY - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
         }
 
         for (AnimalSprite animalSprite : animalSprites) {

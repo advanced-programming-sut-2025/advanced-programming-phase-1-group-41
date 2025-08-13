@@ -24,39 +24,53 @@ public class CoopMap implements Location {
         switch(coopType){
             case Deluxe: {
                 for (int i = 0; i < 19; i++) {
-                    for (int j = 0; j < 10; j++) {
+                    for (int j = 5; j < 10; j++) {
+                        if(i>1&&j==5)continue;
+                        if(i==0&&j==5)continue;
                         Grass grass = new Grass();
                         Cell cell = new Cell(grass, offsetY + i, offsetX + j);
                         cells.add(cell);
                     }
                 }
+                Door door = new Door();
+                Cell cell = getCell(offsetX+1,offsetY+5);
+                cell.setObjectMap(door);
+                break;
             }
             case Big: {
-                for (int i = 0; i < 16; i++) {
-                    for (int j = 0; j < 10; j++) {
-                        Grass grass = new Grass();
-                        Cell cell = new Cell(grass, offsetY + i, offsetX + j);
-                        cells.add(cell);
-                    }
-                }
-            }
-            case Normal: {
-                for (int i = 0; i < 8; i++) {
-                    for (int j = 0; j < 6; j++) {
-                        if(i>0&&j==0)continue;
+                for (int i = 0; i < 15; i++) {
+                    for (int j = 0; j < 7; j++) {
+                        if(i>1&&j==0)continue;
                         if(i==0&&j==0)continue;
                         Grass grass = new Grass();
                         Cell cell = new Cell(grass, offsetY + i, offsetX + j);
                         cells.add(cell);
                     }
                 }
+                Door door = new Door();
+                Cell cell = getCell(offsetX+1,offsetY+0);
+                cell.setObjectMap(door);
+                break;
+            }
+            case Normal: {
+                for (int i = 0; i < 8; i++) {
+                    for (int j = 0; j < 6; j++) {
+                        if(i>1&&j==0)continue;
+                        if(i==0&&j==0)continue;
+                        Grass grass = new Grass();
+                        Cell cell = new Cell(grass, offsetY + i, offsetX + j);
+                        cells.add(cell);
+                    }
+                }
+                Door door = new Door();
+                Cell cell = getCell(offsetX+1,offsetY+0);
+                cell.setObjectMap(door);
+                break;
 
             }
         }
 
-        Door door = new Door();
-        Cell cell = getCell(offsetX+1,offsetY+0);
-        cell.setObjectMap(door);
+
     }
 
     public ArrayList<Cell> getCells() {

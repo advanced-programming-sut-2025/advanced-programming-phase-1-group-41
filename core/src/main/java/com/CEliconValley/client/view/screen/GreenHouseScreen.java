@@ -4,6 +4,7 @@ import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.controller.spawners.ItemSpawner;
 import com.CEliconValley.client.view.screen.maps.FarmMap;
 import com.CEliconValley.common.CellData;
+import com.CEliconValley.controllers.Spawner.BuildingSpawner;
 import com.CEliconValley.controllers.Spawner.CropSpawner;
 import com.CEliconValley.controllers.Spawner.InventoryRenderer;
 import com.CEliconValley.controllers.Spawner.TreeSpawner;

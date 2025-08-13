@@ -8,6 +8,7 @@ import com.CEliconValley.common.AnimalData;
 import com.CEliconValley.common.CoopData;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.buildings.Door;
+import com.CEliconValley.models.buildings.animalContainer.CoopType;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -161,7 +162,14 @@ public class CoopScreen extends GameScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
-        batch.draw(background, 0, -CELL_SIZE/3 , CELL_SIZE * 13, CELL_SIZE * 9);
+        if(coop.getCoopType().equals(CoopType.Normal)) {
+            batch.draw(background, 0, -CELL_SIZE / 3f, CELL_SIZE * 13, CELL_SIZE * 9);
+        }else if(coop.getCoopType().equals(CoopType.Big)) {
+            batch.draw(background, -CELL_SIZE/2, -CELL_SIZE *2/ 3f, CELL_SIZE * 16, CELL_SIZE * 16*9/13f);
+        }
+        else{
+            batch.draw(background, 0, 0, CELL_SIZE * 20, CELL_SIZE * 20*9/13f);
+        }
 
 
         if (hero.currentAnimation != null) {

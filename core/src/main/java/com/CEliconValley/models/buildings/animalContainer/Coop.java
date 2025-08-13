@@ -45,7 +45,10 @@ public class Coop implements Building {
         this.coopType = coopType;
         this.x = x;
         this.y = y;
-        int size = 5 + coopType.getCapacity() / 4;
+        int size = 4 + coopType.getCapacity() / 4;
+        if(!coopType.equals(CoopType.Deluxe)){
+            size = size + 1;
+        }
         int xWall;
         int yWall;
         yWall = y;
@@ -84,8 +87,11 @@ public class Coop implements Building {
         this.capacity = coopType.getCapacity();
         this.x = x;
         this.y = y;
-        int size = 5 + coopType.getCapacity() / 4;
-        anchorX=x+size-1;
+        int size = 4 + coopType.getCapacity() / 4;
+        anchorX=x+size;
+        if(!coopType.equals(CoopType.Deluxe)){
+            size = size + 1;
+        }
         anchorY=y+1;
         int xWall;
         int yWall;

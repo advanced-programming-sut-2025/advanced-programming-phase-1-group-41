@@ -793,5 +793,12 @@ class FarmScreen extends GameScreen implements Screen {
         return new Result(true,"You have "+quantityOfFish+" fresh fish of "+caughtFish.getFishType().getName());
 
     }
+    public void breakRock(Cell cell){
+        for(CellData cellData:Finder.getfd().getCells()){
+            if(cellData.extractData().getX() == cell.getX() && cellData.extractData().getY() == cell.getY()){
+                rockSpawner.hitRock(cellData,Finder.getfd());
+            }
+        }
+    }
 
 }
