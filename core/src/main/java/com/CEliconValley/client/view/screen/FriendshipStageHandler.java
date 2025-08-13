@@ -543,6 +543,9 @@ public class FriendshipStageHandler {
                         setMessage("Your friendship xp is " + friendshipData.getFriendshipXp() + ", it should be at 300 xp to give flower.", Color.RED);
                         return;
                     }
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand("flower -u "+playerData.getUsername(), AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
                     // TODO give flower
                     return;
                 } else if (isPlayer && friendShipLevel == 3) {
@@ -558,14 +561,14 @@ public class FriendshipStageHandler {
                 }
                 switchForm("proposeOrQuest");
                 updateQuestsUI();
-                if(isPlayer){
-                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                        new GameCommand("hug -u "+playerData.getUsername(), AppClient.getUserData().getUsername()));
-                    AppClient.getClient().send(new Gson().toJson(msg));
-                    screen.friendshipMode = false;
-                    Gdx.input.setInputProcessor(screen.stage);
-                    emptyFields();
-                }
+//                if(isPlayer){
+//                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+//                        new GameCommand("hug -u "+playerData.getUsername(), AppClient.getUserData().getUsername()));
+//                    AppClient.getClient().send(new Gson().toJson(msg));
+//                    screen.friendshipMode = false;
+//                    Gdx.input.setInputProcessor(screen.stage);
+//                    emptyFields();
+//                }
                 //TODO proposeOrQuest
             }
         });

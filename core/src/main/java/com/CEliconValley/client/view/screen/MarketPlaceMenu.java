@@ -123,7 +123,7 @@ public class MarketPlaceMenu {
             Item item = slot.getItem();
             if (item == null) continue;
             int maxQuantity = slot.getQuantity();
-            int selected = selectedQuantities.getOrDefault(slot.getItem().getName(), 0);
+            int selected = selectedQuantities.getOrDefault(slot.getItem().getName(), 1);
 
 
             TextureRegion texture = ItemManager.getTexture(item);
@@ -191,6 +191,7 @@ public class MarketPlaceMenu {
             }
             font.setColor(selected < maxQuantity ? Color.WHITE : Color.GRAY);
             font.draw(batch,"+", x + slotSize + 55, y);
+            font.setColor(Color.WHITE);
 
             if (mousePos.x >= x && mousePos.x <= x + slotSize &&
                 mousePos.y >= y && mousePos.y <= y + slotSize) {
@@ -198,7 +199,7 @@ public class MarketPlaceMenu {
                     assert AppClient.getUserData() != null;
                     GameMessage<GameCommand> msg = new GameMessage<>(
                         "game-command",
-                        new GameCommand("purchase " + item.getName(),
+                        new GameCommand("purchase " + item.getName()+" -n "+selectedQuantities.get(item.getName()),
                             AppClient.getUserData().getUsername())
                     );
                     AppClient.getClient().send(new Gson().toJson(msg));
