@@ -15,6 +15,7 @@ import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -25,6 +26,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MarketPlaceMenu {
     private Texture menuTexture;
@@ -36,6 +39,7 @@ public class MarketPlaceMenu {
     private final BitmapFont font = new BitmapFont();
     private final GameScreen screen;
     private OrthographicCamera camera;
+    private Map<String, Integer> selectedQuantities = new HashMap<>();
     public MarketPlaceMenu(GameScreen screen) {
         this.screen = screen;
         menuTexture = GameAssetManager.getGameAssetManager().getScreenTexture("MarketPlaceMenu_Screen.png");
@@ -66,6 +70,8 @@ public class MarketPlaceMenu {
                 break;
             }
         }
+
+
 
         this.camera = camera;
 
@@ -116,6 +122,9 @@ public class MarketPlaceMenu {
             Slot slot = sd.getSlot();
             Item item = slot.getItem();
             if (item == null) continue;
+            int maxQuantity = slot.getQuantity();
+            int selected = selectedQuantities.getOrDefault(slot.getItem().getName(), 0);
+
 
             TextureRegion texture = ItemManager.getTexture(item);
             if (texture == null) continue;
@@ -166,6 +175,22 @@ public class MarketPlaceMenu {
             font.draw(batch, "$" + sd.getPrice(), x + slotSize + 120, y + slotSize / 2f);
 
             font.getData().setScale(1f);
+            if (isMouseOver( x + slotSize , y-10, 20, 20)) {
+                if (Gdx.input.isButtonJustPressed(0) && selected > 0) {
+                    selectedQuantities.put(slot.getItem().getName(), selected - 1);
+                }
+            }
+            font.setColor(selected > 0 ? Color.WHITE : Color.GRAY);
+            font.draw(batch,"-", x + slotSize + 10, y);
+            font.setColor(Color.WHITE);
+            font.draw(batch, String.valueOf(selected), x + slotSize + 35, y );
+            if (isMouseOver( x + slotSize + 45, y-10, 20, 20)) {
+                if (Gdx.input.isButtonJustPressed(0) && selected < maxQuantity) {
+                    selectedQuantities.put(slot.getItem().getName(), selected + 1);
+                }
+            }
+            font.setColor(selected < maxQuantity ? Color.WHITE : Color.GRAY);
+            font.draw(batch,"+", x + slotSize + 55, y);
 
             if (mousePos.x >= x && mousePos.x <= x + slotSize &&
                 mousePos.y >= y && mousePos.y <= y + slotSize) {
@@ -203,6 +228,12 @@ public class MarketPlaceMenu {
     }
     public void hideSoldOuts(){
         hideSoldOuts=!hideSoldOuts;
+    }
+    public boolean isMouseOver(float x, float y, float width, float height) {
+        Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        camera.unproject(mousePos);
+        return mousePos.x >= x && mousePos.x <= x + width &&
+            mousePos.y >= y && mousePos.y <= y + height;
     }
 
 }
