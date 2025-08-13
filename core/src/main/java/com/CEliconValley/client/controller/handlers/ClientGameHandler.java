@@ -165,6 +165,17 @@ public class ClientGameHandler {
                     screen.handleVote(screen.getStage(), vote.target);
                 }
             }
+            case "rock-anime" -> {
+                BreakAnimCred cred = gson.fromJson(body, BreakAnimCred.class);
+                CellData cellData = cred.cellData;
+                if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                    .getScreen()  instanceof GameScreen gs){
+                    if(gs instanceof FarmScreen screen){
+                        // todo shahab break animation
+                    }
+                }
+
+            }
             case "message-cred" -> {
                 if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
                     .getScreen()  instanceof GameScreen gs){

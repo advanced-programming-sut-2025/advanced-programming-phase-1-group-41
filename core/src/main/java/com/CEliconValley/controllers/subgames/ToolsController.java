@@ -1,5 +1,10 @@
 package com.CEliconValley.controllers.subgames;
 
+import com.CEliconValley.common.CellData;
+import com.CEliconValley.common.SlotData;
+import com.CEliconValley.common.messages.BreakAnimCred;
+import com.CEliconValley.common.messages.GameCommand;
+import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.foragings.*;
 import com.CEliconValley.models.foragings.Nature.*;
@@ -19,6 +24,7 @@ import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Products.Product;
 import com.CEliconValley.models.items.Products.ProductType;
 import com.CEliconValley.models.locations.Farm;
+import com.google.gson.Gson;
 import dev.morphia.aggregation.stages.Match;
 
 import java.util.Random;
@@ -199,6 +205,12 @@ public class ToolsController {
                     (Item) cell.getObjectMap(), 1 + value
             );
             player.getForagingSkill().increaseXp(10);
+
+            // todo
+            GameMessage<BreakAnimCred> msg = new GameMessage<BreakAnimCred>("rock-anime",
+                new BreakAnimCred(new CellData(cell)));
+            App.getServer().sendToPlayer(player, new Gson().toJson(msg));
+
             String name = ((Item)cell.getObjectMap()).getName();
             cell.setObjectMap(new Mine(x,y,farm,12121212));
             return new Result(true, "got a "+name);
@@ -244,10 +256,20 @@ public class ToolsController {
                     cell4.setObjectMap(new Grass());
                 }
                 cell.setObjectMap(new Grass());
+
+
+                // todo
+                GameMessage<BreakAnimCred> msg = new GameMessage<BreakAnimCred>("rock-anime",
+                    new BreakAnimCred(new CellData(cell)));
+                App.getServer().sendToPlayer(player, new Gson().toJson(msg));
+
                 return new Result(true, "got a "+name);
             } else{
                 if(cell.getObjectMap() instanceof Rock && !cell.getObjectMap().getName().equals(new Grass().getName())){
-                    return new Result(true, "Hits Left: "+((Rock) cell.getObjectMap()).getHitPoints());
+
+                    Result result = new Result(true, "Hits Left: "+((Rock) cell.getObjectMap()).getHitPoints());
+                    App.sendResult(result, playername);
+                    return result;
                 }
                 return new Result(true,"broke");
             }
