@@ -58,7 +58,7 @@ public class TreeSpawner {
                 if(tree.isThundered()){
                     stage=9;
                 }
-                System.out.println(stage+"<------------------------------------------------");
+//                System.out.println(stage+"<------------------------------------------------");
 
 
 
@@ -93,7 +93,7 @@ public class TreeSpawner {
                 if(tree.isThundered()){
                     stage=9;
                 }
-                System.out.println(stage+"<-------------------------------------------->"+tree.getCurrentStage());
+//                System.out.println(stage+"<-------------------------------------------->"+tree.getCurrentStage());
 
 
                 TextureRegion[] frames = treeFramesMap.get(type.name());

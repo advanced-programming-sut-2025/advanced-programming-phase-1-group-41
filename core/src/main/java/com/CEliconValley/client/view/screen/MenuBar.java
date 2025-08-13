@@ -1053,7 +1053,7 @@ public class MenuBar {
         font.setColor(Color.WHITE);
         font.getData().setScale(1f);
 
-        x -= screenHeight * 0.0275f;
+        x -= screenHeight * 0.025f;
 
         for (GiftData giftData : Finder.getpd().getNewGiftsData()) {
             String text = giftData.getSlotData().getItemName() + " from " + giftData.getFromName();
@@ -1064,7 +1064,7 @@ public class MenuBar {
             font.getData().setScale(2f);
             font.draw(batch, text, playerX, playerY + playerSize / 1.5f);
 
-            playerX += playerSize * 1.2f;
+            playerX += playerSize * 1.3f;
 
             for (int i = 0; i < 5; i++) {
                 playerX += playerSize / 2f;
