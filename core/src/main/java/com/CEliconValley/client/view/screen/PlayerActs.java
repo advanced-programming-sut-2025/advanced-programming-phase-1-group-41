@@ -138,6 +138,18 @@ public class PlayerActs {
             if(screen.friendshipStageHandler.isChatting && Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
                 String message = screen.friendshipStageHandler.chatTextField.getText();
                 // TODO Chatting
+                if(screen.friendshipStageHandler.isPlayer){
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand
+                            ("talk -u "+screen.friendshipStageHandler.playerData.getUsername()+
+                                " -m "+message, AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
+                }else{
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand
+                            ("meet NPC "+screen.friendshipStageHandler.npcData.getName(), AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
+                }
                 screen.friendshipStageHandler.chatTextField.setText("");
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){

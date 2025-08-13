@@ -19,7 +19,6 @@ public class Friendship {
     private boolean areMarried = false;
     private Player proposer = null;
 
-
     public Friendship(Player proposer, Player player1, Player player2,
                       int level, int lastReadMessage, boolean hadTradeToday,
                       boolean hadTalkingToday, boolean hadRejectedTradeToday,
@@ -46,7 +45,7 @@ public class Friendship {
         this.player1 = player1;
         this.player2 = player2;
         friendshipLevel = FriendshipLevel.Stranger;
-        level = 0;
+        level = 2;
         friendshipXp = 0;
     }
 

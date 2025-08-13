@@ -1,7 +1,11 @@
 package com.CEliconValley.models.ui;
 
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.view.screen.FriendshipStageHandler;
+import com.CEliconValley.common.messages.GameCommand;
+import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.controllers.ItemManager;
+import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.items.Inventory;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
@@ -17,6 +21,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.google.gson.Gson;
 
 public class InventoryBarActor extends Actor {
 
@@ -45,6 +50,10 @@ public class InventoryBarActor extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        toFront();
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.update();
+        inventory = Finder.getpd().getInventoryData().getInventory();
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
 
@@ -78,7 +87,6 @@ public class InventoryBarActor extends Actor {
                     if (texture != null) {
                         float x = startingX + firstItemX + col * (slotSize + spacingX);
                         float y = startingY + firstItemY - row * (slotSize + spacingY) * 0.9f;
-
                         float originalWidth = texture.getRegionWidth() * 0.9f;
                         float originalHeight = texture.getRegionHeight() * 0.9f;
 
@@ -121,10 +129,18 @@ public class InventoryBarActor extends Actor {
                             String name;
                             if(friendshipStageHandler.isPlayer){
                                 name = friendshipStageHandler.playerData.getUsername();
+                                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                    new GameCommand("gift -u "+name+" -i "+item.getName()+" -a 1",
+                                        AppClient.getUserData().getUsername()));
+                                AppClient.getClient().send(new Gson().toJson(msg));
                             } else{
                                 name = friendshipStageHandler.npcData.getName();
+                                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                    new GameCommand("gift NPC "+name+" -i "+item.getName(),
+                                        AppClient.getUserData().getUsername()));
+                                AppClient.getClient().send(new Gson().toJson(msg));
                             }
-                            friendshipStageHandler.setMessage("Gifted " + item.getName() + " to " + name + ".", CustomColors.GAMEGREENCOLOR);
+//                            friendshipStageHandler.setMessage("Gifted " + item.getName() + " to " + name + ".", CustomColors.GAMEGREENCOLOR);
                         }
                     }
                 }

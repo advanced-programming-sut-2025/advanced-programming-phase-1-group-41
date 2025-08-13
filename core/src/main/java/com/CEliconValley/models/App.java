@@ -7,6 +7,7 @@ import com.CEliconValley.common.OnlineData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.ErrorMessage;
 import com.CEliconValley.common.messages.GameMessage;
+import com.CEliconValley.common.messages.ResultSender;
 import com.CEliconValley.common.messages.SuccessMessage;
 import com.CEliconValley.database.UserDB;
 import com.CEliconValley.server.GameServer;
@@ -246,5 +247,10 @@ public class App {
                 new SuccessMessage("game_request", result.message()));
             App.getServer().sendToPlayername(playername, new Gson().toJson(response));
         }
+    }
+
+    public static void sendRawResult(Result result, String playername){
+        GameMessage<ResultSender> msg = new GameMessage<>("game-result",new ResultSender(result));
+        App.getServer().sendToPlayername(playername, new Gson().toJson(msg));
     }
 }

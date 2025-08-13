@@ -240,7 +240,7 @@ public class MenuBar {
                                             AppClient.getUserData().getUsername())
                                     );
                                     AppClient.getClient().send(new Gson().toJson(msg));
-                                }else if(Food.parseFood(item.getName()) != null){
+                                }else if(Finder.parseItem(item.getName()) instanceof Eatable){
                                     assert AppClient.getUserData() != null;
                                     GameMessage<GameCommand> msg = new GameMessage<>("game-command",
                                         new GameCommand("eat " + item.getName(),
@@ -527,7 +527,7 @@ public class MenuBar {
                 NPCData npcData = NPCsData.get(i - relationsIndex.size());
                 String NPCname = npcData.getName();
 
-                friendShipLevel = npcData.getFriendShipData().get(Objects.requireNonNull(Finder.getpd()).getUsername());
+                friendShipLevel = npcData.getFriendShipData().get(Objects.requireNonNull(Finder.getpd()).getUsername()) / 200;
 
                 if(npcData.getName().equals("Mohsen")) {
                     batch.draw(mohsenAvatarTexture, characterX, characterY, characterSize, characterSize);
@@ -1160,7 +1160,7 @@ public class MenuBar {
     public void scrollDown() {
         startingRow++;
 
-        if (selectedIndex < GameAssetManager.getGameAssetManager().npcTextures.size() + relationTextures.size() - visibleRelationsCount + 1)
+        if (selectedIndex < GameAssetManager.getGameAssetManager().npcTextures.size() + relationTextures.size() - visibleRelationsCount - 3)
             selectedIndex++;
     }
 
@@ -1177,7 +1177,6 @@ public class MenuBar {
             if (tabOrder[nextIndex] != null) {
                 currentTab = tabOrder[nextIndex];
             } else {
-
                 nextIndex = (nextIndex + 1) % tabOrder.length;
                 currentTab = tabOrder[nextIndex];
             }

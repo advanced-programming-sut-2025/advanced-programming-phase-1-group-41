@@ -9,6 +9,9 @@ import com.google.gson.JsonObject;
 public class ClientMessageRouter {
     public static void route(String type, JsonObject body, Gson gson,
                              long timestamp, String message) {
+        if(type.equals("game-result")) {
+            System.out.println("Cmessage: " + message);
+        }
         switch (type) {
             case "app-data", "avatar-response", "handshake-data" -> {
                 GeneralHandler.handle(type, body, gson, timestamp);
@@ -21,7 +24,7 @@ public class ClientMessageRouter {
             }
             case "game-data", "new-game", "pre-start-request", "game-command",
                  "farm-data", "player-data", "new-vote", "message-cred" ,
-                 "npc-data" -> ClientGameHandler.handle(type, body, gson, timestamp);
+                 "npc-data", "game-result" -> ClientGameHandler.handle(type, body, gson, timestamp);
         }
     }
     public static void route(String type, Gson gson,

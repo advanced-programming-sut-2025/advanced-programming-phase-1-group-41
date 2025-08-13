@@ -5,10 +5,7 @@ import com.CEliconValley.client.view.LobbyScreen;
 import com.CEliconValley.client.view.screen.*;
 import com.CEliconValley.common.*;
 import com.CEliconValley.common.messages.*;
-import com.CEliconValley.models.App;
-import com.CEliconValley.models.Finder;
-import com.CEliconValley.models.Menu;
-import com.CEliconValley.models.Player;
+import com.CEliconValley.models.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
@@ -176,6 +173,19 @@ public class ClientGameHandler {
                     gs.updateChat();
                 }
             }
+            case "game-result" -> {
+                ResultSender result = gson.fromJson(body, ResultSender.class);
+                System.out.println("Expected Result: "+result.message);
+                if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen() instanceof GameScreen screen){
+                    System.out.println(result);
+                    Gdx.app.postRunnable(()->{
+                        if(screen.friendshipMode){
+                            screen.friendshipStageHandler.setMessage(result);
+                            System.out.println(result);
+                        }
+                    });
+                }
+            }
             case "game-command" -> {
                 GameCommand gamecommand = gson.fromJson(body, GameCommand.class);
                 System.out.println("received a command "+gamecommand.command);
@@ -218,7 +228,19 @@ public class ClientGameHandler {
                             }
                         }, 5);
                     }
-                }else if(gamecommand.command.equals("go-to-village")){
+                }else if(gamecommand.command.equals("text-mention")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen() instanceof GameScreen screen){
+                        screen.updateTagMessage(gamecommand.playerName);
+                        new Timer().schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                screen.removeTagMessage();
+                            }
+                        }, 5);
+                    }
+                }
+                else if(gamecommand.command.equals("go-to-village")){
                     if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
                         .getScreen() instanceof FarmScreen screen){
                         Gdx.app.postRunnable(()->{

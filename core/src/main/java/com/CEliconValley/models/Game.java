@@ -104,6 +104,18 @@ public class Game {
         this.lobby = lobby;
         this.playerMessages = new ArrayList<>();
         this.playerMessages = new ArrayList<>();
+
+
+        for (int i = 0; i < players.size(); i++) {
+            Player player = players.get(i);
+            for (int j = i; j < players.size(); j++) {
+                if(i == j) continue;
+                Player second = players.get(j);
+                Friendship friendship = new Friendship(player, second);
+                player.addFriendship(friendship);
+                second.addFriendship(friendship);
+            }
+        }
     }
 
 

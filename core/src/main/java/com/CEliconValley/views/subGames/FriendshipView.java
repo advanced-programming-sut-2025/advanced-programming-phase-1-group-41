@@ -1,22 +1,26 @@
 package com.CEliconValley.views.subGames;
 
 import com.CEliconValley.controllers.subgames.FriendshipController;
+import com.CEliconValley.models.App;
+import com.CEliconValley.models.Result;
 import com.CEliconValley.views.commands.gameCommands.FriendShipCommands;
 
 import java.util.regex.Matcher;
 
 public class FriendshipView {
     static FriendshipController controller =  new FriendshipController();
-    public static boolean check(String input){
+    public static boolean check(String input, String playername) {
         Matcher matcher;
         if((matcher = FriendShipCommands.Friendships.getMatcher(input)) != null){
             System.out.println(controller.friendshipsList(matcher));
         } else if((matcher = FriendShipCommands.Talk.getMatcher(input)) != null){
-            System.out.println(controller.talk(matcher));
+            System.out.println(controller.talk(matcher, playername));
         } else if((matcher = FriendShipCommands.TalkHistory.getMatcher(input)) != null){
             System.out.println(controller.talkHistory(matcher));
         } else if((matcher = FriendShipCommands.Gift.getMatcher(input)) != null){
-            System.out.println(controller.gift(matcher));
+            Result result = controller.gift(matcher, playername);
+            System.out.println(result);
+            App.sendRawResult(result, playername);
         } else if((matcher = FriendShipCommands.GiftList.getMatcher(input)) != null){
             System.out.println(controller.giftList(matcher));
         } else if((matcher = FriendShipCommands.GiftRate.getMatcher(input)) != null){

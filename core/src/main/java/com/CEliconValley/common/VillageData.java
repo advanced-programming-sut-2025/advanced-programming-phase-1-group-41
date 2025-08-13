@@ -16,7 +16,7 @@ import java.util.HashMap;
 @Embedded
 public class VillageData {
     ArrayList<CellData> cellsData;
-    ArrayList<MarketPlaceData> markplacesData;
+    ArrayList<MarketPlaceData> marketplacesData;
     ArrayList<BuildingData> buildingsData;
 //    ArrayList<CellData> transferCellsData;
 //    ArrayList<CellData> startPointsData;
@@ -27,7 +27,7 @@ public class VillageData {
 
     public VillageData(Village village) {
         cellsData = new ArrayList<>();
-        markplacesData = new ArrayList<>();
+        marketplacesData = new ArrayList<>();
         buildingsData = new ArrayList<>();
 //        transferCellsData = new ArrayList<>();
 //        startPointsData = new ArrayList<>();
@@ -43,7 +43,7 @@ public class VillageData {
 //        });
         for (Building building : village.getBuildings()) {
             if(building instanceof Marketplace marketplace){
-                markplacesData.add(new MarketPlaceData(marketplace));
+                marketplacesData.add(new MarketPlaceData(marketplace));
             }
             buildingsData.add(new BuildingData(building));
         }
@@ -69,7 +69,7 @@ public class VillageData {
 
         for (Building building : village.getBuildings()) {
             if(building instanceof Marketplace marketplace){
-                for (MarketPlaceData marketPlaceData : markplacesData) {
+                for (MarketPlaceData marketPlaceData : marketplacesData) {
                     if(marketPlaceData.getName().equals(marketplace.getName())){
                         marketplace.setItemsForSale(getItemsForSale(marketPlaceData));
                         break;
@@ -136,8 +136,8 @@ public class VillageData {
         return buildingsData;
     }
 
-    public ArrayList<MarketPlaceData> getMarkplacesData() {
-        return markplacesData;
+    public ArrayList<MarketPlaceData> getMarketplacesData() {
+        return marketplacesData;
     }
 
     public ArrayList<NPCData> getNPCsData() {

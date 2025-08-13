@@ -286,6 +286,16 @@ public class PlayerController {
         return new Result(true, value+" energy added :)");
     }
 
+    public Result fish(Matcher matcher, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        String fishname = matcher.group(1);
+        int quantity = Integer.parseInt(matcher.group(2).trim());
+        Inventory inventory = player.getInventory();
+        System.out.println("fishname {"+fishname+"}");
+        inventory.addToInventory(Finder.parseItem(fishname), quantity);
+        return new Result(true,"you got "+quantity+" of "+fishname);
+    }
+
     public Result fishing(Matcher matcher){
         Game game=App.getGame();
         String fishingRodName = matcher.group(1).trim();

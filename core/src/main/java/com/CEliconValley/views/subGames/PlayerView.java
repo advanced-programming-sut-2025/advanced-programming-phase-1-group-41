@@ -25,8 +25,10 @@ public class PlayerView {
         }else if((matcher = InventoryAndToolCommands.InventoryShow.getMatcher(input))!=null){
             System.out.println(controller.showInventory(matcher, playername));
         }else if((matcher = GameMainCommands.Fishing.getMatcher(input))!=null){
-            System.out.println(controller.fishing(matcher));
-        }else if((matcher = GameMainCommands.Eat.getMatcher(input))!=null){
+            System.out.println(controller.fishing(matcher));}
+        else if((matcher = GameMainCommands.Fish.getMatcher(input))!=null){
+                System.out.println(controller.fish(matcher, playername));}
+        else if((matcher = GameMainCommands.Eat.getMatcher(input))!=null){
             System.out.println(controller.eat(matcher, playername));
         }else if((matcher = GameMainCommands.SkillShow.getMatcher(input))!=null){
             System.out.println(controller.showSkill(matcher));

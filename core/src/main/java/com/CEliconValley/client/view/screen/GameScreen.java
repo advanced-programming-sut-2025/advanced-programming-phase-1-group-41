@@ -89,7 +89,7 @@ public abstract class GameScreen implements Screen {
     protected Stage chatStage;
     protected Stage scoreboardStage;
     protected Stage friendshipStage;
-    protected FriendshipStageHandler friendshipStageHandler;
+    public FriendshipStageHandler friendshipStageHandler;
     public CraftableMachine cm = null;
     public boolean sellmode = false;
     public boolean trashmode = false;
@@ -204,7 +204,9 @@ public abstract class GameScreen implements Screen {
             chatScrollPane.validate();
             chatScrollPane.setScrollPercentY(1f);
         });
-
+        if(friendshipStageHandler != null){
+            friendshipStageHandler.updateChat();
+        }
     }
 
     private void setupChatUI(){

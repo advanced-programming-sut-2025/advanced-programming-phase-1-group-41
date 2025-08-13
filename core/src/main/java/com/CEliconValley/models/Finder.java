@@ -13,6 +13,7 @@ import com.CEliconValley.models.items.*;
 import com.CEliconValley.client.view.screen.maps.CottageMap;
 import com.CEliconValley.client.view.screen.maps.BarnMap;
 import com.CEliconValley.client.view.screen.maps.GreenhouseMap;
+import com.CEliconValley.models.items.craftableitems.SmokedFish;
 import com.CEliconValley.models.npc.npcCharacters.*;
 import com.CEliconValley.models.npc.npchomes.*;
 import org.bson.types.ObjectId;
@@ -305,6 +306,7 @@ public class Finder {
         return null;
     }
     public static PlayerData getpd(){
+        if(AppClient.getGameData() == null) return null;
         for (PlayerData pd : AppClient.getGameData().getPlayersData()) {
             if(pd.getUsername().equals(AppClient.getUserData().getUsername())){
                 return pd;

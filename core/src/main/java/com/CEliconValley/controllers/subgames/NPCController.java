@@ -11,6 +11,7 @@ import com.CEliconValley.models.npc.npcCharacters.Quest;
 import com.CEliconValley.models.tools.Tool;
 import com.CEliconValley.models.ui.TerminalColors;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -21,10 +22,10 @@ import static com.CEliconValley.models.Finder.parseNPC;
 public class NPCController {
 
     public Result meetNpc(Matcher matcher){
-        Inventory inventory= App.getGame().getCurrentPlayer().getInventory();
-        Player player=App.getGame().getCurrentPlayer();
+        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
+        Player player = App.getGame().getCurrentPlayer();
         String npcName = matcher.group(1);
-        NPC npc=findNPCAround(npcName);
+        NPC npc=findNPCAround(npcName, player);
         if(npc==null){
             if(!getNPCList().contains(npcName)){
                 return new Result(false, "no one`s here with that name");
@@ -64,12 +65,18 @@ public class NPCController {
         return new Result(false, "impossible");
     }
 
-    public Result giftToNpc(Matcher matcher){
-        Inventory inventory=App.getGame().getCurrentPlayer().getInventory();
-        Player player=App.getGame().getCurrentPlayer();
+    public Result giftToNpc(Matcher matcher, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        Inventory inventory=player.getInventory();
         String npcName = matcher.group(1);
         String itemName = matcher.group(2);
-        NPC npc=findNPCAround(npcName);
+        NPC npc = null;
+        for(NPC npc1 : App.getGame().getVillage().getNPCs()){
+            if(npc1.getName().equals(npcName)){
+                npc = npc1;
+            }
+        }
+//        NPC npc=findNPCAround(npcName, player);
         if(npc==null){
             if(!getNPCList().contains(npcName)){
                 return new Result(false, "no one`s here with that name");
@@ -89,7 +96,7 @@ public class NPCController {
         inventory.removeFromInventory(item,1);
         if(npc.getFavorites().contains(item)){
             if(!npc.isGiftedToday(player)) {
-                npc.incFriendShip(App.getGame().getCurrentPlayer(), 200);
+                npc.incFriendShip(player, 200);
 
             }
             npc.setGiftedToday(player,true);
@@ -97,7 +104,7 @@ public class NPCController {
         }
         else{
             if(!npc.isGiftedToday(player)){
-                npc.incFriendShip(App.getGame().getCurrentPlayer(), 50);
+                npc.incFriendShip(player, 50);
             }
             npc.setGiftedToday(player,true);
             return new Result(true, npc.getDialogues(9));
@@ -164,12 +171,12 @@ public class NPCController {
         return new Result(true, " ");
     }
 
-    public Result finishQuest(Matcher matcher){
-        Inventory inventory=App.getGame().getCurrentPlayer().getInventory();
-        Player player=App.getGame().getCurrentPlayer();
+    public Result finishQuest(Matcher matcher, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        Inventory inventory=player.getInventory();
         int indexOfQuest=Integer.parseInt(matcher.group(1));
         for(NPC npc :App.getGame().getVillage().getNPCs()){
-            if(findNPCAround(npc.getName())!=null){
+            if(findNPCAround(npc.getName(), player)!=null){
                 Quest quest =npc.getQuests().get(indexOfQuest-1);
                 if(quest.isLocked(player)){
                     if(indexOfQuest==1){
@@ -193,8 +200,7 @@ public class NPCController {
     }
 
 
-    private NPC findNPCAround(String name){
-        Player player = App.getGame().getCurrentPlayer();
+    private NPC findNPCAround(String name, Player player){
         NPC npc = parseNPC(name);
 
         if(npc==null){
