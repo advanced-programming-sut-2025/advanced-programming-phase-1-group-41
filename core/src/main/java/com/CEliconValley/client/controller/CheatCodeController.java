@@ -41,9 +41,9 @@ public class CheatCodeController {
         } else if ((matcher = StoreCommands.CheatAddDollars.getMatcher(input)) != null) {
             System.out.println(marketplaceController.cheatAddMoney(matcher, playerName));
         }else if((matcher = GameMainCommands.EnergyUnlimited.getMatcher(input))!=null){
-            System.out.println(playerController.cheatEnergyUnlimited(matcher));
+            System.out.println(playerController.cheatEnergyUnlimited(matcher, playerName));
         }else if((matcher = GameMainCommands.EnergySet.getMatcher(input))!=null){
-            System.out.println(playerController.cheatEnergySet(matcher));
+            System.out.println(playerController.cheatEnergySet(matcher, playerName));
         } else{
             return false;
         }

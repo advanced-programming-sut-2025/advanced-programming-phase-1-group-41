@@ -596,6 +596,7 @@ public abstract class GameScreen implements Screen {
 
         stage.addActor(overlay);
         overlay.toBack();
+
     }
 
     public void handleVote(Stage stage, String name) {
@@ -679,6 +680,8 @@ public abstract class GameScreen implements Screen {
             stage.addActor(overlay);
             overlay.toBack();
 
+
+            PlayerActs.showProposalUI();
         });
     }
 

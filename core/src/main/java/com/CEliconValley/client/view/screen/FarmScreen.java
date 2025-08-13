@@ -212,6 +212,7 @@ class FarmScreen extends GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if(AppClient.getGameData() == null) return;
         bushTexture = GameAssetManager.getGameAssetManager().getTileTexture("Bush_" + AppClient.getGameData().getTime().getSeason().name + ".png");
         if(isGameFinished) return;
         String season = AppClient.getGameData().getTime().getSeason().name();
@@ -594,6 +595,10 @@ class FarmScreen extends GameScreen implements Screen {
 
         SimplePathFinder spf = new SimplePathFinder(farmMap);
         hero.movementQueue = spf.getPathQueue(hero.playerX.get(), hero.playerY.get(), hero.destX, hero.destY);
+        if(hero.movementQueue.isEmpty()){
+            GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("at home", AppClient.getUserData().getUsername()));
+            AppClient.getClient().send(new Gson().toJson(msg));
+        }
 
 
     }
