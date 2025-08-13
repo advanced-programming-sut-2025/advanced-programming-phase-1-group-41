@@ -1045,7 +1045,7 @@ public class MenuBar {
         }
 
         y = startingY + screenHeight * 0.55f;
-        x += screenWidth * 0.25f;
+        x += screenWidth * 0.275f;
 
         font.getData().setScale(2.4f);
         font.setColor(CustomColors.GOLD);
