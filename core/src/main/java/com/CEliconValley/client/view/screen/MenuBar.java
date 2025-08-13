@@ -138,10 +138,15 @@ public class MenuBar {
 
         switch (currentTab) {
             case "Crafting":
-            case "Food":
-            case "Gift":
+                renderCrafting(batch);
                 renderInventoryBar(batch, camera, inventory);
                 break;
+            case "Food":
+                renderCooking(batch);
+                renderInventoryBar(batch, camera, inventory);
+                break;
+            case "Gift":
+                renderGifts(batch);
             case "Inventory":
                 renderInventoryBar(batch, camera, inventory);
                 renderSelectedItem(batch);
@@ -982,6 +987,10 @@ public class MenuBar {
         font.getData().setScale(1f);
     }
 
+    private void renderGifts(Batch batch){
+
+    }
+
     private boolean hasAllItems(CraftingRecipe recipe) {
         Map<Item, Integer> requiredItems = recipe.neededItems;
         Inventory inventory = player.getInventory();
@@ -1144,8 +1153,6 @@ public class MenuBar {
             font.setColor(1f, 1f, 1f, 1f);
         }
     }
-
-
 
     public void dispose() {
         menuTexture.dispose();
