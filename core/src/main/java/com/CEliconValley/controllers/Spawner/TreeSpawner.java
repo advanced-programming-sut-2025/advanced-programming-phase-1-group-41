@@ -1,5 +1,6 @@
 package com.CEliconValley.controllers.Spawner;
 
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.view.screen.GreenHouseScreen;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.models.Cell;
@@ -53,7 +54,13 @@ public class TreeSpawner {
             if (cell.getObjectMap() instanceof ForagingTree) {
                 ForagingTree tree = (ForagingTree) cell.getObjectMap();
                 TreeType type = tree.getTreeType();
-                int stage = 7;
+                int stage = 3+getSeasonIndex();
+                if(tree.isThundered()){
+                    stage=9;
+                }
+                System.out.println(stage+"<------------------------------------------------");
+
+
 
                 TextureRegion[] frames = treeFramesMap.get(type.name());
                 if (frames != null && stage >= 0 && stage < frames.length) {
@@ -73,7 +80,21 @@ public class TreeSpawner {
             if (cell.getObjectMap() instanceof Tree) {
                 Tree tree = (Tree) cell.getObjectMap();
                 TreeType type = tree.getTreeType();
-                int stage = 7;
+                int stage = tree.getCurrentStage();
+                if(tree.getCurrentStage()>0){
+                    stage++;
+                }
+                if(tree.getCurrentStage()==3){
+                    stage=tree.getCurrentStage()+getSeasonIndex();
+                }
+                if(tree.getCurrentStage()==4){
+                    stage=8;
+                }
+                if(tree.isThundered()){
+                    stage=9;
+                }
+                System.out.println(stage+"<-------------------------------------------->"+tree.getCurrentStage());
+
 
                 TextureRegion[] frames = treeFramesMap.get(type.name());
                 if (frames != null && stage >= 0 && stage < frames.length) {
@@ -100,7 +121,19 @@ public class TreeSpawner {
         if (cell.getObjectMap() instanceof Tree) {
             Tree tree = (Tree) cell.getObjectMap();
             TreeType type = tree.getTreeType();
-            int stage = 7;
+            int stage = tree.getCurrentStage();
+            if(tree.getCurrentStage()>0){
+                stage++;
+            }
+            if(tree.getCurrentStage()==3){
+                stage=tree.getCurrentStage()+getSeasonIndex();
+            }
+            if(tree.getCurrentStage()==4){
+                stage=8;
+            }
+            if(tree.isThundered()){
+                stage=9;
+            }
 
             TextureRegion[] frames = treeFramesMap.get(type.name());
             if (frames != null && stage >= 0 && stage < frames.length) {
@@ -118,6 +151,23 @@ public class TreeSpawner {
         }
 
 
+    }
+    private int getSeasonIndex(){
+        switch(AppClient.getGameData().getTime().getSeason()){
+            case Spring -> {
+                return 1;
+            }
+            case Summer -> {
+                return 2;
+            }
+            case Autumn -> {
+                return 3;
+            }
+            case Winter -> {
+                return 4;
+            }
+        }
+        return 0;
     }
 
 

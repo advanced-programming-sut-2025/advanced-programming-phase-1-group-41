@@ -55,7 +55,7 @@ public class CropSpawner {
             cropFramesMap.put(cropType, frames);
         }
 
-        // محصولات Foraging (از ردیف cropCount به بعد، هر ردیف 5 محصول)
+
         int startRow = cropCount;
         for (int i = 0; i < forageCount; i++) {
             ForagingCropType type = ForagingCropType.values()[i];

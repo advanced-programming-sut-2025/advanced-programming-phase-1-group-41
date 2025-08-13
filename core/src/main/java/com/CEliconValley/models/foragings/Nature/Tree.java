@@ -26,7 +26,7 @@ public class Tree implements Nature, Obstacle {
     private int hitPoints;
     private final TreeType treeType;
     private int typeIndex = 0;
-    private int currentStage = 6;
+    private int currentStage = 0;
     private int currentStageLevel = 0;
     private boolean isWateredToday = false;
     private int waterStreak = 0;
