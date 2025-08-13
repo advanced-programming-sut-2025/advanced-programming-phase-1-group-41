@@ -476,15 +476,23 @@ public class FriendshipStageHandler {
         tradeForm.setVisible(formName.equals("trade"));
         updateQuestsUI();
         emptyFields();
+        resetProposing();
+    }
+
+    private void resetProposing(){
         if (isPlayer && friendShipLevel < 3) {
             proposeOrQuestTab.setText("Give Flower");
             if(friendShipLevel < 2 || friendshipData.getFriendshipXp() < 300){
                 proposeOrQuestTab.getLabel().setColor(Color.RED);
+            } else{
+                proposeOrQuestTab.getLabel().setColor(Color.WHITE);
             }
         } else if (isPlayer && friendShipLevel == 3) {
             proposeOrQuestTab.setText("Propose");
             if(friendshipData.getFriendshipXp() < 400){
                 proposeOrQuestTab.getLabel().setColor(Color.RED);
+            } else{
+                proposeOrQuestTab.getLabel().setColor(Color.WHITE);
             }
         } else if (isPlayer) {
             proposeOrQuestTab.setText("Go To Farm");
@@ -556,7 +564,7 @@ public class FriendshipStageHandler {
                     // TODO Propose
                     return;
                 } else if (isPlayer) {
-                    // TODO GO TO Farm
+                    // TODO Go To Farm
                     return;
                 }
                 switchForm("proposeOrQuest");
