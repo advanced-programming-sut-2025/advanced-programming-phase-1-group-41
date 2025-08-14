@@ -54,6 +54,8 @@ public class LobbyScreen implements Screen {
     private Table teamTable;
     private Table mapTable;
 
+    private Label errorLabel;
+
     private Texture teamBackgroundTexture;
     private Texture lobbyBackgorundTexture;
 
@@ -97,6 +99,8 @@ public class LobbyScreen implements Screen {
         label3 = new Label("PLAYER3", skin);
         label4 = new Label("PLAYER4", skin);
 
+        this.errorLabel = new Label("", skin);
+
         startGameButton = new TextButton("Start Game", skin);
         exitButton = new TextButton("Exit", skin);
 
@@ -136,6 +140,7 @@ public class LobbyScreen implements Screen {
 
         Table topContent = new Table();
         topContent.add(startGameButton).width(300).pad(20).padTop(150).row();
+        topContent.add(errorLabel).width(300).pad(20).padTop(150).row();
         startGameButton.setVisible(false);
         if(lobby.isLoad()){
             topContent.add(isLoadLabel).width(300).pad(20).row();
@@ -327,5 +332,9 @@ public class LobbyScreen implements Screen {
         return null;
     }
 
+    public void setErrorMessage(String text){
+        errorLabel.setText(text);
+        errorLabel.setColor(Color.RED);
+    }
 
 }

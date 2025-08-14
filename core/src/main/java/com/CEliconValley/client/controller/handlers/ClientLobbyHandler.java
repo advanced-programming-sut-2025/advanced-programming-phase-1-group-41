@@ -58,6 +58,7 @@ public class ClientLobbyHandler {
                 });
                 System.out.println("Cmessage: deleted lobby");
             }
+
         }
     }
     public static void handle(String type, String msg, Gson gson, long timestamp){
@@ -70,6 +71,11 @@ public class ClientLobbyHandler {
                     AppClient.setMenu(Menu.Main);
                     Main.getMain().setScreen(AppClient.getMenu().getScreen());
                 });
+            }
+            case "lobby-error" -> {
+                if(AppClient.getMenu().menu instanceof LobbyScreen view){
+                    view.setErrorMessage(msg);
+                }
             }
         }
     }

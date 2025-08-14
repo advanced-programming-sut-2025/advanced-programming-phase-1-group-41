@@ -43,12 +43,16 @@ public class GameHandler {
                     }
                     for (PlayerData pd : gd.getPlayersData()) {
                         if(!lobby.getPlayerNames().contains(pd.getUsername())){
-                            System.out.println(pd.getUsername()+" is not in lobby!");
+                            String text = pd.getUsername()+" is not in lobby!";
+                            System.out.println(text);
+                            conn.send(gson.toJson(new GameMessage<>("lobby-error", text)));
                             return;
                         }
                     }
                     if(gd.getPlayersData().size() != lobby.getPlayerNames().size()){
-                        System.out.println("someone new is in lobby ;)");
+                        String text = "someone new is in lobby ;)";
+                        System.out.println(text);
+                        conn.send(gson.toJson(new GameMessage<>("lobby-error", text)));
                         return;
                     }
                     Game game = gd.makeGame();
@@ -122,6 +126,7 @@ public class GameHandler {
                 System.out.println("saving game there");
                 GameMessage<String> exiter = new GameMessage<>("game-command","exit-game");
                 App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(exiter));
+                App.getGame().stopScheduler();
                 App.setGame(null);
             }
             case "load-game" -> {

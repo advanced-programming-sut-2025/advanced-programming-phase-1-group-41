@@ -34,7 +34,7 @@ public class ClientMessageRouter {
             case "game-command" -> {
                 ClientGameHandler.handle(type, message, gson, timestamp);
             }
-            case "leave-lobby" -> {
+            case "leave-lobby", "lobby-error" -> {
                 ClientLobbyHandler.handle(type, message, gson, timestamp);
                 System.out.println("lobby for "+message);
             }
