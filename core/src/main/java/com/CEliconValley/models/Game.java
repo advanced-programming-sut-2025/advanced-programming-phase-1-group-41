@@ -419,4 +419,8 @@ public class Game {
     public ArrayList<PlayerMessage> getPlayerMessages() {
         return playerMessages;
     }
+
+    public void setPlayerMessages(ArrayList<PlayerMessage> playerMessages) {
+        this.playerMessages = playerMessages;
+    }
 }

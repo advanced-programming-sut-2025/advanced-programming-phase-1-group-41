@@ -100,6 +100,11 @@ public class GameData {
                 }
             }
         }
+        if(playerMessages == null) {
+            game.setPlayerMessages(new ArrayList<>());
+        }else{
+            game.setPlayerMessages(new ArrayList<>(playerMessages));
+        }
         return game;
     }
 

@@ -135,7 +135,7 @@ public class ReactionBar {
             }
         }
         col = 0;
-        y = startingY + menuHeight / 3f
+        y = startingY + menuHeight / 3f;
         for (String reaction : allReactions) {
             font.draw(batch, reaction, x, y);
 

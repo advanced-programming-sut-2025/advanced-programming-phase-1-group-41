@@ -76,6 +76,7 @@ public class App {
                         }
                         App.getServer().sendToGroupByPlayers(senders, new Gson().toJson(exiter));
                         dcguys.clear();
+                        App.getGame().stopScheduler();
                         App.setGame(null);
                     }
                 }

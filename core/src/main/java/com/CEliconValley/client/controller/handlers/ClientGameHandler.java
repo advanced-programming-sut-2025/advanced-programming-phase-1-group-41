@@ -8,6 +8,7 @@ import com.CEliconValley.client.view.screen.*;
 import com.CEliconValley.common.*;
 import com.CEliconValley.common.messages.*;
 import com.CEliconValley.models.*;
+import com.CEliconValley.models.locations.Farm;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
@@ -153,10 +154,13 @@ public class ClientGameHandler {
                     AppClient.setGameData(gamedata);
                     Player player = Finder.getpd().getPlayer();
                     System.out.println("farid "+player.getFarmId());
-                    ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(new FarmScreen(
+                    FarmScreen farmScreen = new FarmScreen(
                         Finder.getFarmDataById(AppClient.getGameData(), AppClient.getUserData().getUsername()).getFarm(player), player
-                    ));
-                    System.out.println("farmid "+Finder.getFarmDataById(AppClient.getGameData(), AppClient.getUserData().getUsername()).getId());
+                    );
+                    ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(farmScreen);
+                    if(player.isPlayerIsInVillage()){
+                        PlayerActs.changeScreen(new VillageScreen(Objects.requireNonNull(Finder.getpd()).getPlayer(), farmScreen));
+                    }
                 });
             }
             case "pre-start-request" -> {

@@ -41,7 +41,7 @@ public class Main extends Game {
         image = new Texture(GameAssetManager.getGameAssetManager().CEliconValleyBackground);
         background = new Image(image);
         Graphics.DisplayMode displayMode = Gdx.graphics.getDisplayMode();
-        Gdx.graphics.setFullscreenMode(displayMode);
+//        Gdx.graphics.setFullscreenMode(displayMode);
         background.setSize(stage.getWidth(), stage.getHeight());
         stage.addActor(background);
         main.setScreen(AppClient.getMenu().getScreen());
