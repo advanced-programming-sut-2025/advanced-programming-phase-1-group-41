@@ -46,9 +46,17 @@ public class ReactionBar {
         this.screen = screen;
         menuTexture = GameAssetManager.getGameAssetManager().getScreenTexture("Reaction.png");
 
+        font.getData().setScale(2f);
+
         tileWidth = menuTexture.getWidth() / 3;
         tileHeight = menuTexture.getHeight() / 3;
 
+        allReactions.add("Salam");
+        allReactions.add("Salam");
+        allReactions.add("Salam");
+        allReactions.add("Salam");
+        allReactions.add("Salam");
+        allReactions.add("Salam");
         allReactions.add("Salam");
         allReactions.add("Khobi");
         allReactions.add("Man Kir Mikham");
@@ -78,10 +86,9 @@ public class ReactionBar {
         float x = startingX + screenWidth * 0.03f;
         float y = startingY + screenHeight * 0.6f;
 
-        float reactionSize = screenWidth * 0.04f;
+        float reactionSize = screenWidth * 0.08f;
 
         float spacingY = reactionSize * 0.6f;
-
 
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mousePos);
@@ -90,6 +97,46 @@ public class ReactionBar {
 
         int col = 0;
         for (String reaction : playerReactions) {
+            font.draw(batch, reaction, x, y);
+
+            if (mousePos.x >= x && mousePos.x <= x + reactionSize &&
+                mousePos.y >= y && mousePos.y <= y + reactionSize) {
+                if (Gdx.input.isButtonJustPressed(0)) {
+                    //TODO Left Click in Player Reactions
+                } else if (Gdx.input.isButtonJustPressed(1)) {
+                    //TODO Right Click in Player Reactions
+                }
+
+                GlyphLayout layout = new GlyphLayout(font, "React: " + reaction);
+                float tooltipWidth = layout.width + 20;
+                float tooltipHeight = layout.height + 10;
+
+                float tooltipX = x + reactionSize / 2f - tooltipWidth / 2f;
+                float tooltipY = y + reactionSize + 10;
+
+
+                batch.end();
+                shapeRenderer.setProjectionMatrix(camera.combined);
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                shapeRenderer.setColor(0, 0, 0, 0.8f);
+                shapeRenderer.rect(tooltipX, tooltipY, tooltipWidth, tooltipHeight);
+                shapeRenderer.end();
+                batch.begin();
+
+                font.draw(batch, layout, tooltipX + 10, tooltipY + tooltipHeight - 5);
+            }
+
+            x += reactionSize;
+            col++;
+            if (col == 5) {
+                col = 0;
+                y += spacingY;
+                x = startingX + screenWidth * 0.03f;
+            }
+        }
+        col = 0;
+        y = startingY + menuHeight / 3f
+        for (String reaction : allReactions) {
             font.draw(batch, reaction, x, y);
 
             if (mousePos.x >= x && mousePos.x <= x + reactionSize &&

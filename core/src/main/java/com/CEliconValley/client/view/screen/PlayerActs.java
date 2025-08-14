@@ -89,7 +89,7 @@ public class PlayerActs {
             if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyJustPressed(Input.Keys.CAPS_LOCK)){
                 screen.reactionMode = false;
             }
-            return new Result(true, "reactionmode opened");
+            return new Result(false, "chat");
         }
         if (screen.cheatMode) {
             stage.act(delta);
