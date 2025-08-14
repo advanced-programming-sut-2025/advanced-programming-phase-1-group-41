@@ -10,7 +10,10 @@ import com.CEliconValley.client.view.screen.menu.MarketPlaceMenu;
 import com.CEliconValley.client.view.screen.menu.MenuBar;
 import com.CEliconValley.client.view.screen.menu.ShippingBinBar;
 import com.CEliconValley.client.view.screen.randomwalk.Node;
-import com.CEliconValley.common.*;
+import com.CEliconValley.common.CellData;
+import com.CEliconValley.common.NPCData;
+import com.CEliconValley.common.PlayerData;
+import com.CEliconValley.common.VillageData;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.PosDiff;
@@ -29,8 +32,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.google.gson.Gson;
 
 import java.util.*;
@@ -72,6 +78,7 @@ public class VillageScreen extends GameScreen implements Screen {
     Texture farmlandTexture = GameAssetManager.getGameAssetManager().getTileTexture("farmland.png");
     Texture bombedTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
 
+
     public static final float VIRTUAL_WIDTH = 3160f;
     public static final float VIRTUAL_HEIGHT = 1350f;
     public static final int CELLS_IN_WIDTH = 15;
@@ -81,6 +88,7 @@ public class VillageScreen extends GameScreen implements Screen {
     private float passiveStateTime = 0f;
     public ArrayList<NPCSprite> npcSprites = new ArrayList<>();
     public ArrayList<PlayerSprite> playerSprites = new ArrayList<>();
+
 
 
     public void updatenpcData() {
@@ -179,6 +187,7 @@ public class VillageScreen extends GameScreen implements Screen {
         this.farmScreen = farmScreen;
 
         shippingBinBar = new ShippingBinBar(this);
+
 
         updatenpcData();
         updatePlayers();
@@ -500,4 +509,6 @@ public class VillageScreen extends GameScreen implements Screen {
             isMarketMenuOpen =! isMarketMenuOpen;
         };
     }
+
+
 }
