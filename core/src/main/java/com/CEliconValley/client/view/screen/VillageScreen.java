@@ -57,6 +57,7 @@ public class VillageScreen extends GameScreen implements Screen {
     public VillageMap villageMap;
     private GroundBorderSpawner groundBorderSpawner;
     private final List<CellData> visibleCells = new ArrayList<>();
+    private final AnimalMenu animalMenu;
     private String currentSeason = "";
     public FarmScreen farmScreen;
     Map<Cell, TextureRegion> groundCache;
@@ -121,6 +122,7 @@ public class VillageScreen extends GameScreen implements Screen {
         this.menuBar = super.getMenuBar();
         menuBar.setPlayer(player);
         this.marketPlaceMenu = super.getMarketPlaceMenu();
+        this.animalMenu =  super.getAnimalMenu();
         this.villageMap = new VillageMap(AppClient.getGameData().getVillageData());
         this.player = player;
         treeSpawner = new TreeSpawner();
@@ -368,6 +370,10 @@ public class VillageScreen extends GameScreen implements Screen {
                 marketPlaceMenu.renderShopMenu(batch, camera, marketplace);
 
             }
+        }else if(isAnimalMenuOpen) {
+
+                animalMenu.renderShopMenu(batch, camera);
+
         }
         else {inventoryRenderer.render(batch, camera);}
 

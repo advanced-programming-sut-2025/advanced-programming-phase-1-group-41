@@ -267,6 +267,11 @@ public class PlayerActs {
                 AppClient.getClient().send(new Gson().toJson(msg));
             }
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
+            if(screen instanceof VillageScreen villageScreen){
+                villageScreen.isAnimalMenuOpen = !villageScreen.isAnimalMenuOpen;
+            }
+        }
         else if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
             if(screen instanceof VillageScreen villageScreen){
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command",

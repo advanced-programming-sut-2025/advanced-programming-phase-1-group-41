@@ -28,6 +28,7 @@ import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.tools.FishingRod;
 import com.CEliconValley.models.tools.FishingRodLevel;
 import com.CEliconValley.models.ui.GameAssetManager;
+import com.CEliconValley.views.Crow;
 import com.CEliconValley.views.subGames.FishingMiniGame;
 import com.CEliconValley.views.subGames.Rain;
 import com.CEliconValley.views.subGames.Snow;
@@ -44,6 +45,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.google.gson.Gson;
+import org.bson.internal.BsonUtil;
 
 import java.util.*;
 
@@ -54,6 +56,7 @@ class FarmScreen extends GameScreen implements Screen {
     private final Snow snow;
     private final Thunder thunder;
     private MenuBar menuBar;
+    private Crow crow;
     private ArtisanMenu artisanMenu;
     private final Player player;
     private final TreeSpawner treeSpawner;
@@ -73,6 +76,8 @@ class FarmScreen extends GameScreen implements Screen {
     private final Texture grassTexture = GameAssetManager.getGameAssetManager().getTileTexture("grass.png");
     private final Texture groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("ground.png");
     private final Texture sandTexture = GameAssetManager.getGameAssetManager().getTileTexture("sand.png");
+    private final Texture canPlaceTexture = GameAssetManager.getGameAssetManager().getTileTexture("canPlace.png");
+    private final Texture cantPlaceTexture = GameAssetManager.getGameAssetManager().getTileTexture("cantPlace.png");
     private final Texture thunderedTexture = GameAssetManager.getGameAssetManager().getTileTexture("thundered.png");
     private final Texture farmlandTexture = GameAssetManager.getGameAssetManager().getTileTexture("farmland.png");
     private final Texture bombedTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
@@ -212,6 +217,7 @@ class FarmScreen extends GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+
         if(isGameFinished) return;
         String season = AppClient.getGameData().getTime().getSeason().name();
         if (!season.equals(currentSeason)) {
@@ -340,6 +346,31 @@ class FarmScreen extends GameScreen implements Screen {
                 batch.draw(thunderedTexture, x, y, CELL_SIZE, CELL_SIZE);
             }
         }
+            if(CraftableMachine.parseCraftable(hero.selectedItemName)!=null){
+                batch.setColor(1f,1f,1f,0.5f);
+                for(CellData celld:visibleCells){
+                    int x = (int) (celld.getX() * CELL_SIZE);
+                    int y = (int) (celld.getY() * CELL_SIZE);
+                    if(celld.extractData().getObjectMap() instanceof Grass){
+                        batch.draw(canPlaceTexture,x,y,CELL_SIZE,CELL_SIZE);
+                    }
+                    else{
+                        batch.draw(cantPlaceTexture,x,y,CELL_SIZE,CELL_SIZE);
+                    }
+                }
+                batch.setColor(1f,1f,1f,1f);
+            }
+        if(crow==null){
+            crow = new Crow(hero.playerX.get()*CELL_SIZE+MathUtils.random(0,2000));
+        }else if(crow.isDespawned()){
+            if(!(crow.spawnDate ==AppClient.getGameData().getTime().getDay())){
+                crow=null;
+            }
+        }else {
+            crow.update(Gdx.graphics.getDeltaTime());
+            crow.render(batch);
+        }
+
         if (AppClient.getGameData().getWeatherType().equals(WeatherType.Snowy)) {
             snow.render(batch, camera);
         }

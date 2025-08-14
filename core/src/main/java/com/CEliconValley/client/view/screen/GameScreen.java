@@ -55,6 +55,7 @@ public abstract class GameScreen implements Screen {
     protected boolean flip = false;
     protected boolean isMenuOpen = false;
     protected boolean isMarketMenuOpen = false;
+    protected boolean isAnimalMenuOpen = false;
     protected boolean isArtisanMenuOpen = false;
     protected InventoryRenderer inventoryRenderer;
     protected boolean cheatMode = false;
@@ -99,6 +100,7 @@ public abstract class GameScreen implements Screen {
     protected Hero hero;
     protected MenuBar menuBar = new MenuBar(this);
     protected MarketPlaceMenu marketPlaceMenu=new MarketPlaceMenu(this);
+    protected AnimalMenu animalMenu=new AnimalMenu(this);
     protected ArtisanMenu artisanMenu = new ArtisanMenu(this);
     protected BarnOrCoopMenuBar barnOrCoopMenuBar = new BarnOrCoopMenuBar(this);
     protected Texture hudTexture = new Texture(Gdx.files.internal("game/Clock/Clock.png"));
@@ -757,6 +759,9 @@ public abstract class GameScreen implements Screen {
     }
     public MarketPlaceMenu getMarketPlaceMenu() {
         return marketPlaceMenu;
+    }
+    public AnimalMenu getAnimalMenu() {
+        return animalMenu;
     }
 }
 
