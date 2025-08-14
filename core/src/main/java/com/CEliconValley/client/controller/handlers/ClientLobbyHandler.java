@@ -5,6 +5,7 @@ import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.view.LobbyScreen;
 import com.CEliconValley.client.view.MainMenuView;
 import com.CEliconValley.common.messages.GameMessage;
+import com.CEliconValley.common.messages.LeaveLobbyCred;
 import com.CEliconValley.models.Lobby;
 import com.CEliconValley.models.Menu;
 import com.badlogic.gdx.Gdx;
@@ -73,8 +74,9 @@ public class ClientLobbyHandler {
                 });
             }
             case "lobby-error" -> {
+                GameMessage<String> message = gson.fromJson(msg, new TypeToken<GameMessage<String>>() {}.getType());
                 if(AppClient.getMenu().menu instanceof LobbyScreen view){
-                    view.setErrorMessage(msg);
+                    view.setErrorMessage(message.body);
                 }
             }
         }
