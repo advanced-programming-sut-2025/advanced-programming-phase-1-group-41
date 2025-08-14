@@ -38,6 +38,7 @@ public class Hero {
     private TextureRegion[][] farmingActs;
     private Farm farm;
     public int currentDirection=3;
+    public boolean showEmote = false;
 
     public AtomicInteger playerX = new AtomicInteger();
     public final AtomicInteger playerY = new AtomicInteger();

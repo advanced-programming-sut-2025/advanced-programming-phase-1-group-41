@@ -20,7 +20,7 @@ public class ServerMessageRouter {
                  "update-vote", "terminate-vote",
                  "new-ter" , "update-ter" , "terminate-ter",
                  "save-game", "load-game", "player-message",
-                 "position" -> {
+                 "position", "emote" -> {
                 GameHandler.handle(type, rawJson, conn, gson);
             }
             case "make-lobby", "join-lobby", "leave-lobby" -> {

@@ -1,5 +1,6 @@
 package com.CEliconValley.models;
 
+import com.CEliconValley.common.messages.Emotion;
 import com.CEliconValley.common.messages.Position;
 import com.CEliconValley.models.items.*;
 import com.CEliconValley.models.items.craftablemachines.Machine;
@@ -87,6 +88,10 @@ public class Player {
     @Transient
     private Buff currentBuff = null;
     int questsFinsihed;
+
+    public ArrayList<Emotion> emotions = new ArrayList<>();
+    public int selectedEmotionIndex = 0;
+
 //    private Farm farm;
 //    private ArrayList<Animal> animals;
 //    private ArrayList<Skill> skills;
@@ -114,7 +119,9 @@ public class Player {
                   ArrayList<Machine> onGoingMachines,
                   boolean playerIsInVillage,
                   double savings, User user, int x, int y, FarmType farmType, int questsFinsihed,
-                  int targetx, int targety, float renderx, float rendery, int currentDirection, boolean isMoving) {
+                  int targetx, int targety, float renderx, float rendery,
+                  int currentDirection, boolean isMoving, ArrayList<Emotion> emotions,
+                  int selectedEmotionIndex) {
         this.cookingRecipes = cookingRecipes;
         this.craftingRecipes = craftingRecipes;
         this.currentBuff = currentBuff;
@@ -145,6 +152,8 @@ public class Player {
         this.currentDirection = currentDirection;
         this.isMoving = isMoving;
         this.questsFinsihed = questsFinsihed;
+        this.selectedEmotionIndex = selectedEmotionIndex;
+        this.emotions = new ArrayList<>(emotions);
     }
 
     public void handmadePostLoad(ArrayList<Friendship> friendships,
@@ -213,6 +222,13 @@ public class Player {
 //        this.farm = null;
         _id = new ObjectId();
         this.questsFinsihed = 0;
+        this.emotions = new ArrayList<>();
+        this.emotions.add(new Emotion(5, true, user.getUsername()));
+        this.emotions.add(new Emotion(1, true, user.getUsername()));
+        this.emotions.add(new Emotion(2, true, user.getUsername()));
+        this.emotions.add(new Emotion(0, false, user.getUsername()));
+        this.emotions.add(new Emotion(1, false, user.getUsername()));
+        this.selectedEmotionIndex = 0;
     }
 
     public void prepareForSaving() {

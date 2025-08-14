@@ -141,6 +141,16 @@ public class GameHandler {
                 }
                 lobby.postLoad(gd.getLobby().getLobbyID(), gd.get_id(), conn);
             }
+            case "emote" -> {
+                GameMessage<Emotion> msg = gson.fromJson(message, new TypeToken<GameMessage<Emotion>>() {}.getType());
+                Player p = Finder.getPlayerByUsername(msg.body.username);
+                p.selectedEmotionIndex = p.emotions.indexOf(msg.body);
+                for (Player player : App.getGame().getPlayers()) {
+                    if(player.isPlayerIsInVillage()){
+                        App.getServer().sendToPlayer(player, gson.toJson(msg));
+                    }
+                }
+            }
             case "position" -> {
                 GameMessage<Position> msg = gson.fromJson(message, new TypeToken<GameMessage<Position>>() {}.getType());
                 Position pos = msg.body;
@@ -150,7 +160,26 @@ public class GameHandler {
                     new PlayerData(player));
                 App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(response));
             }
-
+            case "remove-emotion" -> {
+                GameMessage<Emotion> msg = gson.fromJson(message, new TypeToken<GameMessage<Emotion>>() {}.getType());
+                Player player = Finder.getPlayerByUsername(msg.body.username);
+                if(player.emotions.contains(msg.body)){
+                    player.emotions.remove(msg.body);
+                }else{
+                    System.out.println("emotion smth went wrong");
+                }
+            }
+            case "add-emotion" -> {
+                GameMessage<Emotion> msg = gson.fromJson(message, new TypeToken<GameMessage<Emotion>>() {}.getType());
+                Player player = Finder.getPlayerByUsername(msg.body.username);
+                if(player.emotions.size()>=5){
+                    App.sendResult(new Result(false,"can't have more than 5 reactions"), msg.body.username);
+                }else if(player.emotions.contains(msg.body)){
+                    App.sendResult(new Result(false, "already have that reaction"), msg.body.username);
+                }else{
+                    player.emotions.add(msg.body);
+                }
+            }
             case "player-message" -> {
                 GameMessage<PlayerMessage> playerMsg = gson.fromJson(message, new TypeToken<GameMessage<PlayerMessage>>() {}.getType());
                 App.getGame().getPlayerMessages().add(playerMsg.body);

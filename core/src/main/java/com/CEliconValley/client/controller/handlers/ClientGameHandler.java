@@ -236,6 +236,34 @@ public class ClientGameHandler {
                     });
                 }
             }
+            case "emote" -> {
+                Emotion emotion = gson.fromJson(body, Emotion.class);
+                if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).getScreen()
+                    instanceof VillageScreen screen){
+                    if(emotion.username.equals(AppClient.getUserData().getUsername())){
+                        screen.hero.showEmote = true;
+                        new Timer().scheduleTask(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                screen.hero.showEmote = false;
+                            }
+                        }, 5);
+                    }else{
+                        for (PlayerSprite playerSprite : screen.playerSprites) {
+                            if(playerSprite.getPlayerData().getUsername().equals(emotion.username)){
+                                playerSprite.showEmote = true;
+                                new Timer().scheduleTask(new Timer.Task() {
+                                    @Override
+                                    public void run() {
+                                      playerSprite.showEmote = false;
+                                    }
+                                }, 5);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
             case "game-command" -> {
                 GameCommand gamecommand = gson.fromJson(body, GameCommand.class);
                 System.out.println("received a command "+gamecommand.command);

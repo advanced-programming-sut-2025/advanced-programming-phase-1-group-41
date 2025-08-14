@@ -25,7 +25,7 @@ public class ClientMessageRouter {
             case "game-data", "new-game", "pre-start-request", "game-command",
                  "farm-data", "player-data", "new-vote", "message-cred" ,
                  "npc-data", "game-result", "rock-anime",
-                 "hug" -> ClientGameHandler.handle(type, body, gson, timestamp);
+                 "hug", "emote" -> ClientGameHandler.handle(type, body, gson, timestamp);
         }
     }
     public static void route(String type, Gson gson,

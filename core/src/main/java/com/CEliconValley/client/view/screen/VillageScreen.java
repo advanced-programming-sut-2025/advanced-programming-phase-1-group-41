@@ -14,6 +14,7 @@ import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.NPCData;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.VillageData;
+import com.CEliconValley.common.messages.Emotion;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.PosDiff;
@@ -279,6 +280,10 @@ public class VillageScreen extends GameScreen implements Screen {
                     hero.stateTime = 0f;
                 }
                 batch.draw(frame, hero.renderX - CELL_SIZE / 2f, hero.renderY - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
+                if(hero.showEmote){
+                    Emotion emotion= Finder.getpd().emotions.get(Finder.getpd().selectedEmotionIndex);
+                    showTexture(hero.renderX, hero.renderY, emotion);
+                }
             }
             buildingSpawner.renderBuildings(batch, cellData, villageMap.villageData);
             itemSpawner.renderItems(batch, cellData, this);
@@ -336,6 +341,7 @@ public class VillageScreen extends GameScreen implements Screen {
                     batch.draw(currentFrame, renderx - CELL_SIZE / 2f, rendery - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
                 }
 
+
                 float fontScale = CELL_SIZE / 40f;
                 playerSprite.font.getData().setScale(fontScale);
                 playerSprite.layout.setText(playerSprite.font, playerSprite.name);
@@ -371,6 +377,11 @@ public class VillageScreen extends GameScreen implements Screen {
                 }
                 playerSprite.font.setColor(customColor);
                 playerSprite.font.draw(batch, playerSprite.layout, textX, textY);
+                if(playerSprite.showEmote){
+                    Emotion emotion= playerSprite.getPlayerData().emotions.get
+                        (playerSprite.getPlayerData().selectedEmotionIndex);
+                    showTexture(renderx, rendery, emotion);
+                }
 //                playerSprite.font.setColor(Color.WHITE);
 
 

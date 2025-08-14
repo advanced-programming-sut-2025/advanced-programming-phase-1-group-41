@@ -32,6 +32,7 @@ public class PlayerSprite {
     public boolean onRepeat = true;
     private final Texture extraActsTexture;
     private TextureRegion[][] extraActs;
+    public boolean showEmote = false;
 
     public PlayerSprite(PlayerData playerData) {
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();

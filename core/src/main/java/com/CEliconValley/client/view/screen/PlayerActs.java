@@ -7,10 +7,7 @@ import com.CEliconValley.client.model.PlayerSprite;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.NPCData;
 import com.CEliconValley.common.PlayerData;
-import com.CEliconValley.common.messages.GameCommand;
-import com.CEliconValley.common.messages.GameMessage;
-import com.CEliconValley.common.messages.Position;
-import com.CEliconValley.common.messages.TGPoint;
+import com.CEliconValley.common.messages.*;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.animals.FishType;
 import com.CEliconValley.models.animals.animalKinds.Cow;
@@ -556,14 +553,9 @@ public class PlayerActs {
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.Q)){
             System.out.println("you're at "+hero.playerX+" "+hero.playerY);
-            if(screen instanceof VillageScreen villageScreen){
-                if(villageScreen.popup.isVisible()){
-                    villageScreen.removePopup();
-                }else{
-                    villageScreen.updatePopup
-                        (screen.hero.renderX, screen.hero.renderY, "salam");
-                }
-            }
+            GameMessage<Emotion> msg = new GameMessage<>("emote",
+                new Emotion(5,true, AppClient.getUserData().getUsername()));
+            AppClient.getClient().send(new Gson().toJson(msg));
         }else if(Gdx.input.isKeyJustPressed(Input.Keys.K)){
             if(screen instanceof VillageScreen villageScreen){
                 if(villageScreen.isMarketMenuOpen){

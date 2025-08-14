@@ -10,6 +10,7 @@ import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.FarmData;
 import com.CEliconValley.common.NPCData;
 import com.CEliconValley.common.PlayerData;
+import com.CEliconValley.common.messages.Emotion;
 import com.CEliconValley.controllers.Spawner.InventoryRenderer;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
@@ -48,6 +49,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.Objects;
+
+import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public abstract class GameScreen implements Screen {
     protected final SpriteBatch batch;
@@ -838,6 +841,12 @@ public abstract class GameScreen implements Screen {
 
     public void setLastAnimal(AnimalSprite lastAnimal) {
         this.lastAnimal = lastAnimal;
+    }
+
+    public void showTexture(float renderx, float rendery, Emotion emotion){
+        TextureRegion emote = GameAssetManager.getGameAssetManager().getEmote(emotion.index);
+        float ratio =(float) emote.getRegionWidth() / emote.getRegionHeight();
+        batch.draw(emote, renderx, rendery + CELL_SIZE, ratio * CELL_SIZE , CELL_SIZE);
     }
 }
 

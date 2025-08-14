@@ -1,5 +1,6 @@
 package com.CEliconValley.common;
 
+import com.CEliconValley.common.messages.Emotion;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.items.Buff;
 import com.CEliconValley.models.items.CookingRecipe;
@@ -55,7 +56,8 @@ public class PlayerData {
     BuffData buffData;
     ToolLevel toolLevel;
     int questsFinsihed;
-
+    public ArrayList<Emotion> emotions;
+    public int selectedEmotionIndex;
 
     public PlayerData() {
     }
@@ -126,6 +128,8 @@ public class PlayerData {
         this.rendery = player.rendery;
         this.currentDirection = player.currentDirection;
         this.isMoving = player.isMoving;
+        this.selectedEmotionIndex = player.selectedEmotionIndex;
+        this.emotions = player.emotions == null ? new ArrayList<>() : new ArrayList<>(player.emotions);
     }
 
 
@@ -161,7 +165,7 @@ public class PlayerData {
                 energy, energyUnlimited, farmId, getFarmingSkill(), getFishingSkill(),
                 getForagingSkill(), inFarmId, inventory, maxEnergy, getMiningSkill(),
                 money, getMachines(), isPlayerInVillage, savings, user, x, y, farmType, questsFinsihed,
-            targetx, targety, renderx, rendery, currentDirection, isMoving);
+            targetx, targety, renderx, rendery, currentDirection, isMoving, emotions, selectedEmotionIndex);
     }
 
     public Skill getFarmingSkill() {
