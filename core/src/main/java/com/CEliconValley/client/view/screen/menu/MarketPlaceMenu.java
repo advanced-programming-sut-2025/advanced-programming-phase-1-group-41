@@ -150,7 +150,11 @@ public class MarketPlaceMenu {
 
             font.getData().setScale(1.5f);
             String name = readableName(item.getName());
+            if(slot.getQuantity() == 0){
+                font.setColor(Color.GRAY);
+            }
             font.draw(batch, name, x + slotSize + 20, y + slotSize / 1.5f);
+            font.setColor(Color.WHITE);
 
                 font.getData().setScale(1.2f);
             if (slot.getQuantity() ==0) {
@@ -168,7 +172,7 @@ public class MarketPlaceMenu {
             }font.setColor(Color.WHITE);
 
             font.getData().setScale(1.2f);
-            font.draw(batch, "$" + sd.getPrice(), x + slotSize + 120, y + slotSize / 2f);
+            font.draw(batch, "$" + sd.getPrice(), x + slotSize + 120, y + slotSize * 0.25f);
 
             font.getData().setScale(1f);
             if (isMouseOver( x + slotSize , y-10, 20, 20)) {
@@ -195,7 +199,7 @@ public class MarketPlaceMenu {
                     assert AppClient.getUserData() != null;
                     GameMessage<GameCommand> msg = new GameMessage<>(
                         "game-command",
-                        new GameCommand("purchase " + item.getName()+" -n "+selectedQuantities.get(item.getName()),
+                        new GameCommand("purchase " + item.getName()+" -n "+selected,
                             AppClient.getUserData().getUsername())
                     );
                     AppClient.getClient().send(new Gson().toJson(msg));
