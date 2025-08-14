@@ -25,7 +25,7 @@ public class TradeData {
         this.item = new SlotData(trade.getItem());
         this.paidInMoney = trade.isPaidInMoney();
         this.price = trade.getPrice();
-        this.targetItem = new SlotData(trade.getTargetItem());
+        this.targetItem = trade.getTargetItem() == null ? null : new SlotData(trade.getTargetItem());
         this.isRequest = trade.isRequest();
         this.isDone = trade.isDone();
         this.isRejected = trade.isRejected();

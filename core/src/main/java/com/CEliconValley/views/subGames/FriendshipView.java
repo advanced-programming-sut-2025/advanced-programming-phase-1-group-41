@@ -45,9 +45,11 @@ public class FriendshipView {
         }else if((matcher = FriendShipCommands.GoTo.getMatcher(input)) != null){
             System.out.println(controller.goToFarm(matcher));
         } else if((matcher = TradeCommands.TradeToMoney.getMatcher(input)) != null){
-            System.out.println(tController.tradeToMoney(matcher));
+            System.out.println(tController.tradeToMoney(matcher, playername));
         }else if((matcher = TradeCommands.TradeResponse.getMatcher(input)) != null){
-            System.out.println(tController.tradeResponse(matcher));
+            Result result = tController.tradeResponse(matcher, playername);
+            System.out.println(result);
+            App.sendResult(result, playername);
         } else{
             return false;
         }

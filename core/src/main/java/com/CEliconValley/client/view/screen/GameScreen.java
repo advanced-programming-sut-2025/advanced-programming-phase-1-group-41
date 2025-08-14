@@ -97,6 +97,10 @@ public abstract class GameScreen implements Screen {
     public TextButton proposeyesButton, proposenoButton;
     public Label proposeLabel;
 
+    public boolean tradeMode = false;
+    public TextButton tradeyesButton, tradenoButton;
+    public Label tradeLabel;
+
     private Table scoreboardInfoTable;
 
     public boolean isGameFinished = false;
@@ -148,6 +152,10 @@ public abstract class GameScreen implements Screen {
     public void setTextForProposeLabel(String input){
         proposeLabel.setText(input);
         proposeLabel.setPosition(Gdx.graphics.getWidth() / 3f - proposeLabel.getWidth(), stage.getHeight() * 5 / 6- proposeLabel.getHeight() / 2);
+    }
+    public void setTextForTradeLabel(String input){
+        tradeLabel.setText(input);
+        tradeLabel.setPosition(Gdx.graphics.getWidth() / 3f - tradeLabel.getWidth(), stage.getHeight() * 5 / 6- tradeLabel.getHeight() / 2);
     }
 
     private void setupVoteUI(){
@@ -208,6 +216,22 @@ public abstract class GameScreen implements Screen {
         proposeLabel.setFontScale(2f);
         proposeLabel.setPosition(Gdx.graphics.getWidth() / 2f - terLabel.getWidth(), stage.getHeight() * 5 / 6- terLabel.getHeight() / 2);
         stage.addActor(proposeLabel);
+
+        tradenoButton = new TextButton("No", GameAssetManager.getGameAssetManager().getSkin());
+        tradenoButton.setColor(Color.RED);
+        tradenoButton.setVisible(false);
+        tradeyesButton = new TextButton("Yes", GameAssetManager.getGameAssetManager().getSkin());
+        tradeyesButton.setColor(Color.GREEN);
+        tradeyesButton.setVisible(false);
+        tradeyesButton.setPosition(stage.getWidth()* 3 / 4 - tradeyesButton.getWidth() / 2, stage.getHeight() / 2- tradeyesButton.getHeight() / 2);
+        tradenoButton.setPosition(stage.getWidth()/4 - tradenoButton.getWidth() / 2, stage.getHeight() / 2 - tradenoButton.getHeight() / 2);
+        stage.addActor(tradeyesButton);
+        stage.addActor(tradenoButton);
+        tradeLabel = new Label("trade", GameAssetManager.getGameAssetManager().getSkin());
+        tradeLabel.setVisible(false);
+        tradeLabel.setFontScale(2f);
+        tradeLabel.setPosition(Gdx.graphics.getWidth() / 2f - terLabel.getWidth(), stage.getHeight() * 5 / 6- terLabel.getHeight() / 2);
+        stage.addActor(tradeLabel);
 
 
 
@@ -715,6 +739,34 @@ public abstract class GameScreen implements Screen {
 
 
             PlayerActs.showProposalUI();
+        });
+    }
+    public void handleTrade(Stage stage, String username) {
+        Gdx.app.postRunnable(() -> {
+            tradeMode = true;
+            tradeLabel.setVisible(true);
+            tradenoButton.setVisible(true);
+            tradeyesButton.setVisible(true);
+            setTextForTradeLabel(username);
+
+
+            overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
+                .getGameAssetManager()
+                .getBackgroundTexture("Field1.png"))));
+
+            //        overlay.setColor(0, 0, 0, 0.5f);
+            overlay.setSize(stage.getWidth(), stage.getHeight());
+            overlay.setPosition(0, 0);
+
+            overlay.getColor().a = 0;
+            overlay.addAction(Actions.fadeIn(0.5f));
+
+
+            stage.addActor(overlay);
+            overlay.toBack();
+
+
+            PlayerActs.showTradeUI();
         });
     }
 

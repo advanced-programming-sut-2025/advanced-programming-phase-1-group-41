@@ -120,20 +120,24 @@ public class TradeInventoryBarActor extends Actor {
                             mousePos.y >= y && mousePos.y <= y + slotSize) {
                             drawTooltip(batch, x, y, slotSize, "Trade Request: " + readableName(item.getName()) + " for " + item.getPrice());
                             if (Gdx.input.isButtonJustPressed(0)) {
-                                clicked = true;
+                                String name;
+                                if(friendshipStageHandler.isPlayer){
+                                    name = friendshipStageHandler.playerData.getUsername();
+                                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                        new GameCommand("trade -u "+name+" -t offer -i "+item.getName()+" -a 1 -p " + (int)item.getPrice(),
+                                            AppClient.getUserData().getUsername()));
+                                    AppClient.getClient().send(new Gson().toJson(msg));
+                                }
+                            }else if (Gdx.input.isButtonJustPressed(1)) {
+                                String name;
+                                if(friendshipStageHandler.isPlayer){
+                                    name = friendshipStageHandler.playerData.getUsername();
+                                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                        new GameCommand("trade -u "+name+" -t request -i "+item.getName()+" -a 1 -p " + (int)item.getPrice(),
+                                            AppClient.getUserData().getUsername()));
+                                    AppClient.getClient().send(new Gson().toJson(msg));
+                                }
                             }
-                        }
-                        if (clicked) {
-                            //TODO Trade to Player
-                            String name;
-                            if(friendshipStageHandler.isPlayer){
-                                name = friendshipStageHandler.playerData.getUsername();
-                                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                                    new GameCommand("trade -u "+name+" -t offer -i "+item.getName()+" -a 1 -p " + item.getPrice(),
-                                        AppClient.getUserData().getUsername()));
-                                AppClient.getClient().send(new Gson().toJson(msg));
-                            }
-//                            friendshipStageHandler.setMessage("Gifted " + item.getName() + " to " + name + ".", CustomColors.GAMEGREENCOLOR);
                         }
                     }
                 }
