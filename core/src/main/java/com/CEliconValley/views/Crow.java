@@ -90,7 +90,6 @@ public class Crow {
                     break;
             }
         }
-        System.out.println(x+" "+y);
     }
 
     public void render(SpriteBatch batch) {
