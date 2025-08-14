@@ -12,6 +12,7 @@ import com.CEliconValley.models.buildings.ShippingBin;
 import com.CEliconValley.models.buildings.Well;
 import com.CEliconValley.models.foragings.ForagingCrop;
 import com.CEliconValley.models.foragings.ForagingCropType;
+import com.CEliconValley.models.foragings.Nature.Bush;
 import com.CEliconValley.models.foragings.Nature.Rock;
 import com.CEliconValley.models.items.Item;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,6 +24,9 @@ public class ItemSpawner {
     public void renderItems(SpriteBatch batch, CellData cellData, FarmData farmData) {
         Item item = Finder.parseItem(cellData.getObjectName());
         if (item == null) {
+            return;
+        }
+        if(item instanceof Bush){
             return;
         }
         if(item instanceof Rock){

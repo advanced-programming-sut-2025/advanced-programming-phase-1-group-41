@@ -36,8 +36,7 @@ public class InventoryData {
         for (SlotData slot : slots) {
             Item item = Finder.parseItem(slot.getItemName());
             if(item == null){
-                System.out.println("b "+ slot.getItemName());
-                System.out.println(Finder.parseItem("BlueDiscus"));
+                System.out.println("the null item is "+ slot.getItemName());
             }
             inventory.addToInventory(item, slot.getQuantity());
         }

@@ -23,13 +23,20 @@ public class ToolView {
 //            System.out.println(controller.showCurrentTool(matcher));
         } else if ((matcher = InventoryAndToolCommands.ShowAvailableTools.getMatcher(input)) != null) {
 //            System.out.println(controller.showAvailableTools(matcher));
-        } else if ((matcher = InventoryAndToolCommands.UseTool.getMatcher(input)) != null) {
-            System.out.println(controller.useTool(matcher, playername));
+        } else if ((matcher = InventoryAndToolCommands.UseToolE.getMatcher(input)) != null) {
+            System.out.println(controller.useTool(matcher, playername, true));
             GameMessage<FarmData> msg = new GameMessage<>("farm-data",
                 new FarmData(Finder.getFarmByPlayer(Finder.getPlayerByUsername(playername))));
             App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(),
                 new Gson().toJson(msg));
-        } else if ((matcher = InventoryAndToolCommands.UseShear.getMatcher(input)) != null) {
+        }else if ((matcher = InventoryAndToolCommands.UseToolMouse.getMatcher(input)) != null) {
+            System.out.println(controller.useTool(matcher, playername, false));
+            GameMessage<FarmData> msg = new GameMessage<>("farm-data",
+                new FarmData(Finder.getFarmByPlayer(Finder.getPlayerByUsername(playername))));
+            App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(),
+                new Gson().toJson(msg));
+        }
+        else if ((matcher = InventoryAndToolCommands.UseShear.getMatcher(input)) != null) {
             System.out.println(controller.useShear(matcher, playername));
         }
          else if ((matcher = InventoryAndToolCommands.UseMilkPale.getMatcher(input)) != null) {

@@ -24,6 +24,7 @@ import com.CEliconValley.models.foragings.Nature.TreeType;
 import com.CEliconValley.models.foragings.Seed;
 import com.CEliconValley.models.items.CraftableMachine;
 import com.CEliconValley.models.items.Item;
+import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.tools.*;
 import com.badlogic.gdx.Gdx;
@@ -317,9 +318,15 @@ public class PlayerActs {
                 handleClick(mousePos.x, mousePos.y, villageScreen);
             }else if(screen instanceof FarmScreen farmScreen){
                 farmScreen.camera.unproject(mousePos);
-                handleClick(mousePos.x, mousePos.y, farmScreen);
+                handleToolUse(mousePos.x, mousePos.y, farmScreen);
             }
 
+        }else if(Gdx.input.isButtonJustPressed(2)){
+            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            if(screen instanceof FarmScreen farmScreen){
+                farmScreen.camera.unproject(mousePos);
+                handleClick(mousePos.x, mousePos.y, farmScreen);
+            }
         }
         if (screen.isMenuOpen) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
@@ -489,7 +496,7 @@ public class PlayerActs {
                         if (screen instanceof FarmScreen farmScreen) {
                             assert AppClient.getUserData() != null;
                             GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                                    new GameCommand("tools use -d " + hero.currentDirection, AppClient.getUserData().getUsername()));
+                                    new GameCommand("tools mouse use -d " + hero.currentDirection, AppClient.getUserData().getUsername()));
                             AppClient.getClient().send(new Gson().toJson(msg));
 //                farmScreen.hit(hero.currentDirection, hero.playerX.get(), hero.playerY.get());
                         }
@@ -607,7 +614,7 @@ public class PlayerActs {
             if (screen instanceof FarmScreen farmScreen) {
                 assert AppClient.getUserData() != null;
                 GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                    new GameCommand("tools use -d " + hero.currentDirection, AppClient.getUserData().getUsername()));
+                    new GameCommand("tools e use -d " + hero.currentDirection, AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
 //                farmScreen.hit(hero.currentDirection, hero.playerX.get(), hero.playerY.get());
             }else if(screen instanceof GreenHouseScreen greenHouseScreen){
@@ -1076,6 +1083,55 @@ public class PlayerActs {
         }
     }
 
+
+    public static void handleToolUse(float mouseX, float mouseY, FarmScreen farmScreen){
+        Hero hero = farmScreen.getHero();
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if(i ==0 && j == 0) continue;
+                CellData cd = Finder.getcdByFarmData(hero.playerX.get()+j,
+                    hero.playerY.get()+i, farmScreen.getFarmMap().farmData);
+
+                if(mouseX >= cd.getX()*CELL_SIZE && mouseX <= (cd.getX()+1)*CELL_SIZE &&
+                    mouseY >= cd.getY()*CELL_SIZE && mouseY <= (cd.getY()+1)*CELL_SIZE){
+                    int dir = getDir(i,j);
+                    if(dir == -1){
+                        System.out.println("invalid dir");
+                        return;
+                    }
+                    screen.onRepeat = false;
+                    hero.stateTime = 0;
+                    int pre = getMainToolNumber();
+                    ArrayList<TGPoint> tgp = getOtherToolNumber();
+                    if(dir == 1 | dir == 7 | dir == 8){
+                        hero.currentDirection = 4;
+                    }else if(dir == 3 || dir == 4 || dir == 5){
+                        hero.currentDirection = 2;
+                    }else if(dir ==2 ){
+                        hero.currentDirection = 3;
+                    }else if(dir == 6){
+                        hero.currentDirection = 1;
+                    }
+                    if (pre == -1) {
+                        if(tgp == null){
+                            hero.currentAnimation = hero.useTool(pre+1);
+                        }
+                        else{
+                            hero.currentAnimation = hero.useOtherTool(tgp);
+                        }
+                    }else{
+                        hero.currentAnimation = hero.useTool(pre);
+                    }
+                    hero.isActing.set(true);
+                    hero.stateTime = 0;
+                    assert AppClient.getUserData() != null;
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand("tools mouse use -d " + dir, AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
+                }
+            }
+        }
+    }
 
     public static void handleClick(float mouseX, float mouseY, FarmScreen farmScreen){
         for (CellData cell : Finder.getfd().getCells()) {

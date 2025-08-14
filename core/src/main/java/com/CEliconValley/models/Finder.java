@@ -43,6 +43,9 @@ public class Finder {
         return null;
     }
     public static Item parseItem(String itemName){
+        if(itemName.equals(new Bush().getName())){
+            return new Bush();
+        }
         if(parseBasicTool(itemName)!=null){
             return parseBasicTool(itemName);
         }

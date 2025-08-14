@@ -56,7 +56,7 @@ public class ToolsController {
 //        return (new MarketplaceController()).upgradeTool(tool);
 //    }
 
-    public Result preValidateUseTool(Matcher matcher, Player player){
+    public Result preValidateUseTool(Matcher matcher, Player player, boolean E){
         String dirName = matcher.group("direction").trim();
         int dir = Integer.parseInt(dirName)-1;
         if(dir < 0 || dir > 7){
@@ -64,14 +64,19 @@ public class ToolsController {
         }
         int [][]dirs = {{-1,-1},{0,-1},{1,-1},{1,0},{1,1},{0,1},{-1,1},{-1,0},};
         int [][]secondDirs = {{0,1},{1,0},{0,-1},{-1,0}};
-        x = player.getX()+secondDirs[dir][0];
-        y = player.getY()+secondDirs[dir][1];
+        if(E){
+            x = player.getX()+secondDirs[dir][0];
+            y = player.getY()+secondDirs[dir][1];
+        }else{
+            x = player.getX()+dirs[dir][0];
+            y = player.getY()+dirs[dir][1];
+        }
         return new Result(true, "x: "+x+" y: "+y);
     }
 
-    public Result useTool(Matcher matcher, String playername){
+    public Result useTool(Matcher matcher, String playername, boolean E){
         Player player = Finder.getPlayerByUsername(playername);
-        Result preResult = preValidateUseTool(matcher, player);
+        Result preResult = preValidateUseTool(matcher, player, E);
         if (!preResult.success()){
             return preResult;
         }
