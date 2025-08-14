@@ -558,6 +558,11 @@ public class PlayerActs {
                 petCoop(screen);
             }
         }
+        else if(Gdx.input.isKeyPressed(Input.Keys.C)){
+            if(screen instanceof FarmScreen fs){
+                fs.setCrow(null);
+            }
+        }
 //        else if(Gdx.input.isKeyPressed(Input.Keys.Y) && screen instanceof FarmScreen){
 //            ((FarmScreen) screen).isCraftInfo = true;
 //        }
