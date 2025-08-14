@@ -18,7 +18,11 @@ public class CraftingView {
         }else if((matcher = GameMainCommands.PlaceItem.getMatcher(input))!=null){
             System.out.println(controller.placeItem(matcher, playername));;
         }else if((matcher = GameMainCommands.ArtisanUse.getMatcher(input))!=null){
-            System.out.println(controller.artisanUse(matcher, playername));;
+            Result result = controller.artisanUse(matcher, playername);
+            System.out.println(result);
+            if(!result.success()){
+                App.sendResult(result, playername);
+            }
         }else if((matcher = GameMainCommands.ArtisanGet.getMatcher(input))!=null){
             System.out.println(controller.artisanGet(matcher, playername));;
         }else if((matcher = GameMainCommands.ArtisanStart.getMatcher(input))!=null){

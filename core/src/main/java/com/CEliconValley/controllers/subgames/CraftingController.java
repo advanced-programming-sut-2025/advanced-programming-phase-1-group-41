@@ -377,9 +377,13 @@ public class CraftingController {
             if(!onGoingMachine.getCraftableMachine().getName().equals(machine.getName())) continue;
             if(onGoingMachine.suffice()){
                 onGoingMachine.setStart(true);
-                return new Result(true,"machine started");
+                Result result =  new Result(true,"machine started");
+                App.sendResult(result, playername);
+                return result;
             }else{
-                return new Result(false,"insufficient material");
+                Result result = new Result(false,"insufficient material");
+                App.sendResult(result, playername);
+                return result;
             }
         }
         return new Result(false,"no machine found!");
@@ -460,7 +464,10 @@ public class CraftingController {
             }else if(item.getName().equalsIgnoreCase(MineralType.Coal.getName())){
                 updateItems(item, fs, player, 1);
             }else{
-                System.out.println(item.getName()+" is not a valid item");
+                Result result = new Result(false," is not a valid input");
+                App.sendResult(result, player.getUser().getUsername());
+                System.out.println(result);
+                return;
             }
         }
     }
@@ -518,7 +525,9 @@ public class CraftingController {
             if(item1.getName().equalsIgnoreCase(item.getName())){
                 updateItems(item1, cp, player, 1);
             }else{
-                System.out.println(item1.getName()+" is not a valid item");
+                Result result = new Result(false," is not a valid input");
+                App.sendResult(result, player.getUser().getUsername());
+                System.out.println(result);
                 return;
             }
         }
@@ -601,7 +610,9 @@ public class CraftingController {
                 }
                 updateItems(item1, keg, player, max);
             }else{
-                System.out.println(item1.getName()+" is not a valid item");
+                Result result = new Result(false," is not a valid input");
+                App.sendResult(result, player.getUser().getUsername());
+                System.out.println(result);
                 return;
             }
         }
@@ -627,7 +638,10 @@ public class CraftingController {
             if(item.getName().equalsIgnoreCase(new Wood().getName())){
                 updateItems(item, kiln, player, 10);
             }else{
-                System.out.println(item.getName()+" is not a valid item");
+                Result result = new Result(false," is not a valid input");
+                App.sendResult(result, player.getUser().getUsername());
+                System.out.println(result);
+                return;
             }
         }
     }
@@ -684,7 +698,9 @@ public class CraftingController {
             if(item.getName().equalsIgnoreCase(type.getName())){
                 updateItems(item, dehydrator, player, 5);
             }else{
-                System.out.println(item.getName() + " is not a valid input");
+                Result result = new Result(false," is not a valid input");
+                App.sendResult(result, player.getUser().getUsername());
+                System.out.println(result);
                 return;
             }
         }
@@ -734,7 +750,9 @@ public class CraftingController {
             }else if(mineralType != null && item.getName().equalsIgnoreCase(mineralType.getName())){
                 updateItems(item, furnace, player, 5);
             }else{
-                System.out.println(item.getName() + " is not a valid input");
+                Result result = new Result(false," is not a valid input");
+                App.sendResult(result, player.getUser().getUsername());
+                System.out.println(result);
                 return;
             }
         }
@@ -790,7 +808,9 @@ public class CraftingController {
             if(item.getName().equalsIgnoreCase(type.getName())){
                 updateItems(item, pj, player, 1);
             }else{
-                System.out.println(item.getName()+" is not a valid input");
+                Result result = new Result(false," is not a valid input");
+                App.sendResult(result, player.getUser().getUsername());
+                System.out.println(result);
                 return;
             }
         }
@@ -852,7 +872,9 @@ public class CraftingController {
             if(item.getName().equalsIgnoreCase(type.getName())){
                 updateItems(item, oilMaker, player, 1);
             }else{
-                System.out.println(item.getName()+" is not a valid input");
+                Result result = new Result(false," is not a valid input");
+                App.sendResult(result, player.getUser().getUsername());
+                System.out.println(result);
                 return;
             }
         }
@@ -900,7 +922,9 @@ public class CraftingController {
             if(item.getName().equalsIgnoreCase(type.getName())){
                 updateItems(item, mayoMachine, player, 1);
             }else{
-                System.out.println(item.getName()+" is not a valid input");
+                Result result = new Result(false," is not a valid input");
+                App.sendResult(result, player.getUser().getUsername());
+                System.out.println(result);
                 return;
             }
         }
@@ -949,7 +973,9 @@ public class CraftingController {
             if(item.getName().equalsIgnoreCase(type.getName())){
                 updateItems(item, loom, player, 1);
             }else{
-                System.out.println(item.getName()+" is not a valid input");
+                Result result = new Result(false," is not a valid input");
+                App.sendResult(result, player.getUser().getUsername());
+                System.out.println(result);
                 return;
             }
         }
