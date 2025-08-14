@@ -221,7 +221,7 @@ class FarmScreen extends GameScreen implements Screen {
     @Override
     public void render(float delta) {
         if(AppClient.getGameData() == null) return;
-        bushTexture = GameAssetManager.getGameAssetManager().getTileTexture("Bush_" + AppClient.getGameData().getTime().getSeason().name + ".png");
+        bushTexture = GameAssetManager.getGameAssetManager().getTileTexture("BigBush_" + AppClient.getGameData().getTime().getSeason().name + ".png");
 
         if(isGameFinished) return;
         String season = AppClient.getGameData().getTime().getSeason().name();
@@ -348,7 +348,7 @@ class FarmScreen extends GameScreen implements Screen {
             int y = (int) (cell.getY() * CELL_SIZE);
 //            batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
             if (cell.getObjectMap() instanceof Bush) {
-                batch.draw(bushTexture, x, y, CELL_SIZE, CELL_SIZE);
+                batch.draw(bushTexture, x-CELL_SIZE/2f, y-CELL_SIZE/2f, CELL_SIZE*2, CELL_SIZE*2);
             }
         }
             if(CraftableMachine.parseCraftable(hero.selectedItemName)!=null){
