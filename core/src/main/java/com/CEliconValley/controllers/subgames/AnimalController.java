@@ -175,7 +175,9 @@ public class AnimalController {
 
     }
 
-    public Result buyAnimal(Matcher matcher) {
+    public Result buyAnimal(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
         String animalType = matcher.group(1).trim().toLowerCase();
         String animalName = matcher.group(2).trim().toLowerCase();
         Animal animal = parseAnimal(animalType, animalName);
@@ -188,49 +190,65 @@ public class AnimalController {
                     for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
                         if (barn.getBarnType().getCapacity() == 12) {
                             if (barn.getCapacity() > 0) {
-                                Result preResult = new MarketplaceController().buyAnimal(animal, barn);
+                                Result preResult = new MarketplaceController().buyAnimal(animal, barn, playername);
                                 if(!preResult.success()){
+                                    App.sendResult(preResult, playername);
                                     return preResult;
                                 }
                                 barn.addAnimal(animal);
                                 barn.updateCapacity(-1);
-                                return new Result(true, "Animal added to " + barn.getBarnType().name() + " barn");
+                                Result result =  new Result(true, "Animal added to " + barn.getBarnType().name() + " barn");
+                                App.sendResult(result, playername);
+                                return result;
                             }
                         }
                     }
-                    return new Result(false, "not enough space for " + animalType);
+
+                    Result result =  new Result(false, "not enough space for " + animalType);
+                    App.sendResult(result, playername);
+                    return result;
                 }
                 case Big -> {
                     for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
                         if (barn.getBarnType().getCapacity() >= 8) {
                             if (barn.getCapacity() > 0) {
-                                Result preResult = new MarketplaceController().buyAnimal(animal, barn);
+                                Result preResult = new MarketplaceController().buyAnimal(animal, barn, playername);
                                 if(!preResult.success()){
+                                    App.sendResult(preResult, playername);
                                     return preResult;
                                 }
                                 barn.addAnimal(animal);
                                 barn.updateCapacity(-1);
-                                return new Result(true, "Animal added to " + barn.getBarnType().name() + " barn");
+                                Result result = new Result(true, "Animal added to " + barn.getBarnType().name() + " barn");
+                                App.sendResult(result, playername);
+                                return result;
                             }
                         }
                     }
-                    return new Result(false, "not enough space for " + animalType);
+                    Result result = new Result(false, "not enough space for " + animalType);
+                    App.sendResult(result, playername);
+                    return result;
                 }
                 case Normal -> {
                     for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
                         if (barn.getBarnType().getCapacity() >= 4) {
                             if (barn.getCapacity() > 0) {
-                                Result preResult = new MarketplaceController().buyAnimal(animal, barn);
+                                Result preResult = new MarketplaceController().buyAnimal(animal, barn, playername);
                                 if(!preResult.success()){
+                                    App.sendResult(preResult, playername);
                                     return preResult;
                                 }
                                 barn.addAnimal(animal);
                                 barn.updateCapacity(-1);
-                                return new Result(true, "Animal added to " + barn.getBarnType().name() + " barn");
+                                Result result = new Result(true, "Animal added to " + barn.getBarnType().name() + " barn");
+                                App.sendResult(result, playername);
+                                return result;
                             }
                         }
                     }
-                    return new Result(false, "not enough space for " + animalType);
+                    Result result = new Result(false, "not enough space for " + animalType);
+                    App.sendResult(result, playername);
+                    return result;
                 }
 
             }
@@ -240,49 +258,64 @@ public class AnimalController {
                     for (Coop coop : App.getGame().getCurrentPlayerFarm().getCoops()) {
                         if (coop.getCoopType().getCapacity() == 12) {
                             if (coop.getCapacity() > 0) {
-                                Result preResult = new MarketplaceController().buyAnimal(animal, coop);
+                                Result preResult = new MarketplaceController().buyAnimal(animal, coop, playername);
                                 if(!preResult.success()){
+                                    App.sendResult(preResult, playername);
                                     return preResult;
                                 }
                                 coop.addAnimal(animal);
                                 coop.updateCapacity(-1);
-                                return new Result(true, "Animal added to " + coop.getCoopType().name() + " coop");
+                                Result result =  new Result(true, "Animal added to " + coop.getCoopType().name() + " coop");
+                                App.sendResult(result, playername);
+                                return result;
                             }
                         }
                     }
-                    return new Result(false, "not enough space for +" + animalType);
+                    Result result =  new Result(false, "not enough space for +" + animalType);
+                    App.sendResult(result, playername);
+                    return result;
                 }
                 case Big -> {
                     for (Coop coop : App.getGame().getCurrentPlayerFarm().getCoops()) {
                         if (coop.getCoopType().getCapacity() >= 8) {
                             if (coop.getCapacity() > 0) {
-                                Result preResult = new MarketplaceController().buyAnimal(animal, coop);
+                                Result preResult = new MarketplaceController().buyAnimal(animal, coop, playername);
                                 if(!preResult.success()){
+                                    App.sendResult(preResult, playername);
                                     return preResult;
                                 }
                                 coop.addAnimal(animal);
                                 coop.updateCapacity(-1);
-                                return new Result(true, "Animal added to " + coop.getCoopType().name() + " coop");
+                                Result result = new Result(true, "Animal added to " + coop.getCoopType().name() + " coop");
+                                App.sendResult(result, playername);
+                                return result;
                             }
                         }
                     }
-                    return new Result(false, "not enough space for +" + animalType);
+                    Result result = new Result(false, "not enough space for +" + animalType);
+                    App.sendResult(result, playername);
+                    return result;
                 }
                 case Normal -> {
                     for (Coop coop : App.getGame().getCurrentPlayerFarm().getCoops()) {
                         if (coop.getCoopType().getCapacity() >= 4) {
                             if (coop.getCapacity() > 0) {
-                                Result preResult = new MarketplaceController().buyAnimal(animal, coop);
+                                Result preResult = new MarketplaceController().buyAnimal(animal, coop, playername);
                                 if(!preResult.success()){
+                                    App.sendResult(preResult, playername);
                                     return preResult;
                                 }
                                 coop.addAnimal(animal);
                                 coop.updateCapacity(-1);
-                                return new Result(true, "Animal added to " + coop.getCoopType().name() + " coop");
+                                Result result = new Result(true, "Animal added to " + coop.getCoopType().name() + " coop");
+                                App.sendResult(result, playername);
+                                return result;
                             }
                         }
                     }
-                    return new Result(false, "not enough space for +" + animalType);
+                    Result result =  new Result(false, "not enough space for +" + animalType);
+                    App.sendResult(result, playername);
+                    return result;
                 }
 
             }

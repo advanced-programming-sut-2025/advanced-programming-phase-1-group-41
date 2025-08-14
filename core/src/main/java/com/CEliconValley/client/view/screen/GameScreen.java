@@ -2,6 +2,7 @@ package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
+import com.CEliconValley.client.model.AnimalSprite;
 import com.CEliconValley.client.model.StrategyScoreboard;
 import com.CEliconValley.client.view.screen.maps.*;
 import com.CEliconValley.client.view.screen.menu.*;
@@ -67,6 +68,8 @@ public abstract class GameScreen implements Screen {
     public TextButton yesVoteButton, noVoteButton;
     public Label playerVoteLabel;
     public Label howManyVotedLabel;
+
+    protected AnimalSprite lastAnimal = null;
 
     public OrthographicCamera camera;
 
@@ -824,6 +827,10 @@ public abstract class GameScreen implements Screen {
     }
     public AnimalMenu getAnimalMenu() {
         return animalMenu;
+    }
+
+    public void setLastAnimal(AnimalSprite lastAnimal) {
+        this.lastAnimal = lastAnimal;
     }
 }
 

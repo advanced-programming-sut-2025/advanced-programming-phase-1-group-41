@@ -36,7 +36,7 @@ public class BarnScreen extends GameScreen implements Screen {
     private ArrayList<AnimalSprite> animalSprites;
     private BarnData barnData;
     private int id;
-    private AnimalSprite lastAnimal = null;
+
 
     public void updateAnimalSprites(BarnData barnData) {
         if (animalSprites == null) {
@@ -275,7 +275,5 @@ public class BarnScreen extends GameScreen implements Screen {
         return lastAnimal;
     }
 
-    public void setLastAnimal(AnimalSprite lastAnimal) {
-        this.lastAnimal = lastAnimal;
-    }
+
 }

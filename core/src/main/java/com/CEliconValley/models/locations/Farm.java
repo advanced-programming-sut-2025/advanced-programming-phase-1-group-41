@@ -350,10 +350,10 @@ public class Farm {
                 break;
             }
         }
-        barn.addAnimal(new Pig(player, "asghar"));
-        barn.addAnimal(new Cow(player, "akbar"));
-        barn.addAnimal(new Sheep(player, "sakineh"));
-        barn.addAnimal(new Goat(player, "asadollah"));
+//        barn.addAnimal(new Pig(player, "asghar"));
+//        barn.addAnimal(new Cow(player, "akbar"));
+//        barn.addAnimal(new Sheep(player, "sakineh"));
+//        barn.addAnimal(new Goat(player, "asadollah"));
         barns.add(barn);
     }
 
@@ -366,7 +366,7 @@ public class Farm {
                 break;
             }
         }
-        coop.addAnimal(new Chicken(player,"abolfazl"));
+//        coop.addAnimal(new Chicken(player,"abolfazl"));
         coops.add(coop);
     }
 

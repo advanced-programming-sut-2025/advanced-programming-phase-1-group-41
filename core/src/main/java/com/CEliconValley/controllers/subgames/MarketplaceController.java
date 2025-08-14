@@ -502,19 +502,24 @@ public class MarketplaceController {
     }
 
 
-    public Result buyAnimal(Animal animal, Building building){
+    public Result buyAnimal(Animal animal, Building building, String playername){
 //        Result preResult = inMarketPlace();
 //        if(!preResult.success()){
 //            return preResult;
 //        }
         MarnieRanch ranch;
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
+        Cell currentCell = Finder.findCellByCoordinatesVillage(player.getX(), player.getY(), App.getGame().getVillage());
         if((currentCell.getObjectMap() instanceof MarnieRanch marnieRanch)){
             ranch = marnieRanch;
         }else{
             return new Result(false, "you're not in marnie's ranch");
         }
         if(player.getMoney() < animal.getBuyPrice() ){
-            return new Result(false,"you need "+(animal.getBuyPrice()-player.getMoney())+" more money!");
+            Result result = new Result(false,"you need "+(animal.getBuyPrice()-player.getMoney())+" more money!");
+            App.sendResult(result, playername);
+            return result;
         }
         HashMap<String, Integer> limits = ranch.getDailyLimit();
         if(animal instanceof Chicken){

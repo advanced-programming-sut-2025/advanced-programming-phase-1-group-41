@@ -7,6 +7,7 @@ import com.CEliconValley.client.view.screen.randomwalk.Node;
 import com.CEliconValley.client.view.screen.randomwalk.SimplePathFinder;
 import com.CEliconValley.common.AnimalData;
 import com.CEliconValley.common.CoopData;
+import com.CEliconValley.controllers.Spawner.InventoryRenderer;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.buildings.animalContainer.CoopType;
@@ -53,7 +54,9 @@ public class CoopScreen extends GameScreen implements Screen {
     }
 
     public CoopScreen(FarmScreen farmScreen, CoopMap coop, Player player, CoopData coopData) {
-        super(null);
+        super(new InventoryRenderer(player.getInventory()));
+        this.menuBar = super.getMenuBar();
+        menuBar.setPlayer(player);
         this.coopMenuBar = super.getBarnOrCoopMenuBar();
         coopMenuBar.setPlayer(player);
         this.farmScreen = farmScreen;
@@ -135,6 +138,7 @@ public class CoopScreen extends GameScreen implements Screen {
             }
             if(animalSprite.isMoving) continue;
             Node node = spf.findPath(animalSprite.x, animalSprite.y, animalSprite.randomX, animalSprite.randomY);
+            if(node == null) continue;
             animalSprite.targetX = node.x;
             animalSprite.targetY = node.y;
             animalSprite.currentDirection = node.getDirection() != 0 ? node.getDirection() : animalSprite.currentDirection;
@@ -175,7 +179,29 @@ public class CoopScreen extends GameScreen implements Screen {
 
         if (hero.currentAnimation != null) {
             TextureRegion currentFrame = hero.currentAnimation.getKeyFrame(hero.stateTime, onRepeat);
-            batch.draw(currentFrame, hero.renderX - CELL_SIZE / 2f, hero.renderY - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
+            //                System.out.println("stateTime: " + stateTime + ", frameIndex: " + currentAnimation.getKeyFrameIndex(stateTime));
+            if (!onRepeat && hero.currentAnimation.isAnimationFinished(hero.stateTime)) {
+                System.out.println("im here for a reason im not sure " + hero.stateTime);
+                hero.currentAnimation = hero.walk(false, hero.currentDirection);
+                onRepeat = true;
+                hero.isActing.set(false);
+                hero.stateTime = 0f;
+                if(lastAnimal != null){
+                    lastAnimal.x = hero.playerX.get();
+                    lastAnimal.y = hero.playerY.get();
+                    lastAnimal.renderX = hero.renderX;
+                    lastAnimal.renderY = hero.renderY;
+                    lastAnimal.targetX = hero.targetX.get();
+                    lastAnimal.targetY = hero.targetY.get();
+                    lastAnimal = null;
+                }
+            }if(coopData.getCoopTypeInt()==1){
+                batch.draw(currentFrame, hero.renderX , hero.renderY - CELL_SIZE , CELL_SIZE * 2f, CELL_SIZE * 2f);
+            }else if(coopData.getCoopTypeInt()==2) {
+                batch.draw(currentFrame, hero.renderX - CELL_SIZE / 2f, hero.renderY - CELL_SIZE , CELL_SIZE * 2f, CELL_SIZE * 2f);
+            }else{
+                batch.draw(currentFrame, hero.renderX - CELL_SIZE / 2f, hero.renderY - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
+            }
         }
         for (AnimalSprite animalSprite : animalSprites) {
             if(animalSprite.currentAnimation != null){
@@ -186,6 +212,13 @@ public class CoopScreen extends GameScreen implements Screen {
 
         if(isCoopMenuOpen){
             coopMenuBar.render(batch, camera);
+        }
+
+        if (isMenuOpen) {
+//                menuBar.render(batch, menuX, menuY, menuWidth, menuHeight);
+            menuBar.render(batch, camera);
+        } else {
+            inventoryRenderer.render(batch, camera);
         }
 
         camera.position.set(hero.renderX + CELL_SIZE / 2f, hero.renderY + CELL_SIZE / 2f, 0);

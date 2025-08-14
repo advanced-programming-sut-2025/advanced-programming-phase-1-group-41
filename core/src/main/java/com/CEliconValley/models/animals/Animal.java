@@ -172,14 +172,14 @@ public abstract class Animal {
 
     public static Animal parseAnimal(String animal,String name) {
         return switch (animal){
-            case "cow" -> new Cow(App.getGame().getCurrentPlayer(), name);
-            case "rabbit" -> new Rabbit(App.getGame().getCurrentPlayer(), name);
-            case "chicken" -> new Chicken(App.getGame().getCurrentPlayer(),name );
-            case "pig" -> new Pig(App.getGame().getCurrentPlayer(), name);
-            case "dino" -> new Dino(App.getGame().getCurrentPlayer(), name);
-            case "goat" -> new Goat(App.getGame().getCurrentPlayer(), name);
-            case "sheep" -> new Sheep(App.getGame().getCurrentPlayer(), name);
-            case "duck" -> new Duck(App.getGame().getCurrentPlayer(), name);
+            case "cow", "Cow" -> new Cow(App.getGame().getCurrentPlayer(), name);
+            case "rabbit", "Rabbit" -> new Rabbit(App.getGame().getCurrentPlayer(), name);
+            case "chicken", "Chicken" -> new Chicken(App.getGame().getCurrentPlayer(),name );
+            case "pig", "Pig" -> new Pig(App.getGame().getCurrentPlayer(), name);
+            case "dino", "Dinosaur" -> new Dino(App.getGame().getCurrentPlayer(), name);
+            case "goat","Goat"  -> new Goat(App.getGame().getCurrentPlayer(), name);
+            case "sheep", "Sheep" -> new Sheep(App.getGame().getCurrentPlayer(), name);
+            case "duck", "Duck" -> new Duck(App.getGame().getCurrentPlayer(), name);
             default -> null;
         };
     }

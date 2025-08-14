@@ -14,7 +14,7 @@ public class AnimalView {
         if((matcher = GameMainCommands.Build.getMatcher(input))!=null){
             System.out.println(controller.build(matcher));
         }else if((matcher = AnimalCommands.BuyAnimal.getMatcher(input))!=null){
-            System.out.println(controller.buyAnimal(matcher));
+            System.out.println(controller.buyAnimal(matcher, playername));
         }else if((matcher = AnimalCommands.PetInside.getMatcher(input))!=null){
             System.out.println(controller.petInside(matcher, playername));
         }else if((matcher = AnimalCommands.PetOutside.getMatcher(input))!=null){

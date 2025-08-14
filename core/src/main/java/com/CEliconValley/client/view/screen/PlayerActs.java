@@ -457,8 +457,8 @@ public class PlayerActs {
                                                 new GameCommand("shear " + animalSprite.animalData.getName(), AppClient.getUserData().getUsername()));
                                         AppClient.getClient().send(new Gson().toJson(msg));
                                         hero.currentAnimation = hero.shear();
-                                        if(screen instanceof BarnScreen barnScreen){
-                                            barnScreen.setLastAnimal(animalSprite);
+                                        if(screen instanceof BarnScreen barnScree){
+                                            screen.setLastAnimal(animalSprite);
                                         }
                                     }else{
                                         hero.currentAnimation = hero.useTool(pre+1);

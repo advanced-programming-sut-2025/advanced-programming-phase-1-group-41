@@ -41,7 +41,7 @@ public class AnimalMenu {
         animalNames.add("Goat");
         animalNames.add("Pig");
         animalNames.add("Chicken");
-        animalNames.add("Duck");
+            animalNames.add("Duck");
         animalNames.add("Rabbit");
         animalNames.add("Dinosaur");
         infoTexture = new Texture("game/Hero/NPC/Animals.png");
@@ -64,11 +64,10 @@ public class AnimalMenu {
 
         if(screen instanceof VillageScreen && ((VillageScreen) screen).isTypingAnimalName){
             if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && !screen.cheatCodeField.getText().trim().isEmpty()){
-                // TODO Sepehr
                 assert AppClient.getUserData() != null;
                 GameMessage<GameCommand> msg = new GameMessage<>(
                     "game-command",
-                    new GameCommand("purchase " + animalNames.get(index)+" -n "+screen.cheatCodeField.getText(),
+                    new GameCommand("buy animal -a "+animalNames.get(index)+" -n "+screen.cheatCodeField.getText().trim(),
                         AppClient.getUserData().getUsername())
                 );
                 AppClient.getClient().send(new Gson().toJson(msg));
