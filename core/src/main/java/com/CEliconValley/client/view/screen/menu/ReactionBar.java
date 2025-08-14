@@ -1,8 +1,10 @@
 package com.CEliconValley.client.view.screen.menu;
 
+import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.view.screen.GameScreen;
 import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.common.messages.Emotion;
+import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Player;
 import com.CEliconValley.models.ui.GameAssetManager;
@@ -15,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -93,9 +96,11 @@ public class ReactionBar {
                 if (mousePos.x >= x && mousePos.x <= x + reactionSize / 2 &&
                     mousePos.y >= y - spacingY * 2 && mousePos.y <= y) {
                     if (Gdx.input.isButtonJustPressed(0)) {
-                        //TODO Left Click in Player Reactions
+                        GameMessage<Emotion> msg = new GameMessage<>("remove-emotion", emotion);
+                        AppClient.getClient().send(new Gson().toJson(msg));
                     } else if (Gdx.input.isButtonJustPressed(1)) {
-                        //TODO Right Click in Player Reactions
+                        GameMessage<Emotion> msg = new GameMessage<>("emote", emotion);
+                        AppClient.getClient().send(new Gson().toJson(msg));
                     }
 
                     GlyphLayout layout = new GlyphLayout(font, "React");
@@ -121,9 +126,11 @@ public class ReactionBar {
                 if (mousePos.x >= x && mousePos.x <= x + reactionSize &&
                     mousePos.y >= y - spacingY * 2 && mousePos.y <= y) {
                     if (Gdx.input.isButtonJustPressed(0)) {
-                        //TODO Left Click in Player Reactions
+                        GameMessage<Emotion> msg = new GameMessage<>("remove-emotion", emotion);
+                        AppClient.getClient().send(new Gson().toJson(msg));
                     } else if (Gdx.input.isButtonJustPressed(1)) {
-                        //TODO Right Click in Player Reactions
+                        GameMessage<Emotion> msg = new GameMessage<>("emote", emotion);
+                        AppClient.getClient().send(new Gson().toJson(msg));
                     }
 
                     GlyphLayout layout = new GlyphLayout(font, "React" + allTextReactions.get(emotion.index));
@@ -161,7 +168,10 @@ public class ReactionBar {
             if (mousePos.x >= x && mousePos.x <= x + reactionSize &&
                 mousePos.y >= y - spacingY / 1.75 && mousePos.y <= y) {
                 if (Gdx.input.isButtonJustPressed(0)) {
-                    //TODO Left Click in Player Reactions
+                    int index = allTextReactions.indexOf(reaction);
+                    GameMessage<Emotion> msg = new GameMessage<>("add-emotion",
+                        new Emotion(index, false, AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
                 }
                 GlyphLayout layout = new GlyphLayout(font, "Select: " + reaction);
                 float textWidth = layout.width + 20;
@@ -201,7 +211,10 @@ public class ReactionBar {
             if (mousePos.x >= x && mousePos.x <= x + reactionSize &&
                 mousePos.y >= y && mousePos.y <= y + spacingY) {
                 if (Gdx.input.isButtonJustPressed(0)) {
-                    //TODO Left Click in Player Reactions
+                    int index = allEmoteTextures.indexOf(textureRegion);
+                    GameMessage<Emotion> msg = new GameMessage<>("add-emotion",
+                        new Emotion(index, true, AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
                 }
                 GlyphLayout layout = new GlyphLayout(font, "Select");
                 float textWidth = layout.width + 20;
