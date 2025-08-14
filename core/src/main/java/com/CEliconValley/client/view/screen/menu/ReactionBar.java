@@ -101,6 +101,7 @@ public class ReactionBar {
                     } else if (Gdx.input.isButtonJustPressed(1)) {
                         GameMessage<Emotion> msg = new GameMessage<>("emote", emotion);
                         AppClient.getClient().send(new Gson().toJson(msg));
+                        screen.reactionMode = false;
                     }
 
                     GlyphLayout layout = new GlyphLayout(font, "React");
@@ -131,9 +132,10 @@ public class ReactionBar {
                     } else if (Gdx.input.isButtonJustPressed(1)) {
                         GameMessage<Emotion> msg = new GameMessage<>("emote", emotion);
                         AppClient.getClient().send(new Gson().toJson(msg));
+                        screen.reactionMode = false;
                     }
 
-                    GlyphLayout layout = new GlyphLayout(font, "React" + allTextReactions.get(emotion.index));
+                    GlyphLayout layout = new GlyphLayout(font, "React " + allTextReactions.get(emotion.index));
                     float textWidth = layout.width + 20;
                     float textHeight = layout.height + 10;
 

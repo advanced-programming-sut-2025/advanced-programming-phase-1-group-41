@@ -33,10 +33,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -864,9 +862,33 @@ public abstract class GameScreen implements Screen {
     }
 
     public void showTexture(float renderx, float rendery, Emotion emotion){
-        TextureRegion emote = GameAssetManager.getGameAssetManager().getEmote(emotion.index);
-        float ratio =(float) emote.getRegionWidth() / emote.getRegionHeight();
-        batch.draw(emote, renderx, rendery + CELL_SIZE, ratio * CELL_SIZE , CELL_SIZE);
+        if(emotion.isEmote){
+            TextureRegion emote = allEmoteTextures.get(emotion.index);
+            float ratio =(float) emote.getRegionWidth() / emote.getRegionHeight();
+            batch.draw(emote, renderx, rendery + CELL_SIZE, ratio * CELL_SIZE , CELL_SIZE);
+        }else{
+            BitmapFont font = new BitmapFont();
+            ShapeRenderer shapeRenderer = new ShapeRenderer();
+
+            font.getData().setScale(2f);
+            GlyphLayout layout = new GlyphLayout(font, allTextReactions.get(emotion.index));
+
+            float textWidth = layout.width + 20;
+            float textHeight = layout.height + 10;
+
+            float textX = renderx;
+            float textY = rendery + CELL_SIZE * 3 / 2f;
+
+            batch.end();
+            shapeRenderer.setProjectionMatrix(camera.combined);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(0, 0, 0, 0.8f);
+            shapeRenderer.rect(textX, textY, textWidth, textHeight);
+            shapeRenderer.end();
+            batch.begin();
+
+            font.draw(batch, layout, textX + 10, textY + textHeight - 5);
+        }
     }
 }
 
