@@ -856,5 +856,11 @@ class FarmScreen extends GameScreen implements Screen {
             }
         }
     }
+    public Crow getCrow(){
+        return crow;
+    }
+    public void setCrow(Crow crow){
+        this.crow=crow;
+    }
 
 }

@@ -10,6 +10,8 @@ import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Result;
 import com.CEliconValley.models.buildings.ShippingBin;
 import com.CEliconValley.models.buildings.Well;
+import com.CEliconValley.models.foragings.Crop;
+import com.CEliconValley.models.foragings.CropType;
 import com.CEliconValley.models.foragings.ForagingCrop;
 import com.CEliconValley.models.foragings.ForagingCropType;
 import com.CEliconValley.models.foragings.Nature.Bush;
@@ -32,6 +34,10 @@ public class ItemSpawner {
         if(item instanceof Rock){
             return;
         }
+        if(item instanceof Crop||item instanceof ForagingCrop){
+            return;
+        }
+
         TextureRegion itemTexture = ItemManager.getTexture(item);
         float drawX = cellData.getX() * CELL_SIZE;
         float drawY = cellData.getY() * CELL_SIZE;

@@ -1,5 +1,6 @@
 package com.CEliconValley.models.npc;
 
+import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.common.messages.Messagenpc;
 import com.CEliconValley.models.*;
@@ -149,10 +150,19 @@ public class LLMClient {
         }
         npc.getLlmClient().sendMessageAsync(
             prompt,
-            npcReply -> npc.getTalkByName(playername).getTalks().add(new Messagenpc(true, npcReply)),
+            npcReply -> {
+                npc.getTalkByName(playername).getTalks().add(new Messagenpc(true, npcReply));
+                GameMessage<GameCommand> npcDialogue = new GameMessage<>("game-command",
+                    new GameCommand("npc-dialogue", npc.getName()));
+                App.getServer().sendToPlayer(player, new Gson().toJson(npcDialogue));
+            }
+            ,
             error -> {
                 npc.getTalkByName(playername).getTalks().add(new Messagenpc(true, fallbackText));
 //                npc.getTalkByName(playername).getTalks().add(new Messagenpc(true, "(NPC failed to respond properly)"));
+                GameMessage<GameCommand> npcDialogue = new GameMessage<>("game-command",
+                    new GameCommand("npc-dialogue", npc.getName()));
+                App.getServer().sendToPlayer(player, new Gson().toJson(npcDialogue));
                 System.out.println("LLM error: " + error.getMessage());
                 error.printStackTrace();
 

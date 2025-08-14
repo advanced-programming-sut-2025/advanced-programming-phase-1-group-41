@@ -61,6 +61,9 @@ public class VillageScreen extends GameScreen implements Screen {
     public static Sprite villageSprite;
 
     public boolean isTypingAnimalName;
+    public Animation<TextureRegion> dialogueAnimation=null;
+    public float dialogueStatetime = 0f;
+    public boolean isDialogue = false;
 
     Texture grassTexture = GameAssetManager.getGameAssetManager().getTileTexture("grass.png");
     //        Texture groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("Village_Tile.png");
@@ -287,6 +290,21 @@ public class VillageScreen extends GameScreen implements Screen {
                 float width = height / currentFrame.getRegionHeight(); width *= currentFrame.getRegionWidth();
                 batch.draw(currentFrame, rx - CELL_SIZE / 2f, ry - CELL_SIZE / 2f, width, height);
             }
+            if(dialogueAnimation != null) {
+                if(npcSprite.getNPCData() == null ) continue;
+                TextureRegion currentFrame = dialogueAnimation.getKeyFrame(dialogueStatetime, false);
+                float ratio = ( Gdx.graphics.getWidth() / VIRTUAL_WIDTH);
+                float rx = npcSprite.getNPCData().renderX / 160 *(ratio * 160);
+                float ry = npcSprite.getNPCData().renderY / 160 *(ratio * 160);
+                if(!dialogueAnimation.isAnimationFinished(dialogueStatetime) && isDialogue) {
+                    batch.draw(currentFrame,
+                        rx - CELL_SIZE * 0.50f,
+                        ry + CELL_SIZE *0.95f, CELL_SIZE*0.55f, CELL_SIZE*0.55f);
+                }else{
+                    isDialogue = false;
+                }
+
+            }
         }
         playerSprites.forEach(player -> {
             if(!player.isActing)  player.currentAnimation = player.walk(player.getPlayerData().isMoving, player.getPlayerData().currentDirection);
@@ -381,6 +399,7 @@ public class VillageScreen extends GameScreen implements Screen {
         stage.act(delta);
         stage.draw();
 
+        dialogueStatetime += delta;
         npcSprites.forEach(npcSprite -> {
             npcSprite.stateTime += delta;
         });
