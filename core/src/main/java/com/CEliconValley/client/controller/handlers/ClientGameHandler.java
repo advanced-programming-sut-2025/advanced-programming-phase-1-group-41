@@ -1,6 +1,7 @@
 package com.CEliconValley.client.controller.handlers;
 
 import com.CEliconValley.client.AppClient;
+import com.CEliconValley.client.model.NPCSprite;
 import com.CEliconValley.client.model.PlayerSprite;
 import com.CEliconValley.client.view.LobbyScreen;
 import com.CEliconValley.client.view.screen.*;
@@ -273,7 +274,23 @@ public class ClientGameHandler {
                             }
                         }, 5);
                     }
-                }else if(gamecommand.command.equals("text-mention")){
+                }else if(gamecommand.command.equals("npc-dialogue")){
+                    String npcName = gamecommand.playerName;
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen() instanceof VillageScreen screen){
+                        System.out.println("received dialogue for "+npcName);
+                        for (NPCSprite npcSprite : screen.npcSprites) {
+                            if(npcSprite.getNPCData().getName().equals(npcName)){
+                                System.out.println("set it here");
+                                screen.dialogueAnimation = npcSprite.dialogue();
+                                screen.dialogueStatetime = 0f;
+                                screen.isDialogue = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                else if(gamecommand.command.equals("text-mention")){
                     if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
                         .getScreen() instanceof GameScreen screen){
                         screen.updateTagMessage(gamecommand.playerName);

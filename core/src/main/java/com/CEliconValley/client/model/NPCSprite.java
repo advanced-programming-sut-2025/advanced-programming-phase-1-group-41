@@ -3,6 +3,7 @@ package com.CEliconValley.client.model;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.common.NPCData;
 import com.CEliconValley.common.messages.TGPoint;
+import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.npc.npcCharacters.Abigail;
 import com.CEliconValley.models.npc.npchomes.AbigailHome;
@@ -23,8 +24,8 @@ public class NPCSprite {
     public float stateTime = 0f;
     public Animation<TextureRegion> currentAnimation;
     public Location location;
-
-
+    private final Texture buffTexture;
+    private TextureRegion[][] buff;
 
     public boolean reachedDestination(){
         return getNPCData().x == getNPCData().randomX && getNPCData().y == getNPCData().randomY;
@@ -40,6 +41,8 @@ public class NPCSprite {
         this.npcActs = TextureRegion.split(texture, texture.getWidth()/columns, texture.getHeight()/rows);
         this.location = location;
         this.currentAnimation = walk(false, currentDirection);
+        buffTexture = GameAssetManager.getGameAssetManager().getHeroTexture("Particles.png");
+        buff = TextureRegion.split(buffTexture, buffTexture.getWidth()/8,buffTexture.getHeight()/2);
     }
 
 
@@ -148,6 +151,37 @@ public class NPCSprite {
         }
     }
 
+    public Animation<TextureRegion> dialogue(){
+        ArrayList<TGPoint> tgPoints = getBuff();
+        TextureRegion[] wantedActs=new TextureRegion[tgPoints.size()];
+        for (int i = 0; i < tgPoints.size(); i++) {
+            TGPoint tgPoint = tgPoints.get(i);
+            TextureRegion flippedFrame = new TextureRegion(buff[tgPoint.row][tgPoint.col]);
+            flippedFrame.flip(true, false);
+            wantedActs[i] = flippedFrame;
+        }
+        return new Animation<>(0.20f,wantedActs);
+    }
+
+    private ArrayList<TGPoint> getBuff(){
+        ArrayList<TGPoint> pet = new ArrayList();
+        for (int i = 0; i < 8; i++) {
+            pet.add(new TGPoint(1, i));
+        }
+        for (int i = 0; i < 8; i++) {
+            pet.add(new TGPoint(1, i));
+        }
+        for (int i = 0; i < 8; i++) {
+            pet.add(new TGPoint(1, i));
+        }
+        for (int i = 0; i < 8; i++) {
+            pet.add(new TGPoint(1, i));
+        }
+        for (int i = 0; i < 8; i++) {
+            pet.add(new TGPoint(1, i));
+        }
+        return pet;
+    }
 
 
 }
