@@ -48,6 +48,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
@@ -76,6 +77,8 @@ public abstract class GameScreen implements Screen {
     public Label playerVoteLabel;
     public Label howManyVotedLabel;
 
+    public final ArrayList<String> allTextReactions = new ArrayList<>();
+    public final ArrayList<TextureRegion> allEmoteTextures = new ArrayList<>();
 
     protected AnimalSprite lastAnimal = null;
 
@@ -438,8 +441,25 @@ public abstract class GameScreen implements Screen {
 
         setupChatUI();
         setupScoreboardUI();
+        setReactions();
     }
 
+    private void setReactions(){
+        allTextReactions.add("Hi!");
+        allTextReactions.add("How are you?");
+        allTextReactions.add("I like you");
+        allTextReactions.add("Wanna be friends?");
+        allTextReactions.add("Hello");
+        allTextReactions.add("LOL");
+        allTextReactions.add("Lmao");
+        allTextReactions.add("Nice to meet you");
+        allTextReactions.add("Tschüss");
+        allTextReactions.add("Adios");
+
+        for(int i = 0; i < 15; i++){
+            allEmoteTextures.add(GameAssetManager.getGameAssetManager().getEmote(i + 1));
+        }
+    }
 
     public boolean canMoveTo(int x, int y, Location location) {
         if(location instanceof FarmMap farmMap){

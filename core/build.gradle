@@ -31,6 +31,7 @@ dependencies {
   // implementation 'org.jline:jline:3.23.0'
 
   // Your LibGDX-related dependencies
+
   implementation "com.badlogicgames.gdx:gdx-ai:1.8.2"
   implementation "org.java-websocket:Java-WebSocket:1.5.4"
   api "com.badlogicgames.box2dlights:box2dlights:$box2dlightsVersion"

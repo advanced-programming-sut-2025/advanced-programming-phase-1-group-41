@@ -1,9 +1,10 @@
 package com.CEliconValley.client.view.screen.menu;
 
 import com.CEliconValley.client.view.screen.GameScreen;
-import com.CEliconValley.controllers.ItemManager;
+import com.CEliconValley.common.PlayerData;
+import com.CEliconValley.common.messages.Emotion;
+import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Player;
-import com.CEliconValley.models.items.Slot;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 
@@ -18,12 +20,11 @@ import java.util.ArrayList;
 
 public class ReactionBar {
     private final Texture menuTexture;
+    private final Texture emoteTexture;
 
-    private final int tileWidth;
-    private final int tileHeight;
-
-    private final ArrayList<String> allReactions = new ArrayList<>();
-    private final ArrayList<String> playerReactions = new ArrayList<>();
+    private ArrayList<String> allTextReactions;
+    private ArrayList<TextureRegion> allEmoteTextures;
+    private ArrayList<String> playerReactions;
 
 
     private int startingRow = 0;
@@ -36,8 +37,7 @@ public class ReactionBar {
     ShapeRenderer shapeRenderer = new ShapeRenderer();
     private float startingX;
     private float startingY;
-    private String currentTab;
-    ArrayList<Slot> foodsData = null;
+
     private OrthographicCamera camera;
 
     private GameScreen screen;
@@ -45,27 +45,14 @@ public class ReactionBar {
     public ReactionBar(GameScreen screen) {
         this.screen = screen;
         menuTexture = GameAssetManager.getGameAssetManager().getScreenTexture("Reaction.png");
+        emoteTexture = GameAssetManager.getGameAssetManager().getScreenTexture("EmoteScreen.png");
 
         font.getData().setScale(2f);
 
-        tileWidth = menuTexture.getWidth() / 3;
-        tileHeight = menuTexture.getHeight() / 3;
+        this.allTextReactions = screen.allTextReactions;
+        this.allEmoteTextures = screen.allEmoteTextures;
 
-        allReactions.add("Salam");
-        allReactions.add("Salam");
-        allReactions.add("Salam");
-        allReactions.add("Salam");
-        allReactions.add("Salam");
-        allReactions.add("Salam");
-        allReactions.add("Salam");
-        allReactions.add("Khobi");
-        allReactions.add("Man Kir Mikham");
-        allReactions.add("Jooon");
-        allReactions.add("Sex");
-        playerReactions.addAll(allReactions);
-        allReactions.add("Dokhtar Bazi");
-        allReactions.add("Oouf");
-        allReactions.add("Damn");
+        playerReactions = allTextReactions;
     }
 
     public void setPlayer(Player player) {
@@ -84,93 +71,161 @@ public class ReactionBar {
         startingY = camera.position.y - menuHeight / 2f;
 
         float x = startingX + screenWidth * 0.03f;
-        float y = startingY + screenHeight * 0.6f;
+        float y = startingY + menuHeight * 0.7f;
 
-        float reactionSize = screenWidth * 0.08f;
+        float reactionSize = menuWidth * 0.2f;
 
-        float spacingY = reactionSize * 0.6f;
+        float spacingY = reactionSize * 0.3f;
 
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mousePos);
 
+        batch.draw(emoteTexture, startingX - menuWidth / 3f, startingY - menuHeight / 4.4f, screenWidth, screenHeight * 1.05f);
         batch.draw(menuTexture, startingX, startingY, menuWidth, menuHeight);
 
         int col = 0;
-        for (String reaction : playerReactions) {
+        PlayerData playerData = Finder.getpd();
+//        font.getData().setScale(2.5f);
+        for (Emotion emotion : playerData.emotions) {
+            if (emotion.isEmote) {
+                batch.draw(allEmoteTextures.get(emotion.index), x, y - spacingY, reactionSize / 2.5f, reactionSize / 2.5f);
+
+                if (mousePos.x >= x && mousePos.x <= x + reactionSize / 2 &&
+                    mousePos.y >= y - spacingY * 2 && mousePos.y <= y) {
+                    if (Gdx.input.isButtonJustPressed(0)) {
+                        //TODO Left Click in Player Reactions
+                    } else if (Gdx.input.isButtonJustPressed(1)) {
+                        //TODO Right Click in Player Reactions
+                    }
+
+                    GlyphLayout layout = new GlyphLayout(font, "React");
+                    float textWidth = layout.width + 20;
+                    float textHeight = layout.height + 10;
+
+                    float textX = x + reactionSize / 2f - textWidth / 2f;
+                    float textY = y + reactionSize / 10f + 10;
+
+                    batch.end();
+                    shapeRenderer.setProjectionMatrix(camera.combined);
+                    shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                    shapeRenderer.setColor(0, 0, 0, 0.8f);
+                    shapeRenderer.rect(textX, textY, textWidth, textHeight);
+                    shapeRenderer.end();
+                    batch.begin();
+
+                    font.draw(batch, layout, textX + 10, textY + textHeight - 5);
+                }
+            } else {
+                font.draw(batch, allTextReactions.get(emotion.index), x, y);
+
+                if (mousePos.x >= x && mousePos.x <= x + reactionSize &&
+                    mousePos.y >= y - spacingY * 2 && mousePos.y <= y) {
+                    if (Gdx.input.isButtonJustPressed(0)) {
+                        //TODO Left Click in Player Reactions
+                    } else if (Gdx.input.isButtonJustPressed(1)) {
+                        //TODO Right Click in Player Reactions
+                    }
+
+                    GlyphLayout layout = new GlyphLayout(font, "React" + allTextReactions.get(emotion.index));
+                    float textWidth = layout.width + 20;
+                    float textHeight = layout.height + 10;
+
+                    float textX = x + reactionSize / 2f - textWidth / 2f;
+                    float textY = y + reactionSize / 10f + 10;
+
+                    batch.end();
+                    shapeRenderer.setProjectionMatrix(camera.combined);
+                    shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                    shapeRenderer.setColor(0, 0, 0, 0.8f);
+                    shapeRenderer.rect(textX, textY, textWidth, textHeight);
+                    shapeRenderer.end();
+                    batch.begin();
+
+                    font.draw(batch, layout, textX + 10, textY + textHeight - 5);
+                }
+            }
+
+            x += reactionSize;
+            col++;
+        }
+
+//        font.getData().setScale(2f);
+        col = 0;
+        y = startingY + menuHeight / 2.4f;
+
+        x = startingX + screenWidth * 0.03f;
+
+        for (String reaction : allTextReactions) {
             font.draw(batch, reaction, x, y);
 
             if (mousePos.x >= x && mousePos.x <= x + reactionSize &&
-                mousePos.y >= y && mousePos.y <= y + reactionSize) {
+                mousePos.y >= y - spacingY / 1.75 && mousePos.y <= y) {
                 if (Gdx.input.isButtonJustPressed(0)) {
                     //TODO Left Click in Player Reactions
-                } else if (Gdx.input.isButtonJustPressed(1)) {
-                    //TODO Right Click in Player Reactions
                 }
+                GlyphLayout layout = new GlyphLayout(font, "Select: " + reaction);
+                float textWidth = layout.width + 20;
+                float textHeight = layout.height + 10;
 
-                GlyphLayout layout = new GlyphLayout(font, "React: " + reaction);
-                float tooltipWidth = layout.width + 20;
-                float tooltipHeight = layout.height + 10;
-
-                float tooltipX = x + reactionSize / 2f - tooltipWidth / 2f;
-                float tooltipY = y + reactionSize + 10;
-
+                float textX = x + reactionSize / 2f - textWidth / 2f;
+                float textY = y + reactionSize / 10f + 10;
 
                 batch.end();
                 shapeRenderer.setProjectionMatrix(camera.combined);
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                 shapeRenderer.setColor(0, 0, 0, 0.8f);
-                shapeRenderer.rect(tooltipX, tooltipY, tooltipWidth, tooltipHeight);
+                shapeRenderer.rect(textX, textY, textWidth, textHeight);
                 shapeRenderer.end();
                 batch.begin();
 
-                font.draw(batch, layout, tooltipX + 10, tooltipY + tooltipHeight - 5);
+                font.draw(batch, layout, textX + 10, textY + textHeight - 5);
             }
 
             x += reactionSize;
             col++;
             if (col == 5) {
                 col = 0;
-                y += spacingY;
+                y -= spacingY / 1.75f;
                 x = startingX + screenWidth * 0.03f;
             }
         }
+
+        x = startingX + screenWidth * 0.03f;
+
+        y -= spacingY;
+
         col = 0;
-        y = startingY + menuHeight / 3f;
-        for (String reaction : allReactions) {
-            font.draw(batch, reaction, x, y);
+        for (TextureRegion textureRegion : allEmoteTextures) {
+            batch.draw(textureRegion, x, y, reactionSize / 4f, reactionSize / 4f);
 
             if (mousePos.x >= x && mousePos.x <= x + reactionSize &&
-                mousePos.y >= y && mousePos.y <= y + reactionSize) {
+                mousePos.y >= y && mousePos.y <= y + spacingY) {
                 if (Gdx.input.isButtonJustPressed(0)) {
                     //TODO Left Click in Player Reactions
-                } else if (Gdx.input.isButtonJustPressed(1)) {
-                    //TODO Right Click in Player Reactions
                 }
+                GlyphLayout layout = new GlyphLayout(font, "Select");
+                float textWidth = layout.width + 20;
+                float textHeight = layout.height + 10;
 
-                GlyphLayout layout = new GlyphLayout(font, "React: " + reaction);
-                float tooltipWidth = layout.width + 20;
-                float tooltipHeight = layout.height + 10;
-
-                float tooltipX = x + reactionSize / 2f - tooltipWidth / 2f;
-                float tooltipY = y + reactionSize + 10;
-
+                float textX = x + reactionSize / 2f - textWidth / 2f;
+                float textY = y + reactionSize / 10f + 10;
 
                 batch.end();
                 shapeRenderer.setProjectionMatrix(camera.combined);
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                 shapeRenderer.setColor(0, 0, 0, 0.8f);
-                shapeRenderer.rect(tooltipX, tooltipY, tooltipWidth, tooltipHeight);
+                shapeRenderer.rect(textX, textY, textWidth, textHeight);
                 shapeRenderer.end();
                 batch.begin();
 
-                font.draw(batch, layout, tooltipX + 10, tooltipY + tooltipHeight - 5);
+                font.draw(batch, layout, textX + 10, textY + textHeight - 5);
             }
 
             x += reactionSize;
             col++;
             if (col == 5) {
                 col = 0;
-                y += spacingY;
+                y -= spacingY;
                 x = startingX + screenWidth * 0.03f;
             }
         }
@@ -188,10 +243,5 @@ public class ReactionBar {
 
     public void scrollDown() {
         if (selectedIndex > 0) selectedIndex--;
-    }
-
-    public void scrollUp() {
-        if (selectedIndex < foodsData.size() - visibleAnimalsCount)
-            selectedIndex++;
     }
 }
