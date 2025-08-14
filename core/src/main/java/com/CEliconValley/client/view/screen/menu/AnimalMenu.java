@@ -1,22 +1,15 @@
-package com.CEliconValley.client.view.screen;
+package com.CEliconValley.client.view.screen.menu;
 
 import com.CEliconValley.client.AppClient;
-import com.CEliconValley.common.MarketPlaceData;
-import com.CEliconValley.common.PlayerData;
-import com.CEliconValley.common.SlotData;
+import com.CEliconValley.client.view.screen.GameScreen;
+import com.CEliconValley.client.view.screen.VillageScreen;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
-import com.CEliconValley.controllers.ItemManager;
-import com.CEliconValley.models.Finder;
-import com.CEliconValley.models.animals.FishType;
-import com.CEliconValley.models.buildings.marketplaces.Marketplace;
-import com.CEliconValley.models.items.Inventory;
 import com.CEliconValley.models.items.Item;
-import com.CEliconValley.models.items.Slot;
+import com.CEliconValley.models.ui.CustomColors;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -40,6 +33,8 @@ public class AnimalMenu {
     private Map<String, Integer> selectedQuantities = new HashMap<>();
     ArrayList<String> animalNames = new ArrayList<>();
     ArrayList<TextureRegion> animalTextures = new ArrayList<>();
+    int index;
+
     public AnimalMenu(GameScreen screen) {
         animalNames.add("Sheep");
         animalNames.add("Cow");
@@ -63,14 +58,29 @@ public class AnimalMenu {
         menuTexture = GameAssetManager.getGameAssetManager().getScreenTexture("CoopOrBarnMenu_Screen.png");
         infoTexture = GameAssetManager.getGameAssetManager().getBackgroundTexture("Info_Background1.png");
 
-
     }
 
     public void renderShopMenu(Batch batch, OrthographicCamera camera) {
+
+        if(screen instanceof VillageScreen && ((VillageScreen) screen).isTypingAnimalName){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && !screen.cheatCodeField.getText().trim().isEmpty()){
+                // TODO Sepehr
+                assert AppClient.getUserData() != null;
+                GameMessage<GameCommand> msg = new GameMessage<>(
+                    "game-command",
+                    new GameCommand("purchase " + animalNames.get(index)+" -n "+screen.cheatCodeField.getText(),
+                        AppClient.getUserData().getUsername())
+                );
+                AppClient.getClient().send(new Gson().toJson(msg));
+                screen.cheatCodeField.setText("");
+                screen.cheatCodeField.setVisible(false);
+                ((VillageScreen) screen).isTypingAnimalName = false;
+            }
+            return;
+        }
+
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
-
-
 
         this.camera = camera;
 
@@ -94,10 +104,6 @@ public class AnimalMenu {
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mousePos);
 
-
-
-
-
         int columns = 3;
         float spacingX = slotSize * 3.5f;
 
@@ -112,7 +118,7 @@ public class AnimalMenu {
 
             int col = i % columns;
             int row = i / columns;
-            if(row>=4)continue;
+            if(row>=4) continue;
             float x = firstItemX + col * spacingX;
             float y = firstItemY - row * (slotSize + spacingY);
 
@@ -176,20 +182,26 @@ public class AnimalMenu {
 
             if (mousePos.x >= x && mousePos.x <= x + slotSize &&
                 mousePos.y >= y && mousePos.y <= y + slotSize) {
+
+                font.getData().setScale(2f);
+                font.setColor(CustomColors.GAMEGREENCOLOR);
+                font.draw(batch,"Buy " + animalNames.get(i), drawX, drawY + slotSize);
+                font.setColor(Color.WHITE);
+                font.getData().setScale(1f);
+
                 if (Gdx.input.isButtonJustPressed(0)) {
-                    assert AppClient.getUserData() != null;
-                    GameMessage<GameCommand> msg = new GameMessage<>(
-                        "game-command",
-                        new GameCommand("purchase " + animalNames.get(i)+" -n "+selectedQuantities.get(animalNames.get(i)),
-                            AppClient.getUserData().getUsername())
-                    );
-                    AppClient.getClient().send(new Gson().toJson(msg));
+                    if(screen instanceof VillageScreen){
+                        screen.cheatCodeField.setText("");
+                        screen.cheatCodeField.setMessageText("Enter Animal Name");
+                        ((VillageScreen) screen).isTypingAnimalName = true;
+                        screen.cheatCodeField.setVisible(true);
+                        index = i;
+                    }
                 }
             }
         }
 
     }
-
 
     private int getItemPrice(Item item) {
 

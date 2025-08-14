@@ -23,7 +23,6 @@ import com.CEliconValley.models.foragings.Nature.Lake;
 import com.CEliconValley.models.foragings.Nature.Obstacle;
 import com.CEliconValley.models.foragings.Nature.Rock;
 import com.CEliconValley.models.items.CraftableMachine;
-import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.ui.CustomColors;
 import com.CEliconValley.models.ui.GameAssetManager;
@@ -62,7 +61,7 @@ public abstract class GameScreen implements Screen {
     public boolean scoreboardMode = false;
     public boolean friendshipMode = false;
     public Image overlay;
-    protected TextField cheatCodeField;
+    public TextField cheatCodeField;
     protected ShippingBinBar shippingBinBar;
     protected CraftInfo craftInfo;
     public TextButton yesVoteButton, noVoteButton;
@@ -522,6 +521,7 @@ public abstract class GameScreen implements Screen {
     public void handleCheatCode(Stage stage) {
         cheatMode = true;
         cheatCodeField.setVisible(true);
+        cheatCodeField.setMessageText("Enter Cheat Code");
         stage.setKeyboardFocus(cheatCodeField);
         cheatCodeField.setText("");
 

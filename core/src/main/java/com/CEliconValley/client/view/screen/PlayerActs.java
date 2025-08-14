@@ -54,6 +54,9 @@ public class PlayerActs {
     public static Result handleInput(Hero hero, Location location, Stage stage, float delta) {
         screen.updateEnergy();
 
+        if(screen instanceof VillageScreen && ((VillageScreen) screen).isTypingAnimalName){
+            return new Result(true, "typing animal name");
+        }
         if(screen instanceof CottageScreen && ((CottageScreen) screen).isRefrigeratorOpen){
             if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
                 ((CottageScreen) screen).isRefrigeratorOpen = !((CottageScreen) screen).isRefrigeratorOpen;

@@ -5,6 +5,7 @@ import com.CEliconValley.client.controller.spawners.ItemSpawner;
 import com.CEliconValley.client.model.NPCSprite;
 import com.CEliconValley.client.model.PlayerSprite;
 import com.CEliconValley.client.view.screen.maps.VillageMap;
+import com.CEliconValley.client.view.screen.menu.AnimalMenu;
 import com.CEliconValley.client.view.screen.menu.MarketPlaceMenu;
 import com.CEliconValley.client.view.screen.menu.MenuBar;
 import com.CEliconValley.client.view.screen.menu.ShippingBinBar;
@@ -60,6 +61,7 @@ public class VillageScreen extends GameScreen implements Screen {
     public static Texture villageTexture = new Texture("game/Buildings/Screen/Village_Screen_Spring.png");
     public static Sprite villageSprite;
 
+    public boolean isTypingAnimalName;
 
     Texture grassTexture = GameAssetManager.getGameAssetManager().getTileTexture("grass.png");
     //        Texture groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("Village_Tile.png");
