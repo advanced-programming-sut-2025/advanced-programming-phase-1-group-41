@@ -9,7 +9,8 @@ import com.CEliconValley.common.messages.ResultSender;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.ui.CustomColors;
 import com.CEliconValley.models.ui.GameAssetManager;
-import com.CEliconValley.models.ui.InventoryBarActor;
+import com.CEliconValley.models.ui.GiftInventoryBarActor;
+import com.CEliconValley.models.ui.TradeInventoryBarActor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -35,7 +36,7 @@ public class FriendshipStageHandler {
 
     private final BitmapFont font = new BitmapFont();
     private int startingRow = 0;
-    public boolean isGifting = false, isChatting = false;
+    public boolean isGifting = false, isChatting = false, isTrading = false;
     private final Image avatarImage;
     private final Texture questTexture;
     private final Label nameLabel;
@@ -59,7 +60,10 @@ public class FriendshipStageHandler {
     private ScrollPane chatScrollPane;
 
     // Gift form
-    public final InventoryBarActor invActor;
+    public final GiftInventoryBarActor giftInvActor;
+
+    // Trade form
+    public final TradeInventoryBarActor tradeInvActor;
 
     // Quest form
     public final Table questsTable;
@@ -159,8 +163,12 @@ public class FriendshipStageHandler {
 
 
         // --- Gift Fields
-        invActor = new InventoryBarActor(this, camera, Finder.getpd().getInventoryData().getInventory(), font);
-        invActor.setVisible(false);
+        giftInvActor = new GiftInventoryBarActor(this, camera, Finder.getpd().getInventoryData().getInventory(), font);
+        giftInvActor.setVisible(false);
+
+        // --- Trade Field
+        tradeInvActor = new TradeInventoryBarActor(this, camera, Finder.getpd().getInventoryData().getInventory(), font);
+        tradeInvActor.setVisible(false);
 
         // --- Quest Fields
         questsTable = new Table();
@@ -181,7 +189,8 @@ public class FriendshipStageHandler {
 
 
         Gdx.input.setInputProcessor(stage);
-        stage.addActor(invActor);
+        stage.addActor(giftInvActor);
+        stage.addActor(tradeInvActor);
         stage.addActor(mainTable);
         stage.addActor(chatForm);
         stage.addActor(giftForm);
@@ -518,16 +527,16 @@ public class FriendshipStageHandler {
                 switchForm("gift");
                 isGifting = true;
                 Gdx.app.postRunnable(() -> {
-                    invActor.setVisible(true);
-                    invActor.setTouchable(Touchable.enabled);
-                    stage.setKeyboardFocus(invActor);
-                    invActor.setVisible(true);
-                    invActor.setTouchable(Touchable.enabled);
-                    invActor.toFront(); // Ensure it's drawn above other actors
+                    giftInvActor.setVisible(true);
+                    giftInvActor.setTouchable(Touchable.enabled);
+                    stage.setKeyboardFocus(giftInvActor);
+                    giftInvActor.setVisible(true);
+                    giftInvActor.setTouchable(Touchable.enabled);
+                    giftInvActor.toFront(); // Ensure it's drawn above other actors
                     screen.camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                     screen.camera.update();
-                    stage.setKeyboardFocus(invActor);
-                    stage.setScrollFocus(invActor);
+                    stage.setKeyboardFocus(giftInvActor);
+                    stage.setScrollFocus(giftInvActor);
                 });
 
 
@@ -588,6 +597,21 @@ public class FriendshipStageHandler {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 switchForm("trade");
+                if(isPlayer){
+                    isGifting = true;
+                    Gdx.app.postRunnable(() -> {
+                        tradeInvActor.setVisible(true);
+                        tradeInvActor.setTouchable(Touchable.enabled);
+                        stage.setKeyboardFocus(tradeInvActor);
+                        tradeInvActor.setVisible(true);
+                        tradeInvActor.setTouchable(Touchable.enabled);
+                        tradeInvActor.toFront(); // Ensure it's drawn above other actors
+                        screen.camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                        screen.camera.update();
+                        stage.setKeyboardFocus(tradeInvActor);
+                        stage.setScrollFocus(tradeInvActor);
+                    });
+                }
             }
         });
 
@@ -618,8 +642,10 @@ public class FriendshipStageHandler {
     public void emptyFields() {
         chatTextField.setText("");
         setMessage("", Color.CLEAR);
-        invActor.setVisible(false);
+        giftInvActor.setVisible(false);
+        tradeInvActor.setVisible(false);
         isGifting = false;
         isChatting = false;
+        isTrading = false;
     }
 }

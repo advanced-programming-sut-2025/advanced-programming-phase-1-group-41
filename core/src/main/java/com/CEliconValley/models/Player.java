@@ -223,9 +223,9 @@ public class Player {
         _id = new ObjectId();
         this.questsFinsihed = 0;
         this.emotions = new ArrayList<>();
-        this.emotions.add(new Emotion(5, true, user.getUsername()));
+        this.emotions.add(new Emotion(4, true, user.getUsername()));
+        this.emotions.add(new Emotion(0, true, user.getUsername()));
         this.emotions.add(new Emotion(1, true, user.getUsername()));
-        this.emotions.add(new Emotion(2, true, user.getUsername()));
         this.emotions.add(new Emotion(0, false, user.getUsername()));
         this.emotions.add(new Emotion(1, false, user.getUsername()));
         this.selectedEmotionIndex = 0;

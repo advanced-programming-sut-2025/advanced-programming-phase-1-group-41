@@ -218,6 +218,11 @@ public class PlayerActs {
             stage.draw();
             return new Result(false, "cheat");
         }
+        if (screen.tradeMode) {
+            stage.act(delta);
+            stage.draw();
+            return new Result(false, "cheat");
+        }
         if(screen.terMode){
             stage.act(delta);
             stage.draw();
@@ -1231,6 +1236,24 @@ public class PlayerActs {
             screen.overlay = null;
         }
     }
+    public static void resetTrade(){
+        screen.tradeMode = false;
+        screen.tradenoButton.setVisible(false);
+        screen.tradeyesButton.setVisible(false);
+        screen.tradenoButton.reset();
+        screen.tradeyesButton.reset();
+        screen.tradeLabel.setVisible(false);
+        if(screen.overlay == null) return;
+        screen.overlay.addAction(Actions.sequence(
+            Actions.fadeOut(0.5f),
+            Actions.run(() -> screen.overlay.remove())
+        ));
+
+        if (screen.overlay != null) {
+            screen.overlay.remove();
+            screen.overlay = null;
+        }
+    }
 
     public static void showProposalUI() {
         screen.proposeMode = true;
@@ -1258,6 +1281,35 @@ public class PlayerActs {
                     new GameCommand("respond reject -u " + screen.lastProposer, AppClient.getUserData().getUsername()));
                 AppClient.getClient().send(new Gson().toJson(msg));
                 resetPropose();
+            }
+        });
+    }
+    public static void showTradeUI() {
+        screen.tradeMode = true;
+        screen.tradeLabel.setVisible(true);
+        screen.tradeyesButton.setVisible(true);
+        screen.tradenoButton.setVisible(true);
+
+        screen.tradeyesButton.clearListeners();
+        screen.tradenoButton.clearListeners();
+
+        screen.tradeyesButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                    new GameCommand("trade response accept -i 1", AppClient.getUserData().getUsername()));
+                AppClient.getClient().send(new Gson().toJson(msg));
+                resetTrade();
+            }
+        });
+
+        screen.tradenoButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                    new GameCommand("trade response reject -i 1", AppClient.getUserData().getUsername()));
+                AppClient.getClient().send(new Gson().toJson(msg));
+                resetTrade();
             }
         });
     }

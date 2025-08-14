@@ -365,7 +365,17 @@ public class ClientGameHandler {
                         });
                     }
 
-                }else if(gamecommand.command.equals("go-left")){
+                }else if(gamecommand.command.equals("trade-mode")){
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen() instanceof GameScreen screen){
+                        Gdx.app.postRunnable(()->{
+                            System.out.println("handling trade");
+                            screen.handleTrade(screen.getStage(), gamecommand.playerName);
+                        });
+                    }
+                }
+
+                else if(gamecommand.command.equals("go-left")){
                     if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
                         .getScreen() instanceof VillageScreen screen){
                         Gdx.app.postRunnable(()->{

@@ -2,15 +2,17 @@ package com.CEliconValley.models.ui;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.view.screen.FriendshipStageHandler;
+import com.CEliconValley.common.PlayerData;
+import com.CEliconValley.common.TradeData;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.controllers.ItemManager;
 import com.CEliconValley.models.Finder;
+import com.CEliconValley.models.Trade;
 import com.CEliconValley.models.items.Inventory;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -23,7 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.google.gson.Gson;
 
-public class InventoryBarActor extends Actor {
+public class TradeInventoryBarActor extends Actor {
 
     private OrthographicCamera camera;
     private Inventory inventory;
@@ -37,14 +39,14 @@ public class InventoryBarActor extends Actor {
     private float startingY = 0;
     private int startingRow = 0;
 
-    public InventoryBarActor(FriendshipStageHandler friendshipStageHandler, OrthographicCamera camera, Inventory inventory, BitmapFont font) {
+    public TradeInventoryBarActor(FriendshipStageHandler friendshipStageHandler, OrthographicCamera camera, Inventory inventory, BitmapFont font) {
         this.friendshipStageHandler = friendshipStageHandler;
         this.camera = camera;
         this.inventory = inventory;
         this.font = font;
         this.shapeRenderer = new ShapeRenderer();
         menuTexture = GameAssetManager.getGameAssetManager().getScreenTexture("ShippingBin.png");
-        giftTexture = GameAssetManager.getGameAssetManager().getInventoryTexture("relations/Gift.png");
+        giftTexture = GameAssetManager.getGameAssetManager().getInventoryTexture("skills/Ruby.png");
         setTouchable(Touchable.enabled);
     }
 
@@ -66,6 +68,9 @@ public class InventoryBarActor extends Actor {
         float firstItemX = screenWidth * 0.03f;
         float firstItemY = screenHeight * 0.23f;
 
+        float historyX = startingY - screenWidth / 5f;
+        float historyY = firstItemY;
+
         int row = 0;
         float slotSize = screenWidth * 0.035f;
 
@@ -76,6 +81,43 @@ public class InventoryBarActor extends Actor {
         camera.unproject(mousePos);
 
         batch.draw(menuTexture, startingX, startingY, menuWidth, menuHeight);
+
+        font.draw(batch, "Trade History:", historyX, historyY);
+
+        historyY += spacingY;
+
+        PlayerData mainPlayerData = Finder.getpd();
+        for(TradeData tradeData : friendshipStageHandler.playerData.getTotalTradesListData()){
+            if(tradeData.getFromName().equals(mainPlayerData.getUsername())){
+                Trade trade = tradeData.getTrade(mainPlayerData.getPlayer(), friendshipStageHandler.playerData.getPlayer());
+                font.setColor(CustomColors.SWAMP_COLOR);
+                String done = " (Done)";
+                if(trade.isRejected()){
+                    done = " (Rejected)";
+                }
+                if(trade.isPaidInMoney()){
+                    if(trade.isRequest()){
+                        font.draw(batch, trade.getItem().getItem().getName() + " for " + trade.getPrice() +"$" + done, historyX, historyY);
+                    } else{
+                        font.draw(batch, trade.getPrice() + "$ for " + trade.getItem().getItem().getName() + done, historyX, historyY);
+                    }
+                }
+            } else if(tradeData.getToName().equals(mainPlayerData.getUsername())){
+                Trade trade = tradeData.getTrade(friendshipStageHandler.playerData.getPlayer(), mainPlayerData.getPlayer());
+                font.setColor(CustomColors.JUNGLE_COLOR);
+                String done = " (Done)";
+                if(trade.isRejected()){
+                    done = " (Rejected)";
+                }
+                if(trade.isPaidInMoney()){
+                    if(trade.isRequest()){
+                        font.draw(batch, trade.getItem().getItem().getName() + " for " + trade.getPrice() +"$" + done, historyX, historyY);
+                    } else{
+                        font.draw(batch, trade.getPrice() + "$ for " + trade.getItem().getItem().getName() + done, historyX, historyY);
+                    }
+                }
+            }
+        }
 
         for (int col = 0; row < 3; ) {
             int index = col + (startingRow + row) * 12;
@@ -119,28 +161,26 @@ public class InventoryBarActor extends Actor {
                         boolean clicked = false;
                         if (mousePos.x >= x && mousePos.x <= x + slotSize &&
                             mousePos.y >= y && mousePos.y <= y + slotSize) {
-                            drawTooltip(batch, x, y, slotSize, "Gift: " + readableName(item.getName()));
+                            drawTooltip(batch, x, y, slotSize, "Trade Request: " + readableName(item.getName()) + " for " + item.getPrice());
                             if (Gdx.input.isButtonJustPressed(0)) {
-                                clicked = true;
+                                String name;
+                                if(friendshipStageHandler.isPlayer){
+                                    name = friendshipStageHandler.playerData.getUsername();
+                                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                        new GameCommand("trade -u "+name+" -t offer -i "+item.getName()+" -a 1 -p " + (int)item.getPrice(),
+                                            AppClient.getUserData().getUsername()));
+                                    AppClient.getClient().send(new Gson().toJson(msg));
+                                }
+                            }else if (Gdx.input.isButtonJustPressed(1)) {
+                                String name;
+                                if(friendshipStageHandler.isPlayer){
+                                    name = friendshipStageHandler.playerData.getUsername();
+                                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                                        new GameCommand("trade -u "+name+" -t request -i "+item.getName()+" -a 1 -p " + (int)item.getPrice(),
+                                            AppClient.getUserData().getUsername()));
+                                    AppClient.getClient().send(new Gson().toJson(msg));
+                                }
                             }
-                        }
-                        if (clicked) {
-                            //TODO Gift to Player
-                            String name;
-                            if(friendshipStageHandler.isPlayer){
-                                name = friendshipStageHandler.playerData.getUsername();
-                                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                                    new GameCommand("gift -u "+name+" -i "+item.getName()+" -a 1",
-                                        AppClient.getUserData().getUsername()));
-                                AppClient.getClient().send(new Gson().toJson(msg));
-                            } else{
-                                name = friendshipStageHandler.npcData.getName();
-                                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                                    new GameCommand("gift NPC "+name+" -i "+item.getName(),
-                                        AppClient.getUserData().getUsername()));
-                                AppClient.getClient().send(new Gson().toJson(msg));
-                            }
-//                            friendshipStageHandler.setMessage("Gifted " + item.getName() + " to " + name + ".", CustomColors.GAMEGREENCOLOR);
                         }
                     }
                 }

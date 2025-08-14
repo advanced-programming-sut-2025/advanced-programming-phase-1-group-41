@@ -1,14 +1,17 @@
 package com.CEliconValley.views.subGames;
 
+import com.CEliconValley.controllers.TradeMenuController;
 import com.CEliconValley.controllers.subgames.FriendshipController;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Result;
+import com.CEliconValley.views.commands.TradeCommands;
 import com.CEliconValley.views.commands.gameCommands.FriendShipCommands;
 
 import java.util.regex.Matcher;
 
 public class FriendshipView {
     static FriendshipController controller =  new FriendshipController();
+    static TradeMenuController tController =  new TradeMenuController();
     public static boolean check(String input, String playername) {
         Matcher matcher;
         if((matcher = FriendShipCommands.Friendships.getMatcher(input)) != null){
@@ -41,8 +44,13 @@ public class FriendshipView {
             System.out.println(controller.respond(matcher, playername));
         }else if((matcher = FriendShipCommands.GoTo.getMatcher(input)) != null){
             System.out.println(controller.goToFarm(matcher));
-        }
-        else{
+        } else if((matcher = TradeCommands.TradeToMoney.getMatcher(input)) != null){
+            System.out.println(tController.tradeToMoney(matcher, playername));
+        }else if((matcher = TradeCommands.TradeResponse.getMatcher(input)) != null){
+            Result result = tController.tradeResponse(matcher, playername);
+            System.out.println(result);
+            App.sendResult(result, playername);
+        } else{
             return false;
         }
         return true;

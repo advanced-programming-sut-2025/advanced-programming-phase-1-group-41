@@ -82,7 +82,6 @@ public class MenuBar {
         emptyHeartTexture = GameAssetManager.getGameAssetManager().getInventoryTexture("relations/Empty_Heart.png");
         giftTexture = GameAssetManager.getGameAssetManager().getInventoryTexture("relations/Gift.png");
 
-
         int i = 0;
         for (PlayerData playerData : AppClient.getGameData().getPlayersData()) {
             assert AppClient.getUserData() != null;
@@ -464,6 +463,21 @@ public class MenuBar {
         float screenHeight = camera.viewportHeight;
 
         NPCsData = AppClient.getGameData().getVillageData().getNPCsData();
+
+        int k = 0;
+        relationsIndex.clear();
+        relationTextures.clear();
+        for (PlayerData playerData : AppClient.getGameData().getPlayersData()) {
+            assert AppClient.getUserData() != null;
+            if (playerData.getUsername().equals(AppClient.getUserData().getUsername())) {
+                k++;
+                continue;
+            }
+            relationsIndex.add(k);
+            relationTextures.add(new Texture(playerData.getAvatarPath()));
+            k++;
+        }
+
         if(NPCsData == null) return;
         float menuWidth = screenWidth * 0.6f;
         float menuHeight = screenHeight * 0.7f;
@@ -1005,7 +1019,7 @@ public class MenuBar {
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
 
-        float x = startingX + screenWidth * 0.75f;
+        float x = startingX + screenWidth * 0.075f;
         float y = startingY + screenHeight * 0.55f;
 
         float spacing = screenWidth * 0.14f;

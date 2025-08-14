@@ -58,7 +58,14 @@ public class GameHandler {
                     Game game = gd.makeGame();
                     loadGame(game);
 
-                }else{
+                }
+                else{
+                    // 2 players
+//                    if(lobby.getPlayerNames().size() < 2){
+//                        conn.send(gson.toJson(new GameMessage<>("lobby-error", "at least 2 players needed")));
+//                        return;
+//                    }
+
                     System.out.println("making game for "+lobby);
                     for (String playerName : lobby.getPlayerNames()) {
                         GameMessage<PreStartRequest> request = new GameMessage<>("pre-start-request", new PreStartRequest());
@@ -170,6 +177,9 @@ public class GameHandler {
                 Player player = Finder.getPlayerByUsername(msg.body.username);
                 if(player.emotions.contains(msg.body)){
                     player.emotions.remove(msg.body);
+                    GameMessage<PlayerData> response = new GameMessage<>("player-data",
+                        new PlayerData(player));
+                    App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(response));
                 }else{
                     System.out.println("emotion smth went wrong");
                 }
@@ -183,6 +193,9 @@ public class GameHandler {
                     App.sendResult(new Result(false, "already have that reaction"), msg.body.username);
                 }else{
                     player.emotions.add(msg.body);
+                    GameMessage<PlayerData> response = new GameMessage<>("player-data",
+                        new PlayerData(player));
+                    App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(response));
                 }
             }
             case "player-message" -> {

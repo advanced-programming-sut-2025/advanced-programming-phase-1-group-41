@@ -61,6 +61,7 @@ public class BarnScreen extends GameScreen implements Screen {
         barnMenuBar.setPlayer(player);
         this.farmScreen = farmScreen;
         this.barn = barn;
+        this.barnData = barnData;
         for (Cell cell : barn.getCells()) {
             if (cell == null) continue;
             if (cell.getObjectMap() instanceof Door) {
@@ -139,6 +140,9 @@ public class BarnScreen extends GameScreen implements Screen {
                 result.message().equals("scoreboard")) {
                 return;
             }
+        }
+        if(barnData == null){
+            return;
         }
         randomMovement();
         PlayerActs.approach(hero);

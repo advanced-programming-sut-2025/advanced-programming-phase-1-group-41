@@ -1,9 +1,12 @@
 package com.CEliconValley.controllers;
 
+import com.CEliconValley.common.messages.GameCommand;
+import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.models.*;
 
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
+import com.google.gson.Gson;
 
 import java.util.regex.Matcher;
 
@@ -53,10 +56,10 @@ public class TradeMenuController {
         return new Result(true, "Trade added successfully!");
     }
 
-    public Result tradeToMoney(Matcher matcher){
+    public Result tradeToMoney(Matcher matcher, String playername){
         String username = matcher.group("username");
         String type = matcher.group("type");
-        Player trader = App.getGame().getCurrentPlayer();
+        Player trader = Finder.getPlayerByUsername(playername);
         Player target = Finder.findPlayerByUsername(username);
         if(target == null){
             return new Result(false, "Player not found!");
@@ -89,7 +92,13 @@ public class TradeMenuController {
         target.getTradesList().add(trade);
         target.getNewTradesList().add(trade);
         trader.getTotalTradesList().add(trade);
-
+        String text = itemName+" for "+price+"$";
+        if(!isRequest){
+            text = price+"$ for "+itemName;
+        }
+        GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+            new GameCommand("trade-mode", text));
+        App.getServer().sendToPlayer(target, new Gson().toJson(msg));
         return new Result(true, "Trade added successfully!");
     }
 
@@ -118,17 +127,13 @@ public class TradeMenuController {
         return new Result(true, tradeList.toString());
     }
 
-    public Result tradeResponse(Matcher matcher){
-        int id = Integer.parseInt(matcher.group("id"));
+    public Result tradeResponse(Matcher matcher, String playername){
         String flag = matcher.group(1);
         if(!flag.equals("accept") && !flag.equals("reject")){
             return new Result(false, "Invalid response!");
         }
-        Player resPlayer = App.getGame().getCurrentPlayer();
-        if(id <= 0 || id > resPlayer.getTradesList().size()){
-            return new Result(false, "Wrong id");
-        }
-        Trade trade = resPlayer.getTradesList().get(id - 1);
+        Player resPlayer = Finder.getPlayerByUsername(playername);
+        Trade trade = resPlayer.getTradesList().get(resPlayer.getTradesList().size()-1);
         Player traderPlayer = trade.getFrom();
         Friendship friendship = resPlayer.findFriendship(traderPlayer);
         if(flag.equals("accept")){
@@ -204,6 +209,9 @@ public class TradeMenuController {
                     resPlayer.getInventory().addToInventory(item, amount);
                 }
             }
+
+
+            App.sendResult(new Result(false,playername+" accepted your trade"), traderPlayer.getUser().getUsername());
             return new Result(true, "Trade with " + traderPlayer.getUser().getUsername() + " accepted!");
 
         } else{
@@ -212,6 +220,8 @@ public class TradeMenuController {
             friendship.rejectTrade();
             friendship.interact();
             friendship.decreaseLevel(resPlayer);
+            App.sendResult(new Result(false,playername+" didn't accept your trade"), traderPlayer.getUser().getUsername());
+
             return new Result(true, "Trade with " + traderPlayer.getUser().getUsername() + " rejected!");
         }
     }

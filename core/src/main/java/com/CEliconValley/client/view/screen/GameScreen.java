@@ -33,10 +33,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -48,6 +46,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
@@ -76,6 +75,8 @@ public abstract class GameScreen implements Screen {
     public Label playerVoteLabel;
     public Label howManyVotedLabel;
 
+    public final ArrayList<String> allTextReactions = new ArrayList<>();
+    public final ArrayList<TextureRegion> allEmoteTextures = new ArrayList<>();
 
     protected AnimalSprite lastAnimal = null;
 
@@ -95,6 +96,10 @@ public abstract class GameScreen implements Screen {
     public boolean proposeMode = false;
     public TextButton proposeyesButton, proposenoButton;
     public Label proposeLabel;
+
+    public boolean tradeMode = false;
+    public TextButton tradeyesButton, tradenoButton;
+    public Label tradeLabel;
 
     private Table scoreboardInfoTable;
 
@@ -147,6 +152,10 @@ public abstract class GameScreen implements Screen {
     public void setTextForProposeLabel(String input){
         proposeLabel.setText(input);
         proposeLabel.setPosition(Gdx.graphics.getWidth() / 3f - proposeLabel.getWidth(), stage.getHeight() * 5 / 6- proposeLabel.getHeight() / 2);
+    }
+    public void setTextForTradeLabel(String input){
+        tradeLabel.setText(input);
+        tradeLabel.setPosition(Gdx.graphics.getWidth() / 3f - tradeLabel.getWidth(), stage.getHeight() * 5 / 6- tradeLabel.getHeight() / 2);
     }
 
     private void setupVoteUI(){
@@ -207,6 +216,22 @@ public abstract class GameScreen implements Screen {
         proposeLabel.setFontScale(2f);
         proposeLabel.setPosition(Gdx.graphics.getWidth() / 2f - terLabel.getWidth(), stage.getHeight() * 5 / 6- terLabel.getHeight() / 2);
         stage.addActor(proposeLabel);
+
+        tradenoButton = new TextButton("No", GameAssetManager.getGameAssetManager().getSkin());
+        tradenoButton.setColor(Color.RED);
+        tradenoButton.setVisible(false);
+        tradeyesButton = new TextButton("Yes", GameAssetManager.getGameAssetManager().getSkin());
+        tradeyesButton.setColor(Color.GREEN);
+        tradeyesButton.setVisible(false);
+        tradeyesButton.setPosition(stage.getWidth()* 3 / 4 - tradeyesButton.getWidth() / 2, stage.getHeight() / 2- tradeyesButton.getHeight() / 2);
+        tradenoButton.setPosition(stage.getWidth()/4 - tradenoButton.getWidth() / 2, stage.getHeight() / 2 - tradenoButton.getHeight() / 2);
+        stage.addActor(tradeyesButton);
+        stage.addActor(tradenoButton);
+        tradeLabel = new Label("trade", GameAssetManager.getGameAssetManager().getSkin());
+        tradeLabel.setVisible(false);
+        tradeLabel.setFontScale(2f);
+        tradeLabel.setPosition(Gdx.graphics.getWidth() / 2f - terLabel.getWidth(), stage.getHeight() * 5 / 6- terLabel.getHeight() / 2);
+        stage.addActor(tradeLabel);
 
 
 
@@ -438,8 +463,25 @@ public abstract class GameScreen implements Screen {
 
         setupChatUI();
         setupScoreboardUI();
+        setReactions();
     }
 
+    private void setReactions(){
+        allTextReactions.add("Hi!");
+        allTextReactions.add("How are you?");
+        allTextReactions.add("I like you");
+        allTextReactions.add("Wanna be friends?");
+        allTextReactions.add("Hello");
+        allTextReactions.add("LOL");
+        allTextReactions.add("Lmao");
+        allTextReactions.add("Nice to meet you");
+        allTextReactions.add("Tschüss");
+        allTextReactions.add("Adios");
+
+        for(int i = 0; i < 15; i++){
+            allEmoteTextures.add(GameAssetManager.getGameAssetManager().getEmote(i + 1));
+        }
+    }
 
     public boolean canMoveTo(int x, int y, Location location) {
         if(location instanceof FarmMap farmMap){
@@ -699,6 +741,34 @@ public abstract class GameScreen implements Screen {
             PlayerActs.showProposalUI();
         });
     }
+    public void handleTrade(Stage stage, String username) {
+        Gdx.app.postRunnable(() -> {
+            tradeMode = true;
+            tradeLabel.setVisible(true);
+            tradenoButton.setVisible(true);
+            tradeyesButton.setVisible(true);
+            setTextForTradeLabel(username);
+
+
+            overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
+                .getGameAssetManager()
+                .getBackgroundTexture("Field1.png"))));
+
+            //        overlay.setColor(0, 0, 0, 0.5f);
+            overlay.setSize(stage.getWidth(), stage.getHeight());
+            overlay.setPosition(0, 0);
+
+            overlay.getColor().a = 0;
+            overlay.addAction(Actions.fadeIn(0.5f));
+
+
+            stage.addActor(overlay);
+            overlay.toBack();
+
+
+            PlayerActs.showTradeUI();
+        });
+    }
 
     public void handledc(Stage stage) {
         Gdx.app.postRunnable(() -> {
@@ -844,9 +914,33 @@ public abstract class GameScreen implements Screen {
     }
 
     public void showTexture(float renderx, float rendery, Emotion emotion){
-        TextureRegion emote = GameAssetManager.getGameAssetManager().getEmote(emotion.index);
-        float ratio =(float) emote.getRegionWidth() / emote.getRegionHeight();
-        batch.draw(emote, renderx, rendery + CELL_SIZE, ratio * CELL_SIZE , CELL_SIZE);
+        if(emotion.isEmote){
+            TextureRegion emote = allEmoteTextures.get(emotion.index);
+            float ratio =(float) emote.getRegionWidth() / emote.getRegionHeight();
+            batch.draw(emote, renderx, rendery + CELL_SIZE, ratio * CELL_SIZE , CELL_SIZE);
+        }else{
+            BitmapFont font = new BitmapFont();
+            ShapeRenderer shapeRenderer = new ShapeRenderer();
+
+            font.getData().setScale(2f);
+            GlyphLayout layout = new GlyphLayout(font, allTextReactions.get(emotion.index));
+
+            float textWidth = layout.width + 20;
+            float textHeight = layout.height + 10;
+
+            float textX = renderx;
+            float textY = rendery + CELL_SIZE * 3 / 2f;
+
+            batch.end();
+            shapeRenderer.setProjectionMatrix(camera.combined);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(0, 0, 0, 0.8f);
+            shapeRenderer.rect(textX, textY, textWidth, textHeight);
+            shapeRenderer.end();
+            batch.begin();
+
+            font.draw(batch, layout, textX + 10, textY + textHeight - 5);
+        }
     }
 }
 
