@@ -177,6 +177,9 @@ public class GameHandler {
                 Player player = Finder.getPlayerByUsername(msg.body.username);
                 if(player.emotions.contains(msg.body)){
                     player.emotions.remove(msg.body);
+                    GameMessage<PlayerData> response = new GameMessage<>("player-data",
+                        new PlayerData(player));
+                    App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(response));
                 }else{
                     System.out.println("emotion smth went wrong");
                 }
@@ -190,6 +193,9 @@ public class GameHandler {
                     App.sendResult(new Result(false, "already have that reaction"), msg.body.username);
                 }else{
                     player.emotions.add(msg.body);
+                    GameMessage<PlayerData> response = new GameMessage<>("player-data",
+                        new PlayerData(player));
+                    App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), gson.toJson(response));
                 }
             }
             case "player-message" -> {
