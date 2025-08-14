@@ -10,7 +10,6 @@ import com.CEliconValley.models.items.Inventory;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -23,7 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.google.gson.Gson;
 
-public class InventoryBarActor extends Actor {
+public class TradeInventoryBarActor extends Actor {
 
     private OrthographicCamera camera;
     private Inventory inventory;
@@ -37,14 +36,14 @@ public class InventoryBarActor extends Actor {
     private float startingY = 0;
     private int startingRow = 0;
 
-    public InventoryBarActor(FriendshipStageHandler friendshipStageHandler, OrthographicCamera camera, Inventory inventory, BitmapFont font) {
+    public TradeInventoryBarActor(FriendshipStageHandler friendshipStageHandler, OrthographicCamera camera, Inventory inventory, BitmapFont font) {
         this.friendshipStageHandler = friendshipStageHandler;
         this.camera = camera;
         this.inventory = inventory;
         this.font = font;
         this.shapeRenderer = new ShapeRenderer();
         menuTexture = GameAssetManager.getGameAssetManager().getScreenTexture("ShippingBin.png");
-        giftTexture = GameAssetManager.getGameAssetManager().getInventoryTexture("relations/Gift.png");
+        giftTexture = GameAssetManager.getGameAssetManager().getInventoryTexture("skills/Ruby.png");
         setTouchable(Touchable.enabled);
     }
 
@@ -119,24 +118,18 @@ public class InventoryBarActor extends Actor {
                         boolean clicked = false;
                         if (mousePos.x >= x && mousePos.x <= x + slotSize &&
                             mousePos.y >= y && mousePos.y <= y + slotSize) {
-                            drawTooltip(batch, x, y, slotSize, "Gift: " + readableName(item.getName()));
+                            drawTooltip(batch, x, y, slotSize, "Trade Request: " + readableName(item.getName()) + " for " + item.getPrice());
                             if (Gdx.input.isButtonJustPressed(0)) {
                                 clicked = true;
                             }
                         }
                         if (clicked) {
-                            //TODO Gift to Player
+                            //TODO Trade to Player
                             String name;
                             if(friendshipStageHandler.isPlayer){
                                 name = friendshipStageHandler.playerData.getUsername();
                                 GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                                    new GameCommand("gift -u "+name+" -i "+item.getName()+" -a 1",
-                                        AppClient.getUserData().getUsername()));
-                                AppClient.getClient().send(new Gson().toJson(msg));
-                            } else{
-                                name = friendshipStageHandler.npcData.getName();
-                                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                                    new GameCommand("gift NPC "+name+" -i "+item.getName(),
+                                    new GameCommand("trade -u "+name+" -t offer -i "+item.getName()+" -a 1 -p " + item.getPrice(),
                                         AppClient.getUserData().getUsername()));
                                 AppClient.getClient().send(new Gson().toJson(msg));
                             }
