@@ -15,9 +15,9 @@ public class PlayerView {
         }else if((matcher = GameMainCommands.MoneyShow.getMatcher(input))!=null){
             System.out.println(controller.showMoney(matcher));
         }else if((matcher = GameMainCommands.EnergyUnlimited.getMatcher(input))!=null){
-            System.out.println(controller.cheatEnergyUnlimited(matcher));
+            System.out.println(controller.cheatEnergyUnlimited(matcher, playername));
         }else if((matcher = GameMainCommands.EnergySet.getMatcher(input))!=null){
-            System.out.println(controller.cheatEnergySet(matcher));
+            System.out.println(controller.cheatEnergySet(matcher, playername));
         }else if((matcher = GameMainCommands.CheatAddItem.getMatcher(input))!=null){
 //            System.out.println(controller.cheatAddItem(matcher));
         }else if((matcher = InventoryAndToolCommands.InventoryTrash.getMatcher(input))!=null){

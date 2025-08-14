@@ -4,7 +4,7 @@ import com.CEliconValley.Main;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.model.StrategyScoreboard;
 import com.CEliconValley.client.view.screen.maps.*;
-import com.CEliconValley.client.view.screen.menu.ShippingBinBar;
+import com.CEliconValley.client.view.screen.menu.*;
 import com.CEliconValley.common.CellData;
 import com.CEliconValley.common.FarmData;
 import com.CEliconValley.common.NPCData;
@@ -16,7 +16,6 @@ import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.PlayerMessage;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.buildings.GreenHouse.Greenhouse;
-import com.CEliconValley.models.buildings.ShippingBin;
 import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.foragings.ForagingTree;
 import com.CEliconValley.models.foragings.Nature.Grass;
@@ -24,6 +23,7 @@ import com.CEliconValley.models.foragings.Nature.Lake;
 import com.CEliconValley.models.foragings.Nature.Obstacle;
 import com.CEliconValley.models.foragings.Nature.Rock;
 import com.CEliconValley.models.items.CraftableMachine;
+import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.ui.CustomColors;
 import com.CEliconValley.models.ui.GameAssetManager;
@@ -46,14 +46,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import javax.print.attribute.standard.Fidelity;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public abstract class GameScreen implements Screen {
     public boolean onRepeat = true;
     protected boolean flip = false;
-    protected boolean isMenuOpen = false;
+    public boolean isMenuOpen = false;
     protected boolean isMarketMenuOpen = false;
     protected boolean isAnimalMenuOpen = false;
     protected boolean isArtisanMenuOpen = false;
@@ -66,6 +64,7 @@ public abstract class GameScreen implements Screen {
     public Image overlay;
     protected TextField cheatCodeField;
     protected ShippingBinBar shippingBinBar;
+    protected CraftInfo craftInfo;
     public TextButton yesVoteButton, noVoteButton;
     public Label playerVoteLabel;
     public Label howManyVotedLabel;
@@ -83,6 +82,10 @@ public abstract class GameScreen implements Screen {
     public Label terhowmanyLabel;
     public boolean terMode = false;
 
+    public boolean proposeMode = false;
+    public TextButton proposeyesButton, proposenoButton;
+    public Label proposeLabel;
+
     private Table scoreboardInfoTable;
 
     public boolean isGameFinished = false;
@@ -90,14 +93,17 @@ public abstract class GameScreen implements Screen {
     protected Stage stage;
     protected Stage chatStage;
     protected Stage scoreboardStage;
-    protected Stage friendshipStage;
+    public Stage friendshipStage;
     public FriendshipStageHandler friendshipStageHandler;
     public CraftableMachine cm = null;
     public boolean sellmode = false;
     public boolean trashmode = false;
 
+    public String lastProposer = null;
+    public String lastCraftInfo = null;
+
     public abstract void transfer();
-    protected Hero hero;
+    public Hero hero;
     protected MenuBar menuBar = new MenuBar(this);
     protected MarketPlaceMenu marketPlaceMenu=new MarketPlaceMenu(this);
     protected AnimalMenu animalMenu=new AnimalMenu(this);
@@ -126,6 +132,10 @@ public abstract class GameScreen implements Screen {
     public void setTextForTerLabel(String input){
         terLabel.setText(input);
         terLabel.setPosition(Gdx.graphics.getWidth() / 3f - terLabel.getWidth(), stage.getHeight() * 5 / 6- terLabel.getHeight() / 2);
+    }
+    public void setTextForProposeLabel(String input){
+        proposeLabel.setText(input);
+        proposeLabel.setPosition(Gdx.graphics.getWidth() / 3f - proposeLabel.getWidth(), stage.getHeight() * 5 / 6- proposeLabel.getHeight() / 2);
     }
 
     private void setupVoteUI(){
@@ -170,6 +180,28 @@ public abstract class GameScreen implements Screen {
         terhowmanyLabel.setPosition(Gdx.graphics.getWidth() / 2f - terhowmanyLabel.getWidth(), stage.getHeight() * 4 / 6- terhowmanyLabel.getHeight() / 2);
         terhowmanyLabel.setVisible(false);
         stage.addActor(terhowmanyLabel);
+
+        proposenoButton = new TextButton("No", GameAssetManager.getGameAssetManager().getSkin());
+        proposenoButton.setColor(Color.RED);
+        proposenoButton.setVisible(false);
+        proposeyesButton = new TextButton("Yes", GameAssetManager.getGameAssetManager().getSkin());
+        proposeyesButton.setColor(Color.GREEN);
+        proposeyesButton.setVisible(false);
+        proposeyesButton.setPosition(stage.getWidth()* 3 / 4 - proposeyesButton.getWidth() / 2, stage.getHeight() / 2- proposeyesButton.getHeight() / 2);
+        proposenoButton.setPosition(stage.getWidth()/4 - proposenoButton.getWidth() / 2, stage.getHeight() / 2 - proposenoButton.getHeight() / 2);
+        stage.addActor(proposeyesButton);
+        stage.addActor(proposenoButton);
+        proposeLabel = new Label("Propose", GameAssetManager.getGameAssetManager().getSkin());
+        proposeLabel.setVisible(false);
+        proposeLabel.setFontScale(2f);
+        proposeLabel.setPosition(Gdx.graphics.getWidth() / 2f - terLabel.getWidth(), stage.getHeight() * 5 / 6- terLabel.getHeight() / 2);
+        stage.addActor(proposeLabel);
+
+
+
+
+
+
         dcLabel = new Label("oops someone got dced...", GameAssetManager.getGameAssetManager().getSkin());
         dcLabel.setFontScale(2f);
         dcLabel.setPosition(Gdx.graphics.getWidth() / 2f - dcLabel.getWidth(), stage.getHeight() * 5 / 6- dcLabel.getHeight() / 2);
@@ -566,6 +598,7 @@ public abstract class GameScreen implements Screen {
 
         stage.addActor(overlay);
         overlay.toBack();
+
     }
 
     public void handleVote(Stage stage, String name) {
@@ -622,6 +655,35 @@ public abstract class GameScreen implements Screen {
             stage.addActor(overlay);
             overlay.toBack();
 
+        });
+    }
+    public void handlePropose(Stage stage, String username) {
+        Gdx.app.postRunnable(() -> {
+            proposeMode = true;
+            proposeLabel.setVisible(true);
+            proposenoButton.setVisible(true);
+            proposeyesButton.setVisible(true);
+            setTextForProposeLabel(username+ "has proposed D:");
+            lastProposer = username;
+
+
+            overlay = new Image(new TextureRegionDrawable(new TextureRegion(GameAssetManager
+                .getGameAssetManager()
+                .getBackgroundTexture("Field1.png"))));
+
+            //        overlay.setColor(0, 0, 0, 0.5f);
+            overlay.setSize(stage.getWidth(), stage.getHeight());
+            overlay.setPosition(0, 0);
+
+            overlay.getColor().a = 0;
+            overlay.addAction(Actions.fadeIn(0.5f));
+
+
+            stage.addActor(overlay);
+            overlay.toBack();
+
+
+            PlayerActs.showProposalUI();
         });
     }
 

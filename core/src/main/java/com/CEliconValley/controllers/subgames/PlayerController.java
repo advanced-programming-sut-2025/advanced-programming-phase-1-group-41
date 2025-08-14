@@ -52,17 +52,19 @@ public class PlayerController {
         return new Result(true, message.toString());
     }
 
-    public Result cheatEnergySet(Matcher matcher) {
+    public Result cheatEnergySet(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
         String valueRaw = matcher.group(1);
         int value = Integer.parseInt(valueRaw);
-        App.getGame().getCurrentPlayer().setEnergy(value);
+        player.setEnergy(value);
         return new Result(true, "energy has been set to "+
                 App.getGame().getCurrentPlayer().getEnergy());
     }
 
-    public Result cheatEnergyUnlimited(Matcher matcher) {
-        App.getGame().getCurrentPlayer().setEnergyUnlimited(true);
-        return new Result(true, App.getGame().getCurrentPlayer().getUser().getUsername()+
+    public Result cheatEnergyUnlimited(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
+        player.setEnergyUnlimited(true);
+        return new Result(true, player.getUser().getUsername()+
                 " energy is now unlimited");
     }
 

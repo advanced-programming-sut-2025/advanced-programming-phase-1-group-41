@@ -3,6 +3,9 @@ package com.CEliconValley.client.view.screen;
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.controller.spawners.ItemSpawner;
 import com.CEliconValley.client.view.screen.maps.*;
+import com.CEliconValley.client.view.screen.menu.ArtisanMenu;
+import com.CEliconValley.client.view.screen.menu.CraftInfo;
+import com.CEliconValley.client.view.screen.menu.MenuBar;
 import com.CEliconValley.client.view.screen.menu.ShippingBinBar;
 import com.CEliconValley.client.view.screen.randomwalk.Node;
 import com.CEliconValley.client.view.screen.randomwalk.SimplePathFinder;
@@ -19,11 +22,9 @@ import com.CEliconValley.models.buildings.animalContainer.Barn;
 import com.CEliconValley.models.buildings.animalContainer.BarnType;
 import com.CEliconValley.models.buildings.animalContainer.Coop;
 import com.CEliconValley.models.buildings.animalContainer.CoopType;
+import com.CEliconValley.models.foragings.CropType;
 import com.CEliconValley.models.foragings.Nature.*;
 import com.CEliconValley.models.items.BuffType;
-import com.CEliconValley.models.items.CraftableMachine;
-import com.CEliconValley.models.items.craftablemachines.FishSmoker;
-import com.CEliconValley.models.items.craftablemachines.Machine;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.tools.FishingRod;
 import com.CEliconValley.models.tools.FishingRodLevel;
@@ -81,7 +82,7 @@ class FarmScreen extends GameScreen implements Screen {
     private final Texture thunderedTexture = GameAssetManager.getGameAssetManager().getTileTexture("thundered.png");
     private final Texture farmlandTexture = GameAssetManager.getGameAssetManager().getTileTexture("farmland.png");
     private final Texture bombedTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
-    private final Texture BushTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
+    private Texture bushTexture;
 
     Map<Cell, TextureRegion> groundCache;
 
@@ -102,6 +103,7 @@ class FarmScreen extends GameScreen implements Screen {
     private Animation<TextureRegion>[] coastAnimations;
     private float passiveStateTime = 0f;
 
+    public boolean isCraftInfo = false;
 
     public void updateFarmData() {
         // maybe needs change?
@@ -212,11 +214,14 @@ class FarmScreen extends GameScreen implements Screen {
 
 
         shippingBinBar = new ShippingBinBar(this);
+        craftInfo = new CraftInfo(this);
     }
 
 
     @Override
     public void render(float delta) {
+        if(AppClient.getGameData() == null) return;
+        bushTexture = GameAssetManager.getGameAssetManager().getTileTexture("Bush_" + AppClient.getGameData().getTime().getSeason().name + ".png");
 
         if(isGameFinished) return;
         String season = AppClient.getGameData().getTime().getSeason().name();
@@ -343,7 +348,7 @@ class FarmScreen extends GameScreen implements Screen {
             int y = (int) (cell.getY() * CELL_SIZE);
 //            batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
             if (cell.getObjectMap() instanceof Bush) {
-                batch.draw(thunderedTexture, x, y, CELL_SIZE, CELL_SIZE);
+                batch.draw(bushTexture, x, y, CELL_SIZE, CELL_SIZE);
             }
         }
             if(CraftableMachine.parseCraftable(hero.selectedItemName)!=null){
@@ -406,8 +411,9 @@ class FarmScreen extends GameScreen implements Screen {
             shippingBinBar.render(batch, camera, true);
         }else if(trashmode){
             shippingBinBar.render(batch, camera, false);
-        }
-        else{
+        } else if(isCraftInfo){
+            craftInfo.render(batch, camera, lastCraftInfo);
+        } else{
             inventoryRenderer.render(batch, camera);
         }
 
@@ -624,6 +630,10 @@ class FarmScreen extends GameScreen implements Screen {
 
         SimplePathFinder spf = new SimplePathFinder(farmMap);
         hero.movementQueue = spf.getPathQueue(hero.playerX.get(), hero.playerY.get(), hero.destX, hero.destY);
+        if(hero.movementQueue.isEmpty()){
+            GameMessage<GameCommand> msg = new GameMessage<>("game-command", new GameCommand("at home", AppClient.getUserData().getUsername()));
+            AppClient.getClient().send(new Gson().toJson(msg));
+        }
 
 
     }

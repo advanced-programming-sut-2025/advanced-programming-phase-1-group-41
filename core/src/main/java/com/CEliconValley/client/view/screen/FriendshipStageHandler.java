@@ -113,7 +113,7 @@ public class FriendshipStageHandler {
         chatTab = new TextButton("Chat", skin);
         giftTab = new TextButton("Gift", skin);
         if (isPlayer && friendShipLevel < 3) {
-            proposeOrQuestTab = new TextButton("Give Flower", skin);
+            proposeOrQuestTab = new TextButton("Flower", skin);
             if(friendShipLevel < 2 || friendshipData.getFriendshipXp() < 300){
                 proposeOrQuestTab.getLabel().setColor(Color.RED);
             }
@@ -481,7 +481,7 @@ public class FriendshipStageHandler {
 
     private void resetProposing(){
         if (isPlayer && friendShipLevel < 3) {
-            proposeOrQuestTab.setText("Give Flower");
+            proposeOrQuestTab.setText("Flower");
             if(friendShipLevel < 2 || friendshipData.getFriendshipXp() < 300){
                 proposeOrQuestTab.getLabel().setColor(Color.RED);
             } else{
@@ -561,6 +561,9 @@ public class FriendshipStageHandler {
                         setMessage("Your friendship xp is " + friendshipData.getFriendshipXp() + ", it should be at 400 xp to give flower.", Color.RED);
                         return;
                     }
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand("ask marriage -u "+playerData.getUsername(), AppClient.getUserData().getUsername()));
+                    AppClient.getClient().send(new Gson().toJson(msg));
                     // TODO Propose
                     return;
                 } else if (isPlayer) {

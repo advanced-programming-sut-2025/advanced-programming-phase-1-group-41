@@ -17,7 +17,10 @@ import com.CEliconValley.models.animals.animalKinds.Cow;
 import com.CEliconValley.models.animals.animalKinds.Goat;
 import com.CEliconValley.models.animals.animalKinds.Sheep;
 import com.CEliconValley.models.buildings.ShippingBin;
+import com.CEliconValley.models.foragings.CropType;
 import com.CEliconValley.models.foragings.Fertilizer;
+import com.CEliconValley.models.foragings.ForagingCropType;
+import com.CEliconValley.models.foragings.Nature.TreeType;
 import com.CEliconValley.models.foragings.Seed;
 import com.CEliconValley.models.items.CraftableMachine;
 import com.CEliconValley.models.items.Item;
@@ -25,6 +28,7 @@ import com.CEliconValley.models.locations.Location;
 import com.CEliconValley.models.tools.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -56,7 +60,12 @@ public class PlayerActs {
             }
             return new Result(true, "refrigerator opened");
         }
-
+        if(screen instanceof FarmScreen && ((FarmScreen) screen).isCraftInfo){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+                ((FarmScreen) screen).isCraftInfo = false;
+            }
+            return new Result(true, "craft info opened");
+        }
         if(screen.sellmode){
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
                 screen.sellmode = false;
@@ -194,6 +203,11 @@ public class PlayerActs {
 
             return new Result(false, "cheat");
         }
+        if (screen.proposeMode) {
+            stage.act(delta);
+            stage.draw();
+            return new Result(false, "cheat");
+        }
         if(screen.terMode){
             stage.act(delta);
             stage.draw();
@@ -280,7 +294,7 @@ public class PlayerActs {
                 AppClient.getClient().send(new Gson().toJson(msg));
             }
         }
-        else if(Gdx.input.isButtonJustPressed(0)){
+        else if(Gdx.input.isButtonJustPressed(0) && !screen.isMenuOpen && screen.hero.selectedItemName != null){
             Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             if(screen instanceof FarmScreen farmScreen){
                 farmScreen.camera.unproject(mousePos);
@@ -297,6 +311,9 @@ public class PlayerActs {
             if(screen instanceof VillageScreen villageScreen){
                 villageScreen.camera.unproject(mousePos);
                 handleClick(mousePos.x, mousePos.y, villageScreen);
+            }else if(screen instanceof FarmScreen farmScreen){
+                farmScreen.camera.unproject(mousePos);
+                handleClick(mousePos.x, mousePos.y, farmScreen);
             }
 
         }
@@ -530,6 +547,9 @@ public class PlayerActs {
                 petCoop(screen);
             }
         }
+//        else if(Gdx.input.isKeyPressed(Input.Keys.Y) && screen instanceof FarmScreen){
+//            ((FarmScreen) screen).isCraftInfo = true;
+//        }
         else if (Gdx.input.isKeyJustPressed((Input.Keys.E))) {
             screen.onRepeat = false;
             hero.stateTime = 0;
@@ -1053,6 +1073,38 @@ public class PlayerActs {
     }
 
 
+    public static void handleClick(float mouseX, float mouseY, FarmScreen farmScreen){
+        for (CellData cell : Finder.getfd().getCells()) {
+            float renderx = cell.getX() * CELL_SIZE;
+            float rendery = cell.getY() * CELL_SIZE;
+            if(renderx < mouseX && mouseX < renderx + CELL_SIZE &&
+            rendery < mouseY && mouseY < rendery + CELL_SIZE){
+                String craftName = cell.getObjectName();
+                for(CropType cropType : CropType.values()){
+                    if(craftName.equalsIgnoreCase(cropType.getName())){
+                        farmScreen.isCraftInfo = true;
+                        screen.lastCraftInfo = cropType.toString();
+                        return;
+                    }
+                }
+                for(TreeType treeType : TreeType.values()){
+                    if(craftName.equalsIgnoreCase(treeType.getName())){
+                        farmScreen.isCraftInfo = true;
+                        screen.lastCraftInfo = treeType.toString();
+                        return;
+                    }
+                }
+                for(ForagingCropType foragingCropType : ForagingCropType.values()){
+                    if(craftName.equalsIgnoreCase(foragingCropType.getName())){
+                        farmScreen.isCraftInfo = true;
+                        screen.lastCraftInfo = foragingCropType.toString();
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     public static void handleClick(float mouseX, float mouseY, VillageScreen vs){
         for (PlayerSprite playerSprite : vs.playerSprites) {
             float renderx = playerSprite.getPlayerData().renderx;
@@ -1083,5 +1135,54 @@ public class PlayerActs {
                 });
             }
         }
+    }
+
+    public static void resetPropose(){
+        screen.proposeMode = false;
+        screen.proposenoButton.setVisible(false);
+        screen.proposeyesButton.setVisible(false);
+        screen.proposenoButton.reset();
+        screen.proposeyesButton.reset();
+        screen.proposeLabel.setVisible(false);
+        if(screen.overlay == null) return;
+        screen.overlay.addAction(Actions.sequence(
+            Actions.fadeOut(0.5f),
+            Actions.run(() -> screen.overlay.remove())
+        ));
+
+        if (screen.overlay != null) {
+            screen.overlay.remove();
+            screen.overlay = null;
+        }
+    }
+
+    public static void showProposalUI() {
+        screen.proposeMode = true;
+        screen.proposeLabel.setVisible(true);
+        screen.proposeyesButton.setVisible(true);
+        screen.proposenoButton.setVisible(true);
+
+        screen.proposeyesButton.clearListeners();
+        screen.proposenoButton.clearListeners();
+
+        screen.proposeyesButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                    new GameCommand("respond accept -u " + screen.lastProposer, AppClient.getUserData().getUsername()));
+                AppClient.getClient().send(new Gson().toJson(msg));
+                resetPropose();
+            }
+        });
+
+        screen.proposenoButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                    new GameCommand("respond reject -u " + screen.lastProposer, AppClient.getUserData().getUsername()));
+                AppClient.getClient().send(new Gson().toJson(msg));
+                resetPropose();
+            }
+        });
     }
 }

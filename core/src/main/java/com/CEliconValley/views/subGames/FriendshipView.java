@@ -34,9 +34,11 @@ public class FriendshipView {
             System.out.println(result);
             App.sendRawResult(result, playername);
         } else if((matcher = FriendShipCommands.Marriage.getMatcher(input)) != null){
-            System.out.println(controller.propose(matcher));
+            Result result = controller.propose(matcher, playername);
+            System.out.println(result);
+            App.sendRawResult(result, playername);
         } else if((matcher = FriendShipCommands.Respond.getMatcher(input)) != null){
-            System.out.println(controller.respond(matcher));
+            System.out.println(controller.respond(matcher, playername));
         }else if((matcher = FriendShipCommands.GoTo.getMatcher(input)) != null){
             System.out.println(controller.goToFarm(matcher));
         }

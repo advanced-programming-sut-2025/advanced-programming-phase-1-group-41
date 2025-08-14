@@ -1,6 +1,7 @@
-package com.CEliconValley.client.view.screen;
+package com.CEliconValley.client.view.screen.menu;
 
 import com.CEliconValley.client.AppClient;
+import com.CEliconValley.client.view.screen.GameScreen;
 import com.CEliconValley.common.MachineData;
 import com.CEliconValley.common.SlotData;
 import com.CEliconValley.common.messages.GameCommand;
@@ -8,10 +9,8 @@ import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.controllers.ItemManager;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.Player;
-import com.CEliconValley.models.Result;
 import com.CEliconValley.models.foragings.FruitType;
 import com.CEliconValley.models.items.*;
-import com.CEliconValley.models.items.craftablemachines.Machine;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -27,7 +26,6 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ArtisanMenu {
 //    private final Texture menuTexture;

@@ -1,6 +1,9 @@
-package com.CEliconValley.client.view.screen;
+package com.CEliconValley.client.view.screen.menu;
 
 import com.CEliconValley.client.AppClient;
+import com.CEliconValley.client.view.screen.CottageScreen;
+import com.CEliconValley.client.view.screen.GameScreen;
+import com.CEliconValley.client.view.screen.GreenHouseScreen;
 import com.CEliconValley.common.*;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
@@ -461,7 +464,7 @@ public class MenuBar {
         float screenHeight = camera.viewportHeight;
 
         NPCsData = AppClient.getGameData().getVillageData().getNPCsData();
-
+        if(NPCsData == null) return;
         float menuWidth = screenWidth * 0.6f;
         float menuHeight = screenHeight * 0.7f;
         startingX = camera.position.x - menuWidth / 2f;
@@ -530,6 +533,9 @@ public class MenuBar {
                     screen.handleFriendship(screen.friendshipStage, playerData, null);
                 }
             } else {
+                if(NPCsData.isEmpty()){
+                    return;
+                }
                 NPCData npcData = NPCsData.get(i - relationsIndex.size());
                 String NPCname = npcData.getName();
 
@@ -994,7 +1000,7 @@ public class MenuBar {
         float screenWidth = camera.viewportWidth;
         float screenHeight = camera.viewportHeight;
 
-        float x = startingX + screenWidth * 0.1f;
+        float x = startingX + screenWidth * 0.75f;
         float y = startingY + screenHeight * 0.55f;
 
         float spacing = screenWidth * 0.14f;
@@ -1045,7 +1051,7 @@ public class MenuBar {
         }
 
         y = startingY + screenHeight * 0.55f;
-        x += screenWidth * 0.275f;
+        x += screenWidth * 0.3f;
 
         font.getData().setScale(2.4f);
         font.setColor(CustomColors.GOLD);
@@ -1053,10 +1059,14 @@ public class MenuBar {
         font.setColor(Color.WHITE);
         font.getData().setScale(1f);
 
-        x -= screenHeight * 0.0275f;
+        x -= screenHeight * 0.09f;
 
-        for (GiftData giftData : Finder.getpd().getNewGiftsData()) {
-            String text = giftData.getSlotData().getItemName() + " from " + giftData.getFromName();
+        endIndex = Math.min(selectedGiftIndex + 10, Finder.getpd().getReceivedGiftsData().size());
+
+        for (int j = selectedGiftIndex; j < endIndex; j++) {
+            GiftData giftData = Finder.getpd().getReceivedGiftsData().get(j);
+
+            String text = giftData.getSlotData().getItemName() + " by " + giftData.getFromName();
 
             float playerX = x;
             float playerY = y - playerSize + 5;
@@ -1064,7 +1074,7 @@ public class MenuBar {
             font.getData().setScale(2f);
             font.draw(batch, text, playerX, playerY + playerSize / 1.5f);
 
-            playerX += playerSize * 1.2f;
+            playerX += playerSize * 1.4f;
 
             for (int i = 0; i < 5; i++) {
                 playerX += playerSize / 2f;
@@ -1088,7 +1098,7 @@ public class MenuBar {
                     float tooltipHeight = tooltipLayout.height + 30;
 
                     float tooltipX = playerX + playerSize * 1.5f - tooltipWidth / 2f;
-                    float tooltipY = playerY + playerSize / 2;
+                    float tooltipY = playerY + playerSize;
 
                     batch.end();
                     shapeRenderer.setProjectionMatrix(camera.combined);
