@@ -727,10 +727,12 @@ public class MenuBar {
             if (mouseOver && Finder.getpd().getCraftingRecipes().contains(machine.getRecipe())) {
                 drawToolTip(batch, machine, drawX, drawY);
 
-                if (Gdx.input.justTouched()) {
-                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                        new GameCommand("crafting craft " + machine, AppClient.getUserData().getUsername()));
-                    AppClient.getClient().send(new Gson().toJson(msg));
+                if (Gdx.input.isButtonJustPressed(0)) {
+                    if ((screen instanceof CottageScreen)) {
+                        GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                            new GameCommand("crafting craft " + machine, AppClient.getUserData().getUsername()));
+                        AppClient.getClient().send(new Gson().toJson(msg));
+                    }
 //                    if (hasAllItems(machine.getRecipe())) {
 //                        Map<Item, Integer> requiredItems = machine.getRecipe().neededItems;
 //                        Inventory inventory = player.getInventory();
@@ -807,9 +809,12 @@ public class MenuBar {
                 drawCookingTip(batch, food, drawX, drawY);
 
                 if (Gdx.input.isButtonJustPressed(0)) {
-                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
-                        new GameCommand("cooking prepare " + food, AppClient.getUserData().getUsername()));
-                    AppClient.getClient().send(new Gson().toJson(msg));
+                    if ((screen instanceof CottageScreen)) {
+                        GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                            new GameCommand("cooking prepare " + food, AppClient.getUserData().getUsername()));
+                        AppClient.getClient().send(new Gson().toJson(msg));
+                    }
+
 //                    if (hasAllItems(recipe)) {
 //                        Map<Item, Integer> requiredItems = recipe.neededItems;
 //                        Inventory inventory = player.getInventory();

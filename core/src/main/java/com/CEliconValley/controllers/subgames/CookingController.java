@@ -108,9 +108,9 @@ public class CookingController {
     public Result prepareFood(Matcher matcher, String playername) {
         Player player = Finder.getPlayerByUsername(playername);
         Farm farm = Finder.getFarmByPlayer(player);
-        if(!inHome(player, farm)){
-            return new Result(false, "You're not in a home");
-        }
+//        if(!inHome(player, farm)){
+//            return new Result(false, "You're not in a home");
+//        }
         String foodName = matcher.group(1).trim();
         Food food = Food.parseFood(foodName);
         if(food == null){
@@ -125,7 +125,9 @@ public class CookingController {
         boolean checker = true;
         Inventory inventory = player.getInventory();
         if(inventory.getEmptySlots() <= 0){
-            return new Result(false,"inventory is full :(");
+            Result result =  new Result(false,"inventory is full :(");
+            App.sendResult(result, playername);
+            return result;
         }
         for (Item item : food.getRecipe().neededItems.keySet()) {
             Slot invSlot = inventory.getSlotByItem(item);
@@ -141,15 +143,22 @@ public class CookingController {
             }
         }
         if(!checker){
-            return new Result(false,"you don't have the needed items :(");
+            Result result = new Result(false,"you don't have the needed items :(");
+            App.sendResult(result, playername);
+            return result;
         }
 
         if(inventory.getEmptySlots() <= 0){
-            return new Result(false,"you don't have enough empty slots");
+
+            Result result = new Result(false,"you don't have enough empty slots");
+            App.sendResult(result, playername);
+            return result;
         }
 
         if(player.getEnergy() < 3){
-            return new Result(false,"you don't have enough energy");
+            Result result =  new Result(false,"you don't have enough energy");
+            App.sendResult(result, playername);
+            return result;
         }
 
         // remove items

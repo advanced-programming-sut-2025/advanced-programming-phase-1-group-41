@@ -12,6 +12,7 @@ import com.CEliconValley.models.foragings.FruitType;
 import com.CEliconValley.models.items.*;
 import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -20,6 +21,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Timer;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -259,6 +261,15 @@ public class RefrigeratorBar {
                                             AppClient.getUserData().getUsername())
                                     );
                                     AppClient.getClient().send(new Gson().toJson(msg));
+                                }else{
+                                    screen.updateMessage("You only can put food in refrigerator", Color.RED);
+                                    new Timer().schedule(new Timer.Task() {
+
+                                        @Override
+                                        public void run() {
+                                            screen.removeMessage();
+                                        }
+                                    }, 3);
                                 }
                             }
 

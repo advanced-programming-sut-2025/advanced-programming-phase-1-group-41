@@ -93,6 +93,7 @@ public class PlayerActs {
 
                 screen.cheatCodeField.setText("");
                 screen.cheatCodeField.setVisible(false);
+                screen.stage.setKeyboardFocus(screen.cheatCodeField);
                 screen.cheatMode = false;
 
                 screen.overlay.addAction(Actions.sequence(

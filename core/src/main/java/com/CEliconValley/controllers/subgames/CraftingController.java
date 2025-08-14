@@ -204,9 +204,9 @@ public class CraftingController {
     public Result craftRecipe(Matcher matcher, String playername) {
         Player player = Finder.getPlayerByUsername(playername);
         Farm farm = Finder.getFarmByPlayer(player);
-        if (!inHome(player, farm)) {
-            return new Result(false, "You are not in a home");
-        }
+//        if (!inHome(player, farm)) {
+//            return new Result(false, "You are not in a home");
+//        }
         String itemName = matcher.group(1).trim();
         Item item = Finder.parseItem(itemName);
         if (item == null) {
@@ -219,17 +219,23 @@ public class CraftingController {
             if (item.getName().equals(machine.getName())) {
                 boolean hasItems = hasNeededItems(machine, player);
                 if (!hasItems) {
-                    return new Result(false, "you don't have the needed items");
+                    Result result = new Result(false, "you don't have the needed items");
+                    App.sendResult(result, playername);
+                    return result;
                 }
 
                 if (player.getInventory().getEmptySlots() <= 0) {
+                    Result result = new Result(false, "you don't have the needed items");
+                    App.sendResult(result, playername);
                     return new Result(false, "you don't have enough empty slots");
                 }
 
                 removeItems(machine, player);
                 player.decEnergy(2);
                 player.getInventory().addToInventory(machine, 1);
-                return new Result(true, "You received a " + machine.getName());
+                Result result = new Result(true, "You received a " + machine.getName());
+                App.sendResult(result, playername);
+                return result;
             }
         }
         return new Result(false, "can't craft that item");
