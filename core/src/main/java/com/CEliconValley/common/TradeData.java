@@ -34,7 +34,8 @@ public class TradeData {
 
     public Trade getTrade(Player from, Player to) {
         return new Trade(
-          from, to, isDone, isRejected, isRequest, item.getSlot(), paidInMoney, price, targetItem.getSlot()
+          from, to, isDone, isRejected, isRequest, item.getSlot(), paidInMoney, price,
+            targetItem == null ? null : targetItem.getSlot()
         );
     }
 

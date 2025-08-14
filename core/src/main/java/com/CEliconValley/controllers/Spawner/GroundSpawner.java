@@ -53,23 +53,28 @@ public class GroundSpawner {
         int y = cellData.getY();
         Cell cell = cellData.extractData();
         return !(cell.getObjectMap() instanceof Grass && ((Grass) cell.getObjectMap()).isGround()) &&
-            (isGround(x + 1, y, farmData) ||
-                isGround(x - 1, y, farmData) || isGround(x, y + 1, farmData)
-                || isGround(x, y - 1, farmData));
+            (isNotGrass(x + 1, y, farmData) ||
+                isNotGrass(x - 1, y, farmData) || isNotGrass(x, y + 1, farmData)
+                || isNotGrass(x, y - 1, farmData));
     }
 
-    private boolean isGround(int x, int y, FarmData farmData) {
+    private boolean isNotGrass(int x, int y, FarmData farmData) {
         CellData cd = Finder.getcdByFarmData(x, y, farmData);
         if(cd == null) return false;
         Cell cell = cd.extractData();
-        return cell.getObjectMap() instanceof Grass && ((Grass) cell.getObjectMap()).isGround();
+        if(cell.getObjectMap() instanceof Grass grass){
+            if(grass.isGround()||grass.isFarmland()||grass.isBombed()||grass.isSand()||grass.isThundered()){
+                return true;
+            }
+        }
+        return false;
     }
 
     private int getBorderIndex(int x, int y, FarmData farmData) {
-        boolean up = isGround(x, y + 1, farmData);
-        boolean down = isGround(x, y - 1, farmData);
-        boolean left = isGround(x - 1, y, farmData);
-        boolean right = isGround(x + 1, y, farmData);
+        boolean up = isNotGrass(x, y + 1, farmData);
+        boolean down = isNotGrass(x, y - 1, farmData);
+        boolean left = isNotGrass(x - 1, y, farmData);
+        boolean right = isNotGrass(x + 1, y, farmData);
 
         if (up && left) return 8;
         if (up && right) return 6;
@@ -82,5 +87,6 @@ public class GroundSpawner {
 
         return 4;
     }
+
 }
 
