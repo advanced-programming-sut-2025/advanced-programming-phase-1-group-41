@@ -295,6 +295,7 @@ public class PlayerController {
         Inventory inventory = player.getInventory();
         System.out.println("fishname {"+fishname+"}");
         inventory.addToInventory(Finder.parseItem(fishname), quantity);
+        player.getFishingSkill().increaseXp(quantity * 5);
         return new Result(true,"you got "+quantity+" of "+fishname);
     }
 

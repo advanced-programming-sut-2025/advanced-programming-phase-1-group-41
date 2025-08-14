@@ -1,15 +1,18 @@
 package com.CEliconValley.views.subGames;
 
+import com.CEliconValley.client.view.screen.GameScreen;
 import com.CEliconValley.controllers.ItemManager;
 import com.CEliconValley.models.animals.FishType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Timer;
 
 public class FishingMiniGame {
 
@@ -117,8 +120,30 @@ public class FishingMiniGame {
                 attemptsLeft--;
                 System.out.printf("NO");
                 if (attemptsLeft <= 0) {
-                    System.out.println("nonononononono");
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen()  instanceof GameScreen screen){
+                        screen.updateMessage("you lost :(", Color.RED);
+                        new Timer().schedule(new Timer.Task() {
+
+                            @Override
+                            public void run() {
+                                screen.removeMessage();
+                            }
+                        }, 5);
+                    }
+                }else{
+                    if(((com.badlogic.gdx.Game) Gdx.app.getApplicationListener())
+                        .getScreen()  instanceof GameScreen screen){
+                        screen.updateMessage("you missed. "+attemptsLeft+" attempts left", Color.RED);
+                        new Timer().schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                screen.removeMessage();
+                            }
+                        }, 2);
+                    }
                 }
+
             }
         }
     }

@@ -25,6 +25,7 @@ import com.CEliconValley.models.buildings.animalContainer.CoopType;
 import com.CEliconValley.models.foragings.CropType;
 import com.CEliconValley.models.foragings.Nature.*;
 import com.CEliconValley.models.items.BuffType;
+import com.CEliconValley.models.items.CraftableMachine;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.tools.FishingRod;
 import com.CEliconValley.models.tools.FishingRodLevel;
@@ -45,6 +46,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Timer;
 import com.google.gson.Gson;
 import org.bson.internal.BsonUtil;
 
@@ -834,6 +836,16 @@ class FarmScreen extends GameScreen implements Screen {
             new GameCommand("fish -n "+caughtFish.getName()+" -c "+quantityOfFish,
                 AppClient.getUserData().getUsername()));
         AppClient.getClient().send(new Gson().toJson(message));
+
+        updateMessage("You caught "+quantityOfFish+" fresh fish of "+caughtFish.getFishType().getName(), Color.GREEN);
+        new com.badlogic.gdx.utils.Timer().schedule(new Timer.Task() {
+
+            @Override
+            public void run() {
+                removeMessage();
+            }
+        }, 5);
+
         return new Result(true,"You have "+quantityOfFish+" fresh fish of "+caughtFish.getFishType().getName());
 
     }
