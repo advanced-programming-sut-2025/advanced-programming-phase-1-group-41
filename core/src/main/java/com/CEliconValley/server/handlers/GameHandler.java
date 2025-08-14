@@ -58,7 +58,14 @@ public class GameHandler {
                     Game game = gd.makeGame();
                     loadGame(game);
 
-                }else{
+                }
+                else{
+                    // 2 players
+//                    if(lobby.getPlayerNames().size() < 2){
+//                        conn.send(gson.toJson(new GameMessage<>("lobby-error", "at least 2 players needed")));
+//                        return;
+//                    }
+
                     System.out.println("making game for "+lobby);
                     for (String playerName : lobby.getPlayerNames()) {
                         GameMessage<PreStartRequest> request = new GameMessage<>("pre-start-request", new PreStartRequest());
