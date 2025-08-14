@@ -2,10 +2,13 @@ package com.CEliconValley.models.ui;
 
 import com.CEliconValley.client.AppClient;
 import com.CEliconValley.client.view.screen.FriendshipStageHandler;
+import com.CEliconValley.common.PlayerData;
+import com.CEliconValley.common.TradeData;
 import com.CEliconValley.common.messages.GameCommand;
 import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.controllers.ItemManager;
 import com.CEliconValley.models.Finder;
+import com.CEliconValley.models.Trade;
 import com.CEliconValley.models.items.Inventory;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
@@ -65,6 +68,9 @@ public class TradeInventoryBarActor extends Actor {
         float firstItemX = screenWidth * 0.03f;
         float firstItemY = screenHeight * 0.23f;
 
+        float historyX = startingY - screenWidth / 5f;
+        float historyY = firstItemY;
+
         int row = 0;
         float slotSize = screenWidth * 0.035f;
 
@@ -75,6 +81,43 @@ public class TradeInventoryBarActor extends Actor {
         camera.unproject(mousePos);
 
         batch.draw(menuTexture, startingX, startingY, menuWidth, menuHeight);
+
+        font.draw(batch, "Trade History:", historyX, historyY);
+
+        historyY += spacingY;
+
+        PlayerData mainPlayerData = Finder.getpd();
+        for(TradeData tradeData : friendshipStageHandler.playerData.getTotalTradesListData()){
+            if(tradeData.getFromName().equals(mainPlayerData.getUsername())){
+                Trade trade = tradeData.getTrade(mainPlayerData.getPlayer(), friendshipStageHandler.playerData.getPlayer());
+                font.setColor(CustomColors.SWAMP_COLOR);
+                String done = " (Done)";
+                if(trade.isRejected()){
+                    done = " (Rejected)";
+                }
+                if(trade.isPaidInMoney()){
+                    if(trade.isRequest()){
+                        font.draw(batch, trade.getItem().getItem().getName() + " for " + trade.getPrice() +"$" + done, historyX, historyY);
+                    } else{
+                        font.draw(batch, trade.getPrice() + "$ for " + trade.getItem().getItem().getName() + done, historyX, historyY);
+                    }
+                }
+            } else if(tradeData.getToName().equals(mainPlayerData.getUsername())){
+                Trade trade = tradeData.getTrade(friendshipStageHandler.playerData.getPlayer(), mainPlayerData.getPlayer());
+                font.setColor(CustomColors.JUNGLE_COLOR);
+                String done = " (Done)";
+                if(trade.isRejected()){
+                    done = " (Rejected)";
+                }
+                if(trade.isPaidInMoney()){
+                    if(trade.isRequest()){
+                        font.draw(batch, trade.getItem().getItem().getName() + " for " + trade.getPrice() +"$" + done, historyX, historyY);
+                    } else{
+                        font.draw(batch, trade.getPrice() + "$ for " + trade.getItem().getItem().getName() + done, historyX, historyY);
+                    }
+                }
+            }
+        }
 
         for (int col = 0; row < 3; ) {
             int index = col + (startingRow + row) * 12;
