@@ -13,6 +13,7 @@ import com.CEliconValley.models.items.Inventory;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -68,8 +69,8 @@ public class TradeInventoryBarActor extends Actor {
         float firstItemX = screenWidth * 0.03f;
         float firstItemY = screenHeight * 0.23f;
 
-        float historyX = startingY - screenWidth / 5f;
-        float historyY = firstItemY;
+        float historyX = startingY - screenWidth / 10f;
+        float historyY = firstItemY - menuHeight / 2f;
 
         int row = 0;
         float slotSize = screenWidth * 0.035f;
@@ -82,9 +83,10 @@ public class TradeInventoryBarActor extends Actor {
 
         batch.draw(menuTexture, startingX, startingY, menuWidth, menuHeight);
 
+        font.getData().setScale(2f);
         font.draw(batch, "Trade History:", historyX, historyY);
 
-        historyY += spacingY;
+        historyY -= spacingY;
 
         PlayerData mainPlayerData = Finder.getpd();
         for(TradeData tradeData : friendshipStageHandler.playerData.getTotalTradesListData()){
@@ -102,6 +104,7 @@ public class TradeInventoryBarActor extends Actor {
                         font.draw(batch, trade.getPrice() + "$ for " + trade.getItem().getItem().getName() + done, historyX, historyY);
                     }
                 }
+                historyY -= spacingY;
             } else if(tradeData.getToName().equals(mainPlayerData.getUsername())){
                 Trade trade = tradeData.getTrade(friendshipStageHandler.playerData.getPlayer(), mainPlayerData.getPlayer());
                 font.setColor(CustomColors.JUNGLE_COLOR);
@@ -116,8 +119,11 @@ public class TradeInventoryBarActor extends Actor {
                         font.draw(batch, trade.getPrice() + "$ for " + trade.getItem().getItem().getName() + done, historyX, historyY);
                     }
                 }
+                historyY -= spacingY;
             }
         }
+        font.setColor(Color.WHITE);
+        font.getData().setScale(1f);
 
         for (int col = 0; row < 3; ) {
             int index = col + (startingRow + row) * 12;
