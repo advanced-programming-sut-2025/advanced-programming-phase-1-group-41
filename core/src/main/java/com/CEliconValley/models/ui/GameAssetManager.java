@@ -24,6 +24,10 @@ public class GameAssetManager {
     public Image getBackground(String name) {
         return new Image(new Texture(Gdx.files.internal("backgrounds/" + name)));
     }
+
+    public Texture emoteTexture = new Texture(Gdx.files.internal("game/Buildings/Screen/Emotes.png"));
+    public TextureRegion[][] emotes;
+
     public Texture getBackgroundTexture(String name) {
         return new Texture(Gdx.files.internal("backgrounds/" + name));
     }
@@ -63,8 +67,16 @@ public class GameAssetManager {
     public Texture getInventoryTexture(String name) {return new Texture(Gdx.files.internal("game/inventory/" + name));}
     public Texture getAvatarTexture(){return new Texture(AppClient.getUserData().getAvatarPath());}
 
+
+    public TextureRegion getEmote(int row){
+        return emotes[row][3];
+    }
+
     public GameAssetManager(){
         npcTextures = new HashMap<>();
+
+        emotes = TextureRegion.split(emoteTexture, emoteTexture.getWidth()/4, emoteTexture.getHeight()/16);
+
 
         String[] npcNames = {
             "Clint", "Willy", "Mohsen", "Morris", "Gus",

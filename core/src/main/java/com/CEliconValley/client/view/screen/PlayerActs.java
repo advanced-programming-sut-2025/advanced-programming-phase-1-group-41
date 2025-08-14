@@ -554,8 +554,16 @@ public class PlayerActs {
                 ((CoopScreen) screen).setCoopMenuOpen(!((CoopScreen) screen).isCoopMenuOpen());
             }
         }
-        else if(Gdx.input.isKeyPressed(Input.Keys.Q)){
+        else if(Gdx.input.isKeyJustPressed(Input.Keys.Q)){
             System.out.println("you're at "+hero.playerX+" "+hero.playerY);
+            if(screen instanceof VillageScreen villageScreen){
+                if(villageScreen.popup.isVisible()){
+                    villageScreen.removePopup();
+                }else{
+                    villageScreen.updatePopup
+                        (screen.hero.renderX, screen.hero.renderY, "salam");
+                }
+            }
         }else if(Gdx.input.isKeyJustPressed(Input.Keys.K)){
             if(screen instanceof VillageScreen villageScreen){
                 if(villageScreen.isMarketMenuOpen){
