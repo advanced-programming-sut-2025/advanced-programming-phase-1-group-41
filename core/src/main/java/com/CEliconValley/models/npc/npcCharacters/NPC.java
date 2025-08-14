@@ -57,7 +57,7 @@ public abstract class NPC {
         return true;
     }
 
-    protected LLMClient llmClient = new LLMClient(App.api_key);
+    protected LLMClient llmClient = new LLMClient(App.backup);
     protected String personality = "Strict impolite but kind-hearted , has sexual attraction" +
         " and uses some new slangs in his words and answers briefly";
 
