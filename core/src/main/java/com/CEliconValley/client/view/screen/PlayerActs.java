@@ -512,7 +512,7 @@ public class PlayerActs {
                             @Override
                             public void run() {
                                 if (!fs.isFishing()) {
-                                    fs.startFishing(FishType.Shad);
+                                    fs.startFishing(fs.determineCaughtFish().getFishType());
                                 }
                             }
                         }, 0.5f);
