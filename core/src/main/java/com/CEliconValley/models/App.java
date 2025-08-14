@@ -23,6 +23,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class App {
     public static String api_key = "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";
+    public static String backup = "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";
+    public static String backup2 = "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";
+    public static String backup3 = "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";
     public static int MaxLength = 75;
     public static int MaxHeight = 60;
     public final static ArrayList<User> users = new ArrayList<>();
