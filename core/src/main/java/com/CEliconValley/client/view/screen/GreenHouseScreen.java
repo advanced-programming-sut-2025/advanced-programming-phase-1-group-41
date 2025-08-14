@@ -28,7 +28,6 @@ import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class GreenHouseScreen extends GameScreen implements Screen {
     private final FarmScreen farmScreen;
-    private final SpriteBatch batch;
     private final Texture background;
     public final GreenhouseMap greenHouseMap;
     private final Player player;
@@ -61,7 +60,6 @@ public class GreenHouseScreen extends GameScreen implements Screen {
         this.farmScreen=farmScreen;
         this.greenHouseMap = greenHouse;
         this.player = player;
-        this.batch = new SpriteBatch();
         this.background = GameAssetManager.getGameAssetManager().getScreenTexture("GreenHouse_Screen.png");
         for(Cell cell : greenHouse.getCells()) {
             if(cell==null){continue;}
@@ -94,7 +92,10 @@ public class GreenHouseScreen extends GameScreen implements Screen {
         if(isGameFinished) return;
         Result result = PlayerActs.handleInput(hero, greenHouseMap, stage, delta);
         if(!result.success()){
-            if(result.message().equals("cheat")){
+            if (result.message().equals("cheat") ||
+                result.message().equals("chat") ||
+                result.message().equals("friendship") ||
+                result.message().equals("scoreboard")) {
                 return;
             }
         }

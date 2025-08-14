@@ -34,6 +34,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -49,6 +50,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import java.util.Objects;
 
 public abstract class GameScreen implements Screen {
+    protected final SpriteBatch batch;
+
     public boolean onRepeat = true;
     protected boolean flip = false;
     public boolean isMenuOpen = false;
@@ -61,6 +64,7 @@ public abstract class GameScreen implements Screen {
     public boolean chatMode = false;
     public boolean scoreboardMode = false;
     public boolean friendshipMode = false;
+    public boolean reactionMode = false;
     public Image overlay;
     public TextField cheatCodeField;
     protected ShippingBinBar shippingBinBar;
@@ -68,6 +72,7 @@ public abstract class GameScreen implements Screen {
     public TextButton yesVoteButton, noVoteButton;
     public Label playerVoteLabel;
     public Label howManyVotedLabel;
+
 
     protected AnimalSprite lastAnimal = null;
 
@@ -107,6 +112,7 @@ public abstract class GameScreen implements Screen {
     public abstract void transfer();
     public Hero hero;
     protected MenuBar menuBar = new MenuBar(this);
+    protected ReactionBar reactionBar = new ReactionBar(this);
     protected MarketPlaceMenu marketPlaceMenu=new MarketPlaceMenu(this);
     protected AnimalMenu animalMenu=new AnimalMenu(this);
     protected ArtisanMenu artisanMenu = new ArtisanMenu(this);
@@ -355,6 +361,7 @@ public abstract class GameScreen implements Screen {
 
 
     public GameScreen(InventoryRenderer inventoryRenderer) {
+        batch = new SpriteBatch();
         camera = new OrthographicCamera();
         stage = new Stage(new ScreenViewport(), Main.getBatch());
         chatStage = new Stage(new ScreenViewport(), Main.getBatch());

@@ -82,7 +82,15 @@ public class PlayerActs {
             }
             return new Result(true, "trash opened");
         }
-
+        if(screen.reactionMode){
+            screen.batch.begin();
+            screen.reactionBar.render(screen.batch, screen.camera);
+            screen.batch.end();
+            if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyJustPressed(Input.Keys.CAPS_LOCK)){
+                screen.reactionMode = false;
+            }
+            return new Result(true, "reactionmode opened");
+        }
         if (screen.cheatMode) {
             stage.act(delta);
             stage.draw();
@@ -290,6 +298,9 @@ public class PlayerActs {
             if(screen instanceof VillageScreen villageScreen){
                 villageScreen.isAnimalMenuOpen = !villageScreen.isAnimalMenuOpen;
             }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.CAPS_LOCK)) {
+            screen.reactionMode = !screen.reactionMode;
         }
         else if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
             if(screen instanceof VillageScreen villageScreen){

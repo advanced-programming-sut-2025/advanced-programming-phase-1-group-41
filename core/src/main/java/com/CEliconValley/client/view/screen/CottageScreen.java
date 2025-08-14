@@ -20,7 +20,6 @@ import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class CottageScreen extends GameScreen implements Screen {
     private final FarmScreen farmScreen;
-    private final SpriteBatch batch;
     private final Texture background;
     private final CottageMap cottageMap;
     private final Player player;
@@ -46,7 +45,6 @@ public class CottageScreen extends GameScreen implements Screen {
         this.farmScreen = farmScreen;
         this.cottageMap = cottageMap;
         this.player = player;
-        this.batch = new SpriteBatch();
         this.background = GameAssetManager.getGameAssetManager().getScreenTexture("Cottage_Screen.png");
         for (Cell cell : cottageMap.getCells()) {
             if (cell == null) continue;
@@ -71,7 +69,10 @@ public class CottageScreen extends GameScreen implements Screen {
         if(isGameFinished) return;
         Result result = PlayerActs.handleInput(hero, cottageMap, stage, delta);
         if(!result.success()){
-            if(result.message().equals("cheat")){
+            if (result.message().equals("cheat") ||
+                result.message().equals("chat") ||
+                result.message().equals("friendship") ||
+                result.message().equals("scoreboard")) {
                 return;
             }
         }

@@ -54,7 +54,6 @@ import java.util.*;
 
 public
 class FarmScreen extends GameScreen implements Screen {
-    private final SpriteBatch batch;
     private final Rain rain;
     private final Snow snow;
     private final Thunder thunder;
@@ -148,7 +147,6 @@ class FarmScreen extends GameScreen implements Screen {
         groundBorderSpawner = new GroundBorderSpawner();
         itemSpawner = new ItemSpawner();
 
-        batch = new SpriteBatch();
         groundCache = new HashMap<>();
 
         farmSprite = new Sprite(farmTexture);

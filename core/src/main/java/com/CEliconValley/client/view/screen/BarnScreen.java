@@ -28,7 +28,6 @@ import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class BarnScreen extends GameScreen implements Screen {
     private final FarmScreen farmScreen;
-    private final SpriteBatch batch;
     private final TextureRegion background;
     private final BarnMap barn;
     private BarnOrCoopMenuBar barnMenuBar;
@@ -62,7 +61,6 @@ public class BarnScreen extends GameScreen implements Screen {
         barnMenuBar.setPlayer(player);
         this.farmScreen = farmScreen;
         this.barn = barn;
-        this.batch = new SpriteBatch();
         for (Cell cell : barn.getCells()) {
             if (cell == null) continue;
             if (cell.getObjectMap() instanceof Door) {
@@ -135,7 +133,10 @@ public class BarnScreen extends GameScreen implements Screen {
         if (isGameFinished) return;
         Result result = PlayerActs.handleInput(hero, barn, stage, delta);
         if (!result.success()) {
-            if (result.message().equals("cheat")) {
+            if (result.message().equals("cheat") ||
+                result.message().equals("chat") ||
+                result.message().equals("friendship") ||
+                result.message().equals("scoreboard")) {
                 return;
             }
         }

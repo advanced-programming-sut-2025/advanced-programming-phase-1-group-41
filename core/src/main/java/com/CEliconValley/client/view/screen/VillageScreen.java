@@ -36,7 +36,6 @@ import com.google.gson.Gson;
 import java.util.*;
 
 public class VillageScreen extends GameScreen implements Screen {
-    private final SpriteBatch batch;
     private final Rain rain;
     private final Snow snow;
     private final Thunder thunder;
@@ -130,7 +129,6 @@ public class VillageScreen extends GameScreen implements Screen {
         cropSpawner = new CropSpawner();
         groundBorderSpawner = new GroundBorderSpawner();
 
-        batch = new SpriteBatch();
         groundCache = new HashMap<>();
 
         villageSprite = new Sprite(villageTexture);
