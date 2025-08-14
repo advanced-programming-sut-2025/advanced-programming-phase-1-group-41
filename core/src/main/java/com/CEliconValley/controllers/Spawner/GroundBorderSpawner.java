@@ -18,6 +18,7 @@ import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 public class GroundBorderSpawner {
 
     private Texture groundTexture;
+    private Texture singleGroundTexture;
     private Texture coastTexture;
     private Texture cornerTexture;
     private String currentSeason = "";
@@ -28,6 +29,10 @@ public class GroundBorderSpawner {
     private  TextureRegion groundRegion;
     private  TextureRegion[] coastRegions = new TextureRegion[9];
     private  TextureRegion cornerSE, cornerNE, cornerNW, cornerSW;
+    private final Texture sandTexture = GameAssetManager.getGameAssetManager().getTileTexture("sand.png");
+    private final Texture thunderedTexture = GameAssetManager.getGameAssetManager().getTileTexture("thundered.png");
+    private final Texture farmlandTexture = GameAssetManager.getGameAssetManager().getTileTexture("farmland.png");
+    private final Texture bombedTexture = GameAssetManager.getGameAssetManager().getTileTexture("bombed.png");
 
     public GroundBorderSpawner() {
         switch (AppClient.getGameData().getTime().getSeason()){
@@ -35,21 +40,25 @@ public class GroundBorderSpawner {
                 groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("ground_Spring.png");
                 coastTexture = GameAssetManager.getGameAssetManager().getTileTexture("groundBorder_Spring.png");
                 cornerTexture = GameAssetManager.getGameAssetManager().getTileTexture("groundCorner_Spring.png");
+                singleGroundTexture =  GameAssetManager.getGameAssetManager().getTileTexture("SingleGround_Spring.png");
             }
             case Summer -> {
                 groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("ground_Summer.png");
                 coastTexture = GameAssetManager.getGameAssetManager().getTileTexture("groundBorder_Summer.png");
                 cornerTexture = GameAssetManager.getGameAssetManager().getTileTexture("groundCorner_Summer.png");
+                singleGroundTexture =  GameAssetManager.getGameAssetManager().getTileTexture("SingleGround_Summer.png");
             }
             case Autumn ->  {
                 groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("ground_Autumn.png");
                 coastTexture = GameAssetManager.getGameAssetManager().getTileTexture("groundBorder_Autumn.png");
                 cornerTexture = GameAssetManager.getGameAssetManager().getTileTexture("groundCorner_Autumn.png");
+                singleGroundTexture =  GameAssetManager.getGameAssetManager().getTileTexture("SingleGround_Autumn.png");
             }
             case Winter -> {
                 groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("ground_Winter.png");
                 coastTexture = GameAssetManager.getGameAssetManager().getTileTexture("groundBorder_Winter.png");
                 cornerTexture = GameAssetManager.getGameAssetManager().getTileTexture("groundCorner_Winter.png");
+                singleGroundTexture =  GameAssetManager.getGameAssetManager().getTileTexture("SingleGround_Winter.png");
             }
         }
 
@@ -72,10 +81,24 @@ public class GroundBorderSpawner {
         float drawX = x * CELL_SIZE, drawY = y * CELL_SIZE;
 
         Cell cell = cellData.extractData();
-        if (!(cell.getObjectMap() instanceof Grass grass) || !grass.isGround())
+        if (!(cell.getObjectMap() instanceof Grass grass) ||!isNotGrass(x,y,farmData))
             return;
+        if(grass.isGround()){
+         batch.draw(groundRegion, drawX, drawY, CELL_SIZE, CELL_SIZE);
+        }
+        else if(grass.isThundered()){
+            batch.draw(thunderedTexture, drawX, drawY, CELL_SIZE, CELL_SIZE);
+        }
+        else if(grass.isFarmland()){
+            batch.draw(farmlandTexture, drawX, drawY, CELL_SIZE, CELL_SIZE);
+        }
+        else if(grass.isSand()){
+            batch.draw(sandTexture, drawX, drawY, CELL_SIZE, CELL_SIZE);
+        }
+        else if(grass.isBombed()){
+            batch.draw(bombedTexture, drawX, drawY, CELL_SIZE, CELL_SIZE);
+        }
 
-        batch.draw(groundRegion, drawX, drawY, CELL_SIZE, CELL_SIZE);
 
         if (grass.getInitialize() > -1) {
             switch (grass.getInitialize()) {
@@ -84,11 +107,17 @@ public class GroundBorderSpawner {
                 case 10 -> batch.draw(cornerSE, drawX, drawY, CELL_SIZE, CELL_SIZE);
                 case 11 -> batch.draw(cornerNW, drawX, drawY, CELL_SIZE, CELL_SIZE);
                 case 12 -> batch.draw(cornerNE, drawX, drawY, CELL_SIZE, CELL_SIZE);
+                case 13 -> batch.draw(singleGroundTexture,drawX,drawY,CELL_SIZE,CELL_SIZE);
             }
             return;
         }
+        if (isSurroundedByGrass(x, y, farmData)) {
+            batch.draw(singleGroundTexture, drawX, drawY, CELL_SIZE, CELL_SIZE);
+            grass.setInitialize(13);
+            return;
+        }
 
-        if (isCoast(cell, farmData)) {
+        else if (isCoast(cell, farmData)) {
             int idx = getCoastIndex(x, y, farmData);
             grass.setInitialize(idx);
             batch.draw(coastRegions[idx], drawX, drawY, CELL_SIZE, CELL_SIZE);
@@ -112,15 +141,22 @@ public class GroundBorderSpawner {
             }
         }
     }
+    private boolean isSurroundedByGrass(int x, int y, FarmData farmData) {
+        return isNotGrass(x, y, farmData) == true &&
+            !isNotGrass(x+1, y, farmData) &&
+            !isNotGrass(x-1, y, farmData) &&
+            !isNotGrass(x, y+1, farmData) &&
+            !isNotGrass(x, y-1, farmData);
+    }
 
 
     private boolean isCoast(Cell cell, FarmData farmData) {
         int x = cell.getX(), y = cell.getY();
-        if (!(cell.getObjectMap() instanceof Grass g) || !g.isGround()) return false;
-        return !isGround(x+1,y,farmData)
-            || !isGround(x-1,y,farmData)
-            || !isGround(x,y+1,farmData)
-            || !isGround(x,y-1,farmData);
+        if (!(cell.getObjectMap() instanceof Grass g) || !isNotGrass(x,y,farmData)) return false;
+        return !isNotGrass(x+1,y,farmData)
+            || !isNotGrass(x-1,y,farmData)
+            || !isNotGrass(x,y+1,farmData)
+            || !isNotGrass(x,y-1,farmData);
     }
 
     private boolean isSimpleGrass(int x, int y, FarmData farmData) {
@@ -129,18 +165,23 @@ public class GroundBorderSpawner {
         Cell c = cd.extractData();
         return c.getObjectMap() instanceof Grass g && !g.isGround();
     }
-    private boolean isGround(int x, int y, FarmData farmData) {
+    private boolean isNotGrass(int x, int y, FarmData farmData) {
         CellData cd = Finder.getcdByFarmData(x, y, farmData);
         if (cd == null) return false;
         Cell c = cd.extractData();
-        return c.getObjectMap() instanceof Grass g && g.isGround();
+        if(c.getObjectMap() instanceof Grass grass){
+            if(grass.isGround()||grass.isFarmland()||grass.isBombed()||grass.isSand()||grass.isThundered()){
+                return true;
+            }
+        }
+        return false;
     }
 
     private int getCoastIndex(int x, int y, FarmData farmData) {
-        boolean r = !isGround(x+1,y,farmData);
-        boolean l = !isGround(x-1,y,farmData);
-        boolean u = !isGround(x,y+1,farmData);
-        boolean d = !isGround(x,y-1,farmData);
+        boolean r = !isNotGrass(x+1,y,farmData);
+        boolean l = !isNotGrass(x-1,y,farmData);
+        boolean u = !isNotGrass(x,y+1,farmData);
+        boolean d = !isNotGrass(x,y-1,farmData);
 
         if (r && d) return 0;
         if (u && l) return 8;
@@ -154,14 +195,14 @@ public class GroundBorderSpawner {
     }
 
     private CornerType getGroundCornerType(int x, int y, FarmData farmData) {
-        boolean n  = !isGround(x,   y+1, farmData) == false;
-        boolean s  = !isGround(x,   y-1, farmData) == false;
-        boolean e  = !isGround(x+1, y,   farmData) == false;
-        boolean w  = !isGround(x-1, y,   farmData) == false;
-        boolean ne = !isGround(x+1, y+1, farmData);
-        boolean nw = !isGround(x-1, y+1, farmData);
-        boolean se = !isGround(x+1, y-1, farmData);
-        boolean sw = !isGround(x-1, y-1, farmData);
+        boolean n  = !isNotGrass(x,   y+1, farmData) == false;
+        boolean s  = !isNotGrass(x,   y-1, farmData) == false;
+        boolean e  = !isNotGrass(x+1, y,   farmData) == false;
+        boolean w  = !isNotGrass(x-1, y,   farmData) == false;
+        boolean ne =!isNotGrass(x+1, y+1, farmData);
+        boolean nw = !isNotGrass(x-1, y+1, farmData);
+        boolean se = !isNotGrass(x+1, y-1, farmData);
+        boolean sw = !isNotGrass(x-1, y-1, farmData);
 
         if (n && e && ne) return CornerType.SW;
         if (n && w && nw) return CornerType.SE;
@@ -184,7 +225,7 @@ public class GroundBorderSpawner {
         float drawX = x * CELL_SIZE, drawY = y * CELL_SIZE;
 
         Cell cell = cellData.extractData();
-        if (!(cell.getObjectMap() instanceof Grass grass) || !grass.isGround())
+        if (!(cell.getObjectMap() instanceof Grass grass) || isGround(x,y,villageData))
             return;
 
         batch.draw(groundRegion, drawX, drawY, CELL_SIZE, CELL_SIZE);

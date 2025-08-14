@@ -279,18 +279,18 @@ class FarmScreen extends GameScreen implements Screen {
 //            batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
             if (cell.getObjectMap() instanceof Grass) {
                 Grass grass = (Grass) cell.getObjectMap();
-                if (grass.isThundered()) {
-                    batch.draw(thunderedTexture, x, y, CELL_SIZE, CELL_SIZE);
-                } else if (grass.isBombed()) {
-                    batch.draw(bombedTexture, x, y, CELL_SIZE, CELL_SIZE);
-                } else if (grass.isFarmland()) {
-                    batch.draw(farmlandTexture, x, y, CELL_SIZE, CELL_SIZE);
-                } else if (grass.isGround()) {
-//                    batch.draw(groundTexture, x, y, CELL_SIZE, CELL_SIZE);
-                } else if (grass.isSand()) {
-                    batch.draw(sandTexture, x, y, CELL_SIZE, CELL_SIZE);
-                } else {
-                }
+//                if (grass.isThundered()) {
+//                    batch.draw(thunderedTexture, x, y, CELL_SIZE, CELL_SIZE);
+//                } else if (grass.isBombed()) {
+//                    batch.draw(bombedTexture, x, y, CELL_SIZE, CELL_SIZE);
+//                } else if (grass.isFarmland()) {
+//                    batch.draw(farmlandTexture, x, y, CELL_SIZE, CELL_SIZE);
+//                } else if (grass.isGround()) {
+////                    batch.draw(groundTexture, x, y, CELL_SIZE, CELL_SIZE);
+//                } else if (grass.isSand()) {
+//                    batch.draw(sandTexture, x, y, CELL_SIZE, CELL_SIZE);
+//                } else {
+//                }
             } else if(cell.getObjectMap() instanceof Mine || cell.getObjectMap() instanceof Mineral) {
                 batch.draw(bombedTexture, x, y, CELL_SIZE, CELL_SIZE);
             }
