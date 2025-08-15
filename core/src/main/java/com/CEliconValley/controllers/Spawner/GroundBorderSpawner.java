@@ -41,6 +41,7 @@ public class GroundBorderSpawner {
                 coastTexture = GameAssetManager.getGameAssetManager().getTileTexture("groundBorder_Spring.png");
                 cornerTexture = GameAssetManager.getGameAssetManager().getTileTexture("groundCorner_Spring.png");
                 singleGroundTexture =  GameAssetManager.getGameAssetManager().getTileTexture("SingleGround_Spring.png");
+
             }
             case Summer -> {
                 groundTexture = GameAssetManager.getGameAssetManager().getTileTexture("ground_Summer.png");
@@ -111,7 +112,7 @@ public class GroundBorderSpawner {
             }
             return;
         }
-        if (isSurroundedByGrass(x, y, farmData)) {
+        if (grass.isFarmland()||grass.isThundered()||isSurroundedByGrass(x, y, farmData)) {
             batch.draw(singleGroundTexture, drawX, drawY, CELL_SIZE, CELL_SIZE);
             grass.setInitialize(13);
             return;
@@ -225,7 +226,7 @@ public class GroundBorderSpawner {
         float drawX = x * CELL_SIZE, drawY = y * CELL_SIZE;
 
         Cell cell = cellData.extractData();
-        if (!(cell.getObjectMap() instanceof Grass grass) || isGround(x,y,villageData))
+        if (!(cell.getObjectMap() instanceof Grass grass) || !grass.isGround())
             return;
 
         batch.draw(groundRegion, drawX, drawY, CELL_SIZE, CELL_SIZE);
@@ -345,11 +346,15 @@ public class GroundBorderSpawner {
             groundTexture = new Texture("game/general/tiles/ground_Spring_Village.png");
             coastTexture = new Texture("game/general/tiles/groundBorder_" + season + ".png");
             cornerTexture = new Texture("game/general/tiles/groundCorner_" + season + ".png");
+            singleGroundTexture =  GameAssetManager.getGameAssetManager().getTileTexture("SingleGround_"+season+".png");
+
         }
         else if(areaType==AreaType.FARM) {
             groundTexture = new Texture("game/general/tiles/ground_" + season + ".png");
             coastTexture = new Texture("game/general/tiles/groundBorder_" + season + ".png");
             cornerTexture = new Texture("game/general/tiles/groundCorner_" + season + ".png");
+            singleGroundTexture =  GameAssetManager.getGameAssetManager().getTileTexture("SingleGround_"+season+".png");
+
         }
 
         groundRegion = new TextureRegion(groundTexture);
