@@ -1,5 +1,6 @@
 package com.CEliconValley.models.buildings.marketplaces;
 
+import com.CEliconValley.common.CellData;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.ui.TerminalColors;
@@ -33,6 +34,14 @@ public class CarpenterShop extends Marketplace implements Building {
     }
     private int x;
     private int y;
+    private int anchorX;
+    private int anchorY;
+
+    public CarpenterShop() {
+        anchorX=69;
+        anchorY=35;
+    }
+
     public CarpenterShop(int x, int y, Village village) {
         super(null);
         constructCarpenterShop(x, y, village);
@@ -66,8 +75,9 @@ public class CarpenterShop extends Marketplace implements Building {
                 Cell cell = Finder.findCellByCoordinatesVillage(i, yWall,village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
-                if(i == x + 5&&yWall==y+7){
+                if((i == x + 5||i==x+6)&&yWall==y){
                     cell.setObjectMap(door);
+                    doors.add(cell);
                 }
             }
             yWall+=7;
@@ -151,11 +161,11 @@ public class CarpenterShop extends Marketplace implements Building {
 
     @Override
     public int getAnchorX() {
-        return 0;
+        return anchorX;
     }
 
     @Override
     public int getAnchorY() {
-        return 0;
+        return anchorY;
     }
 }

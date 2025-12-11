@@ -1,8 +1,6 @@
 package com.CEliconValley.server.controller;
 
-import com.CEliconValley.common.HandshakeData;
-import com.CEliconValley.common.OnlineData;
-import com.CEliconValley.common.UserData;
+import com.CEliconValley.common.*;
 import com.CEliconValley.common.messages.*;
 import com.CEliconValley.database.UserDB;
 import com.CEliconValley.models.*;
@@ -13,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.concurrent.TimeUnit;
 
 public class ServerAuthentication {
     public static Message handleLogin(LoginCred creds, WebSocket conn) throws NoSuchAlgorithmException {
@@ -37,7 +36,7 @@ public class ServerAuthentication {
         }
         login(user, stayLoggedIn, conn);
         GameMessage<HandshakeData> msg = new GameMessage<>("handshake-data",
-            new HandshakeData(null, App.lobbies, App.onlinePlayers));
+            new HandshakeData(null, App.lobbies, App.onlinePlayers, App.getGameByUsername(username)));
         String json = new Gson().toJson(msg);
         conn.send(json);
         return new SuccessMessage("login_request",new UserData(user).toJson());
@@ -122,6 +121,36 @@ public class ServerAuthentication {
         user.setStayLoggedIn(stayLoggedIn);
         App.putOnlinePlayer(new OnlineData(user.getUsername(), false));
         App.getServer().getOnlineConnections().put(conn, user);
+        DCguy dcguy = App.containsDC(user);
+        System.out.println(App.getDcguys());
+        if (dcguy != null && App.getGame() != null) {
+            // handle rejoin game
+            TaskScheduler.schedule(() -> {
+                App.getDcguys().remove(dcguy);
+                conn.send(new Gson().toJson(
+                    new GameMessage<>("new-game",
+                        new GameData(App.getGame()))
+                ));
+                try{
+                    Thread.sleep(100);
+                } catch (InterruptedException e){
+                    System.out.println(e.getMessage());
+                }
+                if (App.getDcguys().isEmpty()) {
+                    App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(),
+                        new Gson().toJson(new GameMessage<>("game-command",
+                            new GameCommand("resume-game", ";)"))));
+                    App.getGame().startScheduler();
+                }else{
+                    GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                        new GameCommand("dc-game", ":)"));
+                    conn.send(new Gson().toJson(msg));
+                }
+            }, 1, TimeUnit.SECONDS);
+        }else{
+            System.out.println("dcguys doesn't have "+user.getUsername());
+            System.out.println(App.getGame() != null);
+        }
     }
     public static String getHash(String pass) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");

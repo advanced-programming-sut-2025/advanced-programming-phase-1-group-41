@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 public class Pierre extends NPC{
     Marketplace marketplace;
-    public Pierre(String name, Occupation job, Marketplace marketplace, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift,ArrayList<Quest> quests) {
-        super(name, job, dialogues, favorites, itemsToGift, quests);
+    public Pierre(String name, Occupation job, Marketplace marketplace, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift) {
+        super(name, job, dialogues, favorites, itemsToGift);
         setX(45);setY(10);
         setDaysToUnlockQ3(2*28);
     }

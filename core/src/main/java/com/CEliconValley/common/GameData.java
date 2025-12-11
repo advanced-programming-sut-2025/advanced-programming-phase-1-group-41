@@ -3,6 +3,7 @@ package com.CEliconValley.common;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.locations.Village;
+import com.CEliconValley.models.npc.npcCharacters.NPC;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import org.bson.types.ObjectId;
@@ -22,11 +23,13 @@ public class GameData {
     WeatherType tmrwWeatherType;
     double roundEnergy;
     VillageData villageData;
-
+    Lobby lobby;
+    ArrayList<PlayerMessage> playerMessages;
     public GameData() {
     }
 
     public GameData(Game game) {
+        this._id = game.get_id();
         this.time = game.getTime();
         this.weatherType = game.getWeatherType();
         this.tmrwWeatherType = game.getTmrwWeatherType();
@@ -38,6 +41,8 @@ public class GameData {
         fillPlayers(game);
         fillFarms(game);
         this.villageData = new VillageData(game.getVillage());
+        this.lobby = game.getLobby();
+        this.playerMessages = game.getPlayerMessages();
     }
 
     private void fillFarms(Game game) {
@@ -80,11 +85,26 @@ public class GameData {
         Village village = this.villageData.getVillage(players);
         ArrayList<Farm> farms = getFarms(players);
         Game game = new Game(this.time, village, this.weatherType, this.tmrwWeatherType,
-                this.roundEnergy, farms);
+                this.roundEnergy, farms, this.playerMessages);
         Player currentPlayer = PlayerFinder.getPlayerByName(players, currentPlayerName);
         Player loader = PlayerFinder.getPlayerByName(players, loaderName);
         game.handmadePostLoad(currentPlayer, loader, players);
         setUsersCurrentGame(game);
+        game.set_id(this._id);
+        game.setLobby(this.lobby);
+        for (NPC npc : game.getVillage().getNPCs()) {
+            for (NPCData npCsDatum : villageData.getNPCsData()) {
+                if(npCsDatum.getName().equals(npc.getName())) {
+                    npc.setTalks(new ArrayList<>(npCsDatum.getTalks()));
+                    break;
+                }
+            }
+        }
+        if(playerMessages == null) {
+            game.setPlayerMessages(new ArrayList<>());
+        }else{
+            game.setPlayerMessages(new ArrayList<>(playerMessages));
+        }
         return game;
     }
 
@@ -106,6 +126,9 @@ public class GameData {
 
     public ArrayList<Friendship> getFriendships(ArrayList<Player> players,ArrayList<FriendshipData> friendshipsData) {
         ArrayList<Friendship> friendships = new ArrayList<>();
+        if(friendshipsData == null){
+            return friendships;
+        }
         for (FriendshipData fd : friendshipsData) {
             Player player1 = PlayerFinder.getPlayerByName(players, fd.getPlayer1Name());
             Player player2 = PlayerFinder.getPlayerByName(players, fd.getPlayer2Name());
@@ -173,5 +196,17 @@ public class GameData {
 
     public WeatherType getWeatherType() {
         return weatherType;
+    }
+
+    public Lobby getLobby() {
+        return lobby;
+    }
+
+    public ArrayList<PlayerMessage> getPlayerMessages() {
+        return playerMessages;
+    }
+
+    public void setPlayerMessages(ArrayList<PlayerMessage> playerMessages) {
+        this.playerMessages = playerMessages;
     }
 }

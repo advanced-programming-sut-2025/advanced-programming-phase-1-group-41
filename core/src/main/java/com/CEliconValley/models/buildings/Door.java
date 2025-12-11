@@ -1,7 +1,9 @@
 package com.CEliconValley.models.buildings;
 
 import com.CEliconValley.models.ui.TerminalColors;
+import dev.morphia.annotations.Embedded;
 
+@Embedded
 public class Door implements Building {
     @Override
     public String getChar() {
@@ -12,6 +14,7 @@ public class Door implements Building {
         }
         return TerminalColors.colorize(82,0,"][");
     }
+    private int initialize=-1;
 
     @Override
     public String getName() {
@@ -51,5 +54,12 @@ public class Door implements Building {
     @Override
     public int getAnchorY() {
         return 0;
+    }
+
+    public int getInitialize(){
+        return initialize;
+    }
+    public void setInitialize(int initialize) {
+        this.initialize = initialize;
     }
 }

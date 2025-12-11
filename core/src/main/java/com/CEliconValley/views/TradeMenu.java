@@ -22,15 +22,18 @@ public class TradeMenu implements AppMenu, Screen {
             System.out.println("Enter only one Target!");
         } else if((matcher = TradeCommands.TradeToItem.getMatcher(input)) != null){
             System.out.println(controller.tradeToItem(matcher));
-        } else if((matcher = TradeCommands.TradeToMoney.getMatcher(input)) != null){
-            System.out.println(controller.tradeToMoney(matcher));
-        } else if((matcher = TradeCommands.TradeList.getMatcher(input)) != null){
+        }
+//        else if((matcher = TradeCommands.TradeToMoney.getMatcher(input)) != null){
+//            System.out.println(controller.tradeToMoney(matcher));
+//        }
+        else if((matcher = TradeCommands.TradeList.getMatcher(input)) != null){
             System.out.println(controller.tradeList(matcher));
         } else if((matcher = TradeCommands.TradeHistory.getMatcher(input)) != null){
             System.out.println(controller.tradeHistory(matcher));
-        } else if((matcher = TradeCommands.TradeResponse.getMatcher(input)) != null){
-            System.out.println(controller.tradeResponse(matcher));
         }
+//        else if((matcher = TradeCommands.TradeResponse.getMatcher(input)) != null){
+//            System.out.println(controller.tradeResponse(matcher));
+//        }
     }
 
     @Override

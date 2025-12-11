@@ -35,7 +35,7 @@ public class TimeLineController {
         return new Result(true,"day:"+convertDay(tl.getDay()));
     }
 
-    private String convertDay(int dayNum){
+    public String convertDay(int dayNum){
         dayNum %= 7;
         return switch(dayNum){
             case 0 -> "Saturday";
@@ -62,7 +62,7 @@ public class TimeLineController {
             return new Result(false,"Invalid hour");
         }
         for (int i = 0; i < deltaH; i++) {
-            tl.advanceOneHour();
+            tl.advanceOneHour(true);
         }
 //        int deltaD = deltaH / 24;
 //        advanceDay(deltaD);

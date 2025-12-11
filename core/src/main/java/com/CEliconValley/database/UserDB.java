@@ -25,6 +25,9 @@ public class UserDB {
         datastore.find(User.class).forEach(user -> {
             App.addUser(user);
         });
+        datastore.find(GameData.class).forEach(gameData -> {
+            App.gamesdata.add(gameData);
+        });
     }
 
 
@@ -33,10 +36,23 @@ public class UserDB {
         Datastore datastore = Morphia.createDatastore(mongoClient, "ProjectDB");
 
         GameData gameData = new GameData(game);
-        Gson gson = new Gson();
-        String jsonData = gson.toJson(gameData);
-        App.getServer().broadcast(jsonData);
+//        Gson gson = new Gson();
+//        String jsonData = gson.toJson(gameData);
+//        App.getServer().broadcast(jsonData);
+        if(!App.gamesdata.contains(gameData)){
+            App.gamesdata.add(gameData);
+        }
         datastore.save(gameData);
+    }
+    public static void deleteGame(Game game){
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        Datastore datastore = Morphia.createDatastore(mongoClient, "ProjectDB");
+
+        GameData gameData = new GameData(game);
+        datastore.delete(gameData);
+        if(App.gamesdata.contains(gameData)){
+            App.gamesdata.remove(gameData);
+        }
     }
 
     public static Game loadGame(String username){
@@ -51,6 +67,7 @@ public class UserDB {
         }
         return null;
     }
+
 
     public static void saveUser(User user){
         MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");

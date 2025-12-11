@@ -1,5 +1,6 @@
 package com.CEliconValley.common;
 
+import com.CEliconValley.common.messages.Emotion;
 import com.CEliconValley.models.*;
 import com.CEliconValley.models.items.Buff;
 import com.CEliconValley.models.items.CookingRecipe;
@@ -8,7 +9,9 @@ import com.CEliconValley.models.items.Inventory;
 import com.CEliconValley.models.items.craftablemachines.Machine;
 import com.CEliconValley.models.locations.FarmType;
 import com.CEliconValley.models.skills.Skill;
+import com.CEliconValley.models.tools.LevelTool;
 import com.CEliconValley.models.tools.Tool;
+import com.CEliconValley.models.tools.ToolLevel;
 import dev.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
@@ -18,6 +21,7 @@ import java.util.List;
 public class PlayerData {
 
     String username;
+    String avatarPath;
     double money;
     double savings;
     int farmId;
@@ -25,6 +29,12 @@ public class PlayerData {
     int inFarmId;
     int x;
     int y;
+    public int targetx;
+    public int targety;
+    public float renderx;
+    public float rendery;
+    public int currentDirection = 3;
+    public boolean isMoving = false;
     double energy;
     int maxEnergy;
     boolean energyUnlimited;
@@ -44,13 +54,17 @@ public class PlayerData {
     ArrayList<TradeData> newTradesListData;
     ArrayList<TradeData> totalTradesListData;
     BuffData buffData;
-
+    ToolLevel toolLevel;
+    int questsFinsihed;
+    public ArrayList<Emotion> emotions;
+    public int selectedEmotionIndex;
 
     public PlayerData() {
     }
 
     public PlayerData(Player player) {
         this.username = player.getUser().getUsername();
+        this.avatarPath = player.getUser().getAvatarPath();
         this.money = player.getMoney();
         this.savings = player.getSavings();
         this.farmId = player.getFarmId();
@@ -66,7 +80,13 @@ public class PlayerData {
         this.cookingRecipes = new ArrayList<>(player.getCookingRecipes());
         this.craftingRecipes = new ArrayList<>(player.getCraftingRecipes());
         this.isPlayerInVillage = player.isPlayerIsInVillage();
-
+        this.questsFinsihed = player.getQuestsFinsihed();
+        if(player.getCurrentTool() == null) this.currentToolName = null;
+        else{
+            if(player.getCurrentTool() instanceof LevelTool lt){
+                this.toolLevel = lt.getLevel();
+            }
+        }
         this.skillLevels = new ArrayList<>();
         fillSkillLevels(player);
         this.onGoingMachines = new ArrayList<>();
@@ -101,6 +121,15 @@ public class PlayerData {
             this.totalTradesListData.add(new TradeData(trade));
         }
         this.buffData = player.getBuff() == null ? null : new BuffData(player.getBuff());
+
+        this.targetx = player.targetx;
+        this.targety = player.targety;
+        this.renderx = player.renderx;
+        this.rendery = player.rendery;
+        this.currentDirection = player.currentDirection;
+        this.isMoving = player.isMoving;
+        this.selectedEmotionIndex = player.selectedEmotionIndex;
+        this.emotions = player.emotions == null ? new ArrayList<>() : new ArrayList<>(player.emotions);
     }
 
 
@@ -130,12 +159,13 @@ public class PlayerData {
     public Player getPlayer() {
         User user = PlayerFinder.getUserByPlayerName(username);
         Inventory inventory = inventoryData.getInventory();
-        Tool tool = currentToolName == null ? null : Finder.getToolByName(currentToolName);
+        Tool tool = currentToolName == null ? null : (Tool) Finder.parseItem(currentToolName);
         Buff buff = buffData == null ? null : buffData.getBuff();
         return new Player(cookingRecipes, craftingRecipes, buff, tool, depressionDaysLeft,
                 energy, energyUnlimited, farmId, getFarmingSkill(), getFishingSkill(),
                 getForagingSkill(), inFarmId, inventory, maxEnergy, getMiningSkill(),
-                money, getMachines(), isPlayerInVillage, savings, user, x, y, farmType);
+                money, getMachines(), isPlayerInVillage, savings, user, x, y, farmType, questsFinsihed,
+            targetx, targety, renderx, rendery, currentDirection, isMoving, emotions, selectedEmotionIndex);
     }
 
     public Skill getFarmingSkill() {
@@ -183,6 +213,9 @@ public class PlayerData {
 
     public double getEnergy() {
         return energy;
+    }
+    public void setEnergy(double energy) {
+        this.energy = energy;
     }
 
     public boolean isEnergyUnlimited() {
@@ -264,4 +297,28 @@ public class PlayerData {
     public int getY() {
         return y;
     }
+
+    public FarmType getFarmType() {
+        return farmType;
+    }
+
+    public ToolLevel getToolLevel() {
+        return toolLevel;
+    }
+
+    public String getAvatarPath() {
+        return avatarPath;
+    }
+
+    public int getQuestsFinsihed() {
+        return questsFinsihed;
+    }
+
+    public Double getPlayerSkills(){
+        return (this.getFarmingSkill().getLevel()
+            + this.getFishingSkill().getLevel()
+            + this.getForagingSkill().getLevel()
+            + this.getMiningSkill().getLevel()) / 4d;
+    }
+
 }

@@ -33,6 +33,14 @@ public class ForagingCrop implements Foraging, Item {
         this.foragingCropType = foragingCropType;
     }
 
+    public ForagingCrop(int x, int y, Farm farm) {
+        Cell cell= Finder.findCellByCoordinates(x, y, farm);
+        assert cell != null;
+        cell.setObjectMap(this);
+        int type = (new Random()).nextInt(ForagingCropType.values().length);
+        this.foragingCropType = ForagingCropType.values()[type];
+    }
+
 
     public ForagingCrop(ForagingCropType foragingCropType, int typeIndex) {
         this.foragingCropType = foragingCropType;

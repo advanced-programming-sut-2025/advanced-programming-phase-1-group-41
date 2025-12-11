@@ -16,6 +16,10 @@ public class Mine implements ObjectMap {
     private int x = 3;
     private int y = 3;
 
+
+    public Mine() {
+    }
+
     @Override
     public String getChar() {
         return TerminalColors.colorize(233,237,"^.");

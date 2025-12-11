@@ -1,7 +1,10 @@
 package com.CEliconValley.models;
 
+import com.CEliconValley.common.messages.GameCommand;
+import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.controllers.subgames.*;
 import com.CEliconValley.models.buildings.marketplaces.Marketplace;
+import com.google.gson.Gson;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import org.bson.types.ObjectId;
@@ -59,23 +62,28 @@ public class TimeLine {
         return year;
     }
 
-    public void advanceOneHour(){
+    public void advanceOneHour(boolean cheat){
         CraftingController.check();
         hour++;
         if(hour >= 24){
             hour = 0;
             System.out.println("advancing day");
-            advanceOneDay();
+            if(!cheat){
+                preAdvanceOneDay();
+            }else{
+                advanceOneDay();
+            }
         }
         MarketplaceController.updateHourly();
         for(Player player : App.getGame().getPlayers()){
             player.updateHourly();
         }
     }
+    public void preAdvanceOneDay(){
+        goHome();
+    }
     public void advanceOneDay(){
         if(hour == 0){
-            // TODO important fix this!
-//            goHome();
             for (Player player : App.getGame().getPlayers()) {
                 player.resetEnergy();
             }
@@ -110,9 +118,12 @@ public class TimeLine {
         if(hour == 0){
 
             for (int i = 0; i < 9; i++) {
-                advanceOneHour();
+                advanceOneHour(true);
             }
         }
+        GameMessage<String> msg = new GameMessage<>("game-command", "new day");
+        App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(),
+            new Gson().toJson(msg));
     }
     public void advanceOneSeason(){
         Season[] seasons = Season.values();
@@ -126,19 +137,9 @@ public class TimeLine {
     }
 
     public void goHome(){
-        for (Player player : App.getGame().getPlayers()) {
-            Farm farm = Finder.findFarmByPlayer(player);
-            MapController controller = new MapController();
-            Cell villageCell = App.getGame().getVillage().getTransferCells().get(0);
-            Cell playerCell = farm.getStartPoints().get(0);
-            if(player.isPlayerIsInVillage()){
-                Result preResult = controller.walk(null,villageCell.getX(),villageCell.getY());
-                if(!preResult.success()){
-                    System.out.println("you're stuck "+preResult);
-                }
-            }
-            System.out.println(controller.walk(null, playerCell.getX(),playerCell.getY()));
-        }
+        GameMessage<String> msg = new GameMessage<>("game-command", "walk home");
+        App.getGame().stopScheduler();
+        App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), new Gson().toJson(msg));
     }
 
     public void predictTmrwWeather() {
@@ -189,5 +190,19 @@ public class TimeLine {
             ", season=" + season +
             ", year=" + year +
             '}';
+    }
+
+    public String convertDay(){
+        this.day %= 7;
+        return switch(this.day){
+            case 0 -> "Saturday";
+            case 1 -> "Sunday";
+            case 2 -> "Monday";
+            case 3 -> "Tuesday";
+            case 4 -> "Wednesday";
+            case 5 -> "Thursday";
+            case 6 -> "Friday";
+            default -> throw new IllegalStateException("Unexpected value: " + this.day);
+        };
     }
 }

@@ -1,23 +1,31 @@
 package com.CEliconValley.models.locations;
 
+import com.CEliconValley.client.model.NPCSprite;
+import com.CEliconValley.client.view.screen.randomwalk.Node;
+import com.CEliconValley.client.view.screen.randomwalk.SimplePathFinder;
+import com.CEliconValley.common.CellData;
+import com.CEliconValley.common.NPCData;
+import com.CEliconValley.common.messages.GameMessage;
 import com.CEliconValley.models.*;
+import com.CEliconValley.models.buildings.*;
 import com.CEliconValley.models.buildings.marketplaces.*;
+import com.CEliconValley.models.foragings.Nature.Obstacle;
 import com.CEliconValley.models.npc.npchomes.*;
 
-import com.CEliconValley.models.buildings.Bridge;
-import com.CEliconValley.models.buildings.Building;
-import com.CEliconValley.models.buildings.Door;
-import com.CEliconValley.models.buildings.ShippingBin;
 import com.CEliconValley.models.buildings.animalContainer.Barn;
 import com.CEliconValley.models.buildings.animalContainer.Coop;
 import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.foragings.Nature.Lake;
 import com.CEliconValley.models.npc.npcCharacters.NPC;
 import com.CEliconValley.models.ui.TerminalColors;
+import com.google.gson.Gson;
 
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import static com.CEliconValley.models.npc.npcCharacters.NPC.CELL_SIZE;
 
 
 public class Village implements Location{ ;
@@ -27,7 +35,69 @@ public class Village implements Location{ ;
     ArrayList<Cell> transferCells = new ArrayList<>();
     ArrayList<Cell> startPoints = new ArrayList<>();
     ArrayList<NPC> NPCs = new ArrayList<>();
+    Gson gson = new Gson();
 
+
+    public void randomMovement() {
+        for (NPC npc : getNPCs()) {
+            if(npc.reachedDestination() && !npc.randomSetter){
+                int delayTime = new Random().nextInt(2000, 5000);
+                ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+                npc.randomSetter = true;
+                scheduler.schedule(() -> {
+                    npc.setRandomPoint();
+                    npc.randomSetter = false;
+                    SimplePathFinder spf = new SimplePathFinder(App.getGame().getVillage());
+                    npc.movementQueue = spf.getPathQueue(npc.x, npc.y, npc.randomX, npc.randomY);
+                }, delayTime, TimeUnit.MILLISECONDS);
+
+            }
+            if(npc.isMoving) continue;
+            Node nextNode = npc.movementQueue.poll();
+            if (nextNode != null) {
+                npc.targetX=nextNode.x;
+                npc.targetY=nextNode.y;
+                npc.isMoving= true;
+                npc.currentDirection = nextNode.getDirection() != 0 ? nextNode.getDirection() : npc.currentDirection;
+            }
+        }
+    }
+    public void npcApproach() {
+        NPCs.forEach(npc -> {
+            if (npc.isMoving) {
+                float moveAmount = 20;
+                float targetPixelX = npc.targetX * CELL_SIZE;
+                float targetPixelY = npc.targetY * CELL_SIZE;
+//                npc.currentAnimation = npc.walk(true, npc.currentDirection);
+                if (npc.renderX < targetPixelX) {
+                    npc.renderX += moveAmount;
+                    if (npc.renderX > targetPixelX) npc.renderX = targetPixelX;
+                } else if (npc.renderX > targetPixelX) {
+                    npc.renderX -= moveAmount;
+                    if (npc.renderX < targetPixelX) npc.renderX = targetPixelX;
+                }
+
+
+                if (npc.renderY < targetPixelY) {
+                    npc.renderY += moveAmount;
+                    if (npc.renderY > targetPixelY) npc.renderY = targetPixelY;
+                } else if (npc.renderY > targetPixelY) {
+                    npc.renderY -= moveAmount;
+                    if (npc.renderY < targetPixelY) npc.renderY = targetPixelY;
+                }
+
+                if (npc.renderX == targetPixelX && npc.renderY == targetPixelY) {
+                    npc.x = npc.targetX;
+                    npc.y = npc.targetY;
+                    // TODO need to change the animaldata as well perhaps
+                    npc.isMoving = false;
+//                    npc.currentAnimation = npc.walk(false, npc.currentDirection);
+                }
+            }
+
+        });
+
+    }
 
 
     public Village(boolean load) {
@@ -84,20 +154,20 @@ public class Village implements Location{ ;
         transferCells.add(getCell(44,36));
         startPoints.add(getCell(47,32));
 
-        buildings.add(new Blacksmith(80,54,this, load));
-        buildings.add(new FishShop(22,0,this, load));
-        buildings.add(new GeneralStore(38,3,this, load));
-        buildings.add(new Saloon(80,20,this));
-        buildings.add(new MarnieRanch(80,0,this));
-        buildings.add(new CarpenterShop(67,0,this));
-        buildings.add(new Barn(77,0,this));
-        buildings.add(new Coop(77,4,this));
-        buildings.add(new Jojamart(84,10,this, load));
-        buildings.add(new AbigailHome(9,43,this));
-        buildings.add(new LiaHome(0,51,this));
-        buildings.add(new SebastienHome(12,58,this));
-        buildings.add(new RobinHome(24,58,this));
-        buildings.add(new HarveyHome(59,54,this));
+        buildings.add(new Blacksmith(82,55,this, load));//
+        buildings.add(new FishShop(22,3,this, load));//
+        buildings.add(new GeneralStore(38,15,this, load));//
+        buildings.add(new Saloon(80,20,this));//
+        buildings.add(new MarnieRanch(29,9,this));//
+        buildings.add(new CarpenterShop(60,34,this));//
+//        buildings.add(new Barn(77,0,this));
+//        buildings.add(new Coop(77,4,this));
+        buildings.add(new Jojamart(81,10,this, load));//
+        buildings.add(new AbigailHome(35,58,this));
+        buildings.add(new leahHome(12,58,this));//
+        buildings.add(new SebastienHome(24,58,this));//
+        buildings.add(new RobinHome(12,52,this));//
+        buildings.add(new HarveyHome(59,54,this));//
 
 
 
@@ -113,15 +183,21 @@ public class Village implements Location{ ;
             makeGround(getCell(i,19));
             makeGround(getCell(i,18));
         }
-        for(int j=19;j<55;j++){
+        for(int j=19;j<62;j++){
             makeGround(getCell(89,j));
             makeGround(getCell(90,j));
+        }for(int i=90;i>65;i--){//todo
+            makeGround(getCell(i,61));
+            makeGround(getCell(i,62));
+        }for(int i=90;i>82;i--){
+            makeGround(getCell(i,53));
+            makeGround(getCell(i,54));
         }
-        makeGround(getCell(89,55));
-        makeGround(getCell(88,55));
-        makeGround(getCell(88,56));
-        makeGround(getCell(87,56));
-        makeGround(getCell(86,56));
+//        makeGround(getCell(89,55));
+//        makeGround(getCell(88,55));
+//        makeGround(getCell(88,56));
+//        makeGround(getCell(87,56));
+//        makeGround(getCell(86,56));
 
         for(int j=8;j<12;j++){
             makeGround(getCell(36,j));
@@ -175,6 +251,17 @@ public class Village implements Location{ ;
         }
         for(int j=36;j>=28;j--){
             makeGround(getCell(47,j));
+            makeGround(getCell(48,j));
+            makeGround(getCell(46,j));
+            makeGround(getCell(45,j));
+            makeGround(getCell(49,j));
+            makeGround(getCell(50,j));
+            makeGround(getCell(44,j));
+
+        }
+        for(int j=35;j>=29;j--){
+            makeGround(getCell(43,j));
+            makeGround(getCell(51,j));
         }
         for(int i=43;i<=62;i++){
             makeGround(getCell(i,58));
@@ -195,8 +282,16 @@ public class Village implements Location{ ;
         for(int j=14;j>8;j--){
             makeGround(getCell(71,j));
             makeGround(getCell(72,j));
+        }for(int j=54;j>48;j--){
+            makeGround(getCell(62,j));
+            makeGround(getCell(63,j));
         }
         for(int i=72;i<=80;i++){
+            makeGround(getCell(i,9));
+            makeGround(getCell(i,8));
+        }
+        for(int i=80;i<=88;i++){
+            makeGround(getCell(i,10));
             makeGround(getCell(i,9));
             makeGround(getCell(i,8));
         }
@@ -205,9 +300,15 @@ public class Village implements Location{ ;
         makeGround(getCell(82,10));
         makeGround(getCell(82,11));
         makeGround(getCell(83,11));
+        makeGrass(getCell(81,9));
         makeGround(getCell(20,2));
         makeGround(getCell(21,2));
-        getCell(48, 31).setObjectMap(new ShippingBin());
+        makeGround(getCell(22,2));
+        makeGround(getCell(23,2));
+        makeGround(getCell(24,2));
+        makeGround(getCell(25,2));
+        //todo fix below
+//        getCell(48, 31).setObjectMap(new ShippingBin());
 
     }
     private void makeGround(Cell cell){
@@ -377,6 +478,31 @@ public class Village implements Location{ ;
             }
         }
         return null;
+    }
+
+
+    public boolean canMoveTo(int x, int y){
+        for (Cell cell : cells) {
+            if (cell.getX() == x && cell.getY() == y) {
+                if (cell.getObjectMap() instanceof Lake ||( cell.getObjectMap() instanceof Grass grass && !grass.isGround() )
+                    ||cell.getObjectMap() instanceof Wall ||cell.getObjectMap() instanceof Obstacle) {
+                    return false;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public Cell getCellAroundABuilding(Building building){
+        ArrayList<Cell> hasCells = new ArrayList<>();
+        for (Cell cell : getCells()) {
+            if(cell.getObjectMap().getName().equals(building.getName())){
+                hasCells.add(cell);
+            }
+        }
+        return hasCells.get(new Random().nextInt(hasCells.size()));
     }
 
     //    public void setCells(ArrayList<Cell> cells) {

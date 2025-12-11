@@ -139,4 +139,7 @@ public class Greenhouse implements Building {
     public void setUnlocked(boolean unlocked) {
         isUnlocked = unlocked;
     }
+
+    public static int getGreenhouseLength() {return 6;}
+    public static int getGreenhouseHeight() {return 7;}
 }

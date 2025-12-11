@@ -1,9 +1,6 @@
 package com.CEliconValley.common;
 
-import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Finder;
-import com.CEliconValley.models.ObjectMap;
-import com.CEliconValley.models.Player;
+import com.CEliconValley.models.*;
 import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.buildings.Cottage;
 import com.CEliconValley.models.buildings.animalContainer.Barn;
@@ -44,6 +41,7 @@ public class FarmData {
     int greenhouseX;
     int greenhouseY;
     int cottageX;
+    int cottageY = App.MaxHeight - 4;
     int mineLengthX;
     int mineLengthY;
 
@@ -320,5 +318,9 @@ public class FarmData {
 
     public ArrayList<TreeData> getTreesData() {
         return treesData;
+    }
+
+    public int getCottageY() {
+        return cottageY;
     }
 }

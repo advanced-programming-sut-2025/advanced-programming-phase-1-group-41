@@ -1,16 +1,21 @@
 package com.CEliconValley.models;
 
+import com.CEliconValley.client.AppClient;
+import com.CEliconValley.client.view.screen.PlayerActs;
 import com.CEliconValley.client.view.screen.maps.CoopMap;
-import com.CEliconValley.common.FarmData;
-import com.CEliconValley.common.GameData;
-import com.CEliconValley.common.PlayerData;
+import com.CEliconValley.common.*;
+import com.CEliconValley.models.buildings.Building;
+import com.CEliconValley.models.buildings.marketplaces.*;
 import com.CEliconValley.models.buildings.marketplaces.items.*;
 import com.CEliconValley.models.foragings.*;
 import com.CEliconValley.models.foragings.Nature.*;
 import com.CEliconValley.models.items.*;
-import com.CEliconValley.views.maps.CottageMap;
-import com.CEliconValley.views.maps.BarnMap;
-import com.CEliconValley.views.maps.GreenhouseMap;
+import com.CEliconValley.client.view.screen.maps.CottageMap;
+import com.CEliconValley.client.view.screen.maps.BarnMap;
+import com.CEliconValley.client.view.screen.maps.GreenhouseMap;
+import com.CEliconValley.models.items.craftableitems.SmokedFish;
+import com.CEliconValley.models.npc.npcCharacters.*;
+import com.CEliconValley.models.npc.npchomes.*;
 import org.bson.types.ObjectId;
 import com.CEliconValley.models.buildings.ShippingBin;
 import com.CEliconValley.models.buildings.Well;
@@ -18,7 +23,6 @@ import com.CEliconValley.models.items.Products.ProductType;
 import com.CEliconValley.models.items.craftableitems.CraftableNames;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.locations.Village;
-import com.CEliconValley.models.npc.npcCharacters.NPC;
 import com.CEliconValley.models.tools.FishingRodLevel;
 import com.CEliconValley.models.tools.NormalTools;
 import com.CEliconValley.models.tools.Tool;
@@ -39,6 +43,9 @@ public class Finder {
         return null;
     }
     public static Item parseItem(String itemName){
+        if(itemName.equals(new Bush().getName())){
+            return new Bush();
+        }
         if(parseBasicTool(itemName)!=null){
             return parseBasicTool(itemName);
         }
@@ -134,8 +141,8 @@ public class Finder {
         return null;
     }
 
-    public static Tool getToolByName(String name){
-        for (Slot slot : App.getGame().getCurrentPlayer().getInventory().getSlots()) {
+    public static Tool getToolByName(String name, Player player){
+        for (Slot slot : player.getInventory().getSlots()) {
             if(slot.getItem() == null){
                 continue;
             }
@@ -157,8 +164,17 @@ public class Finder {
         }
         return null;
     }
+
     public static Cell findCellByCoordinatesVillage(int x, int y, Village village){
         for(Cell cell : village.getCells()){
+            if(cell.getX() == x && cell.getY() == y){
+                return cell;
+            }
+        }
+        return null;
+    }
+    public static CellData findCellByCoordinatesVillage(int x, int y, VillageData village){
+        for(CellData cell : village.getCellsData()){
             if(cell.getX() == x && cell.getY() == y){
                 return cell;
             }
@@ -234,6 +250,14 @@ public class Finder {
         }
         return null;
     }
+    public static PlayerData findPlayerDataByUsername(String username){
+        for(PlayerData player : AppClient.getGameData().getPlayersData()){
+            if(player.getPlayer().getUser()!=null&&player.getPlayer().getUser().getUsername().equals(username)){
+                return player;
+            }
+        }
+        return null;
+    }//todo , بالایی نال میده
     public static NPC parseNPC(String name){
         for(NPC npc:App.getGame().getVillage().getNPCs()){
             if(npc.getName().equalsIgnoreCase(name)){
@@ -251,6 +275,13 @@ public class Finder {
         }
         return null;
     }
+
+    public static FarmData getfd(){
+
+        return getFarmDataById(AppClient.getGameData(), AppClient.getUserData().getUsername());
+    }
+
+
     public static FarmData getFarmDataById(GameData gameData, String username){
         Integer id = null;
         for (PlayerData playersDatum : gameData.getPlayersData()) {
@@ -263,6 +294,134 @@ public class Finder {
                 if(farmsDatum.getId() == id){
                     return farmsDatum;
                 }
+            }
+        }
+        return null;
+    }
+
+
+    public static CellData getcdByFarmData(int x, int y, FarmData farmData){
+        for (CellData cell : farmData.getCells()) {
+            if(cell.getX() == x && cell.getY() == y){
+                return cell;
+            }
+        }
+        return null;
+    }
+    public static PlayerData getpd(){
+        if(AppClient.getGameData() == null) return null;
+        for (PlayerData pd : AppClient.getGameData().getPlayersData()) {
+            if(pd.getUsername().equals(AppClient.getUserData().getUsername())){
+                return pd;
+            }
+        }
+        return null;
+    }
+    public static Player getPlayerByUsername(String username){
+        for(Player player : App.getGame().getPlayers()){
+            if(player.getUser().getUsername().equals(username)){
+                return player;
+            }
+        }
+        return null;
+    }
+    public static Farm getFarmByPlayer(Player player){
+        for (Farm farm : App.getGame().getFarms()) {
+            if(farm.getId() == player.getFarmId()){
+                return farm;
+            }
+        }
+        return null;
+    }
+
+    public static CellData getcdByVillageData(int x, int y, VillageData villageData) {
+        for (CellData cell : villageData.getCellsData()) {
+            if(cell.getX() == x && cell.getY() == y){
+                return cell;
+            }
+        }
+        return null;
+    }
+    public static BarnData getbdByid(int id){
+        FarmData farmData = getfd();
+        for (BarnData bd : farmData.getBarnsData()) {
+            if(bd.getId() == id){
+                return bd;
+            }
+        }
+        return null;
+    }
+    public static CoopData getcdByid(int id){
+        FarmData farmData = getfd();
+        for (CoopData cd : farmData.getCoopsData()) {
+            if(cd.getId() == id){
+                return cd;
+            }
+        }
+        return null;
+    }
+
+
+    public static Building getBuildingBynpc(NPC npc, boolean work){
+        for (Building building : App.getGame().getVillage().getBuildings()) {
+            if(!work){
+                if(building instanceof AbigailHome && npc instanceof Abigail){
+                    return building;
+                }
+                if(building instanceof leahHome && npc instanceof leah){
+                    return building;
+                }
+                if(building instanceof SebastienHome && npc instanceof Sebastien){
+                    return building;
+                }
+                if(building instanceof RobinHome && npc instanceof Robin){
+                    return building;
+                }
+                if(building instanceof HarveyHome && npc instanceof Harvey){
+                    return building;
+                }
+            }else{
+                if(building instanceof Blacksmith && npc instanceof Clint){
+                    return building;
+                }
+                if(building instanceof FishShop && (
+                    ( npc instanceof Willy ) || npc instanceof Mohsen
+                )){
+                    return building;
+                }
+                if(building instanceof GeneralStore && npc instanceof Pierre){
+                    return building;
+                }
+                if(building instanceof Saloon && npc instanceof Gus){
+                    return building;
+                }
+                if(building instanceof MarnieRanch && npc instanceof Marine){
+                    return building;
+                }
+                if(building instanceof CarpenterShop && npc instanceof Robin){
+                    return building;
+                }
+                if(building instanceof Jojamart && npc instanceof Morris){
+                    return building;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static CellData getcdByvd(int x, int y) {
+        for (CellData cd : AppClient.getGameData().getVillageData().getCellsData()) {
+            if(cd.getX() == x && cd.getY() == y){
+                return cd;
+            }
+        }
+        return null;
+    }
+
+    public static NPCData getnpcdatabyname(String name){
+        for (NPCData npcd : AppClient.getGameData().getVillageData().getNPCsData()) {
+            if(npcd.getName().equals(name)){
+                return npcd;
             }
         }
         return null;

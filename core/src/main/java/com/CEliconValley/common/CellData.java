@@ -3,7 +3,9 @@ package com.CEliconValley.common;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.buildings.Bridge;
+import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.buildings.GreenHouse.WaterTank;
+import com.CEliconValley.models.buildings.animalContainer.Barn;
 import com.CEliconValley.models.foragings.*;
 import com.CEliconValley.models.foragings.Nature.*;
 import com.CEliconValley.models.items.Item;
@@ -21,6 +23,7 @@ public class CellData {
     String objectName;
     String className = null;
     HashMap<String, Object> data;
+    private int fakeGround=0;
 
     public CellData() {
     }
@@ -79,6 +82,8 @@ public class CellData {
             data.put("hitPoints", r.getHitPoints());
             data.put("rockType", r.getRockType().ordinal());
             data.put("variant", r.getVariant());
+            data.put("anchorX", r.getAnchorX());
+            data.put("anchorY", r.getAnchorY());
         }
         else if(cell.getObjectMap() instanceof Grass grass){
             data.put("isFarmland", grass.isFarmland());
@@ -134,7 +139,7 @@ public class CellData {
             RockType rockType = RockType.values()[rockTypeInt];
             Rock r = new Rock(getInt(data.get("hitPoints")),
                     rockType,
-                    getInt(data.get("variant")));
+                    getInt(data.get("variant")), getInt(data.get("anchorX")), getInt(data.get("anchorY")));
             Cell newCell = new Cell(r, x, y);
             return newCell;
         }
@@ -159,11 +164,16 @@ public class CellData {
         }
         if(this.objectName.equals(new WaterTank().getName())){
             return new Cell(new WaterTank(), x, y);
+        }if(this.objectName.equals(new Mine().getName())){
+            return new Cell(new Mine(), x, y);
+        }
+        Building building = Building.parseBuilding(this.objectName);
+        if(building != null){
+            return new Cell(building, x, y);
         }
         // TODO
         Item item = Finder.parseItem(this.objectName);
         if(item == null){
-
             System.out.println("null : "+this.objectName+" "+x+" "+y);
         }
         return new Cell(item, x, y);
@@ -196,4 +206,33 @@ public class CellData {
         }
         return result;
     }
+
+
+    public String getClassName() {
+        return className;
+    }
+
+    public HashMap<String, Object> getData() {
+        return data;
+    }
+
+    public String getObjectName() {
+        return objectName;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+    public int getFakeGround(){
+        return fakeGround;
+    }
+
+    public void setFakeGround(int fakeGround) {
+        this.fakeGround = fakeGround;
+    }
+
 }

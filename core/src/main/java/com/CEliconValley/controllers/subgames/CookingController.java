@@ -1,13 +1,11 @@
 package com.CEliconValley.controllers.subgames;
 
-import com.CEliconValley.models.App;
-import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Finder;
-import com.CEliconValley.models.Result;
+import com.CEliconValley.models.*;
 import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.buildings.Cottage;
 import com.CEliconValley.models.buildings.Refrigerator;
 import com.CEliconValley.models.items.*;
+import com.CEliconValley.models.locations.Farm;
 
 import java.util.regex.Matcher;
 
@@ -24,15 +22,15 @@ public class CookingController {
     }
 
 
-    private boolean inHome(){
-        for (Building building : App.getGame().getCurrentPlayerFarm().getBuildings()) {
+    private boolean inHome(Player player, Farm farm){
+        for (Building building : farm.getBuildings()) {
             if(building instanceof Cottage) {
                 refrigerator = (Refrigerator) ((Cottage) building).getRefrigerator();
             }
         }
-        int x = App.getGame().getCurrentPlayer().getX();
-        int y = App.getGame().getCurrentPlayer().getY();
-        Cell cell = App.getGame().getCurrentPlayerFarm().getCell(x, y);
+        int x = player.getX();
+        int y = player.getY();
+        Cell cell = farm.getCell(x, y);
         if(cell == null) return false;
         if(cell.getObjectMap() instanceof Cottage){
             return true;
@@ -40,12 +38,12 @@ public class CookingController {
         return false;
     }
 
-    private Result pickFromRef(Item item) {
+    private Result pickFromRef(Item item, Player player, Farm farm) {
         Slot slot = refrigerator.getSlotByItem(item);
         if(slot == null){
             return new Result(false, "Slot not found");
         }
-        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
+        Inventory inventory = player.getInventory();
         if(inventory.getEmptySlots() <= 0){
             return new Result(false, "Inventory is full");
         }
@@ -54,8 +52,8 @@ public class CookingController {
         return new Result(true, "removed from ref :D");
     }
 
-    private Result putInRef(Item item){
-        Slot slot = App.getGame().getCurrentPlayer().getInventory().getSlotByItem(item);
+    private Result putInRef(Item item, Player player, Farm farm) {
+        Slot slot = player.getInventory().getSlotByItem(item);
         int q = slot.getQuantity();
         if(slot==null){
             return new Result(false,"Slot not found");
@@ -64,15 +62,17 @@ public class CookingController {
             return new Result(false,"Refrigerator is full");
         }
         refrigerator.addToRef(slot.getItem(), slot.getQuantity());
-        App.getGame().getCurrentPlayer().getInventory().removeFromInventory(slot.getItem(), slot.getQuantity());
+        player.getInventory().removeFromInventory(slot.getItem(), slot.getQuantity());
 
         return new Result(true,slot.getItem().getName()+" "+q);
     }
 
-    public Result cookingRef(Matcher matcher) {
-        if(!inHome()){
-            return new Result(false, "You're not in a home");
-        }
+    public Result cookingRef(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
+//        if(!inHome()){
+//            return new Result(false, "You're not in a home");
+//        }
         String pickput = matcher.group("which");
         String itemName = matcher.group(2);
         Item item = Finder.parseItem(itemName);
@@ -80,15 +80,15 @@ public class CookingController {
             return new Result(false,"Item not found");
         }
         if(pickput.equals("put")){
-            return this.putInRef(item);
+            return this.putInRef(item, player, farm);
         }else{
-            return this.pickFromRef(item);
+            return this.pickFromRef(item, player, farm);
         }
     }
     public Result showRef(Matcher matcher){
-        if(!inHome()){
-            return new Result(false, "You're not in a home");
-        }
+//        if(!inHome()){
+//            return new Result(false, "You're not in a home");
+//        }
         for(Slot slot : refrigerator.slots){
             if(slot.getItem()==null) continue;
             if(slot.getQuantity()>0) {
@@ -105,33 +105,29 @@ public class CookingController {
 
     }
 
-    public Result learnRecipe(Matcher matcher) {
-        if(!inHome()){
-            return new Result(false, "You're not in a home");
-        }
-        return null;
-        // TODO
-    }
-
-    public Result prepareFood(Matcher matcher) {
-        if(!inHome()){
-            return new Result(false, "You're not in a home");
-        }
+    public Result prepareFood(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
+//        if(!inHome(player, farm)){
+//            return new Result(false, "You're not in a home");
+//        }
         String foodName = matcher.group(1).trim();
         Food food = Food.parseFood(foodName);
         if(food == null){
             return new Result(false,"Food not found");
         }
-        if(!App.getGame().getCurrentPlayer().hasRecipe(food)){
+        if(!player.hasRecipe(food)){
             return new Result(false,"Food not found, recipe");
         }
         if(food.getRecipe() == null){
             return new Result(false,"Not implemented yet");
         }
         boolean checker = true;
-        Inventory inventory = App.getGame().getLoader().getInventory();
+        Inventory inventory = player.getInventory();
         if(inventory.getEmptySlots() <= 0){
-            return new Result(false,"inventory is full :(");
+            Result result =  new Result(false,"inventory is full :(");
+            App.sendResult(result, playername);
+            return result;
         }
         for (Item item : food.getRecipe().neededItems.keySet()) {
             Slot invSlot = inventory.getSlotByItem(item);
@@ -147,15 +143,22 @@ public class CookingController {
             }
         }
         if(!checker){
-            return new Result(false,"you don't have the needed items :(");
+            Result result = new Result(false,"you don't have the needed items :(");
+            App.sendResult(result, playername);
+            return result;
         }
 
         if(inventory.getEmptySlots() <= 0){
-            return new Result(false,"you don't have enough empty slots");
+
+            Result result = new Result(false,"you don't have enough empty slots");
+            App.sendResult(result, playername);
+            return result;
         }
 
-        if(App.getGame().getCurrentPlayer().getEnergy() < 3){
-            return new Result(false,"you don't have enough energy");
+        if(player.getEnergy() < 3){
+            Result result =  new Result(false,"you don't have enough energy");
+            App.sendResult(result, playername);
+            return result;
         }
 
         // remove items
@@ -175,15 +178,15 @@ public class CookingController {
 
 
         inventory.addToInventory(food, 1);
-        App.getGame().getCurrentPlayer().decEnergy(3);
+        player.decEnergy(3);
 
         return new Result(true,"food made.");
     }
 
     public Result showRecepies(Matcher matcher) {
-        if(!inHome()){
-            return new Result(false, "You're not in a home");
-        }
+//        if(!inHome()){
+//            return new Result(false, "You're not in a home");
+//        }
         for (CookingRecipe recipe : App.getGame().getCurrentPlayer().getCookingRecipes()) {
             System.out.println(recipe.getName());
         }

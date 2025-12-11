@@ -12,8 +12,12 @@ import com.CEliconValley.models.buildings.Cottage;
 import com.CEliconValley.models.buildings.Well;
 import com.CEliconValley.models.items.Products.Product;
 import com.CEliconValley.models.items.Products.ProductType;
+import com.CEliconValley.models.locations.Farm;
+import com.CEliconValley.models.tools.BasicTool;
 import com.CEliconValley.models.tools.Tool;
+import com.CEliconValley.models.tools.TrashCan;
 
+import javax.crypto.spec.PSource;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.regex.Matcher;
@@ -22,10 +26,10 @@ public class CraftingController {
     int x;
     int y;
 
-    private boolean inHome() {
-        int x = App.getGame().getCurrentPlayer().getX();
-        int y = App.getGame().getCurrentPlayer().getY();
-        Cell cell = App.getGame().getCurrentPlayerFarm().getCell(x, y);
+    private boolean inHome(Player player, Farm farm) {
+        int x = player.getX();
+        int y = player.getY();
+        Cell cell = farm.getCell(x, y);
         if (cell == null) return false;
         if (cell.getObjectMap() instanceof Cottage) {
             return true;
@@ -33,27 +37,27 @@ public class CraftingController {
         return false;
     }
 
-    public Result preValidateUseTool(Matcher matcher) {
+    public Result preValidateUseTool(Matcher matcher, Player player) {
         String dirName = matcher.group("direction").trim();
         int dir = Integer.parseInt(dirName) - 1;
         if (dir < 0 || dir > 7) {
             return new Result(false, "invalid dir");
         }
         int[][] dirs = {{-1, -1}, {0, -1}, {1, -1}, {1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0},};
-        x = App.getGame().getCurrentPlayer().getX() + dirs[dir][0];
-        y = App.getGame().getCurrentPlayer().getY() + dirs[dir][1];
+        x = player.getX() + dirs[dir][0];
+        y = player.getY() + dirs[dir][1];
         return new Result(true, "x: " + x + " y: " + y);
     }
 
 
-    private void placeBomb(CraftableMachine craftableMachine, Cell cell) {
+    private void placeBomb(CraftableMachine craftableMachine, Cell cell, Player player, Farm farm) {
         int size = 3;
         if(craftableMachine.equals(CraftableMachine.Bomb)){
             size = 5;
         } else if(craftableMachine.equals(CraftableMachine.MegaBomb)){
             size = 7;
         }
-        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
+        Inventory inventory = player.getInventory();
         for(int x = cell.getX() - size; x < cell.getX() + size; x++) {
             for(int y = cell.getY() - size; y < cell.getY() + size; y++) {
                 int x1 = x - cell.getX();
@@ -61,7 +65,7 @@ public class CraftingController {
                 if(x1 * x1 + y1 * y1 >= size * size){
                     continue;
                 }
-                Cell cell1 = Finder.findCellByCoordinates(x, y, App.getGame().getCurrentPlayerFarm());
+                Cell cell1 = Finder.findCellByCoordinates(x, y, farm);
                 if(cell1 == null){
                     continue;
                 }
@@ -81,7 +85,7 @@ public class CraftingController {
                     } else if(objectMap instanceof Mineral){
                         inventory.addToInventory(new Mineral(((Mineral) objectMap).getMineralType()), 1);
                         System.out.println("You got a " + ((Mineral) objectMap).getMineralType().getName() + " by destroying a Mineral.");
-                        cell1.setObjectMap(new Mine(x,y,App.getGame().getCurrentPlayerFarm(),0));
+                        cell1.setObjectMap(new Mine(x,y,farm,0));
                         continue;
                     }
                     Grass grass = new Grass();
@@ -91,7 +95,7 @@ public class CraftingController {
             }
         }
     }
-    public void placeSprinkler(CraftableMachine craftableMachine, Cell cell) {
+    public void placeSprinkler(CraftableMachine craftableMachine, Cell cell, Player player, Farm farm) {
         int size = 4;
         if(craftableMachine.equals(CraftableMachine.QualitySprinkler)){
             size = 8;
@@ -101,7 +105,7 @@ public class CraftingController {
         }
         for(int x = cell.getX() - size; x < cell.getX() + size; x++) {
             for (int y = cell.getY() - size; y < cell.getY() + size; y++) {
-                Cell cell1 = Finder.findCellByCoordinates(x, y, App.getGame().getCurrentPlayerFarm());
+                Cell cell1 = Finder.findCellByCoordinates(x, y, farm);
                 if (cell1 == null) {
                     continue;
                 }
@@ -116,13 +120,15 @@ public class CraftingController {
             }
         }
     }
-    public Result placeItem(Matcher matcher) {
-        Result preResult = preValidateUseTool(matcher);
+    public Result placeItem(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
+        Result preResult = preValidateUseTool(matcher, player);
         if (!preResult.success()) {
             return preResult;
         }
         String itemName = matcher.group(1).trim();
-        Cell cell = Finder.findCellByCoordinates(x, y, App.getGame().getCurrentPlayerFarm());
+        Cell cell = Finder.findCellByCoordinates(x, y, farm);
         if (cell == null) {
             return new Result(false, "Cell not found");
         }
@@ -131,36 +137,39 @@ public class CraftingController {
             return new Result(false, "item not found");
         }
         if (item instanceof Tool){
-            return new Result(false,"u can't place a tool");
+            if(item instanceof TrashCan bt){
+            }else{
+                return new Result(false,"u can't place a tool");
+            }
         }
-        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
+        Inventory inventory = player.getInventory();
         Slot slot = inventory.getSlotByItem(item);
         if (slot == null) {
             return new Result(false, "slot not found");
         }
-        if(item instanceof Well){
-            if(cell.getY() <= App.getGame().getCurrentPlayer().getY()
-            && cell.getX() <= App.getGame().getCurrentPlayer().getX()){
-                return new Result(false,"choose another direction");
-            }
-            Well well = new Well(cell.getX(), cell.getY(), App.getGame().getCurrentPlayerFarm());
-            App.getGame().getCurrentPlayerFarm().getBuildings().add(well);
-            inventory.removeFromInventory(item, 1);
-            return new Result(true, "well was placed");
-        }
+//        if(item instanceof Well){
+//            if(cell.getY() <= player.getY()
+//            && cell.getX() <= player.getX()){
+//                return new Result(false,"choose another direction");
+//            }
+//            Well well = new Well(cell.getX(), cell.getY(), farm);
+//            farm.getBuildings().add(well);
+//            inventory.removeFromInventory(item, 1);
+//            return new Result(true, "well was placed at "+well.getX()+", "+well.getY());
+//        }
         if(item instanceof CraftableMachine machine){
             inventory.removeFromInventory(item, 1);
             if(machine.equals(CraftableMachine.Bomb) || machine.equals(CraftableMachine.CherryBomb) || machine.equals(CraftableMachine.MegaBomb)){
-                placeBomb(machine, cell);
+                placeBomb(machine, cell, player, farm);
                 return new Result(true, "Ka-Booooom");
             }
             if(machine.equals(CraftableMachine.Sprinkler) || machine.equals(CraftableMachine.QualitySprinkler) || machine.equals(CraftableMachine.IridiumSprinkler)){
-                placeSprinkler(machine ,cell);
+                placeSprinkler(machine ,cell, player, farm);
                 return new Result(true, "Fshhhh.., watering all");
             }
             if(machine.equals(CraftableMachine.MysticTreeSeed)){
-                Tree tree = new Tree(cell.getX(), cell.getY(), App.getGame().getCurrentPlayerFarm(), TreeType.Mystic);
-                App.getGame().getCurrentPlayerFarm().addTree(tree);
+                Tree tree = new Tree(cell.getX(), cell.getY(), farm, TreeType.Mystic);
+                farm.addTree(tree);
                 cell.setObjectMap(tree);
                 return new Result(true, "Mystical tree planted O_o");
             }
@@ -174,13 +183,13 @@ public class CraftingController {
         return new Result(true, itemName + " placed on " + x + " " + y);
     }
 
-    public Result showRecepies(Matcher matcher) {
-        if (!inHome()) {
-            return new Result(false, "You are not in a home");
-        }
+    public Result showRecepies(Matcher matcher, String playername) {
+//        if (!inHome()) {
+//            return new Result(false, "You are not in a home");
+//        }
+        Player player = Finder.getPlayerByUsername(playername);
         StringBuilder message = new StringBuilder();
         message.append("Crafting recipes :\n");
-        Player player = App.getGame().getCurrentPlayer();
         for (CraftingRecipe craftingRecipe : player.getCraftingRecipes()) {
             message.append(craftingRecipe.getName()).append("\n");
         }
@@ -192,52 +201,56 @@ public class CraftingController {
         return null;
     }
 
-    public Result craftRecipe(Matcher matcher) {
-        if (!inHome()) {
-            return new Result(false, "You are not in a home");
-        }
+    public Result craftRecipe(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
+//        if (!inHome(player, farm)) {
+//            return new Result(false, "You are not in a home");
+//        }
         String itemName = matcher.group(1).trim();
         Item item = Finder.parseItem(itemName);
         if (item == null) {
             return new Result(false, "Item not found");
         }
 
-//        if (item.getName().equals(CraftableMachine.CherryBomb.getName())) {
-//            App.getGame().getCurrentPlayer().getInventory().addToInventory(CraftableMachine.CherryBomb, 1);
-//            return new Result(true, "you have a cherry bomb now");
-//        }
 
 
         for (CraftableMachine machine : CraftableMachine.values()) {
             if (item.getName().equals(machine.getName())) {
-                boolean hasItems = hasNeededItems(machine);
+                boolean hasItems = hasNeededItems(machine, player);
                 if (!hasItems) {
-                    return new Result(false, "you don't have the needed items");
+                    Result result = new Result(false, "you don't have the needed items");
+                    App.sendResult(result, playername);
+                    return result;
                 }
 
-                if (App.getGame().getCurrentPlayer().getInventory().getEmptySlots() <= 0) {
+                if (player.getInventory().getEmptySlots() <= 0) {
+                    Result result = new Result(false, "you don't have the needed items");
+                    App.sendResult(result, playername);
                     return new Result(false, "you don't have enough empty slots");
                 }
 
-                removeItems(machine);
-                App.getGame().getCurrentPlayer().decEnergy(2);
-                App.getGame().getCurrentPlayer().getInventory().addToInventory(machine, 1);
-                return new Result(true, "You received a " + machine.getName());
+                removeItems(machine, player);
+                player.decEnergy(2);
+                player.getInventory().addToInventory(machine, 1);
+                Result result = new Result(true, "You received a " + machine.getName());
+                App.sendResult(result, playername);
+                return result;
             }
         }
         return new Result(false, "can't craft that item");
     }
 
-    private void removeItems(CraftableMachine machine) {
-        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
+    private void removeItems(CraftableMachine machine, Player player) {
+        Inventory inventory = player.getInventory();
         for (Item item : machine.getRecipe().neededItems.keySet()) {
             Slot invSlot = inventory.getSlotByItem(item);
             inventory.removeFromInventory(item, machine.getRecipe().neededItems.get(item));
         }
     }
 
-    private boolean hasNeededItems(CraftableMachine machine) {
-        Inventory inventory = App.getGame().getCurrentPlayer().getInventory();
+    private boolean hasNeededItems(CraftableMachine machine, Player player) {
+        Inventory inventory = player.getInventory();
         boolean checker = true;
         for (Item item : machine.getRecipe().neededItems.keySet()) {
             Slot invSlot = inventory.getSlotByItem(item);
@@ -251,12 +264,12 @@ public class CraftingController {
         return checker;
     }
 
-    private Cell findArtisan(String machineName) {
+    private Cell findArtisan(String machineName, Player player, Farm farm) {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                x = App.getGame().getCurrentPlayer().getX() + i;
-                y = App.getGame().getCurrentPlayer().getY() + j;
-                Cell cell = App.getGame().getCurrentPlayerFarm().getCell(x, y);
+                x = player.getX() + i;
+                y = player.getY() + j;
+                Cell cell = farm.getCell(x, y);
                 if (cell != null) {
                     if (cell.getObjectMap() instanceof CraftableMachine) {
                         System.out.println("found a " + cell.getObjectMap().getName() + " in " + x + " " + y);
@@ -270,14 +283,16 @@ public class CraftingController {
         return null;
     }
 
-    public Result artisanUse(Matcher matcher) {
+    public Result artisanUse(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
         String machineName = matcher.group(1).trim();
         String itemsInput = matcher.group("items");
         String[] puttingItems = new String[0];
         if(itemsInput != null) {
             puttingItems = itemsInput.trim().split(" ");
         }
-        Cell cell = findArtisan(machineName);
+        Cell cell = findArtisan(machineName, player, farm);
         if (cell == null) {
             return new Result(false, machineName + " is not around you");
         }
@@ -291,36 +306,97 @@ public class CraftingController {
             items.add(item);
         }
         for (Item item : items) {
-            Slot slot = App.getGame().getCurrentPlayer().getInventory().getSlotByItem(item);
+            Slot slot = player.getInventory().getSlotByItem(item);
             if (slot == null || slot.getQuantity() == 0) {
                 return new Result(false,"you don't have " + item.getName());
             }
         }
 
         return switch (machine) {
-            case Furnace -> this.furnace(items, cell);
-            case CharcoalKiln -> this.charcoalKiln(items, cell);
-            case FishSmoker -> this.fishSmoker(items, cell);
-            case Dehydrator -> this.dehydrator(items, cell);
-            case PreservesJar -> this.jarPreserver(items, cell);
-            case OilMaker -> this.oilMaker(items, cell);
-            case Keg -> this.keg(items, cell);
-            case CheesePress -> this.cheesePress(items, cell);
-            case BeeHouse -> this.beeHouse(items, cell);
-            case Loom -> this.loom(items, cell);
-            case MayonnaiseMachine -> this.mayonnaiseMachine(items, cell);
+            case Furnace -> this.furnace(items, cell, player);
+            case CharcoalKiln -> this.charcoalKiln(items, cell, player);
+            case FishSmoker -> this.fishSmoker(items, cell, player);
+            case Dehydrator -> this.dehydrator(items, cell, player);
+            case PreservesJar -> this.jarPreserver(items, cell, player);
+            case OilMaker -> this.oilMaker(items, cell, player);
+            case Keg -> this.keg(items, cell, player);
+            case CheesePress -> this.cheesePress(items, cell, player);
+            case BeeHouse -> this.beeHouse(items, cell, player);
+            case Loom -> this.loom(items, cell, player);
+            case MayonnaiseMachine -> this.mayonnaiseMachine(items, cell, player);
             default -> new Result(false, machineName + " is not useable");
         };
     }
 
-    public Result artisanGet(Matcher matcher) {
+
+    public Result artisanCheat(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
         String machineName = matcher.group(1).trim();
-        Cell cell = findArtisan(machineName);
+        Cell cell = findArtisan(machineName, player, farm);
         if (cell == null) {
             return new Result(false, machineName + " is not around you");
         }
         CraftableMachine machine = (CraftableMachine) cell.getObjectMap();
-        Player player = App.getGame().getCurrentPlayer();
+        for (Machine onGoingMachine : player.getOnGoingMachines()) {
+            if(!onGoingMachine.getCraftableMachine().getName().equalsIgnoreCase(machine.getName())) continue;
+            onGoingMachine.setProcessTime(0);
+            onGoingMachine.setProduce();
+        }
+        return new Result(true,"produce is ready");
+    }
+
+    public Result artisanStop(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
+        String machineName = matcher.group(1).trim();
+        Cell cell = findArtisan(machineName, player, farm);
+        if (cell == null) {
+            return new Result(false, machineName + " is not around you");
+        }
+        CraftableMachine machine = (CraftableMachine) cell.getObjectMap();
+        Iterator iterator = player.getOnGoingMachines().iterator();
+        while(iterator.hasNext()){
+            Machine onGoingMachine = (Machine) iterator.next();
+            if(!onGoingMachine.getCraftableMachine().getName().equalsIgnoreCase(machine.getName())) continue;
+            iterator.remove();
+        }
+        return new Result(true,"furnace canceled");
+    }
+
+    public Result artisanStart(Matcher matcher, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
+        String machineName = matcher.group(1).trim();
+        Cell cell = findArtisan(machineName, player, farm);
+        if (cell == null) {
+            return new Result(false, machineName + " is not around you");
+        }
+        CraftableMachine machine = (CraftableMachine) cell.getObjectMap();
+        for (Machine onGoingMachine : player.getOnGoingMachines()) {
+            if(!onGoingMachine.getCraftableMachine().getName().equals(machine.getName())) continue;
+            if(onGoingMachine.suffice()){
+                onGoingMachine.setStart(true);
+                Result result =  new Result(true,"machine started");
+                App.sendResult(result, playername);
+                return result;
+            }else{
+                Result result = new Result(false,"insufficient material");
+                App.sendResult(result, playername);
+                return result;
+            }
+        }
+        return new Result(false,"no machine found!");
+    }
+    public Result artisanGet(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
+        String machineName = matcher.group(1).trim();
+        Cell cell = findArtisan(machineName, player, farm);
+        if (cell == null) {
+            return new Result(false, machineName + " is not around you");
+        }
+        CraftableMachine machine = (CraftableMachine) cell.getObjectMap();
         Iterator<Machine> iterator = player.getOnGoingMachines().iterator();
         while (iterator.hasNext()) {
             Machine onGoingMachine = iterator.next();
@@ -365,9 +441,8 @@ public class CraftingController {
     }
 
 
-    private Result fishSmoker(ArrayList<Item> items, Cell cell) {
+    private Result fishSmoker(ArrayList<Item> items, Cell cell, Player player) {
         Fish fish = setFish(items);
-        Player player = App.getGame().getCurrentPlayer();
         for (Machine x : player.getOnGoingMachines()) {
             if(x instanceof FishSmoker fs){
                 fishSmokerHelper(fs, items, cell, player, fish);
@@ -389,7 +464,10 @@ public class CraftingController {
             }else if(item.getName().equalsIgnoreCase(MineralType.Coal.getName())){
                 updateItems(item, fs, player, 1);
             }else{
-                System.out.println(item.getName()+" is not a valid item");
+                Result result = new Result(false," is not a valid input");
+                App.sendResult(result, player.getUser().getUsername());
+                System.out.println(result);
+                return;
             }
         }
     }
@@ -419,9 +497,8 @@ public class CraftingController {
         return null;
     }
 
-    private Result cheesePress(ArrayList<Item> items, Cell cell) {
+    private Result cheesePress(ArrayList<Item> items, Cell cell, Player player) {
         Item type= setCheese(items);
-        Player player = App.getGame().getCurrentPlayer();
         if(type == null){
             return new Result(false, "Wrong item!");
         }
@@ -448,14 +525,15 @@ public class CraftingController {
             if(item1.getName().equalsIgnoreCase(item.getName())){
                 updateItems(item1, cp, player, 1);
             }else{
-                System.out.println(item1.getName()+" is not a valid item");
+                Result result = new Result(false," is not a valid input");
+                App.sendResult(result, player.getUser().getUsername());
+                System.out.println(result);
                 return;
             }
         }
     }
 
-    private Result beeHouse(ArrayList<Item> items, Cell cell) {
-        Player player = App.getGame().getCurrentPlayer();
+    private Result beeHouse(ArrayList<Item> items, Cell cell, Player player) {
         for (Machine x : player.getOnGoingMachines()) {
             if (x instanceof BeeHouse bh) {
                 return new Result(true, "it's already ongoing ..");
@@ -492,9 +570,8 @@ public class CraftingController {
         return null;
     }
 
-    private Result keg(ArrayList<Item> items, Cell cell) {
+    private Result keg(ArrayList<Item> items, Cell cell, Player player) {
         Item type= setKeg(items);
-        Player player = App.getGame().getCurrentPlayer();
         if(type == null){
             return new Result(false, "Wrong item!");
         }
@@ -533,7 +610,9 @@ public class CraftingController {
                 }
                 updateItems(item1, keg, player, max);
             }else{
-                System.out.println(item1.getName()+" is not a valid item");
+                Result result = new Result(false," is not a valid input");
+                App.sendResult(result, player.getUser().getUsername());
+                System.out.println(result);
                 return;
             }
         }
@@ -541,8 +620,7 @@ public class CraftingController {
 
 
 
-    private Result charcoalKiln(ArrayList<Item> items, Cell cell) {
-        Player player = App.getGame().getCurrentPlayer();
+    private Result charcoalKiln(ArrayList<Item> items, Cell cell, Player player) {
         for (Machine x : player.getOnGoingMachines()) {
             if(x instanceof Kiln kiln){
                 kilnHelper(kiln, items, cell, player);
@@ -560,7 +638,10 @@ public class CraftingController {
             if(item.getName().equalsIgnoreCase(new Wood().getName())){
                 updateItems(item, kiln, player, 10);
             }else{
-                System.out.println(item.getName()+" is not a valid item");
+                Result result = new Result(false," is not a valid input");
+                App.sendResult(result, player.getUser().getUsername());
+                System.out.println(result);
+                return;
             }
         }
     }
@@ -585,12 +666,11 @@ public class CraftingController {
         return null;
     }
 
-    private Result dehydrator(ArrayList<Item> items, Cell cell) {
+    private Result dehydrator(ArrayList<Item> items, Cell cell, Player player) {
         Item type = setDehydratorType(items);
         if(type == null){
             return new Result(false, "invalid item type ");
         }
-        Player player = App.getGame().getCurrentPlayer();
         for (Machine x : player.getOnGoingMachines()) {
             if (x instanceof Dehydrator dh) {
                 dehyderatorHelper(dh, items, player, type);
@@ -618,7 +698,9 @@ public class CraftingController {
             if(item.getName().equalsIgnoreCase(type.getName())){
                 updateItems(item, dehydrator, player, 5);
             }else{
-                System.out.println(item.getName() + " is not a valid input");
+                Result result = new Result(false," is not a valid input");
+                App.sendResult(result, player.getUser().getUsername());
+                System.out.println(result);
                 return;
             }
         }
@@ -626,9 +708,8 @@ public class CraftingController {
 
 
 
-    private Result furnace(ArrayList<Item> items, Cell cell) {
+    private Result furnace(ArrayList<Item> items, Cell cell, Player player) {
         MineralType mineralType = setMineralType(items);
-        Player player = App.getGame().getCurrentPlayer();
         for (Machine x : player.getOnGoingMachines()) {
             if (x instanceof Furnace furnace) {
                 furnaceHelper(furnace, items, player, mineralType);
@@ -669,7 +750,9 @@ public class CraftingController {
             }else if(mineralType != null && item.getName().equalsIgnoreCase(mineralType.getName())){
                 updateItems(item, furnace, player, 5);
             }else{
-                System.out.println(item.getName() + " is not a valid input");
+                Result result = new Result(false," is not a valid input");
+                App.sendResult(result, player.getUser().getUsername());
+                System.out.println(result);
                 return;
             }
         }
@@ -695,9 +778,8 @@ public class CraftingController {
         return null;
     }
 
-    private Result jarPreserver(ArrayList<Item> items, Cell cell){
+    private Result jarPreserver(ArrayList<Item> items, Cell cell, Player player){
         Item type= setPreserver(items);
-        Player player = App.getGame().getCurrentPlayer();
         if(type == null){
             return new Result(false, "Wrong item!");
         }
@@ -726,7 +808,9 @@ public class CraftingController {
             if(item.getName().equalsIgnoreCase(type.getName())){
                 updateItems(item, pj, player, 1);
             }else{
-                System.out.println(item.getName()+" is not a valid input");
+                Result result = new Result(false," is not a valid input");
+                App.sendResult(result, player.getUser().getUsername());
+                System.out.println(result);
                 return;
             }
         }
@@ -752,9 +836,8 @@ public class CraftingController {
         return null;
     }
 
-    private Result oilMaker(ArrayList<Item> items, Cell cell){
+    private Result oilMaker(ArrayList<Item> items, Cell cell, Player player){
         Item type= setOilType(items);
-        Player player = App.getGame().getCurrentPlayer();
         if(type == null){
             return new Result(false, "Wrong item!");
         }
@@ -789,7 +872,9 @@ public class CraftingController {
             if(item.getName().equalsIgnoreCase(type.getName())){
                 updateItems(item, oilMaker, player, 1);
             }else{
-                System.out.println(item.getName()+" is not a valid input");
+                Result result = new Result(false," is not a valid input");
+                App.sendResult(result, player.getUser().getUsername());
+                System.out.println(result);
                 return;
             }
         }
@@ -809,9 +894,8 @@ public class CraftingController {
         return null;
     }
 
-    private Result mayonnaiseMachine(ArrayList<Item> items, Cell cell){
+    private Result mayonnaiseMachine(ArrayList<Item> items, Cell cell, Player player){
         Item type= setMayo(items);
-        Player player = App.getGame().getCurrentPlayer();
         if(type == null){
             return new Result(false, "Wrong item!");
         }
@@ -838,7 +922,9 @@ public class CraftingController {
             if(item.getName().equalsIgnoreCase(type.getName())){
                 updateItems(item, mayoMachine, player, 1);
             }else{
-                System.out.println(item.getName()+" is not a valid input");
+                Result result = new Result(false," is not a valid input");
+                App.sendResult(result, player.getUser().getUsername());
+                System.out.println(result);
                 return;
             }
         }
@@ -859,9 +945,8 @@ public class CraftingController {
         return null;
     }
 
-    private Result loom(ArrayList<Item> items, Cell cell){
+    private Result loom(ArrayList<Item> items, Cell cell, Player player){
         Item item = setLoom(items);
-        Player player = App.getGame().getCurrentPlayer();
         if(item == null){
             return new Result(false, "Wrong item!");
         }
@@ -888,7 +973,9 @@ public class CraftingController {
             if(item.getName().equalsIgnoreCase(type.getName())){
                 updateItems(item, loom, player, 1);
             }else{
-                System.out.println(item.getName()+" is not a valid input");
+                Result result = new Result(false," is not a valid input");
+                App.sendResult(result, player.getUser().getUsername());
+                System.out.println(result);
                 return;
             }
         }
@@ -896,17 +983,18 @@ public class CraftingController {
 
 
     public static void check(){
-        Player player = App.getGame().getCurrentPlayer();
-        for (Machine onGoingMachine : player.getOnGoingMachines()) {
-            if(onGoingMachine.suffice()){
-//                System.out.println("it suffices reducing time..");
-                onGoingMachine.decreaseProcessTime();
-            if(onGoingMachine.getProcessTime()<=0 && onGoingMachine.getProduce() == null){
-                onGoingMachine.setProduce();
-                System.out.println("produce is ready");
-            }
-            }else{
-                System.out.println(onGoingMachine+" is not suffice");
+        for (Player player : App.getGame().getPlayers()) {
+            for (Machine onGoingMachine : player.getOnGoingMachines()) {
+                if(onGoingMachine.suffice() && onGoingMachine.isStart()){
+                    System.out.println("it suffices reducing time..");
+                    onGoingMachine.decreaseProcessTime();
+                if(onGoingMachine.getProcessTime()<=0 && onGoingMachine.getProduce() == null){
+                    onGoingMachine.setProduce();
+                    System.out.println("produce is ready");
+                }
+                }else{
+                    System.out.println(onGoingMachine+" is not suffice");
+                }
             }
         }
     }

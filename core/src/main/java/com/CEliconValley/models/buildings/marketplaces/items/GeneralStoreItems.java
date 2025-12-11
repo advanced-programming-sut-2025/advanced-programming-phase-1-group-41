@@ -1,6 +1,5 @@
 package com.CEliconValley.models.buildings.marketplaces.items;
 
-import com.CEliconValley.controllers.subgames.CookingController;
 import com.CEliconValley.models.foragings.Fertilizer;
 import com.CEliconValley.models.foragings.FertilizerType;
 import com.CEliconValley.models.foragings.Seed;
@@ -85,7 +84,7 @@ public enum GeneralStoreItems implements Item {
     private String ch;
     boolean isOffSeason = false;
     private Item item;
-    private CookingRecipe cookingRecipe;
+    private CraftingRecipe craftingRecipe;
     private Backpack backpack;
     GeneralStoreItems(Item item){
         this.name = item.getName();
@@ -106,12 +105,14 @@ public enum GeneralStoreItems implements Item {
         this.name = recipe.getName();
         this.ch = "";
         this.price = price;
+        this.craftingRecipe = recipe;
     }
 
     GeneralStoreItems(Backpack backpack, double price){
         this.name = backpack.getName();
         this.ch = "";
         this.price = price;
+        this.backpack = backpack;
     }
 
     @Override
@@ -151,13 +152,15 @@ public enum GeneralStoreItems implements Item {
         return null;
     }
     public int getID() {
-        if(cookingRecipe != null){
-            return this.cookingRecipe.getId();
+        if(craftingRecipe != null){
+            return 70202;
+//            return this.craftingRecipe.getId();
         }
         else if(item != null){
             return this.item.getID();
-        }else{
+        }else if(backpack != null){
             return this.backpack.getID();
         }
+        return 100000;
     }
 }

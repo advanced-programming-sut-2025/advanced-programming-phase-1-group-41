@@ -1,5 +1,6 @@
 package com.CEliconValley.models.buildings;
 
+import com.CEliconValley.models.items.Food;
 import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.ObjectMap;
 import com.CEliconValley.models.items.Item;
@@ -21,16 +22,25 @@ public class Refrigerator implements ObjectMap {
 
     public Refrigerator(ArrayList<Slot> slots) {
         this.slots = slots;
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 20; i++) {
             this.slots.add(new Slot(null, 0));
         }
     }
 
     public Refrigerator() {
         this.slots = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 20; i++) {
             this.slots.add(new Slot(null,0));
         }
+        addToRef(Food.parseFood("FriedEgg"), 2);
+        addToRef(Food.parseFood("TripleShotEspresso"), 4);
+        addToRef(Food.parseFood("MakiRoll"), 1);
+        addToRef(Food.parseFood("FarmerLunch"), 2);
+        addToRef(Food.parseFood("MinerTreat"), 7);
+        addToRef(Food.parseFood("SeaFormPudding"), 10);
+        addToRef(Food.parseFood("RedPlate"), 20);
+        addToRef(Food.parseFood("Bread"), 1);
+        addToRef(Food.parseFood("HashBrowns"), 2);
     }
 
     public boolean removeFromRef(Item item, int quantity) {

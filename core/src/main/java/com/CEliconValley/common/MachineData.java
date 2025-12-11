@@ -22,6 +22,7 @@ public class MachineData {
     // testing..
     String craftableMachineName;
     int processTime;
+    int initTime;
     SlotData produceData;
     ArrayList<SlotData> slotsData;
     ArrayList<SlotData> receivedItemsData;
@@ -34,7 +35,8 @@ public class MachineData {
     public MachineData(Machine machine) {
         this.craftableMachineName = machine.getCraftableMachine().getName();
         this.processTime = machine.getProcessTime();
-        this.produceData = new SlotData(machine.getProduce());
+        this.initTime = machine.getInitTime();
+        this.produceData = machine.getProduce() == null ? null : new SlotData(machine.getProduce());
         slotsData = new ArrayList<>();
         receivedItemsData = new ArrayList<>();
         for (Slot slot : machine.getSlots()) {
@@ -157,5 +159,34 @@ public class MachineData {
             }
         }
         return null;
+    }
+
+
+    public String getCraftableMachineName() {
+        return craftableMachineName;
+    }
+
+    public HashMap<String, Object> getMetaData() {
+        return metaData;
+    }
+
+    public int getProcessTime() {
+        return processTime;
+    }
+
+    public SlotData getProduceData() {
+        return produceData;
+    }
+
+    public ArrayList<SlotData> getReceivedItemsData() {
+        return receivedItemsData;
+    }
+
+    public ArrayList<SlotData> getSlotsData() {
+        return slotsData;
+    }
+
+    public int getInitTime() {
+        return initTime;
     }
 }

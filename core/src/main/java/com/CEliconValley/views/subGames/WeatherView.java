@@ -16,7 +16,7 @@ public class WeatherView {
         }else if((matcher = WeatherAndTimeCommands.CheatWeather.getMatcher(input))!=null){
             System.out.println(controller.cheatChangeTmrwWeather(matcher));
         }else if((matcher = WeatherAndTimeCommands.CheatThor.getMatcher(input))!=null){
-            System.out.println(controller.cheatStrikeThunder(matcher));
+//            System.out.println(controller.cheatStrikeThunder(matcher));
         } else{
             return false;
         }

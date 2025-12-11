@@ -2,18 +2,17 @@ package com.CEliconValley.client.view.screen;
 
 import com.CEliconValley.client.model.AnimalSprite;
 import com.CEliconValley.client.view.screen.maps.CoopMap;
+import com.CEliconValley.client.view.screen.menu.BarnOrCoopMenuBar;
 import com.CEliconValley.client.view.screen.randomwalk.Node;
 import com.CEliconValley.client.view.screen.randomwalk.SimplePathFinder;
 import com.CEliconValley.common.AnimalData;
+import com.CEliconValley.common.CoopData;
+import com.CEliconValley.controllers.Spawner.InventoryRenderer;
 import com.CEliconValley.models.*;
-import com.CEliconValley.models.animals.animalKinds.*;
 import com.CEliconValley.models.buildings.Door;
-import com.CEliconValley.models.buildings.Wall;
-import com.CEliconValley.models.foragings.Nature.Lake;
-import com.CEliconValley.models.foragings.Nature.Rock;
-import com.CEliconValley.views.maps.BarnMap;
+import com.CEliconValley.models.buildings.animalContainer.CoopType;
+import com.CEliconValley.models.ui.GameAssetManager;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -30,37 +29,48 @@ import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class CoopScreen extends GameScreen implements Screen {
     private final FarmScreen farmScreen;
-    private final Hero hero;
-    private final SpriteBatch batch;
     private final TextureRegion background;
     private final CoopMap coop;
+    private BarnOrCoopMenuBar coopMenuBar;
+    private boolean isCoopMenuOpen = false;
     private ArrayList<AnimalSprite> animalSprites;
+    private CoopData coopData;
+    private int id;
+    public void updateAnimalSprites(CoopData coopData) {
+        if(animalSprites == null) {
+            animalSprites = new ArrayList<>();
+        }
+        if(coopData.getAnimalsData().size() == this.animalSprites.size()) {
+            return;
+        }
+        this.animalSprites = new ArrayList<>();
+        this.coopData = coopData;
+        for (int i = 0; i < coopData.getAnimalsData().size(); i++) {
+            AnimalData ad = coopData.getAnimalsData().get(i);
+            animalSprites.add(new AnimalSprite(coop, ad,
+                hero.playerX.get()+ (3*i % 5), hero.playerY.get()- (i % 7)));
+        }
+    }
 
-    private final OrthographicCamera camera;
-
-    public CoopScreen(FarmScreen farmScreen, CoopMap coop, Player player) {
-        super(null);
-        this.hero = new Hero(coop);
+    public CoopScreen(FarmScreen farmScreen, CoopMap coop, Player player, CoopData coopData) {
+        super(new InventoryRenderer(player.getInventory()));
+        this.menuBar = super.getMenuBar();
+        menuBar.setPlayer(player);
+        this.coopMenuBar = super.getBarnOrCoopMenuBar();
+        coopMenuBar.setPlayer(player);
         this.farmScreen = farmScreen;
         this.coop = coop;
-        this.batch = new SpriteBatch();
+        this.coopData = coopData;
         for (Cell cell : coop.getCells()) {
             if (cell == null) continue;
             if (cell.getObjectMap() instanceof Door) {
-                this.hero.playerX = cell.getX();
-                this.hero.playerY = cell.getY();
+                this.hero.playerX.set(cell.getX());
+                this.hero.playerY.set(cell.getY());
                 break;
             }
         }
-        this.animalSprites = new ArrayList<>();
-        this.animalSprites.add(new AnimalSprite(coop,
-            new AnimalData(new Chicken(null,"mamad")),
-            hero.playerX, hero.playerY + 2
-        ));
-        this.animalSprites.add(new AnimalSprite(coop,
-            new AnimalData(new Dino(null,"asghar")),
-            hero.playerX+3, hero.playerY + 4
-        ));
+        updateAnimalSprites(coopData);
+        this.id = coopData.getId();
 //        this.animalSprites.add(new AnimalSprite(coop,
 //            new AnimalData(new Pig(null,"asghar")),
 //            hero.playerX-2, hero.playerY + 3
@@ -74,9 +84,9 @@ public class CoopScreen extends GameScreen implements Screen {
 //        ));
 
 
-//        this.background=TextureRegion.split(new Texture("game/Buildings/Screen/Barn_Screen.png"),);
+//        this.background=TextureRegion.split(GameAssetManager.getGameAssetManager().getScreenTexture("Barn_Screen.png"),);
 //        this.background =
-        Texture coopTexture = new Texture("game/Buildings/Screen/Coop_Screen.png");
+        Texture coopTexture = GameAssetManager.getGameAssetManager().getScreenTexture("Coop_Screen.png");
 
         int tileWidth = coopTexture.getWidth() ;
         int tileHeight = coopTexture.getHeight()/3;
@@ -94,17 +104,16 @@ public class CoopScreen extends GameScreen implements Screen {
 
 
 
-        this.hero.targetX = hero.playerX;
-        this.hero.targetY = hero.playerY;
-        this.hero.renderX = hero.playerX * CELL_SIZE;
-        this.hero.renderY = hero.playerY * CELL_SIZE;
+        this.hero.targetX.set(hero.playerX.get());
+        this.hero.targetY.set(hero.playerY.get());
+        this.hero.renderX = hero.playerX.get() * CELL_SIZE;
+        this.hero.renderY = hero.playerY.get() * CELL_SIZE;
         this.hero.currentAnimation = hero.walk(false, hero.currentDirection);
         for (AnimalSprite animalSprite : this.animalSprites) {
             animalSprite.currentAnimation = animalSprite.walk(false, animalSprite.currentDirection);
             animalSprite.renderX = animalSprite.x*CELL_SIZE;
             animalSprite.renderY = animalSprite.y*CELL_SIZE;
         }
-
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -127,6 +136,7 @@ public class CoopScreen extends GameScreen implements Screen {
             }
             if(animalSprite.isMoving) continue;
             Node node = spf.findPath(animalSprite.x, animalSprite.y, animalSprite.randomX, animalSprite.randomY);
+            if(node == null) continue;
             animalSprite.targetX = node.x;
             animalSprite.targetY = node.y;
             animalSprite.currentDirection = node.getDirection() != 0 ? node.getDirection() : animalSprite.currentDirection;
@@ -138,15 +148,19 @@ public class CoopScreen extends GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Result result = Playeracts.handleInput(hero, coop, stage, delta);
+        if(isGameFinished) return;
+        Result result = PlayerActs.handleInput(hero, coop, stage, delta);
         if(!result.success()){
-            if(result.message().equals("cheat")){
+            if (result.message().equals("cheat") ||
+                result.message().equals("chat") ||
+                result.message().equals("friendship") ||
+                result.message().equals("scoreboard")) {
                 return;
             }
         }
-        Playeracts.approach(hero);
+        PlayerActs.approach(hero);
         randomMovement();
-        Playeracts.animalApproach(animalSprites,delta);
+        PlayerActs.animalApproach(animalSprites,delta);
         Gdx.gl.glClearColor(0.8f, 0.9f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -154,23 +168,66 @@ public class CoopScreen extends GameScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
-        batch.draw(background, 0, -CELL_SIZE/3 , CELL_SIZE * 13, CELL_SIZE * 9);
+        if(coop.getCoopType().equals(CoopType.Normal)) {
+            batch.draw(background, 0, -CELL_SIZE / 3f, CELL_SIZE * 13, CELL_SIZE * 9);
+        }else if(coop.getCoopType().equals(CoopType.Big)) {
+            batch.draw(background, -CELL_SIZE/2, -CELL_SIZE *2/ 3f, CELL_SIZE * 16, CELL_SIZE * 16*9/13f);
+        }
+        else{
+            batch.draw(background, 0, 0, CELL_SIZE * 20, CELL_SIZE * 20*9/13f);
+        }
 
 
         if (hero.currentAnimation != null) {
             TextureRegion currentFrame = hero.currentAnimation.getKeyFrame(hero.stateTime, onRepeat);
-            batch.draw(currentFrame, hero.renderX - CELL_SIZE / 2f, hero.renderY - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
+            //                System.out.println("stateTime: " + stateTime + ", frameIndex: " + currentAnimation.getKeyFrameIndex(stateTime));
+            if (!onRepeat && hero.currentAnimation.isAnimationFinished(hero.stateTime)) {
+                System.out.println("im here for a reason im not sure " + hero.stateTime);
+                hero.currentAnimation = hero.walk(false, hero.currentDirection);
+                onRepeat = true;
+                hero.isActing.set(false);
+                hero.stateTime = 0f;
+                if(lastAnimal != null){
+                    lastAnimal.x = hero.playerX.get();
+                    lastAnimal.y = hero.playerY.get();
+                    lastAnimal.renderX = hero.renderX;
+                    lastAnimal.renderY = hero.renderY;
+                    lastAnimal.targetX = hero.targetX.get();
+                    lastAnimal.targetY = hero.targetY.get();
+                    lastAnimal = null;
+                }
+            }if(coopData.getCoopTypeInt()==1){
+                batch.draw(currentFrame, hero.renderX , hero.renderY - CELL_SIZE , CELL_SIZE * 2f, CELL_SIZE * 2f);
+            }else if(coopData.getCoopTypeInt()==2) {
+                batch.draw(currentFrame, hero.renderX - CELL_SIZE / 2f, hero.renderY - CELL_SIZE , CELL_SIZE * 2f, CELL_SIZE * 2f);
+            }else{
+                batch.draw(currentFrame, hero.renderX - CELL_SIZE / 2f, hero.renderY - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
+            }
         }
         for (AnimalSprite animalSprite : animalSprites) {
             if(animalSprite.currentAnimation != null){
                 TextureRegion currentFrame = animalSprite.currentAnimation.getKeyFrame(animalSprite.stateTime, onRepeat);
-                batch.draw(currentFrame, animalSprite.renderX - CELL_SIZE / 2f, animalSprite.renderY - CELL_SIZE / 2f, CELL_SIZE * 2f, CELL_SIZE * 2f);
+                batch.draw(currentFrame, animalSprite.renderX - CELL_SIZE / 2f, animalSprite.renderY - CELL_SIZE / 2f, CELL_SIZE * 1.5f, CELL_SIZE * 1.5f);
             }
+        }
+
+        if(isCoopMenuOpen){
+            coopMenuBar.render(batch, camera);
+        }
+
+        if (isMenuOpen) {
+//                menuBar.render(batch, menuX, menuY, menuWidth, menuHeight);
+            menuBar.render(batch, camera);
+        } else {
+            inventoryRenderer.render(batch, camera);
         }
 
         camera.position.set(hero.renderX + CELL_SIZE / 2f, hero.renderY + CELL_SIZE / 2f, 0);
         camera.update();
+
         batch.end();
+        stage.act(delta);
+        stage.draw();
         hero.stateTime += delta;
         animalSprites.forEach(animalSprite -> {
             animalSprite.stateTime += delta;
@@ -179,7 +236,7 @@ public class CoopScreen extends GameScreen implements Screen {
 
 
     public void transfer() {
-        Cell cell = Finder.findCellByCoordinatesCoop(hero.playerX, hero.playerY, this.coop);
+        Cell cell = Finder.findCellByCoordinatesCoop(hero.playerX.get(), hero.playerY.get(), this.coop);
         if (cell.getObjectMap() instanceof Door) {
             ((com.badlogic.gdx.Game) Gdx.app.getApplicationListener()).setScreen(farmScreen);
         }
@@ -195,9 +252,23 @@ public class CoopScreen extends GameScreen implements Screen {
     }
 
     @Override public void show() {
-        Playeracts.setScreen(this);
+        PlayerActs.setScreen(this);
     }
     @Override public void hide() {}
     @Override public void pause() {}
     @Override public void resume() {}
+
+    public boolean isCoopMenuOpen() {
+        return isCoopMenuOpen;
+    }
+
+    public void setCoopMenuOpen(boolean coopMenuOpen) {
+        isCoopMenuOpen = coopMenuOpen;
+    }
+
+    public ArrayList<AnimalSprite> getAnimalSprites() {return animalSprites;}
+
+    public int getId() {
+        return id;
+    }
 }

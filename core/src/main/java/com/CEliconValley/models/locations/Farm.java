@@ -1,10 +1,8 @@
 package com.CEliconValley.models.locations;
 
 import com.CEliconValley.models.*;
-import com.CEliconValley.models.foragings.Crop;
-import com.CEliconValley.models.foragings.Foraging;
-import com.CEliconValley.models.foragings.ForagingCrop;
-import com.CEliconValley.models.foragings.ForagingTree;
+import com.CEliconValley.models.animals.animalKinds.*;
+import com.CEliconValley.models.foragings.*;
 import com.CEliconValley.models.foragings.Nature.*;
 
 import com.CEliconValley.models.animals.Animal;
@@ -26,7 +24,7 @@ import static com.CEliconValley.models.App.MaxHeight;
 import static com.CEliconValley.models.App.MaxLength;
 
 
-public class Farm implements Location {
+public class Farm {
 
     private FarmType farmType;
     private FarmBuilder farmBuilder;
@@ -105,8 +103,12 @@ public class Farm implements Location {
         greenhouse = new Greenhouse(4,MaxHeight-24 - rand.nextInt(4),this);
         buildings.add(greenhouse);
         buildings.add(new Cottage(30 + rand.nextInt(4), MaxHeight-4,this));
-        creatNewCoop(40,MaxHeight-4,CoopType.Big);
-        creatNewBarn(20,MaxHeight-4,BarnType.Normal);
+        creatNewCoop(30,4,CoopType.Deluxe);
+        creatNewBarn(15,MaxHeight-24,BarnType.Deluxe);
+        creatNewCoop(15,MaxHeight-4,CoopType.Big);
+        creatNewBarn(45,MaxHeight-24,BarnType.Big);
+        creatNewCoop(45,MaxHeight-4,CoopType.Normal);
+        creatNewBarn(20,4,BarnType.Normal);
         mine = new Mine(7 + rand.nextInt(7), 7 + rand.nextInt(6),this);
 
 
@@ -185,18 +187,18 @@ public class Farm implements Location {
 //                i--;
 //            }
 //        }
-        for(int i = 0; i < foragingTreeCount ;i++){
+        for(int i = 0; i < foragingCropCount ;i++){
             int y = rand.nextInt(MaxLength - 4) + 4;
             int x = rand.nextInt(MaxHeight - 4) + 4;
             if(Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).getObjectMap() instanceof Grass){
-                Tree tree = new Tree(x, y, this, TreeType.values()[rand.nextInt(TreeType.values().length)]);
-                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(tree);
-                trees.add(tree);
+                ForagingCrop foragingCrop = new ForagingCrop(x, y, this);
+                Objects.requireNonNull(Finder.findCellByCoordinates(x, y, this)).setObjectMap(foragingCrop);
+                foragings.add(foragingCrop);
             } else{
                 i--;
             }
         }
-        if(this.getId()==1){
+        if(this.getId()==0){
             for(Cell cell : cells){
                 if(cell.getX()==59&&cell.getY()>=73||cell.getY()==74&&cell.getX()>=58){
                     Grass grass = new Grass();
@@ -205,7 +207,7 @@ public class Farm implements Location {
                     transferCells.add(cell);
                 }
             }
-        }else if(this.getId()==2){
+        }else if(this.getId()==1){
             for(Cell cell : cells){
                 if(cell.getX()==0&&cell.getY()>=73||cell.getY()==74&&cell.getX()<=1){
                     Grass grass = new Grass();
@@ -214,7 +216,7 @@ public class Farm implements Location {
                     transferCells.add(cell);
                 }
             }
-        }else if(this.getId()==3){
+        }else if(this.getId()==2){
             for(Cell cell : cells){
                 if(cell.getX()==59&&cell.getY()<=1||cell.getY()==0&&cell.getX()>=58){
                     Grass grass = new Grass();
@@ -223,7 +225,7 @@ public class Farm implements Location {
                     transferCells.add(cell);
                 }
             }
-        } else if(this.getId()==4){
+        } else if(this.getId()==3){
             for(Cell cell : cells){
                 if(cell.getX()==0&&cell.getY()<=1||cell.getY()==0&&cell.getX()<=1){
                     Grass grass = new Grass();
@@ -232,15 +234,16 @@ public class Farm implements Location {
                     transferCells.add(cell);
                 }
             }
-        }//todo تو فاز یک ، ایگرگ از بالا به پایین زیاد میشد ولی تو گرافیک برعکسه این، ترنسفر سل ها باید عوض شن
-        for(Cell cell : cells){
-            if(cell.getY()>2&&getCell(cell.getX(),cell.getY()-1).getObjectMap() instanceof Door&&getCell(cell.getX(),cell.getY()-2).getObjectMap() instanceof Cottage){
-                cell.setObjectMap(new Grass());
-                startPoints.add(cell);
-//                Objects.requireNonNull(Finder.findPlayerByFarm(this)).setX(cell.getX());
-//                Objects.requireNonNull(Finder.findPlayerByFarm(this)).setY(cell.getY());
-            }
         }
+//        for(Cell cell : cells){
+//            if(cell.getY()>2&&getCell(cell.getX(),cell.getY()-1).getObjectMap() instanceof Door&&getCell(cell.getX(),cell.getY()-2).getObjectMap() instanceof Cottage){
+//                System.out.println("found a cell "+cell.getX()+" "+cell.getY()+" in "+id);
+//                cell.setObjectMap(new Grass());
+//                startPoints.add(cell);
+////                Objects.requireNonNull(Finder.findPlayerByFarm(this)).setX(cell.getX());
+////                Objects.requireNonNull(Finder.findPlayerByFarm(this)).setY(cell.getY());
+//            }
+//        }
 
 
     }
@@ -339,11 +342,32 @@ public class Farm implements Location {
     }
 
     public void creatNewBarn(int x, int y, BarnType barnType){
-        barns.add(new Barn(x, y, this, barnType));
+        Barn barn = new Barn(x, y, this, barnType);
+        Player player = null;
+        for (Player p : App.getGame().getPlayers()) {
+            if(p.getFarmId() == id){
+                player = p;
+                break;
+            }
+        }
+//        barn.addAnimal(new Pig(player, "asghar"));
+//        barn.addAnimal(new Cow(player, "akbar"));
+//        barn.addAnimal(new Sheep(player, "sakineh"));
+//        barn.addAnimal(new Goat(player, "asadollah"));
+        barns.add(barn);
     }
 
     public void creatNewCoop(int x,int y,CoopType coopType){
-        coops.add(new Coop(x, y, this, coopType));
+        Coop coop = new Coop(x, y, this, coopType);
+        Player player = null;
+        for (Player p : App.getGame().getPlayers()) {
+            if(p.getFarmId() == id){
+                player = p;
+                break;
+            }
+        }
+//        coop.addAnimal(new Chicken(player,"abolfazl"));
+        coops.add(coop);
     }
 
     public ArrayList<Cell> getCells() {
@@ -364,6 +388,7 @@ public class Farm implements Location {
         }
         return false;
     }
+
     public Cell getCell(int x , int y){
         for(Cell cell : cells){
             if(cell.getX() == x && cell.getY() == y){

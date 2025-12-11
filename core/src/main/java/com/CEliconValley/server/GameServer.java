@@ -1,10 +1,7 @@
 package com.CEliconValley.server;
 
 import com.CEliconValley.common.messages.*;
-import com.CEliconValley.models.App;
-import com.CEliconValley.models.Lobby;
-import com.CEliconValley.models.Player;
-import com.CEliconValley.models.User;
+import com.CEliconValley.models.*;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.java_websocket.WebSocket;
@@ -19,7 +16,7 @@ public class GameServer extends WebSocketServer {
     public static final int PORT = 6969;
 
     private final Set<WebSocket> connections = Collections.synchronizedSet(new HashSet<>());
-    private final Map<WebSocket, User> onlineConnections = new HashMap<>();
+    private final Map<WebSocket, User> onlineConnections = Collections.synchronizedMap(new HashMap<>());
     public GameServer() {
         super(new InetSocketAddress("0.0.0.0",PORT));
     }
@@ -47,6 +44,26 @@ public class GameServer extends WebSocketServer {
                 App.getServer().broadcast(new Gson().toJson(response2));
             }
         }
+
+
+        for (Player player : App.getGame().getPlayers()) {
+            if(player.getUser().getUsername().equals(onlineConnections.get(conn).getUsername())){
+                App.getDcguys().add(new DCguy(App.getGame().get_id(), player.getUser()));
+                GameMessage<GameCommand> msg = new GameMessage<>("game-command",
+                    new GameCommand("dc-game", ":)"));
+                ArrayList<String> names = new ArrayList<>();
+                for (Player p : App.getGame().getPlayers()) {
+                    if(!p.getUser().getUsername().equals(player.getUser().getUsername())){
+                        names.add(p.getUser().getUsername());
+                    }
+                }
+                sendToGroup(names, new Gson().toJson(msg));
+                System.out.println(player.getUser().getUsername()+" from inside the game got out :(");
+                App.getGame().stopScheduler();
+                App.dcTimestamp = System.currentTimeMillis();
+            }
+        }
+
         onlineConnections.remove(conn);
         System.out.println("Closed connection: " + conn.getRemoteSocketAddress());
     }
@@ -54,15 +71,17 @@ public class GameServer extends WebSocketServer {
     @Override
     public void onMessage(WebSocket conn, String message) {
         Gson gson = new Gson();
+        String type = null;
         try{
             GameMessage<Object> genericMsg = gson.fromJson(message, new TypeToken<GameMessage<Object>>() {}.getType());
+            type = genericMsg.type;
             ServerMessageRouter.route(genericMsg.type, message, conn, gson);
-            System.out.println(onlineConnections);
+//            System.out.println(onlineConnections);
         } catch (Exception e) {
             System.out.println("ESmessage: "+message);
             e.printStackTrace();
         }
-        System.out.println("Smessage: "+message);
+        if(!type.equals("position")) System.out.println("Smessage: "+message);
     }
 
     @Override
@@ -114,6 +133,21 @@ public class GameServer extends WebSocketServer {
             System.out.println("checker is " + checker);
             System.out.println("names size is " + names.size());
         }
+    }
 
+    public void sendToPlayername(String playername, String message){
+        onlineConnections.forEach((k,v)->{
+            if(v.getUsername().equals(playername)){
+                k.send(message);
+            }
+        });
+    }
+
+    public void sendToPlayer(Player player, String message){
+        onlineConnections.forEach((k,v)->{
+            if(v.getUsername().equals(player.getUser().getUsername())){
+                k.send(message);
+            }
+        });
     }
 }

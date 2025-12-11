@@ -1,6 +1,9 @@
 package com.CEliconValley.controllers.Spawner;
 
+import com.CEliconValley.common.CellData;
+import com.CEliconValley.common.FarmData;
 import com.CEliconValley.models.Cell;
+import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.foragings.Nature.Grass;
 import com.CEliconValley.models.locations.Farm;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,17 +11,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
+import static com.CEliconValley.client.view.screen.FarmScreen.farmSprite;
 
 public class GroundSpawner {
 
-    private final Farm farm;
     private final Texture groundTexture;
     private final Texture grassBorderTexture;
     private final TextureRegion[] grassBorders;
 
-    public GroundSpawner(Farm farm) {
-        this.farm = farm;
-        groundTexture = new Texture("game/general/tiles/ground.png");
+    public GroundSpawner() {
+        groundTexture = new Texture("game/general/tiles/ground_Spring.png");
         grassBorderTexture = new Texture("game/general/tiles/grassBorder.png");
 
         grassBorders = new TextureRegion[9];
@@ -30,43 +32,49 @@ public class GroundSpawner {
         }
 
     }
+    // useless?
+//    public boolean renderGround(SpriteBatch batch, CellData cellData, float passiveStateTime) {
+//        int x = cellData.getX() * CELL_SIZE;
+//        int y = cellData.getY() * CELL_SIZE;
+//        Cell cell = cellData.extractData();
+//        if (cell.getObjectMap() instanceof Grass &&((Grass) cell.getObjectMap()).isGround()) {
+//            batch.draw(groundTexture, x, y, CELL_SIZE, CELL_SIZE);
+//            return true;
+//        } else if (isGrassBorder(cell)) {
+//            int index = getBorderIndex(cell.getX(), cell.getY());
+//            batch.draw(grassBorders[index], x, y, CELL_SIZE, CELL_SIZE);
+//            return true;
+//        }
+//        return false;
+//    }
 
-    public boolean renderGround(SpriteBatch batch, Cell cell,float passiveStateTime) {
-        int x = cell.getX() * CELL_SIZE;
-        int y = cell.getY() * CELL_SIZE;
-
-        if (cell.getObjectMap() instanceof Grass &&((Grass) cell.getObjectMap()).isGround()) {
-            batch.draw(groundTexture, x, y, CELL_SIZE, CELL_SIZE);
-            return true;
-        } else if (isGrassBorder(cell)) {
-            int index = getBorderIndex(cell.getX(), cell.getY());
-            batch.draw(grassBorders[index], x, y, CELL_SIZE, CELL_SIZE);
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isGrassBorder(Cell cell) {
-        int x = cell.getX();
-        int y = cell.getY();
+    private boolean isGrassBorder(CellData cellData, FarmData farmData) {
+        int x = cellData.getX();
+        int y = cellData.getY();
+        Cell cell = cellData.extractData();
         return !(cell.getObjectMap() instanceof Grass && ((Grass) cell.getObjectMap()).isGround()) &&
-            (isGround(x + 1, y) || isGround(x - 1, y) || isGround(x, y + 1) || isGround(x, y - 1));
+            (isNotGrass(x + 1, y, farmData) ||
+                isNotGrass(x - 1, y, farmData) || isNotGrass(x, y + 1, farmData)
+                || isNotGrass(x, y - 1, farmData));
     }
 
-    private boolean isGround(int x, int y) {
-        for (Cell cell : farm.getCells()) {
-            if (cell.getX() == x && cell.getY() == y) {
-                return cell.getObjectMap() instanceof Grass && ((Grass) cell.getObjectMap()).isGround();
+    private boolean isNotGrass(int x, int y, FarmData farmData) {
+        CellData cd = Finder.getcdByFarmData(x, y, farmData);
+        if(cd == null) return false;
+        Cell cell = cd.extractData();
+        if(cell.getObjectMap() instanceof Grass grass){
+            if(grass.isGround()||grass.isFarmland()||grass.isBombed()||grass.isSand()||grass.isThundered()){
+                return true;
             }
         }
         return false;
     }
 
-    private int getBorderIndex(int x, int y) {
-        boolean up = isGround(x, y + 1);
-        boolean down = isGround(x, y - 1);
-        boolean left = isGround(x - 1, y);
-        boolean right = isGround(x + 1, y);
+    private int getBorderIndex(int x, int y, FarmData farmData) {
+        boolean up = isNotGrass(x, y + 1, farmData);
+        boolean down = isNotGrass(x, y - 1, farmData);
+        boolean left = isNotGrass(x - 1, y, farmData);
+        boolean right = isNotGrass(x + 1, y, farmData);
 
         if (up && left) return 8;
         if (up && right) return 6;
@@ -79,5 +87,6 @@ public class GroundSpawner {
 
         return 4;
     }
+
 }
 

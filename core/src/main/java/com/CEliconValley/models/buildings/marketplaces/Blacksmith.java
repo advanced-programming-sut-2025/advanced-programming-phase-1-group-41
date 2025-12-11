@@ -1,5 +1,6 @@
 package com.CEliconValley.models.buildings.marketplaces;
 
+import com.CEliconValley.common.CellData;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.ui.TerminalColors;
@@ -30,6 +31,14 @@ public class Blacksmith extends Marketplace implements Building{
     }
     private int x;
     private int y;
+    private int anchorX;
+    private int anchorY;
+
+    public Blacksmith() {
+        anchorX = 86;
+        anchorY = 56;
+    }
+
     public Blacksmith(int x, int y, Village village, boolean load) {
 //        super(App.getGame().getVillage().getnpcByName("clint"));
         super(null);
@@ -62,6 +71,10 @@ public class Blacksmith extends Marketplace implements Building{
                 Cell cell = Finder.findCellByCoordinatesVillage(i, yWall,village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
+                if(i == x+3&&yWall==y){
+                    cell.setObjectMap(door);
+                    doors.add(cell);
+                }
             }
             yWall+=5;
         }
@@ -71,9 +84,7 @@ public class Blacksmith extends Marketplace implements Building{
                 Cell cell = Finder.findCellByCoordinatesVillage(xWall, j, village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
-                if(j == y + 2&&xWall==x+5){
-                    cell.setObjectMap(door);
-                }
+
             }
             xWall+=5;
         }
@@ -137,11 +148,11 @@ public class Blacksmith extends Marketplace implements Building{
 
     @Override
     public int getAnchorX() {
-        return 0;
+        return anchorX;
     }
 
     @Override
     public int getAnchorY() {
-        return 0;
+        return anchorY;
     }
 }

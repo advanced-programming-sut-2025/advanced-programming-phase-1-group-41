@@ -16,6 +16,7 @@ public enum Menu {
     Trade(new TradeMenu(),"TradeMenu"),
     Lobby(new LobbyScreen(new LobbyController()), "Lobby"),
     AvatarSelection(new AvatarSelectionView(new AvatarSelectionController()), "AvatarSelectionMenu"),
+    GameSelection(new GameSelectionView(new GameSelectionController()), "GameSelectionMenu"),
     ;
 
 
@@ -66,9 +67,11 @@ public enum Menu {
                 Menu.Lobby.menu = new LobbyScreen(new LobbyController());
             } if(menu.equals(Menu.AvatarSelection.menu)){
                 Menu.AvatarSelection.menu = new AvatarSelectionView(new AvatarSelectionController());
+            } if(menu.equals(Menu.GameSelection.menu)){
+                Menu.GameSelection.menu = new GameSelectionView(new GameSelectionController());
             }
             if(menu == Menu.Main.menu || menu == Profile.menu || menu == Authentication.menu
-            || menu == Lobby.menu || menu == AvatarSelection.menu){
+            || menu == Lobby.menu || menu == AvatarSelection.menu || menu == GameSelection.menu){
                 com.CEliconValley.Main.getMain().setScreen(AppClient.getMenu().getScreen());
             }
         });

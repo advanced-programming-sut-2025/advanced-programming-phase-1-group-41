@@ -11,9 +11,11 @@ public class PreGame {
     String adminName;
     int counter = 0;
     int playersSize;
-    public PreGame(int size, String adminName) {
+    Lobby lobby;
+    public PreGame(int size, String adminName, Lobby lobby) {
         playersSize = size;
         this.adminName = adminName;
+        this.lobby = lobby;
     }
 
     public void addPlayer(String username, FarmType farmType) {
@@ -47,5 +49,9 @@ public class PreGame {
 
     public int getPlayersSize() {
         return playersSize;
+    }
+
+    public Lobby getLobby() {
+        return lobby;
     }
 }

@@ -65,6 +65,15 @@ public class MainMenuController {
             }
         });
 
+        view.selectGameButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    Menu.GameSelection.resetMenu();
+                    AppClient.setMenu(Menu.GameSelection);
+                    Main.getMain().setScreen(AppClient.getMenu().getScreen());
+                }
+        });
+
     }
 
     public void handleJoinLobby() {

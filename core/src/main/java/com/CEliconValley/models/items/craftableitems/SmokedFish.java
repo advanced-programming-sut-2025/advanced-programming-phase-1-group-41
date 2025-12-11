@@ -37,4 +37,6 @@ public class SmokedFish implements Item, Eatable {
     public String getChar() {
         return "SF";
     }
+
+
 }

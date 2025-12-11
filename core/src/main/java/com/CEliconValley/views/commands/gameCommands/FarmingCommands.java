@@ -8,8 +8,12 @@ public enum FarmingCommands implements Command {
     CraftInfo("\\s*craftinfo\\s+-n\\s+(?<craftName>.*)\\s*"),
     GreenhouseBuild("\\s*greenhouse\\s+build\\s*"),
     Plant("\\s*plant\\s+-s\\s+(?<seed>.*)\\s+-d\\s+(?<direction>.*)\\s*"),
+    GreenhousePlant("\\s*greenhouse\\s+plant\\s+-s\\s+(?<seed>.*)\\s+-d\\s+(?<direction>.*)\\s*"),
     ShowPlant("\\s*showplant\\s+-l\\s+(?<x>.*)\\s*,\\s*(?<y>.*)\\s*"),
     Fertilize("\\s*fertilize\\s+-f\\s+(?<fertilizer>.*)\\s+-d\\s+(?<direction>.*)\\s*"),
+    GreenhouseFertilize("\\s*greenhouse\\s+fertilize\\s+-f\\s+(?<fertilizer>.*)\\s+-d\\s+(?<direction>.*)\\s*"),
+    GreenhouseWater("\\s*greenhouse\\s+water\\s*"),
+    GreenhouseHarvest("\\s*greenhouse\\s+harvest\\s*"),
     HowMuchWater("\\s*howmuch\\s+water\\s*"),
     ;
 

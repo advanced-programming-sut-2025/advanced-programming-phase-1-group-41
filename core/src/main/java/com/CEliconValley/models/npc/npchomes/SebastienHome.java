@@ -20,6 +20,14 @@ public class SebastienHome extends NPCHome implements Building {
     }
     private int x;
     private int y;
+    private int anchorX;
+    private int anchorY;
+
+    public SebastienHome() {
+        anchorX=28;
+        anchorY=59;
+    }
+
     public SebastienHome(int x, int y, Village village) {
         this.x = x;
         this.y = y;
@@ -27,28 +35,28 @@ public class SebastienHome extends NPCHome implements Building {
         int yWall;
         yWall = y;
         while(yWall<=y+6) {
-            for (int i = x; i <= x + 8; i++) {
+            for (int i = x; i <= x + 5; i++) {
                 Cell cell = Finder.findCellByCoordinatesVillage(i, yWall,village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
-                if(i == x + 4&&yWall==y){
+                if(i == x + 2&&yWall==y){
                     cell.setObjectMap(new Door());
                 }
             }
             yWall+=6;
         }
         xWall = x;
-        while(xWall<=x+8) {
+        while(xWall<=x+5) {
             for (int j = y+1; j <= y+6; j++) {
                 Cell cell = Finder.findCellByCoordinatesVillage(xWall, j, village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
             }
-            xWall+=8;
+            xWall+=5;
         }
         x++;
         y++;
-        int xLength=7;
+        int xLength=4;
         int yLength=5;
         for(int i=x; i<xLength+x; i++) {
             for(int j=y; j<yLength+y; j++) {
@@ -77,11 +85,11 @@ public class SebastienHome extends NPCHome implements Building {
 
     @Override
     public int getAnchorX() {
-        return 0;
+        return anchorX;
     }
 
     @Override
     public int getAnchorY() {
-        return 0;
+        return anchorY;
     }
 }

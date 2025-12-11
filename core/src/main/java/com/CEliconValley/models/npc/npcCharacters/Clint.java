@@ -14,8 +14,8 @@ public class Clint extends NPC{
 
 
 
-    public Clint(String name, Occupation job, Marketplace marketplace, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift,ArrayList<Quest> quests) {
-        super(name, job, dialogues, favorites, itemsToGift, quests);
+    public Clint(String name, Occupation job, Marketplace marketplace, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift) {
+        super(name, job, dialogues, favorites, itemsToGift);
         this.marketplace = marketplace;
         setX(86);setY(55);
         setDaysToUnlockQ3(5*28);

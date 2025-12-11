@@ -3,6 +3,11 @@ package com.CEliconValley.models.items;
 import com.CEliconValley.models.animals.Fish;
 import com.CEliconValley.models.animals.FishType;
 import com.CEliconValley.models.buildings.Well;
+import com.CEliconValley.models.foragings.Nature.Mineral;
+import com.CEliconValley.models.foragings.Nature.MineralType;
+import com.CEliconValley.models.foragings.Seed;
+import com.CEliconValley.models.foragings.SeedType;
+import com.CEliconValley.models.items.craftablemachines.Furnace;
 import com.CEliconValley.models.tools.*;
 
 import java.util.ArrayList;
@@ -27,11 +32,13 @@ public class Inventory {
 
         setDefaultBag();
         upgradeBackpack(Backpack.Large);
+        upgradeBackpack(Backpack.Deluxe);
 //        System.out.println("herllooooo:"+backpack.getSize());
 
 
         addToInventory(new Pickaxe(), 1);
         addToInventory(new TrashCan(), 1);
+        addToInventory(new MilkPale(), 1);
         // todo buy this
         addToInventory(new FishingRod(), 1);
         addToInventory(new WateringCan(), 1);
@@ -40,38 +47,39 @@ public class Inventory {
         addToInventory(new Scythe(), 1);
         addToInventory(new Shear(), 1);
         addToInventory(new Well(),1);
-        addToInventory(new Fish(FishType.Squid),1);
-        addToInventory(new Fish(FishType.Shad),1);
-        addToInventory(new Fish(FishType.BlueDiscus),1);
-        addToInventory(new Fish(FishType.Crimsonfish),1);
-        addToInventory(new Fish(FishType.Dorado),1);
-        addToInventory(new Fish(FishType.Flounder),1);
-        addToInventory(new Fish(FishType.Ghostfish),1);
-        addToInventory(new Fish(FishType.Herring),1);
-        addToInventory(new Fish(FishType.Angler),1);
-        addToInventory(new Fish(FishType.Herring),1);
-        addToInventory(new Fish(FishType.Lionfish),1);
-        addToInventory(new Fish(FishType.Tuna),1);
-        addToInventory(new Fish(FishType.Tilapia),1);
-        addToInventory(new Fish(FishType.Sardine),1);
-        addToInventory(new Fish(FishType.RainbowTrout),1);
+        addToInventory(CraftableMachine.Furnace,1);
+        addToInventory(new Mineral(MineralType.Coal),1);
+        addToInventory(new Mineral(MineralType.CopperOre),5);
+        addToInventory(new Seed(SeedType.CherrySapling), 5);
+//        addToInventory(new Fish(FishType.Squid),1);
+//        addToInventory(new Fish(FishType.Shad),1);
+//        addToInventory(new Fish(FishType.BlueDiscus),1);
+//        addToInventory(new Fish(FishType.Crimsonfish),1);
+//        addToInventory(new Fish(FishType.Dorado),1);
+//        addToInventory(new Fish(FishType.Flounder),1);
+//        addToInventory(new Fish(FishType.Ghostfish),1);
+//        addToInventory(new Fish(FishType.Herring),1);
+//        addToInventory(new Fish(FishType.Angler),1);
+//        addToInventory(new Fish(FishType.Herring),1);
+//        addToInventory(new Fish(FishType.Lionfish),1);
+//        addToInventory(new Fish(FishType.Tuna),1);
+//        addToInventory(new Fish(FishType.Tilapia),1);
+//        addToInventory(new Fish(FishType.Sardine),1);
+//        addToInventory(new Fish(FishType.RainbowTrout),1);
         addToInventory(new Fish(FishType.MidnightCarp),1);
         addToInventory(Food.Bread,1);
-        addToInventory(Food.FriedEgg,1);
-        addToInventory(Food.MakiRoll,1);
-        addToInventory(new Fish(FishType.Glacierfish),1);
-        addToInventory(Food.BakedFish,1);
-        addToInventory(Food.FarmerLunch,1);
-        addToInventory(Food.FruitSalad,1);
-        addToInventory(Food.TripleShotEspresso,1);
-        addToInventory(Food.Spaghetti,1);
-        addToInventory(Food.Cookie,1);
+//        addToInventory(Food.FriedEgg,1);
+//        addToInventory(Food.MakiRoll,1);
+//        addToInventory(new Fish(FishType.Glacierfish),1);
+//        addToInventory(Food.BakedFish,1);
+//        addToInventory(Food.FarmerLunch,1);
+//        addToInventory(Food.FruitSalad,1);
+//        addToInventory(Food.TripleShotEspresso,1);
+//        addToInventory(Food.Spaghetti,1);
+//        addToInventory(Food.Cookie,1);
         addToInventory(Food.Omelet,1);
         addToInventory(Food.HashBrowns,1);
         addToInventory(Food.Pancakes,1);
-
-
-
 
 
 
@@ -120,7 +128,7 @@ public class Inventory {
 
     private boolean appendInventory(Item item, int quantity){
         for (Slot slot : slots) {
-            if(slot == null || slot.getItem() == null){
+            if(slot == null || slot.getItem() == null || slot.getItem().getName() == null){
                 continue;
             }
             if(item.getName().equals((slot.getItem().getName()))){
@@ -240,6 +248,16 @@ public class Inventory {
             }
         }
         return -2;
+    }
+    public boolean doHave(Item item, int quantity){
+
+        for(Slot slot : slots){
+            if(slot.getItem() == null || slot.getQuantity() == 0) continue;
+            if(slot.getItem().getName().equals(item.getName())){
+                return slot.getQuantity() >= quantity;
+            }
+        }
+        return false;
     }
 
 

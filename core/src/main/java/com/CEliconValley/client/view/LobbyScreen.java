@@ -32,7 +32,7 @@ public class LobbyScreen implements Screen {
     private Stage stage;
     Image avatarImage;
 
-    private final Image background = new Image(new Texture(GameAssetManager.getGameAssetManager().CEliconValleyBackground));
+    private final Image background = GameAssetManager.getGameAssetManager().getBackground("Mountain.jpg");;
 
     public  Label idText;
     public  Label passText;
@@ -42,6 +42,7 @@ public class LobbyScreen implements Screen {
     private Label label2;
     private Label label3;
     private Label label4;
+    public  Label isLoadLabel;
     public TextButton startGameButton;
     public TextButton exitButton;
     private TextButton mountainButton;
@@ -52,6 +53,8 @@ public class LobbyScreen implements Screen {
     private Table mainTable;
     private Table teamTable;
     private Table mapTable;
+
+    private Label errorLabel;
 
     private Texture teamBackgroundTexture;
     private Texture lobbyBackgorundTexture;
@@ -96,6 +99,8 @@ public class LobbyScreen implements Screen {
         label3 = new Label("PLAYER3", skin);
         label4 = new Label("PLAYER4", skin);
 
+        this.errorLabel = new Label("", skin);
+
         startGameButton = new TextButton("Start Game", skin);
         exitButton = new TextButton("Exit", skin);
 
@@ -122,6 +127,10 @@ public class LobbyScreen implements Screen {
         if(lobby.isPrivate()) {
             passText = new Label("Pass: " + lobby.getPassword(), skin);
         }
+        if(lobby.isLoad()){
+            isLoadLabel = new Label("Game is Loaded!", skin);
+            isLoadLabel.setColor(CustomColors.GAMEGREENCOLOR);
+        }
 
         controller.setView(this);
 
@@ -131,7 +140,11 @@ public class LobbyScreen implements Screen {
 
         Table topContent = new Table();
         topContent.add(startGameButton).width(300).pad(20).padTop(150).row();
+        topContent.add(errorLabel).width(300).pad(20).padTop(150).row();
         startGameButton.setVisible(false);
+        if(lobby.isLoad()){
+            topContent.add(isLoadLabel).width(300).pad(20).row();
+        }
         topContent.add(adminText).width(300).pad(20).row();
         topContent.add(nameText).width(300).pad(20).row();
         topContent.add(idText).width(300).pad(20).row();
@@ -319,5 +332,9 @@ public class LobbyScreen implements Screen {
         return null;
     }
 
+    public void setErrorMessage(String text){
+        errorLabel.setText(text);
+        errorLabel.setColor(Color.RED);
+    }
 
 }

@@ -1,40 +1,56 @@
 package com.CEliconValley.views.subGames;
 
+import com.CEliconValley.controllers.TradeMenuController;
 import com.CEliconValley.controllers.subgames.FriendshipController;
+import com.CEliconValley.models.App;
+import com.CEliconValley.models.Result;
+import com.CEliconValley.views.commands.TradeCommands;
 import com.CEliconValley.views.commands.gameCommands.FriendShipCommands;
 
 import java.util.regex.Matcher;
 
 public class FriendshipView {
     static FriendshipController controller =  new FriendshipController();
-    public static boolean check(String input){
+    static TradeMenuController tController =  new TradeMenuController();
+    public static boolean check(String input, String playername) {
         Matcher matcher;
         if((matcher = FriendShipCommands.Friendships.getMatcher(input)) != null){
             System.out.println(controller.friendshipsList(matcher));
         } else if((matcher = FriendShipCommands.Talk.getMatcher(input)) != null){
-            System.out.println(controller.talk(matcher));
+            System.out.println(controller.talk(matcher, playername));
         } else if((matcher = FriendShipCommands.TalkHistory.getMatcher(input)) != null){
             System.out.println(controller.talkHistory(matcher));
         } else if((matcher = FriendShipCommands.Gift.getMatcher(input)) != null){
-            System.out.println(controller.gift(matcher));
+            Result result = controller.gift(matcher, playername);
+            System.out.println(result);
+            App.sendRawResult(result, playername);
         } else if((matcher = FriendShipCommands.GiftList.getMatcher(input)) != null){
             System.out.println(controller.giftList(matcher));
         } else if((matcher = FriendShipCommands.GiftRate.getMatcher(input)) != null){
-            System.out.println(controller.giftRate(matcher));
+            System.out.println(controller.giftRate(matcher, playername));
         } else if((matcher = FriendShipCommands.GiftHistory.getMatcher(input)) != null){
             System.out.println(controller.giftHistory(matcher));
         } else if((matcher = FriendShipCommands.Hug.getMatcher(input)) != null){
-            System.out.println(controller.hug(matcher));
+            System.out.println(controller.hug(matcher, playername));
         } else if((matcher = FriendShipCommands.Flower.getMatcher(input)) != null){
-            System.out.println(controller.flower(matcher));
+            Result result = controller.flower(matcher, playername);
+            System.out.println(result);
+            App.sendRawResult(result, playername);
         } else if((matcher = FriendShipCommands.Marriage.getMatcher(input)) != null){
-            System.out.println(controller.propose(matcher));
+            Result result = controller.propose(matcher, playername);
+            System.out.println(result);
+            App.sendRawResult(result, playername);
         } else if((matcher = FriendShipCommands.Respond.getMatcher(input)) != null){
-            System.out.println(controller.respond(matcher));
+            System.out.println(controller.respond(matcher, playername));
         }else if((matcher = FriendShipCommands.GoTo.getMatcher(input)) != null){
             System.out.println(controller.goToFarm(matcher));
-        }
-        else{
+        } else if((matcher = TradeCommands.TradeToMoney.getMatcher(input)) != null){
+            System.out.println(tController.tradeToMoney(matcher, playername));
+        }else if((matcher = TradeCommands.TradeResponse.getMatcher(input)) != null){
+            Result result = tController.tradeResponse(matcher, playername);
+            System.out.println(result);
+            App.sendResult(result, playername);
+        } else{
             return false;
         }
         return true;

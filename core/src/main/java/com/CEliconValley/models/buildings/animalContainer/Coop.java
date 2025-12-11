@@ -20,7 +20,7 @@ public class Coop implements Building {
     private int anchorY;
     private CoopType coopType;
     private int capacity;
-
+    private int id;
     public int getX() {
         return x;
     }
@@ -33,9 +33,11 @@ public class Coop implements Building {
         return capacity;
     }
 
+    public Coop() {
+    }
 
-    public Coop(ArrayList<Animal> animals,int anchorX, int anchorY,
-                CoopType coopType, int capacity,int x, int y, Farm farm) {
+    public Coop(ArrayList<Animal> animals, int anchorX, int anchorY,
+                CoopType coopType, int capacity, int x, int y, Farm farm, int id) {
         this.animals = new ArrayList<>(animals);
         this.anchorX = anchorX;
         this.anchorY = anchorY;
@@ -43,7 +45,10 @@ public class Coop implements Building {
         this.coopType = coopType;
         this.x = x;
         this.y = y;
-        int size = 5 + coopType.getCapacity() / 4;
+        int size = 4 + coopType.getCapacity() / 4;
+        if(!coopType.equals(CoopType.Deluxe)){
+            size = size + 1;
+        }
         int xWall;
         int yWall;
         yWall = y;
@@ -76,13 +81,17 @@ public class Coop implements Building {
                 cell.setObjectMap(this);
             }
         }
+        this.id = id;
     }
     public Coop(int x, int y, Farm farm, CoopType coopType) {
         this.capacity = coopType.getCapacity();
         this.x = x;
         this.y = y;
-        int size = 5 + coopType.getCapacity() / 4;
-        anchorX=x+size-1;
+        int size = 4 + coopType.getCapacity() / 4;
+        anchorX=x+size;
+        if(!coopType.equals(CoopType.Deluxe)){
+            size = size + 1;
+        }
         anchorY=y+1;
         int xWall;
         int yWall;
@@ -117,6 +126,7 @@ public class Coop implements Building {
                 cell.setObjectMap(this);
             }
         }
+        this.id = farm.getCoops() == null ? 0 : farm.getCoops().size();
     }
     public Coop(int x, int y, Village village) {
         this.x = x;
@@ -164,7 +174,7 @@ public class Coop implements Building {
 
     @Override
     public String getName() {
-        return "Barn";
+        return "Coop";
     }
 
     public ArrayList<Animal> getAnimals() {
@@ -188,5 +198,9 @@ public class Coop implements Building {
     @Override
     public int getAnchorY() {
         return anchorY;
+    }
+
+    public int getId() {
+        return id;
     }
 }

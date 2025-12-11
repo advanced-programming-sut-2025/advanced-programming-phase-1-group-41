@@ -16,7 +16,7 @@ import java.util.HashMap;
 @Embedded
 public class VillageData {
     ArrayList<CellData> cellsData;
-    ArrayList<MarketPlaceData> markplacesData;
+    ArrayList<MarketPlaceData> marketplacesData;
     ArrayList<BuildingData> buildingsData;
 //    ArrayList<CellData> transferCellsData;
 //    ArrayList<CellData> startPointsData;
@@ -27,7 +27,7 @@ public class VillageData {
 
     public VillageData(Village village) {
         cellsData = new ArrayList<>();
-        markplacesData = new ArrayList<>();
+        marketplacesData = new ArrayList<>();
         buildingsData = new ArrayList<>();
 //        transferCellsData = new ArrayList<>();
 //        startPointsData = new ArrayList<>();
@@ -43,7 +43,7 @@ public class VillageData {
 //        });
         for (Building building : village.getBuildings()) {
             if(building instanceof Marketplace marketplace){
-                markplacesData.add(new MarketPlaceData(marketplace));
+                marketplacesData.add(new MarketPlaceData(marketplace));
             }
             buildingsData.add(new BuildingData(building));
         }
@@ -54,7 +54,7 @@ public class VillageData {
 
     public Village getVillage(ArrayList<Player> players) {
         Village village = new Village(true);
-        // set the ground!
+
         for (int i = 0; i < village.getCells().size(); i++) {
             Cell cell = village.getCells().get(i);
             if(cell.getObjectMap() instanceof Building) continue;
@@ -66,10 +66,10 @@ public class VillageData {
                 cell.setObjectMap(objectMap);
             }
         }
-        // set stock!
+
         for (Building building : village.getBuildings()) {
             if(building instanceof Marketplace marketplace){
-                for (MarketPlaceData marketPlaceData : markplacesData) {
+                for (MarketPlaceData marketPlaceData : marketplacesData) {
                     if(marketPlaceData.getName().equals(marketplace.getName())){
                         marketplace.setItemsForSale(getItemsForSale(marketPlaceData));
                         break;
@@ -77,7 +77,7 @@ public class VillageData {
                 }
             }
         }
-        // set NPCs!
+
         for (NPC npc : village.getNPCs()) {
             for (NPCData npcData : NPCsData) {
                 if(npc.getName().equals(npc.getName())){
@@ -126,5 +126,21 @@ public class VillageData {
             itemsForSale.add(slotData.getSlot());
         });
         return itemsForSale;
+    }
+
+    public ArrayList<CellData> getCellsData() {
+        return cellsData;
+    }
+
+    public ArrayList<BuildingData> getBuildingsData() {
+        return buildingsData;
+    }
+
+    public ArrayList<MarketPlaceData> getMarketplacesData() {
+        return marketplacesData;
+    }
+
+    public ArrayList<NPCData> getNPCsData() {
+        return NPCsData;
     }
 }

@@ -1,27 +1,35 @@
 package com.CEliconValley.models;
 
 import com.CEliconValley.client.GameClient;
-import com.CEliconValley.client.view.LobbyScreen;
 import com.CEliconValley.common.AppData;
+import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.OnlineData;
+import com.CEliconValley.common.PlayerData;
+import com.CEliconValley.common.messages.ErrorMessage;
 import com.CEliconValley.common.messages.GameMessage;
+import com.CEliconValley.common.messages.ResultSender;
+import com.CEliconValley.common.messages.SuccessMessage;
+import com.CEliconValley.database.UserDB;
 import com.CEliconValley.server.GameServer;
+import com.CEliconValley.server.handlers.LobbyHandler;
 import com.google.gson.Gson;
 import org.bson.types.ObjectId;
+import org.java_websocket.WebSocket;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class App {
+    public static String api_key = "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";
+    public static String backup = "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";
+    public static String backup2 = "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";
+    public static String backup3 = "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";
     public static int MaxLength = 75;
     public static int MaxHeight = 60;
     public final static ArrayList<User> users = new ArrayList<>();
-    public final static ArrayList<Game> games = new ArrayList<>();
-    public final static HashMap<ObjectId, User> userMap = new HashMap<>();
+    public final static ArrayList<GameData> gamesdata = new ArrayList<>();
     public static ArrayList<Lobby> lobbies = new ArrayList<>();
     public static Set<OnlineData> onlinePlayers = new HashSet<>();
     private static User currentUser;
@@ -29,11 +37,68 @@ public class App {
     private static Game game;
     private static GameServer server;
     private static GameClient client;
+    private static Set<DCguy> dcguys = new HashSet<>();
+    public static long dcTimestamp = System.currentTimeMillis();
+    private static Thread backgroundWorker = new Thread(() -> {
+        while (true) {
+            try {
+                for (Lobby lobby : lobbies) {
+                    if(System.currentTimeMillis() - lobby.lastTimeJoined > 60_000 * 5){
+                        System.out.println(lobby.getLobbyName()+" is going to be deleted?");
+                        System.out.println("current size "+lobby.getPlayerNames().size());
+                        int maxAttempts = lobby.getPlayerNames().size();
+                        int attempts = 0;
+                        while(lobby.getPlayerNames().size() > 0 && attempts < maxAttempts){
+                            String playerName = lobby.getPlayerNames().iterator().next();
+                            AtomicReference<WebSocket> conn = new AtomicReference<>();
+                            App.getServer().getOnlineConnections().forEach((k,v) -> {
+                                if(v.getUsername().equals(playerName)){
+                                    conn.set(k);
+                                }
+                            });
+                            LobbyHandler.handleLeaveLobby(lobby, conn.get(), new Gson(), playerName);
+                            attempts++;
+                        }
+                        System.out.println("after size "+lobby.getPlayerNames().size());
+                    }
+                }
 
+
+                if(!dcguys.isEmpty() && App.getGame() != null){
+                    System.out.println("not empty "+ (System.currentTimeMillis() - dcTimestamp) / 1000);
+                    if(System.currentTimeMillis() - dcTimestamp > 60_000 * 2){
+                        // handle save and quit for all
+                        UserDB.saveGame(App.getGame());
+                        System.out.println("saving game here");
+                        GameMessage<String> exiter = new GameMessage<>("game-command","exit-game");
+                        ArrayList<Player> senders = new ArrayList<>();
+                        for (Player player : App.getGame().getPlayers()) {
+                            if(containsDC(player.getUser()) == null){
+                                senders.add(player);
+                            }
+                        }
+                        App.getServer().sendToGroupByPlayers(senders, new Gson().toJson(exiter));
+                        dcguys.clear();
+                        App.getGame().stopScheduler();
+                        App.setGame(null);
+                    }
+                }
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                System.out.println("Thread interrupted, shutting down.");
+                break;
+            }
+        }
+    });
+
+    static {
+        backgroundWorker.setDaemon(true);
+    }
 
     public static void setupServer(){
         server = new GameServer();
         server.start();
+        backgroundWorker.start();
         System.out.println("GameServer started on port " + GameServer.PORT);
     }
     public static void setupClient(){
@@ -116,6 +181,7 @@ public class App {
     }
 
     public static void sendData(){
+
         GameMessage<AppData> msg = new GameMessage<>("app-data",new AppData(onlinePlayers));
         String json = new Gson().toJson(msg);
         App.getServer().broadcast(json);
@@ -129,5 +195,67 @@ public class App {
 
     public static void setPreGame(PreGame preGame) {
         App.preGame = preGame;
+    }
+
+    public static ArrayList<String> getGameByUsername(String username){
+        ArrayList<String> gameNames = new ArrayList<>();
+        for (GameData gd : App.gamesdata) {
+            String namerr = gd.getLobby().getLobbyName()+" "+gd.getLobby().getLobbyID();
+            for (PlayerData pd : gd.getPlayersData()) {
+                if(pd.getUsername().equals(username)) {
+                    gameNames.add(namerr);
+                    break;
+                }
+            }
+        }
+        return gameNames;
+    }
+    public static GameData getGameDataByCustomName(String cn){
+        for (GameData gd : App.gamesdata) {
+            String namerr = gd.getLobby().getLobbyName()+" "+gd.getLobby().getLobbyID();
+            if(cn.equals(namerr)) {
+                return gd;
+            }
+        }
+        return null;
+    }
+    public static GameData getGameDataById(ObjectId id){
+        for (GameData gd : App.gamesdata) {
+            if(gd.get_id().equals(id)) {
+                return gd;
+            }
+        }
+        return null;
+    }
+
+    public static Set<DCguy> getDcguys() {
+        return dcguys;
+    }
+
+    public static DCguy containsDC(User user){
+        for (DCguy dcguy : dcguys) {
+            if(dcguy.getUser().getUsername().equals(user.getUsername())) {
+                return dcguy;
+            }
+        }
+        return null;
+    }
+
+
+    public static void sendResult(Result result, String playername){
+        if(!result.success()){
+            GameMessage<ErrorMessage> response = new GameMessage<>("game_response",
+                new ErrorMessage("game_request", result.message()));
+            App.getServer().sendToPlayername(playername, new Gson().toJson(response));
+        }else{
+            GameMessage<SuccessMessage> response = new GameMessage<>("game_response",
+                new SuccessMessage("game_request", result.message()));
+            App.getServer().sendToPlayername(playername, new Gson().toJson(response));
+        }
+    }
+
+    public static void sendRawResult(Result result, String playername){
+        GameMessage<ResultSender> msg = new GameMessage<>("game-result",new ResultSender(result));
+        App.getServer().sendToPlayername(playername, new Gson().toJson(msg));
     }
 }

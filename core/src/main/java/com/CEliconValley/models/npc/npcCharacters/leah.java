@@ -1,0 +1,26 @@
+package com.CEliconValley.models.npc.npcCharacters;
+
+import com.CEliconValley.models.ui.TerminalColors;
+import com.CEliconValley.models.Occupation;
+import com.CEliconValley.models.npc.npchomes.NPCHome;
+import com.CEliconValley.models.items.Item;
+import com.CEliconValley.models.items.Slot;
+
+import java.util.ArrayList;
+
+public class leah extends NPC{
+    NPCHome home;
+    public leah(String name, Occupation job, NPCHome home, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift) {
+        super(name, job, dialogues, favorites, itemsToGift);
+        this.home = home;setX(11);setY(53);
+        setDaysToUnlockQ3(7*28);
+    }
+    @Override
+    public String getChar(){
+        return TerminalColors.colorize(208,0,"웃 ");
+    }
+
+    public NPCHome getHome() {
+        return home;
+    }
+}

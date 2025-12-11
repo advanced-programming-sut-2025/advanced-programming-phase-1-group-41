@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -33,15 +34,17 @@ public class MainMenuView implements Screen {
     private final MainMenuController controller;
     private Stage stage;
 
-    private final Image background = new Image(new Texture(GameAssetManager.getGameAssetManager().CEliconValleyBackground));
+    private final Image background = GameAssetManager.getGameAssetManager().getBackground("Mountain.jpg");
+    private Image avatar;
 
-    public final TextButton newLobbyButton, joinLobbyButton;
+    public final TextButton newLobbyButton, joinLobbyButton, selectGameButton;
     public final TextButton profileButton;
     public final TextButton logoutButton;
 
     private final Table mainTable;
     private final Table playersDataTable;
     private final Table formTable;
+    private final Table infoTable;
 
     // Join Lobby fields
     private Label joinLobbyMessage;
@@ -65,9 +68,11 @@ public class MainMenuView implements Screen {
     Table lobbyListTable;
 
     public MainMenuView(MainMenuController controller) {
+
         this.controller = controller;
         Skin skin = GameAssetManager.getGameAssetManager().getSkin();
 
+        selectGameButton = new TextButton("Select Game", skin);
         newLobbyButton = new TextButton("New Lobby", skin);
         joinLobbyButton = new TextButton("Join Lobby", skin);
         profileButton = new TextButton("Profile", skin);
@@ -84,6 +89,9 @@ public class MainMenuView implements Screen {
         formTable = new Table();
         formTable.setFillParent(true);
         formTable.center();
+
+        infoTable = new Table();
+        infoTable.setFillParent(true);
 
         playersScrollPane = new ScrollPane(playersDataTable, skin);
         playersScrollPane.setFadeScrollBars(false);
@@ -146,6 +154,15 @@ public class MainMenuView implements Screen {
     }
 
     private void buildUI() {
+        if(AppClient.getUserData() != null && AppClient.getUserData().getAvatarPath() != null){
+            avatar = new Image(GameAssetManager.getGameAssetManager().getAvatarTexture());
+            infoTable.add(avatar).width(300).height(250).pad(20).row();
+            Label label = new Label(AppClient.getUserData().getNickname(), GameAssetManager.getGameAssetManager().getSkin());
+            label.setAlignment(Align.center);
+            label.setColor(CustomColors.GOLD);
+            infoTable.add(label).center().align(Align.center).width(300).pad(20).row();
+        }
+
         mainTable.clear();
         formTable.clear();
 
@@ -154,8 +171,10 @@ public class MainMenuView implements Screen {
         lobbyRow.add(joinLobbyButton).padRight(10);
 
         mainTable.add(lobbyRow).width(450).pad(20).padTop(150).row();
+        mainTable.add(selectGameButton).width(300).pad(20).row();
         mainTable.add(profileButton).width(300).pad(20).row();
         mainTable.add(logoutButton).width(300).pad(20).row();
+
 
         onlinePlayersUpdate();
 
@@ -186,7 +205,7 @@ public class MainMenuView implements Screen {
 
         formTable.add(new Label("Join Lobby", skin, "title")).padBottom(20).row();
         formTable.add(joinLobbyMessage).width(400).pad(10).row();
-        formTable.add(lobbiesScrollPane).width(400).height(200).pad(10).row(); //Scroll Pane
+        formTable.add(lobbiesScrollPane).width(400).height(200).pad(10).row();
         formTable.add(lobbyIdField).width(400).pad(10).row();
         formTable.add(lobbyPasswordField).width(400).pad(10).row();
         formTable.add(joinConfirmButton).width(300).pad(10).row();
@@ -269,6 +288,8 @@ public class MainMenuView implements Screen {
         stage = new Stage(new ScreenViewport(), Main.getBatch());
         Gdx.input.setInputProcessor(stage);
 
+        infoTable.setPosition(-stage.getWidth() / 3f, stage.getHeight() / 4);
+
         background.setSize(stage.getWidth(), stage.getHeight());
         background.setPosition(0, 0);
 
@@ -276,6 +297,7 @@ public class MainMenuView implements Screen {
         stage.addActor(mainTable);
         stage.addActor(playersScrollPane);
         stage.addActor(formTable);
+        stage.addActor(infoTable);
     }
 
     @Override
@@ -286,6 +308,12 @@ public class MainMenuView implements Screen {
             } else {
                 Graphics.DisplayMode displayMode = Gdx.graphics.getDisplayMode();
                 Gdx.graphics.setFullscreenMode(displayMode);
+            }
+        } else if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            if(joinLobby) {
+                controller.handleJoinLobby();
+            } else if(!mainTable.isVisible()) {
+                controller.handleNewLobby();
             }
         }
 
@@ -310,6 +338,7 @@ public class MainMenuView implements Screen {
     }
 
     public Stage getStage() { return stage; }
+    public TextButton getSelectGameButton() { return selectGameButton; }
     public TextButton getJoinLobbyButton() { return joinLobbyButton; }
     public TextButton getNewLobbyButton() { return newLobbyButton; }
     public TextButton getProfileButton() { return profileButton; }

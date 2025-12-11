@@ -21,6 +21,7 @@ public class Barn implements Building {
     private int anchorY;
     private BarnType barnType;
     private int capacity;
+    private int id;
 
     public int getX() {
         return x;
@@ -34,8 +35,11 @@ public class Barn implements Building {
         return barnType;
     }
 
-    public Barn(ArrayList<Animal> animals,int anchorX,
-                int anchorY, BarnType barnType, int capacity, int x, int y, Farm farm) {
+    public Barn() {
+    }
+
+    public Barn(ArrayList<Animal> animals, int anchorX,
+                int anchorY, BarnType barnType, int capacity, int x, int y, Farm farm, int id) {
         this.animals = new ArrayList<>(animals);
         this.anchorX = anchorX;
         this.anchorY = anchorY;
@@ -47,7 +51,7 @@ public class Barn implements Building {
         int xWall;
         int yWall;
         yWall = y;
-        while(yWall<=y + size) {
+        while(yWall<=y + size-2) {
             for (int i = x; i <= x + size; i++) {
                 Cell cell = Finder.findCellByCoordinates(i, yWall, farm);
                 assert cell != null;
@@ -56,11 +60,11 @@ public class Barn implements Building {
                     cell.setObjectMap(new Door());
                 }
             }
-            yWall+=size;
+            yWall+=size-2;
         }
         xWall = x;
         while(xWall<=x+size) {
-            for (int j = y+1; j <= y+size; j++) {
+            for (int j = y+1; j <= y+size-2; j++) {
                 Cell cell = Finder.findCellByCoordinates(xWall, j, farm);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
@@ -70,12 +74,13 @@ public class Barn implements Building {
         x++;
         y++;
         for(int i = x; i< size +x - 1; i++) {
-            for(int j = y; j< size +y - 1; j++) {
+            for(int j = y; j< size +y - 3; j++) {
                 Cell cell=Finder.findCellByCoordinates(i, j, farm);
                 assert cell != null;
                 cell.setObjectMap(this);
             }
         }
+        this.id=id;
     }
 
     public Barn(int x, int y, Farm farm, BarnType barnType) {
@@ -89,7 +94,7 @@ public class Barn implements Building {
         int xWall;
         int yWall;
         yWall = y;
-        while(yWall<=y + size) {
+        while(yWall<=y + size-2) {
             for (int i = x; i <= x + size; i++) {
                 Cell cell = Finder.findCellByCoordinates(i, yWall, farm);
                 assert cell != null;
@@ -98,11 +103,11 @@ public class Barn implements Building {
                     cell.setObjectMap(new Door());
                 }
             }
-            yWall+=size;
+            yWall+=size-2;
         }
         xWall = x;
         while(xWall<=x+size) {
-            for (int j = y+1; j <= y+size; j++) {
+            for (int j = y+1; j <= y+size-2; j++) {
                 Cell cell = Finder.findCellByCoordinates(xWall, j, farm);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
@@ -112,12 +117,13 @@ public class Barn implements Building {
         x++;
         y++;
         for(int i = x; i< size +x - 1; i++) {
-            for(int j = y; j< size +y - 1; j++) {
+            for(int j = y; j< size +y - 3; j++) {
                 Cell cell=Finder.findCellByCoordinates(i, j, farm);
                 assert cell != null;
                 cell.setObjectMap(this);
             }
         }
+        this.id = farm.getBarns() == null ? 0 : farm.getBarns().size();
     }
     public Barn(int x, int y, Village village) {
         this.x = x;
@@ -127,17 +133,17 @@ public class Barn implements Building {
         int xWall;
         int yWall;
         yWall = y;
-        while(yWall<=y + size) {
+        while(yWall<=y + size-2) {
             for (int i = x; i <= x + size; i++) {
                 Cell cell = Finder.findCellByCoordinatesVillage(i, yWall, village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
             }
-            yWall+=size;
+            yWall+=size-2;
         }
         xWall = x;
         while(xWall<=x+size) {
-            for (int j = y+1; j <= y+size; j++) {
+            for (int j = y+1; j <= y+size-2; j++) {
                 Cell cell = Finder.findCellByCoordinatesVillage(xWall, j, village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
@@ -147,7 +153,7 @@ public class Barn implements Building {
         x++;
         y++;
         for(int i = x; i< size +x - 1; i++) {
-            for(int j = y; j< size +y - 1; j++) {
+            for(int j = y; j< size +y - 3; j++) {
                 Cell cell=Finder.findCellByCoordinatesVillage(i, j, village);
                 assert cell != null;
                 cell.setObjectMap(this);
@@ -195,5 +201,7 @@ public class Barn implements Building {
     }
 
 
-
+    public int getId() {
+        return id;
+    }
 }

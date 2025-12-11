@@ -12,11 +12,11 @@ import java.util.ArrayList;
 public class Robin extends NPC{
     Marketplace marketplace;
     NPCHome home;
-    public Robin(String name, Occupation job, NPCHome home, Marketplace marketplace, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift,ArrayList<Quest> quests) {
-        super(name, job, dialogues, favorites, itemsToGift, quests);
+    public Robin(String name, Occupation job, NPCHome home, Marketplace marketplace, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift) {
+        super(name, job, dialogues, favorites, itemsToGift);
         this.marketplace = marketplace;
         this.home = home;
-        setX(70);setY(13);
+        setX(13);setY(53);
         setDaysToUnlockQ3(11*28);
     }
     @Override

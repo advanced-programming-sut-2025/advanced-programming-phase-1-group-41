@@ -71,6 +71,7 @@ public class ProfileMenuController {
                 Main.getMain().setScreen(AppClient.getMenu().getScreen());
             }
         });
+
     }
     private void change(String key, String value){
         GameMessage<ProfCred> message =

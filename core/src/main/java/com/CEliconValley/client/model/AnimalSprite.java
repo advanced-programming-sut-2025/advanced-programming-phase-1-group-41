@@ -3,14 +3,15 @@ package com.CEliconValley.client.model;
 import com.CEliconValley.client.view.screen.maps.CoopMap;
 import com.CEliconValley.common.AnimalData;
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Hero;
 import com.CEliconValley.models.locations.Location;
-import com.CEliconValley.views.maps.BarnMap;
+import com.CEliconValley.client.view.screen.maps.BarnMap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.Random;
+
+import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class AnimalSprite {
     public Texture texture;
@@ -43,6 +44,8 @@ public class AnimalSprite {
         this.y = Y;
         this.targetX = x;
         this.targetY = y;
+        this.renderX = this.x*CELL_SIZE;
+        this.renderY = this.y*CELL_SIZE;
         this.location = location;
         setRandomPoint();
     }

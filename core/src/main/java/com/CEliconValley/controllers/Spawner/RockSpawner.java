@@ -1,5 +1,7 @@
 package com.CEliconValley.controllers.Spawner;
 
+import com.CEliconValley.common.CellData;
+import com.CEliconValley.common.FarmData;
 import com.CEliconValley.models.Cell;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.foragings.Nature.*;
@@ -15,9 +17,8 @@ import java.util.Map;
 import static com.CEliconValley.client.view.screen.FarmScreen.CELL_SIZE;
 
 public class RockSpawner {
-    private final Farm farm;
     private final WaterSpawner waterSpawner;
-    private final GroundSpawner groundSpawner;
+    private final GroundBorderSpawner groundSpawner;
     private final Map<Cell, Float> breakingEffects = new HashMap<>();
     private final Map<Cell, Float> breakingBigRockEffects = new HashMap<>();
     private final Map<Cell, TextureRegion> rockRenderCache = new HashMap<>();
@@ -56,14 +57,13 @@ public class RockSpawner {
 
 
     }
-    public RockSpawner(Farm farm) {
+    public RockSpawner() {
         splitRockTexture();
-        waterSpawner=new WaterSpawner(farm);
-        groundSpawner=new GroundSpawner(farm);
-        this.farm = farm;
-
+        waterSpawner=new WaterSpawner();
+        groundSpawner=new GroundBorderSpawner();
     }
-    public boolean renderRocks(SpriteBatch batch, Cell cell, float passiveState) {
+    public boolean renderRocks(SpriteBatch batch, CellData cellData, float passiveState) {
+        Cell cell = cellData.extractData();
         if (breakingEffects.containsKey(cell) || breakingBigRockEffects.containsKey(cell)) return false;
 
         float x = cell.getX() * CELL_SIZE;
@@ -77,9 +77,7 @@ public class RockSpawner {
 
         if (cell.getObjectMap() instanceof Rock rock) {
             if (rock.getRockType() == RockType.BigRock) {
-//                if (!waterSpawner.renderWater(batch, cell, passiveState) && !groundSpawner.renderGround(batch, cell, passiveState)) {
-//                    batch.draw(grassTexture, x, y, CELL_SIZE, CELL_SIZE);
-//                }
+
 
                 if (cell.getX() == rock.getAnchorX() && cell.getY() == rock.getAnchorY()) {
                     int variant = rock.getVariant();
@@ -111,12 +109,12 @@ public class RockSpawner {
         return false;
     }
 
-    public boolean hitRock(Cell cell) {
+    public boolean hitRock(CellData cellData, FarmData farmData) {
+        Cell cell = cellData.extractData();
         if (cell.getObjectMap() instanceof Rock rock) {
             if (rock.getRockType() == RockType.BigRock) {
-                if (rock.getHitPoints() > 1) {
-                    rock.decreaseHitPoints();
-                } else if (!breakingBigRockEffects.containsKey(cell)) {
+
+                 if (!breakingBigRockEffects.containsKey(cell)) {
                     new Thread(() -> {
                         try {
                             Thread.sleep(450);
@@ -125,7 +123,7 @@ public class RockSpawner {
                         }
                         int anchorX = rock.getAnchorX();
                         int anchorY = rock.getAnchorY();
-                        Cell c = farm.getCell(anchorX , anchorY );
+                        Cell c = Finder.getcdByFarmData(anchorX, anchorY, farmData).extractData();
                         breakingBigRockEffects.put(c, 0f);
                     }).start();
 //                    rockRenderCache.remove(cell);
@@ -152,7 +150,8 @@ public class RockSpawner {
         return false;
     }
 
-    public boolean renderBreakingEffectForCell(SpriteBatch batch, Cell cell, float delta) {
+    public boolean renderBreakingEffectForCell(SpriteBatch batch, CellData cellData, float delta) {
+        Cell cell = cellData.extractData();
         if (breakingEffects.containsKey(cell)) {
             float stateTime = breakingEffects.get(cell) + delta;
             Object obj = cell.getObjectMap();
@@ -209,9 +208,9 @@ public class RockSpawner {
 
             if (animation.isAnimationFinished(stateTime)) {
                 cell.setObjectMap(new Grass());
-                Finder.findCellByCoordinates(cell.getX()-1,cell.getY(),farm).setObjectMap(new Grass());
-                Finder.findCellByCoordinates(cell.getX()-1,cell.getY()+1,farm).setObjectMap(new Grass());
-                Finder.findCellByCoordinates(cell.getX(),cell.getY()+1,farm).setObjectMap(new Grass());
+//                Finder.findCellByCoordinates(cell.getX()-1,cell.getY(),farm).setObjectMap(new Grass());
+//                Finder.findCellByCoordinates(cell.getX()-1,cell.getY()+1,farm).setObjectMap(new Grass());
+//                Finder.findCellByCoordinates(cell.getX(),cell.getY()+1,farm).setObjectMap(new Grass());
 
 
                 breakingBigRockEffects.remove(cell);

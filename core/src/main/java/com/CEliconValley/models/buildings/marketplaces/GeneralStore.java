@@ -20,6 +20,8 @@ public class GeneralStore extends Marketplace implements Building {
     ArrayList<Slot> summer = new ArrayList<>();
     ArrayList<Slot> fall = new ArrayList<>();
     private final Door door = new Door();
+    private int anchorX;
+    private int anchorY;
 
 
     @Override
@@ -33,6 +35,12 @@ public class GeneralStore extends Marketplace implements Building {
     }
     private int x;
     private int y;
+
+    public GeneralStore() {
+        anchorX = 55;
+        anchorY = 18;
+    }
+
     public GeneralStore(int x, int y, Village village, boolean load) {
         super(null);
         constructGeneralStore(x,y,village);
@@ -86,8 +94,9 @@ public class GeneralStore extends Marketplace implements Building {
                 Cell cell = Finder.findCellByCoordinatesVillage(i, yWall,village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
-                if(i == x + 9&&yWall==y+8){
+                if((i >=x+8&&i<=x+10)){
                     cell.setObjectMap(door);
+                    doors.add(cell);
                 }
             }
             yWall+=8;
@@ -262,11 +271,11 @@ public class GeneralStore extends Marketplace implements Building {
 
     @Override
     public int getAnchorX() {
-        return 0;
+        return anchorX;
     }
 
     @Override
     public int getAnchorY() {
-        return 0;
+        return anchorY;
     }
 }

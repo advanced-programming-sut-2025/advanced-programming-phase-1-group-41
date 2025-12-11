@@ -40,7 +40,7 @@ public class AvatarSelectionView implements AppMenu, Screen {
         this.skin = GameAssetManager.getGameAssetManager().getSkin();
         this.stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        background = GameAssetManager.getGameAssetManager().getBackground("CElicon_Valley.jpg");
+        background = GameAssetManager.getGameAssetManager().getBackground("Mountain.jpg");;
 
         avatarPaths = new Array<>();
         avatarButtons = new Array<>();

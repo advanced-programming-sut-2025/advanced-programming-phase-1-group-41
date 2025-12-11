@@ -1,12 +1,14 @@
 package com.CEliconValley.client;
 
 //import com.CEliconValley.common.GameData;
+import com.CEliconValley.client.view.screen.GameScreen;
 import com.CEliconValley.common.GameData;
 import com.CEliconValley.common.OnlineData;
 import com.CEliconValley.common.UserData;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Lobby;
 import com.CEliconValley.models.Menu;
+import com.badlogic.gdx.Gdx;
 
 import java.util.*;
 
@@ -19,8 +21,9 @@ public class AppClient {
     public final static ArrayList<String> questions = new ArrayList<>();
     private static Set<Lobby> lobbies = Collections.synchronizedSet(new HashSet<>());
     private static Lobby currentLobby;
-    private static Set<GameData> games = new HashSet<>();
+    private static ArrayList<String> games = new ArrayList<>();
     private static Set<OnlineData> onlinePlayers = new HashSet<>();
+
 
     public static void login(UserData ud) {
         userData = ud;
@@ -94,11 +97,11 @@ public class AppClient {
         AppClient.client = client;
     }
 
-    public static Set<GameData> getGames() {
+    public static ArrayList<String> getGames() {
         return games;
     }
 
-    public static void setGames(Set<GameData> games) {
+    public static void setGames(ArrayList<String> games) {
         AppClient.games = games;
     }
 
@@ -117,5 +120,16 @@ public class AppClient {
     public static void addLobby(Lobby lobby){
         lobbies.remove(lobby);
         lobbies.add(lobby);
+    }
+
+    public static void endGame(GameScreen screen){
+        screen.isGameFinished = true;
+        Gdx.app.postRunnable(()-> {
+            AppClient.setMenu(Menu.Main);
+            AppClient.getMenu().resetMenu();
+            AppClient.setGameData(null);
+            AppClient.setCurrentLobby(null);
+            screen.dispose();
+        });
     }
 }
