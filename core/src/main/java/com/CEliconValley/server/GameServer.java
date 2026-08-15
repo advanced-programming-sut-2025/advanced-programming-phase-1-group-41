@@ -95,9 +95,10 @@ public class GameServer extends WebSocketServer {
     }
 
     public static void main(String[] args) {
-        GameServer server = new GameServer();
-        server.start();
-        System.out.println("GameServer started on port " + PORT);
+//        GameServer server = new GameServer();
+//        server.start();
+//        System.out.println("GameServer started on port " + PORT);
+        App.setupServer();
     }
 
     public Map<WebSocket, User> getOnlineConnections() {

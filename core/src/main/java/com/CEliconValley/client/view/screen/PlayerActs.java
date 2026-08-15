@@ -324,7 +324,8 @@ public class PlayerActs {
                 villageScreen.camera.unproject(mousePos);
                 putInGreenhouse(mousePos.x, mousePos.y, villageScreen);
             }
-        }else if(Gdx.input.isButtonJustPressed(1)){
+        }
+        else if(Gdx.input.isButtonJustPressed(1)){
             Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             if(screen instanceof VillageScreen villageScreen){
                 villageScreen.camera.unproject(mousePos);
@@ -334,13 +335,14 @@ public class PlayerActs {
                 handleToolUse(mousePos.x, mousePos.y, farmScreen);
             }
 
-        }else if(Gdx.input.isButtonJustPressed(2)){
-            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-            if(screen instanceof FarmScreen farmScreen){
-                farmScreen.camera.unproject(mousePos);
-                handleClick(mousePos.x, mousePos.y, farmScreen);
-            }
         }
+//        else if(Gdx.input.isButtonJustPressed(1)){
+//            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+//            if(screen instanceof FarmScreen farmScreen){
+//                farmScreen.camera.unproject(mousePos);
+//                handleClick(mousePos.x, mousePos.y, farmScreen);
+//            }
+//        }
         if (screen.isMenuOpen) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
                 screen.menuBar.goToPreviousTab();
@@ -996,6 +998,7 @@ public class PlayerActs {
                 mouseY >= cd.getY()*CELL_SIZE && mouseY <= (cd.getY()+1)*CELL_SIZE){
 
                     if(Finder.parseItem(cd.getObjectName()) instanceof CraftableMachine craftableMachine){
+                        System.out.println("im here :)");
                         screen.isArtisanMenuOpen = !screen.isArtisanMenuOpen;
                         screen.cm = craftableMachine;
                         return;

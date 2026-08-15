@@ -92,10 +92,10 @@ public class Hero {
     public Animation<TextureRegion> walk(boolean canWalk, int direction) {
 
 
-        if(selectedItemName != null && Finder.getpd() != null &&
-            !Finder.getpd().getInventoryData().getInventory().doHave(Finder.parseItem(selectedItemName),1)){
-            selectedItemName = null;
-        }
+//        if(selectedItemName != null && Finder.getpd() != null &&
+//            !Finder.getpd().getInventoryData().getInventory().doHave(Finder.parseItem(selectedItemName),1)){
+//            selectedItemName = null;
+//        }
 
         TextureRegion[] wantedActs=new TextureRegion[8];
         TextureRegion[] animation = new TextureRegion[1];
