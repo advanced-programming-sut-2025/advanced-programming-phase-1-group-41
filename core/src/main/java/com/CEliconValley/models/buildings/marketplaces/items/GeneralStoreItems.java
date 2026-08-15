@@ -4,10 +4,7 @@ import com.CEliconValley.models.foragings.Fertilizer;
 import com.CEliconValley.models.foragings.FertilizerType;
 import com.CEliconValley.models.foragings.Seed;
 import com.CEliconValley.models.foragings.SeedType;
-import com.CEliconValley.models.items.Backpack;
-import com.CEliconValley.models.items.CraftableItem;
-import com.CEliconValley.models.items.CraftingRecipe;
-import com.CEliconValley.models.items.Item;
+import com.CEliconValley.models.items.*;
 
 public enum GeneralStoreItems implements Item {
     // permanent
@@ -86,6 +83,9 @@ public enum GeneralStoreItems implements Item {
     private double price;
     private String ch;
     boolean isOffSeason = false;
+    private Item item;
+    private CraftingRecipe craftingRecipe;
+    private Backpack backpack;
     GeneralStoreItems(Item item){
         this.name = item.getName();
         this.price = item.getPrice();
@@ -98,18 +98,21 @@ public enum GeneralStoreItems implements Item {
         this.ch = item.getChar();
         this.name = item.getName();
         this.price = price;
+        this.item = item;
     }
 
     GeneralStoreItems(CraftingRecipe recipe, double price) {
         this.name = recipe.getName();
         this.ch = "";
         this.price = price;
+        this.craftingRecipe = recipe;
     }
 
     GeneralStoreItems(Backpack backpack, double price){
         this.name = backpack.getName();
         this.ch = "";
         this.price = price;
+        this.backpack = backpack;
     }
 
     @Override
@@ -147,5 +150,17 @@ public enum GeneralStoreItems implements Item {
             }
         }
         return null;
+    }
+    public int getID() {
+        if(craftingRecipe != null){
+            return 70202;
+//            return this.craftingRecipe.getId();
+        }
+        else if(item != null){
+            return this.item.getID();
+        }else if(backpack != null){
+            return this.backpack.getID();
+        }
+        return 100000;
     }
 }

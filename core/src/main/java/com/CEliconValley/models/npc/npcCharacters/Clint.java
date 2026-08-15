@@ -1,6 +1,6 @@
 package com.CEliconValley.models.npc.npcCharacters;
 
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Occupation;
 import com.CEliconValley.models.buildings.marketplaces.Marketplace;
 import com.CEliconValley.models.items.Item;
@@ -14,15 +14,15 @@ public class Clint extends NPC{
 
 
 
-    public Clint(String name, Occupation job, Marketplace marketplace, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift,ArrayList<Quest> quests) {
-        super(name, job, dialogues, favorites, itemsToGift, quests);
+    public Clint(String name, Occupation job, Marketplace marketplace, ArrayList<String> dialogues, ArrayList<Item> favorites, ArrayList<Slot> itemsToGift) {
+        super(name, job, dialogues, favorites, itemsToGift);
         this.marketplace = marketplace;
         setX(86);setY(55);
         setDaysToUnlockQ3(5*28);
     }
     @Override
     public String getChar(){
-        return Colors.colorize(196,0,"웃 ");
+        return TerminalColors.colorize(196,0,"웃 ");
     }
 
     public Marketplace getMarketplace() {

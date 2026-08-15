@@ -2,7 +2,7 @@ package com.CEliconValley.models.buildings.marketplaces;
 
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.buildings.Door;
@@ -18,10 +18,11 @@ public class FishShop extends Marketplace implements Building {
 
     ArrayList<Slot> stock= new ArrayList<>();
     private final Door door = new Door();
-
+    private int anchorX;
+    private int anchorY;
     @Override
     public String getChar() {
-        return Colors.colorize(51,21,"FS");
+        return TerminalColors.colorize(51,21,"FS");
     }
 
     @Override
@@ -30,9 +31,15 @@ public class FishShop extends Marketplace implements Building {
     }
     private int x;
     private int y;
-    public FishShop(int x, int y, Village village) {
+
+    public FishShop() {
+        anchorX = 26;
+        anchorY = 4;
+    }
+
+    public FishShop(int x, int y, Village village, boolean load) {
         super(null);
-        constructFishShop(x, y, village);
+        constructFishShop(x, y, village, load);
 
         stock.add(new Slot(FishShopItems.FishSmokerRecipe, 1));
         stock.add(new Slot(new Troutsoup(), 1));
@@ -42,38 +49,43 @@ public class FishShop extends Marketplace implements Building {
         stock.add(new Slot(FishShopItems.IridiumRod, 1));
 
         this.updateStock();
+
     }
 
-    public void constructFishShop(int x , int y , Village village){
+    public void constructFishShop(int x , int y , Village village, boolean laod){
         this.x = x;
         this.y = y;
         int xWall;
         int yWall;
+
         yWall = y;
-        while(yWall<=y+5) {
+        while(yWall<=y+2) {
             for (int i = x; i <= x + 5; i++) {
                 Cell cell = Finder.findCellByCoordinatesVillage(i, yWall,village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
+                if(yWall == y&&i==x+1){
+                    cell.setObjectMap(door);
+                    doors.add(cell);
+                }
+
             }
-            yWall+=5;
+            yWall+=2;
         }
         xWall = x;
         while(xWall<=x+5) {
-            for (int j = y+1; j <= y+5; j++) {
+            for (int j = y+1; j <= y+2; j++) {
                 Cell cell = Finder.findCellByCoordinatesVillage(xWall, j, village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
-                if(j == y + 2&&xWall==x){
-                    cell.setObjectMap(door);
-                }
+
             }
             xWall+=5;
         }
         x++;
         y++;
         int xLength=4;
-        int yLength=4;
+        int yLength=2;
         for(int i=x; i<xLength+x; i++) {
             for(int j=y; j<yLength+y; j++) {
                 Cell cell=Finder.findCellByCoordinatesVillage(i, j, village);
@@ -118,5 +130,15 @@ public class FishShop extends Marketplace implements Building {
             door.setClosed(true);
             door.setClosesSoon(false);
         }
+    }
+
+    @Override
+    public int getAnchorX() {
+        return anchorX;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return anchorY;
     }
 }

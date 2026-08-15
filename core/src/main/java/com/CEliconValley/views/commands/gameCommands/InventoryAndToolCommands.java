@@ -11,7 +11,10 @@ public enum InventoryAndToolCommands implements Command {
     ShowCurrentTools("\\s*tools\\s+show\\s+current\\s*"),
     ShowAvailableTools("\\s*tools\\s+show\\s+available\\s*"),
     UpgradeTool("\\s*tools\\s+upgrade\\s+(?<toolName>.*)\\s*"),
-    UseTool("\\s*tools\\s+use\\s+-d\\s+(?<direction>.*)\\s*"),
+    UseToolE("\\s*tools\\s+e\\s+use\\s+-d\\s+(?<direction>.*)\\s*"),
+    UseToolMouse("\\s*tools\\s+mouse\\s+use\\s+-d\\s+(?<direction>.*)\\s*"),
+    UseShear("\\s*shear\\s+(?<animalname>.+)\\s*"),
+    UseMilkPale("\\s*milkpale\\s+(?<animalname>.+)\\s*")
     ;
 
     private final String pattern;

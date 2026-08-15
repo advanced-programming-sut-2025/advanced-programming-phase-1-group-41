@@ -1,7 +1,7 @@
 package com.CEliconValley.models.foragings;
 
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 
 import com.CEliconValley.models.foragings.Nature.Obstacle;
@@ -14,9 +14,9 @@ public class ForagingTree implements Foraging, Obstacle {
     @Override
     public String getChar() {
         if(isThundered){
-            return Colors.colorize(15,0,(typeIndex/10) + "" + typeIndex % 10);
+            return TerminalColors.colorize(15,0,(typeIndex/10) + "" + typeIndex % 10);
         }
-        return Colors.colorize(3,0,(typeIndex/10) + "" + typeIndex % 10);
+        return TerminalColors.colorize(3,0,(typeIndex/10) + "" + typeIndex % 10);
     }
 
     @Override
@@ -28,6 +28,15 @@ public class ForagingTree implements Foraging, Obstacle {
     private final TreeType foragingTreeType;
     private final int typeIndex;
     private boolean isThundered = false;
+
+
+    public ForagingTree(TreeType foragingTreeType,
+                        int hitPoints, int typeIndex, boolean isThundered) {
+        this.foragingTreeType = foragingTreeType;
+        this.hitPoints = hitPoints;
+        this.typeIndex = typeIndex;
+        this.isThundered = isThundered;
+    }
 
     public ForagingTree(int x, int y, Farm farm) {
         Random rand = new Random();
@@ -58,4 +67,16 @@ public class ForagingTree implements Foraging, Obstacle {
     public TreeType getTreeType() {
         return foragingTreeType;
     }
+
+
+
+    public TreeType getForagingTreeType() {
+        return foragingTreeType;
+    }
+
+    public int getTypeIndex() {
+        return typeIndex;
+    }
+
+
 }

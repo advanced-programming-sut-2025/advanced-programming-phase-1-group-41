@@ -1,7 +1,7 @@
 package com.CEliconValley.models.foragings.Nature;
 
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.ObjectMap;
 import com.CEliconValley.models.locations.Farm;
@@ -13,26 +13,33 @@ public class Mine implements ObjectMap {
     private Farm farm;
     private int xLength;
     private int yLength;
-    private int x;
-    private int y;
+    private int x = 3;
+    private int y = 3;
+
+
+    public Mine() {
+    }
 
     @Override
     public String getChar() {
-        return Colors.colorize(233,237,"^.");
+        return TerminalColors.colorize(233,237,"^.");
     }
 
     @Override
     public String getName() {
         return "Mine";
     }
-    public Mine(int x, int y, Farm farm) {
+    public Mine(int xLength, int yLength, Farm farm) {
+        int x = 3;
+        int y = 3;
+        this.xLength = xLength;
+        this.yLength = yLength;
         x++;
         y++;
         this.farm = farm;
         mineralCount = 0;
         Random rand = new Random();
-        xLength = 7 + rand.nextInt(7);
-        yLength = 7 + rand.nextInt(6);
+
         for(int i=x; i<xLength+x; i++) {
             for(int j=y; j<yLength+y; j++) {
                 Cell cell= Finder.findCellByCoordinates(i, j, farm);
@@ -48,7 +55,6 @@ public class Mine implements ObjectMap {
         }
     }
     public Mine(int x, int y, Farm farm, int i) {
-        Random rand = new Random();
         Cell cell= Finder.findCellByCoordinates(x, y, farm);
         assert cell != null;
         cell.setObjectMap(this);
@@ -70,5 +76,29 @@ public class Mine implements ObjectMap {
                 i--;
             }
         }
+    }
+
+    public Farm getFarm() {
+        return farm;
+    }
+
+    public int getMineralCount() {
+        return mineralCount;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getxLength() {
+        return xLength;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getyLength() {
+        return yLength;
     }
 }

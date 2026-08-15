@@ -4,6 +4,7 @@ import com.CEliconValley.models.*;
 
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.locations.Farm;
+import com.CEliconValley.models.ui.TerminalColors;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,9 +13,9 @@ public class Crop implements Item {
     @Override
     public String getChar() {
         if(isGiantCrop){
-            return Colors.colorize(53,21 + 6 * currentStage,typeIndex/10 + "" + typeIndex%10);
+            return TerminalColors.colorize(53,21 + 6 * currentStage,typeIndex/10 + "" + typeIndex%10);
         }
-        return Colors.colorize(53,58 + 6 * currentStage,typeIndex/10 + "" + typeIndex%10);
+        return TerminalColors.colorize(53,58 + 6 * currentStage,typeIndex/10 + "" + typeIndex%10);
     }
 
     @Override
@@ -36,6 +37,29 @@ public class Crop implements Item {
     private int waterStreak = 0;
     private int x;
     private int y;
+
+
+
+    public Crop(boolean canRegrow, CropType cropType, int currentStage,
+                int currentStageLevel, boolean isFertilizedToday,
+                boolean isGiantCrop, boolean isProtected, boolean isWateredToday,
+                int regrowthTime, ArrayList<Integer> stages, int typeIndex,
+                int waterStreak, int x, int y) {
+        this.canRegrow = canRegrow;
+        this.cropType = cropType;
+        this.currentStage = currentStage;
+        this.currentStageLevel = currentStageLevel;
+        this.isFertilizedToday = isFertilizedToday;
+        this.isGiantCrop = isGiantCrop;
+        this.isProtected = isProtected;
+        this.isWateredToday = isWateredToday;
+        this.regrowthTime = regrowthTime;
+        this.stages = new ArrayList<>(stages);
+        this.typeIndex = typeIndex;
+        this.waterStreak = waterStreak;
+        this.x = x;
+        this.y = y;
+    }
 
     public Crop(int x, int y, Farm farm, CropType cropType) {
         this.x = x;
@@ -201,4 +225,74 @@ public class Crop implements Item {
         // TODO needs to change ?
         return this.cropType.getBaseSellPrice();
     }
+
+    public boolean isCanRegrow() {
+        return canRegrow;
+    }
+
+    public boolean isFertilizedToday() {
+        return isFertilizedToday;
+    }
+
+    public int getTypeIndex() {
+        return typeIndex;
+    }
+
+    public int getWaterStreak() {
+        return waterStreak;
+    }
+
+    public int getID() {
+        switch (this.cropType) {
+            case BlueJazz -> { return 10000; }
+            case Carrot -> { return 10001; }
+            case Cauliflower -> { return 10002; }
+            case CoffeeBean -> { return 10003; }
+            case Garlic -> { return 10004; }
+            case GreenBean -> { return 10005; }
+            case Kale -> { return 10006; }
+            case Parsnip -> { return 10007; }
+            case Potato -> { return 10008; }
+            case Rhubarb -> { return 10009; }
+            case Strawberry -> { return 10010; }
+            case Tulip -> { return 10011; }
+
+            case Rice -> { return 10100; }
+            case Blueberry -> { return 10101; }
+            case Corn -> { return 10102; }
+            case Hops -> { return 10103; }
+            case HotPepper -> { return 10104; }
+            case Melon -> { return 10105; }
+            case Poppy -> { return 10106; }
+            case Radish -> { return 10107; }
+            case RedCabbage -> { return 10108; }
+            case Starfruit -> { return 10109; }
+            case SummerSpangle -> { return 10110; }
+            case SummerSquash -> { return 10111; }
+
+            case Sunflower -> { return 10200; }
+            case Tomato -> { return 10201; }
+            case Wheat -> { return 10202; }
+            case Amaranth -> { return 10203; }
+            case Artichoke -> { return 10204; }
+            case Beet -> { return 10205; }
+            case BokChoy -> { return 10206; }
+            case Broccoli -> { return 10207; }
+            case Cranberries -> { return 10208; }
+            case Eggplant -> { return 10209; }
+            case FairyRose -> { return 10210; }
+            case Grape -> { return 10211; }
+
+            case Pumpkin -> { return 10300; }
+            case Yam -> { return 10301; }
+            case SweetGemBerry -> { return 10302; }
+            case Powdermelon -> { return 10303; }
+            case AncientFruit -> { return 10304; }
+        }
+
+        throw new IllegalStateException("Unknown cropType: " + this.cropType);
+    }
+
+
+
 }

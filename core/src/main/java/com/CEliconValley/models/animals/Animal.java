@@ -6,7 +6,7 @@ import com.CEliconValley.models.animals.animalKinds.*;
 import com.CEliconValley.models.items.Products.Product;
 
 public abstract class Animal {
-    public abstract void doTheFuckingJob();
+    public abstract String getAnimalType();
     protected String name;
     protected int x;
     protected int y;
@@ -43,6 +43,24 @@ public abstract class Animal {
         this.x = x;
     }
 
+    public Animal(Breed breed, int buyPrice, int daysUntilProduce,
+                  int friendShip, boolean isFedToday, boolean isHome,
+                  boolean isPetToday, String name, Player owner,
+                  Product product, BarnOrCageSize sizeNeeded, int x, int y) {
+        this.breed = breed;
+        this.buyPrice = buyPrice;
+        this.daysUntilProduce = daysUntilProduce;
+        this.friendShip = friendShip;
+        this.isFedToday = isFedToday;
+        this.isHome = isHome;
+        this.isPetToday = isPetToday;
+        this.name = name;
+        this.owner = owner;
+        this.product = product;
+        this.sizeNeeded = sizeNeeded;
+        this.x = x;
+        this.y = y;
+    }
 
     public Animal(Player owner, String name, int buyPrice, BarnOrCageSize sizeNeeded) {
         this.name = name;
@@ -154,15 +172,26 @@ public abstract class Animal {
 
     public static Animal parseAnimal(String animal,String name) {
         return switch (animal){
-            case "cow" -> new Cow(App.getGame().getCurrentPlayer(), name);
-            case "rabbit" -> new Rabbit(App.getGame().getCurrentPlayer(), name);
-            case "chicken" -> new Chicken(App.getGame().getCurrentPlayer(),name );
-            case "pig" -> new Pig(App.getGame().getCurrentPlayer(), name);
-            case "dino" -> new Dino(App.getGame().getCurrentPlayer(), name);
-            case "goat" -> new Goat(App.getGame().getCurrentPlayer(), name);
-            case "sheep" -> new Sheep(App.getGame().getCurrentPlayer(), name);
-            case "duck" -> new Duck(App.getGame().getCurrentPlayer(), name);
+            case "cow", "Cow" -> new Cow(App.getGame().getCurrentPlayer(), name);
+            case "rabbit", "Rabbit" -> new Rabbit(App.getGame().getCurrentPlayer(), name);
+            case "chicken", "Chicken" -> new Chicken(App.getGame().getCurrentPlayer(),name );
+            case "pig", "Pig" -> new Pig(App.getGame().getCurrentPlayer(), name);
+            case "dino", "Dinosaur" -> new Dino(App.getGame().getCurrentPlayer(), name);
+            case "goat","Goat"  -> new Goat(App.getGame().getCurrentPlayer(), name);
+            case "sheep", "Sheep" -> new Sheep(App.getGame().getCurrentPlayer(), name);
+            case "duck", "Duck" -> new Duck(App.getGame().getCurrentPlayer(), name);
             default -> null;
         };
+    }
+
+    public static String getAnimalSound(String animalType){
+        if(animalType.equalsIgnoreCase("chicken")) return  "Jick Jick";
+        if(animalType.equalsIgnoreCase("cow")) return  "MOO00ooo...";
+        if(animalType.equalsIgnoreCase("dino")) return  "RRAAWWwww";
+        if(animalType.equalsIgnoreCase("duck")) return  "Quack Quack";
+        if(animalType.equalsIgnoreCase("goat")) return  "Maaaa";
+        if(animalType.equalsIgnoreCase("pig")) return  "Oink Oink!";
+        if(animalType.equalsIgnoreCase("sheep")) return  "Baaa Baaa";
+        return "";
     }
 }

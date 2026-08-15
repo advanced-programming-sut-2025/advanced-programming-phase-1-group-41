@@ -32,10 +32,10 @@ public class FarmBuilder {
     }
 
     public void setCounters(){
-        rockCount = 0;
-        foragingCropCount = 0;
-        foragingTreeCount = 0;
-        plantCount = 0;
+//        rockCount = 0;
+//        foragingCropCount = 0;
+//        foragingTreeCount = 0;
+//        plantCount = 0;
         for(Cell cell : farm.getCells()){
             if(cell.getObjectMap() instanceof Rock){
                 rockCount++;
@@ -60,8 +60,8 @@ public class FarmBuilder {
         foragingTreeCount = farm.getForagingTreeCount() - foragingTreeCount - 5 + rand.nextInt(11);
         plantCount = farm.getPlantCount() - plantCount - 5 + rand.nextInt(11);
         foragingCropCount = farm.getForagingCropCount() - foragingCropCount - 5 + rand.nextInt(11);
-        //Change To Test
-//        rockCount = 20;
+//        //Change To Test
+//        rockCount = 110;
 //        foragingTreeCount = 20;
 //        plantCount = 20;
 //        foragingCropCount = 20;
@@ -101,6 +101,8 @@ public class FarmBuilder {
                 i--;
             }
         }
+
+        // TODO important fix this!
         farm.getStartPoints().get(0).setObjectMap(new Grass());
         for(int i = 0; i < farm.getTransferCells().size(); i++){
             farm.getTransferCells().get(i).setObjectMap(new Grass());

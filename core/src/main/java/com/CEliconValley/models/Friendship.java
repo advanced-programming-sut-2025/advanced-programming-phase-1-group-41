@@ -19,12 +19,34 @@ public class Friendship {
     private boolean areMarried = false;
     private Player proposer = null;
 
+    public Friendship(Player proposer, Player player1, Player player2,
+                      int level, int lastReadMessage, boolean hadTradeToday,
+                      boolean hadTalkingToday, boolean hadRejectedTradeToday,
+                      boolean hadInteractionToday, boolean hadHugToday,
+                      boolean gaveFlower, int friendshipXp, FriendshipLevel friendshipLevel,
+                      boolean areMarried) {
+        this.proposer = proposer;
+        this.player2 = player2;
+        this.player1 = player1;
+        this.level = level;
+        this.lastReadMessage = lastReadMessage;
+        this.hadTradeToday = hadTradeToday;
+        this.hadTalkingToday = hadTalkingToday;
+        this.hadRejectedTradeToday = hadRejectedTradeToday;
+        this.hadInteractionToday = hadInteractionToday;
+        this.hadHugToday = hadHugToday;
+        this.gaveFlower = gaveFlower;
+        this.friendshipXp = friendshipXp;
+        this.friendshipLevel = friendshipLevel;
+        this.areMarried = areMarried;
+    }
+
     public Friendship(Player player1, Player player2) {
         this.player1 = player1;
         this.player2 = player2;
         friendshipLevel = FriendshipLevel.Stranger;
-        level = 0;
-        friendshipXp = 0;
+        level = 3;
+        friendshipXp = 400;
     }
 
     public Player getPlayer1() {
@@ -278,4 +300,7 @@ public class Friendship {
     public boolean isHadTradeToday() {
         return hadTradeToday;
     }
+
+
+
 }

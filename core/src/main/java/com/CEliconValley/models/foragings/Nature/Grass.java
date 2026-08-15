@@ -1,7 +1,7 @@
 package com.CEliconValley.models.foragings.Nature;
 
 import com.CEliconValley.models.App;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.ObjectMap;
 import com.CEliconValley.models.locations.Farm;
 
@@ -9,25 +9,35 @@ public class Grass implements ObjectMap {
     @Override
     public String getChar() {
         if(isFarmland){
-            return Colors.colorize(94,0,"||");
+            return TerminalColors.colorize(94,0,"||");
         } else if(isSand){
-            return Colors.colorize(228,0,"ww");
+            return TerminalColors.colorize(228,0,"ww");
         } else if(isThundered){
-            return Colors.colorize(15,0,"ww");
+            return TerminalColors.colorize(15,0,"ww");
         } else if(isBombed){
-            return Colors.colorize(237,0,"ww");
+            return TerminalColors.colorize(237,0,"ww");
         } else if(isGround){
-            return Colors.colorize(215,0,"ww");
+            return TerminalColors.colorize(215,0,"ww");
         }else{
             if(App.getGame() != null){
                 if(App.getGame().getTime().getHour() >= 19){
-                    return Colors.colorize(22,0,"ww");
+                    return TerminalColors.colorize(22,0,"ww");
                 }
             }
-            return Colors.colorize(40,0,"ww");
+            return TerminalColors.colorize(40,0,"ww");
 //            return Colors.colorize(2,0,"ww");
         }
     }
+    private int initialize = -1;
+
+    public int getInitialize() {
+        return initialize;
+    }
+
+    public void setInitialize(int initialize) {
+        this.initialize = initialize;
+    }
+
 
     @Override
     public String getName() {
@@ -73,6 +83,16 @@ public class Grass implements ObjectMap {
         this.isThundered = isThundered;
     }
     public void setBombed(boolean bombed) {this.isBombed = bombed;}
+
+
+    public Grass(boolean isBombed, boolean isFarmland, boolean isGround, boolean isSand, boolean isThundered) {
+        this.isBombed = isBombed;
+        this.isFarmland = isFarmland;
+        this.isGround = isGround;
+        this.isSand = isSand;
+        this.isThundered = isThundered;
+    }
+
     public Grass(int startX, int startY, Farm farm) {
         isGround = true;
         isFarmland = false;
@@ -110,4 +130,14 @@ public class Grass implements ObjectMap {
 //            Objects.requireNonNull(Finder.findCellByCoordinates(startX, i, farm)).setObjectMap(this);
 //        }
     }
+
+
+    public boolean isBombed() {
+        return isBombed;
+    }
+
+    public boolean isThundered() {
+        return isThundered;
+    }
+
 }

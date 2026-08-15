@@ -2,7 +2,7 @@ package com.CEliconValley.models.buildings.marketplaces;
 
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.buildings.Door;
@@ -24,7 +24,7 @@ public class Jojamart extends Marketplace implements Building {
 
     @Override
     public String getChar() {
-        return Colors.colorize(8,71,"JM");
+        return TerminalColors.colorize(8,71,"JM");
     }
 
     @Override
@@ -33,7 +33,15 @@ public class Jojamart extends Marketplace implements Building {
     }
     private int x;
     private int y;
-    public Jojamart(int x, int y, Village village) {
+    private int anchorX;
+    private int anchorY;
+
+    public Jojamart() {
+        anchorX=87;
+        anchorY = 16;
+    }
+
+    public Jojamart(int x, int y, Village village, boolean load) {
         super(null);
         constructJojamart(x,y,village);
 
@@ -90,7 +98,9 @@ public class Jojamart extends Marketplace implements Building {
 
         winter.add(new Slot(JojamartItems.PowdermelonSeeds, 10));
 
-        this.updateStock();
+        if(!load){
+            this.updateStock();
+        }
 
     }
 
@@ -105,8 +115,9 @@ public class Jojamart extends Marketplace implements Building {
                 Cell cell = Finder.findCellByCoordinatesVillage(i, yWall,village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
-                if(i == x + 5&&yWall==y+7) {
+                if(i == x + 5&&yWall==y) {
                     cell.setObjectMap(door);
+                    doors.add(cell);
                 }
             }
             yWall+=7;
@@ -119,6 +130,7 @@ public class Jojamart extends Marketplace implements Building {
                 cell.setObjectMap(new Wall());
                 if(j == y + 1&&xWall==x) {
                     cell.setObjectMap(door2);
+                    doors.add(cell);
                 }
             }
             xWall+=10;
@@ -196,5 +208,15 @@ public class Jojamart extends Marketplace implements Building {
             door.setClosesSoon(false);
             door2.setClosesSoon(false);
         }
+    }
+
+    @Override
+    public int getAnchorX() {
+        return anchorX;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return anchorY;
     }
 }

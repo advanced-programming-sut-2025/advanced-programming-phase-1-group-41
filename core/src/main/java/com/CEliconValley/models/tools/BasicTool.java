@@ -39,6 +39,11 @@ public enum BasicTool implements Tool {
     public double getPrice() {
         return 0;
     }
+    public int getID() {
+
+        return this.item.getID();
+    }
+
 
 
 }

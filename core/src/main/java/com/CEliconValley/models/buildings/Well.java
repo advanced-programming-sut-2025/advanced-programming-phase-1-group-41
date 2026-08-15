@@ -1,18 +1,19 @@
 package com.CEliconValley.models.buildings;
 
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.foragings.Nature.Obstacle;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.foragings.Nature.Lake;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.locations.Farm;
 
 
-public class Well implements Building, Item{
+public class Well implements Building, Item, Obstacle {
     @Override
     public String getChar() {
 //        return Colors.colorize(255,0,"🌑");
-        return Colors.colorize(247,234,"**");
+        return TerminalColors.colorize(247,234,"we");
     }
     private int x;
     private int y;
@@ -61,5 +62,18 @@ public class Well implements Building, Item{
     @Override
     public double getPrice() {
         return 1000;
+    }
+    public int getID() {
+        return 100000;
+    }
+
+    @Override
+    public int getAnchorX() {
+        return 0;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return 0;
     }
 }

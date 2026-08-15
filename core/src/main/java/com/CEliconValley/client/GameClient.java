@@ -1,9 +1,29 @@
 package com.CEliconValley.client;
 
+import com.CEliconValley.Main;
+import com.CEliconValley.client.view.LobbyScreen;
+import com.CEliconValley.client.view.MainMenuView;
+import com.CEliconValley.client.view.ProfileMenuView;
+import com.CEliconValley.client.view.screen.FarmScreen;
+import com.CEliconValley.common.AppData;
+import com.CEliconValley.common.GameData;
+import com.CEliconValley.common.HandshakeData;
+import com.CEliconValley.common.UserData;
+import com.CEliconValley.common.messages.*;
+import com.CEliconValley.models.*;
+import com.CEliconValley.models.locations.Farm;
+import com.CEliconValley.models.locations.FarmType;
+import com.badlogic.gdx.Gdx;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
+import java.util.HashSet;
 
 public class GameClient extends WebSocketClient {
 
@@ -13,16 +33,25 @@ public class GameClient extends WebSocketClient {
 
     public static void main(String[] args) {
         try {
-            String first = "ws://localhost:8080";
+            String first = "ws://localhost:6969";
             String second = "wss://5d92bdf5fa08.ngrok-free.app";
             URI serverUri = new URI(first);
             GameClient client = new GameClient(serverUri);
             client.connect(); // Starts async connection
-            while(!client.isOpen()) {
+            while (!client.isOpen()) {
                 Thread.sleep(50);
             }
-            client.send("sup");
             client.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void shutdown() {
+        try {
+            if (this.isOpen()) {
+                this.close(); // Gracefully close the connection
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -31,16 +60,91 @@ public class GameClient extends WebSocketClient {
     @Override
     public void onOpen(ServerHandshake handshakedata) {
         System.out.println("Connected to server!");
-        send("Hello from client!");
     }
 
     @Override
     public void onMessage(String message) {
-        System.out.println("Received from server: " + message);
+        Gson gson = new Gson();
+        try {
+            GameMessage<Object> genericMsg = gson.fromJson(message, new TypeToken<GameMessage<Object>>() {
+            }.getType());
+//            long now = System.currentTimeMillis();
+//            long sent = genericMsg.timestamp;
+//            System.out.println("    Latency: " + (now - sent) + "ms");
+//            JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+//            JsonElement bodyElement = jsonObject.get("body");
+//            GameMessage<SuccessMessage> successMsg = null;
+//            GameMessage<ErrorMessage> errorMsg = null;
+//            try{
+//                if (bodyElement.getAsJsonObject().has("success")) {
+//                    successMsg = gson.fromJson(message, new TypeToken<GameMessage<SuccessMessage>>() {
+//                    }.getType());
+//                } else if (bodyElement.getAsJsonObject().has("error")) {
+//                    errorMsg = gson.fromJson(message, new TypeToken<GameMessage<ErrorMessage>>() {
+//                    }.getType());
+//                }
+//            } catch (Exception e) {
+//                System.out.println(e.getMessage());
+//            }
+//            if (successMsg != null) {
+//                System.out.println("success is "+message);
+//                Response.successResponse(successMsg.body);
+//            } else if (errorMsg != null) {
+//                System.out.println("error is "+message);
+//                Response.errorResponse(errorMsg.body);
+            JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+            JsonElement bodyElement = jsonObject.get("body");
+            if (bodyElement == null || bodyElement.isJsonNull()) {
+                System.err.println("Missing or null 'body' field.");
+                return;
+            }
+
+            if (bodyElement.isJsonObject()) {
+                JsonObject bodyObject = bodyElement.getAsJsonObject();
+
+                if (bodyObject.has("success")) {
+                    SuccessMessage success = gson.fromJson(bodyObject, SuccessMessage.class);
+                    System.out.println("Success: " + success.success);
+                    Response.successResponse(success);
+                } else if (bodyObject.has("error")) {
+                    ErrorMessage error = gson.fromJson(bodyObject, ErrorMessage.class);
+                    System.out.println("Error: " + error.error);
+                    Response.errorResponse(error);
+                } else {
+                    ClientMessageRouter.route(genericMsg.type, bodyObject, gson, genericMsg.timestamp, message);
+                }
+            }else{
+                ClientMessageRouter.route(genericMsg.type, gson, genericMsg.timestamp, message);
+            }
+        } catch (Exception e) {
+            System.out.println("----------------------------------");
+            System.out.println("CmessageE: " + message);
+            System.out.println("----------------------------------");
+        }
+//        try {
+//            GameData data = gson.fromJson(message, GameData.class);
+//            System.out.println("received the data :D");
+//            System.out.println("client code:");
+//            Game game = data.makeGame();
+//            for (Farm farm : game.getFarms()) {
+//                farm.printMap();
+//            }
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+////            System.out.println("received message: "+message);
+//        }
     }
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
+        if(Main.getMain() != null){
+            Gdx.app.postRunnable(() -> {
+               Gdx.app.exit();
+            });
+            System.out.println("released the beast");
+        }else{
+            System.out.println("main is null");
+        }
         System.out.println("Connection closed: " + reason + " (Code: " + code + ")");
     }
 

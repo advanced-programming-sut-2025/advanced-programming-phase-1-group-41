@@ -984,10 +984,10 @@ skin/craftacular-ui.png
 skin/font-bold-export.fnt
 skin/font-export.fnt
 skin/font-title-export.fnt
-skin/lobby/1.png
-skin/lobby/2.png
-skin/lobby/3.png
-skin/lobby/4.png
+skin/lobbyScreen/1.png
+skin/lobbyScreen/2.png
+skin/lobbyScreen/3.png
+skin/lobbyScreen/4.png
 ui/font-list.fnt
 ui/font-subtitle.fnt
 ui/font-window.fnt

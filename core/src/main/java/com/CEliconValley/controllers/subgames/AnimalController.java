@@ -175,7 +175,9 @@ public class AnimalController {
 
     }
 
-    public Result buyAnimal(Matcher matcher) {
+    public Result buyAnimal(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
         String animalType = matcher.group(1).trim().toLowerCase();
         String animalName = matcher.group(2).trim().toLowerCase();
         Animal animal = parseAnimal(animalType, animalName);
@@ -188,49 +190,65 @@ public class AnimalController {
                     for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
                         if (barn.getBarnType().getCapacity() == 12) {
                             if (barn.getCapacity() > 0) {
-                                Result preResult = new MarketplaceController().buyAnimal(animal, barn);
+                                Result preResult = new MarketplaceController().buyAnimal(animal, barn, playername);
                                 if(!preResult.success()){
+                                    App.sendResult(preResult, playername);
                                     return preResult;
                                 }
                                 barn.addAnimal(animal);
                                 barn.updateCapacity(-1);
-                                return new Result(true, "Animal added to " + barn.getBarnType().name() + " barn");
+                                Result result =  new Result(true, "Animal added to " + barn.getBarnType().name() + " barn");
+                                App.sendResult(result, playername);
+                                return result;
                             }
                         }
                     }
-                    return new Result(false, "not enough space for " + animalType);
+
+                    Result result =  new Result(false, "not enough space for " + animalType);
+                    App.sendResult(result, playername);
+                    return result;
                 }
                 case Big -> {
                     for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
                         if (barn.getBarnType().getCapacity() >= 8) {
                             if (barn.getCapacity() > 0) {
-                                Result preResult = new MarketplaceController().buyAnimal(animal, barn);
+                                Result preResult = new MarketplaceController().buyAnimal(animal, barn, playername);
                                 if(!preResult.success()){
+                                    App.sendResult(preResult, playername);
                                     return preResult;
                                 }
                                 barn.addAnimal(animal);
                                 barn.updateCapacity(-1);
-                                return new Result(true, "Animal added to " + barn.getBarnType().name() + " barn");
+                                Result result = new Result(true, "Animal added to " + barn.getBarnType().name() + " barn");
+                                App.sendResult(result, playername);
+                                return result;
                             }
                         }
                     }
-                    return new Result(false, "not enough space for " + animalType);
+                    Result result = new Result(false, "not enough space for " + animalType);
+                    App.sendResult(result, playername);
+                    return result;
                 }
                 case Normal -> {
                     for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
                         if (barn.getBarnType().getCapacity() >= 4) {
                             if (barn.getCapacity() > 0) {
-                                Result preResult = new MarketplaceController().buyAnimal(animal, barn);
+                                Result preResult = new MarketplaceController().buyAnimal(animal, barn, playername);
                                 if(!preResult.success()){
+                                    App.sendResult(preResult, playername);
                                     return preResult;
                                 }
                                 barn.addAnimal(animal);
                                 barn.updateCapacity(-1);
-                                return new Result(true, "Animal added to " + barn.getBarnType().name() + " barn");
+                                Result result = new Result(true, "Animal added to " + barn.getBarnType().name() + " barn");
+                                App.sendResult(result, playername);
+                                return result;
                             }
                         }
                     }
-                    return new Result(false, "not enough space for " + animalType);
+                    Result result = new Result(false, "not enough space for " + animalType);
+                    App.sendResult(result, playername);
+                    return result;
                 }
 
             }
@@ -240,49 +258,64 @@ public class AnimalController {
                     for (Coop coop : App.getGame().getCurrentPlayerFarm().getCoops()) {
                         if (coop.getCoopType().getCapacity() == 12) {
                             if (coop.getCapacity() > 0) {
-                                Result preResult = new MarketplaceController().buyAnimal(animal, coop);
+                                Result preResult = new MarketplaceController().buyAnimal(animal, coop, playername);
                                 if(!preResult.success()){
+                                    App.sendResult(preResult, playername);
                                     return preResult;
                                 }
                                 coop.addAnimal(animal);
                                 coop.updateCapacity(-1);
-                                return new Result(true, "Animal added to " + coop.getCoopType().name() + " coop");
+                                Result result =  new Result(true, "Animal added to " + coop.getCoopType().name() + " coop");
+                                App.sendResult(result, playername);
+                                return result;
                             }
                         }
                     }
-                    return new Result(false, "not enough space for +" + animalType);
+                    Result result =  new Result(false, "not enough space for +" + animalType);
+                    App.sendResult(result, playername);
+                    return result;
                 }
                 case Big -> {
                     for (Coop coop : App.getGame().getCurrentPlayerFarm().getCoops()) {
                         if (coop.getCoopType().getCapacity() >= 8) {
                             if (coop.getCapacity() > 0) {
-                                Result preResult = new MarketplaceController().buyAnimal(animal, coop);
+                                Result preResult = new MarketplaceController().buyAnimal(animal, coop, playername);
                                 if(!preResult.success()){
+                                    App.sendResult(preResult, playername);
                                     return preResult;
                                 }
                                 coop.addAnimal(animal);
                                 coop.updateCapacity(-1);
-                                return new Result(true, "Animal added to " + coop.getCoopType().name() + " coop");
+                                Result result = new Result(true, "Animal added to " + coop.getCoopType().name() + " coop");
+                                App.sendResult(result, playername);
+                                return result;
                             }
                         }
                     }
-                    return new Result(false, "not enough space for +" + animalType);
+                    Result result = new Result(false, "not enough space for +" + animalType);
+                    App.sendResult(result, playername);
+                    return result;
                 }
                 case Normal -> {
                     for (Coop coop : App.getGame().getCurrentPlayerFarm().getCoops()) {
                         if (coop.getCoopType().getCapacity() >= 4) {
                             if (coop.getCapacity() > 0) {
-                                Result preResult = new MarketplaceController().buyAnimal(animal, coop);
+                                Result preResult = new MarketplaceController().buyAnimal(animal, coop, playername);
                                 if(!preResult.success()){
+                                    App.sendResult(preResult, playername);
                                     return preResult;
                                 }
                                 coop.addAnimal(animal);
                                 coop.updateCapacity(-1);
-                                return new Result(true, "Animal added to " + coop.getCoopType().name() + " coop");
+                                Result result = new Result(true, "Animal added to " + coop.getCoopType().name() + " coop");
+                                App.sendResult(result, playername);
+                                return result;
                             }
                         }
                     }
-                    return new Result(false, "not enough space for +" + animalType);
+                    Result result =  new Result(false, "not enough space for +" + animalType);
+                    App.sendResult(result, playername);
+                    return result;
                 }
 
             }
@@ -291,10 +324,12 @@ public class AnimalController {
         return null;
     }
 
-    public Result pet(Matcher matcher) {
+    public Result petOutside(Matcher matcher, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
         String name = matcher.group(1);
         Animal theAnimal = null;
-        for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
+        for (Barn barn : farm.getBarns()) {
             for (Animal animal : barn.getAnimals()) {
                 if (animal.getName().equals(name)) {
                     theAnimal = animal;
@@ -302,7 +337,7 @@ public class AnimalController {
                 }
             }
         }
-        for (Coop coop : App.getGame().getCurrentPlayerFarm().getCoops()) {
+        for (Coop coop : farm.getCoops()) {
             for (Animal animal : coop.getAnimals()) {
                 if (animal.getName().equals(name)) {
                     theAnimal = animal;
@@ -313,48 +348,61 @@ public class AnimalController {
         if (theAnimal == null) {
             return new Result(false, name + " is not one of your pets");
         }
-        for (int i = -2; i <= 2; i++) {
-            for (int j = -2; j <= 2; j++) {
-                int x = App.getGame().getCurrentPlayer().getX() + i;
-                int y = App.getGame().getCurrentPlayer().getY() + j;
-                Cell cell = App.getGame().getCurrentPlayerFarm().getCell(x, y);
-                if (cell == null) {
-                    continue;
-                }
-                ObjectMap objectMap = cell.getObjectMap();
-                if (theAnimal.getX() == x && theAnimal.getY() == y) {
-                    if(theAnimal.isPetToday()){
-                        return new Result(true, "you pet " + name + " again");
-                    }
-                    theAnimal.increaseFriendShip(15);
-                    theAnimal.setPetToday(true);
-                    return new Result(true, "you pet " + name + ", now it loves you more");
-                } else if (objectMap instanceof Barn) {
-                    for (Animal animal : ((Barn) objectMap).getAnimals()) {
-                        if (animal.getName().equals(name)) {
-                            animal.increaseFriendShip(15);
-                            animal.setPetToday(true);
-                            return new Result(true, "you pet " + name + " in its barn, now it loves you more");
-                        }
-                    }
-                } else if (objectMap instanceof Coop) {
-                    for (Animal animal : ((Coop) objectMap).getAnimals()) {
-                        if (animal.getName().equals(name)) {
-                            animal.increaseFriendShip(15);
-                            animal.setPetToday(true);
-                            return new Result(true, "you pet " + name + " in its coop, now it loves you more");
-                        }
-                    }
+        if(theAnimal.isPetToday()){
+            return new Result(true, "you pet " + name + " again");
+        }
+        theAnimal.increaseFriendShip(15);
+        theAnimal.setPetToday(true);
+        return new Result(true, "you pet " + name + ", now it loves you more");
+
+
+    }
+
+    public Result petInside(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
+        String name = matcher.group(1);
+        Animal theAnimal = null;
+        for (Barn barn : farm.getBarns()) {
+            for (Animal animal : barn.getAnimals()) {
+                System.out.println("checking for "+ animal.getName());
+                if (animal.getName().equals(name)) {
+                    theAnimal = animal;
+                    break;
                 }
             }
         }
-        return new Result(false, name + " is not anywhere around you");
+        for (Coop coop : farm.getCoops()) {
+            for (Animal animal : coop.getAnimals()) {
+                if (animal.getName().equals(name)) {
+                    theAnimal = animal;
+                    break;
+                }
+            }
+        }
+        if (theAnimal == null) {
+            return new Result(false, name + " is not one of your pets");
+        }
+        if(theAnimal.isPetToday()){
+            return new Result(false,"already pet");
+        }
+        if(theAnimal.getBreed() == Breed.Barn){
+            theAnimal.increaseFriendShip(15);
+            theAnimal.setPetToday(true);
+            return new Result(true, "you pet " + name + " in its barn, now it loves you more");
+        }else{
+            theAnimal.increaseFriendShip(15);
+            theAnimal.setPetToday(true);
+            return new Result(true, "you pet " + name + " in its coop, now it loves you more");
+        }
+
     }
 
-    public Result cheatSetFriendship(Matcher matcher) {
+    public Result cheatSetFriendship(Matcher matcher, String username) {
+        Player player = Finder.getPlayerByUsername(username);
         String name = matcher.group(1);
         String amount = matcher.group(2);
-        for (Barn barn : App.getGame().getCurrentPlayerFarm().getBarns()) {
+        for (Barn barn : Finder.getFarmByPlayer(player).getBarns()) {
             for (Animal animal : barn.getAnimals()) {
                 if (animal.getName().equals(name)) {
                     animal.increaseFriendShip(Integer.parseInt(amount) - animal.getFriendShip());
@@ -362,7 +410,7 @@ public class AnimalController {
                 }
             }
         }
-        for (Coop coop : App.getGame().getCurrentPlayerFarm().getCoops()) {
+        for (Coop coop : Finder.getFarmByPlayer(player).getCoops()) {
             for (Animal animal : coop.getAnimals()) {
                 if (animal.getName().equals(name)) {
                     animal.increaseFriendShip(Integer.parseInt(amount) - animal.getFriendShip());
@@ -487,43 +535,43 @@ public class AnimalController {
 
     }
 
-    public Result feedHay(Matcher matcher) {
+    public Result feedHay(Matcher matcher, String playername) {
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
         String name = matcher.group(1);
         Animal theAnimal = null;
-        for (int i = -2; i <= 2; i++) {
-            for (int j = -2; j <= 2; j++) {
-                int x = App.getGame().getCurrentPlayer().getX();
-                int y = App.getGame().getCurrentPlayer().getY();
-                Cell cell = App.getGame().getCurrentPlayerFarm().getCell(x + i, y + j);
-                if (cell == null) continue;
-                ObjectMap objectMap = cell.getObjectMap();
-                if (objectMap instanceof Barn) {
-                    for (Animal animal : ((Barn) objectMap).getAnimals()) {
-                        if (animal.getName().equals(name)) {
-                            if(App.getGame().getCurrentPlayer().getInventory().getSlotByItem(MarketplaceItems.Hay)==null) {
-                                return new Result(false, "you dont have any hay, buy it from Marine`s Ranch");
-                            }
-                            App.getGame().getCurrentPlayer().getInventory().removeFromInventory(MarketplaceItems.Hay,1);
-                            if(animal.isFedToday()){
-                                return new Result(true, name + " is fed with Hay, again");
-                            }
-                            animal.increaseFriendShip(8);
-                            animal.setFedToday(true);
-                            return new Result(true, name + " is fed with Hay, now it loves you more");
-                        }
-                    }
-                } else if (objectMap instanceof Coop) {
-                    for (Animal animal : ((Coop) objectMap).getAnimals()) {
-                        if (animal.getName().equals(name)) {
-                            animal.increaseFriendShip(8);
-                            animal.setFedToday(true);
-                            return new Result(true, name + " is fed with Hay, now it loves you more");
-                        }
-                    }
+        for (Barn barn : farm.getBarns()) {
+            for (Animal animal : barn.getAnimals()) {
+                System.out.println("checking for "+ animal.getName());
+                if (animal.getName().equals(name)) {
+                    theAnimal = animal;
+                    break;
                 }
             }
         }
-        return new Result(false, name + " is not anywhere around you");
+        for (Coop coop : farm.getCoops()) {
+            for (Animal animal : coop.getAnimals()) {
+                if (animal.getName().equals(name)) {
+                    theAnimal = animal;
+                    break;
+                }
+            }
+        }
+        if (theAnimal == null) {
+            return new Result(false, name + " is not one of your pets");
+        }
+        if(player.getInventory().doHave(MarketplaceItems.Hay,1)){
+            player.getInventory().removeFromInventory(MarketplaceItems.Hay,1);
+        }else{
+            return new Result(false,"you don't have hay");
+        }
+        if(theAnimal.isFedToday()){
+            return new Result(true, name + " is fed with Hay, again");
+        }
+        theAnimal.increaseFriendShip(8);
+        theAnimal.setFedToday(true);
+        return new Result(true, name + " is fed with Hay, now it loves you more");
+
     }
 
     public Result producesList(Matcher matcher) {
@@ -545,10 +593,12 @@ public class AnimalController {
     }
 
 
-    public Result collectProduct(Matcher matcher){
+    public Result collectProduct(Matcher matcher, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
         String name=matcher.group(1);
         Animal theAnimal=null;
-        for(Barn barn:App.getGame().getCurrentPlayerFarm().getBarns()){
+        for(Barn barn:farm.getBarns()){
             for(Animal animal: barn.getAnimals()){
                 if(animal.getName().equals(name)){
                     theAnimal = animal;
@@ -556,7 +606,7 @@ public class AnimalController {
                 }
             }
         }
-        for(Coop coop:App.getGame().getCurrentPlayerFarm().getCoops()){
+        for(Coop coop:farm.getCoops()){
             for(Animal animal: coop.getAnimals()){
                 if(animal.getName().equals(name)){
                     theAnimal = animal;
@@ -567,131 +617,44 @@ public class AnimalController {
         if(theAnimal==null){
             return new Result(false,name+" is not one of your pets");
         }
-        for(int i=-2;i<=2;i++){
-            for(int j=-2;j<=2;j++){
-                int x = App.getGame().getCurrentPlayer().getX()+i;
-                int y = App.getGame().getCurrentPlayer().getY()+j;
-                Cell cell=App.getGame().getCurrentPlayerFarm().getCell(x, y);
-                if(cell==null){
-                    continue;
-                }
-                ObjectMap objectMap=cell.getObjectMap();
-                if(theAnimal.getX()==x && theAnimal.getY()==y){
-                    if(theAnimal.getProduct()==null){
-                        return new Result(false,"no product is available");
-                    }
-                    String productName=theAnimal.getProduct().getName();
-                    double quality=(((double) theAnimal.getFriendShip() /1000)*((0.5 + Math.random())));
-                    double lastPrice=0.0;
-                    String rarity="";
-                    if(quality<=0.5){
-                        rarity="normal";
-                        lastPrice=theAnimal.getProduct().getPrice();
-                    }
-                    else if(quality<=0.7){
-                        rarity="silver";
-                        lastPrice=theAnimal.getProduct().getPrice()*1.25;
-                    }
-                    else if(quality<=0.9){
-                        rarity="golden";
-                        lastPrice=theAnimal.getProduct().getPrice()*1.5;
-                    }
-                    else{
-                        rarity="iridium";
-                        lastPrice=theAnimal.getProduct().getPrice()*2;
-                    }
-                    App.getGame().getCurrentPlayer().getInventory().addToInventory(theAnimal.getProduct(),1,(int)Math.floor(lastPrice));
-                    if(theAnimal.getProduct().getName().contains("Milk")||theAnimal.getProduct().getName().contains("Sheep")){
-                        theAnimal.increaseFriendShip(5);
-                    }
-                    theAnimal.setProduct(null);
-
-
-                    return new Result(true,"you collected " +rarity+" "+ productName + " from " + theAnimal.getName());
-                }
-                else if(objectMap instanceof Barn){
-                    for(Animal animal:((Barn) objectMap).getAnimals()){
-                        if(animal.getName().equals(name)){
-                            if(animal.getProduct()!=null) {
-                                if(animal instanceof Pig){
-                                    return new Result(false,animal.getChar()+" do not let the truffles go");
-                                }
-                                double quality=(((double) theAnimal.getFriendShip() /1000)*((0.5 + Math.random())));
-                                double lastPrice=0.0;
-                                String rarity="";
-                                if(quality<=0.5){
-                                    rarity="normal";
-                                    lastPrice=theAnimal.getProduct().getPrice();
-                                }
-                                else if(quality<=0.7){
-                                    rarity="silver";
-                                    lastPrice=theAnimal.getProduct().getPrice()*1.25;
-                                }
-                                else if(quality<=0.9){
-                                    rarity="golden";
-                                    lastPrice=theAnimal.getProduct().getPrice()*1.5;
-                                }
-                                else{
-                                    rarity="iridium";
-                                    lastPrice=theAnimal.getProduct().getPrice()*2;
-                                }
-                                String productName = animal.getProduct().getName();
-                                App.getGame().getCurrentPlayer().getInventory().addToInventory(animal.getProduct(),1,(int)Math.floor(lastPrice));
-                                if(theAnimal.getProduct().getName().contains("Milk")||theAnimal.getProduct().getName().contains("Sheep")){
-                                    theAnimal.increaseFriendShip(5);
-                                }
-                                animal.setProduct(null);
-                                return new Result(true, "you collected " +rarity+" "+ productName + " from " + animal.getName());
-                            }
-                            return new Result(false, "no product is available");
-                        }
-                    }
-                }
-                else if(objectMap instanceof Coop){
-                    for(Animal animal:((Coop) objectMap).getAnimals()){
-                        if(animal.getName().equals(name)){
-                            if(animal.getProduct()!=null) {
-                                double quality=(((double) theAnimal.getFriendShip() /1000)*((0.5 + Math.random())));
-                                double lastPrice=0.0;
-                                String rarity="";
-                                if(quality<=0.5){
-                                    rarity="normal";
-                                    lastPrice=theAnimal.getProduct().getPrice();
-                                }
-                                else if(quality<=0.7){
-                                    rarity="silver";
-                                    lastPrice=theAnimal.getProduct().getPrice()*1.25;
-                                }
-                                else if(quality<=0.9){
-                                    rarity="golden";
-                                    lastPrice=theAnimal.getProduct().getPrice()*1.5;
-                                }
-                                else{
-                                    rarity="iridium";
-                                    lastPrice=theAnimal.getProduct().getPrice()*2;
-                                }
-                                String productName = animal.getProduct().getName();
-                                App.getGame().getCurrentPlayer().getInventory().addToInventory(animal.getProduct(),1,(int)Math.floor(lastPrice));
-                                if(theAnimal.getProduct().getName().contains("Milk")||theAnimal.getProduct().getName().contains("Sheep")){
-                                    theAnimal.increaseFriendShip(5);
-                                }
-                                animal.setProduct(null);
-                                return new Result(true, "you collected " +rarity+" "+productName + " from " + animal.getName());
-                            }
-                            return new Result(false, "no product is available");
-                        }
-                    }
-                }
-            }
+        if(theAnimal.getProduct()==null){
+            return new Result(false,"no product is available");
         }
-        return new Result(false,name+" is not anywhere around you");
+        String productName=theAnimal.getProduct().getName();
+        double quality=(((double) theAnimal.getFriendShip() /1000)*((0.5 + Math.random())));
+        double lastPrice=0.0;
+        String rarity="";
+        if(quality<=0.5){
+            rarity="normal";
+            lastPrice=theAnimal.getProduct().getPrice();
+        }
+        else if(quality<=0.7){
+            rarity="silver";
+            lastPrice=theAnimal.getProduct().getPrice()*1.25;
+        }
+        else if(quality<=0.9){
+            rarity="golden";
+            lastPrice=theAnimal.getProduct().getPrice()*1.5;
+        }
+        else{
+            rarity="iridium";
+            lastPrice=theAnimal.getProduct().getPrice()*2;
+        }
+        player.getInventory().addToInventory(theAnimal.getProduct(),1,(int)Math.floor(lastPrice));
+        if(theAnimal.getProduct().getName().contains("Milk")||theAnimal.getProduct().getName().contains("Sheep")){
+            theAnimal.increaseFriendShip(5);
+        }
+        theAnimal.setProduct(null);
+        return new Result(true,"you collected " +rarity+" "+ productName + " from " + theAnimal.getName());
     }
-    public Result sellAnimal(Matcher matcher){
+    public Result sellAnimal(Matcher matcher, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
         String name=matcher.group(1);
         Animal theAnimal=null;
         Barn theBarn=null;
         Coop theCoop=null;
-        for(Barn barn:App.getGame().getCurrentPlayerFarm().getBarns()){
+        for(Barn barn:farm.getBarns()){
             for(Animal animal:barn.getAnimals()){
                 if(animal.getName().equals(name)){
                     theAnimal=animal;
@@ -700,7 +663,7 @@ public class AnimalController {
                 }
             }
         }
-        for(Coop coop:App.getGame().getCurrentPlayerFarm().getCoops()){
+        for(Coop coop:farm.getCoops()){
             for(Animal animal:coop.getAnimals()){
                 if(animal.getName().equals(name)){
                     theAnimal=animal;
@@ -723,7 +686,7 @@ public class AnimalController {
 
         }
         double sellPrice = theAnimal.getBuyPrice()*(((double) theAnimal.getFriendShip() /1000)+0.3);
-        App.getGame().getCurrentPlayer().incMoney(sellPrice);
+        player.incMoney(sellPrice);
 
         return new Result(true,"sold "+name+" for "+sellPrice);
 

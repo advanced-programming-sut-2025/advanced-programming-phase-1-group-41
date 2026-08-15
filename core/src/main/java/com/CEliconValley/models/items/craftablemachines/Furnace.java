@@ -7,6 +7,8 @@ import com.CEliconValley.models.items.CraftableMachine;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.items.Slot;
 
+import java.util.ArrayList;
+
 import static com.CEliconValley.models.foragings.Nature.MineralType.*;
 
 public class Furnace extends Machine {
@@ -16,6 +18,11 @@ public class Furnace extends Machine {
         slots.add(new Slot(new Mineral(MineralType.Coal),1));
         receivedItems.add(new Slot(new Mineral(mineralType),0));
         receivedItems.add(new Slot(new Mineral(MineralType.Coal),0));
+    }
+
+    public Furnace(int processTime, Slot produce,
+                   ArrayList<Slot> receivedItems, ArrayList<Slot> slots){
+        super(CraftableMachine.Furnace, processTime, produce, receivedItems, slots);
     }
 
 

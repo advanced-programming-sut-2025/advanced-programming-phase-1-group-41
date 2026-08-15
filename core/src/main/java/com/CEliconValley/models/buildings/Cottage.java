@@ -1,21 +1,24 @@
 package com.CEliconValley.models.buildings;
 
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.items.Item;
 import com.CEliconValley.models.locations.Farm;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 
 public class Cottage implements Building {
     @Override
     public String getChar() {
-        return Colors.colorize(178,0,"..");
+        return TerminalColors.colorize(178,0,"..");
     }
     private int x;
     private int y;
+    private int anchorX;
+    private int anchorY;
     private Refrigerator refrigerator;
     private HashSet<Item> machines;
     @Override
@@ -23,7 +26,12 @@ public class Cottage implements Building {
         return "Cottage";
     }
 
+    public Cottage() {
+    }
+
     public Cottage(int x, int y, Farm farm) {
+        anchorX = x+4;
+        anchorY = y+1;
         this.refrigerator = new Refrigerator();
         this.machines = new HashSet<>();
         this.x = x;
@@ -32,20 +40,23 @@ public class Cottage implements Building {
         int xWall;
         int yWall;
         yWall = y;
-        while(yWall <= y + 5) {
+        ArrayList<Cell> startPoints = new ArrayList<>();
+        while(yWall <= y + 3) {
             for (int i = x; i <= x + 5; i++) {
                 Cell cell = Finder.findCellByCoordinates(i, yWall, farm);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
-                if(i == x + 2 && yWall == y + 5){
+                if(i == x + 3 && yWall == y ){
                     cell.setObjectMap(new Door());
+                    startPoints.add(cell);
+                    farm.setStartPoints(startPoints);
                 }
             }
-            yWall+=5;
+            yWall+=3;
         }
         xWall = x;
         while(xWall<=x+5) {
-            for (int j = y + 1; j <= y + 5; j++) {
+            for (int j = y + 1; j <= y + 3; j++) {
                 Cell cell = Finder.findCellByCoordinates(xWall, j, farm);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
@@ -55,7 +66,7 @@ public class Cottage implements Building {
         x++;
         y++;
         int xLength=4;
-        int yLength=4;
+        int yLength=2;
         for(int i = x; i < xLength + x; i++) {
             for(int j = y; j < yLength + y; j++) {
                 Cell cell=Finder.findCellByCoordinates(i, j, farm);
@@ -92,4 +103,14 @@ public class Cottage implements Building {
     public HashSet<Item> getMachines() {
         return machines;
     }
+
+    public int getAnchorY(){
+        return anchorY;
+    }
+    public int getAnchorX(){
+        return anchorX;
+    }
+
+    public static int getCottageLength() {
+        return 5;}
 }

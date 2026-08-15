@@ -23,11 +23,13 @@ public class User {
     @Transient
     private Game currentGame;
     private ObjectId gameId;
+    private String avatarPath;
 
     public User() {
     }
 
-    public User( String username, String password, String email, String nickname, Gender gender, String question, String answer) {
+
+    public User(String username, String password, String email, String nickname, Gender gender, String question, String answer) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -40,6 +42,7 @@ public class User {
         this.answer = answer;
         this.stayLoggedIn = false;
         _id = new ObjectId();
+        this.avatarPath = "avatars/\u200E \u200ESepehr.png";
     }
 
     public void prepareForSaving() {
@@ -186,4 +189,7 @@ public class User {
     public void setGameId(ObjectId gameId) {
         this.gameId = gameId;
     }
+
+    public String getAvatarPath() {return avatarPath;}
+    public void setAvatarPath(String avatarPath) {this.avatarPath = avatarPath;}
 }

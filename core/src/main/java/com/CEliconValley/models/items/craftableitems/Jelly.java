@@ -41,4 +41,8 @@ public class Jelly implements Item, Eatable {
     public double getEnergy() {
         return this.fruit.getEnergy()*2;
     }
+    public int getID() {
+
+        return 10809;
+    }
 }

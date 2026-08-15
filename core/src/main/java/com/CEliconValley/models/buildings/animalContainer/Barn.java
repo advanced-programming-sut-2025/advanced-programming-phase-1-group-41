@@ -1,10 +1,11 @@
 package com.CEliconValley.models.buildings.animalContainer;
 
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.animals.Animal;
 import com.CEliconValley.models.buildings.Building;
+import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.buildings.Wall;
 import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.locations.Village;
@@ -12,11 +13,15 @@ import com.CEliconValley.models.locations.Village;
 import java.util.ArrayList;
 
 public class Barn implements Building {
-    private final ArrayList<Animal> animals = new ArrayList<>();
+    private ArrayList<Animal> animals = new ArrayList<>();
     private int x;
     private int y;
+    // TODO these anchor things need to be handled, rn there is no logic behind them
+    private int anchorX;
+    private int anchorY;
     private BarnType barnType;
     private int capacity;
+    private int id;
 
     public int getX() {
         return x;
@@ -30,26 +35,36 @@ public class Barn implements Building {
         return barnType;
     }
 
-    public Barn(int x, int y, Farm farm, BarnType barnType) {
-        this.capacity=barnType.getCapacity();
+    public Barn() {
+    }
+
+    public Barn(ArrayList<Animal> animals, int anchorX,
+                int anchorY, BarnType barnType, int capacity, int x, int y, Farm farm, int id) {
+        this.animals = new ArrayList<>(animals);
+        this.anchorX = anchorX;
+        this.anchorY = anchorY;
+        this.barnType = barnType;
+        this.capacity = capacity;
         this.x = x;
         this.y = y;
-        this.barnType=barnType;
         int size = 5 + barnType.getCapacity() / 4;
         int xWall;
         int yWall;
         yWall = y;
-        while(yWall<=y + size) {
+        while(yWall<=y + size-2) {
             for (int i = x; i <= x + size; i++) {
                 Cell cell = Finder.findCellByCoordinates(i, yWall, farm);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
+                if(i == x + 1 && yWall == y ){
+                    cell.setObjectMap(new Door());
+                }
             }
-            yWall+=size;
+            yWall+=size-2;
         }
         xWall = x;
         while(xWall<=x+size) {
-            for (int j = y+1; j <= y+size; j++) {
+            for (int j = y+1; j <= y+size-2; j++) {
                 Cell cell = Finder.findCellByCoordinates(xWall, j, farm);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
@@ -59,31 +74,76 @@ public class Barn implements Building {
         x++;
         y++;
         for(int i = x; i< size +x - 1; i++) {
-            for(int j = y; j< size +y - 1; j++) {
+            for(int j = y; j< size +y - 3; j++) {
                 Cell cell=Finder.findCellByCoordinates(i, j, farm);
                 assert cell != null;
                 cell.setObjectMap(this);
             }
         }
+        this.id=id;
+    }
+
+    public Barn(int x, int y, Farm farm, BarnType barnType) {
+        this.capacity=barnType.getCapacity();
+        this.x = x;
+        this.y = y;
+        this.barnType=barnType;
+        int size = 5 + barnType.getCapacity() / 4;
+        anchorX=x+size-1;
+        anchorY=y+1;
+        int xWall;
+        int yWall;
+        yWall = y;
+        while(yWall<=y + size-2) {
+            for (int i = x; i <= x + size; i++) {
+                Cell cell = Finder.findCellByCoordinates(i, yWall, farm);
+                assert cell != null;
+                cell.setObjectMap(new Wall());
+                if(i == x + 1 && yWall == y ){
+                    cell.setObjectMap(new Door());
+                }
+            }
+            yWall+=size-2;
+        }
+        xWall = x;
+        while(xWall<=x+size) {
+            for (int j = y+1; j <= y+size-2; j++) {
+                Cell cell = Finder.findCellByCoordinates(xWall, j, farm);
+                assert cell != null;
+                cell.setObjectMap(new Wall());
+            }
+            xWall+=size;
+        }
+        x++;
+        y++;
+        for(int i = x; i< size +x - 1; i++) {
+            for(int j = y; j< size +y - 3; j++) {
+                Cell cell=Finder.findCellByCoordinates(i, j, farm);
+                assert cell != null;
+                cell.setObjectMap(this);
+            }
+        }
+        this.id = farm.getBarns() == null ? 0 : farm.getBarns().size();
     }
     public Barn(int x, int y, Village village) {
         this.x = x;
         this.y = y;
+        barnType=BarnType.Normal;
         int size = 3;
         int xWall;
         int yWall;
         yWall = y;
-        while(yWall<=y + size) {
+        while(yWall<=y + size-2) {
             for (int i = x; i <= x + size; i++) {
                 Cell cell = Finder.findCellByCoordinatesVillage(i, yWall, village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
             }
-            yWall+=size;
+            yWall+=size-2;
         }
         xWall = x;
         while(xWall<=x+size) {
-            for (int j = y+1; j <= y+size; j++) {
+            for (int j = y+1; j <= y+size-2; j++) {
                 Cell cell = Finder.findCellByCoordinatesVillage(xWall, j, village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
@@ -93,7 +153,7 @@ public class Barn implements Building {
         x++;
         y++;
         for(int i = x; i< size +x - 1; i++) {
-            for(int j = y; j< size +y - 1; j++) {
+            for(int j = y; j< size +y - 3; j++) {
                 Cell cell=Finder.findCellByCoordinatesVillage(i, j, village);
                 assert cell != null;
                 cell.setObjectMap(this);
@@ -107,7 +167,7 @@ public class Barn implements Building {
 
     @Override
     public String getChar() {
-        return Colors.colorize(243,234,"bb");
+        return TerminalColors.colorize(243,234,"bb");
     }
 
     @Override
@@ -128,5 +188,20 @@ public class Barn implements Building {
     }
     public void setY(int y){
         this.y=y;
+    }
+
+    @Override
+    public int getAnchorX() {
+        return anchorX;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return anchorY;
+    }
+
+
+    public int getId() {
+        return id;
     }
 }

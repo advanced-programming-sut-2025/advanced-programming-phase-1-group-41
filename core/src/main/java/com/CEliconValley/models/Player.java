@@ -1,16 +1,19 @@
 package com.CEliconValley.models;
 
+import com.CEliconValley.common.messages.Emotion;
+import com.CEliconValley.common.messages.Position;
 import com.CEliconValley.models.items.*;
+import com.CEliconValley.models.items.craftablemachines.Machine;
+import com.CEliconValley.models.locations.FarmType;
+import com.CEliconValley.models.skills.Skill;
+import com.CEliconValley.models.tools.Tool;
+import com.CEliconValley.models.ui.TerminalColors;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Transient;
 import org.bson.types.ObjectId;
-import com.CEliconValley.models.items.craftablemachines.Machine;
-import com.CEliconValley.models.skills.Skill;
-import com.CEliconValley.models.tools.Tool;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Objects;
 
 @Entity("players")
@@ -18,15 +21,15 @@ public class Player {
 
     public String getChar() {
         if(farmId == 1){
-            return Colors.colorize(0,199,":]");
+            return TerminalColors.colorize(0,199,":]");
         }
         if(farmId == 2){
-            return Colors.colorize(0,56,":]");
+            return TerminalColors.colorize(0,56,":]");
         }
         if(farmId == 3){
-            return Colors.colorize(0,226,":]");
+            return TerminalColors.colorize(0,226,":]");
         }
-        return Colors.colorize(0,40,":]");
+        return TerminalColors.colorize(0,40,":]");
     }
 
     @Id
@@ -38,8 +41,15 @@ public class Player {
     private double savings;
     private int farmId;
     private int inFarmId;
+    private FarmType farmType;
     private int x;
     private int y;
+    public int targetx;
+    public int targety;
+    public float renderx;
+    public float rendery;
+    public int currentDirection = 3;
+    public boolean isMoving = false;
     private double energy;
     private int maxEnergy = 200;
     private boolean energyUnlimited;
@@ -64,19 +74,24 @@ public class Player {
     @Transient
     private ArrayList<Friendship> friendships;
     @Transient
-    private final ArrayList<Gift> newGifts = new ArrayList<>();
+    private ArrayList<Gift> newGifts = new ArrayList<>();
     @Transient
-    private final ArrayList<Gift> receivedGifts = new ArrayList<>();
+    private ArrayList<Gift> receivedGifts = new ArrayList<>();
     @Transient
-    private final ArrayList<Gift> sendGifts = new ArrayList<>();
+    private ArrayList<Gift> sendGifts = new ArrayList<>();
     @Transient
-    private final ArrayList<Trade> tradesList = new ArrayList<>();
+    private ArrayList<Trade> tradesList = new ArrayList<>();
     @Transient
-    private final ArrayList<Trade> newTradesList = new ArrayList<>();
+    private ArrayList<Trade> newTradesList = new ArrayList<>();
     @Transient
-    private final ArrayList<Trade> totalTradesList = new ArrayList<>();
+    private ArrayList<Trade> totalTradesList = new ArrayList<>();
     @Transient
     private Buff currentBuff = null;
+    int questsFinsihed;
+
+    public ArrayList<Emotion> emotions = new ArrayList<>();
+    public int selectedEmotionIndex = 0;
+
 //    private Farm farm;
 //    private ArrayList<Animal> animals;
 //    private ArrayList<Skill> skills;
@@ -92,19 +107,84 @@ public class Player {
 
 //    private ArrayList<HashMap<NPC, Integer>> npcs;
     // needs an augmentation
-    private ArrayList<HashMap<Player, FriendshipLevel>> friends;
 
+
+    public Player(ArrayList<CookingRecipe> cookingRecipes,
+                  ArrayList<CraftingRecipe> craftingRecipes, Buff currentBuff,
+                  Tool currentTool, int depressionDaysLeft, double energy,
+                  boolean energyUnlimited, int farmId, Skill farmingSkill,
+                  Skill fishingSkill, Skill foragingSkill,
+                  int inFarmId, Inventory inventory,
+                  int maxEnergy, Skill miningSkill, double money,
+                  ArrayList<Machine> onGoingMachines,
+                  boolean playerIsInVillage,
+                  double savings, User user, int x, int y, FarmType farmType, int questsFinsihed,
+                  int targetx, int targety, float renderx, float rendery,
+                  int currentDirection, boolean isMoving, ArrayList<Emotion> emotions,
+                  int selectedEmotionIndex) {
+        this.cookingRecipes = cookingRecipes;
+        this.craftingRecipes = craftingRecipes;
+        this.currentBuff = currentBuff;
+        this.currentTool = currentTool;
+        this.depressionDaysLeft = depressionDaysLeft;
+        this.energy = energy;
+        this.energyUnlimited = energyUnlimited;
+        this.farmId = farmId;
+        this.farmType = farmType;
+        this.farmingSkill = farmingSkill;
+        this.fishingSkill = fishingSkill;
+        this.foragingSkill = foragingSkill;
+        this.inFarmId = inFarmId;
+        this.inventory = inventory;
+        this.maxEnergy = maxEnergy;
+        this.miningSkill = miningSkill;
+        this.money = money;
+        this.onGoingMachines = new ArrayList<>(onGoingMachines);
+        this.playerIsInVillage = playerIsInVillage;
+        this.savings = savings;
+        this.user = user;
+        this.x = x;
+        this.y = y;
+        this.targetx = targetx;
+        this.targety = targety;
+        this.renderx = renderx;
+        this.rendery = rendery;
+        this.currentDirection = currentDirection;
+        this.isMoving = isMoving;
+        this.questsFinsihed = questsFinsihed;
+        this.selectedEmotionIndex = selectedEmotionIndex;
+        this.emotions = new ArrayList<>(emotions);
+    }
+
+    public void handmadePostLoad(ArrayList<Friendship> friendships,
+                                 ArrayList<Gift> newGifts, ArrayList<Trade> newTradesList,
+                                 ArrayList<Gift> receivedGifts, ArrayList<Gift> sendGifts,
+                                 ArrayList<Trade> totalTradesList, ArrayList<Trade> tradesList) {
+        this.friendships = new ArrayList<>(friendships);
+        this.newGifts = new ArrayList<>(newGifts);
+        this.newTradesList = new ArrayList<>(newTradesList);
+        this.receivedGifts = new ArrayList<>(receivedGifts);
+        this.sendGifts = new ArrayList<>(sendGifts);
+        this.totalTradesList = new ArrayList<>(totalTradesList);
+        this.tradesList = new ArrayList<>(tradesList);
+    }
 
     public Player() {
     }
 
-    public Player(User user) {
+    public Player(User user, FarmType farmType, int farmId) {
         this.user = user;
         money = 0;
         savings = 0;
-        x = 0;
-        y = 0;
+        x = 35;
+        y = 55;
+        this.targetx = x;
+        this.targety = y;
+        this.renderx = renderx * 160;
+        this.rendery = rendery * 160;
         energy = 200;
+        this.farmId = farmId;
+        this.farmType = farmType;
         this.inventory = new Inventory();
         this.energyUnlimited = false;
         this.currentTool = null;
@@ -141,6 +221,14 @@ public class Player {
 //        backpack = Backpack.Default;
 //        this.farm = null;
         _id = new ObjectId();
+        this.questsFinsihed = 0;
+        this.emotions = new ArrayList<>();
+        this.emotions.add(new Emotion(4, true, user.getUsername()));
+        this.emotions.add(new Emotion(0, true, user.getUsername()));
+        this.emotions.add(new Emotion(1, true, user.getUsername()));
+        this.emotions.add(new Emotion(0, false, user.getUsername()));
+        this.emotions.add(new Emotion(1, false, user.getUsername()));
+        this.selectedEmotionIndex = 0;
     }
 
     public void prepareForSaving() {
@@ -171,6 +259,9 @@ public class Player {
 
     public double getMoney() {
         double value = 0;
+        if(this.friendships == null){
+            this.friendships = new ArrayList<>();
+        }
         for (Friendship friendship : this.friendships) {
             if(friendship.isAreMarried()){
                 if(friendship.getPlayer1().getUser().getUsername().equals(App.getGame().getCurrentPlayer().getUser().getUsername())){
@@ -447,6 +538,7 @@ public class Player {
     }
 
 
+
     public Buff getCurrentBuff() {
         return currentBuff;
     }
@@ -455,11 +547,34 @@ public class Player {
         return depressionDaysLeft;
     }
 
-    public ArrayList<HashMap<Player, FriendshipLevel>> getFriends() {
-        return friends;
-    }
-
     public int getMaxEnergy() {
         return maxEnergy;
+    }
+
+    public FarmType getFarmType() {
+        return farmType;
+    }
+
+    public int getQuestsFinsihed() {
+        return questsFinsihed;
+    }
+
+    public void setQuestsFinsihed(int questsFinsihed) {
+        this.questsFinsihed = questsFinsihed;
+    }
+
+    public void incrementQuestsFinished(){
+        questsFinsihed++;
+    }
+
+    public void updatePos(Position pos){
+        this.x = pos.x;
+        this.y = pos.y;
+        this.targetx = pos.targetx;
+        this.targety = pos.targety;
+        this.renderx = pos.renderx;
+        this.rendery = pos.rendery;
+        this.currentDirection = pos.currentdirection;
+        this.isMoving = pos.ismoving;
     }
 }

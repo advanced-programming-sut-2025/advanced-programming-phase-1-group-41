@@ -43,15 +43,27 @@ public enum FishType implements Item, Eatable {
         return price;
     }
 
+    @Override
+    public int getID() {
+        Fish fish=new Fish(this);
+        return fish.getID();
+
+    }
+
     public Season getSeason() {return season;}
 
 
     public static Item parseFish(String name) {
+        for (FishType value : FishType.values()) {
+            if(value.name().equals(name)){
+                return value;
+            }
+        }
         return switch(name){
             case "Salmon" -> Salmon;
             case "Sardine" -> Sardine;
             case "Shad" -> Shad;
-            case "BlueDiscus " -> BlueDiscus;
+            case "BlueDiscus" -> BlueDiscus;
             case "MidnightCarp" -> MidnightCarp;
             case "Squid" -> Squid;
             case "Tuna" -> Tuna;
@@ -86,5 +98,14 @@ public enum FishType implements Item, Eatable {
         return this.name();
     }
 
+
+    public static FishType parseFishType(String name) {
+        for (FishType fishType : FishType.values()) {
+            if(fishType.getName().equals(name)){
+                return fishType;
+            }
+        }
+        return null;
+    }
 
 }

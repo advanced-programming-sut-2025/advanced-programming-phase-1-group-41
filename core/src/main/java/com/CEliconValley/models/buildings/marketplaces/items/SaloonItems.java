@@ -26,6 +26,8 @@ public enum SaloonItems implements Item {
     private String name;
     private double price;
     private String ch;
+    private Item item;
+    private CookingRecipe cookingRecipe;
 
     SaloonItems(String ch, String name, double price) {
         this.ch = ch;
@@ -38,12 +40,14 @@ public enum SaloonItems implements Item {
         this.name = recipe.getName();
         this.price = price;
         this.ch = "";
+        cookingRecipe = recipe;
     }
 
     SaloonItems(Item item, double price) {
         this.ch = item.getChar();
         this.name = item.getName();
         this.price = price;
+        this.item = item;
     }
 
     @Override
@@ -68,5 +72,13 @@ public enum SaloonItems implements Item {
             }
         }
         return null;
+    }
+    public int getID() {
+        if(cookingRecipe == null){
+            return this.item.getID();
+        }
+        else{
+            return this.cookingRecipe.getId();
+        }
     }
 }

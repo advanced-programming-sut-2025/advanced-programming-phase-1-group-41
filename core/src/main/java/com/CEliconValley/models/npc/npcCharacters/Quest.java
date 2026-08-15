@@ -128,4 +128,12 @@ public class Quest {
     public NPC getOwner() {
         return owner;
     }
+
+    public HashMap<Player, Boolean> getIsFinished() {
+        return isFinished;
+    }
+
+    public HashMap<Player, Boolean> getIsLocked() {
+        return isLocked;
+    }
 }

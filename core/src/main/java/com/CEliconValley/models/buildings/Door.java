@@ -1,17 +1,20 @@
 package com.CEliconValley.models.buildings;
 
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
+import dev.morphia.annotations.Embedded;
 
+@Embedded
 public class Door implements Building {
     @Override
     public String getChar() {
         if(isClosed){
-            return Colors.colorize(196,0,"[]");
+            return TerminalColors.colorize(196,0,"[]");
         } else if(closesSoon) {
-            return Colors.colorize(208, 0, "||");
+            return TerminalColors.colorize(208, 0, "||");
         }
-        return Colors.colorize(82,0,"][");
+        return TerminalColors.colorize(82,0,"][");
     }
+    private int initialize=-1;
 
     @Override
     public String getName() {
@@ -31,5 +34,32 @@ public class Door implements Building {
 
     public void setClosesSoon(boolean closesSoon) {
         this.closesSoon = closesSoon;
+    }
+
+    @Override
+    public int getAnchorX() {
+        return 0;
+    }
+
+    @Override
+    public int getX() {
+        return 0;
+    }
+
+    @Override
+    public int getY() {
+        return 0;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return 0;
+    }
+
+    public int getInitialize(){
+        return initialize;
+    }
+    public void setInitialize(int initialize) {
+        this.initialize = initialize;
     }
 }

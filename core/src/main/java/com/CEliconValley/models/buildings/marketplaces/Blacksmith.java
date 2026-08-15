@@ -1,8 +1,9 @@
 package com.CEliconValley.models.buildings.marketplaces;
 
+import com.CEliconValley.common.CellData;
 import com.CEliconValley.models.App;
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.buildings.Door;
@@ -21,7 +22,7 @@ public class Blacksmith extends Marketplace implements Building{
 
     @Override
     public String getChar() {
-        return Colors.colorize(0,160,"BS");
+        return TerminalColors.colorize(0,160,"BS");
     }
 
     @Override
@@ -30,10 +31,18 @@ public class Blacksmith extends Marketplace implements Building{
     }
     private int x;
     private int y;
-    public Blacksmith(int x, int y, Village village) {
+    private int anchorX;
+    private int anchorY;
+
+    public Blacksmith() {
+        anchorX = 86;
+        anchorY = 56;
+    }
+
+    public Blacksmith(int x, int y, Village village, boolean load) {
 //        super(App.getGame().getVillage().getnpcByName("clint"));
         super(null);
-        constructBlacksmith(x,y,village);
+        constructBlacksmith(x,y,village, load);
         itemsForSale.add(new Slot(BlacksmithItems.Coal, 10000));
         itemsForSale.add(new Slot(BlacksmithItems.IronOre, 10000));
         itemsForSale.add(new Slot(BlacksmithItems.GoldOre, 10000));
@@ -51,7 +60,7 @@ public class Blacksmith extends Marketplace implements Building{
         updates.add(true);
     }
 
-    private void constructBlacksmith(int x, int y , Village village){
+    private void constructBlacksmith(int x, int y , Village village, boolean load){
         this.x = x;
         this.y = y;
         int xWall;
@@ -62,6 +71,10 @@ public class Blacksmith extends Marketplace implements Building{
                 Cell cell = Finder.findCellByCoordinatesVillage(i, yWall,village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
+                if(i == x+3&&yWall==y){
+                    cell.setObjectMap(door);
+                    doors.add(cell);
+                }
             }
             yWall+=5;
         }
@@ -71,9 +84,7 @@ public class Blacksmith extends Marketplace implements Building{
                 Cell cell = Finder.findCellByCoordinatesVillage(xWall, j, village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
-                if(j == y + 2&&xWall==x+5){
-                    cell.setObjectMap(door);
-                }
+
             }
             xWall+=5;
         }
@@ -88,7 +99,9 @@ public class Blacksmith extends Marketplace implements Building{
                 cell.setObjectMap(this);
             }
         }
-        updateHourly();
+        if(!load) {
+            updateHourly();
+        }
     }
 
     public int getX() {
@@ -131,5 +144,15 @@ public class Blacksmith extends Marketplace implements Building{
             door.setClosed(true);
             door.setClosesSoon(false);
         }
+    }
+
+    @Override
+    public int getAnchorX() {
+        return anchorX;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return anchorY;
     }
 }

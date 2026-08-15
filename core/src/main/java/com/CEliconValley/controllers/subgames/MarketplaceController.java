@@ -4,6 +4,9 @@ import com.CEliconValley.models.*;
 import com.CEliconValley.models.animals.animalKinds.*;
 import com.CEliconValley.models.buildings.marketplaces.*;
 import com.CEliconValley.models.items.*;
+import com.CEliconValley.models.locations.Farm;
+import com.CEliconValley.models.locations.Village;
+import com.CEliconValley.models.npc.npcCharacters.NPC;
 import com.CEliconValley.models.tools.*;
 
 import com.CEliconValley.models.animals.Animal;
@@ -14,6 +17,8 @@ import com.CEliconValley.models.buildings.animalContainer.BarnType;
 import com.CEliconValley.models.buildings.animalContainer.CoopType;
 import com.CEliconValley.models.foragings.Nature.Rock;
 import com.CEliconValley.models.foragings.Nature.Wood;
+import com.CEliconValley.models.ui.TerminalColors;
+import dev.morphia.mapping.codec.reader.Mark;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -23,8 +28,7 @@ public class MarketplaceController {
     Player player;
     Inventory inventory;
     Cell currentCell;
-    private Result inMarketPlace(){
-        player = App.getGame().getCurrentPlayer();
+    private Result inMarketPlace(Player player){
         currentCell = App.getGame().getVillage().getCell(player.getX(), player.getY());
         inventory = player.getInventory();
         if(!player.isPlayerIsInVillage()){
@@ -37,26 +41,60 @@ public class MarketplaceController {
         return new Result(true,"");
     }
     public static void updateHourly(){
-        for(Building market : App.getGame().getVillage().getBuildings()){
-            if(market instanceof Marketplace){
+        Village village = App.getGame().getVillage();
+        int hour = App.getGame().getTime().getHour();
+        for(Building market : village.getBuildings()){
+            if(market instanceof Marketplace marketplace){
                 ((Marketplace) market).updateHourly();
+                if(Marketplace.goToWork <= hour && hour <= Marketplace.outOfWork){
+                    marketplace.isOpen = true;
+                }else{
+                    marketplace.isOpen = false;
+                }
+            }
+        }
+        for (NPC npc : village.getNPCs()) {
+            if(hour == Marketplace.outOfHome){
+                npc.isOutside = true;
+                npc.shouldGoToWork = false;
+                npc.shouldGoHome = false;
+            }
+            else if(hour == Marketplace.goToWork){
+                if(npc.getJob() != null && npc.getJob()!=Occupation.Jobless || npc.getHome() != null){
+                    if(npc.getJob() != null && npc.getJob()!=Occupation.Jobless){
+                        npc.shouldGoToWork = true;
+                        npc.isOutside = false;
+                    }
+                }
+            }
+            else if(hour == Marketplace.outOfWork){
+                npc.isOutside = true;
+                npc.shouldGoToWork = false;
+                npc.shouldGoHome = false;
+            }else if(hour == Marketplace.goToHome){
+                if(npc.getJob() != null && npc.getJob()!=Occupation.Jobless || npc.getHome() != null){
+                    if(npc.getHome() != null){
+                        npc.shouldGoHome = true;
+                        npc.isOutside = false;
+                    }
+                }
             }
         }
     }
     public Result showAllProducts(Matcher matcher){
-        Result preResult = inMarketPlace();
-        if(!preResult.success()){
-            return preResult;
-        }
+//        Result preResult = inMarketPlace();
+//        if(!preResult.success()){
+//            return preResult;
+//        }
         Marketplace mp = (Marketplace) currentCell.getObjectMap();
         System.out.println("All Products: \n");
         for(Slot slot : mp.getItemsForSale()){
             if(slot.getQuantity() > 0){
                 if(slot.getQuantity()<=5){
-                    System.out.print(Colors.foreColor(202));
+                    System.out.print(TerminalColors.foreColor(202));
                 }
                 else{
-                    System.out.print(Colors.foreColor(46));
+                    System.out.print(TerminalColors.foreColor(46));
                 }
                 System.out.printf(
                         "%-40s -> %7d left | price: %6.0f%n",
@@ -65,31 +103,31 @@ public class MarketplaceController {
                         slot.getItem().getPrice()
                 );
             }else {
-                System.out.print(Colors.foreColor(124));
+                System.out.print(TerminalColors.foreColor(124));
                 System.out.printf("%-40s ->       SOLD OUT\n",slot.getItem().getName());
 
-            } System.out.print(Colors.RESET);
+            } System.out.print(TerminalColors.RESET);
         }
         return new Result(true,"");
     }
 
     public Result showAllAvailableProducts(Matcher matcher){
-        Result preResult = inMarketPlace();
-        if(!preResult.success()){
-            return preResult;
-        }
+//        Result preResult = inMarketPlace();
+//        if(!preResult.success()){
+//            return preResult;
+//        }
         Marketplace mp = (Marketplace) currentCell.getObjectMap();
         StringBuilder message = new StringBuilder();
         System.out.println("Available products:\n");
         for(Slot slot : mp.getItemsForSale()){
             if(slot.getQuantity() > 0){
                 if(slot.getQuantity()<10){
-                    System.out.print(Colors.foreColor(202));
+                    System.out.print(TerminalColors.foreColor(202));
                 }else if(slot.getQuantity()<4){
-                    System.out.print(Colors.foreColor(124));
+                    System.out.print(TerminalColors.foreColor(124));
                 }
                 else{
-                    System.out.print(Colors.foreColor(46));
+                    System.out.print(TerminalColors.foreColor(46));
                 }
                 System.out.printf(
                         "%-40s -> %7d left | price: %6.0f%n",
@@ -97,7 +135,7 @@ public class MarketplaceController {
                         slot.getQuantity(),
                         slot.getItem().getPrice()
                 );
-                System.out.print(Colors.RESET);
+                System.out.print(TerminalColors.RESET);
             }
         }
 
@@ -124,13 +162,12 @@ public class MarketplaceController {
         return true;
     }
 
-    private boolean nearShippingBin(){
-        player = App.getGame().getCurrentPlayer();
+    private boolean nearShippingBin(Player player, Farm farm){
         inventory = player.getInventory();
         if(!player.isPlayerIsInVillage()){
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
-                    Cell nextCell = Finder.findCellByCoordinates(player.getX()+i, player.getY()+j, App.getGame().getCurrentPlayerFarm());
+                    Cell nextCell = Finder.findCellByCoordinates(player.getX()+i, player.getY()+j, farm);
                     if(nextCell == null) continue;
                     if(nextCell.getObjectMap() instanceof ShippingBin){
                         return true;
@@ -152,8 +189,10 @@ public class MarketplaceController {
 
     }
 
-    public Result sellProduct(Matcher matcher){
-        boolean nearShippingBin = nearShippingBin();
+    public Result sellProduct(Matcher matcher, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
+        boolean nearShippingBin = nearShippingBin(player, farm);
         if(!nearShippingBin){
             return new Result(false, "you're not near a shipping bin");
         }
@@ -164,7 +203,6 @@ public class MarketplaceController {
         if(item == null){
             return new Result(false, "item doesn't exist");
         }
-        Player player = App.getGame().getCurrentPlayer();
         Slot slot = player.getInventory().getSlotByItem(item);
         if(slot == null){
             return new Result(false, "you don't have this item");
@@ -186,11 +224,14 @@ public class MarketplaceController {
         value += 1;
         player.incSavings(value);
         player.getInventory().removeFromInventory(slot.getItem(), wantedQuantity);
-        return new Result(true,"you're gonna gain "+value+" later.. current saving: "+player.getSavings());
+        Result result = new Result(true,"you're gonna gain "+value+" later.. current saving: "+player.getSavings());
+        App.sendResult(result, playername);
+        return result;
     }
 
-    public Result purchaseProduct(Matcher matcher){
-        Result preResult = inMarketPlace();
+    public Result purchaseProduct(Matcher matcher, String playername){
+        Player player = Finder.getPlayerByUsername(playername);
+        Result preResult = inMarketPlace(player);
         if(!preResult.success()){
             return preResult;
         }
@@ -210,13 +251,17 @@ public class MarketplaceController {
                     case FiberGlass -> {
                         int fishingLevel = player.getFishingSkill().getLevel();
                         if(fishingLevel < 2){
-                            return new Result(false, "your fishing needs to be at least 2");
+                            Result result = new Result(false, "your fishing needs to be at least 2");
+                            App.sendResult(result, playername);
+                            return result;
                         }
                     }
                     case Iridium -> {
                         int fishingLevel = player.getFishingSkill().getLevel();
                         if(fishingLevel < 4){
-                            return new Result(false, "your fishing needs to be at least 4");
+                            Result result =  new Result(false, "your fishing needs to be at least 4");
+                            App.sendResult(result, playername);
+                            return result;
                         }
                     }
                 }
@@ -228,16 +273,23 @@ public class MarketplaceController {
                 switch (bp){
                     case Deluxe -> {
                         if(player.getInventory().getBackpack() == Backpack.Default){
-                            return new Result(false, "you need to buy a large backpack first");
+                            Result result =  new Result(false, "you need to buy a large backpack first");
+                            App.sendResult(result, playername);
+                            return result;
                         }
                     }
                 }
                 if(bp.equals(player.getInventory().getBackpack())){
-                    return new Result(false,"you already have " +
+
+                    Result result =  new Result(false,"you already have " +
                             player.getInventory().getBackpack()+" backpack");
+                    App.sendResult(result, playername);
+                    return result;
                 }
                 if(bp.ordinal() < player.getInventory().getBackpack().ordinal()){
-                    return new Result(false,"you can't downgrade your backpack..");
+                    Result result = new Result(false,"you can't downgrade your backpack..");
+                    App.sendResult(result, playername);
+                    return result;
                 }
             }
         }
@@ -255,11 +307,15 @@ public class MarketplaceController {
             return new Result(false, "Out of stock for "+itemName);
         }
         if(slot.getQuantity() < wantedQuantity){
-            return new Result(false, "Low stock for "+itemName);
+            Result result =  new Result(false, "Low stock for "+itemName);
+            App.sendResult(result, playername);
+            return result;
         }
         double delta = player.getMoney() - (wantedQuantity * slot.getItem().getPrice());
         if(delta < 0){
-            return new Result(false, "Not enough money for "+itemName+" you need "+(-delta) + " more money");
+            Result result =  new Result(false, "Not enough money for "+itemName+" you need "+(-delta) + " more money");
+            App.sendResult(result, playername);
+            return result;
         }
         if(mp instanceof CarpenterShop carpenterShop){
             Slot neededItem = null;
@@ -272,11 +328,15 @@ public class MarketplaceController {
                 Slot s = inventory.getSlotByItem(neededItem.getItem());
                 if(s != null){
                     if(s.getQuantity() < neededItem.getQuantity()){
-                        return new Result(false,"insufficient material..");
+                        Result result =  new Result(false,"insufficient material..");
+                        App.sendResult(result, playername);
+                        return result;
                     }
                     inventory.removeFromInventory(neededItem.getItem(), neededItem.getQuantity());
                 }else{
-                    return new Result(false, "you don't have the needed resources");
+                    Result result =  new Result(false, "you don't have the needed resources");
+                    App.sendResult(result, playername);
+                    return result;
                 }
             }
         }
@@ -350,19 +410,19 @@ public class MarketplaceController {
         return new Result(true, wantedQuantity+"x "+itemName+" purchased");
     }
 
-    public Result cheatAddMoney(Matcher matcher){
+    public Result cheatAddMoney(Matcher matcher, String playerName){
+        Player player = Finder.getPlayerByUsername(playerName);
         int delta = Integer.parseInt(matcher.group(1).trim());
-        Player player = App.getGame().getCurrentPlayer();
         player.incMoney(delta);
         return new Result(true,"new money is : "+player.getMoney());
     }
 
 
     public Result upgradeTool(Tool tool){
-        Result preResult = inMarketPlace();
-        if(!preResult.success()){
-            return preResult;
-        }
+//        Result preResult = inMarketPlace();
+//        if(!preResult.success()){
+//            return preResult;
+//        }
         Blacksmith bs;
         try{
             bs = (Blacksmith) currentCell.getObjectMap();
@@ -442,19 +502,24 @@ public class MarketplaceController {
     }
 
 
-    public Result buyAnimal(Animal animal, Building building){
-        Result preResult = inMarketPlace();
-        if(!preResult.success()){
-            return preResult;
-        }
+    public Result buyAnimal(Animal animal, Building building, String playername){
+//        Result preResult = inMarketPlace();
+//        if(!preResult.success()){
+//            return preResult;
+//        }
         MarnieRanch ranch;
+        Player player = Finder.getPlayerByUsername(playername);
+        Farm farm = Finder.getFarmByPlayer(player);
+        Cell currentCell = Finder.findCellByCoordinatesVillage(player.getX(), player.getY(), App.getGame().getVillage());
         if((currentCell.getObjectMap() instanceof MarnieRanch marnieRanch)){
             ranch = marnieRanch;
         }else{
             return new Result(false, "you're not in marnie's ranch");
         }
         if(player.getMoney() < animal.getBuyPrice() ){
-            return new Result(false,"you need "+(animal.getBuyPrice()-player.getMoney())+" more money!");
+            Result result = new Result(false,"you need "+(animal.getBuyPrice()-player.getMoney())+" more money!");
+            App.sendResult(result, playername);
+            return result;
         }
         HashMap<String, Integer> limits = ranch.getDailyLimit();
         if(animal instanceof Chicken){
@@ -512,10 +577,10 @@ public class MarketplaceController {
     }
 
     public Result buildBaoop(double cost, int rockCount, int woodCount, int index){
-        Result preResult = inMarketPlace();
-        if(!preResult.success()){
-            return preResult;
-        }
+//        Result preResult = inMarketPlace();
+//        if(!preResult.success()){
+//            return preResult;
+//        }
         Slot rockSlot = new Slot(new Rock(), rockCount);
         Slot woodSlot = new Slot(new Wood(), woodCount);
         Slot playerRock = inventory.getSlotByItem(rockSlot.getItem());

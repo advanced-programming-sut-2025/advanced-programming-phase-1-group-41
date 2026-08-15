@@ -1,7 +1,7 @@
 package com.CEliconValley.models.foragings.Nature;
 
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 
 import com.CEliconValley.models.locations.Farm;
@@ -11,7 +11,7 @@ import java.util.Random;
 public class Mineral implements Nature, Obstacle {
     @Override
     public String getChar() {
-        return Colors.colorize(15,51,typeIndex/10 + "" + typeIndex%10);
+        return TerminalColors.colorize(15,51,typeIndex/10 + "" + typeIndex%10);
     }
 
     private final int typeIndex;
@@ -44,4 +44,12 @@ public class Mineral implements Nature, Obstacle {
     public double getPrice() {
         return mineralType.getPrice();
     }
+    @Override
+    public int getID() {
+        int index = this.mineralType.ordinal();
+        int row = index / 5;
+        int col = index % 5;
+        return 70000 + row * 100 + col;
+    }
+
 }

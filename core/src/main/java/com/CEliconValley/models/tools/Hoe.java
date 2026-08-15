@@ -31,4 +31,19 @@ public class Hoe implements Tool, LevelTool{
     public double getPrice() {
         return 0;
     }
+    public int getID() {
+        switch (this.getLevel()) {
+            case Default:
+                return 90100;
+            case Copper:
+                return 90101;
+            case Iron:
+                return 90102;
+            case Gold:
+                return 90103;
+            case Iridium:
+                return 90104;
+        }
+        return -1;
+    }
 }

@@ -18,6 +18,9 @@ public class Troutsoup implements Item,  Eatable {
     public double getPrice() {
         return 250;
     }
+    public int getID() {
+        return 10410;
+    }
 
     @Override
     public String getChar() {

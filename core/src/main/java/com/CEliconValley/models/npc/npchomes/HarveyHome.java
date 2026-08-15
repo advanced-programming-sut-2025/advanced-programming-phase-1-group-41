@@ -1,7 +1,7 @@
 package com.CEliconValley.models.npc.npchomes;
 
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.buildings.Door;
@@ -11,7 +11,7 @@ import com.CEliconValley.models.locations.Village;
 public class HarveyHome extends NPCHome implements Building {
     @Override
     public String getChar() {
-        return Colors.colorize(15,0,"..");
+        return TerminalColors.colorize(15,0,"..");
     }
 
     @Override
@@ -20,6 +20,14 @@ public class HarveyHome extends NPCHome implements Building {
     }
     private int x;
     private int y;
+    private int anchorX;
+    private int anchorY;
+
+    public HarveyHome() {
+        anchorX = 64;
+        anchorY = 55;
+    }
+
     public HarveyHome(int x, int y, Village village) {
         this.x = x;
         this.y = y;
@@ -31,7 +39,7 @@ public class HarveyHome extends NPCHome implements Building {
                 Cell cell = Finder.findCellByCoordinatesVillage(i, yWall,village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
-                if(i == x + 3&&yWall==y+4){
+                if(i == x + 3&&yWall==y){
                     cell.setObjectMap(new Door());
                 }
             }
@@ -73,5 +81,15 @@ public class HarveyHome extends NPCHome implements Building {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    @Override
+    public int getAnchorX() {
+        return anchorX;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return anchorY;
     }
 }

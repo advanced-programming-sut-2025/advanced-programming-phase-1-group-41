@@ -1,5 +1,7 @@
 package com.CEliconValley.controllers;
 
+import com.CEliconValley.common.FarmData;
+import com.CEliconValley.common.PlayerData;
 import com.CEliconValley.models.*;
 
 import com.CEliconValley.models.foragings.Crop;
@@ -67,10 +69,11 @@ public class WeatherController {
 
     public void applyEfficiency(){}
 
-    public Result cheatStrikeThunder(Matcher matcher){
+    public Result cheatStrikeThunder(Matcher matcher, String playerName){
+        Player player = Finder.getPlayerByUsername(playerName);
+        Farm farm = Finder.getFarmByPlayer(player);
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
-        Farm farm = App.getGame().getCurrentPlayerFarm();
         Cell cell = Finder.findCellByCoordinates(x, y, farm);
         assert cell != null;
         if(cell.getObjectMap() instanceof Grass || cell.getObjectMap() instanceof Crop || cell.getObjectMap() instanceof ForagingCrop
@@ -90,6 +93,7 @@ public class WeatherController {
         return new Result(true,"Thundered " + cell.getObjectMap().getName() + " at " + x + ", " + y + " successfully!.");
     }
 
+
     public Result cheatChangeTmrwWeather(Matcher matcher){
         String raw = matcher.group(1).trim();
         if(raw.isEmpty()){
@@ -106,6 +110,22 @@ public class WeatherController {
 
         App.getGame().setTmrwWeatherType(weatherType);
         return new Result(true,"tomorrow weather is: "+weatherType);
+    }
+    public void Strike(int x, int y, Farm farm){
+        Cell cell = Finder.findCellByCoordinates(x, y, farm);
+        assert cell != null;
+        if(cell.getObjectMap() instanceof Grass || cell.getObjectMap() instanceof Crop || cell.getObjectMap() instanceof ForagingCrop
+            || cell.getObjectMap() instanceof Plant || cell.getObjectMap() instanceof Bush){
+            Grass grass = new Grass();
+            grass.setThundered(true);
+            cell.setObjectMap(grass);
+        } else if(cell.getObjectMap() instanceof Tree || cell.getObjectMap() instanceof ForagingTree){
+            if(cell.getObjectMap() instanceof Tree){
+                ((Tree) cell.getObjectMap()).thunder();
+            } else {
+                ((ForagingTree) cell.getObjectMap()).thunder();
+            }
+        }
     }
 
 

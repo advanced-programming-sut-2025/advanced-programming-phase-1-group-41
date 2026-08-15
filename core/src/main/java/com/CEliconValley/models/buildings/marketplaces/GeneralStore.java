@@ -1,7 +1,6 @@
 package com.CEliconValley.models.buildings.marketplaces;
 
 import com.CEliconValley.models.*;
-
 import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.buildings.Door;
 import com.CEliconValley.models.buildings.Wall;
@@ -9,6 +8,7 @@ import com.CEliconValley.models.buildings.marketplaces.items.GeneralStoreItems;
 import com.CEliconValley.models.buildings.marketplaces.items.MarketplaceItems;
 import com.CEliconValley.models.items.Slot;
 import com.CEliconValley.models.locations.Village;
+import com.CEliconValley.models.ui.TerminalColors;
 
 import java.util.ArrayList;
 
@@ -20,11 +20,13 @@ public class GeneralStore extends Marketplace implements Building {
     ArrayList<Slot> summer = new ArrayList<>();
     ArrayList<Slot> fall = new ArrayList<>();
     private final Door door = new Door();
+    private int anchorX;
+    private int anchorY;
 
 
     @Override
     public String getChar() {
-        return Colors.colorize(0,105,"GS");
+        return TerminalColors.colorize(0,105,"GS");
     }
 
     @Override
@@ -33,7 +35,13 @@ public class GeneralStore extends Marketplace implements Building {
     }
     private int x;
     private int y;
-    public GeneralStore(int x, int y, Village village) {
+
+    public GeneralStore() {
+        anchorX = 55;
+        anchorY = 18;
+    }
+
+    public GeneralStore(int x, int y, Village village, boolean load) {
         super(null);
         constructGeneralStore(x,y,village);
 
@@ -47,7 +55,9 @@ public class GeneralStore extends Marketplace implements Building {
 
         constructFallStock();
 
-        updateStock();
+        if(!load) {
+            updateStock();
+        }
 
     }
 
@@ -84,8 +94,9 @@ public class GeneralStore extends Marketplace implements Building {
                 Cell cell = Finder.findCellByCoordinatesVillage(i, yWall,village);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
-                if(i == x + 9&&yWall==y+8){
+                if((i >=x+8&&i<=x+10)){
                     cell.setObjectMap(door);
+                    doors.add(cell);
                 }
             }
             yWall+=8;
@@ -256,5 +267,15 @@ public class GeneralStore extends Marketplace implements Building {
             door.setClosed(true);
             door.setClosesSoon(false);
         }
+    }
+
+    @Override
+    public int getAnchorX() {
+        return anchorX;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return anchorY;
     }
 }

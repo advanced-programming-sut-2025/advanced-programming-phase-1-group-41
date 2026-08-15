@@ -95,4 +95,37 @@ public enum CraftableItem implements Item{
         }
         return null;
     }
+    public int getID() {
+        return switch (this) {
+            case CopperBar -> 20000;
+            case IronBar -> 20001;
+            case GoldBar -> 20002;
+            case IridiumBar -> 20003;
+            case Oil -> 20004;
+            case TruffleOil -> 20005;
+
+            case Mayonnaise -> 20100;
+            case LargeMayonnaise -> 20101;
+            case DuckMayonnaise -> 20102;
+            case DinosaurMayonnaise -> 20103;
+            case Cloth -> 20104;
+            case Honey -> 20105;
+
+            case Cheese -> 20200;
+            case LargeCheese -> 20201;
+            case GoatCheese -> 20202;
+            case LargeGoatCheese -> 20203;
+            case Beer -> 20204;
+            case Vineger -> 20205;
+
+            case Coffee -> 20300;
+            case Mead -> 20301;
+            case PaleAle -> 20302;
+            case Raisin -> 20303;
+            case Coal -> 70301;
+
+            default -> throw new IllegalStateException("Unknown item: " + this);
+        };
+    }
+
 }

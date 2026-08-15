@@ -1,8 +1,9 @@
 package com.CEliconValley.models.items;
 
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.foragings.Nature.Obstacle;
+import com.CEliconValley.models.ui.TerminalColors;
 
-public enum CraftableMachine implements Item{
+public enum CraftableMachine implements Item, Obstacle {
     CherryBomb("cb", "CherryBomb",50,CraftingRecipe.CherryBomb),
     Bomb("bb","Bomb",50, CraftingRecipe.Bomb),
     MegaBomb("mb", "Megabomb", 50 , CraftingRecipe.MegaBomb ),
@@ -11,8 +12,8 @@ public enum CraftableMachine implements Item{
     IridiumSprinkler("is", "IridiumSprinkler", 0, CraftingRecipe.IridiumSprinkler),
     CharcoalKiln("ck", "CharcoalKiln", 0, CraftingRecipe.CharcoalKiln),
     Furnace("Fu", "Furnace", 0,CraftingRecipe.Furnace),
-    Scarecrow(Colors.colorize(160, 0, "!!"), "Scarecrow", 0, CraftingRecipe.ScareCrow),
-    DeluxeScarecrow(Colors.colorize(160, 0, "??"), "DeluxeScarecrow", 0, CraftingRecipe.DeluxeScareCrow),
+    Scarecrow(TerminalColors.colorize(160, 0, "!!"), "Scarecrow", 0, CraftingRecipe.ScareCrow),
+    DeluxeScarecrow(TerminalColors.colorize(160, 0, "??"), "DeluxeScarecrow", 0, CraftingRecipe.DeluxeScareCrow),
     BeeHouse("bh", "BeeHouse", 0, CraftingRecipe.BeeHouse),
     CheesePress("cp", "CheesePress", 0, CraftingRecipe.CheesePress),
     Keg("k", "Keg", 0, CraftingRecipe.Keg),
@@ -69,4 +70,35 @@ public enum CraftableMachine implements Item{
         }
         return null;
     }
+    public int getID() {
+        return switch (this) {
+            case CherryBomb -> 30000;
+            case Bomb -> 30001;
+            case MegaBomb -> 30002;
+            case Sprinkler -> 30003;
+            case QualitySprinkler -> 30004;
+            case IridiumSprinkler -> 30005;
+
+            case CharcoalKiln -> 30100;
+            case Furnace -> 30101;
+            case Scarecrow -> 30102;
+            case DeluxeScarecrow -> 30103;
+            case BeeHouse -> 30104;
+            case CheesePress -> 30105;
+
+            case Keg -> 30200;
+            case Loom -> 30201;
+            case MayonnaiseMachine -> 30202;
+            case OilMaker -> 30203;
+            case PreservesJar -> 30204;
+            case Dehydrator -> 30205;
+
+            case GrassStarter -> 30300;
+            case FishSmoker -> 30301;
+            case MysticTreeSeed -> 30302;
+
+            default -> throw new IllegalStateException("Unknown item: " + this);
+        };
+    }
+
 }

@@ -22,23 +22,28 @@ public enum FishShopItems implements Item {
     private String name;
     private double price;
     private String ch;
+    private Item item;
+    private CraftingRecipe recipe;
 
     FishShopItems(Item item){
         this.name = item.getName();
         this.price = item.getPrice();
         this.ch = item.getChar();
+        this.item = item;
     }
 
     FishShopItems(Item item, double price) {
         this.ch = item.getChar();
         this.name = item.getName();
         this.price = price;
+        this.item = item;
     }
 
     FishShopItems(CraftingRecipe recipe, double price) {
         this.name = recipe.getName();
         this.price = price;
         this.ch = "";
+        this.recipe = recipe;
     }
 
     @Override
@@ -63,5 +68,9 @@ public enum FishShopItems implements Item {
             }
         }
         return null;
+    }
+    public int getID() {
+        if(this.item == null) return 70202;
+        return this.item.getID();
     }
 }

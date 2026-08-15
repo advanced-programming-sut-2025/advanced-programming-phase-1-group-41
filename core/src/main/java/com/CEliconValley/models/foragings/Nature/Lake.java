@@ -1,7 +1,7 @@
 package com.CEliconValley.models.foragings.Nature;
 
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.ObjectMap;
 import com.CEliconValley.models.locations.Farm;
@@ -9,11 +9,12 @@ import com.CEliconValley.models.locations.Village;
 
 import java.util.Random;
 
-public class Lake implements ObjectMap, Obstacle {
+public class Lake implements ObjectMap, Obstacle,WaterTile {
     @Override
     public String getChar() {
-        return Colors.colorize(39,39,"LL");
+        return TerminalColors.colorize(39,39,"LL");
     }
+    private int initialize=-1;
     private static final int WIDTH = 15;
     private static final int HEIGHT = 15;
     private static final int ITERATIONS = 6;
@@ -23,6 +24,7 @@ public class Lake implements ObjectMap, Obstacle {
     public String getName() {
         return "Lake";
     }
+
 
     public Lake(int x, int y, Village village, int YoHaHa) {
         Cell cell = Finder.findCellByCoordinatesVillage(x, y, village);
@@ -36,7 +38,7 @@ public class Lake implements ObjectMap, Obstacle {
     public Lake(int x, int y, Farm farm, int Khordamet) {
         Cell cell = Finder.findCellByCoordinates(x, y, farm);
         if (cell != null) {
-            cell.setObjectMap(this);
+            cell.setObjectMap(new Lake());
         }
     }
     public Lake(int startX, int startY1, Village village) {
@@ -67,7 +69,7 @@ public class Lake implements ObjectMap, Obstacle {
                 if (map[x][y]) {
                     Cell cell = Finder.findCellByCoordinatesVillage(startX + x, (int) startY + y, village);
                     if (cell != null) {
-                        cell.setObjectMap(this);
+                        cell.setObjectMap(new Lake());
                     }
                 }
             }
@@ -92,7 +94,7 @@ public class Lake implements ObjectMap, Obstacle {
                 if (map[x][y]) {
                     Cell cell = Finder.findCellByCoordinates(startX + x, startY + y, farm);
                     if (cell != null) {
-                        cell.setObjectMap(this);
+                        cell.setObjectMap(new Lake());
                     }
                 }
             }
@@ -128,5 +130,12 @@ public class Lake implements ObjectMap, Obstacle {
             }
         }
         return count;
+    }
+
+    public void setInitialize(int initialize) {
+        this.initialize = initialize;
+    }
+    public int getInitialize() {
+        return initialize;
     }
 }

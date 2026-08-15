@@ -37,6 +37,10 @@ public class Pickles implements Item , Eatable {
     public double getPrice() {
         return 2* crop.getPrice()+50;
     }
+    public int getID() {
+
+        return 10811;
+    }
 
     @Override
     public String getChar() {

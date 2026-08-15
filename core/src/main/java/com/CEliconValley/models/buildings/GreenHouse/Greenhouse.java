@@ -1,7 +1,7 @@
 package com.CEliconValley.models.buildings.GreenHouse;
 
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 import com.CEliconValley.models.buildings.Building;
 import com.CEliconValley.models.buildings.Door;
@@ -14,12 +14,14 @@ public class Greenhouse implements Building {
     @Override
     public String getChar() {
         if(isUnlocked){
-            return Colors.colorize(0,3,"XX");
+            return TerminalColors.colorize(0,3,"XX");
         }
-        return Colors.colorize(0,237,"XX");
+        return TerminalColors.colorize(0,237,"XX");
     }
     private int x;
     private int y;
+    private int anchorX;
+    private int anchorY;
     private Farm farm;
     private boolean isUnlocked = false;
     private ArrayList<Door> doors = new ArrayList<>();
@@ -39,10 +41,12 @@ public class Greenhouse implements Building {
         int xWall;
         int yWall;
         yWall = y;
+        anchorX = x+5;
+        anchorY = y+1;
         while(yWall<=y+7) {
-            for (int i = x; i <= x + 6; i++) {
+            for (int i = x-1; i <= x + 6; i++) {
                 Cell cell = Finder.findCellByCoordinates(i, yWall, farm);
-                if(yWall == y && (i != x && i != x + 6)){
+                if(yWall == y+7 && (i != x-1 && i != x + 5&&i!=x+6)){
                     assert cell != null;
                     cell.setObjectMap(new WaterTank());
                 }
@@ -50,7 +54,7 @@ public class Greenhouse implements Building {
                     assert cell != null;
                     cell.setObjectMap(new Wall());
                 }
-                if(i == x + 3 && yWall == y + 7){
+                if(i == x + 3 && yWall == y ){
                     Door door = new Door();
                     door.setClosed(true);
                     doors.add(door);
@@ -66,12 +70,12 @@ public class Greenhouse implements Building {
                 Cell cell = Finder.findCellByCoordinates(xWall, j, farm);
                 assert cell != null;
                 cell.setObjectMap(new Wall());
-                if((j == y + 3 && xWall == x + 6) || (j == y + 4 && xWall == x + 6)){
-                    Door door = new Door();
-                    door.setClosed(true);
-                    doors.add(door);
-                    cell.setObjectMap(door);
-                }
+//                if((j == y + 3 && xWall == x + 6) || (j == y + 4 && xWall == x + 6)){
+//                    Door door = new Door();
+//                    door.setClosed(true);
+//                    doors.add(door);
+//                    cell.setObjectMap(door);
+//                }
             }
             xWall+=6;
         }
@@ -113,4 +117,29 @@ public class Greenhouse implements Building {
         }
         return false;
     }
+
+    @Override
+    public int getAnchorX() {
+        return anchorX;
+    }
+
+    @Override
+    public int getAnchorY() {
+        return anchorY;
+    }
+
+    public ArrayList<Door> getDoors() {
+        return doors;
+    }
+
+    public boolean isUnlocked() {
+        return isUnlocked;
+    }
+
+    public void setUnlocked(boolean unlocked) {
+        isUnlocked = unlocked;
+    }
+
+    public static int getGreenhouseLength() {return 6;}
+    public static int getGreenhouseHeight() {return 7;}
 }

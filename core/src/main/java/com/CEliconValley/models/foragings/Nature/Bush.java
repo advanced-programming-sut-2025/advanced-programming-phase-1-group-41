@@ -1,7 +1,7 @@
 package com.CEliconValley.models.foragings.Nature;
 
 import com.CEliconValley.models.Cell;
-import com.CEliconValley.models.Colors;
+import com.CEliconValley.models.ui.TerminalColors;
 import com.CEliconValley.models.Finder;
 
 import com.CEliconValley.models.locations.Farm;
@@ -11,7 +11,7 @@ import java.util.Random;
 public class Bush implements Nature {
     @Override
     public String getChar() {
-        return Colors.colorize(64,64,"%%%%");
+        return TerminalColors.colorize(64,64,"%%%%");
     }
     @Override
     public String getName() {
@@ -21,6 +21,9 @@ public class Bush implements Nature {
     private static final int HEIGHT = 12;
     private static final int ITERATIONS = 5;
     private static final double INITIAL_WATER_CHANCE = 0.6;
+
+    public Bush() {
+    }
 
     public Bush(int startX, int startY, Farm farm) {
         boolean[][] map = new boolean[WIDTH][HEIGHT];
@@ -77,6 +80,9 @@ public class Bush implements Nature {
             }
         }
         return count;
+    }
+    public int getID() {
+        return -1;
     }
 
     @Override

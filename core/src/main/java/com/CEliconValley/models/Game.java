@@ -1,5 +1,12 @@
 package com.CEliconValley.models;
 
+import com.CEliconValley.common.GameData;
+import com.CEliconValley.common.NPCData;
+import com.CEliconValley.common.messages.GameCommand;
+import com.CEliconValley.common.messages.GameMessage;
+import com.CEliconValley.models.npc.npcCharacters.NPC;
+import com.badlogic.gdx.utils.Timer;
+import com.google.gson.Gson;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Transient;
@@ -8,7 +15,12 @@ import com.CEliconValley.models.locations.Farm;
 import com.CEliconValley.models.locations.Village;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Entity("games")
@@ -30,7 +42,8 @@ public class Game {
     private ArrayList<ObjectId> playersId;
     private WeatherType weatherType;
     private WeatherType tmrwWeatherType;
-
+    private Lobby lobby;
+    private ArrayList<PlayerMessage> playerMessages;
 
     private double roundEnergy;
     @Transient
@@ -41,56 +54,73 @@ public class Game {
         return village;
     }
 
-
-
+    public ScheduledExecutorService scheduler;
+    public ScheduledExecutorService npcScheduler;
+    public Thread commandThread;
+    private int howManyInHome = 0;
+    private int howManyForVote = 0;
+    private int howManyForTer = 0;
+    private String whichToVote = "";
 
     public Game() {
     }
 
-    public Game(ArrayList<Player> players, Player loader) {
-        this.players = players;
+
+    public Game(TimeLine time, Village village,
+                WeatherType weatherType, WeatherType tmrwWeatherType,
+                double roundEnergy, ArrayList<Farm> farms, ArrayList<PlayerMessage> playerMessages) {
+        this.time = time;
+        this.village = village;
+        this.weatherType = weatherType;
+        this.tmrwWeatherType = tmrwWeatherType;
+        this.roundEnergy = roundEnergy;
+        this.farms = new ArrayList<>(farms);
+        this.playerMessages = playerMessages;
+    }
+
+
+    public void handmadePostLoad(Player currentPlayer, Player loader, ArrayList<Player> players) {
+        this.currentPlayer = currentPlayer;
+        this.loader = loader;
+        this.players = new ArrayList<>(players);
+    }
+
+    public Game(ArrayList<Player> players, Player loader, Lobby lobby) {
+        this.players = new ArrayList<>(players);
         this.loader = loader;
         this.weatherType = WeatherType.Sunny;
         this.tmrwWeatherType = WeatherType.Sunny;
         this.time = new TimeLine();
 //        this.map = new Map();
-
         this.roundEnergy = 0;
         this._id = new ObjectId();
+        App.setGame(this);
+        this.village = new Village(false);
+        for (int i = 0; i < this.players.size(); i++) {
+            this.farms.add(new Farm(i, players.get(i).getFarmType()));
+            players.get(i).setFarmId(i);
+        }
+        this.lobby = lobby;
+        this.playerMessages = new ArrayList<>();
+        this.playerMessages = new ArrayList<>();
 
-    }
 
-    public void setFarms(){
-        this.farms.add(new Farm(1));
-        this.farms.add(new Farm(2));
-        this.farms.add(new Farm(3));
-        this.farms.add(new Farm(4));
-    }
-
-    public void setPlayers(List<Player> players) {
-        this.players = new ArrayList<>(players); // Ensure it's explicitly an ArrayList
-        this.playersId = players.stream()
-                .map(Player::get_id)
-                .collect(Collectors.toCollection(ArrayList::new)); // Convert IDs safely to ArrayList
-    }
-
-    public void prepareForSaving() {
-        if (loader != null) loaderId = loader.get_id();
-        if (currentPlayer != null) currentPlayerId = currentPlayer.get_id();
-
-        playersId = players.stream()
-                .map(Player::get_id)
-                .collect(Collectors.toCollection(ArrayList::new));
+        for (int i = 0; i < players.size(); i++) {
+            Player player = players.get(i);
+            for (int j = i; j < players.size(); j++) {
+                if(i == j) continue;
+                Player second = players.get(j);
+                Friendship friendship = new Friendship(player, second);
+                player.addFriendship(friendship);
+                second.addFriendship(friendship);
+            }
+        }
     }
 
 
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
-
-//    public WeatherType getWeatherType() {
-//        return weatherType;
-//    }
 
     public void passTurn() {
         for (int i = 0; i < 4; i++) {
@@ -103,7 +133,7 @@ public class Game {
             }
         }
         if(village == null) {
-            this.village = new Village();
+            this.village = new Village(false);
         }
     }
 
@@ -230,4 +260,167 @@ public class Game {
         return null;
     }
 
+    public void startScheduler() {
+        scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate(() -> {
+            try {
+                getTime().advanceOneHour(false);
+                GameMessage<GameData> msg = new GameMessage<>("game-data", new GameData(this));
+                App.getServer().sendToGroupByPlayers(getPlayers(), new Gson().toJson(msg));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, 10, 10, TimeUnit.SECONDS);
+        npcScheduler = Executors.newSingleThreadScheduledExecutor();
+        npcScheduler.scheduleAtFixedRate(() -> {
+            try {
+                village.randomMovement();
+                village.npcApproach();
+                village.getNPCs().forEach(npc -> {
+                    GameMessage<NPCData> msg = new GameMessage<>("npc-data",
+                        new NPCData(npc));
+                    App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), new Gson().toJson(msg));
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, 20, 20, TimeUnit.MILLISECONDS);
+    }
+
+    public void stopScheduler() {
+        if (scheduler != null && !scheduler.isShutdown()) {
+            scheduler.shutdownNow();
+        }
+        if (npcScheduler != null && !npcScheduler.isShutdown()) {
+            npcScheduler.shutdownNow();
+        }
+
+    }
+
+
+    public int getHowManyInHome() {
+        return howManyInHome;
+    }
+
+    public void setHowManyInHome(int howManyInHome) {
+        this.howManyInHome = howManyInHome;
+    }
+    public void incHowManyInHome(){
+        howManyInHome++;
+        if(howManyInHome == players.size()){
+            startScheduler();
+            howManyInHome = 0;
+            time.advanceOneDay();
+        }
+    }
+
+    public int getHowManyForVote() {
+        return howManyForVote;
+    }
+
+    public void setHowManyForVote(int howManyForVote) {
+        this.howManyForVote = howManyForVote;
+    }
+    public void incHowManyForVote(){
+        howManyForVote++;
+        if(howManyForVote == players.size()){
+            // todo logic to remove player
+            Player player = Finder.getPlayerByUsername(whichToVote);
+            App.getGame().removePlayerFromGame(player);
+            GameMessage<String> response = new GameMessage<>("game-command",
+                "terminate-vote");
+            App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), new Gson().toJson(response));
+            howManyForVote = 0;
+            whichToVote = "";
+            GameMessage<String> exiter = new GameMessage<>("game-command","exit-game");
+            App.getServer().getOnlineConnections().forEach((k,v) -> {
+                if(v.equals(player.getUser())){
+                    k.send(new Gson().toJson(exiter));
+                }
+            });
+            GameMessage<GameData> msg = new GameMessage<>("game-data", new GameData(this));
+            App.getServer().sendToGroupByPlayers(getPlayers(), new Gson().toJson(msg));
+        }else{
+            GameMessage<GameCommand> response = new GameMessage<>("game-command",
+                new GameCommand("update-vote", ""+App.getGame().getHowManyForVote()));
+            App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), new Gson().toJson(response));
+
+        }
+    }
+    public int getHowManyForTer() {
+        return howManyForTer;
+    }
+
+    public void setHowManyForTer(int howManyForTer) {
+        this.howManyForTer = howManyForTer;
+    }
+    public void incHowManyForTer(){
+        howManyForTer++;
+        if(howManyForTer == players.size()){
+            this.stopScheduler();
+            GameMessage<String> exiter = new GameMessage<>("game-command","exit-game");
+            App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), new Gson().toJson(exiter));
+            App.setGame(null);
+            App.setPreGame(null);
+        }else{
+            GameMessage<GameCommand> response = new GameMessage<>("game-command",
+                new GameCommand("update-ter", ""+App.getGame().getHowManyForTer()));
+            App.getServer().sendToGroupByPlayers(App.getGame().getPlayers(), new Gson().toJson(response));
+        }
+    }
+
+    public String getWhichToVote() {
+        return whichToVote;
+    }
+
+    public void setWhichToVote(String whichToVote) {
+        this.whichToVote = whichToVote;
+    }
+
+
+    public void removePlayerFromGame(Player player) {
+        this.players.remove(player);
+        if(this.loader.equals(player)){
+            this.loader = this.players.get(0);
+        }
+        for (Farm farm : this.farms) {
+            if(farm.getId() == player.getFarmId()){
+                removeFarmFromGame(farm);
+                break;
+            }
+        }
+        for (Player p : players) {
+            Iterator fi = p.getFriendships().iterator();
+            while (fi.hasNext()) {
+                Friendship f = (Friendship) fi.next();
+                if(f.getPlayer1().equals(player) || f.getPlayer2().equals(player)){
+                    fi.remove();
+                }
+            }
+        }
+        for (NPC npc : village.getNPCs()) {
+            npc.getFriendShip().remove(player);
+            npc.getIsTalkedToday().remove(player);
+            npc.getIsGiftedToday().remove(player);
+        }
+    }
+    public void removeFarmFromGame(Farm farm) {
+        this.farms.remove(farm);
+    }
+
+    public Lobby getLobby() {
+        return lobby;
+    }
+
+    public void setLobby(Lobby lobby) {
+        this.lobby = lobby;
+    }
+
+    public ArrayList<PlayerMessage> getPlayerMessages() {
+        return playerMessages;
+    }
+
+    public void setPlayerMessages(ArrayList<PlayerMessage> playerMessages) {
+        this.playerMessages = playerMessages;
+    }
 }

@@ -19,6 +19,19 @@ public class Fertilizer implements Item {
         return fertilizerType.getName();
     }
 
+    @Override
+    public int getID() {
+        switch (this.fertilizerType) {
+            case BasicRetainingSoil -> { return 40000; }
+            case QualityRetainingSoil -> { return 40001; }
+            case DeluxeRetainingSoil -> { return 40002; }
+            case GrassStarter -> { return 40100; }
+            case PlantGrow -> { return 40101; }
+        }
+        throw new IllegalStateException("Unknown item: " + this);
+    }
+
+
     public FertilizerType getFertilizerType() {
         return fertilizerType;
     }
@@ -27,4 +40,5 @@ public class Fertilizer implements Item {
     public double getPrice() {
         return fertilizerType.getPrice();
     }
+
 }
